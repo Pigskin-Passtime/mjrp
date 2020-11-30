@@ -1,0 +1,123 @@
+####################################
+#
+#			Guilli's Containment Origin Events
+#			Contributors: Guilliman
+##########################
+
+
+namespace = containment_digsite
+
+
+# Dig Site Event 1 “Surface Analysis” 
+fleet_event = {
+	id = containment_digsite.1
+	title = containment_digsite.1.name
+	desc = containment_digsite.1.desc
+	picture = GFX_evt_alien_ruins
+	show_sound = event_scanner
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		fromfrom = { set_site_progress_locked = yes }
+	}
+
+	after = { 
+		fromfrom = { set_site_progress_locked = no } 
+	}
+
+	option = {
+		name = CURIOUS
+		owner = {
+			add_monthly_resource_mult = {
+				resource = engineering_research
+     			value = @tier2researchreward
+     			min = @tier2researchmin
+     			max = @tier2researchmax
+     		}
+		}
+		fromfrom.planet = {
+			add_deposit = d_physics_2
+		}
+	}
+}
+
+# Dig Site Event 2 “Deep Core Drilling”
+fleet_event = {
+	id = containment_digsite.2
+	title = containment_digsite.2.name
+	desc = containment_digsite.2.desc
+	picture = GFX_evt_alien_ruins
+	show_sound = event_scanner
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		fromfrom = { set_site_progress_locked = yes }
+	}
+
+	after = { 
+		fromfrom = { set_site_progress_locked = no } 
+	}
+
+	option = {
+		name = CURIOUS
+		owner = {
+			add_resource = { minerals = 1000 }
+		}
+		fromfrom.planet = {
+			add_deposit = d_engineering_2
+		}
+	}
+}
+
+# Dig Site Event 3 “The Machine Core”
+fleet_event = {
+	id = containment_digsite.3
+	title = containment_digsite.3.name
+	desc = containment_digsite.3.desc
+	picture = GFX_evt_alien_ruins
+	show_sound = event_scanner
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		fromfrom = { set_site_progress_locked = yes }
+	}
+
+	after = { 
+		fromfrom = { set_site_progress_locked = no } 
+	}
+
+	option = {
+		name = CURIOUS
+		owner = {
+			hidden_effect = {
+				random_owned_planet = {
+					limit = { is_capital = yes }
+					planet_event = { id = containment.11 days = 3000 }  # TODO:  extend time, 3 days for testing purposes  # event = Moon ‘Beta’ Event “”
+				}
+			}
+			add_monthly_resource_mult = {
+				resource = unity
+				value = @tier2unityreward
+				min = @tier2unitymin
+				max = @tier2unitymax
+			}
+		}
+		fromfrom.planet = {
+			add_deposit = d_physics_1
+			add_deposit = d_society_1
+			add_deposit = d_engineering_1
+		}
+	}
+}
