@@ -1,0 +1,307 @@
+namespace = nsc_freebooter_test
+### Testing Event for Howard ###
+country_event = {
+	id = nsc_freebooter_test.1
+	title = "nsc_freebooter.4.name"
+	desc = "nsc_freebooter.4.desc"
+	picture = GFX_evt_surrender
+	is_triggered_only = yes
+
+	immediate = {
+		from.root = {
+			set_name = "The Galactic Khanate"
+		}
+	
+		change_country_flag = {
+			icon = {
+				category = "pirate"
+				file = "flag_pirate_11.dds"
+			}
+			background= {
+				category = "backgrounds"
+				file = "00_solid.dds"
+			}
+			colors={
+				"red"
+				"red"
+				"null"
+				"null"
+			}
+		}
+	}
+	option = {
+		name = nsc_freebooter.4.a
+	}
+}
+country_event = {
+	id = nsc_freebooter_test.2
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		random_country = {
+			limit = {
+				is_ai = yes
+				is_country_type = default
+			}
+			add_opinion_modifier = {
+				who = root
+				modifier = nsc_freebooter_opinion_they_raided_one_of_our_colony
+			}
+		}
+	}
+}
+country_event = {
+	id = nsc_freebooter_test.3
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		create_fleet = {
+			effect = {
+				set_owner = root
+				set_location = root.capital_star.starbase
+				create_ship = {
+					name = random
+					design = "NSC_FREEBOOTER_SHIP_DESIGN_CORVETTE"
+					graphical_culture = root
+				}
+				create_ship = {
+					name = random
+					design = "NSC_FREEBOOTER_SHIP_DESIGN_DESTROYER"
+					graphical_culture = root
+				}
+				create_ship = {
+					name = random
+					design = "NSC_FREEBOOTER_SHIP_DESIGN_CRUISER"
+					graphical_culture = root
+				}
+				create_ship = {
+					name = random
+					design = "NSC_FREEBOOTER_SHIP_DESIGN_BATTLESHIP"
+					graphical_culture = root
+				}
+				create_ship = {
+					name = random
+					design = "NSC_FREEBOOTER_SHIP_DESIGN_TITAN"
+					graphical_culture = root
+				}
+			}
+		}
+		create_fleet = {
+			effect = {
+				set_owner = root
+				set_location = root.capital_star.starbase
+				create_ship = {
+					name = random
+					design = "NSC_FREEBOOTER_SHIP_DESIGN_COLOSSUS"
+					graphical_culture = root
+				}
+			}
+		}
+		create_fleet = {
+			effect = {
+				set_owner = root
+				set_location = root.capital_star.starbase
+				create_ship = {
+					name = random
+					design = "NSC_FREEBOOTER_SHIP_DESIGN_JUGGERNAUT"
+					graphical_culture = root
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = nsc_freebooter_test.4
+	title = "nsc_freebooter.4.name"
+	desc = "nsc_freebooter.4.desc"
+	picture = GFX_evt_surrender
+	is_triggered_only = yes
+
+	immediate = {
+		create_leader = {
+			name = random
+			species = root.species
+			gender = male
+			skill = random
+			class = general
+			set_age = 25
+			effect = {
+				save_event_target_as = nsc_freebooter_the_duel_evt_the_opponent_target
+			}
+		}
+	}
+
+	option = {
+		name = "GOOD"
+		event_target:nsc_freebooter_the_duel_evt_the_opponent_target = { kill_leader = { show_notification = yes } }
+	}
+	option = {
+		name = "DIG"
+		kill_leader = {
+			type = ruler
+			heir = no
+			show_notification = yes
+		}
+		if = {
+			limit = { exists = heir }
+			kill_leader = {
+				type = ruler
+				heir = yes
+				show_notification = yes
+			}
+		}
+		event_target:nsc_freebooter_the_duel_evt_the_opponent_target = {
+			add_trait = nsc_freebooter_leader_trait_ruler_great_khan
+			root = {
+				clone_leader = {
+					target = prev
+					class = admiral
+					traits = { trait = nsc_freebooter_leader_trait_great_khan }
+					skill = 5 #less than the original khan since the leader was a general
+				}
+				set_leader = prev
+			}
+		}
+	}
+}
+country_event = {
+	id = nsc_freebooter_test.5
+	title = "nsc_freebooter.22.name"
+	desc = "nsc_freebooter.22.desc"
+	picture = GFX_evt_surrender
+	is_triggered_only = yes
+
+	immediate = {
+		random_owned_leader = {
+			limit = { leader_class = general }
+			save_event_target_as = nsc_freebooter_the_duel_evt_the_opponent_target
+		}
+	}
+
+	option = {
+		name = nsc_freebooter.22.a
+		custom_tooltip = nsc_freebooter.22.a.tooltip
+		country_event = { id = nsc_freebooter_test.6 }
+	}
+}
+country_event = {
+	id = nsc_freebooter_test.6
+	title = "nsc_freebooter.23.name"
+	desc = "nsc_freebooter.23.desc"
+	picture = GFX_evt_surrender
+	is_triggered_only = yes
+
+	immediate = {
+		random_owned_leader = {
+			limit = { leader_class = general }
+			save_event_target_as = nsc_freebooter_the_duel_evt_the_opponent_target
+		}
+	}
+
+	option = {
+		name = nsc_freebooter.23.a
+		custom_tooltip = nsc_freebooter.23.a.tooltip
+		country_event = { id = nsc_freebooter_test.7 }
+	}
+}
+country_event = {
+	id = nsc_freebooter_test.7
+	title = "nsc_freebooter.24.name"
+	desc = "nsc_freebooter.24.desc"
+	picture = GFX_evt_surrender
+	is_triggered_only = yes
+
+	immediate = {
+		random_owned_leader = {
+			limit = { leader_class = general }
+			save_event_target_as = nsc_freebooter_the_duel_evt_the_opponent_target
+		}
+	}
+
+	option = {
+		name = nsc_freebooter.24.a
+		custom_tooltip = nsc_freebooter.24.a.tooltip
+		country_event = { id = nsc_freebooter_test.8 }
+	}
+}
+country_event = {
+	id = nsc_freebooter_test.8
+	title = "nsc_freebooter.25.name"
+	desc = "nsc_freebooter.25.desc"
+	picture = GFX_evt_surrender
+	is_triggered_only = yes
+
+	immediate = {
+		random_owned_leader = {
+			limit = { leader_class = general }
+			save_event_target_as = nsc_freebooter_the_duel_evt_the_opponent_target
+		}
+	}
+
+	option = {
+		name = nsc_freebooter.25.a
+		custom_tooltip = nsc_freebooter.25.a.tooltip
+		country_event = { id = nsc_freebooter_test.9 }
+	}
+}
+country_event = {
+	id = nsc_freebooter_test.9
+	title = "nsc_freebooter.26.name"
+	desc = "nsc_freebooter.26.desc"
+	picture = GFX_evt_surrender
+	is_triggered_only = yes
+
+	immediate = {
+		random_owned_leader = {
+			limit = { leader_class = general }
+			save_event_target_as = nsc_freebooter_the_duel_evt_the_opponent_target
+		}
+	}
+
+	option = {
+		name = nsc_freebooter.25.a
+		custom_tooltip = nsc_freebooter.25.a.tooltip
+		country_event = { id = nsc_freebooter_test.10 }
+	}
+}
+country_event = {
+	id = nsc_freebooter_test.10
+	title = "nsc_freebooter.27.name"
+	desc = "nsc_freebooter.27.agr.desc.1"
+	picture = GFX_evt_surrender
+	is_triggered_only = yes
+
+	immediate = {
+		random_owned_leader = {
+			limit = { leader_class = general }
+			save_event_target_as = nsc_freebooter_the_duel_evt_the_opponent_target
+		}
+	}
+
+	option = {
+		name = nsc_freebooter.26.go.aggressive
+		custom_tooltip = nsc_freebooter.26.tooltip
+		country_event = { id = nsc_freebooter_test.11 }
+	}
+}
+country_event = {
+	id = nsc_freebooter_test.11
+	title = "nsc_freebooter.27.name"
+	desc = "nsc_freebooter.27.def.desc.4"
+	picture = GFX_evt_surrender
+	is_triggered_only = yes
+
+	immediate = {
+		random_owned_leader = {
+			limit = { leader_class = general }
+			save_event_target_as = nsc_freebooter_the_duel_evt_the_opponent_target
+		}
+	}
+
+	option = {
+		name = nsc_freebooter.26.go.aggressive
+		custom_tooltip = nsc_freebooter.26.tooltip
+	}
+}

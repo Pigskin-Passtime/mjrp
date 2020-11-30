@@ -1,0 +1,1264 @@
+origin_nsc_freebooter_start_setup = {
+	set_planet_entity = {
+		entity = "habitat_phase_03_entity"
+		graphical_culture = space_owner
+	}
+	owner = { give_technology = { tech = tech_nsc_freebooter_boarding_pod_1 message = no } }
+	while = {
+		count = 25
+		create_pop = { species = owner_main_species }
+	}
+	add_building = building_capital
+	add_building = building_bureaucratic_1
+	add_building = building_research_lab_1
+	add_building = building_factory_1
+	while = {
+		count = 2
+		add_district = district_nsc_freebooter_hab_housing
+	}
+	while = {
+		count = 2
+		add_district = district_nsc_freebooter_hab_foundry
+	}
+	while = {
+		count = 2
+		add_district = district_nsc_freebooter_hab_farming
+	}
+	solar_system = {
+		every_system_planet = {
+			limit = { has_planet_flag = mining_planet }
+			create_mining_station = { owner = space_owner }
+		}
+	}
+}
+nsc_frebooter_empire_admiral_market_target_selection = {
+	random_country = {
+		limit = {
+			is_ai = yes
+			is_country_type = default
+			NOT = { is_at_war_with = root }
+			has_resource = { type = energy amount >= 200 }
+		}
+		if = {
+			limit = { is_at_war = yes }
+			random_war = {
+				limit = {
+					any_war_participant = {
+						is_war_leader = yes
+						OR = {
+							relative_power = {
+								who = this
+								category = fleet
+								value = equivalent
+							}
+							relative_power = {
+								who = this
+								category = fleet
+								value = superior
+							}
+							relative_power = {
+								who = root
+								category = fleet
+								value = overwhelming
+							}
+						}
+					}
+				}
+				random_war_participant = {
+					limit = {
+						is_war_leader = yes
+						OR = {
+							relative_power = {
+								who = this
+								category = fleet
+								value = equivalent
+							}
+							relative_power = {
+								who = this
+								category = fleet
+								value = superior
+							}
+							relative_power = {
+								who = root
+								category = fleet
+								value = overwhelming
+							}
+						}
+					}
+					save_event_target_as = nsc_frebooter_customer_empire_biggest_enemy
+				}
+			}
+		}
+		weights = {
+			# can use add or mult
+			base = 5
+			modifier = {
+				add = 5
+				is_at_war = yes
+			}
+			modifier = {
+				add = 20
+				is_at_war = yes
+				OR = {
+					relative_power = {
+						who = event_target:nsc_frebooter_customer_empire_biggest_enemy
+						category = fleet
+						value = inferior
+					}
+					relative_power = {
+						who = event_target:nsc_frebooter_customer_empire_biggest_enemy
+						category = fleet
+						value = pathetic
+					}
+				}
+			}
+			modifier = {
+				add = 10
+				num_fleets >= 5
+			}
+			modifier = {
+				add = 10
+				OR = {
+					relative_power = {
+						who = root
+						category = fleet
+						value = inferior
+					}
+					relative_power = {
+						who = root
+						category = fleet
+						value = pathetic
+					}
+				}
+			}
+			modifier = {
+				add = 20
+				any_owned_fleet = { NOT = { exists = leader } }
+			}
+			modifier = {
+				mult = 0.5
+				has_country_flag = already_bought_admiral_from_nsc_frebooter_empire_before
+			}
+		}
+		save_event_target_as = nsc_frebooter_empire_admiral_market_target
+	}
+}
+nsc_freebooter_admiral_market_selected_target_count_effect = {
+	#clear the variable and the leader flag for recounting
+	set_variable = {
+		which = nsc_freebooter_admiral_market_selected_target_count
+		value = 0
+	}
+	every_owned_leader = {
+		limit = { has_leader_flag = nsc_freebooter_admiral_market_selected_leader_flag }
+		remove_leader_flag = nsc_freebooter_admiral_market_selected_leader_flag
+	}
+	while = {
+		count = 6
+		change_variable = {
+			which = nsc_freebooter_admiral_market_selected_target_count
+			value = 1
+		}
+		random_owned_leader = {
+			limit = {
+				leader_class = admiral
+				NOR = {
+					has_trait = nsc_freebooter_leader_trait_great_khan #no, we can't sell the khan lolol
+					has_leader_flag = nsc_freebooter_admiral_market_selected_leader_flag
+				}
+			}
+			if = {
+				limit = { root = { check_variable = { which = nsc_freebooter_admiral_market_selected_target_count value = 1 } } }
+				save_event_target_as = nsc_freebooter_admiral_market_selected_leader_1 set_leader_flag = nsc_freebooter_admiral_market_selected_leader_flag
+			}
+			if = {
+				limit = { root = { check_variable = { which = nsc_freebooter_admiral_market_selected_target_count value = 2 } } }
+				save_event_target_as = nsc_freebooter_admiral_market_selected_leader_2 set_leader_flag = nsc_freebooter_admiral_market_selected_leader_flag
+			}
+			if = {
+				limit = { root = { check_variable = { which = nsc_freebooter_admiral_market_selected_target_count value = 3 } } }
+				save_event_target_as = nsc_freebooter_admiral_market_selected_leader_3 set_leader_flag = nsc_freebooter_admiral_market_selected_leader_flag
+			}
+			if = {
+				limit = { root = { check_variable = { which = nsc_freebooter_admiral_market_selected_target_count value = 4 } } }
+				save_event_target_as = nsc_freebooter_admiral_market_selected_leader_4 set_leader_flag = nsc_freebooter_admiral_market_selected_leader_flag
+			}
+			if = {
+				limit = { root = { check_variable = { which = nsc_freebooter_admiral_market_selected_target_count value = 5 } } }
+				save_event_target_as = nsc_freebooter_admiral_market_selected_leader_5 set_leader_flag = nsc_freebooter_admiral_market_selected_leader_flag
+			}
+			if = {
+				limit = { root = { check_variable = { which = nsc_freebooter_admiral_market_selected_target_count value = 6 } } }
+				save_event_target_as = nsc_freebooter_admiral_market_selected_leader_6 set_leader_flag = nsc_freebooter_admiral_market_selected_leader_flag
+			}
+		}
+	}
+}
+#let's just not consider 'infulence' #it's a trickery for AI #let's just hope players understand
+nsc_freebooter_admiral_market_sell_effect_1 = {
+	event_target:nsc_freebooter_admiral_market_selected_leader_1 = {
+		switch = {
+			trigger = has_skill
+			1 = { root = { add_resource = { energy = 200 influence = 50 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -200 } } }
+			2 = { root = { add_resource = { energy = 400 influence = 100 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -400 } } }
+			3 = { root = { add_resource = { energy = 600 influence = 150 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -600 } } }
+			4 = { root = { add_resource = { energy = 800 influence = 200 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -800 } } }
+			5 = { root = { add_resource = { energy = 1000 influence = 250 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1000 } } }
+			6 = { root = { add_resource = { energy = 1200 influence = 300 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1200 } } }
+			7 = { root = { add_resource = { energy = 1400 influence = 350 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1400 } } }
+			8 = { root = { add_resource = { energy = 1600 influence = 400 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1600 } } }
+			9 = { root = { add_resource = { energy = 1800 influence = 450 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1800 } } }
+			10 = { root = { add_resource = { energy = 2000 influence = 500 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -2000 } } }
+		}
+		#if the player uses some kinds of mod to increase max leader level...
+		if = {
+			limit = { has_skill > 10 }
+			root = { add_resource = { energy = 2200 influence = 550 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -2200 } }
+		}
+	}
+	if = {
+		limit = { event_target:nsc_frebooter_empire_admiral_market_target = { has_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double } }
+		add_resource = { energy = 1000 }
+	}
+	custom_tooltip = nsc_freebooter.12.a.tooltip
+	add_modifier = { modifier = nsc_freebooter_market_cooldown_empire_modifier days = 360 }
+	hidden_effect = {
+		event_target:nsc_frebooter_empire_admiral_market_target = {
+			set_country_flag = already_bought_admiral_from_nsc_frebooter_empire_before
+			clone_leader = { target = event_target:nsc_freebooter_admiral_market_selected_leader_1 class = admiral }
+			event_target:nsc_freebooter_admiral_market_selected_leader_1 = { kill_leader = { show_notification = no } }
+			if = {
+				limit = { has_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double }
+				add_resource = { energy = -1000 }
+				remove_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double
+			}
+		}
+	}
+}
+nsc_freebooter_admiral_market_sell_effect_2 = {
+	event_target:nsc_freebooter_admiral_market_selected_leader_2 = {
+		switch = {
+			trigger = has_skill
+			1 = { root = { add_resource = { energy = 200 influence = 50 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -200 } } }
+			2 = { root = { add_resource = { energy = 400 influence = 100 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -400 } } }
+			3 = { root = { add_resource = { energy = 600 influence = 150 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -600 } } }
+			4 = { root = { add_resource = { energy = 800 influence = 200 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -800 } } }
+			5 = { root = { add_resource = { energy = 1000 influence = 250 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1000 } } }
+			6 = { root = { add_resource = { energy = 1200 influence = 300 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1200 } } }
+			7 = { root = { add_resource = { energy = 1400 influence = 350 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1400 } } }
+			8 = { root = { add_resource = { energy = 1600 influence = 400 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1600 } } }
+			9 = { root = { add_resource = { energy = 1800 influence = 450 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1800 } } }
+			10 = { root = { add_resource = { energy = 2000 influence = 500 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -2000 } } }
+		}
+		if = {
+			limit = { has_skill > 10 }
+			root = { add_resource = { energy = 2200 influence = 550 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -2200 } }
+		}
+	}
+	if = {
+		limit = { event_target:nsc_frebooter_empire_admiral_market_target = { has_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double } }
+		add_resource = { energy = 1000 }
+	}
+	custom_tooltip = nsc_freebooter.12.b.tooltip
+	add_modifier = { modifier = nsc_freebooter_market_cooldown_empire_modifier days = 360 }
+	hidden_effect = {
+		event_target:nsc_frebooter_empire_admiral_market_target = {
+			set_country_flag = already_bought_admiral_from_nsc_frebooter_empire_before
+			clone_leader = { target = event_target:nsc_freebooter_admiral_market_selected_leader_2 class = admiral }
+			event_target:nsc_freebooter_admiral_market_selected_leader_2 = { kill_leader = { show_notification = no } }
+			if = {
+				limit = { has_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double }
+				add_resource = { energy = -1000 }
+				remove_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double
+			}
+		}
+	}
+}
+nsc_freebooter_admiral_market_sell_effect_3 = {
+	event_target:nsc_freebooter_admiral_market_selected_leader_3 = {
+		switch = {
+			trigger = has_skill
+			1 = { root = { add_resource = { energy = 200 influence = 50 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -200 } } }
+			2 = { root = { add_resource = { energy = 400 influence = 100 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -400 } } }
+			3 = { root = { add_resource = { energy = 600 influence = 150 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -600 } } }
+			4 = { root = { add_resource = { energy = 800 influence = 200 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -800 } } }
+			5 = { root = { add_resource = { energy = 1000 influence = 250 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1000 } } }
+			6 = { root = { add_resource = { energy = 1200 influence = 300 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1200 } } }
+			7 = { root = { add_resource = { energy = 1400 influence = 350 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1400 } } }
+			8 = { root = { add_resource = { energy = 1600 influence = 400 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1600 } } }
+			9 = { root = { add_resource = { energy = 1800 influence = 450 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1800 } } }
+			10 = { root = { add_resource = { energy = 2000 influence = 500 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -2000 } } }
+		}
+		if = {
+			limit = { has_skill > 10 }
+			root = { add_resource = { energy = 2200 influence = 550 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -2200 } }
+		}
+	}
+	if = {
+		limit = { event_target:nsc_frebooter_empire_admiral_market_target = { has_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double } }
+		add_resource = { energy = 1000 }
+	}
+	custom_tooltip = nsc_freebooter.12.c.tooltip
+	add_modifier = { modifier = nsc_freebooter_market_cooldown_empire_modifier days = 360 }
+	hidden_effect = {
+		event_target:nsc_frebooter_empire_admiral_market_target = {
+			set_country_flag = already_bought_admiral_from_nsc_frebooter_empire_before
+			clone_leader = { target = event_target:nsc_freebooter_admiral_market_selected_leader_3 class = admiral }
+			event_target:nsc_freebooter_admiral_market_selected_leader_3 = { kill_leader = { show_notification = no } }
+			if = {
+				limit = { has_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double }
+				add_resource = { energy = -1000 }
+				remove_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double
+			}
+		}
+	}
+}
+nsc_freebooter_admiral_market_sell_effect_4 = {
+	event_target:nsc_freebooter_admiral_market_selected_leader_4 = {
+		switch = {
+			trigger = has_skill
+			1 = { root = { add_resource = { energy = 200 influence = 50 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -200 } } }
+			2 = { root = { add_resource = { energy = 400 influence = 100 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -400 } } }
+			3 = { root = { add_resource = { energy = 600 influence = 150 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -600 } } }
+			4 = { root = { add_resource = { energy = 800 influence = 200 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -800 } } }
+			5 = { root = { add_resource = { energy = 1000 influence = 250 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1000 } } }
+			6 = { root = { add_resource = { energy = 1200 influence = 300 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1200 } } }
+			7 = { root = { add_resource = { energy = 1400 influence = 350 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1400 } } }
+			8 = { root = { add_resource = { energy = 1600 influence = 400 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1600 } } }
+			9 = { root = { add_resource = { energy = 1800 influence = 450 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1800 } } }
+			10 = { root = { add_resource = { energy = 2000 influence = 500 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -2000 } } }
+		}
+		if = {
+			limit = { has_skill > 10 }
+			root = { add_resource = { energy = 2200 influence = 550 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -2200 } }
+		}
+	}
+	if = {
+		limit = { event_target:nsc_frebooter_empire_admiral_market_target = { has_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double } }
+		add_resource = { energy = 1000 }
+	}
+	custom_tooltip = nsc_freebooter.12.d.tooltip
+	add_modifier = { modifier = nsc_freebooter_market_cooldown_empire_modifier days = 360 }
+	hidden_effect = {
+		event_target:nsc_frebooter_empire_admiral_market_target = {
+			set_country_flag = already_bought_admiral_from_nsc_frebooter_empire_before
+			clone_leader = { target = event_target:nsc_freebooter_admiral_market_selected_leader_4 class = admiral }
+			event_target:nsc_freebooter_admiral_market_selected_leader_4 = { kill_leader = { show_notification = no } }
+			if = {
+				limit = { has_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double }
+				add_resource = { energy = -1000 }
+				remove_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double
+			}
+		}
+	}
+}
+nsc_freebooter_admiral_market_sell_effect_5 = {
+	event_target:nsc_freebooter_admiral_market_selected_leader_5 = {
+		switch = {
+			trigger = has_skill
+			1 = { root = { add_resource = { energy = 200 influence = 50 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -200 } } }
+			2 = { root = { add_resource = { energy = 400 influence = 100 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -400 } } }
+			3 = { root = { add_resource = { energy = 600 influence = 150 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -600 } } }
+			4 = { root = { add_resource = { energy = 800 influence = 200 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -800 } } }
+			5 = { root = { add_resource = { energy = 1000 influence = 250 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1000 } } }
+			6 = { root = { add_resource = { energy = 1200 influence = 300 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1200 } } }
+			7 = { root = { add_resource = { energy = 1400 influence = 350 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1400 } } }
+			8 = { root = { add_resource = { energy = 1600 influence = 400 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1600 } } }
+			9 = { root = { add_resource = { energy = 1800 influence = 450 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1800 } } }
+			10 = { root = { add_resource = { energy = 2000 influence = 500 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -2000 } } }
+		}
+		if = {
+			limit = { has_skill > 10 }
+			root = { add_resource = { energy = 2200 influence = 550 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -2200 } }
+		}
+	}
+	if = {
+		limit = { event_target:nsc_frebooter_empire_admiral_market_target = { has_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double } }
+		add_resource = { energy = 1000 }
+	}
+	custom_tooltip = nsc_freebooter.12.e.tooltip
+	add_modifier = { modifier = nsc_freebooter_market_cooldown_empire_modifier days = 360 }
+	hidden_effect = {
+		event_target:nsc_frebooter_empire_admiral_market_target = {
+			set_country_flag = already_bought_admiral_from_nsc_frebooter_empire_before
+			clone_leader = { target = event_target:nsc_freebooter_admiral_market_selected_leader_5 class = admiral }
+			event_target:nsc_freebooter_admiral_market_selected_leader_5 = { kill_leader = { show_notification = no } }
+			if = {
+				limit = { has_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double }
+				add_resource = { energy = -1000 }
+				remove_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double
+			}
+		}
+	}
+}
+nsc_freebooter_admiral_market_sell_effect_6 = {
+	event_target:nsc_freebooter_admiral_market_selected_leader_6 = {
+		switch = {
+			trigger = has_skill
+			1 = { root = { add_resource = { energy = 200 influence = 50 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -200 } } }
+			2 = { root = { add_resource = { energy = 400 influence = 100 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -400 } } }
+			3 = { root = { add_resource = { energy = 600 influence = 150 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -600 } } }
+			4 = { root = { add_resource = { energy = 800 influence = 200 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -800 } } }
+			5 = { root = { add_resource = { energy = 1000 influence = 250 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1000 } } }
+			6 = { root = { add_resource = { energy = 1200 influence = 300 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1200 } } }
+			7 = { root = { add_resource = { energy = 1400 influence = 350 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1400 } } }
+			8 = { root = { add_resource = { energy = 1600 influence = 400 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1600 } } }
+			9 = { root = { add_resource = { energy = 1800 influence = 450 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1800 } } }
+			10 = { root = { add_resource = { energy = 2000 influence = 500 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -2000 } } }
+		}
+		if = {
+			limit = { has_skill > 10 }
+			root = { add_resource = { energy = 2200 influence = 550 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -2200 } }
+		}
+	}
+	if = {
+		limit = { event_target:nsc_frebooter_empire_admiral_market_target = { has_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double } }
+		add_resource = { energy = 1000 }
+	}
+	custom_tooltip = nsc_freebooter.12.f.tooltip
+	add_modifier = { modifier = nsc_freebooter_market_cooldown_empire_modifier days = 360 }
+	hidden_effect = {
+		event_target:nsc_frebooter_empire_admiral_market_target = {
+			set_country_flag = already_bought_admiral_from_nsc_frebooter_empire_before
+			clone_leader = { target = event_target:nsc_freebooter_admiral_market_selected_leader_6 class = admiral }
+			event_target:nsc_freebooter_admiral_market_selected_leader_6 = { kill_leader = { show_notification = no } }
+			if = {
+				limit = { has_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double }
+				add_resource = { energy = -1000 }
+				remove_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double
+			}
+		}
+	}
+}
+nsc_frebooter_empire_fleet_market_target_selection = {
+	random_country = {
+		limit = {
+			is_ai = yes
+			is_country_type = default
+			NOT = { is_at_war_with = root }
+			has_resource = { type = energy amount >= 500 }
+		}
+		if = {
+			limit = { is_at_war = yes }
+			random_war = {
+				limit = {
+					any_war_participant = {
+						is_war_leader = yes
+						OR = {
+							relative_power = {
+								who = this
+								category = fleet
+								value = equivalent
+							}
+							relative_power = {
+								who = this
+								category = fleet
+								value = superior
+							}
+							relative_power = {
+								who = root
+								category = fleet
+								value = overwhelming
+							}
+						}
+					}
+				}
+				random_war_participant = {
+					limit = {
+						is_war_leader = yes
+						OR = {
+							relative_power = {
+								who = this
+								category = fleet
+								value = equivalent
+							}
+							relative_power = {
+								who = this
+								category = fleet
+								value = superior
+							}
+							relative_power = {
+								who = root
+								category = fleet
+								value = overwhelming
+							}
+						}
+					}
+					save_event_target_as = nsc_frebooter_customer_empire_biggest_enemy
+				}
+			}
+		}
+		weights = {
+			# can use add or mult
+			base = 5
+			modifier = {
+				add = 10
+				is_at_war = yes
+			}
+			modifier = {
+				add = 20
+				is_at_war = yes
+				OR = {
+					relative_power = {
+						who = event_target:nsc_frebooter_customer_empire_biggest_enemy
+						category = fleet
+						value = inferior
+					}
+					relative_power = {
+						who = event_target:nsc_frebooter_customer_empire_biggest_enemy
+						category = fleet
+						value = pathetic
+					}
+				}
+			}
+			modifier = {
+				add = 15
+				fleet_power < 5000
+			}
+			modifier = {
+				add = 10
+				fleet_power < 10000
+			}
+			modifier = {
+				add = 5
+				fleet_power < 15000
+			}
+			modifier = {
+				add = 20
+				OR = {
+					relative_power = {
+						who = root
+						category = fleet
+						value = inferior
+					}
+					relative_power = {
+						who = root
+						category = fleet
+						value = pathetic
+					}
+				}
+			}
+			modifier = {
+				mult = 0.75
+				num_fleets >= 4
+			}
+			modifier = {
+				mult = 0.5
+				num_fleets >= 5
+			}
+		}
+		save_event_target_as = nsc_frebooter_empire_fleet_market_target
+	}
+}
+nsc_freebooter_the_duel_event_start_setup_effect = {
+	set_variable = { which = nsc_freebooter_the_duel_evt_the_khan_hp_var value = 4 } #khan default hp
+	set_variable = { which = nsc_freebooter_the_duel_evt_the_opponent_hp_var value = 4 } #opponent default hp
+	ruler = {
+		switch = {
+			trigger = has_trait
+			leader_trait_ruler_chosen = { root = { change_variable = { which = nsc_freebooter_the_duel_evt_the_khan_hp_var value = 1 } } }
+			leader_trait_ruler_cyborg = { root = { change_variable = { which = nsc_freebooter_the_duel_evt_the_khan_hp_var value = 1 } } }
+			leader_trait_ruler_psionic = { root = { change_variable = { which = nsc_freebooter_the_duel_evt_the_khan_hp_var value = 1 } } }
+			leader_trait_ruler_synthetic = { root = { change_variable = { which = nsc_freebooter_the_duel_evt_the_khan_hp_var value = 1 } } }
+		}
+	}
+	random_owned_leader = {
+		limit = { leader_class = general NOT = { has_trait = nsc_freebooter_leader_trait_great_khan } }
+		weights = {
+			base = 5
+			modifier = { add = 3 has_skill >= 3 }
+			modifier = { add = 6 has_skill >= 6 }
+			modifier = { add = 9 has_skill >= 9 }
+		}
+		switch = {
+			trigger = has_trait
+			leader_trait_general_chosen = { root = { change_variable = { which = nsc_freebooter_the_duel_evt_the_opponent_hp_var value = 1 } } }
+			leader_trait_general_cyborg = { root = { change_variable = { which = nsc_freebooter_the_duel_evt_the_opponent_hp_var value = 1 } } }
+			leader_trait_general_psionic = { root = { change_variable = { which = nsc_freebooter_the_duel_evt_the_opponent_hp_var value = 1 } } }
+			leader_trait_general_synthetic = { root = { change_variable = { which = nsc_freebooter_the_duel_evt_the_opponent_hp_var value = 1 } } }
+		}
+		save_event_target_as = nsc_freebooter_the_duel_evt_the_opponent_target
+	}
+}
+nsc_freebooter_the_duel_event_result_reset_effect = {
+	switch = {
+		trigger = has_country_flag
+		#aggressive
+		nsc_freebooter_the_duel_evt_option_aggressive_random_1 = { remove_country_flag = nsc_freebooter_the_duel_evt_option_aggressive_random_1 }
+		nsc_freebooter_the_duel_evt_option_aggressive_random_2 = { remove_country_flag = nsc_freebooter_the_duel_evt_option_aggressive_random_2 }
+		nsc_freebooter_the_duel_evt_option_aggressive_random_3 = { remove_country_flag = nsc_freebooter_the_duel_evt_option_aggressive_random_3 }
+		nsc_freebooter_the_duel_evt_option_aggressive_random_4 = { remove_country_flag = nsc_freebooter_the_duel_evt_option_aggressive_random_4 }
+		nsc_freebooter_the_duel_evt_option_aggressive_random_5 = { remove_country_flag = nsc_freebooter_the_duel_evt_option_aggressive_random_5 }
+		#defensive
+		nsc_freebooter_the_duel_evt_option_defensive_random_1 = { remove_country_flag = nsc_freebooter_the_duel_evt_option_defensive_random_1 }
+		nsc_freebooter_the_duel_evt_option_defensive_random_2 = { remove_country_flag = nsc_freebooter_the_duel_evt_option_defensive_random_2 }
+		nsc_freebooter_the_duel_evt_option_defensive_random_3 = { remove_country_flag = nsc_freebooter_the_duel_evt_option_defensive_random_3 }
+		nsc_freebooter_the_duel_evt_option_defensive_random_4 = { remove_country_flag = nsc_freebooter_the_duel_evt_option_defensive_random_4 }
+		nsc_freebooter_the_duel_evt_option_defensive_random_5 = { remove_country_flag = nsc_freebooter_the_duel_evt_option_defensive_random_5 }
+	}
+}
+nsc_freebooter_the_duel_event_round_1_result_effect = {
+	switch = {
+		trigger = has_country_flag
+		#aggressive
+		nsc_freebooter_the_duel_evt_option_aggressive_random_1 = {
+			subtract_variable = { which = nsc_freebooter_the_duel_evt_the_khan_hp_var value = 1 }
+			subtract_variable = { which = nsc_freebooter_the_duel_evt_the_opponent_hp_var value = 1 }
+		}
+		nsc_freebooter_the_duel_evt_option_aggressive_random_2 = {
+			subtract_variable = { which = nsc_freebooter_the_duel_evt_the_khan_hp_var value = 2 }
+			subtract_variable = { which = nsc_freebooter_the_duel_evt_the_opponent_hp_var value = 2 }
+		}
+		nsc_freebooter_the_duel_evt_option_aggressive_random_3 = {} #nothing happens
+		nsc_freebooter_the_duel_evt_option_aggressive_random_4 = {
+			subtract_variable = { which = nsc_freebooter_the_duel_evt_the_khan_hp_var value = 2 }
+			subtract_variable = { which = nsc_freebooter_the_duel_evt_the_opponent_hp_var value = 1 }
+		}
+		nsc_freebooter_the_duel_evt_option_aggressive_random_5 = {
+			subtract_variable = { which = nsc_freebooter_the_duel_evt_the_khan_hp_var value = 1 }
+			subtract_variable = { which = nsc_freebooter_the_duel_evt_the_opponent_hp_var value = 2 }
+		}
+		#defensive
+		nsc_freebooter_the_duel_evt_option_defensive_random_1 = { 
+			change_variable = { which = nsc_freebooter_the_duel_evt_the_khan_hp_var value = 1 }
+		}
+		nsc_freebooter_the_duel_evt_option_defensive_random_2 = { 
+			subtract_variable = { which = nsc_freebooter_the_duel_evt_the_opponent_hp_var value = 1 }
+		}
+		nsc_freebooter_the_duel_evt_option_defensive_random_3 = {} #nothing happens
+		nsc_freebooter_the_duel_evt_option_defensive_random_4 = { 
+			change_variable = { which = nsc_freebooter_the_duel_evt_the_opponent_hp_var value = 1 }
+		}
+		nsc_freebooter_the_duel_evt_option_defensive_random_5 = {
+			subtract_variable = { which = nsc_freebooter_the_duel_evt_the_khan_hp_var value = 1 }
+			subtract_variable = { which = nsc_freebooter_the_duel_evt_the_opponent_hp_var value = 1 }
+		}
+    }
+}
+nsc_freebooter_the_duel_event_round_2_result_effect = {
+	switch = {
+		trigger = has_country_flag
+		#aggressive
+		nsc_freebooter_the_duel_evt_option_aggressive_random_1 = {
+			subtract_variable = { which = nsc_freebooter_the_duel_evt_the_khan_hp_var value = 2 }
+			subtract_variable = { which = nsc_freebooter_the_duel_evt_the_opponent_hp_var value = 1 }
+		}
+		nsc_freebooter_the_duel_evt_option_aggressive_random_2 = {
+			subtract_variable = { which = nsc_freebooter_the_duel_evt_the_khan_hp_var value = 3 }
+			subtract_variable = { which = nsc_freebooter_the_duel_evt_the_opponent_hp_var value = 2 }
+		}
+		nsc_freebooter_the_duel_evt_option_aggressive_random_3 = {
+			subtract_variable = { which = nsc_freebooter_the_duel_evt_the_khan_hp_var value = 2 }
+			subtract_variable = { which = nsc_freebooter_the_duel_evt_the_opponent_hp_var value = 3 }
+		}
+		nsc_freebooter_the_duel_evt_option_aggressive_random_4 = {
+			subtract_variable = { which = nsc_freebooter_the_duel_evt_the_khan_hp_var value = 3 }
+			subtract_variable = { which = nsc_freebooter_the_duel_evt_the_opponent_hp_var value = 3 }
+		}
+		nsc_freebooter_the_duel_evt_option_aggressive_random_5 = {} #nothing happens
+		#defensive
+		nsc_freebooter_the_duel_evt_option_defensive_random_1 = {
+			change_variable = { which = nsc_freebooter_the_duel_evt_the_khan_hp_var value = 1 }
+			subtract_variable = { which = nsc_freebooter_the_duel_evt_the_opponent_hp_var value = 1 }
+		}
+		nsc_freebooter_the_duel_evt_option_defensive_random_2 = {
+			change_variable = { which = nsc_freebooter_the_duel_evt_the_khan_hp_var value = 1 }
+		}
+		nsc_freebooter_the_duel_evt_option_defensive_random_3 = {
+			subtract_variable = { which = nsc_freebooter_the_duel_evt_the_opponent_hp_var value = 1 }
+		}
+		nsc_freebooter_the_duel_evt_option_defensive_random_4 = {} #nothing happens
+		nsc_freebooter_the_duel_evt_option_defensive_random_5 = {
+			subtract_variable = { which = nsc_freebooter_the_duel_evt_the_khan_hp_var value = 2 }
+			subtract_variable = { which = nsc_freebooter_the_duel_evt_the_opponent_hp_var value = 2 }
+		}
+    }
+}
+nsc_freebooter_planet_raiding_effect = {
+	if = {
+		limit = {
+			root = {
+				OR = {
+					colony_type = col_generator
+					colony_type = col_habitat_energy
+					colony_type = col_generator
+				}
+			}
+		}
+		add_resource = { energy = 120 food = 30 }
+		create_message = {
+			type = EVENT_MESSAGE_TYPE #the notification message for freebooter empire
+			localization = NSC_FREEBOOTER_PIRATE_RAIDING_DONE_ENERGIES
+			days = 15
+			target = this
+			variable = {
+				type = name
+				localization = NSC_FREEBOOTER_PIRATE_RAIDING_TARGET_PLANET
+				scope = this
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			root = {
+				OR = {
+					colony_type = col_mining
+					colony_type = col_habitat_mining
+				}
+			}
+		}
+		add_resource = { minerals = 120 food = 30 }
+		create_message = {
+			type = EVENT_MESSAGE_TYPE #the notification message for freebooter empire
+			localization = NSC_FREEBOOTER_PIRATE_RAIDING_DONE_MINERALS
+			days = 15
+			target = this
+			variable = {
+				type = name
+				localization = NSC_FREEBOOTER_PIRATE_RAIDING_TARGET_PLANET
+				scope = this
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			root = {
+				OR = {
+					colony_type = col_farming
+					colony_type = col_ring_farming
+				}
+			}
+		}
+		add_resource = { food = 150 }
+		create_message = {
+			type = EVENT_MESSAGE_TYPE #the notification message for freebooter empire
+			localization = NSC_FREEBOOTER_PIRATE_RAIDING_DONE_FOOD
+			days = 15
+			target = this
+			variable = {
+				type = name
+				localization = NSC_FREEBOOTER_PIRATE_RAIDING_TARGET_PLANET
+				scope = this
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			root = {
+				OR = {
+					colony_type = col_foundry
+					colony_type = col_habitat_foundry
+					colony_type = col_ecu_foundry
+					colony_type = col_hiv_foundry
+					colony_type = col_mac_foundry
+
+					colony_type = col_habitat_nsc_freebooter_foundry
+				}
+			}
+		}
+		add_resource = { alloys = 120 food = 30 }
+		create_message = {
+			type = EVENT_MESSAGE_TYPE #the notification message for freebooter empire
+			localization = NSC_FREEBOOTER_PIRATE_RAIDING_DONE_ALLOYS
+			days = 15
+			target = this
+			variable = {
+				type = name
+				localization = NSC_FREEBOOTER_PIRATE_RAIDING_TARGET_PLANET
+				scope = this
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			root = {
+				OR = {
+					colony_type = col_factory
+					colony_type = col_habitat_factory
+					colony_type = col_habitat_nsc_freebooter_factory
+					colony_type = col_ecu_factory
+					colony_type = col_mac_factory
+				}
+			}
+		}
+		add_resource = { consumer_goods = 120 food = 30 }
+		create_message = {
+			type = EVENT_MESSAGE_TYPE #the notification message for freebooter empire
+			localization = NSC_FREEBOOTER_PIRATE_RAIDING_DONE_GOODS
+			days = 15
+			target = this
+			variable = {
+				type = name
+				localization = NSC_FREEBOOTER_PIRATE_RAIDING_TARGET_PLANET
+				scope = this
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			root = {
+				OR = {
+					colony_type = col_research
+					colony_type = col_ecu_research
+					colony_type = col_ring_research
+					colony_type = col_habitat_research
+					colony_type = col_habitat_nsc_freebooter_research
+				}
+			}
+		}
+		add_resource = { physics_research = 50 society_research = 50 engineering_research = 50 }
+		create_message = {
+			type = EVENT_MESSAGE_TYPE #the notification message for freebooter empire
+			localization = NSC_FREEBOOTER_PIRATE_RAIDING_DONE_RESEARCH
+			days = 15
+			target = this
+			variable = {
+				type = name
+				localization = NSC_FREEBOOTER_PIRATE_RAIDING_TARGET_PLANET
+				scope = this
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			root = {
+				OR = {
+					colony_type = col_refinery
+					colony_type = col_habitat_refinery
+					colony_type = col_habitat_nsc_freebooter_refinery
+				}
+			}
+		}
+		add_resource = { exotic_gases = 50 rare_crystals = 50 volatile_motes = 50 }
+		create_message = {
+			type = EVENT_MESSAGE_TYPE #the notification message for freebooter empire
+			localization = NSC_FREEBOOTER_PIRATE_RAIDING_DONE_RARES
+			days = 15
+			target = this
+			variable = {
+				type = name
+				localization = NSC_FREEBOOTER_PIRATE_RAIDING_TARGET_PLANET
+				scope = this
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			root = {
+				OR = {
+					colony_type = col_capital
+					colony_type = col_capital_hive
+					colony_type = col_capital_machine
+					colony_type = col_fe_capital
+				}
+			}
+		}
+		add_resource = { alloys = 70 consumer_goods = 70 influence = 10 }
+		create_message = {
+			type = EVENT_MESSAGE_TYPE #the notification message for freebooter empire
+			localization = NSC_FREEBOOTER_PIRATE_RAIDING_DONE_CAPITAL
+			days = 15
+			target = this
+			variable = {
+				type = name
+				localization = NSC_FREEBOOTER_PIRATE_RAIDING_TARGET_PLANET
+				scope = root #it's planet_event so 'root' is the planet itself
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			root = {
+				NOR = {
+					colony_type = col_generator
+					colony_type = col_habitat_energy
+					colony_type = col_generator
+					colony_type = col_mining
+
+					colony_type = col_habitat_mining
+					colony_type = col_farming
+					colony_type = col_ring_farming
+					colony_type = col_foundry
+					colony_type = col_habitat_foundry
+
+					colony_type = col_habitat_nsc_freebooter_foundry
+					colony_type = col_ecu_foundry
+					colony_type = col_hiv_foundry
+					colony_type = col_mac_foundry
+					colony_type = col_factory
+
+					colony_type = col_habitat_factory
+					colony_type = col_habitat_nsc_freebooter_factory
+					colony_type = col_ecu_factory
+					colony_type = col_mac_factory
+					colony_type = col_research
+
+					colony_type = col_ecu_research
+					colony_type = col_ring_research
+					colony_type = col_habitat_research
+					colony_type = col_habitat_nsc_freebooter_research
+					colony_type = col_refinery
+
+					colony_type = col_habitat_refinery
+					colony_type = col_habitat_nsc_freebooter_refinery
+					colony_type = col_capital
+					colony_type = col_capital_hive
+					colony_type = col_capital_machine
+
+					colony_type = col_fe_capital
+				}
+			}
+		}
+		add_resource = { energy = 50 minerals = 50 food = 50 }
+		create_message = {
+			type = EVENT_MESSAGE_TYPE #the notification message for freebooter empire
+			localization = NSC_FREEBOOTER_PIRATE_RAIDING_DONE_ETC
+			days = 15
+			target = this
+			variable = {
+				type = name
+				localization = NSC_FREEBOOTER_PIRATE_RAIDING_TARGET_PLANET
+				scope = this
+			}
+		}
+	}
+}
+nsc_freebooter_planet_raiding_planetary_effect = {
+	switch = {
+		trigger = has_modifier
+		nsc_freebooter_world_currently_under_raiding_planet_modifier_1 = {
+			remove_modifier = nsc_freebooter_world_currently_under_raiding_planet_modifier_1 
+			add_modifier = { modifier = nsc_freebooter_world_currently_under_raiding_planet_modifier_2 days = 1080 } 
+		}
+		nsc_freebooter_world_currently_under_raiding_planet_modifier_2 = {
+			remove_modifier = nsc_freebooter_world_currently_under_raiding_planet_modifier_2
+			add_modifier = { modifier = nsc_freebooter_world_currently_under_raiding_planet_modifier_3 days = 1080 } 
+		}
+		nsc_freebooter_world_currently_under_raiding_planet_modifier_3 = {
+			remove_modifier = nsc_freebooter_world_currently_under_raiding_planet_modifier_3 
+			add_modifier = { modifier = nsc_freebooter_world_currently_under_raiding_planet_modifier_4 days = 1080 } 
+		}
+		nsc_freebooter_world_currently_under_raiding_planet_modifier_4 = {
+			remove_modifier = nsc_freebooter_world_currently_under_raiding_planet_modifier_4 
+			add_modifier = { modifier = nsc_freebooter_world_currently_under_raiding_planet_modifier_5 days = 1080 } 
+		}
+		nsc_freebooter_world_currently_under_raiding_planet_modifier_5 = {
+			remove_modifier = nsc_freebooter_world_currently_under_raiding_planet_modifier_5
+			add_modifier = { modifier = nsc_freebooter_world_currently_under_raiding_planet_modifier_6 days = 1080 } 
+		}
+
+		nsc_freebooter_world_currently_under_raiding_planet_modifier_6 = {
+			remove_modifier = nsc_freebooter_world_currently_under_raiding_planet_modifier_6
+			add_modifier = { modifier = nsc_freebooter_world_currently_under_raiding_planet_modifier_7 days = 1080 } 
+		}
+		nsc_freebooter_world_currently_under_raiding_planet_modifier_7 = {
+			remove_modifier = nsc_freebooter_world_currently_under_raiding_planet_modifier_7
+			add_modifier = { modifier = nsc_freebooter_world_currently_under_raiding_planet_modifier_8 days = 1080 } 
+		}
+		nsc_freebooter_world_currently_under_raiding_planet_modifier_8 = {
+			remove_modifier = nsc_freebooter_world_currently_under_raiding_planet_modifier_8
+			add_modifier = { modifier = nsc_freebooter_world_currently_under_raiding_planet_modifier_9 days = 1080 } 
+		}
+		nsc_freebooter_world_currently_under_raiding_planet_modifier_9 = {
+			remove_modifier = nsc_freebooter_world_currently_under_raiding_planet_modifier_9
+			add_modifier = { modifier = nsc_freebooter_world_currently_under_raiding_planet_modifier_10 days = 1080 } 
+		}
+		nsc_freebooter_world_currently_under_raiding_planet_modifier_10 = {
+			remove_modifier = nsc_freebooter_world_currently_under_raiding_planet_modifier_10
+			add_modifier = { modifier = nsc_freebooter_recently_raided_world_planet_modifier days = 1080 }
+		}
+	}
+	#the sequence (of these effects) matters
+	if = {
+		limit = {
+			NOR = {
+				has_modifier = nsc_freebooter_world_currently_under_raiding_planet_modifier_1
+				has_modifier = nsc_freebooter_world_currently_under_raiding_planet_modifier_2
+				has_modifier = nsc_freebooter_world_currently_under_raiding_planet_modifier_3
+				has_modifier = nsc_freebooter_world_currently_under_raiding_planet_modifier_4
+				has_modifier = nsc_freebooter_world_currently_under_raiding_planet_modifier_5
+	
+				has_modifier = nsc_freebooter_world_currently_under_raiding_planet_modifier_6
+				has_modifier = nsc_freebooter_world_currently_under_raiding_planet_modifier_7
+				has_modifier = nsc_freebooter_world_currently_under_raiding_planet_modifier_8
+				has_modifier = nsc_freebooter_world_currently_under_raiding_planet_modifier_9
+				has_modifier = nsc_freebooter_world_currently_under_raiding_planet_modifier_10
+			}
+		}
+		add_modifier = { modifier = nsc_freebooter_world_currently_under_raiding_planet_modifier_1 days = 1080 }
+	}
+}
+nsc_freebooter_boarding_pod_pre_setup_effect = {
+	if = {
+		limit = { fromfrom = { has_component = NSC_FREEBOOTER_BOARDING_POD_1 NOT = { has_component = NSC_FREEBOOTER_BOARDING_POD_2 } } }
+		fromfromfrom = { #remember it's on_ship_destroyed_perp, so this will be calculated per 1 killed ship in the fleet, that's why I set the chance this low
+			random_list = {
+				85 = {}
+				15 = {
+					switch = {
+						trigger = is_ship_size
+						corvette = { solar_system = { change_variable = { which = nsc_freebooter_boarding_pod_target_corvette_var value = 1 } } }
+						destroyer = { solar_system = { change_variable = { which = nsc_freebooter_boarding_pod_target_destroyer_var value = 1 } } }
+						cruiser = { solar_system = { change_variable = { which = nsc_freebooter_boarding_pod_target_cruiser_var value = 1 } } }
+						battleship = { solar_system = { change_variable = { which = nsc_freebooter_boarding_pod_target_battleship_var value = 1 } } }
+						titan = { solar_system = { change_variable = { which = nsc_freebooter_boarding_pod_target_titan_var value = 1 } } }
+						colossus = { solar_system = { change_variable = { which = nsc_freebooter_boarding_pod_target_colossus_var value = 1 } } }
+						juggernaut = { solar_system = { change_variable = { which = nsc_freebooter_boarding_pod_target_juggernaut_var value = 1 } } }
+					}
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = { fromfrom = { NOT = { has_component = NSC_FREEBOOTER_BOARDING_POD_1 } has_component = NSC_FREEBOOTER_BOARDING_POD_2 } }
+		fromfromfrom = {
+			random_list = {
+				70 = {}
+				30 = {
+					switch = {
+						trigger = is_ship_size
+						corvette = { solar_system = { change_variable = { which = nsc_freebooter_boarding_pod_target_corvette_var value = 1 } } }
+						destroyer = { solar_system = { change_variable = { which = nsc_freebooter_boarding_pod_target_destroyer_var value = 1 } } }
+						cruiser = { solar_system = { change_variable = { which = nsc_freebooter_boarding_pod_target_cruiser_var value = 1 } } }
+						battleship = { solar_system = { change_variable = { which = nsc_freebooter_boarding_pod_target_battleship_var value = 1 } } }
+						titan = { solar_system = { change_variable = { which = nsc_freebooter_boarding_pod_target_titan_var value = 1 } } }
+						colossus = { solar_system = { change_variable = { which = nsc_freebooter_boarding_pod_target_colossus_var value = 1 } } }
+						juggernaut = { solar_system = { change_variable = { which = nsc_freebooter_boarding_pod_target_juggernaut_var value = 1 } } }
+					}
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = { fromfrom = { has_component = NSC_FREEBOOTER_BOARDING_POD_1 has_component = NSC_FREEBOOTER_BOARDING_POD_2 } }
+		fromfromfrom = {
+			random_list = {
+				70 = {}
+				30 = {
+					switch = {
+						trigger = is_ship_size
+						corvette = { solar_system = { change_variable = { which = nsc_freebooter_boarding_pod_target_corvette_var value = 1 } } }
+						destroyer = { solar_system = { change_variable = { which = nsc_freebooter_boarding_pod_target_destroyer_var value = 1 } } }
+						cruiser = { solar_system = { change_variable = { which = nsc_freebooter_boarding_pod_target_cruiser_var value = 1 } } }
+						battleship = { solar_system = { change_variable = { which = nsc_freebooter_boarding_pod_target_battleship_var value = 1 } } }
+						titan = { solar_system = { change_variable = { which = nsc_freebooter_boarding_pod_target_titan_var value = 1 } } }
+						colossus = { solar_system = { change_variable = { which = nsc_freebooter_boarding_pod_target_colossus_var value = 1 } } }
+						juggernaut = { solar_system = { change_variable = { which = nsc_freebooter_boarding_pod_target_juggernaut_var value = 1 } } }
+					}
+				}
+			}
+		}
+	}
+}
+nsc_freebooter_boarding_pod_main_effect = {
+	random_system = {
+		limit = {
+			any_fleet_in_system = { is_same_value = fromfrom }
+			OR = {
+				check_variable = { which = nsc_freebooter_boarding_pod_target_corvette_var value >= 1 }
+				check_variable = { which = nsc_freebooter_boarding_pod_target_destroyer_var value >= 1 }
+				check_variable = { which = nsc_freebooter_boarding_pod_target_cruiser_var value >= 1 }
+				check_variable = { which = nsc_freebooter_boarding_pod_target_battleship_var value >= 1 }
+				check_variable = { which = nsc_freebooter_boarding_pod_target_titan_var value >= 1 }
+				check_variable = { which = nsc_freebooter_boarding_pod_target_colossus_var value >= 1 }
+				check_variable = { which = nsc_freebooter_boarding_pod_target_juggernaut_var value >= 1 }
+			}
+		}
+		while = {
+			limit = { check_variable = { which = nsc_freebooter_boarding_pod_target_corvette_var value >= 1 } }
+			subtract_variable = { which = nsc_freebooter_boarding_pod_target_corvette_var value = 1 }
+			create_fleet = {
+				settings = { uses_naval_capacity = no }
+				effect = {
+					set_owner = prevprev.from
+					set_location = {
+						target = prev.starbase
+						distance = 6
+						angle = random
+					}
+					enable_special_project = {
+						name = NSC_FREEBOOTER_BOARDED_SHIP_REPAIR_PROJECT
+						location = this
+						owner = prevprev.this
+					}
+					create_ship = {
+						design = "NSC_FREEBOOTER_SHIP_DESIGN_CORVETTE"
+						graphical_culture = prevprev.from
+						effect = {
+							set_disabled = yes
+							reduce_hp_percent = 95
+						}
+					}
+				}
+			}
+		}
+		while = {
+			limit = { check_variable = { which = nsc_freebooter_boarding_pod_target_destroyer_var value >= 1 } }
+			subtract_variable = { which = nsc_freebooter_boarding_pod_target_destroyer_var value = 1 }
+			create_fleet = {
+				settings = { uses_naval_capacity = no }
+				effect = {
+					set_owner = prevprev.from
+					set_location = {
+						target = prev.starbase
+						distance = 6
+						angle = random
+					}
+					enable_special_project = {
+						name = NSC_FREEBOOTER_BOARDED_SHIP_REPAIR_PROJECT
+						location = this
+						owner = prevprev.this
+					}
+					create_ship = {
+						design = "NSC_FREEBOOTER_SHIP_DESIGN_DESTROYER"
+						graphical_culture = prevprev.from
+						effect = {
+							set_disabled = yes
+							reduce_hp_percent = 95
+						}
+					}
+				}
+			}
+		}
+		while = {
+			limit = { check_variable = { which = nsc_freebooter_boarding_pod_target_cruiser_var value >= 1 } }
+			subtract_variable = { which = nsc_freebooter_boarding_pod_target_cruiser_var value = 1 }
+			create_fleet = {
+				settings = { uses_naval_capacity = no }
+				effect = {
+					set_owner = prevprev.from
+					set_location = {
+						target = prev.starbase
+						distance = 6
+						angle = random
+					}
+					enable_special_project = {
+						name = NSC_FREEBOOTER_BOARDED_SHIP_REPAIR_PROJECT
+						location = this
+						owner = prevprev.this
+					}
+					create_ship = {
+						design = "NSC_FREEBOOTER_SHIP_DESIGN_CRUISER"
+						graphical_culture = prevprev.from
+						effect = {
+							set_disabled = yes
+							reduce_hp_percent = 95
+						}
+					}
+				}
+			}
+		}
+		while = {
+			limit = { check_variable = { which = nsc_freebooter_boarding_pod_target_battleship_var value >= 1 } }
+			subtract_variable = { which = nsc_freebooter_boarding_pod_target_battleship_var value = 1 }
+			create_fleet = {
+				settings = { uses_naval_capacity = no }
+				effect = {
+					set_owner = prevprev.from
+					set_location = {
+						target = prev.starbase
+						distance = 6
+						angle = random
+					}
+					enable_special_project = {
+						name = NSC_FREEBOOTER_BOARDED_SHIP_REPAIR_PROJECT
+						location = this
+						owner = prevprev.this
+					}
+					create_ship = {
+						design = "NSC_FREEBOOTER_SHIP_DESIGN_BATTLESHIP"
+						graphical_culture = prevprev.from
+						effect = {
+							set_disabled = yes
+							reduce_hp_percent = 95
+						}
+					}
+				}
+			}
+		}
+		while = {
+			limit = { check_variable = { which = nsc_freebooter_boarding_pod_target_titan_var value >= 1 } }
+			subtract_variable = { which = nsc_freebooter_boarding_pod_target_titan_var value = 1 }
+			create_fleet = {
+				settings = { uses_naval_capacity = no }
+				effect = {
+					set_owner = prevprev.from
+					set_location = {
+						target = prev.starbase
+						distance = 6
+						angle = random
+					}
+					enable_special_project = {
+						name = NSC_FREEBOOTER_BOARDED_SHIP_REPAIR_PROJECT
+						location = this
+						owner = prevprev.this
+					}
+					create_ship = {
+						design = "NSC_FREEBOOTER_SHIP_DESIGN_TITAN"
+						graphical_culture = prevprev.from
+						effect = {
+							set_disabled = yes
+							reduce_hp_percent = 95
+						}
+					}
+				}
+			}
+		}
+		while = {
+			limit = { check_variable = { which = nsc_freebooter_boarding_pod_target_colossus_var value >= 1 } }
+			subtract_variable = { which = nsc_freebooter_boarding_pod_target_colossus_var value = 1 }
+			create_fleet = {
+				settings = { uses_naval_capacity = no }
+				effect = {
+					set_owner = prevprev.from
+					set_location = {
+						target = prev.starbase
+						distance = 6
+						angle = random
+					}
+					enable_special_project = {
+						name = NSC_FREEBOOTER_BOARDED_SHIP_REPAIR_PROJECT
+						location = this
+						owner = prevprev.this
+					}
+					create_ship = {
+						design = "NSC_FREEBOOTER_SHIP_DESIGN_COLOSSUS"
+						graphical_culture = prevprev.from
+						effect = {
+							set_disabled = yes
+							reduce_hp_percent = 95
+						}
+					}
+				}
+			}
+		}
+		while = {
+			limit = { check_variable = { which = nsc_freebooter_boarding_pod_target_juggernaut_var value >= 1 } }
+			subtract_variable = { which = nsc_freebooter_boarding_pod_target_juggernaut_var value = 1 }
+			create_fleet = {
+				settings = { uses_naval_capacity = no }
+				effect = {
+					set_owner = prevprev.from
+					set_location = {
+						target = prev.starbase
+						distance = 6
+						angle = random
+					}
+					enable_special_project = {
+						name = NSC_FREEBOOTER_BOARDED_SHIP_REPAIR_PROJECT
+						location = this
+						owner = prevprev.this
+					}
+					create_ship = {
+						design = "NSC_FREEBOOTER_SHIP_DESIGN_JUGGERNAUT"
+						graphical_culture = prevprev.from
+						effect = {
+							set_disabled = yes
+							reduce_hp_percent = 95
+						}
+					}
+				}
+			}
+		}
+	}
+}
