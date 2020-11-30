@@ -1,0 +1,542 @@
+############################
+#
+# Will O The Wisps Events
+#
+# Written by felis
+#
+############################
+
+namespace = wotw_story
+
+# Planetary Administration Report
+planet_event = {
+	id = wotw_story.1
+	title = "wotw_story.1.name"
+	desc = "wotw_story.1.desc"
+	picture = GFX_evt_colony_settlement
+	show_sound = event_administrative_work
+	location = ROOT
+	trackable = yes
+
+	pre_triggers = {
+		has_owner = yes
+		original_owner = yes
+		has_ground_combat = no
+		is_occupied_flag = no
+	}
+
+	trigger = {
+		owner = {
+			has_origin = origin_wotw
+		}
+		has_planet_flag = wotw_forest_moon
+	}
+
+	is_triggered_only = yes
+
+	after = {
+		begin_event_chain = {
+			event_chain = "wotw_enchanted_forest_chain"
+			target = ROOT
+		}
+		custom_tooltip = wotw_story.1.tooltip
+		hidden_effect = {
+			remove_deposit = d_enchanted_forest_1
+			add_deposit = d_enchanted_forest_2
+			planet_event = { id = wotw_story.2 days = 720 random = 60 }
+		}
+	}
+
+	option = {
+		name = wotw_story.1.a # Establish the Wardens (environmentalists)
+		trigger = {
+			owner = {
+				has_civic = civic_environmentalist
+			}
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = unity
+				value = @tier2unityreward
+				min = @tier2unitymin
+				max = @tier2unitymax
+			}
+		}
+	}
+	option = {
+		name = wotw_story.1.b # Establish the Wardens
+		trigger = {
+			owner = {
+				NOT = { has_civic = civic_environmentalist }
+			}
+		}
+	}
+}
+
+# Report from the Wardens
+planet_event = {
+	id = wotw_story.2
+	title = "wotw_story.2.name"
+	desc = "wotw_story.2.desc"
+	picture = GFX_evt_zro_1
+	show_sound = event_alien_nature
+	location = ROOT
+	trackable = yes
+
+	pre_triggers = {
+		has_owner = yes
+		original_owner = yes
+		has_ground_combat = no
+		is_occupied_flag = no
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = wotw_story.2.a # Prepare an expedition
+		enable_special_project = {
+			name = "WOTW_1_PROJECT"
+			location = this
+			owner = root
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+				max = @tier2researchmax
+			}
+		}
+		hidden_effect = {
+			planet_event = { id = wotw_story.4 days = 720 random = 60 }
+		}
+	}
+}
+
+# Expedition outcome
+planet_event = {
+	id = wotw_story.3
+	title = "wotw_story.3.name"
+	desc = "wotw_story.3.desc"
+	picture = GFX_evt_aggressive_flora
+	show_sound = event_alien_nature
+	location = ROOT
+	trackable = yes
+
+	pre_triggers = {
+		has_owner = yes
+		original_owner = yes
+		has_ground_combat = no
+		is_occupied_flag = no
+	}
+
+	is_triggered_only = yes
+
+	after = {
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+		}
+	}
+
+	option = {
+		name = wotw_story.3.a # Set up a research outpost (materialists)
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_materialist
+					has_ethic = ethic_materialist
+				}
+			}
+		}
+		custom_tooltip = wotw_story.3.a.tooltip
+		owner = {
+			add_monthly_resource_mult = {
+				resource = unity
+				value = @tier3unityreward
+				min = @tier3unitymin
+				max = @tier3unitymax
+			}
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					has_deposit = d_enchanted_forest_2
+				}
+				remove_deposit = d_enchanted_forest_2
+				add_deposit = d_enchanted_forest_3
+			}
+			else_if = {
+				limit = {
+					has_deposit = d_enchanted_forest_5
+				}
+				remove_deposit = d_enchanted_forest_5
+				add_deposit = d_enchanted_forest_6
+			}
+		}
+	}
+	option = {
+		name = wotw_story.3.b # Set up a temple (spiritualists)
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_spiritualist
+					has_ethic = ethic_fanatic_spiritualist
+				}
+			}
+		}
+		custom_tooltip = wotw_story.3.b.tooltip
+		owner = {
+			add_monthly_resource_mult = {
+				resource = unity
+				value = @tier3unityreward
+				min = @tier3unitymin
+				max = @tier3unitymax
+			}
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					has_deposit = d_enchanted_forest_2
+				}
+				remove_deposit = d_enchanted_forest_2
+				add_deposit = d_enchanted_forest_4
+			}
+			else_if = {
+				limit = {
+					has_deposit = d_enchanted_forest_5
+				}
+				remove_deposit = d_enchanted_forest_5
+				add_deposit = d_enchanted_forest_7
+			}
+		}
+	}
+	option = {
+		name = wotw_story.3.c # Set up a research outpost
+		trigger = {
+			owner = {
+				NOR = {
+					has_ethic = ethic_materialist
+					has_ethic = ethic_materialist
+				}
+			}
+		}
+		custom_tooltip = wotw_story.3.c.tooltip
+		hidden_effect = {
+			if = {
+				limit = {
+					has_deposit = d_enchanted_forest_2
+				}
+				remove_deposit = d_enchanted_forest_2
+				add_deposit = d_enchanted_forest_3
+			}
+			else_if = {
+				limit = {
+					has_deposit = d_enchanted_forest_5
+				}
+				remove_deposit = d_enchanted_forest_5
+				add_deposit = d_enchanted_forest_6
+			}
+		}
+	}
+}
+
+# Redevelopment plans
+planet_event = {
+	id = wotw_story.4
+	title = "wotw_story.4.name"
+	desc = "wotw_story.4.desc"
+	picture = GFX_evt_busy_spaceport
+	show_sound = event_construction
+	location = ROOT
+	trackable = yes
+
+	pre_triggers = {
+		has_owner = yes
+		original_owner = yes
+		has_ground_combat = no
+		is_occupied_flag = no
+	}
+
+	is_triggered_only = yes
+
+	after = {
+		hidden_effect = {
+			planet_event = { id = wotw_story.5 days = 720 random = 60 }
+		}
+	}
+
+	option = {
+		name = wotw_story.4.a # Let them
+		allow = {
+			owner = {
+				has_resource = {
+					type = energy
+					amount >= 2000
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				energy = -2000
+			}
+		}
+		custom_tooltip = wotw_story.4.a.tooltip
+		hidden_effect = {
+			if = {
+				limit = {
+					has_deposit = d_enchanted_forest_2
+				}
+				remove_deposit = d_enchanted_forest_2
+				add_deposit = d_enchanted_forest_5
+			}
+			else_if = {
+				limit = {
+					has_deposit = d_enchanted_forest_3
+				}
+				remove_deposit = d_enchanted_forest_3
+				add_deposit = d_enchanted_forest_6
+			}
+			else_if = {
+				limit = {
+					has_deposit = d_enchanted_forest_4
+				}
+				remove_deposit = d_enchanted_forest_4
+				add_deposit = d_enchanted_forest_7
+			}
+		}
+	}
+	option = {
+		name = wotw_story.4.b # Prohibit (environmentalists)
+		trigger = {
+			owner = {
+				has_civic = civic_environmentalist
+			}
+		}
+	}
+	option = {
+		name = wotw_story.4.c # Prohibit
+		trigger = {
+			owner = {
+				NOT = { has_civic = civic_environmentalist }
+			}
+		}
+	}
+}
+
+# An eerie presence
+planet_event = {
+	id = wotw_story.5
+	title = "wotw_story.5.name"
+	desc = "wotw_story.5.desc"
+	picture = GFX_evt_alien_nature
+	show_sound = event_mystic_reveal
+	location = ROOT
+	trackable = yes
+
+	pre_triggers = {
+		has_owner = yes
+		original_owner = yes
+		has_ground_combat = no
+		is_occupied_flag = no
+	}
+
+	is_triggered_only = yes
+
+	after = {
+		hidden_effect = {
+			planet_event = { id = wotw_story.6 days = 720 random = 60 }
+		}
+	}
+
+	option = {
+		name = WORRYING
+		add_modifier = {
+			modifier = "wotw_eerie_presence"
+			days = 720
+		}
+	}
+}
+
+# The Revelation
+planet_event = {
+	id = wotw_story.6
+	title = "wotw_story.6.name"
+	desc = "wotw_story.6.desc"
+	picture = GFX_evt_surreal_visions
+	show_sound = event_mystic_reveal
+	location = ROOT
+	trackable = yes
+
+	pre_triggers = {
+		has_owner = yes
+		original_owner = yes
+		has_ground_combat = no
+		is_occupied_flag = no
+	}
+
+	is_triggered_only = yes
+
+	after = {
+		owner = {
+			end_event_chain = "wotw_enchanted_forest_chain"
+		}
+
+		hidden_effect = {
+			if = {
+				limit = { has_modifier = wotw_eerie_presence }
+				remove_modifier = wotw_eerie_presence
+			}
+		}
+	}
+
+	option = {
+		name = wotw_story.6.a # Accept the guidance
+		hidden_effect = {
+			if = {
+				limit = {
+					has_deposit = d_enchanted_forest_2
+				}
+				remove_deposit = d_enchanted_forest_2
+				add_deposit = d_enchanted_forest_8
+			}
+			else_if = {
+				limit = {
+					has_deposit = d_enchanted_forest_3
+				}
+				remove_deposit = d_enchanted_forest_3
+				add_deposit = d_enchanted_forest_9
+			}
+			else_if = {
+				limit = {
+					has_deposit = d_enchanted_forest_4
+				}
+				remove_deposit = d_enchanted_forest_4
+				add_deposit = d_enchanted_forest_10
+			}
+			else_if = {
+				limit = {
+					has_deposit = d_enchanted_forest_5
+				}
+				remove_deposit = d_enchanted_forest_5
+				add_deposit = d_enchanted_forest_8
+			}
+			else_if = {
+				limit = {
+					has_deposit = d_enchanted_forest_6
+				}
+				remove_deposit = d_enchanted_forest_6
+				add_deposit = d_enchanted_forest_9
+			}
+			else_if = {
+				limit = {
+					has_deposit = d_enchanted_forest_7
+				}
+				remove_deposit = d_enchanted_forest_7
+				add_deposit = d_enchanted_forest_10
+			}
+			owner = {
+				modify_species = {
+					species = this
+					add_trait = trait_attuned_to_nature
+				}
+				while = {
+					count = 3			
+					random_owned_pop = {
+						limit = {
+							is_same_species = owner.species
+							NOT = { has_ethic = "ethic_pacifist" }
+						}
+						pop_change_ethic = "ethic_pacifist"
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					NOR = {
+						has_ethic = "ethic_pacifist"
+						has_ethic = "ethic_fanatic_pacifist"
+					}
+				}
+			}
+			owner = {
+				add_monthly_resource_mult = {
+					resource = unity
+					value = @tier4unityreward
+					min = @tier4unitymin
+					max = @tier4unitymax
+				}
+				shift_ethic = "ethic_pacifist"
+			}		
+		}
+		else = {
+				owner = {
+					add_monthly_resource_mult = {
+					resource = unity
+					value = @tier5unityreward
+					min = @tier5unitymin
+					max = @tier5unitymax
+				}
+			}
+		}
+	}
+	option = {
+		name = wotw_story.6.b # Reject
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+				max = @tier2researchmax
+			}
+		}
+		change_pc = pc_nuked
+		hidden_effect = {
+			reset_planet = yes
+			# clear_blockers = yes
+			# add_deposit = d_burned_forest # TODO: add deposit
+			if = {
+				limit = {
+					has_deposit = d_enchanted_forest_2
+				}
+				remove_deposit = d_enchanted_forest_2
+			}
+			else_if = {
+				limit = {
+					has_deposit = d_enchanted_forest_3
+				}
+				remove_deposit = d_enchanted_forest_3
+			}
+			else_if = {
+				limit = {
+					has_deposit = d_enchanted_forest_4
+				}
+				remove_deposit = d_enchanted_forest_4
+			}
+			else_if = {
+				limit = {
+					has_deposit = d_enchanted_forest_5
+				}
+				remove_deposit = d_enchanted_forest_5
+			}
+			else_if = {
+				limit = {
+					has_deposit = d_enchanted_forest_6
+				}
+				remove_deposit = d_enchanted_forest_6
+			}
+			else_if = {
+				limit = {
+					has_deposit = d_enchanted_forest_7
+				}
+				remove_deposit = d_enchanted_forest_7
+			}
+		}
+	}
+}
