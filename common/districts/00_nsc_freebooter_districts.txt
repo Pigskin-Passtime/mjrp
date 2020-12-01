@@ -181,6 +181,167 @@ district_nsc_freebooter_hab_foundry = {
 		}
 	}
 }
+district_nsc_freebooter_hab_mining = {
+	base_buildtime = 540
+	icon = district_mining
+	is_capped_by_modifier = no
+
+	show_on_uncolonized = {
+		uses_district_set = nsc_freebooter_habitat
+	}
+
+	potential = {
+		exists = owner
+		owner = { is_lithoid_empire = yes }
+		uses_district_set = nsc_freebooter_habitat
+	}
+
+	allow = {
+		NOT = { has_modifier = resort_colony }
+	}
+
+	conversion_ratio = 1
+	convert_to = {
+		district_mining
+	}
+
+	resources = {
+		category = planet_districts
+		cost = { minerals = 750 }
+		upkeep = { energy = 3 }
+	}
+
+	planet_modifier = {
+		planet_housing_add = 2 #only two housing #this is the intended disadvantage
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				has_valid_civic = civic_agrarian_idyll
+			}
+		}
+		modifier = {
+			planet_housing_add = 1
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = { is_hive_empire = yes }
+		}
+		modifier = {
+			job_mining_drone_add = 3
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = { is_machine_empire = yes }
+		}
+		modifier = {
+			job_mining_drone_add = 2
+			planet_housing_add = 1
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				is_gestalt = no
+				is_fallen_empire_spiritualist = no
+			}
+		}
+		modifier = {
+			job_miner_add = 2 #only two jobs #this is the intended disadvantage
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = { is_fallen_empire_spiritualist = yes }
+		}
+		modifier = {
+			job_fe_acolyte_mine_add = 2
+		}
+	}
+
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = { is_gestalt = yes }
+		}
+		text = job_mining_drone_effect_desc
+	}
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = {
+				is_gestalt = no
+				is_fallen_empire_spiritualist = no
+			}
+		}
+		text = job_miner_effect_desc
+	}
+
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = { is_fallen_empire_spiritualist = yes }
+		}
+		text = job_fe_acolyte_mine_effect_desc
+	}
+
+	ai_weight = {
+		weight = 0
+		modifier = {
+			weight = 300
+			districts_build_district = yes
+			owner = {
+				has_monthly_income = {
+					resource = food
+					value > 10
+				}
+				has_monthly_income = {
+					resource = energy
+					value > 200
+				}
+			}
+		}
+		modifier = {
+			weight = 250
+				any_owned_pop = {
+				is_unemployed = yes
+				NOT = { has_citizenship_type = { type = citizenship_organic_trophy } }
+			}
+		}
+		modifier = {
+			factor = 1.25
+			exists = owner
+			owner = {
+				is_lithoid_empire = yes
+			}
+		}
+		modifier = {
+			factor = 10
+			owner = {
+				has_deficit = minerals
+			}
+		}
+	}
+
+	ai_resource_production = {
+		minerals = 1
+		trigger = {
+			always = yes
+		}
+	}
+}
 district_nsc_freebooter_hab_farming = {
 	base_buildtime = 540
 	is_capped_by_modifier = no
@@ -191,6 +352,8 @@ district_nsc_freebooter_hab_farming = {
 	}
 
 	potential = {
+		exists = owner
+		owner = { is_lithoid_empire = no }
 		uses_district_set = nsc_freebooter_habitat
 	}
 

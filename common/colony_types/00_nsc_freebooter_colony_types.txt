@@ -24,83 +24,144 @@ col_habitat_nsc_freebooter = {
 	icon = 12
 
 	potential = {
-		uses_district_set = habitat
+		NOT = { has_planet_flag = nsc_freebooter_habitat_1 }
+		is_planet_class = pc_nsc_freebooter_habitat
 	}
 
 	weight_modifier = {
-		base = 500
+		base = 5000
 	}
 }
 
-# Habitat Cultural
-col_habitat_nsc_freebooter_leisure = {
-	icon = 20
+# Habitat Mining
+col_habitat_nsc_freebooter_mining = {
+	icon = 23
 
 	potential = {
-		uses_district_set = habitat
-		exists = owner
-		owner = {
-			OR = {
+		NOT = { has_planet_flag = nsc_freebooter_habitat_1 }
+		is_planet_class = pc_nsc_freebooter_habitat
+	}
+	planet_modifier = {
+		planet_miners_produces_mult = 0.1
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				is_galactic_community_member = yes
 				is_gestalt = no
-				has_valid_civic = civic_machine_servitor
+			}
+			OR = {
+				is_active_resolution = "resolution_greatergood_five_year_plans"
+				is_active_resolution = "resolution_greatergood_greater_than_ourselves"
+				is_active_resolution = "resolution_greatergood_balance_in_the_middle"
+				is_active_resolution = "resolution_greatergood_universal_prosperity_mandate"
 			}
 		}
+		modifier = {
+			planet_jobs_worker_produces_mult = 0.05
+		}
 	}
-	planet_modifier = {
-	    planet_districts_hab_leisure_cost_mult = -0.1
-		pop_happiness = 0.10
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				is_galactic_community_member = yes
+				is_gestalt = yes
+			}
+			OR = {
+				is_active_resolution = "resolution_greatergood_five_year_plans"
+				is_active_resolution = "resolution_greatergood_greater_than_ourselves"
+				is_active_resolution = "resolution_greatergood_balance_in_the_middle"
+				is_active_resolution = "resolution_greatergood_universal_prosperity_mandate"
+			}
+		}
+		modifier = {
+			planet_jobs_simple_drone_produces_mult = 0.05
+		}
 	}
+
 	weight_modifier = {
-		base = 200
+		base = 50000
 		modifier = {
-			factor = 3
-			has_designation = col_habitat_leisure
+			factor = 2
+			owner = { has_monthly_income = { resource = minerals value < 0 } }
 		}
 		modifier = {
 			factor = 3
-			num_buildings = { type = building_holo_theatres value >= 3 }
+			has_designation = col_habitat_nsc_freebooter_mining
 		}
 		modifier = {
-			factor = 4
-			num_buildings = { type = building_hyper_entertainment_forum value >= 3 }
+			factor = 3
+			num_districts = { type = district_nsc_freebooter_hab_mining value >= 3 }
 		}
 	}
 }
 
-# Habitat Trade
-col_habitat_nsc_freebooter_trade = {
-	icon = 21
+# Habitat Farming
+col_habitat_nsc_freebooter_farming = {
+	icon = 3
 
 	potential = {
-		uses_district_set = habitat
-		exists = owner
-		owner = { is_gestalt = no }
+		NOT = { has_planet_flag = nsc_freebooter_habitat_1 }
+		is_planet_class = pc_nsc_freebooter_habitat
 	}
+
 	planet_modifier = {
-		planet_districts_hab_trade_cost_mult = -0.1
-		trade_value_mult = 0.20
+		planet_farmers_produces_mult = 0.1
 	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				is_galactic_community_member = yes
+				is_gestalt = no
+			}
+			OR = {
+				is_active_resolution = "resolution_greatergood_five_year_plans"
+				is_active_resolution = "resolution_greatergood_greater_than_ourselves"
+				is_active_resolution = "resolution_greatergood_balance_in_the_middle"
+				is_active_resolution = "resolution_greatergood_universal_prosperity_mandate"
+			}
+		}
+		modifier = {
+			planet_jobs_worker_produces_mult = 0.05
+		}
+	}
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				is_galactic_community_member = yes
+				is_gestalt = yes
+			}
+			OR = {
+				is_active_resolution = "resolution_greatergood_five_year_plans"
+				is_active_resolution = "resolution_greatergood_greater_than_ourselves"
+				is_active_resolution = "resolution_greatergood_balance_in_the_middle"
+				is_active_resolution = "resolution_greatergood_universal_prosperity_mandate"
+			}
+		}
+		modifier = {
+			planet_jobs_simple_drone_produces_mult = 0.05
+		}
+	}
+
 	weight_modifier = {
-		base = 300
+		base = 50000
 		modifier = {
-			factor = 2
-			owner = { has_monthly_income = { resource = energy value < 0 } }
+			add = 2
+			has_designation = col_habitat_nsc_freebooter_farming
 		}
 		modifier = {
-			factor = 0.1
-			has_planet_flag = energy_habitat
+			add = 5
+			num_districts = { type = district_nsc_freebooter_hab_farming value >= 3 }
 		}
 		modifier = {
-			factor = 3
-			has_designation = col_habitat_trade
-		}
-		modifier = {
-			factor = 2
-			num_buildings = { type = building_commercial_zone value >= 3 }
-		}
-		modifier = {
-			factor = 3
-			num_buildings = { type = building_commercial_megaplex value >= 3 }
+			factor = 0
+			num_districts = { type = district_nsc_freebooter_hab_farming value = 0 }
 		}
 	}
 }
@@ -110,14 +171,15 @@ col_habitat_nsc_freebooter_research = {
 	icon = 22
 
 	potential = {
-		uses_district_set = habitat
+		NOT = { has_planet_flag = nsc_freebooter_habitat_1 }
+		is_planet_class = pc_nsc_freebooter_habitat
 	}
 	planet_modifier = {
 		planet_districts_hab_research_cost_mult = -0.1
 		planet_researchers_produces_mult = 0.1
 	}
 	weight_modifier = {
-		base = 300
+		base = 3000
 		modifier = {
 			factor = 2
 			OR = {
@@ -128,7 +190,7 @@ col_habitat_nsc_freebooter_research = {
 		}
 		modifier = {
 			factor = 3
-			has_designation = col_habitat_research
+			has_designation = col_habitat_nsc_freebooter_research
 		}
 		modifier = {
 			factor = 2
@@ -154,7 +216,8 @@ col_habitat_nsc_freebooter_fortress = {
 	icon = 24
 
 	potential = {
-		uses_district_set = habitat
+		NOT = { has_planet_flag = nsc_freebooter_habitat_1 }
+		is_planet_class = pc_nsc_freebooter_habitat
 	}
 	planet_modifier = {
 		planet_buildings_strongholds_cost_mult = -0.30
@@ -162,10 +225,10 @@ col_habitat_nsc_freebooter_fortress = {
 		army_defense_damage_mult = 0.20
 	}
 	weight_modifier = {
-		base = 300
+		base = 3000
 		modifier = {
 			factor = 3
-			has_designation = col_habitat_fortress
+			has_designation = col_habitat_nsc_freebooter_fortress
 		}
 		modifier = {
 			factor = 2
@@ -191,21 +254,22 @@ col_habitat_nsc_freebooter_foundry = {
 	icon = 25
 
 	potential = {
-		uses_district_set = habitat
+		NOT = { has_planet_flag = nsc_freebooter_habitat_1 }
+		is_planet_class = pc_nsc_freebooter_habitat
 	}
 	planet_modifier = {
 		planet_building_foundry_1_build_speed_mult = 0.25
 		planet_metallurgists_upkeep_mult = -0.2
 	}
 	weight_modifier = {
-		base = 300
+		base = 3000
 		modifier = {
 			factor = 2
 			owner = { has_monthly_income = { resource = alloys value < 10 } }
 		}
 		modifier = {
 			factor = 3
-			has_designation = col_habitat_foundry
+			has_designation = col_habitat_nsc_freebooter_foundry
 		}
 		modifier = {
 			factor = 2
@@ -235,7 +299,8 @@ col_habitat_nsc_freebooter_factory = {
 	icon = 26
 
 	potential = {
-		uses_district_set = habitat
+		NOT = { has_planet_flag = nsc_freebooter_habitat_1 }
+		is_planet_class = pc_nsc_freebooter_habitat
 		exists = owner
 		OR = {
 			owner = { is_regular_empire = yes }
@@ -247,14 +312,14 @@ col_habitat_nsc_freebooter_factory = {
 		planet_artisans_upkeep_mult = -0.2
 	}
 	weight_modifier = {
-		base = 500
+		base = 5000
 		modifier = {
 			factor = 2
 			owner = { has_monthly_income = { resource = consumer_goods value < 5 } }
 		}
 		modifier = {
 			factor = 3
-			has_designation = col_habitat_factory
+			has_designation = col_habitat_nsc_freebooter_factory
 		}
 		modifier = {
 			factor = 2
@@ -284,7 +349,8 @@ col_habitat_nsc_freebooter_refinery = {
 	icon = 27
 
 	potential = {
-		uses_district_set = habitat
+		NOT = { has_planet_flag = nsc_freebooter_habitat_1 }
+		is_planet_class = pc_nsc_freebooter_habitat
 	}
 	planet_modifier = {
 		planet_building_refinery_build_speed_mult = 0.25
@@ -296,7 +362,7 @@ col_habitat_nsc_freebooter_refinery = {
 	}
 
 	weight_modifier = {
-		base = 500
+		base = 5000
 		modifier = {
 			factor = 2
 			OR = {
@@ -307,7 +373,7 @@ col_habitat_nsc_freebooter_refinery = {
 		}
 		modifier = {
 			factor = 3
-			has_designation = col_habitat_refinery
+			has_designation = col_habitat_nsc_freebooter_refinery
 		}
 		modifier = {
 			factor = 2

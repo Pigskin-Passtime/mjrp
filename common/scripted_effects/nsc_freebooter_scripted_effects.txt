@@ -5,7 +5,7 @@ origin_nsc_freebooter_start_setup = {
 	}
 	owner = { give_technology = { tech = tech_nsc_freebooter_boarding_pod_1 message = no } }
 	while = {
-		count = 25
+		count = 23
 		create_pop = { species = owner_main_species }
 	}
 	add_building = building_capital
@@ -20,9 +20,19 @@ origin_nsc_freebooter_start_setup = {
 		count = 2
 		add_district = district_nsc_freebooter_hab_foundry
 	}
-	while = {
-		count = 2
-		add_district = district_nsc_freebooter_hab_farming
+	if = {
+		limit = { owner = { is_lithoid_empire = no } }
+		while = {
+			count = 2
+			add_district = district_nsc_freebooter_hab_farming
+			create_pop = { species = owner_main_species }
+		}
+		else = {
+			while = {
+				count = 2
+				add_district = district_nsc_freebooter_hab_mining
+			}
+		}
 	}
 	solar_system = {
 		every_system_planet = {
@@ -31,7 +41,7 @@ origin_nsc_freebooter_start_setup = {
 		}
 	}
 }
-nsc_frebooter_empire_admiral_market_target_selection = {
+nsc_freebooter_empire_admiral_market_target_selection = {
 	random_country = {
 		limit = {
 			is_ai = yes
@@ -85,7 +95,7 @@ nsc_frebooter_empire_admiral_market_target_selection = {
 							}
 						}
 					}
-					save_event_target_as = nsc_frebooter_customer_empire_biggest_enemy
+					save_event_target_as = nsc_freebooter_customer_empire_biggest_enemy
 				}
 			}
 		}
@@ -101,12 +111,12 @@ nsc_frebooter_empire_admiral_market_target_selection = {
 				is_at_war = yes
 				OR = {
 					relative_power = {
-						who = event_target:nsc_frebooter_customer_empire_biggest_enemy
+						who = event_target:nsc_freebooter_customer_empire_biggest_enemy
 						category = fleet
 						value = inferior
 					}
 					relative_power = {
-						who = event_target:nsc_frebooter_customer_empire_biggest_enemy
+						who = event_target:nsc_freebooter_customer_empire_biggest_enemy
 						category = fleet
 						value = pathetic
 					}
@@ -137,10 +147,10 @@ nsc_frebooter_empire_admiral_market_target_selection = {
 			}
 			modifier = {
 				mult = 0.5
-				has_country_flag = already_bought_admiral_from_nsc_frebooter_empire_before
+				has_country_flag = already_bought_admiral_from_nsc_freebooter_empire_before
 			}
 		}
-		save_event_target_as = nsc_frebooter_empire_admiral_market_target
+		save_event_target_as = nsc_freebooter_empire_admiral_market_target
 	}
 }
 nsc_freebooter_admiral_market_selected_target_count_effect = {
@@ -199,38 +209,38 @@ nsc_freebooter_admiral_market_sell_effect_1 = {
 	event_target:nsc_freebooter_admiral_market_selected_leader_1 = {
 		switch = {
 			trigger = has_skill
-			1 = { root = { add_resource = { energy = 200 influence = 50 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -200 } } }
-			2 = { root = { add_resource = { energy = 400 influence = 100 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -400 } } }
-			3 = { root = { add_resource = { energy = 600 influence = 150 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -600 } } }
-			4 = { root = { add_resource = { energy = 800 influence = 200 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -800 } } }
-			5 = { root = { add_resource = { energy = 1000 influence = 250 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1000 } } }
-			6 = { root = { add_resource = { energy = 1200 influence = 300 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1200 } } }
-			7 = { root = { add_resource = { energy = 1400 influence = 350 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1400 } } }
-			8 = { root = { add_resource = { energy = 1600 influence = 400 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1600 } } }
-			9 = { root = { add_resource = { energy = 1800 influence = 450 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1800 } } }
-			10 = { root = { add_resource = { energy = 2000 influence = 500 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -2000 } } }
+			1 = { root = { add_resource = { energy = 200 influence = 50 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -200 } } }
+			2 = { root = { add_resource = { energy = 400 influence = 100 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -400 } } }
+			3 = { root = { add_resource = { energy = 600 influence = 150 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -600 } } }
+			4 = { root = { add_resource = { energy = 800 influence = 200 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -800 } } }
+			5 = { root = { add_resource = { energy = 1000 influence = 250 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -1000 } } }
+			6 = { root = { add_resource = { energy = 1200 influence = 300 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -1200 } } }
+			7 = { root = { add_resource = { energy = 1400 influence = 350 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -1400 } } }
+			8 = { root = { add_resource = { energy = 1600 influence = 400 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -1600 } } }
+			9 = { root = { add_resource = { energy = 1800 influence = 450 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -1800 } } }
+			10 = { root = { add_resource = { energy = 2000 influence = 500 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -2000 } } }
 		}
 		#if the player uses some kinds of mod to increase max leader level...
 		if = {
 			limit = { has_skill > 10 }
-			root = { add_resource = { energy = 2200 influence = 550 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -2200 } }
+			root = { add_resource = { energy = 2200 influence = 550 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -2200 } }
 		}
 	}
 	if = {
-		limit = { event_target:nsc_frebooter_empire_admiral_market_target = { has_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double } }
+		limit = { event_target:nsc_freebooter_empire_admiral_market_target = { has_country_flag = nsc_freebooter_empire_admiral_market_target_pay_double } }
 		add_resource = { energy = 1000 }
 	}
 	custom_tooltip = nsc_freebooter.12.a.tooltip
 	add_modifier = { modifier = nsc_freebooter_market_cooldown_empire_modifier days = 360 }
 	hidden_effect = {
-		event_target:nsc_frebooter_empire_admiral_market_target = {
-			set_country_flag = already_bought_admiral_from_nsc_frebooter_empire_before
+		event_target:nsc_freebooter_empire_admiral_market_target = {
+			set_country_flag = already_bought_admiral_from_nsc_freebooter_empire_before
 			clone_leader = { target = event_target:nsc_freebooter_admiral_market_selected_leader_1 class = admiral }
 			event_target:nsc_freebooter_admiral_market_selected_leader_1 = { kill_leader = { show_notification = no } }
 			if = {
-				limit = { has_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double }
+				limit = { has_country_flag = nsc_freebooter_empire_admiral_market_target_pay_double }
 				add_resource = { energy = -1000 }
-				remove_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double
+				remove_country_flag = nsc_freebooter_empire_admiral_market_target_pay_double
 			}
 		}
 	}
@@ -239,37 +249,37 @@ nsc_freebooter_admiral_market_sell_effect_2 = {
 	event_target:nsc_freebooter_admiral_market_selected_leader_2 = {
 		switch = {
 			trigger = has_skill
-			1 = { root = { add_resource = { energy = 200 influence = 50 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -200 } } }
-			2 = { root = { add_resource = { energy = 400 influence = 100 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -400 } } }
-			3 = { root = { add_resource = { energy = 600 influence = 150 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -600 } } }
-			4 = { root = { add_resource = { energy = 800 influence = 200 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -800 } } }
-			5 = { root = { add_resource = { energy = 1000 influence = 250 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1000 } } }
-			6 = { root = { add_resource = { energy = 1200 influence = 300 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1200 } } }
-			7 = { root = { add_resource = { energy = 1400 influence = 350 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1400 } } }
-			8 = { root = { add_resource = { energy = 1600 influence = 400 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1600 } } }
-			9 = { root = { add_resource = { energy = 1800 influence = 450 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1800 } } }
-			10 = { root = { add_resource = { energy = 2000 influence = 500 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -2000 } } }
+			1 = { root = { add_resource = { energy = 200 influence = 50 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -200 } } }
+			2 = { root = { add_resource = { energy = 400 influence = 100 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -400 } } }
+			3 = { root = { add_resource = { energy = 600 influence = 150 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -600 } } }
+			4 = { root = { add_resource = { energy = 800 influence = 200 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -800 } } }
+			5 = { root = { add_resource = { energy = 1000 influence = 250 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -1000 } } }
+			6 = { root = { add_resource = { energy = 1200 influence = 300 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -1200 } } }
+			7 = { root = { add_resource = { energy = 1400 influence = 350 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -1400 } } }
+			8 = { root = { add_resource = { energy = 1600 influence = 400 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -1600 } } }
+			9 = { root = { add_resource = { energy = 1800 influence = 450 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -1800 } } }
+			10 = { root = { add_resource = { energy = 2000 influence = 500 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -2000 } } }
 		}
 		if = {
 			limit = { has_skill > 10 }
-			root = { add_resource = { energy = 2200 influence = 550 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -2200 } }
+			root = { add_resource = { energy = 2200 influence = 550 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -2200 } }
 		}
 	}
 	if = {
-		limit = { event_target:nsc_frebooter_empire_admiral_market_target = { has_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double } }
+		limit = { event_target:nsc_freebooter_empire_admiral_market_target = { has_country_flag = nsc_freebooter_empire_admiral_market_target_pay_double } }
 		add_resource = { energy = 1000 }
 	}
 	custom_tooltip = nsc_freebooter.12.b.tooltip
 	add_modifier = { modifier = nsc_freebooter_market_cooldown_empire_modifier days = 360 }
 	hidden_effect = {
-		event_target:nsc_frebooter_empire_admiral_market_target = {
-			set_country_flag = already_bought_admiral_from_nsc_frebooter_empire_before
+		event_target:nsc_freebooter_empire_admiral_market_target = {
+			set_country_flag = already_bought_admiral_from_nsc_freebooter_empire_before
 			clone_leader = { target = event_target:nsc_freebooter_admiral_market_selected_leader_2 class = admiral }
 			event_target:nsc_freebooter_admiral_market_selected_leader_2 = { kill_leader = { show_notification = no } }
 			if = {
-				limit = { has_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double }
+				limit = { has_country_flag = nsc_freebooter_empire_admiral_market_target_pay_double }
 				add_resource = { energy = -1000 }
-				remove_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double
+				remove_country_flag = nsc_freebooter_empire_admiral_market_target_pay_double
 			}
 		}
 	}
@@ -278,37 +288,37 @@ nsc_freebooter_admiral_market_sell_effect_3 = {
 	event_target:nsc_freebooter_admiral_market_selected_leader_3 = {
 		switch = {
 			trigger = has_skill
-			1 = { root = { add_resource = { energy = 200 influence = 50 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -200 } } }
-			2 = { root = { add_resource = { energy = 400 influence = 100 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -400 } } }
-			3 = { root = { add_resource = { energy = 600 influence = 150 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -600 } } }
-			4 = { root = { add_resource = { energy = 800 influence = 200 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -800 } } }
-			5 = { root = { add_resource = { energy = 1000 influence = 250 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1000 } } }
-			6 = { root = { add_resource = { energy = 1200 influence = 300 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1200 } } }
-			7 = { root = { add_resource = { energy = 1400 influence = 350 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1400 } } }
-			8 = { root = { add_resource = { energy = 1600 influence = 400 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1600 } } }
-			9 = { root = { add_resource = { energy = 1800 influence = 450 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1800 } } }
-			10 = { root = { add_resource = { energy = 2000 influence = 500 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -2000 } } }
+			1 = { root = { add_resource = { energy = 200 influence = 50 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -200 } } }
+			2 = { root = { add_resource = { energy = 400 influence = 100 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -400 } } }
+			3 = { root = { add_resource = { energy = 600 influence = 150 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -600 } } }
+			4 = { root = { add_resource = { energy = 800 influence = 200 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -800 } } }
+			5 = { root = { add_resource = { energy = 1000 influence = 250 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -1000 } } }
+			6 = { root = { add_resource = { energy = 1200 influence = 300 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -1200 } } }
+			7 = { root = { add_resource = { energy = 1400 influence = 350 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -1400 } } }
+			8 = { root = { add_resource = { energy = 1600 influence = 400 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -1600 } } }
+			9 = { root = { add_resource = { energy = 1800 influence = 450 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -1800 } } }
+			10 = { root = { add_resource = { energy = 2000 influence = 500 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -2000 } } }
 		}
 		if = {
 			limit = { has_skill > 10 }
-			root = { add_resource = { energy = 2200 influence = 550 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -2200 } }
+			root = { add_resource = { energy = 2200 influence = 550 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -2200 } }
 		}
 	}
 	if = {
-		limit = { event_target:nsc_frebooter_empire_admiral_market_target = { has_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double } }
+		limit = { event_target:nsc_freebooter_empire_admiral_market_target = { has_country_flag = nsc_freebooter_empire_admiral_market_target_pay_double } }
 		add_resource = { energy = 1000 }
 	}
 	custom_tooltip = nsc_freebooter.12.c.tooltip
 	add_modifier = { modifier = nsc_freebooter_market_cooldown_empire_modifier days = 360 }
 	hidden_effect = {
-		event_target:nsc_frebooter_empire_admiral_market_target = {
-			set_country_flag = already_bought_admiral_from_nsc_frebooter_empire_before
+		event_target:nsc_freebooter_empire_admiral_market_target = {
+			set_country_flag = already_bought_admiral_from_nsc_freebooter_empire_before
 			clone_leader = { target = event_target:nsc_freebooter_admiral_market_selected_leader_3 class = admiral }
 			event_target:nsc_freebooter_admiral_market_selected_leader_3 = { kill_leader = { show_notification = no } }
 			if = {
-				limit = { has_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double }
+				limit = { has_country_flag = nsc_freebooter_empire_admiral_market_target_pay_double }
 				add_resource = { energy = -1000 }
-				remove_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double
+				remove_country_flag = nsc_freebooter_empire_admiral_market_target_pay_double
 			}
 		}
 	}
@@ -317,37 +327,37 @@ nsc_freebooter_admiral_market_sell_effect_4 = {
 	event_target:nsc_freebooter_admiral_market_selected_leader_4 = {
 		switch = {
 			trigger = has_skill
-			1 = { root = { add_resource = { energy = 200 influence = 50 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -200 } } }
-			2 = { root = { add_resource = { energy = 400 influence = 100 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -400 } } }
-			3 = { root = { add_resource = { energy = 600 influence = 150 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -600 } } }
-			4 = { root = { add_resource = { energy = 800 influence = 200 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -800 } } }
-			5 = { root = { add_resource = { energy = 1000 influence = 250 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1000 } } }
-			6 = { root = { add_resource = { energy = 1200 influence = 300 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1200 } } }
-			7 = { root = { add_resource = { energy = 1400 influence = 350 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1400 } } }
-			8 = { root = { add_resource = { energy = 1600 influence = 400 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1600 } } }
-			9 = { root = { add_resource = { energy = 1800 influence = 450 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1800 } } }
-			10 = { root = { add_resource = { energy = 2000 influence = 500 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -2000 } } }
+			1 = { root = { add_resource = { energy = 200 influence = 50 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -200 } } }
+			2 = { root = { add_resource = { energy = 400 influence = 100 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -400 } } }
+			3 = { root = { add_resource = { energy = 600 influence = 150 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -600 } } }
+			4 = { root = { add_resource = { energy = 800 influence = 200 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -800 } } }
+			5 = { root = { add_resource = { energy = 1000 influence = 250 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -1000 } } }
+			6 = { root = { add_resource = { energy = 1200 influence = 300 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -1200 } } }
+			7 = { root = { add_resource = { energy = 1400 influence = 350 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -1400 } } }
+			8 = { root = { add_resource = { energy = 1600 influence = 400 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -1600 } } }
+			9 = { root = { add_resource = { energy = 1800 influence = 450 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -1800 } } }
+			10 = { root = { add_resource = { energy = 2000 influence = 500 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -2000 } } }
 		}
 		if = {
 			limit = { has_skill > 10 }
-			root = { add_resource = { energy = 2200 influence = 550 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -2200 } }
+			root = { add_resource = { energy = 2200 influence = 550 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -2200 } }
 		}
 	}
 	if = {
-		limit = { event_target:nsc_frebooter_empire_admiral_market_target = { has_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double } }
+		limit = { event_target:nsc_freebooter_empire_admiral_market_target = { has_country_flag = nsc_freebooter_empire_admiral_market_target_pay_double } }
 		add_resource = { energy = 1000 }
 	}
 	custom_tooltip = nsc_freebooter.12.d.tooltip
 	add_modifier = { modifier = nsc_freebooter_market_cooldown_empire_modifier days = 360 }
 	hidden_effect = {
-		event_target:nsc_frebooter_empire_admiral_market_target = {
-			set_country_flag = already_bought_admiral_from_nsc_frebooter_empire_before
+		event_target:nsc_freebooter_empire_admiral_market_target = {
+			set_country_flag = already_bought_admiral_from_nsc_freebooter_empire_before
 			clone_leader = { target = event_target:nsc_freebooter_admiral_market_selected_leader_4 class = admiral }
 			event_target:nsc_freebooter_admiral_market_selected_leader_4 = { kill_leader = { show_notification = no } }
 			if = {
-				limit = { has_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double }
+				limit = { has_country_flag = nsc_freebooter_empire_admiral_market_target_pay_double }
 				add_resource = { energy = -1000 }
-				remove_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double
+				remove_country_flag = nsc_freebooter_empire_admiral_market_target_pay_double
 			}
 		}
 	}
@@ -356,37 +366,37 @@ nsc_freebooter_admiral_market_sell_effect_5 = {
 	event_target:nsc_freebooter_admiral_market_selected_leader_5 = {
 		switch = {
 			trigger = has_skill
-			1 = { root = { add_resource = { energy = 200 influence = 50 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -200 } } }
-			2 = { root = { add_resource = { energy = 400 influence = 100 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -400 } } }
-			3 = { root = { add_resource = { energy = 600 influence = 150 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -600 } } }
-			4 = { root = { add_resource = { energy = 800 influence = 200 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -800 } } }
-			5 = { root = { add_resource = { energy = 1000 influence = 250 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1000 } } }
-			6 = { root = { add_resource = { energy = 1200 influence = 300 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1200 } } }
-			7 = { root = { add_resource = { energy = 1400 influence = 350 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1400 } } }
-			8 = { root = { add_resource = { energy = 1600 influence = 400 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1600 } } }
-			9 = { root = { add_resource = { energy = 1800 influence = 450 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1800 } } }
-			10 = { root = { add_resource = { energy = 2000 influence = 500 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -2000 } } }
+			1 = { root = { add_resource = { energy = 200 influence = 50 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -200 } } }
+			2 = { root = { add_resource = { energy = 400 influence = 100 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -400 } } }
+			3 = { root = { add_resource = { energy = 600 influence = 150 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -600 } } }
+			4 = { root = { add_resource = { energy = 800 influence = 200 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -800 } } }
+			5 = { root = { add_resource = { energy = 1000 influence = 250 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -1000 } } }
+			6 = { root = { add_resource = { energy = 1200 influence = 300 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -1200 } } }
+			7 = { root = { add_resource = { energy = 1400 influence = 350 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -1400 } } }
+			8 = { root = { add_resource = { energy = 1600 influence = 400 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -1600 } } }
+			9 = { root = { add_resource = { energy = 1800 influence = 450 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -1800 } } }
+			10 = { root = { add_resource = { energy = 2000 influence = 500 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -2000 } } }
 		}
 		if = {
 			limit = { has_skill > 10 }
-			root = { add_resource = { energy = 2200 influence = 550 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -2200 } }
+			root = { add_resource = { energy = 2200 influence = 550 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -2200 } }
 		}
 	}
 	if = {
-		limit = { event_target:nsc_frebooter_empire_admiral_market_target = { has_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double } }
+		limit = { event_target:nsc_freebooter_empire_admiral_market_target = { has_country_flag = nsc_freebooter_empire_admiral_market_target_pay_double } }
 		add_resource = { energy = 1000 }
 	}
 	custom_tooltip = nsc_freebooter.12.e.tooltip
 	add_modifier = { modifier = nsc_freebooter_market_cooldown_empire_modifier days = 360 }
 	hidden_effect = {
-		event_target:nsc_frebooter_empire_admiral_market_target = {
-			set_country_flag = already_bought_admiral_from_nsc_frebooter_empire_before
+		event_target:nsc_freebooter_empire_admiral_market_target = {
+			set_country_flag = already_bought_admiral_from_nsc_freebooter_empire_before
 			clone_leader = { target = event_target:nsc_freebooter_admiral_market_selected_leader_5 class = admiral }
 			event_target:nsc_freebooter_admiral_market_selected_leader_5 = { kill_leader = { show_notification = no } }
 			if = {
-				limit = { has_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double }
+				limit = { has_country_flag = nsc_freebooter_empire_admiral_market_target_pay_double }
 				add_resource = { energy = -1000 }
-				remove_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double
+				remove_country_flag = nsc_freebooter_empire_admiral_market_target_pay_double
 			}
 		}
 	}
@@ -395,42 +405,42 @@ nsc_freebooter_admiral_market_sell_effect_6 = {
 	event_target:nsc_freebooter_admiral_market_selected_leader_6 = {
 		switch = {
 			trigger = has_skill
-			1 = { root = { add_resource = { energy = 200 influence = 50 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -200 } } }
-			2 = { root = { add_resource = { energy = 400 influence = 100 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -400 } } }
-			3 = { root = { add_resource = { energy = 600 influence = 150 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -600 } } }
-			4 = { root = { add_resource = { energy = 800 influence = 200 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -800 } } }
-			5 = { root = { add_resource = { energy = 1000 influence = 250 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1000 } } }
-			6 = { root = { add_resource = { energy = 1200 influence = 300 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1200 } } }
-			7 = { root = { add_resource = { energy = 1400 influence = 350 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1400 } } }
-			8 = { root = { add_resource = { energy = 1600 influence = 400 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1600 } } }
-			9 = { root = { add_resource = { energy = 1800 influence = 450 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -1800 } } }
-			10 = { root = { add_resource = { energy = 2000 influence = 500 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -2000 } } }
+			1 = { root = { add_resource = { energy = 200 influence = 50 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -200 } } }
+			2 = { root = { add_resource = { energy = 400 influence = 100 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -400 } } }
+			3 = { root = { add_resource = { energy = 600 influence = 150 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -600 } } }
+			4 = { root = { add_resource = { energy = 800 influence = 200 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -800 } } }
+			5 = { root = { add_resource = { energy = 1000 influence = 250 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -1000 } } }
+			6 = { root = { add_resource = { energy = 1200 influence = 300 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -1200 } } }
+			7 = { root = { add_resource = { energy = 1400 influence = 350 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -1400 } } }
+			8 = { root = { add_resource = { energy = 1600 influence = 400 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -1600 } } }
+			9 = { root = { add_resource = { energy = 1800 influence = 450 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -1800 } } }
+			10 = { root = { add_resource = { energy = 2000 influence = 500 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -2000 } } }
 		}
 		if = {
 			limit = { has_skill > 10 }
-			root = { add_resource = { energy = 2200 influence = 550 } } event_target:nsc_frebooter_empire_admiral_market_target = { add_resource = { energy = -2200 } }
+			root = { add_resource = { energy = 2200 influence = 550 } } event_target:nsc_freebooter_empire_admiral_market_target = { add_resource = { energy = -2200 } }
 		}
 	}
 	if = {
-		limit = { event_target:nsc_frebooter_empire_admiral_market_target = { has_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double } }
+		limit = { event_target:nsc_freebooter_empire_admiral_market_target = { has_country_flag = nsc_freebooter_empire_admiral_market_target_pay_double } }
 		add_resource = { energy = 1000 }
 	}
 	custom_tooltip = nsc_freebooter.12.f.tooltip
 	add_modifier = { modifier = nsc_freebooter_market_cooldown_empire_modifier days = 360 }
 	hidden_effect = {
-		event_target:nsc_frebooter_empire_admiral_market_target = {
-			set_country_flag = already_bought_admiral_from_nsc_frebooter_empire_before
+		event_target:nsc_freebooter_empire_admiral_market_target = {
+			set_country_flag = already_bought_admiral_from_nsc_freebooter_empire_before
 			clone_leader = { target = event_target:nsc_freebooter_admiral_market_selected_leader_6 class = admiral }
 			event_target:nsc_freebooter_admiral_market_selected_leader_6 = { kill_leader = { show_notification = no } }
 			if = {
-				limit = { has_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double }
+				limit = { has_country_flag = nsc_freebooter_empire_admiral_market_target_pay_double }
 				add_resource = { energy = -1000 }
-				remove_country_flag = nsc_frebooter_empire_admiral_market_target_pay_double
+				remove_country_flag = nsc_freebooter_empire_admiral_market_target_pay_double
 			}
 		}
 	}
 }
-nsc_frebooter_empire_fleet_market_target_selection = {
+nsc_freebooter_empire_fleet_market_target_selection = {
 	random_country = {
 		limit = {
 			is_ai = yes
@@ -484,7 +494,7 @@ nsc_frebooter_empire_fleet_market_target_selection = {
 							}
 						}
 					}
-					save_event_target_as = nsc_frebooter_customer_empire_biggest_enemy
+					save_event_target_as = nsc_freebooter_customer_empire_biggest_enemy
 				}
 			}
 		}
@@ -500,12 +510,12 @@ nsc_frebooter_empire_fleet_market_target_selection = {
 				is_at_war = yes
 				OR = {
 					relative_power = {
-						who = event_target:nsc_frebooter_customer_empire_biggest_enemy
+						who = event_target:nsc_freebooter_customer_empire_biggest_enemy
 						category = fleet
 						value = inferior
 					}
 					relative_power = {
-						who = event_target:nsc_frebooter_customer_empire_biggest_enemy
+						who = event_target:nsc_freebooter_customer_empire_biggest_enemy
 						category = fleet
 						value = pathetic
 					}
@@ -547,7 +557,7 @@ nsc_frebooter_empire_fleet_market_target_selection = {
 				num_fleets >= 5
 			}
 		}
-		save_event_target_as = nsc_frebooter_empire_fleet_market_target
+		save_event_target_as = nsc_freebooter_empire_fleet_market_target
 	}
 }
 nsc_freebooter_the_duel_event_start_setup_effect = {
@@ -694,7 +704,7 @@ nsc_freebooter_planet_raiding_effect = {
 			variable = {
 				type = name
 				localization = NSC_FREEBOOTER_PIRATE_RAIDING_TARGET_PLANET
-				scope = this
+				scope = root
 			}
 		}
 	}
@@ -716,7 +726,7 @@ nsc_freebooter_planet_raiding_effect = {
 			variable = {
 				type = name
 				localization = NSC_FREEBOOTER_PIRATE_RAIDING_TARGET_PLANET
-				scope = this
+				scope = root
 			}
 		}
 	}
@@ -738,7 +748,7 @@ nsc_freebooter_planet_raiding_effect = {
 			variable = {
 				type = name
 				localization = NSC_FREEBOOTER_PIRATE_RAIDING_TARGET_PLANET
-				scope = this
+				scope = root
 			}
 		}
 	}
@@ -765,7 +775,7 @@ nsc_freebooter_planet_raiding_effect = {
 			variable = {
 				type = name
 				localization = NSC_FREEBOOTER_PIRATE_RAIDING_TARGET_PLANET
-				scope = this
+				scope = root
 			}
 		}
 	}
@@ -790,7 +800,7 @@ nsc_freebooter_planet_raiding_effect = {
 			variable = {
 				type = name
 				localization = NSC_FREEBOOTER_PIRATE_RAIDING_TARGET_PLANET
-				scope = this
+				scope = root
 			}
 		}
 	}
@@ -815,7 +825,7 @@ nsc_freebooter_planet_raiding_effect = {
 			variable = {
 				type = name
 				localization = NSC_FREEBOOTER_PIRATE_RAIDING_TARGET_PLANET
-				scope = this
+				scope = root
 			}
 		}
 	}
@@ -838,7 +848,7 @@ nsc_freebooter_planet_raiding_effect = {
 			variable = {
 				type = name
 				localization = NSC_FREEBOOTER_PIRATE_RAIDING_TARGET_PLANET
-				scope = this
+				scope = root
 			}
 		}
 	}
@@ -918,7 +928,7 @@ nsc_freebooter_planet_raiding_effect = {
 			variable = {
 				type = name
 				localization = NSC_FREEBOOTER_PIRATE_RAIDING_TARGET_PLANET
-				scope = this
+				scope = root
 			}
 		}
 	}
@@ -1068,7 +1078,6 @@ nsc_freebooter_boarding_pod_main_effect = {
 			limit = { check_variable = { which = nsc_freebooter_boarding_pod_target_corvette_var value >= 1 } }
 			subtract_variable = { which = nsc_freebooter_boarding_pod_target_corvette_var value = 1 }
 			create_fleet = {
-				settings = { uses_naval_capacity = no }
 				effect = {
 					set_owner = prevprev.from
 					set_location = {
@@ -1096,7 +1105,6 @@ nsc_freebooter_boarding_pod_main_effect = {
 			limit = { check_variable = { which = nsc_freebooter_boarding_pod_target_destroyer_var value >= 1 } }
 			subtract_variable = { which = nsc_freebooter_boarding_pod_target_destroyer_var value = 1 }
 			create_fleet = {
-				settings = { uses_naval_capacity = no }
 				effect = {
 					set_owner = prevprev.from
 					set_location = {
@@ -1124,7 +1132,6 @@ nsc_freebooter_boarding_pod_main_effect = {
 			limit = { check_variable = { which = nsc_freebooter_boarding_pod_target_cruiser_var value >= 1 } }
 			subtract_variable = { which = nsc_freebooter_boarding_pod_target_cruiser_var value = 1 }
 			create_fleet = {
-				settings = { uses_naval_capacity = no }
 				effect = {
 					set_owner = prevprev.from
 					set_location = {
@@ -1152,7 +1159,6 @@ nsc_freebooter_boarding_pod_main_effect = {
 			limit = { check_variable = { which = nsc_freebooter_boarding_pod_target_battleship_var value >= 1 } }
 			subtract_variable = { which = nsc_freebooter_boarding_pod_target_battleship_var value = 1 }
 			create_fleet = {
-				settings = { uses_naval_capacity = no }
 				effect = {
 					set_owner = prevprev.from
 					set_location = {
@@ -1180,7 +1186,6 @@ nsc_freebooter_boarding_pod_main_effect = {
 			limit = { check_variable = { which = nsc_freebooter_boarding_pod_target_titan_var value >= 1 } }
 			subtract_variable = { which = nsc_freebooter_boarding_pod_target_titan_var value = 1 }
 			create_fleet = {
-				settings = { uses_naval_capacity = no }
 				effect = {
 					set_owner = prevprev.from
 					set_location = {
@@ -1208,7 +1213,6 @@ nsc_freebooter_boarding_pod_main_effect = {
 			limit = { check_variable = { which = nsc_freebooter_boarding_pod_target_colossus_var value >= 1 } }
 			subtract_variable = { which = nsc_freebooter_boarding_pod_target_colossus_var value = 1 }
 			create_fleet = {
-				settings = { uses_naval_capacity = no }
 				effect = {
 					set_owner = prevprev.from
 					set_location = {
@@ -1236,7 +1240,6 @@ nsc_freebooter_boarding_pod_main_effect = {
 			limit = { check_variable = { which = nsc_freebooter_boarding_pod_target_juggernaut_var value >= 1 } }
 			subtract_variable = { which = nsc_freebooter_boarding_pod_target_juggernaut_var value = 1 }
 			create_fleet = {
-				settings = { uses_naval_capacity = no }
 				effect = {
 					set_owner = prevprev.from
 					set_location = {
@@ -1260,5 +1263,87 @@ nsc_freebooter_boarding_pod_main_effect = {
 				}
 			}
 		}
+	}
+}
+wg_nsc_freebooter_forced_border_open_cost_effect = {
+	if = {
+		limit = { num_owned_planets > 0 num_owned_planets <= 5 }
+		root = { add_resource = { influence = -25 } }
+	}
+	else_if = {
+		limit = { num_owned_planets > 5 num_owned_planets <= 10 }
+		root = { add_resource = { influence = -50 } }
+	}
+	else_if = {
+		limit = { num_owned_planets > 10 num_owned_planets <= 15 }
+		root = { add_resource = { influence = -75 } }
+	}
+	else_if = {
+		limit = { num_owned_planets > 15 num_owned_planets <= 20 }
+		root = { add_resource = { influence = -100 } }
+	}
+	else_if = {
+		limit = { num_owned_planets > 20 num_owned_planets <= 25 }
+		root = { add_resource = { influence = -125 } }
+	}
+	else_if = {
+		limit = { num_owned_planets > 25 num_owned_planets <= 30 }
+		root = { add_resource = { influence = -150 } }
+	}
+	else_if = {
+		limit = { num_owned_planets > 30 num_owned_planets <= 35 }
+		root = { add_resource = { influence = -175 } }
+	}
+	else_if = {
+		limit = { num_owned_planets > 35 num_owned_planets <= 40 }
+		root = { add_resource = { influence = -200 } }
+	}
+	else_if = {
+		limit = { num_owned_planets > 40 num_owned_planets <= 45 }
+		root = { add_resource = { influence = -225 } }
+	}
+	else_if = {
+		limit = { num_owned_planets > 45 num_owned_planets <= 50 }
+		root = { add_resource = { influence = -250 } }
+	}
+	else_if = {
+		limit = { num_owned_planets > 50 num_owned_planets <= 55 }
+		root = { add_resource = { influence = -275 } }
+	}
+	else_if = {
+		limit = { num_owned_planets > 55 num_owned_planets <= 60 }
+		root = { add_resource = { influence = -300 } }
+	}
+	else_if = {
+		limit = { num_owned_planets > 60 num_owned_planets <= 65 }
+		root = { add_resource = { influence = -325 } }
+	}
+	else_if = {
+		limit = { num_owned_planets > 65 num_owned_planets <= 70 }
+		root = { add_resource = { influence = -350 } }
+	}
+	else_if = {
+		limit = { num_owned_planets > 70 num_owned_planets <= 75 }
+		root = { add_resource = { influence = -375 } }
+	}
+	else_if = {
+		limit = { num_owned_planets > 75 num_owned_planets <= 80 }
+		root = { add_resource = { influence = -400 } }
+	}
+	else_if = {
+		limit = { num_owned_planets > 80 num_owned_planets <= 85 }
+		root = { add_resource = { influence = -425 } }
+	}
+	else_if = {
+		limit = { num_owned_planets > 85 num_owned_planets <= 90 }
+		root = { add_resource = { influence = -450 } }
+	}
+	else_if = {
+		limit = { num_owned_planets > 90 num_owned_planets <= 95 }
+		root = { add_resource = { influence = -475 } }
+	}
+	else_if = {
+		limit = { num_owned_planets > 95 }
+		root = { add_resource = { influence = -500 } }
 	}
 }

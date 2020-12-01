@@ -18,20 +18,19 @@ wg_nsc_freebooter_wrath_of_khan = {
 	}
 
 	ai_weight = {
-		weight = 100
+		weight = 0
 	}
 }
-wg_nsc_freebooter_wrath_of_khan_domination = {
+wg_nsc_freebooter_domination = {
 	casus_belli = cb_nsc_freebooter_wrath_of_khan
 	hide_if_no_cb = yes
-	total_war = yes
-	set_defender_wargoal = wg_end_threat
+	release_occupied_systems_on_status_quo = no
 
 	allowed_peace_offers = {
 		status_quo
 	}
 	
-	cede_claims = occupied_only
+	surrender_acceptance = -100
 
 	potential = {
 		always = yes
@@ -39,16 +38,87 @@ wg_nsc_freebooter_wrath_of_khan_domination = {
 	possible = {
 		always = yes
 	}
+	on_status_quo = {
+		custom_tooltip = wg_nsc_freebooter_domination_on_status_quo_tooltip
+		hidden_effect = {
+			create_country = {
+				ignore_initial_colony_error = yes
+				name = random
+				type = default
+				authority = root
+				civics = random
+				species = from.owner.species
+				ethos = root
+				flag = random
+				origin = origin_default
+				effect = {
+					add_resource = {
+						minerals = 5000
+						energy = 5000	
+						food = 5000
+						influence = 1000
+					}
+					prevprev.from = {
+						every_owned_planet = {
+							limit = { is_controlled_by = root }
+							set_owner = prevprev
+							solar_system.starbase = {
+								set_owner = prevprevprev
+							}
+						}
+					}
+					random_owned_planet = {
+						set_capital = yes
+					}
+					establish_communications_no_message = root
+					set_subject_of = {
+						who = root
+						subject_type = nsc_freebooter_satrapy
+					}
+				}
+			}
+		}
+	}
 	on_accept = {
+		hidden_effect = {
+			from = {
+				add_threat = {
+					who = root
+					amount = 0.5
+				}
+			}
+		}
 		from = {
 			set_subject_of = {
 				who = root
-				subject_type = satrapy
-			}				
+				subject_type = nsc_freebooter_satrapy
+			}
 		}
 	}
 	
 	ai_weight = {
-		weight = 0 #ai will not do this #will change this if you want
+		weight = 0
+	}
+}
+#check out 'nsc_freebooter.39' event for the actual effect
+wg_nsc_freebooter_forced_border_open = {
+	casus_belli = cb_nsc_freebooter_pirate_raider
+	hide_if_no_cb = yes
+	set_defender_wargoal = wg_end_threat
+
+	allowed_peace_offers = {
+		status_quo
+	}
+
+	potential = {
+		always = yes
+	}
+	possible = {
+		from = { has_closed_borders = root }
+		wg_nsc_freebooter_forced_border_open_trigger = yes
+	}
+
+	ai_weight = {
+		weight = 0
 	}
 }
