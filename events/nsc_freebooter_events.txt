@@ -1427,10 +1427,21 @@ country_event = {
 
 	trigger = {
 		has_ascension_perk = ap_nsc_freebooter_pirate_raider #check the ap first, to reduce the burden on the performance
+		has_edict = nsc_freebooter_pirate_raiding_control
 		any_owned_fleet = {
 			solar_system = {
 				any_system_planet = {
-					any_fleet_in_orbit = { is_same_value = prevprevprev }
+					any_fleet_in_orbit = { 
+						is_same_value = prevprevprev
+						any_owned_ship = {
+							OR = {
+								is_ship_class = shipclass_military 
+								is_ship_class = shipclass_military_special #for colossus #I may removed this later
+								is_ship_class = shipclass_starbase #for juggernaut #I may removed this later
+							}
+						}
+					}
+					is_colony = yes
 					NOR = {
 						is_owned_by = root
 						has_modifier = nsc_freebooter_recently_raided_world_planet_modifier
@@ -1447,7 +1458,17 @@ country_event = {
 			solar_system = {
 				every_system_planet = {
 					limit = {
-						any_fleet_in_orbit = { is_same_value = prevprevprev }
+						any_fleet_in_orbit = {
+							is_same_value = prevprevprev
+							any_owned_ship = {
+								OR = {
+									is_ship_class = shipclass_military 
+									is_ship_class = shipclass_military_special #for colossus #I may removed this later
+									is_ship_class = shipclass_starbase #for juggernaut #I may removed this later
+								}
+							}
+						}
+						is_colony = yes
 						NOR = {
 							is_owned_by = root
 							has_modifier = nsc_freebooter_recently_raided_world_planet_modifier
@@ -1470,7 +1491,7 @@ planet_event = {
 	trigger = {
 		from.owner = {
 			has_ascension_perk = ap_nsc_freebooter_pirate_raider
-			has_policy_flag = nsc_freebooter_pirate_raiding_control_on_flag
+			has_edict = nsc_freebooter_pirate_raiding_control
 		}
 		this = {
 			NOR = {
@@ -1636,6 +1657,7 @@ country_event = {
 				set_closed_borders = {
 					who = root
 					status = no
+					forced = 3 #check 'action.44' event too
 				}
 				wg_nsc_freebooter_forced_border_open_cost_effect = yes
 			}
