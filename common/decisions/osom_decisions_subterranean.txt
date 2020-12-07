@@ -12,9 +12,26 @@ osom_decision_subterranean_1 = {
 			energy = 1000
 		}
 	}
+	
+	allow = {
+		OR = {
+			owner = {
+				has_origin = "osom_origin_subterranean"
+			}
+			has_building = osom_building_speleology_facility_1
+			has_building = osom_building_speleology_facility_2
+			has_building = osom_building_speleology_facility_3
+		}
+	}
 
 	potential = {
-		owner = { has_technology = osom_tech_subterranean }
+		owner = {
+			OR = {
+				has_technology = osom_tech_speleology_1
+				has_origin = "osom_origin_subterranean"
+			}
+		}
+			
 		NOT = {
 			uses_district_set = habitat
 			uses_district_set = ring_world
@@ -35,6 +52,10 @@ osom_decision_subterranean_1 = {
 	
 	ai_weight = {
 		weight = 50
+		modifier = {
+			factor = 0
+			free_district_slots > 2
+		}
 	}
 }
 
@@ -52,9 +73,22 @@ osom_decision_subterranean_2 = {
 			energy = 1000
 		}
 	}
-	
+
+	allow = {
+		OR = {
+			has_building = osom_building_speleology_facility_1
+			has_building = osom_building_speleology_facility_2
+			has_building = osom_building_speleology_facility_3
+		}
+	}
+
 	potential = {
-		owner = { has_technology = osom_tech_subterranean }
+		owner = {
+			OR = {
+				has_technology = osom_tech_speleology_2
+				has_origin = "osom_origin_subterranean"
+			}
+		}
 		has_modifier = osom_planet_subterranean_1
 		NOT = {
 			uses_district_set = habitat
@@ -74,6 +108,10 @@ osom_decision_subterranean_2 = {
 	
 	ai_weight = {
 		weight = 50
+		modifier = {
+			factor = 0
+			free_district_slots > 2
+		}
 	}
 }
 
@@ -92,9 +130,21 @@ osom_decision_subterranean_3 = {
 			alloys = 1000
 		}
 	}
-	
+
+	allow = {
+		OR = {
+			has_building = osom_building_speleology_facility_2
+			has_building = osom_building_speleology_facility_3
+		}
+	}
+
 	potential = {
-		owner = { has_technology = osom_tech_subterranean }
+		owner = {
+			OR = {
+				has_technology = osom_tech_speleology_3
+				has_origin = "osom_origin_subterranean"
+			}
+		}
 		has_modifier = osom_planet_subterranean_2
 		NOT = {
 			uses_district_set = habitat
@@ -131,9 +181,19 @@ osom_decision_subterranean_4 = {
 			energy = 2000
 		}
 	}
-	
+
+	allow = {
+		OR = {
+			has_building = osom_building_speleology_facility_1
+			has_building = osom_building_speleology_facility_2
+			has_building = osom_building_speleology_facility_3
+		}
+	}
+
 	potential = {
-		owner = { has_technology = osom_tech_subterranean }
+		owner = {
+			has_technology = osom_tech_subterranean
+		}
 		has_modifier = osom_planet_subterranean_3
 		NOT = {
 			uses_district_set = habitat
@@ -153,6 +213,10 @@ osom_decision_subterranean_4 = {
 	
 	ai_weight = {
 		weight = 50
+		modifier = {
+			factor = 0
+			free_district_slots > 2
+		}
 	}
 }
 
@@ -170,9 +234,20 @@ osom_decision_subterranean_5 = {
 			energy = 3000
 		}
 	}
+
+	allow = {
+		OR = {
+			has_building = osom_building_speleology_facility_1
+			has_building = osom_building_speleology_facility_2
+			has_building = osom_building_speleology_facility_3
+		}
+	}
 	
 	potential = {
-		owner = { has_technology = osom_tech_subterranean }
+		owner = {
+			has_technology = osom_tech_subterranean
+			has_ascension_perk = "osom_ap_subterranean_mastery"
+		}
 		has_modifier = osom_planet_subterranean_4
 		NOT = {
 			uses_district_set = habitat
@@ -192,6 +267,10 @@ osom_decision_subterranean_5 = {
 	
 	ai_weight = {
 		weight = 50
+		modifier = {
+			factor = 0
+			free_district_slots > 2
+		}
 	}
 }
 
@@ -212,8 +291,10 @@ osom_decision_subterranean_fortifications = {
 	}
 
 	allow = {
-		has_modifier = osom_planet_subterranean_5
-		owner = {owner = {is_gestalt = no}}
+		owner = {
+		has_ascension_perk = "osom_ap_subterranean_mastery"
+		is_gestalt = no
+		}
 		NOT = { 
 			has_modifier = "osom_planet_subterranean_fortifications_gestalt"
 			has_modifier = "osom_planet_subterranean_fortifications"
@@ -227,8 +308,10 @@ osom_decision_subterranean_fortifications = {
 	}
 	
 	potential = {
-		has_modifier = osom_planet_subterranean_5
-		owner = {owner = {is_gestalt = no}}
+		owner = {
+		has_ascension_perk = "osom_ap_subterranean_mastery"
+		is_gestalt = no
+		}
 		NOT = { 
 			has_modifier = "osom_planet_subterranean_fortifications_gestalt"
 			has_modifier = "osom_planet_subterranean_fortifications"
@@ -302,8 +385,10 @@ osom_decision_subterranean_fortifications_gestalt = {
 	}
 
 	allow = {
-		has_modifier = osom_planet_subterranean_5
-		owner = {is_gestalt = yes}
+		owner = {
+		has_ascension_perk = "osom_ap_subterranean_mastery"
+		is_gestalt = yes
+		}
 		NOT = { 
 			has_modifier = "osom_planet_subterranean_fortifications_gestalt"
 			has_modifier = "osom_planet_subterranean_fortifications"
@@ -317,8 +402,10 @@ osom_decision_subterranean_fortifications_gestalt = {
 	}
 	
 	potential = {
-		has_modifier = osom_planet_subterranean_5
-		owner = {is_gestalt = yes}
+		owner = {
+		has_ascension_perk = "osom_ap_subterranean_mastery"
+		is_gestalt = yes
+		}
 		NOT = { 
 			has_modifier = "osom_planet_subterranean_fortifications_gestalt"
 			has_modifier = "osom_planet_subterranean_fortifications"
@@ -392,8 +479,10 @@ osom_decision_subterranean_industrialization = {
 	}
 
 	allow = {
-		has_modifier = osom_planet_subterranean_5
-		owner = {is_gestalt = no}
+		owner = {
+		has_ascension_perk = "osom_ap_subterranean_mastery"
+		is_gestalt = no
+		}
 		NOT = { 
 			has_modifier = "osom_planet_subterranean_fortifications_gestalt"
 			has_modifier = "osom_planet_subterranean_fortifications"
@@ -408,7 +497,7 @@ osom_decision_subterranean_industrialization = {
 	
 	potential = {
 		owner = {
-			has_origin = "osom_origin_subterranean"
+			has_ascension_perk = "osom_ap_subterranean_mastery"
 			is_gestalt = no
 		}
 		has_modifier = osom_planet_subterranean_5
@@ -485,8 +574,10 @@ osom_decision_subterranean_industrialization_gestalt = {
 	}
 
 	allow = {
-		has_modifier = osom_planet_subterranean_5
-		owner = {is_gestalt = yes}
+		owner = {
+		has_ascension_perk = "osom_ap_subterranean_mastery"
+		is_gestalt = yes
+		}
 		NOT = { 
 			has_modifier = "osom_planet_subterranean_fortifications_gestalt"
 			has_modifier = "osom_planet_subterranean_fortifications"
@@ -501,7 +592,7 @@ osom_decision_subterranean_industrialization_gestalt = {
 	
 	potential = {
 		owner = {
-			has_origin = "osom_origin_subterranean"
+			has_ascension_perk = "osom_ap_subterranean_mastery"
 			is_gestalt = yes
 		}
 		has_modifier = osom_planet_subterranean_5
@@ -578,8 +669,10 @@ osom_decision_subterranean_agriculture = {
 	}
 
 	allow = {
-		has_modifier = osom_planet_subterranean_5
-		owner = {is_gestalt = no}
+		owner = {
+		has_ascension_perk = "osom_ap_subterranean_mastery"
+		is_gestalt = no
+		}
 		NOT = { 
 			has_modifier = "osom_planet_subterranean_fortifications_gestalt"
 			has_modifier = "osom_planet_subterranean_fortifications"
@@ -594,7 +687,7 @@ osom_decision_subterranean_agriculture = {
 	
 	potential = {
 		owner = {
-			has_origin = "osom_origin_subterranean"
+			has_ascension_perk = "osom_ap_subterranean_mastery"
 			is_gestalt = no
 		}
 		has_modifier = osom_planet_subterranean_5
@@ -671,8 +764,10 @@ osom_decision_subterranean_agriculture_gestalt = {
 	}
 
 	allow = {
-		has_modifier = osom_planet_subterranean_5
-		owner = {is_gestalt = yes}
+		owner = {
+		has_ascension_perk = "osom_ap_subterranean_mastery"
+		is_gestalt = yes
+		}
 		NOT = { 
 			has_modifier = "osom_planet_subterranean_fortifications_gestalt"
 			has_modifier = "osom_planet_subterranean_fortifications"
@@ -687,7 +782,7 @@ osom_decision_subterranean_agriculture_gestalt = {
 	
 	potential = {
 		owner = {
-			has_origin = "osom_origin_subterranean"
+			has_ascension_perk = "osom_ap_subterranean_mastery"
 			is_gestalt = yes
 		}
 		has_modifier = osom_planet_subterranean_5
@@ -764,8 +859,10 @@ osom_decision_subterranean_geothermal = {
 	}
 
 	allow = {
-		has_modifier = osom_planet_subterranean_5
-		owner = {is_gestalt = no}
+		owner = {
+		has_ascension_perk = "osom_ap_subterranean_mastery"
+		is_gestalt = no
+		}
 		NOT = { 
 			has_modifier = "osom_planet_subterranean_fortifications_gestalt"
 			has_modifier = "osom_planet_subterranean_fortifications"
@@ -780,7 +877,7 @@ osom_decision_subterranean_geothermal = {
 	
 	potential = {
 		owner = {
-			has_origin = "osom_origin_subterranean"
+			has_ascension_perk = "osom_ap_subterranean_mastery"
 			is_gestalt = no
 		}
 		has_modifier = osom_planet_subterranean_5
@@ -857,8 +954,10 @@ osom_decision_subterranean_geothermal_gestalt = {
 	}
 
 	allow = {
-		has_modifier = osom_planet_subterranean_5
-		owner = {is_gestalt = yes}
+		owner = {
+		has_ascension_perk = "osom_ap_subterranean_mastery"
+		is_gestalt = yes
+		}
 		NOT = { 
 			has_modifier = "osom_planet_subterranean_fortifications_gestalt"
 			has_modifier = "osom_planet_subterranean_fortifications"
@@ -873,7 +972,7 @@ osom_decision_subterranean_geothermal_gestalt = {
 	
 	potential = {
 		owner = {
-			has_origin = "osom_origin_subterranean"
+			has_ascension_perk = "osom_ap_subterranean_mastery"
 			is_gestalt = yes
 		}
 		has_modifier = osom_planet_subterranean_5
@@ -947,7 +1046,11 @@ osom_decision_subterranean_storage = {
 	}
 
 	allow = {
+		OR = {
+		has_modifier = osom_planet_subterranean_3
+		has_modifier = osom_planet_subterranean_4
 		has_modifier = osom_planet_subterranean_5
+		}
 		free_district_slots > 0
 		NOT = { 
 			has_modifier = "osom_planet_subterranean_storage"
@@ -955,7 +1058,14 @@ osom_decision_subterranean_storage = {
 	}
 	
 	potential = {
+		owner = {
+			has_technology = osom_tech_speleology_4
+		}
+		OR = {
+		has_modifier = osom_planet_subterranean_3
+		has_modifier = osom_planet_subterranean_4
 		has_modifier = osom_planet_subterranean_5
+		}
 		NOT = { 
 			has_modifier = "osom_planet_subterranean_storage"
 		}
