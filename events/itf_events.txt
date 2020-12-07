@@ -1,0 +1,910 @@
+############################
+#
+# Will O The Wisps Events
+#
+# Written by felis
+#
+############################
+
+namespace = itf_story
+
+# Planetary Administration Report
+planet_event = {
+	id = itf_story.10
+	title = "itf_story.10.name"
+	desc = "itf_story.10.desc"
+	picture = GFX_evt_colony_settlement
+	show_sound = event_administrative_work
+	location = ROOT
+	trackable = yes
+
+	pre_triggers = {
+		has_owner = yes
+		original_owner = yes
+		has_ground_combat = no
+		is_occupied_flag = no
+	}
+
+	trigger = {
+		owner = {
+			has_origin = origin_wotw
+		}
+		has_planet_flag = itf_forest_moon
+	}
+
+	is_triggered_only = yes
+
+	after = {
+		begin_event_chain = {
+			event_chain = "itf_enchanted_forest_chain"
+			target = ROOT
+		}
+		custom_tooltip = itf_story.10.tooltip
+		hidden_effect = {
+			remove_deposit = d_enchanted_forest_1
+			add_deposit = d_enchanted_forest_2
+			planet_event = { id = itf_story.20 days = 720 random = 60 }
+		}
+	}
+
+	option = {
+		name = itf_story.10.a # Establish the Wardens (environmentalists/agrarian idyll)
+		trigger = {
+			owner = {
+				OR = {
+					has_civic = civic_agrarian_idyll
+					has_civic = civic_environmentalist
+				}
+			}
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = unity
+				value = @tier2unityreward
+				min = @tier2unitymin
+				max = @tier2unitymax
+			}
+		}
+	}
+	option = {
+		name = itf_story.10.b # Establish the Wardens
+		trigger = {
+			owner = {
+				NOR = {
+					has_civic = civic_agrarian_idyll
+					has_civic = civic_environmentalist
+				}
+			}
+		}
+	}
+}
+
+# Report from the Wardens
+planet_event = {
+	id = itf_story.20
+	title = "itf_story.20.name"
+	desc = "itf_story.20.desc"
+	picture = GFX_evt_zro_1
+	show_sound = event_alien_nature
+	location = ROOT
+	trackable = yes
+
+	pre_triggers = {
+		has_owner = yes
+		original_owner = yes
+		has_ground_combat = no
+		is_occupied_flag = no
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = itf_story.20.a # Prepare an expedition
+		add_planet_devastation = 20
+		enable_special_project = {
+			name = "ITF_1_PROJECT"
+			location = root
+			owner = root.owner
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+				max = @tier2researchmax
+			}
+		}
+		hidden_effect = {
+			planet_event = { id = itf_story.40 days = 720 random = 60 }
+		}
+	}
+}
+
+# Expedition outcome (tech_society_1)
+planet_event = {
+	id = itf_story.31
+	title = "itf_story.31.name"
+	desc = "itf_story.31.desc"
+	picture = GFX_evt_aggressive_flora
+	show_sound = event_alien_nature
+	location = ROOT
+	trackable = yes
+
+	pre_triggers = {
+		has_owner = yes
+		original_owner = yes
+		has_ground_combat = no
+		is_occupied_flag = no
+	}
+
+	is_triggered_only = yes
+
+	after = {
+		owner = {
+			give_technology = { tech = tech_society_1 }
+		}
+	}
+
+	option = {
+		name = FASCINATING
+		hidden_effect = {
+			planet_event = { id = itf_story.39 }
+		}
+	}
+}
+
+# Expedition outcome (tech_frontier_hospital)
+planet_event = {
+	id = itf_story.32
+	title = "itf_story.32.name"
+	desc = "itf_story.32.desc"
+	picture = GFX_evt_aggressive_flora
+	show_sound = event_alien_nature
+	location = ROOT
+	trackable = yes
+
+	pre_triggers = {
+		has_owner = yes
+		original_owner = yes
+		has_ground_combat = no
+		is_occupied_flag = no
+	}
+
+	is_triggered_only = yes
+
+	after = {
+		owner = {
+			give_technology = { tech = tech_frontier_hospital }
+		}
+	}
+
+	option = {
+		name = FASCINATING
+		hidden_effect = {
+			planet_event = { id = itf_story.39 days = 60 random = 30 }
+		}
+	}
+}
+
+# Expedition outcome (tech_dense_jungle)
+planet_event = {
+	id = itf_story.33
+	title = "itf_story.33.name"
+	desc = "itf_story.33.desc"
+	picture = GFX_evt_aggressive_flora
+	show_sound = event_alien_nature
+	location = ROOT
+	trackable = yes
+
+	pre_triggers = {
+		has_owner = yes
+		original_owner = yes
+		has_ground_combat = no
+		is_occupied_flag = no
+	}
+
+	is_triggered_only = yes
+
+	after = {
+		owner = {
+			give_technology = { tech = tech_dense_jungle }
+		}
+	}
+
+	option = {
+		name = FASCINATING
+		hidden_effect = {
+			planet_event = { id = itf_story.39 days = 60 random = 30 }
+		}
+	}
+}
+
+# Expedition outcome (minor artifacts)
+planet_event = {
+	id = itf_story.34
+	title = "itf_story.34.name"
+	desc = "itf_story.34.desc"
+	picture = GFX_evt_overgrown_city
+	show_sound = event_alien_nature
+	location = ROOT
+	trackable = yes
+
+	pre_triggers = {
+		has_owner = yes
+		original_owner = yes
+		has_ground_combat = no
+		is_occupied_flag = no
+	}
+
+	is_triggered_only = yes
+
+	after = {
+		owner = {
+			medium_artifact_reward = yes
+		}
+	}
+
+	option = {
+		name = FASCINATING
+		hidden_effect = {
+			planet_event = { id = itf_story.39 days = 60 random = 30 }
+		}
+	}
+}
+
+# Expedition outcome (d_lush_jungle)
+planet_event = {
+	id = itf_story.35
+	title = "itf_story.35.name"
+	desc = "itf_story.35.desc"
+	picture = GFX_evt_aggressive_flora
+	show_sound = event_alien_nature
+	location = ROOT
+	trackable = yes
+
+	pre_triggers = {
+		has_owner = yes
+		original_owner = yes
+		has_ground_combat = no
+		is_occupied_flag = no
+	}
+
+	is_triggered_only = yes
+
+	after = {
+		add_deposit = d_lush_jungle
+		}
+
+	option = {
+		name = FASCINATING
+		hidden_effect = {
+			planet_event = { id = itf_story.39 days = 60 random = 30 }
+		}
+	}
+}
+
+# Expedition outcome (research points)
+planet_event = {
+	id = itf_story.36
+	title = "itf_story.36.name"
+	desc = "itf_story.36.desc"
+	picture = GFX_evt_aggressive_flora
+	show_sound = event_alien_nature
+	location = ROOT
+	trackable = yes
+
+	pre_triggers = {
+		has_owner = yes
+		original_owner = yes
+		has_ground_combat = no
+		is_occupied_flag = no
+	}
+
+	is_triggered_only = yes
+
+	after = {
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier5researchreward
+				min = @tier5researchmin
+				max = @tier5researchmax
+			}
+		}
+	}
+
+	option = {
+		name = FASCINATING
+		hidden_effect = {
+			planet_event = { id = itf_story.39 days = 60 random = 30 }
+		}
+	}
+}
+
+# What to do next
+planet_event = {
+	id = itf_story.39
+	title = "itf_story.39.name"
+	desc = "itf_story.39.desc"
+	desc = {
+		text = "itf_story.39.desc.noSpiritualist"
+		exclusive_trigger = {
+			owner = {
+				NOR = {
+					has_ethic = ethic_spiritualist
+					has_ethic = ethic_fanatic_spiritualist
+				}
+			}
+		}
+	}
+	desc = {
+		text = "itf_story.39.desc.spiritualist"
+		exclusive_trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_spiritualist
+					has_ethic = ethic_fanatic_spiritualist
+				}
+			}
+		}
+	}
+	picture = GFX_evt_alien_nature
+	show_sound = event_alien_nature
+	location = ROOT
+	trackable = yes
+
+	pre_triggers = {
+		has_owner = yes
+		original_owner = yes
+		has_ground_combat = no
+		is_occupied_flag = no
+	}
+
+	is_triggered_only = yes
+
+	after = {
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+		}
+	}
+
+	option = {
+		name = itf_story.39.a # Set up a research outpost (materialists)
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_materialist
+					has_ethic = ethic_fanatic_materialist
+				}
+			}
+		}
+		custom_tooltip = itf_story.39.a.tooltip
+		owner = {
+			add_monthly_resource_mult = {
+				resource = unity
+				value = @tier3unityreward
+				min = @tier3unitymin
+				max = @tier3unitymax
+			}
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					has_deposit = d_enchanted_forest_2
+				}
+				remove_deposit = d_enchanted_forest_2
+				add_deposit = d_enchanted_forest_3
+			}
+			else_if = {
+				limit = {
+					has_deposit = d_enchanted_forest_5
+				}
+				remove_deposit = d_enchanted_forest_5
+				add_deposit = d_enchanted_forest_6
+			}
+		}
+	}
+	option = {
+		name = itf_story.39.b # Set up a temple (spiritualists)
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_spiritualist
+					has_ethic = ethic_fanatic_spiritualist
+				}
+			}
+		}
+		custom_tooltip = itf_story.39.b.tooltip
+		owner = {
+			add_monthly_resource_mult = {
+				resource = unity
+				value = @tier3unityreward
+				min = @tier3unitymin
+				max = @tier3unitymax
+			}
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					has_deposit = d_enchanted_forest_2
+				}
+				remove_deposit = d_enchanted_forest_2
+				add_deposit = d_enchanted_forest_4
+			}
+			else_if = {
+				limit = {
+					has_deposit = d_enchanted_forest_5
+				}
+				remove_deposit = d_enchanted_forest_5
+				add_deposit = d_enchanted_forest_7
+			}
+		}
+	}
+	option = {
+		name = itf_story.39.c # Set up a research outpost
+		trigger = {
+			owner = {
+				NOR = {
+					has_ethic = ethic_materialist
+					has_ethic = ethic_materialist
+				}
+			}
+		}
+		custom_tooltip = itf_story.39.c.tooltip
+		hidden_effect = {
+			if = {
+				limit = {
+					has_deposit = d_enchanted_forest_2
+				}
+				remove_deposit = d_enchanted_forest_2
+				add_deposit = d_enchanted_forest_3
+			}
+			else_if = {
+				limit = {
+					has_deposit = d_enchanted_forest_5
+				}
+				remove_deposit = d_enchanted_forest_5
+				add_deposit = d_enchanted_forest_6
+			}
+		}
+	}
+}
+
+# Development plans
+planet_event = {
+	id = itf_story.40
+	title = "itf_story.40.name"
+	desc = "itf_story.40.desc"
+	picture = GFX_evt_busy_spaceport
+	show_sound = event_construction
+	location = ROOT
+	trackable = yes
+
+	pre_triggers = {
+		has_owner = yes
+		original_owner = yes
+		has_ground_combat = no
+		is_occupied_flag = no
+	}
+
+	is_triggered_only = yes
+
+	after = {
+		hidden_effect = {
+			planet_event = { id = itf_story.50 days = 720 random = 60 }
+		}
+	}
+
+	option = {
+		name = itf_story.40.a # Let them
+		allow = {
+			owner = {
+				has_resource = {
+					type = energy
+					amount >= 2000
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				energy = -2000
+			}
+		}
+		custom_tooltip = itf_story.40.a.tooltip
+		enable_special_project = {
+			name = "ITF_2_PROJECT"
+			location = this
+			owner = root
+		}
+		if = {
+			limit = {
+				owner = {
+					OR = {
+						has_civic = civic_agrarian_idyll
+						has_civic = civic_environmentalist
+					}
+				}
+			}
+			add_modifier = {
+				modifier = "itf_annoyed_ecological_activists"
+				days = 360
+			}
+		}
+		else = {
+			add_modifier = {
+				modifier = "itf_annoyed_ecological_activists_strong"
+				days = 720
+			}
+		}
+	}
+	option = {
+		name = itf_story.40.b # Prohibit (environmentalists/agrarian idyll)
+		trigger = {
+			owner = {
+				OR = {
+					has_civic = civic_agrarian_idyll
+					has_civic = civic_environmentalist
+				}
+			}
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = unity
+				value = @tier3unityreward
+				min = @tier3unitymin
+				max = @tier3unitymax
+			}
+		}
+	}
+	option = {
+		name = itf_story.40.c # Prohibit
+		trigger = {
+			owner = {
+				NOR = {
+					has_civic = civic_agrarian_idyll
+					has_civic = civic_environmentalist
+				}
+			}
+		}
+	}
+}
+
+# Dedevelopment
+planet_event = {
+	id = itf_story.41
+	title = "itf_story.41.name"
+	desc = "itf_story.41.desc"
+	picture = GFX_evt_busy_spaceport
+	show_sound = event_construction
+	location = ROOT
+	trackable = yes
+
+	pre_triggers = {
+		has_owner = yes
+		original_owner = yes
+		has_ground_combat = no
+		is_occupied_flag = no
+	}
+
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				has_deposit = d_enchanted_forest_2
+			}
+			remove_deposit = d_enchanted_forest_2
+			add_deposit = d_enchanted_forest_5
+		}
+		else_if = {
+			limit = {
+				has_deposit = d_enchanted_forest_3
+			}
+			remove_deposit = d_enchanted_forest_3
+			add_deposit = d_enchanted_forest_6
+		}
+		else_if = {
+			limit = {
+				has_deposit = d_enchanted_forest_4
+			}
+			remove_deposit = d_enchanted_forest_4
+			add_deposit = d_enchanted_forest_7
+		}
+	}
+
+	option = {
+		name = itf_story.41.a
+		custom_tooltip = itf_story.41.a.tooltip
+	}
+}
+
+# An eerie presence
+planet_event = {
+	id = itf_story.50
+	title = "itf_story.50.name"
+	desc = "itf_story.50.desc"
+	picture = GFX_evt_alien_nature
+	show_sound = event_mystic_reveal
+	location = ROOT
+	trackable = yes
+
+	pre_triggers = {
+		has_owner = yes
+		original_owner = yes
+		has_ground_combat = no
+		is_occupied_flag = no
+	}
+
+	is_triggered_only = yes
+
+	after = {
+		hidden_effect = {
+			planet_event = { id = itf_story.60 days = 720 random = 60 }
+		}
+	}
+
+	option = {
+		name = WORRYING
+		add_modifier = {
+			modifier = "itf_eerie_presence"
+			days = 720
+		}
+	}
+}
+
+# The Revelation
+planet_event = {
+	id = itf_story.60
+	title = "itf_story.60.name"
+	desc = "itf_story.60.desc"
+	picture = GFX_evt_surreal_visions
+	show_sound = event_mystic_reveal
+	location = ROOT
+	trackable = yes
+
+	pre_triggers = {
+		has_owner = yes
+		original_owner = yes
+		has_ground_combat = no
+		is_occupied_flag = no
+	}
+
+	is_triggered_only = yes
+
+	after = {
+		hidden_effect = {
+			if = {
+				limit = { has_modifier = itf_eerie_presence }
+				remove_modifier = itf_eerie_presence
+			}
+			if = {
+				limit = {
+					owner = {
+						has_special_project = ITF_1_PROJECT
+					}
+				}
+				owner = {
+					abort_special_project = ITF_1_PROJECT
+				}
+			}
+			if = {
+				limit = {
+					owner = {
+						has_special_project = ITF_2_PROJECT
+					}
+				}
+				owner = {
+					abort_special_project = ITF_2_PROJECT
+				}
+			}
+		}
+	}
+
+	option = {
+		name = itf_story.60.a # Accept the guidance
+		hidden_effect = {
+			if = {
+				limit = {
+					has_deposit = d_enchanted_forest_2
+				}
+				remove_deposit = d_enchanted_forest_2
+				add_deposit = d_enchanted_forest_8
+			}
+			else_if = {
+				limit = {
+					has_deposit = d_enchanted_forest_3
+				}
+				remove_deposit = d_enchanted_forest_3
+				add_deposit = d_enchanted_forest_9
+			}
+			else_if = {
+				limit = {
+					has_deposit = d_enchanted_forest_4
+				}
+				remove_deposit = d_enchanted_forest_4
+				add_deposit = d_enchanted_forest_10
+			}
+			else_if = {
+				limit = {
+					has_deposit = d_enchanted_forest_5
+				}
+				remove_deposit = d_enchanted_forest_5
+				add_deposit = d_enchanted_forest_8
+			}
+			else_if = {
+				limit = {
+					has_deposit = d_enchanted_forest_6
+				}
+				remove_deposit = d_enchanted_forest_6
+				add_deposit = d_enchanted_forest_9
+			}
+			else_if = {
+				limit = {
+					has_deposit = d_enchanted_forest_7
+				}
+				remove_deposit = d_enchanted_forest_7
+				add_deposit = d_enchanted_forest_10
+			}
+			owner = {
+				modify_species = {
+					species = this
+					add_trait = trait_attuned_to_nature
+				}
+				while = {
+					count = 3			
+					random_owned_pop = {
+						limit = {
+							is_same_species = owner.species
+							NOT = { has_ethic = "ethic_pacifist" }
+						}
+						pop_change_ethic = "ethic_pacifist"
+					}
+				}
+			}
+			planet_event = { id = itf_story.61 }
+		}
+		if = {
+			limit = {
+				owner = {
+					NOR = {
+						has_ethic = "ethic_pacifist"
+						has_ethic = "ethic_fanatic_pacifist"
+					}
+				}
+			}
+			owner = {
+				add_monthly_resource_mult = {
+					resource = unity
+					value = @tier4unityreward
+					min = @tier4unitymin
+					max = @tier4unitymax
+				}
+				shift_ethic = "ethic_pacifist"
+			}		
+		}
+		else = {
+				owner = {
+					add_monthly_resource_mult = {
+					resource = unity
+					value = @tier5unityreward
+					min = @tier5unitymin
+					max = @tier5unitymax
+				}
+			}
+		}
+	}
+	option = {
+		name = itf_story.60.b # Reject
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier5researchreward
+				min = @tier5researchmin
+				max = @tier5researchmax
+			}
+		}
+		change_pc = pc_nuked
+		hidden_effect = {
+			reset_planet = yes
+			# clear_blockers = yes
+			# add_deposit = d_burned_forest # TODO: add deposit
+			if = {
+				limit = {
+					has_deposit = d_enchanted_forest_2
+				}
+				remove_deposit = d_enchanted_forest_2
+			}
+			else_if = {
+				limit = {
+					has_deposit = d_enchanted_forest_3
+				}
+				remove_deposit = d_enchanted_forest_3
+			}
+			else_if = {
+				limit = {
+					has_deposit = d_enchanted_forest_4
+				}
+				remove_deposit = d_enchanted_forest_4
+			}
+			else_if = {
+				limit = {
+					has_deposit = d_enchanted_forest_5
+				}
+				remove_deposit = d_enchanted_forest_5
+			}
+			else_if = {
+				limit = {
+					has_deposit = d_enchanted_forest_6
+				}
+				remove_deposit = d_enchanted_forest_6
+			}
+			else_if = {
+				limit = {
+					has_deposit = d_enchanted_forest_7
+				}
+				remove_deposit = d_enchanted_forest_7
+			}
+			planet_event = { id = itf_story.62 }
+		}
+	}
+}
+
+# Under the guidance
+planet_event = {
+	id = itf_story.61
+	title = "itf_story.61.name"
+	desc = "itf_story.61.desc"
+	picture = GFX_evt_baol_ruins
+	show_sound = event_mystic_reveal
+	location = ROOT
+	trackable = yes
+
+	pre_triggers = {
+		has_owner = yes
+		original_owner = yes
+		has_ground_combat = no
+		is_occupied_flag = no
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = itf_story.61.a
+		owner = {
+			end_event_chain = "itf_enchanted_forest_chain"
+		}
+	}
+}
+
+# Rejected the guidance
+planet_event = {
+	id = itf_story.62
+	title = "itf_story.62.name"
+	desc = "itf_story.62.desc"
+	picture = GFX_evt_tomb_world
+	show_sound = event_mystic_reveal
+	location = ROOT
+	trackable = yes
+
+	pre_triggers = {
+		has_owner = yes
+		original_owner = yes
+		has_ground_combat = no
+		is_occupied_flag = no
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = itf_story.62.a
+		owner = {
+			end_event_chain = "itf_enchanted_forest_chain"
+		}
+	}
+}
+
