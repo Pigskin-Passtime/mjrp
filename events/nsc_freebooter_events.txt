@@ -14,69 +14,18 @@ planet_event = {
 		origin_nsc_freebooter_start_setup = yes
 	}
 }
-#pop trait changing event 1
+#'trait_nsc_freebooter' trait change event 1
 pop_event = {
 	id = nsc_freebooter.2
 	hide_window = yes
 	is_triggered_only = yes
 
 	trigger = {
-		OR = {
-			AND = {
-				has_trait = trait_pc_nsc_freebooter_habitat_preference
-				NOT = { has_trait = trait_nsc_freebooter_1 }
-				from = { is_planet_class = pc_nsc_freebooter_habitat }
-			}
-			AND = {
-				has_trait = trait_nsc_freebooter_1
-				from = {
-					NOR = {
-						is_planet_class = pc_nsc_freebooter_habitat
-						is_planet_class = pc_habitat #check for the vanilla habitat too
-					}
-				}
-			}
-		}
+		nsc_freebooter_trait_change_event_trigger = yes
 	}
 
 	immediate = {
-		if = {
-			limit = {
-				has_trait = trait_pc_nsc_freebooter_habitat_preference
-				NOT = { has_trait = trait_nsc_freebooter_1 }
-				from = { is_planet_class = pc_nsc_freebooter_habitat }
-			}
-			if = {
-				limit = { has_trait = trait_nsc_freebooter_2 }
-				modify_species = {
-					species = this
-					add_trait = trait_nsc_freebooter_1
-					remove_trait = trait_nsc_freebooter_2
-				}
-				else = {
-					modify_species = {
-						species = this
-						add_trait = trait_nsc_freebooter_1
-					}
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				has_trait = trait_nsc_freebooter_1
-				from = {
-					NOR = {
-						is_planet_class = pc_nsc_freebooter_habitat
-						is_planet_class = pc_habitat #check for the vanilla habitat too
-					}
-				}
-			}
-			modify_species = {
-				species = this
-				remove_trait = trait_nsc_freebooter_1
-				add_trait = trait_nsc_freebooter_2
-			}
-		}
+		nsc_freebooter_trait_change_event_effect = yes
 	}
 }
 #The Khan conquers Worlds
@@ -245,11 +194,12 @@ country_event = {
 				"null"
 			}
 		}
+
 		ruler = { add_trait = nsc_freebooter_leader_trait_ruler_great_khan }
 		clone_leader = {
 			target = ruler
 			class = admiral
-			traits = { trait = nsc_freebooter_leader_trait_great_khan }
+			traits = { trait = nsc_freebooter_admiral_trait_great_khan }
 			skill = 10
 		}
 	}
@@ -265,14 +215,13 @@ country_event = {
 	trigger = {
 		fromfrom = {
 			exists = leader
-			leader = { has_trait = nsc_freebooter_leader_trait_great_khan }
+			fleet = { num_ships = 0 }
+			leader = { has_trait = nsc_freebooter_admiral_trait_great_khan }
 		}
 	}
 	immediate = {
-		this = {
-			ruler = { kill_leader = { show_notification = yes } }
-			heir = { add_trait = nsc_freebooter_leader_trait_ruler_great_khan }
-		}
+		set_country_flag = nsc_freebooter_khan_killed_in_action_flag
+		this = { ruler = { kill_leader = { show_notification = no } } }
 	}
 	option = {
 		name = nsc_freebooter.6.a
@@ -663,12 +612,14 @@ country_event = {
 			event_target:nsc_freebooter_empire_fleet_market_target = {
 				create_fleet = {
 					effect = {
-						set_owner = prev
-						set_location = prev.capital_star.starbase
+						set_owner = root #for 'random_existing_desing' line to use the player's random design, not the AI's
 						create_ship = {
+							name = random
 							random_existing_design = corvette 
 							graphical_culture = root
 						}
+						set_location = prev.capital_star.starbase
+						set_owner = prev
 					}
 				}
 				set_country_flag = already_bought_fleet_from_nsc_freebooter_empire
@@ -691,12 +642,14 @@ country_event = {
 			event_target:nsc_freebooter_empire_fleet_market_target = {
 				create_fleet = {
 					effect = {
-						set_owner = prev
-						set_location = prev.capital_star.starbase
+						set_owner = root
 						create_ship = {
+							name = random
 							random_existing_design = destroyer 
 							graphical_culture = root
 						}
+						set_location = prev.capital_star.starbase
+						set_owner = prev
 					}
 				}
 				set_country_flag = already_bought_fleet_from_nsc_freebooter_empire
@@ -719,12 +672,14 @@ country_event = {
 			event_target:nsc_freebooter_empire_fleet_market_target = {
 				create_fleet = {
 					effect = {
-						set_owner = prev
-						set_location = prev.capital_star.starbase
+						set_owner = root
 						create_ship = {
+							name = random
 							random_existing_design = cruiser 
 							graphical_culture = root
 						}
+						set_location = prev.capital_star.starbase
+						set_owner = prev
 					}
 				}
 				set_country_flag = already_bought_fleet_from_nsc_freebooter_empire
@@ -747,12 +702,14 @@ country_event = {
 			event_target:nsc_freebooter_empire_fleet_market_target = {
 				create_fleet = {
 					effect = {
-						set_owner = prev
-						set_location = prev.capital_star.starbase
+						set_owner = root
 						create_ship = {
+							name = random
 							random_existing_design = battleship 
 							graphical_culture = root
 						}
+						set_location = prev.capital_star.starbase
+						set_owner = prev
 					}
 				}
 				set_country_flag = already_bought_fleet_from_nsc_freebooter_empire
@@ -775,12 +732,14 @@ country_event = {
 			event_target:nsc_freebooter_empire_fleet_market_target = {
 				create_fleet = {
 					effect = {
-						set_owner = prev
-						set_location = prev.capital_star.starbase
+						set_owner = root
 						create_ship = {
+							name = random
 							random_existing_design = titan 
 							graphical_culture = root
 						}
+						set_location = prev.capital_star.starbase
+						set_owner = prev
 					}
 				}
 				set_country_flag = already_bought_fleet_from_nsc_freebooter_empire
@@ -803,12 +762,14 @@ country_event = {
 			event_target:nsc_freebooter_empire_fleet_market_target = {
 				create_fleet = {
 					effect = {
-						set_owner = prev
-						set_location = prev.capital_star.starbase
+						set_owner = root
 						create_ship = {
+							name = random
 							random_existing_design = colossus 
 							graphical_culture = root
 						}
+						set_location = prev.capital_star.starbase
+						set_owner = prev
 					}
 				}
 				set_country_flag = already_bought_fleet_from_nsc_freebooter_empire
@@ -831,12 +792,14 @@ country_event = {
 			event_target:nsc_freebooter_empire_fleet_market_target = {
 				create_fleet = {
 					effect = {
-						set_owner = prev
-						set_location = prev.capital_star.starbase
+						set_owner = root
 						create_ship = {
+							name = random
 							random_existing_design = juggernaut 
 							graphical_culture = root
 						}
+						set_location = prev.capital_star.starbase
+						set_owner = prev
 					}
 				}
 				set_country_flag = already_bought_fleet_from_nsc_freebooter_empire
@@ -896,65 +859,34 @@ country_event = {
 		}
 	}
 }
-#pop trait changing event 2
+#'trait_nsc_freebooter' trait change event 2
 planet_event = {
 	id = nsc_freebooter.19
 	hide_window = yes
 	is_triggered_only = yes
 
 	trigger = {
-		is_planet_class = pc_nsc_freebooter_habitat
-		any_owned_pop = {
-			has_trait = trait_pc_nsc_freebooter_habitat_preference
-			NOT = { has_trait = trait_nsc_freebooter_1 }
-		}
+		nsc_freebooter_trait_change_event_trigger_2 = yes
 	}
 
 	immediate = {
-		every_owned_pop = {
-			limit = {
-				has_trait = trait_pc_nsc_freebooter_habitat_preference
-				NOT = { has_trait = trait_nsc_freebooter_1 }
-			}
-			if = {
-				limit = { has_trait = trait_nsc_freebooter_2 }
-				modify_species = {
-					species = this
-					add_trait = trait_nsc_freebooter_1
-					remove_trait = trait_nsc_freebooter_2
-				}
-				else = {
-					modify_species = {
-						species = this
-						add_trait = trait_nsc_freebooter_1
-					}
-				}
-			}
-		}
+		nsc_freebooter_trait_change_event_effect_2 = yes
 	}
 }
-#pop trait changing event 3
-planet_event = {
+#'trait_nsc_freebooter' trait change event 3
+country_event = {
 	id = nsc_freebooter.20
 	hide_window = yes
 	is_triggered_only = yes
 
 	trigger = {
-		NOR = {
-			is_planet_class = pc_nsc_freebooter_habitat
-			is_planet_class = pc_habitat #check for the vanilla habitat too
-		}
-		any_owned_pop = { has_trait = trait_nsc_freebooter_1 }
+		any_owned_planet = { nsc_freebooter_trait_change_event_trigger_2 = yes }
 	}
 
 	immediate = {
-		every_owned_pop = {
-			limit = { has_trait = trait_nsc_freebooter_1 }
-			modify_species = {
-				species = this
-				remove_trait = trait_nsc_freebooter_1
-				add_trait = trait_nsc_freebooter_2
-			}
+		every_owned_planet = {
+			limit = { nsc_freebooter_trait_change_event_trigger_2 = yes }
+			nsc_freebooter_trait_change_event_effect_2 = yes
 		}
 	}
 }
@@ -1040,6 +972,7 @@ country_event = {
 		custom_tooltip = nsc_freebooter.24.a.tooltip
 		add_modifier = { modifier = nsc_freebooter_the_duel_opponent_won_empire_modifier days = 360 }
 		hidden_effect = {
+			set_country_flag = nsc_freebooter_khan_killed_in_action_flag
 			kill_leader = {
 				type = ruler
 				heir = no
@@ -1059,7 +992,7 @@ country_event = {
 					clone_leader = {
 						target = prev
 						class = admiral
-						traits = { trait = nsc_freebooter_leader_trait_great_khan }
+						traits = { trait = nsc_freebooter_admiral_trait_great_khan }
 						skill = 5 #less than the original khan since the leader was a general
 					}
 					set_leader = prev
@@ -1396,21 +1329,37 @@ country_event = {
 		hidden_effect = { country_event = { id = nsc_freebooter.25 } } #nobody won (both lost)
 	}
 }
-#when the khan die somehow (die of old age or killed in the nsc_freebooter.24 event)
+#when the khan die of old age
 country_event = {
 	id = nsc_freebooter.32
 	title = "nsc_freebooter.6.name"
-	desc = "nsc_freebooter.32.desc"
+	desc = { trigger = { NOT = { has_modifier = humiliated } } text = nsc_freebooter.32.desc }
+	desc = { trigger = { has_modifier = humiliated } text = nsc_freebooter.32.desc_alt } #humiliated khan suicided #check 'fallen_empire_humiliate_effect' and 'fallen_empires.2' event
 	picture = GFX_evt_space_funeral
 	show_sound = event_life_support_fail
 	is_triggered_only = yes
 
 	trigger = {
+		NOT = { has_country_flag = nsc_freebooter_khan_killed_in_action_flag }
 		from = { has_trait = nsc_freebooter_leader_trait_ruler_great_khan }
 	}
 
 	immediate = {
-		heir = { add_trait = nsc_freebooter_leader_trait_ruler_great_khan }
+		if = {
+			limit = {
+				any_owned_leader = {
+					leader_class = admiral
+					has_trait = nsc_freebooter_admiral_trait_great_khan
+				}
+			}
+			random_owned_leader = {
+				limit = {
+					leader_class = admiral
+					has_trait = nsc_freebooter_admiral_trait_great_khan
+				}
+				kill_leader = { show_notification = no }
+			}
+		}
 	}
 
 	option = {
@@ -1418,15 +1367,65 @@ country_event = {
 		add_modifier = { modifier = nsc_freebooter_death_of_khan_empire_modifier days = 360 }
 	}
 }
-#'Pirate Raid' effect events
-#'on_monthly_pulse_country' on_action event
+#wg_nsc_freebooter_forced_border_open war goal effect event
 country_event = {
 	id = nsc_freebooter.33
 	hide_window = yes
 	is_triggered_only = yes
 
 	trigger = {
-		has_ascension_perk = ap_nsc_freebooter_pirate_raider #check the ap first, to reduce the burden on the performance
+		is_war_leader = yes
+		from = {
+			is_war_participant = {
+				who = root
+				side = attackers
+			}
+			using_war_goal = {
+				type = wg_nsc_freebooter_forced_border_open
+				owner = root
+			}
+		}
+	}
+
+	immediate = {
+		from = {
+			random_war_participant = {
+				limit = {
+					NOT = { is_same_empire = root }
+					is_war_leader = yes
+				}
+				set_closed_borders = {
+					who = root
+					status = no
+					forced = 3 #for 3 years #check 'action.44' event too
+				}
+				if = {
+					limit = { is_rival = root }
+					end_rivalry = root
+					add_modifier = { modifier = nsc_freebooter_forced_border_open_no_rival_empire_modifier days = 1080 } #for 3 years
+				}
+				set_policy = {
+					policy = diplomatic_stance
+					option = diplo_stance_belligerent #'diplo_stance_supremacist' is an enhanced version of this
+					cooldown = yes #default 10 years cooldown #diplo action 'action_make_rival' requires 'diplo_stance_supremacist' policy 
+					#so this will prevent the empire to set your empire as its rival for 10 years
+				}
+				wg_nsc_freebooter_forced_border_open_cost_effect = yes
+			}
+			end_war_effect = yes
+		}
+	}
+}
+#'Pirate Raid' effect events
+#'on_monthly_pulse_country' on_action event
+country_event = {
+	id = nsc_freebooter.34
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_origin = origin_nsc_freebooter #check the origin first, to reduce the burden on the performance
+		has_ascension_perk = ap_nsc_freebooter_pirate_raider #then the ascension perk
 		has_edict = nsc_freebooter_pirate_raiding_control
 		any_owned_fleet = {
 			solar_system = {
@@ -1482,45 +1481,15 @@ country_event = {
 		}
 	}
 }
-#'on_planet_bombarded' on_action event
-planet_event = {
-	id = nsc_freebooter.34
-	hide_window = yes
-	is_triggered_only = yes
-
-	trigger = {
-		from.owner = {
-			has_ascension_perk = ap_nsc_freebooter_pirate_raider
-			has_edict = nsc_freebooter_pirate_raiding_control
-		}
-		this = {
-			NOR = {
-				owner = { is_same_empire = prevprev.from.owner }
-				has_modifier = nsc_freebooter_recently_raided_world_planet_modifier
-				is_planet_class = pc_infested #no effect on crisis faction's planets
-				is_planet_class = pc_ai
-			}
-		}
-	}
-
-	immediate = {
-		this = { planet_event = { id = nsc_freebooter.35 } }
-	}
-}
 #the real effect event
 planet_event = {
 	id = nsc_freebooter.35
 	hide_window = yes
 	is_triggered_only = yes
 
-	trigger = {
-		NOT = { has_planet_flag = nsc_freebooter_currently_under_raiding_planet }
-	}
-
 	immediate = {
 		#the 'nsc_freebooter.34' event runs every day so we have to make some intervals #the 'nsc_freebooter.33' event is fine
-		set_timed_planet_flag = { flag = nsc_freebooter_currently_under_raiding_planet days = 30 }
-		add_planet_devastation = 10
+		add_planet_devastation = 5
 		nsc_freebooter_planet_raiding_planetary_effect = yes
 		solar_system = {
 			every_fleet_in_system = {
@@ -1537,18 +1506,21 @@ planet_event = {
 								modifier = nsc_freebooter_opinion_they_raided_one_of_our_colony
 							}
 						}
-						random_owned_pop = { #abduct a pop #a 'random_owned_pop' who is living in the 'root' (the planet where is raided by the empire)
-							prevprev = { #the freebooter empire
-								random_owned_planet = {
-									limit = { free_jobs >= 1 }
-									create_pop = { species = prevprev } #two steps back from the 'random_owned_planet' (one of the freebooter empire's planet) so it's 'random_owned_pop'
+						if = {
+							limit = { prev = { is_at_war_with = root.owner } }
+							random_owned_pop = { #abduct a pop #a 'random_owned_pop' who is living in the 'root' (the planet where is raided by the empire)
+								prevprev = { #the freebooter empire
+									random_owned_planet = {
+										limit = { free_jobs >= 1 }
+										create_pop = { species = prevprev } #two steps back from the 'random_owned_planet' (one of the freebooter empire's planet) so it's 'random_owned_pop'
+									}
+									if = { #if every planet under the freebooter empire has NO free job available at this moment
+										limit = { NOT = { any_owned_planet = { free_jobs >= 1 } } }
+										capital_scope = { create_pop = { species = prevprev } } #two steps back from the 'capital_scope' (the freebooter empire's capital) so it's 'random_owned_pop'
+									}
 								}
-								if = { #if every planet under the freebooter empire has NO free job available at this moment
-									limit = { NOT = { any_owned_planet = { free_jobs >= 1 } } }
-									capital_scope = { create_pop = { species = prevprev } } #two steps back from the 'capital_scope' (the freebooter empire's capital) so it's 'random_owned_pop'
-								}
+								kill_pop = yes
 							}
-							kill_pop = yes
 						}
 					}
 					nsc_freebooter_planet_raiding_effect = yes
@@ -1558,14 +1530,12 @@ planet_event = {
 	}
 }
 #nsc_freebooter_boarding_pod effect event
-#pre-setup
 country_event = {
 	id = nsc_freebooter.36
 	hide_window = yes
 	is_triggered_only = yes
 
 	trigger = {
-		this = { is_ai = no }
 		fromfrom = {
 			OR = {
 				has_component = NSC_FREEBOOTER_BOARDING_POD_1
@@ -1575,45 +1545,24 @@ country_event = {
 	}
 
 	immediate = {
-		nsc_freebooter_boarding_pod_pre_setup_effect = yes
-	}
-}
-#main effect
-country_event = {
-	id = nsc_freebooter.37
-	hide_window = yes
-	is_triggered_only = yes
-	
-	trigger = {
-		this = { is_ai = no }
-		fromfrom = {
-			any_owned_ship = {
-				OR = {
-					has_component = NSC_FREEBOOTER_BOARDING_POD_1
-					has_component = NSC_FREEBOOTER_BOARDING_POD_2
-				}
+		if = {
+			limit = { fromfrom = { has_component = NSC_FREEBOOTER_BOARDING_POD_1 } }
+			random_list = {
+				85 = {}
+				15 = { nsc_freebooter_boarding_pod_main_effect = yes }
 			}
 		}
-		any_system = {
-			any_fleet_in_system = { is_same_value = fromfrom }
-			OR = {
-				check_variable = { which = nsc_freebooter_boarding_pod_target_corvette_var value >= 1 }
-				check_variable = { which = nsc_freebooter_boarding_pod_target_destroyer_var value >= 1 }
-				check_variable = { which = nsc_freebooter_boarding_pod_target_cruiser_var value >= 1 }
-				check_variable = { which = nsc_freebooter_boarding_pod_target_battleship_var value >= 1 }
-				check_variable = { which = nsc_freebooter_boarding_pod_target_titan_var value >= 1 }
-				check_variable = { which = nsc_freebooter_boarding_pod_target_colossus_var value >= 1 }
-				check_variable = { which = nsc_freebooter_boarding_pod_target_juggernaut_var value >= 1 }
+		else_if = {
+			limit = { fromfrom = { has_component = NSC_FREEBOOTER_BOARDING_POD_2 } }
+			random_list = {
+				75 = {}
+				25 = { nsc_freebooter_boarding_pod_main_effect = yes }
 			}
 		}
-	}
-
-	immediate = {
-		nsc_freebooter_boarding_pod_main_effect = yes
 	}
 }
 ship_event = {
-	id = nsc_freebooter.38
+	id = nsc_freebooter.37
 	hide_window = yes
 	is_triggered_only = yes
 
@@ -1623,45 +1572,147 @@ ship_event = {
 				limit = { is_disabled = yes }
 				set_disabled = no
 			}
-			set_owner = root.owner #'debugtooltip' says 'root' is the construction ship, 'root.owner' is the owner empire of that ship so it's the freebooter empire
 		}
 	}
 }
-#wg_nsc_freebooter_forced_border_open war goal effect event
+#if a new ruler is created after the khan is dead
 country_event = {
-	id = nsc_freebooter.39
+	id = nsc_freebooter.38
 	hide_window = yes
 	is_triggered_only = yes
 
 	trigger = {
-		is_war_leader = yes
-		from = {
-			is_war_participant = {
-				who = root
-				side = attackers
-			}
-			using_war_goal = {
-				type = wg_nsc_freebooter_forced_border_open
-				owner = root
+		has_ascension_perk = ap_nsc_freebooter_wrath_of_khan
+		ruler = {
+			NOR = {
+				has_trait = nsc_freebooter_leader_trait_ruler_great_khan
+				has_trait = nsc_freebooter_leader_trait_ruler_child_of_great_khan
 			}
 		}
 	}
 
 	immediate = {
-		from = {
-			random_war_participant = {
-				limit = {
-					NOT = { is_same_empire = root }
-					is_war_leader = yes
+		ruler = { add_trait = nsc_freebooter_leader_trait_ruler_child_of_great_khan }
+		if = {
+			limit = {
+				NOT = {
+					any_owned_leader = {
+						leader_class = admiral
+						OR = {
+							has_trait = nsc_freebooter_admiral_trait_great_khan
+							has_trait = nsc_freebooter_admiral_trait_child_of_great_khan						
+						}
+					}
 				}
-				set_closed_borders = {
-					who = root
-					status = no
-					forced = 3 #check 'action.44' event too
-				}
-				wg_nsc_freebooter_forced_border_open_cost_effect = yes
 			}
-			end_war_effect = yes
+			clone_leader = {
+				target = ruler
+				class = admiral
+				traits = { trait = nsc_freebooter_admiral_trait_child_of_great_khan }
+				skill = 5
+			}
 		}
+	}
+}
+#'NSC_FREEBOOTER_KHAN_SHIP_BUILD_PROJECT' special project effect event
+country_event = {
+	id = nsc_freebooter.39
+	title = "nsc_freebooter.39.name"
+	desc = "nsc_freebooter.39.desc"
+	picture = GFX_evt_fleet_from_surface
+	show_sound = relic_activation_khans_throne
+	location = root.capital_scope
+	is_triggered_only = yes
+
+	immediate = {
+		create_fleet = {
+			effect = {
+				set_owner = root
+				set_location = root.capital_scope
+				create_ship = {
+					prefix = no
+					name = "The Khan's Flagship"
+					design = "Vengeance"
+					graphical_culture = "nsc_freebooter_01"
+					effect = { set_disable_at_health = 0.01 }
+				}
+			}
+		}
+	}
+
+	option = {
+		name = nsc_freebooter.39.a
+	}
+}
+#when the khan's flagship is (nearly) destroyed in a battle
+ship_event = {
+	id = nsc_freebooter.40
+	title = "nsc_freebooter.40.name"
+	desc = "nsc_freebooter.40.desc"
+	picture = GFX_evt_small_space_battle
+	show_sound = event_space_battle
+	location = this
+	is_triggered_only = yes
+
+	trigger = {
+		this = {
+			is_ship_size = nsc_freebooter_flagship
+			is_disabled = yes
+		}
+	}
+	option = {
+		name = nsc_freebooter.40.a
+		custom_tooltip = nsc_freebooter.40.a.tooltip
+		allow = {
+			this.owner = {
+				has_resource = { type = energy amount >= 1000 }
+				has_resource = { type = alloys amount >= 5000 }
+				has_resource = { type = volatile_motes amount >= 100 }
+				has_resource = { type = exotic_gases amount >= 100 }
+				has_resource = { type = rare_crystals amount >= 100 }
+			}
+		}
+		hidden_effect = {
+			this.owner = {
+				add_resource = {
+					energy = -1000
+					alloys = -5000
+					volatile_motes = -100
+					exotic_gases = -100
+					rare_crystals = -100
+				}
+			}
+			enable_special_project = {
+				name = "NSC_FREEBOOTER_KHAN_SHIP_REPAIR_PROJECT"
+				location = this
+				owner = this.owner
+			}
+		}
+	}
+	option = {
+		name = nsc_freebooter.40.b
+		custom_tooltip = nsc_freebooter.40.b.tooltip
+		hidden_effect = { destroy_ship = this }
+	}
+}
+#'NSC_FREEBOOTER_KHAN_SHIP_REPAIR_PROJECT' special project effect event
+ship_event = {
+	id = nsc_freebooter.41
+	title = "nsc_freebooter.41.name"
+	desc = "nsc_freebooter.41.desc"
+	picture = GFX_evt_automated_dreadnought
+	show_sound = event_construction
+	location = fromfrom
+	is_triggered_only = yes
+
+	immediate = {
+		fromfrom = {
+			repair_percentage = 0.25
+			set_disabled = no
+		}
+	}
+
+	option = {
+		name = nsc_freebooter.41.a
 	}
 }

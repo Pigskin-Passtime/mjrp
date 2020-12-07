@@ -100,7 +100,7 @@ wg_nsc_freebooter_domination = {
 		weight = 0
 	}
 }
-#check out 'nsc_freebooter.39' event for the actual effect
+#check out 'nsc_freebooter.33' event for the actual effect
 wg_nsc_freebooter_forced_border_open = {
 	casus_belli = cb_nsc_freebooter_pirate_raider
 	hide_if_no_cb = yes
@@ -114,7 +114,15 @@ wg_nsc_freebooter_forced_border_open = {
 		always = yes
 	}
 	possible = {
-		from = { has_closed_borders = root }
+		from = {
+			OR = {
+				has_closed_borders = root
+				AND = {
+					is_rival = root
+					is_ai = yes #no forced border open against a player empire
+				}
+			}
+		}
 		wg_nsc_freebooter_forced_border_open_trigger = yes
 	}
 

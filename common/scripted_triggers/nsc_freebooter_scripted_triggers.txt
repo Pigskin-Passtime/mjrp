@@ -233,3 +233,109 @@ wg_nsc_freebooter_forced_border_open_trigger = {
 		}
 	}
 }
+nsc_freebooter_trait_change_event_trigger = {
+	OR = {
+		AND = { #condition 0
+			NOT = { has_trait = trait_pc_nsc_freebooter_habitat_preference }
+			OR = {
+				has_trait = trait_nsc_freebooter_1
+				has_trait = trait_nsc_freebooter_2
+				has_trait = trait_nsc_freebooter_3
+				has_trait = trait_nsc_freebooter_4
+				has_trait = trait_nsc_freebooter_5
+			}
+		}
+		AND = { #condition 1
+			has_trait = trait_pc_nsc_freebooter_habitat_preference
+			NOT = { has_trait = trait_nsc_freebooter_1 }
+			from = {
+				OR = {
+					is_planet_class = pc_nsc_freebooter_habitat
+					is_planet_class = pc_habitat
+				}
+			}
+		}
+		AND = { #condition 2
+			has_trait = trait_pc_nsc_freebooter_habitat_preference
+			NOT = { has_trait = trait_nsc_freebooter_2 }
+			from = {
+				NOR = {
+					is_planet_class = pc_nsc_freebooter_habitat
+					is_planet_class = pc_habitat
+					is_planet_class = pc_city
+					is_planet_class = pc_gaia
+					is_planet_class = pc_ringworld_habitable
+				}
+			}
+		}
+		AND = { #condition 3
+			has_trait = trait_pc_nsc_freebooter_habitat_preference
+			NOT = { has_trait = trait_nsc_freebooter_3 }
+			from = { is_planet_class = pc_city }
+		}
+		AND = { #condition 4
+			has_trait = trait_pc_nsc_freebooter_habitat_preference
+			NOT = { has_trait = trait_nsc_freebooter_4 }
+			from = { is_planet_class = pc_gaia }
+		}
+		AND = { #condition 5
+			has_trait = trait_pc_nsc_freebooter_habitat_preference
+			NOT = { has_trait = trait_nsc_freebooter_5 }
+			from = { is_planet_class = pc_ringworld_habitable }
+		}
+	}
+}
+nsc_freebooter_trait_change_event_trigger_2 = {
+	any_owned_pop = {
+		OR = {
+			AND = { #condition 0
+				NOT = { has_trait = trait_pc_nsc_freebooter_habitat_preference }
+				OR = {
+					has_trait = trait_nsc_freebooter_1
+					has_trait = trait_nsc_freebooter_2
+					has_trait = trait_nsc_freebooter_3
+					has_trait = trait_nsc_freebooter_4
+					has_trait = trait_nsc_freebooter_5
+				}
+			}
+			AND = { #condition 1
+				has_trait = trait_pc_nsc_freebooter_habitat_preference
+				NOT = { has_trait = trait_nsc_freebooter_1 }
+				prev.this = {
+					OR = {
+						is_planet_class = pc_nsc_freebooter_habitat
+						is_planet_class = pc_habitat
+					}
+				}
+			}
+			AND = { #condition 2
+				has_trait = trait_pc_nsc_freebooter_habitat_preference
+				NOT = { has_trait = trait_nsc_freebooter_2 }
+				prev.this = {
+					NOR = {
+						is_planet_class = pc_nsc_freebooter_habitat
+						is_planet_class = pc_habitat
+						is_planet_class = pc_city
+						is_planet_class = pc_gaia
+						is_planet_class = pc_ringworld_habitable
+					}
+				}
+			}
+			AND = { #condition 3
+				has_trait = trait_pc_nsc_freebooter_habitat_preference
+				NOT = { has_trait = trait_nsc_freebooter_3 }
+				prev.this = { is_planet_class = pc_city }
+			}
+			AND = { #condition 4
+				has_trait = trait_pc_nsc_freebooter_habitat_preference
+				NOT = { has_trait = trait_nsc_freebooter_4 }
+				prev.this = { is_planet_class = pc_gaia }
+			}
+			AND = { #condition 5
+				has_trait = trait_pc_nsc_freebooter_habitat_preference
+				NOT = { has_trait = trait_nsc_freebooter_5 }
+				prev.this = { is_planet_class = pc_ringworld_habitable }
+			}
+		}
+	}
+}
