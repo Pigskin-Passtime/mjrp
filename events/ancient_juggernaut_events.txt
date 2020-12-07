@@ -240,7 +240,7 @@ country_event = {
 	id = ancient_jug_origin.3
 	title = ancient_jug_origin.3.title
 	desc = ancient_jug_origin.3.desc
-	picture = GFX_evt_juggernaut
+	picture = GFX_evt_origin_ancient_juggernaut_2
 	location = event_target:ancient_juggernaut_itself
 	show_sound = event_default
 	is_triggered_only = yes
@@ -257,16 +257,22 @@ country_event = {
 		}
 	}
 	immediate = {
-		random_owned_fleet = {
+		if = {
 			limit = {
-				any_owned_ship = {
-					is_ship_size = juggernaut
-					has_ship_flag = ancient_juggernaut_itself
-				}
+				has_special_project = "ANCIENT_JUGGERNAUT_REPAIR_FTL_PROJECT"
 			}
+			abort_special_project = {
+				type = "ANCIENT_JUGGERNAUT_REPAIR_FTL_PROJECT"
+			}
+		}
+		random_owned_ship = {
+			limit = {
+				is_ship_size = juggernaut
+				has_ship_flag = ancient_juggernaut_itself
+			}
+			remove_modifier = origin_ancient_juggernaut_initial
 			save_event_target_as = ancient_juggernaut_itself		
 		}
-		
 		set_country_flag = origin_ancient_juggernaut_can_build_one
 	}
 	option = {
@@ -276,22 +282,17 @@ country_event = {
 			}
 		}
 		name = ancient_jug_origin.3.a
-		hidden_effect = {
-			save_event_target_as = ancient_juggernaut_owner
-		}
-		event_target:ancient_juggernaut_itself = {
-			enable_special_project = {
-				name = "ANCIENT_JUGGERNAUT_PROJECT"
-				location = this
-				owner = root
-			}
-		}
 	}
 	option = {
 		trigger = {
 			has_authority = auth_machine_intelligence
 		}
 		name = ancient_jug_origin.3.a_machine
+		
+		
+	}
+	after = {
+		custom_tooltip = ancient_jug_origin.16.tooltip
 		hidden_effect = {
 			save_event_target_as = ancient_juggernaut_owner
 		}
@@ -392,6 +393,14 @@ country_event = {
 				type = ANCIENT_JUGGERNAUT_PROJECT
 			}
 		}
+		if = {
+			limit = {
+				has_special_project = ANCIENT_JUGGERNAUT_REPAIR_FTL_PROJECT
+			}
+			abort_special_project = {
+				type = ANCIENT_JUGGERNAUT_REPAIR_FTL_PROJECT
+			}
+		}
 		effect_ancient_jug_remove_booster_flag = yes
 		effect_ancient_jug_remove_booster_modifier = yes
 		fromfrom = {
@@ -412,6 +421,18 @@ country_event = {
 			}
 			add_modifier = {
 				modifier = origin_ancient_juggernaut_destroyed_debuff
+				days = 7200
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					which = origin_ancient_juggernaut_researched_related_tech
+					value > 3
+				}
+			}
+			add_modifier = {
+				modifier = origin_ancient_juggernaut_destroyed_debuff_afternate
 				days = 7200
 			}
 		}
@@ -536,10 +557,10 @@ country_event = {
 					value = 1936
 				}
 			}
-			1 = {
+			1 = { #My birthdate
 				set_variable = {
 					which = origin_ancient_juggernaut_alloys
-					value = 2000
+					value = 1994
 				}
 			}
 		}
@@ -547,6 +568,38 @@ country_event = {
 
 	after = {
 		end_event_chain = "ancient_juggernaut_chain"
+		if = {
+			limit = {
+				check_variable = {
+					which = origin_ancient_juggernaut_researched_related_tech
+					value < 4
+				}
+			}
+			tooltip = {
+				add_modifier = {
+					modifier = origin_ancient_juggernaut_destroyed_debuff
+					days = 7200
+				}	
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					which = origin_ancient_juggernaut_researched_related_tech
+					value > 3
+				}
+			}
+			tooltip = {
+				add_modifier = {
+					modifier = origin_ancient_juggernaut_destroyed_debuff_afternate
+					days = 7200
+				}	
+			}
+		}
+		add_modifier = {
+			modifier = origin_ancient_juggernaut_destroyed_debuff_afternate_2
+			days = -1
+		}
 		custom_tooltip = ancient_jug_origin.4.tooltip
 		hidden_effect = {
 			random_list = {
@@ -832,20 +885,6 @@ country_event = {
 				has_country_flag = origin_ancient_juggernaut_can_build_one
 			}
 		}
-		if = {
-			limit = {
-				check_variable = {
-					which = origin_ancient_juggernaut_researched_related_tech
-					value < 4
-				}
-			}
-			tooltip = {
-				add_modifier = {
-					modifier = origin_ancient_juggernaut_destroyed_debuff
-					days = 7200
-				}	
-			}
-		}
 		hidden_effect = {
 			observer_event = {
 				id = ancient_jug_origin.1002
@@ -990,7 +1029,7 @@ country_event = {
 }
 
 
-#You made enemy Jug went kaboom
+#You made enemy old Jug went kaboom
 country_event = { 
 	id = ancient_jug_origin.6
 	title = ancient_jug_origin.6.title
@@ -1513,8 +1552,8 @@ country_event = {
 			}
 		}
 	} 
-	picture = GFX_evt_juggernaut
-	show_sound = event_default
+	picture = GFX_evt_origin_ancient_juggernaut_3
+	show_sound = event_ringworld_build_complete
 	location = event_target:ancient_juggernaut_itself
 
 	is_triggered_only = yes
@@ -1524,6 +1563,7 @@ country_event = {
 	}
 
 	immediate = {
+		
 		observer_event = {
 			id = ancient_jug_origin.1000
 		}
@@ -1533,8 +1573,38 @@ country_event = {
 				has_ship_flag = ancient_juggernaut_itself
 			}
 			save_event_target_as = ancient_juggernaut_pre_update_ship
+			if = {
+				limit = {
+					root = {
+						has_country_flag = ancient_jug_has_overclocked
+					}
+				}
+				create_message = { 
+					type = EXPIRED_EDICT
+					localization = ancient_juggernaut_origin_overclock_end_by_upgrade
+					days = 60
+					target = root
+					variable = {
+						type = name
+						localization = ancient_jug
+						scope = this
+					}
+				}
+				root = {
+					remove_country_flag = ancient_jug_has_overclocked
+					remove_modifier = origin_ancient_juggernaut_overclocking_fake_modifier
+				}
+			}
 		}
-		
+		if = {
+			limit = {
+				NOT = {
+					has_country_flag = ancient_jug_can_access_overclock_afternate
+				}
+			}
+			set_country_flag = ancient_jug_can_access_overclock_afternate
+			set_country_flag = ancient_jug_can_access_overclock
+		}
 		create_fleet = {
 			effect = {
 				set_owner = prev.owner
@@ -1579,6 +1649,7 @@ country_event = {
 				days = -1
 			}
 		}
+		
 		every_playable_country = {
 			limit = {
 				has_communications = root
@@ -1617,7 +1688,7 @@ country_event = {
 	id = ancient_jug_origin.11
 	title = ancient_jug_origin.11.title
 	desc = ancient_jug_origin.11.desc
-	picture = GFX_evt_juggernaut
+	picture = GFX_evt_origin_ancient_juggernaut_2
 	show_sound = event_mega_structure_other_empire_build_complete
 	location = from
 
@@ -1750,14 +1821,14 @@ ship_event = {
 				owner = {
 					change_variable = {
 						which = ancient_juggernaut_gift_meter
-						value = 10
+						value = 5
 					}
 				}
 			}
 		}
 	}
 }
-#on_monthly_pulse_country version, old juggernaut gift parameter increase
+#on_monthly_pulse_country old jug gateway
 country_event = {
 	id = ancient_jug_origin.13
 	hide_window = yes
@@ -1785,11 +1856,11 @@ country_event = {
 				id = ancient_jug_origin.20
 			}
 		}
-		if = { #RESEARCH 7 RELATED TECH, UNLOCK OVERTUNER
+		if = { #RESEARCH 6 RELATED TECH, UNLOCK OVERTUNER
 			limit = {
 				check_variable = {
 					which = origin_ancient_juggernaut_researched_related_tech
-					value > 6
+					value > 5
 				}
 				NOT = {
 					has_country_flag = ancient_jug_can_access_overclock
@@ -1886,7 +1957,7 @@ country_event = {
 			}
 			change_variable = {
 				which = ancient_juggernaut_gift_meter
-				value = 1
+				value = 0.9
 			}
 		}
 	}
@@ -1921,7 +1992,7 @@ country_event = {
 			}
 		}
 	}
-	picture = GFX_evt_juggernaut
+	picture = GFX_evt_origin_ancient_juggernaut_2
 	show_sound = event_construction
 	location = event_target:ancient_juggernaut_itself
 	is_triggered_only = yes
@@ -1952,6 +2023,9 @@ country_event = {
 		}
 		switch = {
 			trigger = has_country_flag
+			ancient_jug_origin.14_corvette_4ship = {
+				custom_tooltip = ancient_jug_origin.14.tooltip.4corvette
+			}
 			ancient_jug_origin.14_corvette_8ship = {
 				custom_tooltip = ancient_jug_origin.14.tooltip.8corvette
 			}
@@ -1963,6 +2037,9 @@ country_event = {
 			}
 			ancient_jug_origin.14_corvette_32ship = {
 				custom_tooltip = ancient_jug_origin.14.tooltip.32corvette
+			}
+			ancient_jug_origin.14_destroyer_2ship = {
+				custom_tooltip = ancient_jug_origin.14.tooltip.2destroyer
 			}
 			ancient_jug_origin.14_destroyer_4ship = {
 				custom_tooltip = ancient_jug_origin.14.tooltip.4destroyer
@@ -1995,10 +2072,12 @@ country_event = {
 				custom_tooltip = ancient_jug_origin.14.tooltip.4battleship
 			}
 		}
+		remove_country_flag = ancient_jug_origin.14_corvette_4ship
 		remove_country_flag = ancient_jug_origin.14_corvette_8ship
 		remove_country_flag = ancient_jug_origin.14_corvette_12ship
 		remove_country_flag = ancient_jug_origin.14_corvette_16ship
 		remove_country_flag = ancient_jug_origin.14_corvette_32ship
+		remove_country_flag = ancient_jug_origin.14_destroyer_2ship
 		remove_country_flag = ancient_jug_origin.14_destroyer_4ship
 		remove_country_flag = ancient_jug_origin.14_destroyer_6ship
 		remove_country_flag = ancient_jug_origin.14_destroyer_8ship
@@ -2162,6 +2241,46 @@ country_event = {
 						set_owner = prev
 		
 						while = {
+							count = 4
+							create_ship = {
+								name = random
+								random_existing_design = corvette
+							}
+						}
+						add_modifier = {
+							modifier = origin_ancient_juggernaut_upkeep_half
+							days = -1
+						}
+						set_location = event_target:ancient_juggernaut_itself
+					}
+				}
+				set_country_flag = ancient_jug_origin.14_corvette_4ship
+			}
+			0 = { #Corvette
+				modifier = {
+					add = 5
+					has_technology = tech_destroyers
+				}
+				modifier = {
+					factor = 0.5
+					has_technology = tech_cruisers
+				}
+				modifier = {
+					factor = 0
+					has_technology = tech_battleships
+				}
+				modifier = {
+					factor = 0
+					event_target:ancient_juggernaut_itself = {
+						has_ship_flag = ancient_juggernaut_completed_status
+					}
+				}
+				create_fleet = {
+					set_take_point = no
+					effect = {
+						set_owner = prev
+		
+						while = {
 							count = 8
 							create_ship = {
 								name = random
@@ -2285,6 +2404,46 @@ country_event = {
 					NOT = {
 						has_technology = tech_destroyers
 					}
+				}
+				modifier = {
+					factor = 0.5
+					has_technology = tech_cruisers
+				}
+				modifier = {
+					factor = 0
+					has_technology = tech_battleships
+				}
+				create_fleet = {
+					set_take_point = no
+					effect = {
+						set_owner = prev
+		
+						while = {
+							count = 2
+							create_ship = {
+								name = random
+								random_existing_design = destroyer
+							}
+						}
+						add_modifier = {
+							modifier = origin_ancient_juggernaut_upkeep_half
+							days = -1
+						}
+						set_location = event_target:ancient_juggernaut_itself
+					}
+				}
+				set_country_flag = ancient_jug_origin.14_destroyer_2ship
+			}
+			0 = { #Destroyer
+				modifier = {
+					factor = 0
+					NOT = {
+						has_technology = tech_destroyers
+					}
+				}
+				modifier = {
+					add = 5
+					has_technology = tech_cruisers
 				}
 				modifier = {
 					factor = 0.5
@@ -2740,7 +2899,7 @@ country_event = {
 			}
 		}
 	}
-	picture = GFX_evt_juggernaut
+	picture = GFX_evt_origin_ancient_juggernaut_2
 	show_sound = event_construction
 	location = event_target:ancient_juggernaut_itself
 	is_triggered_only = yes
@@ -2874,7 +3033,7 @@ country_event = {
 		random_list = {
 			10 = { 
 				modifier = {
-					factor = 0.25
+					factor = 0.1
 					has_country_flag = ancient_jug_origin.15_t34_built
 				}
 				modifier = {
@@ -2928,7 +3087,7 @@ country_event = {
 			}
 			10 = { 
 				modifier = {
-					factor = 0.25
+					factor = 0.1
 					has_country_flag = ancient_jug_origin.15_spam_built
 				}
 				if = {
@@ -2970,7 +3129,7 @@ country_event = {
 			}
 			10 = { 
 				modifier = {
-					factor = 0.25
+					factor = 0.1
 					has_country_flag = ancient_jug_origin.15_pre_1_3_meta_built
 				}
 				modifier = {
@@ -3019,7 +3178,7 @@ country_event = {
 			}
 			10 = { 
 				modifier = {
-					factor = 0.25
+					factor = 0.1
 					has_country_flag = ancient_jug_origin.15_pre_2_0_meta_built
 				}
 				modifier = {
@@ -3050,7 +3209,7 @@ country_event = {
 							}
 						}
 						set_fleet_stance = passive
-						set_location = event_target:ancient_juggernaut_itself3
+						set_location = event_target:ancient_juggernaut_itself
 						add_modifier = {
 							modifier = origin_ancient_juggernaut_upkeep_half
 							days = -1
@@ -3069,6 +3228,147 @@ country_event = {
 	}
 }
 
+###INFORM
+country_event = {
+	id = ancient_jug_origin.16
+	title = ancient_jug_origin.16.title
+	desc = {
+		trigger = {
+			hidden:root = {
+				success_text = {
+					text = ancient_jug_origin.16.desc_destroyers
+					has_country_flag = ancient_jug_origin.16_destroyers
+				}
+				success_text = {
+					text = ancient_jug_origin.16.desc_cruisers
+					has_country_flag = ancient_jug_origin.16_cruisers
+				}
+				success_text = {
+					text = ancient_jug_origin.16.desc_battleships
+					has_country_flag = ancient_jug_origin.16_battleships
+				}
+			}
+		}
+	}
+	 
+	picture = GFX_evt_hangar_bay
+	show_sound = event_default
+	is_triggered_only = yes
+	location = event_target:ancient_juggernaut_itself
+	trigger = {
+		has_origin = origin_ancient_juggernaut
+		OR = {
+			last_increased_tech = tech_destroyers
+			last_increased_tech = tech_cruisers
+			last_increased_tech = tech_battleships
+		}
+		any_owned_ship = {
+			is_ship_size = juggernaut
+			has_ship_flag = ancient_juggernaut_itself
+		}
+		NOT = {
+			has_country_flag = ancient_jug_origin_has_upgraded_the_old_jug
+		}
+	}
+	immediate = {
+		random_owned_ship = {
+			limit = {
+				is_ship_size = juggernaut
+				has_ship_flag = ancient_juggernaut_itself
+			}
+			save_event_target_as = ancient_juggernaut_itself
+			
+		}
+		if = {
+			limit = {
+				last_increased_tech = tech_destroyers
+			}
+			set_country_flag = ancient_jug_origin.16_destroyers
+		}
+		else_if = {
+			limit = {
+				last_increased_tech = tech_cruisers
+			}
+			set_country_flag = ancient_jug_origin.16_cruisers
+		}
+		else_if = {
+			limit = {
+				last_increased_tech = tech_battleships
+			}
+			set_country_flag = ancient_jug_origin.16_battleships
+		}
+	}
+	after = {
+		custom_tooltip = ancient_jug_origin.16.tooltip
+		hidden_effect = {
+			remove_country_flag = ancient_jug_origin.16_destroyers
+			remove_country_flag = ancient_jug_origin.16_cruisers
+			remove_country_flag = ancient_jug_origin.16_battleships
+		}
+	}
+	option = {
+		name = GOOD
+	}
+}
+
+###IF YOU RESEARCHED TITAN TECH BUT DONT HAVE JUG TECH (apocalypse DLC)
+country_event = {
+	id = ancient_jug_origin.17
+	title = ancient_jug_origin.16.title
+	desc = ancient_jug_origin.17.desc
+	picture = GFX_evt_hangar_bay
+	show_sound = event_default
+	is_triggered_only = yes
+	location = event_target:ancient_juggernaut_itself
+	trigger = {
+		has_origin = origin_ancient_juggernaut
+		last_increased_tech = tech_titans
+		NOT = {
+			has_technology = tech_juggernaut
+		}
+		any_owned_ship = {
+			is_ship_size = juggernaut
+			has_ship_flag = ancient_juggernaut_itself
+		}
+		NOT = {
+			has_country_flag = ancient_jug_origin_has_upgraded_the_old_jug
+		}
+	}
+	immediate = {
+		random_owned_ship = {
+			limit = {
+				is_ship_size = juggernaut
+				has_ship_flag = ancient_juggernaut_itself
+			}
+			save_event_target_as = ancient_juggernaut_itself
+			
+		}
+	}
+	after = {
+		if = {
+			limit = {
+				NOT = {
+					has_tech_option = tech_juggernaut
+				}
+			}
+			add_research_option = tech_juggernaut
+		}
+	}
+	option = {
+		name = EXCELLENT
+		trigger = {
+			NOT = {
+				has_authority = auth_machine_intelligence
+			}
+		}
+	}
+	option = {
+		name = ACKNOWLEDGED
+		trigger = {
+			has_authority = auth_machine_intelligence
+		}
+	}
+}
 
 ###JUG DISAPPEAR VIA WEIRD damage 99999 command
 #jugger went kaboom but no idea why
@@ -3112,6 +3412,14 @@ country_event = {
 		}
 		if = {
 			limit = {
+				has_special_project = ANCIENT_JUGGERNAUT_REPAIR_FTL_PROJECT
+			}
+			abort_special_project = {
+				type = ANCIENT_JUGGERNAUT_REPAIR_FTL_PROJECT
+			}
+		}
+		if = {
+			limit = {
 				check_variable = {
 					which = origin_ancient_juggernaut_researched_related_tech
 					value < 4
@@ -3121,6 +3429,18 @@ country_event = {
 				modifier = origin_ancient_juggernaut_destroyed_debuff
 				days = 7200
 			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					which = origin_ancient_juggernaut_researched_related_tech
+					value > 3
+				}
+			}
+			add_modifier = {
+				modifier = origin_ancient_juggernaut_destroyed_debuff_afternate
+				days = 7200
+			}	
 		}
 		remove_modifier = origin_ancient_juggernaut_overclocking_fake_modifier
 		remove_modifier = origin_ancient_juggernaut_overclocking_cooldown_modifier
@@ -3134,6 +3454,38 @@ country_event = {
 				has_event_chain = "ancient_juggernaut_chain"
 			}
 			end_event_chain = "ancient_juggernaut_chain"
+		}
+		if = {
+			limit = {
+				check_variable = {
+					which = origin_ancient_juggernaut_researched_related_tech
+					value < 4
+				}
+			}
+			tooltip = {
+				add_modifier = {
+					modifier = origin_ancient_juggernaut_destroyed_debuff
+					days = 7200
+				}	
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					which = origin_ancient_juggernaut_researched_related_tech
+					value > 3
+				}
+			}
+			tooltip = {
+				add_modifier = {
+					modifier = origin_ancient_juggernaut_destroyed_debuff_afternate
+					days = 7200
+				}	
+			}
+		}
+		add_modifier = {
+			modifier = origin_ancient_juggernaut_destroyed_debuff_afternate_2
+			days = -1
 		}
 	}
 
@@ -3158,20 +3510,6 @@ country_event = {
 				has_authority = auth_machine_intelligence
 			}
 		} 
-		if = {
-			limit = {
-				check_variable = {
-					which = origin_ancient_juggernaut_researched_related_tech
-					value < 4
-				}
-			}
-			tooltip = {
-				add_modifier = {
-					modifier = origin_ancient_juggernaut_destroyed_debuff
-					days = 7200
-				}	
-			}
-		}
 		hidden_effect = {
 			observer_event = {
 				id = ancient_jug_origin.1006
@@ -3194,7 +3532,7 @@ country_event = {
 	}
 }
 
-###CAN OVERTUNER NOW
+###CAN OVERTUNER NOW, player country only
 country_event = {
 	id = ancient_jug_origin.21
 	title = ancient_jug_origin.21.title
@@ -3214,7 +3552,7 @@ country_event = {
 			}
 		}
 	} 
-	picture = GFX_evt_juggernaut
+	picture = GFX_evt_origin_ancient_juggernaut_2
 	location = event_target:ancient_juggernaut_itself
 	show_sound = event_default
 	is_triggered_only = yes
@@ -3269,7 +3607,7 @@ country_event = {
 		}
 	}
 }
-###AI COUNTRY is dumb for fleet boost, so randomized to get them one of those###
+###AI COUNTRY is dumb for fleet boost, so randomized to get them one of those### yearly country pulse
 country_event = {
 	id = ancient_jug_origin.22
 	is_triggered_only = yes
@@ -3367,7 +3705,7 @@ country_event = {
 		
 	}
 }
-###AI: can i overclock and not getting myself destroy?
+###AI: can i overclock and not getting myself destroy? yearly country pulse
 country_event = {
 	id = ancient_jug_origin.23
 	is_triggered_only = yes
@@ -3376,7 +3714,7 @@ country_event = {
 	trigger = {
 		has_origin = origin_ancient_juggernaut
 		is_ai = yes
-		has_country_flag = ancient_jug_can_access_overclock
+		has_country_flag = ancient_jug_can_access_overclock_afternate
 		any_owned_ship = {
 			is_ship_size = juggernaut
 			has_ship_flag = ancient_juggernaut_itself
@@ -3390,22 +3728,72 @@ country_event = {
 		NOT = {
 			has_country_flag = ancient_jug_has_overclocked_cooldown
 		}
-		has_monthly_income = {
-			resource = alloys
-			value > 40
+		used_naval_capacity_percent < 1 #AI WILL DISBAND OUTNUMBERED SHIPS
+		OR = {
+			AND = { #INCOME IS GOOD SO LET'S DO IT
+				has_monthly_income = {
+					resource = alloys
+					value > 160
+				}
+				has_monthly_income = {
+					resource = energy
+					value > 600
+				}
+			}
+			AND = { #HAS ENERGY INCOME TO SPEND AND SOME RESOURCES
+				has_monthly_income = {
+					resource = energy
+					value > 300
+				}
+				OR = {
+					has_resource = {
+						type = alloys
+						amount > 1000
+					}
+					has_resource = {
+						type = food
+						amount > 5000
+					}
+					has_resource = {
+						type = minerals
+						amount > 5000
+					}
+					has_resource = {
+						type = consumer_goods
+						amount > 2000
+					}
+				}
+				has_resource = {
+					type = energy
+					amount > 1000
+				}
+			}
+			AND = { #A LOT OF SPARED STUFF TO USE (THEY WILL SELL THEIR STUFF FOR ENERGY SO DON'T WORRY)
+				OR = {
+					has_resource = {
+						type = alloys
+						amount > 12500
+					}
+					has_resource = {
+						type = food
+						amount > 12500
+					}
+					has_resource = {
+						type = minerals
+						amount > 12500
+					}
+					has_resource = {
+						type = consumer_goods
+						amount > 12500
+					}
+				}
+				has_resource = {
+					type = energy
+					amount > 1000
+				}
+			}
 		}
-		has_monthly_income = {
-			resource = energy
-			value > 150
-		}
-		has_resource = {
-			type = alloys
-			amount > 250
-		}
-		has_resource = {
-			type = energy
-			amount > 500
-		}
+		
 	}
 
 	after = {
@@ -3437,10 +3825,10 @@ country_event = {
 		remove_country_flag = ancient_jug_overclock_ship_size_2
 		remove_country_flag = ancient_jug_overclock_ship_size_4
 		remove_country_flag = ancient_jug_overclock_ship_size_8
-		random_list = {
-			0 = {
+		random_list = { #AI LOVES BIG SHIP AND SAVE SOME OF YOUR CPU SUFFER
+			10 = {
 				modifier = {
-					add = 5
+					factor = 0.5
 					OR = {
 						is_at_war = yes
 						has_crisis = yes
@@ -3454,20 +3842,7 @@ country_event = {
 				}
 				set_country_flag = ancient_jug_overclock_ship_size_1
 			}
-			0 = {
-				modifier = {
-					add = 5
-					OR = {
-						is_at_war = yes
-						has_crisis = yes
-						has_global_flag = war_in_heaven_ongoing
-						has_global_flag = gray_goo_crisis_active
-						AND = {
-							has_global_flag = great_khan_announcement
-							NOT = { has_global_flag = great_khan_dead }
-						}
-					}
-				}
+			10 = {
 				modifier = {
 					factor = 0
 					NOT = {
@@ -3476,9 +3851,9 @@ country_event = {
 				}
 				set_country_flag = ancient_jug_overclock_ship_size_2
 			}
-			0 = {
+			10 = {
 				modifier = {
-					add = 5
+					factor = 1.5
 					OR = {
 						is_at_war = yes
 						has_crisis = yes
@@ -3498,9 +3873,9 @@ country_event = {
 				}
 				set_country_flag = ancient_jug_overclock_ship_size_4
 			}
-			0 = {
+			10 = {
 				modifier = {
-					add = 5
+					factor = 2
 					OR = {
 						is_at_war = yes
 						has_crisis = yes
@@ -3544,8 +3919,8 @@ country_event = {
 			}
 		}
 	} 
-	picture = GFX_evt_juggernaut
-	show_sound = event_default
+	picture = GFX_evt_origin_ancient_juggernaut
+	show_sound = event_ship_thrusters
 	location = event_target:ancient_juggernaut_itself
 
 	is_triggered_only = yes
@@ -3565,10 +3940,67 @@ country_event = {
 	}
 	after = {
 		custom_tooltip = ancient_jug_origin.24.tooltip
-		
+		hidden_effect = {
+			abort_special_project = {
+				type = ANCIENT_JUGGERNAUT_REPAIR_FTL_PROJECT
+			}
+		}
 	}
 	option = {
 		name = fedev.9500.a
+		trigger = {
+			has_ethic = ethic_fanatic_militarist
+		}
+	}
+	option = {
+		name = ancient_jug_origin.24.xenophile
+		trigger = {
+			has_ethic = ethic_fanatic_xenophile
+		}
+	}
+	option = {
+		name = ancient_jug_origin.24.materialist
+		trigger = {
+			has_ethic = ethic_fanatic_materialist
+		}
+	}
+	option = {
+		name = ancient_jug_origin.24.spiritualist
+		trigger = {
+			has_ethic = ethic_fanatic_spiritualist
+		}
+	}
+	option = {
+		name = ancient_jug_origin.24.pacifist
+		trigger = {
+			has_ethic = ethic_fanatic_pacifist
+		}
+	}
+	option = {
+		name = ancient_jug_origin.24.authoritarian
+		trigger = {
+			has_ethic = ethic_fanatic_authoritarian
+		}
+	}
+	option = {
+		name = ancient_jug_origin.24.egalitarian
+		trigger = {
+			has_ethic = ethic_fanatic_egalitarian
+		}
+	}
+	option = {
+		name = ancient_jug_origin.24.other
+		trigger = {
+			NOR = {
+				has_ethic = ethic_fanatic_egalitarian
+				has_ethic = ethic_fanatic_authoritarian
+				has_ethic = ethic_fanatic_pacifist
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_fanatic_materialist
+				has_ethic = ethic_fanatic_xenophile
+				has_ethic = ethic_fanatic_militarist
+			}
+		}
 	}
 }
 
@@ -3579,7 +4011,7 @@ observer_event = {
 	id = ancient_jug_origin.999
 	title = ancient_jug_origin.2.title
 	desc = ancient_jug_origin.999.desc
-	picture = GFX_evt_juggernaut
+	picture = GFX_evt_origin_ancient_juggernaut_3
 	location = event_target:ancient_juggernaut_itself
 	show_sound = event_default
 	is_triggered_only = yes
@@ -3592,7 +4024,7 @@ observer_event = {
 	id = ancient_jug_origin.1000
 	title = ancient_jug_origin.2.title
 	desc = ancient_jug_origin.1000.desc
-	picture = GFX_evt_juggernaut
+	picture = GFX_evt_origin_ancient_juggernaut_3
 	location = event_target:ancient_juggernaut_itself
 	show_sound = event_mega_structure_other_empire_build_complete
 	is_triggered_only = yes
@@ -3731,7 +4163,7 @@ country_event = {
 	}
 
 	immediate = {
-		set_country_flag = ancient_juggernaut_view_opened
+		set_country_flag = ancient_juggernaut_view_opened  
 		country_event = {
 			id = ancient_jug_origin.2000
 		}
@@ -3757,6 +4189,12 @@ country_event = {
 
 	option = {
 		name = OK
+		hidden_effect = {
+			remove_country_flag = ancient_juggernaut_view_opened #UI will close itself if you let it open for too long (around 2~3 years in game)
+			country_event = {
+				id = ancient_jug_origin.2001
+			}
+		}	
 	}
 }
 
@@ -3823,6 +4261,10 @@ country_event = {
 			id = ancient_jug_origin.3002
 			days = 1080
 		}
+		country_event = {
+			id = ancient_jug_origin.3003
+			days = 2520
+		}
 	}
 }
 ###DO THE OVERCLOCK TRICK
@@ -3854,7 +4296,7 @@ country_event = {
 					effect = {
 						set_owner = prev
 						while = {
-							count = 32
+							count = 24
 							create_ship = {
 								name = random
 								random_existing_design = corvette
@@ -3874,7 +4316,7 @@ country_event = {
 					effect = {
 						set_owner = prev
 						while = {
-							count = 16
+							count = 12
 							create_ship = {
 								name = random
 								random_existing_design = destroyer
@@ -3894,7 +4336,7 @@ country_event = {
 					effect = {
 						set_owner = prev
 						while = {
-							count = 8
+							count = 6
 							create_ship = {
 								name = random
 								random_existing_design = cruiser
@@ -3914,7 +4356,7 @@ country_event = {
 					effect = {
 						set_owner = prev
 						while = {
-							count = 4
+							count = 3
 							create_ship = {
 								name = random
 								random_existing_design = battleship
@@ -3967,10 +4409,6 @@ country_event = {
 					scope = this
 				}
 			}
-		}
-		country_event = {
-			id = ancient_jug_origin.3003
-			days = 1800
 		}
 	}
 }
