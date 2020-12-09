@@ -1329,7 +1329,109 @@ planet_event = {
 country_event = {
 	id = narrow_escape.20
 	title = narrow_escape_origin_consolidation_menu
-	desc = narrow_escape.20.desc
+	desc = {
+		text = narrow_escape.20.desc.a
+		exclusive_trigger = {
+			check_variable = {
+				which = narrow_escape_origin_first_colony_pops
+				value > 0
+			}
+			check_variable = {
+				which = narrow_escape_origin_second_colony_pops
+				value > 0
+			}
+			check_variable = {
+				which = narrow_escape_origin_third_colony_pops
+				value > 0
+			}
+		}
+	}
+	desc = {
+		text = narrow_escape.20.desc.b
+		exclusive_trigger = {
+			check_variable = {
+				which = narrow_escape_origin_first_colony_pops
+				value > 0
+			}
+			check_variable = {
+				which = narrow_escape_origin_second_colony_pops
+				value > 0
+			}
+			check_variable = {
+				which = narrow_escape_origin_third_colony_pops
+				value <= 0
+			}
+		}
+	}
+	desc = {
+		text = narrow_escape.20.desc.c
+		exclusive_trigger = {
+			check_variable = {
+				which = narrow_escape_origin_first_colony_pops
+				value > 0
+			}
+			check_variable = {
+				which = narrow_escape_origin_second_colony_pops
+				value <= 0
+			}
+			check_variable = {
+				which = narrow_escape_origin_third_colony_pops
+				value <= 0
+			}
+		}
+	}
+	desc = {
+		text = narrow_escape.20.desc.d
+		exclusive_trigger = {
+			check_variable = {
+				which = narrow_escape_origin_first_colony_pops
+				value <= 0
+			}
+			check_variable = {
+				which = narrow_escape_origin_second_colony_pops
+				value > 0
+			}
+			check_variable = {
+				which = narrow_escape_origin_third_colony_pops
+				value > 0
+			}
+		}
+	}
+	desc = {
+		text = narrow_escape.20.desc.e
+		exclusive_trigger = {
+			check_variable = {
+				which = narrow_escape_origin_first_colony_pops
+				value <= 0
+			}
+			check_variable = {
+				which = narrow_escape_origin_second_colony_pops
+				value > 0
+			}
+			check_variable = {
+				which = narrow_escape_origin_third_colony_pops
+				value <= 0
+			}
+		}
+	}
+	desc = {
+		text = narrow_escape.20.desc.f
+		exclusive_trigger = {
+			check_variable = {
+				which = narrow_escape_origin_first_colony_pops
+				value <= 0
+			}
+			check_variable = {
+				which = narrow_escape_origin_second_colony_pops
+				value <= 0
+			}
+			check_variable = {
+				which = narrow_escape_origin_third_colony_pops
+				value > 0
+			}
+		}
+	}
+
 	picture = GFX_evt_colony_settlement
 
 	is_triggered_only = yes
@@ -5072,6 +5174,13 @@ planet_event = {
 						add_resource = { minor_artifacts = 0.00001 }
 					}
 				}
+
+				every_country = {
+					limit = {
+						has_country_flag = narrow_escape_met_country_immediate@prev
+					}
+					establish_communications = prev
+				}
 			}
 
 			set_capital = yes
@@ -6081,5 +6190,21 @@ country_event = {
 				value = 0
 			}
 		}
+	}
+}
+
+# Establish communications
+country_event = {
+	id = narrow_escape.100
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		is_country_type = country_type_narrow_escape_origin
+	}
+
+	immediate = {
+		from = { set_country_flag = narrow_escape_met_country_immediate@root }
 	}
 }
