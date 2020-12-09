@@ -53,29 +53,140 @@ building_tecdawn_array = {
 
 	on_built = {
 		root.owner = {
+			set_variable = {
+				which = tecdawn_built_arrays
+				value = 1
+			}
+		}
+		root.owner = {
 			if = {
 				limit = { 
 					check_variable = {
 						which = tecdawn_built_arrays
 						value = 0
 					}
+					NOT = {
+						has_country_flag = tecdawn_built_first_array
+					}
 				}
+				set_country_flag = tecdawn_built_first_array
 				root = {
 					planet_event = {
 						id = tecdawn.309
 					}
+					
+					if = {
+						limit = { 
+							owner = {
+								OR = {
+									check_variable = {
+										which = tecdawn_built_arrays
+										value = 2
+									}
+									AND = {
+										has_country_flag = tecdawn_built_first_array
+										has_country_flag = tecdawn_built_second_array
+									}
+								}
+								
+							}	
+						}
+						prev = { 
+							country_event = {
+								id = tecdawn.311
+								days = 90
+							}
+						}
+					}
 				}
 			}
 			if = {
-				limit = { 
+				limit = {
 					check_variable = {
 						which = tecdawn_built_arrays
-						value = 1
+						value > 0
+					}
+					NOT = {
+						has_country_flag = tecdawn_built_second_array
 					}
 				}
 				root = {
 					planet_event = {
 						id = tecdawn.310
+					}
+					owner = {
+						set_variable = {
+							which = tecdawn_built_arrays
+							value = 1
+						}
+						set_country_flag = tecdawn_built_second_array
+					}
+					if = {
+						limit = { 
+							owner = {
+								OR = {
+									check_variable = {
+										which = tecdawn_built_arrays
+										value = 2
+									}
+									AND = {
+										has_country_flag = tecdawn_built_first_array
+										has_country_flag = tecdawn_built_second_array
+									}
+								}
+								
+							}	
+						}
+						prev = { 
+							country_event = {
+								id = tecdawn.311
+								days = 90
+							}
+						}
+					}
+				}
+			}
+			# Just for the sake of avoiding any problem
+			if = {
+				limit = {
+					check_variable = {
+						which = tecdawn_built_arrays
+						value > 0
+					}
+				}
+				root = {
+					planet_event = {
+						id = tecdawn.310
+					}
+					owner = {
+						set_variable = {
+							which = tecdawn_built_arrays
+							value = 1
+						}
+						set_country_flag = tecdawn_built_second_array
+					}
+					if = {
+						limit = { 
+							owner = {
+								OR = {
+									check_variable = {
+										which = tecdawn_built_arrays
+										value = 2
+									}
+									AND = {
+										has_country_flag = tecdawn_built_first_array
+										has_country_flag = tecdawn_built_second_array
+									}
+								}
+								
+							}	
+						}
+						prev = { 
+							country_event = {
+								id = tecdawn.311
+								days = 90
+							}
+						}
 					}
 				}
 			}
