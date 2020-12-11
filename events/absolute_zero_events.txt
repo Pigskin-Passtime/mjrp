@@ -13,10 +13,30 @@ country_event = {
 	}
 
 	immediate = {
-		set_country_flag = capital_2240_destruction_flag
+		set_country_flag = capital_2222_destruction_flag
 		capital_scope = {
 			add_modifier = {
-				modifier = the_cache
+				modifier = the_cache days = 7920
+			}
+			planet_event = {
+				id = absolute_zero.8
+				days = 7920
+			}
+			solar_system = {
+				random_system_planet = {
+					limit = {
+						has_planet_flag = null_star_start_flag
+					}
+					set_deposit = d_null_4
+					if = {
+						limit = {
+							has_mining_station = yes
+						}
+						mining_station = {
+							dismantle = yes
+						}
+					}
+				}
 			}
 		}
 	}
@@ -158,9 +178,34 @@ country_event = {
 	}
 }
 
-### todo ###
 planet_event = {
 	id = absolute_zero.8
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		if = {
+			limit = {
+				planet_owner = {
+					has_country_flag = capital_2222_destruction_flag
+				}
+			}
+			every_owned_pop = {
+				kill_pop = yes
+			}
+			remove_all_buildings = yes
+			change_pc = pc_frozen
+			event_target:absolute_zero_sun = {
+				spawn_planet_temperature_effect = yes
+				change_pc = pc_shattered_2
+			}
+		}
+	}
+}
+
+### todo ###
+planet_event = {
+	id = absolute_zero.9
 	is_triggered_only = yes
 	hide_window = yes
 
