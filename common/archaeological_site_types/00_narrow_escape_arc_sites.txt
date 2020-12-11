@@ -14,7 +14,7 @@ site_narrow_escape_destroyed_homeworld = {
 	}
 	allow = {
 		custom_tooltip = {
-			fail_text = "Your research is not advanced enough."
+			fail_text = "trigger_no RYour research is not advanced enough.!"
 			OR = {
 				owner = { has_country_flag = narrow_escape_force_archaeology_research }
 				AND = {
@@ -86,37 +86,53 @@ site_narrow_escape_destroyed_homeworld = {
 	}
 
 	stage = {
-		difficulty = 9
+		difficulty = 9		# Should be 8
 		icon = GFX_archaeology_runes_C1
 		event = narrow_escape_archaeology.101
 	}
 	stage = {
-		difficulty = 11
+		difficulty = 11		# Should be 10
 		icon = GFX_archaeology_runes_C2
 		event = narrow_escape_archaeology.102
 	}
 	stage = {
-		difficulty = 12
+		difficulty = 12		# Should be 11
 		icon = GFX_archaeology_runes_C3
 		event = narrow_escape_archaeology.103
 	}
 	stage = {
-		difficulty = 13
+		difficulty = 13		# Should be 12
 		icon = GFX_archaeology_runes_C4
 		event = narrow_escape_archaeology.104
 	}
 	stage = {
-		difficulty = 14
+		difficulty = 14		# Should be 13
 		icon = GFX_archaeology_runes_C5
 		event = narrow_escape_archaeology.105
 	}
 	stage = {
-		difficulty = 15
+		difficulty = 14		# Should be 14
 		icon = GFX_archaeology_runes_C6
 		event = narrow_escape_archaeology.106
 	}
 
 	on_roll_failed = {
+		hidden_effect = {
+			leader = {
+				random_list = {
+					1 = { add_experience = 5  }
+					1 = { add_experience = 10 }
+					1 = { add_experience = 15 }
+					1 = { add_experience = 20 }
+					1 = { add_experience = 25 }
+					1 = { add_experience = 30 }
+					1 = { add_experience = 35 }
+				}
+				# 15 - 45 for a negative roll
+				# 30 - 60 for a neutral  roll
+				# 45 - 75 for a positive roll
+			}
+		}
 		from = { standard_archaeological_site_on_roll_failed = { RANDOM_EVENTS = site_narrow_escape_destroyed_homeworld_random_events } }
 	}
 }
@@ -139,7 +155,7 @@ site_narrow_escape_mysterious_moon = {
 	}
 	allow = {
 		custom_tooltip = {
-			fail_text = "Your research is not advanced enough."
+			fail_text = "trigger_no RYour research is not advanced enough.!"
 			OR = {
 				owner = { has_country_flag = narrow_escape_force_archaeology_research }
 				AND = {
@@ -160,11 +176,11 @@ site_narrow_escape_mysterious_moon = {
 					OR = {
 						end_game_years_passed >= 0
 						AND = {
-							end_game_years_passed >= -10
+							end_game_years_passed >= -25
 							owner = { has_technology = tech_archeology_lab_ancrel }
 						}
 						AND = {
-							end_game_years_passed >= -15
+							end_game_years_passed >= -50
 							owner = {
 								resource_income_compare = {
 									resource = physics_research
@@ -181,7 +197,7 @@ site_narrow_escape_mysterious_moon = {
 							}
 						}
 						AND = {
-							end_game_years_passed >= -25
+							end_game_years_passed >= -75
 							owner = { has_technology = tech_archeology_lab_ancrel }
 							owner = {
 								resource_income_compare = {
@@ -214,22 +230,38 @@ site_narrow_escape_mysterious_moon = {
 	}
 
 	stage = {
-		difficulty = 11
+		difficulty = 11		# Should be 10
 		icon = GFX_archaeology_runes_F4
 		event = narrow_escape_archaeology.201
 	}
 	stage = {
-		difficulty = 12
+		difficulty = 12		# Should be 11
 		icon = GFX_archaeology_runes_F5
 		event = narrow_escape_archaeology.202
 	}
 	stage = {
-		difficulty = 13
+		difficulty = 12		# Should be 12
 		icon = GFX_archaeology_runes_F6
 		event = narrow_escape_archaeology.203
 	}
 
 	on_roll_failed = {
+		hidden_effect = {
+			leader = {
+				random_list = {
+					1 = { add_experience = 5  }
+					1 = { add_experience = 10 }
+					1 = { add_experience = 15 }
+					1 = { add_experience = 20 }
+					1 = { add_experience = 25 }
+					1 = { add_experience = 30 }
+					1 = { add_experience = 35 }
+				}
+				# 15 - 45 for a negative roll
+				# 30 - 60 for a neutral  roll
+				# 45 - 75 for a positive roll
+			}
+		}
 		from = { standard_archaeological_site_on_roll_failed = { RANDOM_EVENTS = site_narrow_escape_mysterious_moon_random_events } }
 	}
 }

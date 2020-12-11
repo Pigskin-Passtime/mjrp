@@ -20,7 +20,28 @@ country_event = {
 
 		# Save the primary species
 		this = {
+			every_owned_pop = {
+				limit = {
+					species = { is_same_value = root.species }
+				}
+				if = {
+					limit = {
+						NOT = { has_trait = trait_narrow_escape_species }
+					}
+					modify_species = {
+						add_trait = trait_narrow_escape_species
+					}
+				}
+			}
 			species = {
+				if = {
+					limit = {
+						NOT = { has_trait = trait_narrow_escape_species }
+					}
+					modify_species = {
+						add_trait = trait_narrow_escape_species
+					}
+				}
 				create_country = {
 					name = "country_type_narrow_escape_origin_primary_species"
 					type = country_type_narrow_escape_origin_primary_species
@@ -35,6 +56,19 @@ country_event = {
 
 		# Save the secondary species
 		this = {
+			every_owned_pop = {
+				limit = {
+					species = { NOT = { is_same_value = root.species } }
+				}
+				if = {
+					limit = {
+						NOT = { has_trait = trait_narrow_escape_species }
+					}
+					modify_species = {
+						add_trait = trait_narrow_escape_species
+					}
+				}
+			}
 			random_owned_pop = {
 				limit = {
 					species = { NOT = { is_same_value = root.species } }
@@ -555,6 +589,17 @@ country_event = {
 							NOT = { has_star_flag = narrow_escape_origin_unsuitable_system@root }
 							any_system_planet = {
 								is_colonizable = yes
+								habitability = {
+									who = event_target:narrow_escape_origin_primary_species
+									value >= 0.6
+								}
+								OR = {
+									NOT = { exists = event_target:narrow_escape_origin_secondary_species }
+									habitability = {
+										who = event_target:narrow_escape_origin_secondary_species
+										value >= 0.6
+									}
+								}
 							}
 							NOT = {
 								any_fleet_in_system = {
@@ -5285,7 +5330,7 @@ planet_event = {
 					create_pop = { species = event_target:narrow_escape_origin_secondary_species }
 				}
 			}
-			add_modifier = { modifier = narrow_escape_origin_capital_colonized days = 360 }
+			planet_event = { id = narrow_escape.34 }
 			add_planet_devastation = 50
 			owner = {
 				switch = {
@@ -5335,6 +5380,13 @@ planet_event = {
 						add_modifier = { modifier = narrow_escape_origin_colony_ships_megacorp_lithoid_16 }
 					}
 				}
+			}
+
+			if = {
+				limit = {
+					owner = { is_ai = yes }
+				}
+				planet_event = { id = narrow_escape.37 days = 2 }
 			}
 		}
 		else_if = {
@@ -5426,7 +5478,7 @@ planet_event = {
 					create_pop = { species = event_target:narrow_escape_origin_secondary_species }
 				}
 			}
-			add_modifier = { modifier = narrow_escape_origin_capital_colonized days = 360 }
+			planet_event = { id = narrow_escape.34 }
 			add_planet_devastation = 50
 			owner = {
 				switch = {
@@ -5476,6 +5528,13 @@ planet_event = {
 						add_modifier = { modifier = narrow_escape_origin_colony_ships_megacorp_lithoid_10 }
 					}
 				}
+			}
+
+			if = {
+				limit = {
+					owner = { is_ai = yes }
+				}
+				planet_event = { id = narrow_escape.37 days = 2 }
 			}
 		}
 		else_if = {
@@ -5567,7 +5626,7 @@ planet_event = {
 					create_pop = { species = event_target:narrow_escape_origin_secondary_species }
 				}
 			}
-			add_modifier = { modifier = narrow_escape_origin_capital_colonized_2 days = 360 }
+			planet_event = { id = narrow_escape.33 }
 			add_planet_devastation = 50
 			owner = {
 				switch = {
@@ -5617,6 +5676,13 @@ planet_event = {
 						add_modifier = { modifier = narrow_escape_origin_colony_ships_megacorp_lithoid_6 }
 					}
 				}
+			}
+
+			if = {
+				limit = {
+					owner = { is_ai = yes }
+				}
+				planet_event = { id = narrow_escape.37 days = 2 }
 			}
 		}
 		else_if = {
@@ -5708,7 +5774,7 @@ planet_event = {
 					create_pop = { species = event_target:narrow_escape_origin_secondary_species }
 				}
 			}
-			add_modifier = { modifier = narrow_escape_origin_capital_colonized_2 days = 360 }
+			planet_event = { id = narrow_escape.33 }
 			add_planet_devastation = 50
 			owner = {
 				switch = {
@@ -5747,6 +5813,13 @@ planet_event = {
 						remove_modifier = narrow_escape_origin_colony_ships_megacorp_lithoid_32
 					}
 				}
+			}
+
+			if = {
+				limit = {
+					owner = { is_ai = yes }
+				}
+				planet_event = { id = narrow_escape.37 days = 2 }
 			}
 		}
 		else_if = {
@@ -5800,7 +5873,7 @@ planet_event = {
 					create_pop = { species = event_target:narrow_escape_origin_secondary_species }
 				}
 			}
-			add_modifier = { modifier = narrow_escape_origin_second_colonized days = 360 }
+			planet_event = { id = narrow_escape.35 }
 			add_planet_devastation = 20
 			owner = {
 				switch = {
@@ -5884,6 +5957,13 @@ planet_event = {
 					}
 				}
 			}
+
+			if = {
+				limit = {
+					owner = { is_ai = yes }
+				}
+				planet_event = { id = narrow_escape.38 days = 2 }
+			}
 		}
 		else_if = {
 			limit = {
@@ -5936,7 +6016,7 @@ planet_event = {
 					create_pop = { species = event_target:narrow_escape_origin_secondary_species }
 				}
 			}
-			add_modifier = { modifier = narrow_escape_origin_second_colonized days = 360 }
+			planet_event = { id = narrow_escape.35 }
 			add_planet_devastation = 20
 			owner = {
 				switch = {
@@ -5975,6 +6055,13 @@ planet_event = {
 						remove_modifier = narrow_escape_origin_colony_ships_megacorp_lithoid_16
 					}
 				}
+			}
+
+			if = {
+				limit = {
+					owner = { is_ai = yes }
+				}
+				planet_event = { id = narrow_escape.38 days = 2 }
 			}
 		}
 		else_if = {
@@ -6015,7 +6102,7 @@ planet_event = {
 					create_pop = { species = event_target:narrow_escape_origin_secondary_species }
 				}
 			}
-			add_modifier = { modifier = narrow_escape_origin_third_colonized days = 360 }
+			planet_event = { id = narrow_escape.36 }
 			add_planet_devastation = 10
 			owner = {
 				switch = {
@@ -6055,6 +6142,202 @@ planet_event = {
 					}
 				}
 			}
+
+			if = {
+				limit = {
+					owner = { is_ai = yes }
+				}
+				planet_event = { id = narrow_escape.39 days = 2 }
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = narrow_escape.33
+	title = narrow_escape.33.name
+	desc = narrow_escape.33.desc
+
+	picture = GFX_evt_colony_settlement
+	show_sound = event_construction
+
+	is_triggered_only = yes
+
+	option = {
+		name = narrow_escape.33.a
+		add_modifier = { modifier = narrow_escape_origin_capital_colonized_2 days = 360 }
+	}
+}
+
+planet_event = {
+	id = narrow_escape.34
+	title = narrow_escape.34.name
+	desc = narrow_escape.34.desc
+
+	picture = GFX_evt_colony_settlement
+	show_sound = event_construction
+
+	is_triggered_only = yes
+
+	option = {
+		name = narrow_escape.34.a
+		add_modifier = { modifier = narrow_escape_origin_capital_colonized days = 360 }
+	}
+}
+
+planet_event = {
+	id = narrow_escape.35
+	title = narrow_escape.35.name
+	desc = narrow_escape.35.desc
+
+	picture = GFX_evt_colony_settlement
+	show_sound = event_construction
+
+	is_triggered_only = yes
+
+	option = {
+		name = narrow_escape.35.a
+		add_modifier = { modifier = narrow_escape_origin_second_colonized days = 360 }
+	}
+}
+
+planet_event = {
+	id = narrow_escape.36
+	title = narrow_escape.36.name
+	desc = narrow_escape.36.desc
+
+	picture = GFX_evt_colony_settlement
+	show_sound = event_construction
+
+	is_triggered_only = yes
+
+	option = {
+		name = narrow_escape.36.a
+		add_modifier = { modifier = narrow_escape_origin_third_colonized days = 360 }
+	}
+}
+
+planet_event = {
+	id = narrow_escape.37
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		if = {
+			limit = {
+				owner = { is_machine_empire = no }
+			}
+			add_building = building_capital
+		}
+		else = {
+			add_building = building_machine_capital
+		}
+		if = {
+			limit = {
+				owner = {
+					country_uses_food = yes
+					NOT = { has_valid_civic = civic_machine_servitor }
+					NOT = { has_valid_civic = civic_machine_assimilator }
+				}
+			}
+			add_district = district_farming
+			add_district = district_farming
+			add_district = district_farming
+		}
+		else_if = {
+			limit = {
+				owner = { has_valid_civic = civic_machine_assimilator }
+			}
+			if = {
+				limit = {
+					owner = { any_owned_species = { is_lithoid = yes } }
+				}
+				add_district = district_mining
+				add_district = district_mining
+			}
+			else = {
+				add_district = district_farming
+				add_district = district_farming
+			}
+			add_district = district_generator
+		}
+		else_if = {
+			limit = {
+				owner = { has_valid_civic = civic_machine_servitor }
+			}
+			if = {
+				limit = {
+					owner = { any_owned_species = { is_lithoid = yes } }
+				}
+				add_district = district_mining
+			}
+			else = {
+				add_district = district_farming
+			}
+			add_district = district_generator
+			add_district = district_generator
+		}
+		else_if = {
+			limit = {
+				owner = { is_machine_empire = yes }
+			}
+			add_district = district_mining
+			add_district = district_generator
+			add_district = district_generator
+		}
+		else_if = {
+			limit = {
+				owner = { is_lithoid_empire = yes }
+			}
+			add_district = district_mining
+			add_district = district_mining
+			add_district = district_mining
+		}
+		add_district = district_mining
+		add_district = district_mining
+		add_district = district_generator
+		add_district = district_city
+		add_district = district_city
+		add_district = district_city
+		change_variable = {
+			which = narrow_escape_builds_completed
+			value = 10
+		}
+	}
+}
+
+planet_event = {
+	id = narrow_escape.38
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		add_building = building_capital
+		add_district = district_city
+		add_district = district_mining
+
+		change_variable = {
+			which = narrow_escape_builds_completed
+			value = 3
+		}
+	}
+}
+
+planet_event = {
+	id = narrow_escape.39
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		add_district = district_city
+		add_district = district_mining
+
+		change_variable = {
+			which = narrow_escape_builds_completed
+			value = 2
 		}
 	}
 }
@@ -6090,7 +6373,7 @@ planet_event = {
 							value >= 18
 						}
 					}
-					remove_modifier = narrow_escape_origin_capital_colonized
+					remove_modifier = narrow_escape_origin_capital_colonized_2
 				}
 			}
 			narrow_escape_origin_capital_colonized = {
@@ -6206,5 +6489,49 @@ country_event = {
 
 	immediate = {
 		from = { set_country_flag = narrow_escape_met_country_immediate@root }
+	}
+}
+
+event = {
+	id = narrow_escape.1000
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		every_country = {
+			random_country = {
+				limit = {
+					has_country_flag = country_type_narrow_escape_origin_primary_species@prev
+				}
+				prev = {
+					every_owned_pop = {
+						limit = {
+							is_same_species = prevprev.species
+							NOT = { has_trait = trait_narrow_escape_species }
+						}
+						modify_species = {
+							add_trait = trait_narrow_escape_species
+						}
+					}
+				}
+			}
+			random_country = {
+				limit = {
+					has_country_flag = country_type_narrow_escape_origin_secondary_species@prev
+				}
+				prev = {
+					every_owned_pop = {
+						limit = {
+							is_same_species = prevprev.species
+							NOT = { has_trait = trait_narrow_escape_species }
+						}
+						modify_species = {
+							add_trait = trait_narrow_escape_species
+						}
+					}
+				}
+			}
+		}
 	}
 }
