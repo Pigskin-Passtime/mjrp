@@ -7,7 +7,7 @@ planet_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		has_planet_flag = nsc_freebooter_habitat_1
+		has_planet_flag = nsc_freebooter_home_habitat
 	}
 
 	immediate = {
@@ -174,10 +174,7 @@ country_event = {
 
 	immediate = {
 		set_name = "The Galactic Khanate"
-		change_government = {
-			authority = auth_imperial
-			civics = { civic = nsc_freebooter_civic_great_khans_vision }
-		}
+		force_add_civic = nsc_freebooter_civic_great_khans_vision
 		change_country_flag = {
 			icon = {
 				category = "pirate"
@@ -194,7 +191,6 @@ country_event = {
 				"null"
 			}
 		}
-
 		ruler = { add_trait = nsc_freebooter_leader_trait_ruler_great_khan }
 		clone_leader = {
 			target = ruler
@@ -1329,11 +1325,11 @@ country_event = {
 		hidden_effect = { country_event = { id = nsc_freebooter.25 } } #nobody won (both lost)
 	}
 }
-#when the khan die of old age
+#when the khan is dead somehow
 country_event = {
 	id = nsc_freebooter.32
 	title = "nsc_freebooter.6.name"
-	desc = { trigger = { NOT = { has_modifier = humiliated } } text = nsc_freebooter.32.desc }
+	desc = { trigger = { NOT = { has_modifier = humiliated } } text = nsc_freebooter.32.desc } #when the khan die of old age
 	desc = { trigger = { has_modifier = humiliated } text = nsc_freebooter.32.desc_alt } #humiliated khan suicided #check 'fallen_empire_humiliate_effect' and 'fallen_empires.2' event
 	picture = GFX_evt_space_funeral
 	show_sound = event_life_support_fail
@@ -1470,6 +1466,7 @@ country_event = {
 						is_colony = yes
 						NOR = {
 							is_owned_by = root
+							has_planet_flag = nsc_freebooter_planet_raiding_prevent_duplication
 							has_modifier = nsc_freebooter_recently_raided_world_planet_modifier
 							is_planet_class = pc_infested #no effect on crisis faction's planets
 							is_planet_class = pc_ai
@@ -1488,11 +1485,11 @@ planet_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		#the 'nsc_freebooter.34' event runs every day so we have to make some intervals #the 'nsc_freebooter.33' event is fine
+		set_timed_planet_flag = { flag = nsc_freebooter_planet_raiding_prevent_duplication days = 30 } #it takes exactly 30 days to pass a month
 		add_planet_devastation = 5
 		nsc_freebooter_planet_raiding_planetary_effect = yes
 		solar_system = {
-			every_fleet_in_system = {
+			random_fleet_in_system = { #changed from 'every_fleet_in_system' to prevent the event to happen several times at once
 				limit = {
 					exists = orbit
 					orbit = { is_same_value = root }
@@ -1523,7 +1520,29 @@ planet_event = {
 							}
 						}
 					}
-					nsc_freebooter_planet_raiding_effect = yes
+					if = {
+						limit = {
+							NOR = {
+								has_technology = tech_nsc_freebooter_planet_raiding_improve_1
+								has_technology = tech_nsc_freebooter_planet_raiding_improve_2
+							}
+						}
+						nsc_freebooter_planet_raiding_effect_1 = yes
+					}
+					else_if = {
+						limit = {
+							has_technology = tech_nsc_freebooter_planet_raiding_improve_1
+							NOT = { has_technology = tech_nsc_freebooter_planet_raiding_improve_2 }
+						}
+						nsc_freebooter_planet_raiding_effect_2 = yes
+					}
+					else_if = {
+						limit = {
+							has_technology = tech_nsc_freebooter_planet_raiding_improve_1
+							has_technology = tech_nsc_freebooter_planet_raiding_improve_2
+						}
+						nsc_freebooter_planet_raiding_effect_3 = yes
+					}
 				}
 			}
 		}

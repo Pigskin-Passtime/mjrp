@@ -15,6 +15,13 @@ country_event = {
 				which = nsc_freebooter_leader_making_trait_points
 				value = 2 #max traits number
 			}
+			if = {
+				limit = { has_technology = tech_nsc_freebooter_khan_training_improve }
+				change_variable = {
+					which = nsc_freebooter_leader_making_trait_points
+					value = 1 #increase max traits number by 1
+				}
+			}
 		}
 		if = {
 			limit = {
@@ -102,6 +109,31 @@ country_event = {
 				NOT = { has_country_flag = nsc_freebooter_leader_making_set_skill_level_6_granted }
 			}
 			set_country_flag = nsc_freebooter_leader_making_set_skill_level_6_granted
+		}
+	}
+}
+country_event = {
+	id = nsc_freebooter_customgui.3
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		last_increased_tech = tech_nsc_freebooter_khan_training_improve
+	}
+
+	immediate = {
+		if = {
+			limit = { NOT = { has_country_flag = nsc_freebooter_leader_making_window_opened } }
+			set_variable = {
+				which = nsc_freebooter_leader_making_trait_points
+				value = 3 #max traits number
+			}
+			else = { #if the leader making gui is opened
+				change_variable = {
+					which = nsc_freebooter_leader_making_trait_points
+					value = 1
+				}
+			}
 		}
 	}
 }
