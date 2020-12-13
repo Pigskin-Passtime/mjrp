@@ -517,12 +517,18 @@ country_event = {
 					}
 					is_ship_class = shipclass_military
 				}
-				auto_follow_fleet = {
-					target = event_target:paradigm_shift_zaxoid_fleet
-					attack_fleet = no
+				owner = {
+					set_country_flag = paradigm_shift_endgame_has_fleet
 				}
-				# set_event_locked = yes
 				set_fleet_flag = paradigm_shift_endgame_locked
+			}
+		}
+		every_country = {
+			limit = {
+				has_country_flag = paradigm_shift_endgame_has_fleet
+			}
+			country_event = {
+				id = paradigm_shift.712
 			}
 		}
 		country_event = {
@@ -543,6 +549,40 @@ country_event = {
 				target = event_target:paradigm_shift_kellectors_system.star
 				clear_auto_move_on_arrival = yes
 			}
+		}
+	}
+}
+
+# set auto follow zaxoid fleet
+# this = helper country
+country_event = {
+	id = paradigm_shift.712
+	title = "paradigm_shift.712.title"
+	desc = "paradigm_shift.712.desc"
+	picture = GFX_evt_wormhole
+	is_triggered_only = yes
+	option = {
+		name = "paradigm_shift.712.help"
+		every_owned_fleet = {
+			limit = {
+				has_fleet_flag = paradigm_shift_endgame_locked
+			}
+			auto_follow_fleet = {
+				target = event_target:paradigm_shift_zaxoid_fleet
+				attack_fleet = no
+			}
+		}
+	}
+	option = {
+		name = "paradigm_shift.712.no"
+		hidden_effect = {
+			every_owned_fleet = {
+				limit = {
+					has_fleet_flag = paradigm_shift_endgame_locked
+				}
+				remove_fleet_flag = paradigm_shift_endgame_locked
+			}
+			remove_country_flag = paradigm_shift_endgame_has_fleet
 		}
 	}
 }
@@ -677,7 +717,7 @@ country_event = {
 					event_target:paradigm_shift_kellectors_system = {
 						any_fleet_in_system = {
 							owner = {
-								is_hostile = event_target:paradigm_shift_zaxoid
+								is_same_value = event_target:paradigm_shift_kellectors
 							}
 						}
 					}
@@ -717,7 +757,7 @@ country_event = {
 					event_target:paradigm_shift_kellectors_system = {
 						any_fleet_in_system = {
 							owner = {
-								is_hostile = event_target:paradigm_shift_kellectors
+								is_same_value = event_target:paradigm_shift_zaxoid
 							}
 						}
 					}
