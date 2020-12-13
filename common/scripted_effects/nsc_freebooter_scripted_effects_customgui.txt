@@ -13,24 +13,24 @@ clear_nsc_freebooter_leader_making_values = {
 		clear_nsc_freebooter_leader_making_skill_levels = yes
 	}
 	if = {
-		limit = { has_country_flag = leader_class_set_to_governor }
+		limit = { has_country_flag = nsc_freebooter_leader_class_set_to_governor }
 		clear_nsc_freebooter_leader_making_governor_traits = yes
-		remove_country_flag = leader_class_set_to_governor
+		remove_country_flag = nsc_freebooter_leader_class_set_to_governor
 	}
 	if = {
-		limit = { has_country_flag = leader_class_set_to_scientist }
+		limit = { has_country_flag = nsc_freebooter_leader_class_set_to_scientist }
 		clear_nsc_freebooter_leader_making_scientist_traits = yes
-		remove_country_flag = leader_class_set_to_scientist
+		remove_country_flag = nsc_freebooter_leader_class_set_to_scientist
 	}
 	if = {
-		limit = { has_country_flag = leader_class_set_to_admiral }
+		limit = { has_country_flag = nsc_freebooter_leader_class_set_to_admiral }
 		clear_nsc_freebooter_leader_making_admiral_traits = yes
-		remove_country_flag = leader_class_set_to_admiral
+		remove_country_flag = nsc_freebooter_leader_class_set_to_admiral
 	}
 	if = {
-		limit = { has_country_flag = leader_class_set_to_general }
+		limit = { has_country_flag = nsc_freebooter_leader_class_set_to_general }
 		clear_nsc_freebooter_leader_making_general_traits = yes
-		remove_country_flag = leader_class_set_to_general
+		remove_country_flag = nsc_freebooter_leader_class_set_to_general
 	}
 }
 clear_nsc_freebooter_leader_making_skill_levels = {
@@ -48,7 +48,14 @@ clear_nsc_freebooter_leader_making_governor_traits = {
 	set_variable = {
 		which = nsc_freebooter_leader_making_trait_points
 		value = 2 #max traits number
-	}
+    }
+    if = {
+        limit = { has_technology = tech_nsc_freebooter_khan_training_improve }
+        change_variable = {
+            which = nsc_freebooter_leader_making_trait_points
+            value = 1 #increase max traits number by 1
+        }
+    }
 	while = {
 		switch = {
 			trigger = has_country_flag
@@ -71,7 +78,14 @@ clear_nsc_freebooter_leader_making_scientist_traits = {
 	set_variable = {
 		which = nsc_freebooter_leader_making_trait_points
 		value = 2 #max traits number
-	}
+    }
+    if = {
+        limit = { has_technology = tech_nsc_freebooter_khan_training_improve }
+        change_variable = {
+            which = nsc_freebooter_leader_making_trait_points
+            value = 1 #increase max traits number by 1
+        }
+    }
 	while = {
 		switch = {
 			trigger = has_country_flag
@@ -106,7 +120,14 @@ clear_nsc_freebooter_leader_making_admiral_traits = {
 	set_variable = {
 		which = nsc_freebooter_leader_making_trait_points
 		value = 2 #max traits number
-	}
+    }
+    if = {
+        limit = { has_technology = tech_nsc_freebooter_khan_training_improve }
+        change_variable = {
+            which = nsc_freebooter_leader_making_trait_points
+            value = 1 #increase max traits number by 1
+        }
+    }
 	while = {
 		switch = {
 			trigger = has_country_flag
@@ -130,7 +151,14 @@ clear_nsc_freebooter_leader_making_general_traits = {
 	set_variable = {
 		which = nsc_freebooter_leader_making_trait_points
 		value = 2 #max traits number
-	}
+    }
+    if = {
+        limit = { has_technology = tech_nsc_freebooter_khan_training_improve }
+        change_variable = {
+            which = nsc_freebooter_leader_making_trait_points
+            value = 1 #increase max traits number by 1
+        }
+    }
 	while = {
 		switch = {
 			trigger = has_country_flag
@@ -149,7 +177,7 @@ clear_nsc_freebooter_leader_making_general_traits = {
 nsc_freebooter_leader_making_process = {
     #set leader class phase
     if = {
-        limit = { has_country_flag = leader_class_set_to_governor }
+        limit = { has_country_flag = nsc_freebooter_leader_class_set_to_governor }
         create_leader = {
             class = governor
             species = owner.species
@@ -248,7 +276,7 @@ nsc_freebooter_leader_making_process = {
         }
     }
     else_if = {
-        limit = { has_country_flag = leader_class_set_to_scientist }
+        limit = { has_country_flag = nsc_freebooter_leader_class_set_to_scientist }
         create_leader = {
             class = scientist
             species = owner.species
@@ -445,7 +473,7 @@ nsc_freebooter_leader_making_process = {
         }
     }
     else_if = {
-        limit = { has_country_flag = leader_class_set_to_admiral }
+        limit = { has_country_flag = nsc_freebooter_leader_class_set_to_admiral }
         create_leader = {
             class = admiral
             species = owner.species
@@ -550,7 +578,7 @@ nsc_freebooter_leader_making_process = {
         }
     }
     else_if = {
-        limit = { has_country_flag = leader_class_set_to_general }
+        limit = { has_country_flag = nsc_freebooter_leader_class_set_to_general }
         create_leader = {
             class = general
             species = owner.species
