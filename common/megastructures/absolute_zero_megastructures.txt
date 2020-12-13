@@ -8,8 +8,8 @@ field_beacon_0 = {
 	resources = {
 		category = megastructures
 		cost = {
-			alloys = 500
-			influence = 20
+			alloys = 400
+			influence = 30
 		}
 
 		upkeep = {
@@ -61,8 +61,7 @@ field_beacon_0 = {
 		}
 		custom_tooltip = {
 			fail_text = "requires_no_existing_megastructure"
-			#NOT = { has_any_megastructure = yes }
-			has_no_non_gate_megastructure = yes
+			has_any_megastructure = no
 		}
 	}
 
@@ -108,49 +107,44 @@ field_beacon_0 = {
 					}
 				}
 			}
-			root = {
-				spawn_megastructure = {
-					type = field_beacon_0
-					location = fromfrom.planet
-					orbit_distance = 15
-					orbit_angle = 0
-					owner = solar_system.owner
-				}
-				spawn_megastructure = {
-					type = field_beacon_0
-					location = fromfrom.planet
-					orbit_distance = 15
-					orbit_angle = 72
-					owner = solar_system.owner
-				}
-				spawn_megastructure = {
-					type = field_beacon_0
-					location = fromfrom.planet
-					orbit_distance = 15
-					orbit_angle = 144
-					owner = solar_system.owner
-				}
-				spawn_megastructure = {
-					type = field_beacon_0
-					location = fromfrom.planet
-					orbit_distance = 15
-					orbit_angle = 216
-					owner = solar_system.owner
-				}
-				spawn_megastructure = {
-					type = field_beacon_0
-					location = fromfrom.planet
-					orbit_distance = 15
-					orbit_angle = 288
-					owner = solar_system.owner
-				}
-				remove_megastructure = fromfrom
+			remove_megastructure = fromfrom
+			spawn_megastructure = {
+				type = field_beacon_0
+				location = fromfrom.planet
+				orbit_distance = 15
+				orbit_angle = 0
+			}
+			spawn_megastructure = {
+				type = field_beacon_0
+				location = fromfrom.planet
+				orbit_distance = 15
+				orbit_angle = 72
+			}
+			spawn_megastructure = {
+				type = field_beacon_0
+				location = fromfrom.planet
+				orbit_distance = 15
+				orbit_angle = 144
+			}
+			spawn_megastructure = {
+				type = field_beacon_0
+				location = fromfrom.planet
+				orbit_distance = 15
+				orbit_angle = 216
+			}
+			spawn_megastructure = {
+				type = field_beacon_0
+				location = fromfrom.planet
+				orbit_distance = 15
+				orbit_angle = 288
 			}
 		}
 		fromfrom.planet = {
 			set_planet_flag = has_megastructure
 			if = {
-				limit = { has_orbital_station = yes }
+				limit = {
+					has_orbital_station = yes
+				}
 				orbital_station = {
 					dismantle = yes
 				}
@@ -167,7 +161,7 @@ field_beacon_1 = {
 	resources = {
 		category = megastructures
 		cost = {
-			alloys = 750
+			alloys = 630
 		}
 
 		upkeep = {
@@ -273,14 +267,13 @@ field_beacon_2 = {
 
 
 	possible = {
-		fromfrom.planet = {
-			is_planet_class = pc_shielded_m_star
-		}
-	}
-	
-	potential = {
-		NOT = {
-			
+		custom_tooltip = {
+			fail_text = "not_a_dying_star"
+			fromfrom.planet = {
+				NOT = {
+					is_planet_class = pc_shielded_m_star
+				}
+			}
 		}
 	}
 

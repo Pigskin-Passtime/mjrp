@@ -121,6 +121,7 @@ country_event = {
 
 	option = { 
 		name = "absolute_zero.5.a" #custom_tooltip = "absolute_zero.2.tooltip"
+		end_event_chain = the_cache_chain
 	}
 }
 
@@ -199,25 +200,21 @@ planet_event = {
 				spawn_planet_temperature_effect = yes
 				change_pc = pc_shattered_2
 			}
+			every_system_megastructure = {
+				remove_megastructure = this
+			}
+			solar_system.owner = {
+				country_event = {
+					id = absolute_zero.6
+					days = 360
+				}
+			}
 		}
 	}
 }
 
-### todo ###
 planet_event = {
 	id = absolute_zero.9
-	is_triggered_only = yes
-	hide_window = yes
-
-	immediate = {
-		change_pc = pc_null_planet
-		clear_deposits = yes
-		add_deposit = d_null_2
-	}
-}
-
-planet_event = {
-	id = absolute_zero.152
 	is_triggered_only = yes
 	hide_window = yes
 
@@ -482,80 +479,17 @@ planet_event = {
 			spawn_ringworld_cracker_effect = yes
 			change_pc = pc_ringworld_habitable_damaged
 		}
-		else_if = {
-			limit = { habitable_planet = yes }
-			change_pc = pc_shattered
+		else = {
+			change_pc = pc_frozen
 			clear_deposits = yes
 			random_list = {
-				1 = {
-					add_deposit = d_minerals_4
-					add_deposit = d_minerals_4
-					add_deposit = d_minerals_4
-					add_deposit = d_minerals_4
+				50 = {
+					add_deposit = d_null_1
 				}
-				1 = {
-					add_deposit = d_minerals_4
-					add_deposit = d_minerals_4
-					add_deposit = d_minerals_4
-				}
-				1 = {
-					add_deposit = d_minerals_4
-					add_deposit = d_minerals_4
-				}
-				1 = {
-					add_deposit = d_minerals_4
+				50 = {
+					add_deposit = d_null_2
 				}
 			}
-		}
-		else = {
-			change_pc = pc_shattered
-			clear_deposits = yes
-		}
-	}
-}
-
-country_event = {
-	id = absolute_zero.153
-	title = planet_destruction.102.name
-	desc = planet_destruction.101.desc
-	picture = GFX_evt_exploding_planet
-	show_sound = event_super_explosion
-	location = from
-
-
-	is_triggered_only = yes
-
-	trigger = {
-		NOT = { has_country_flag = fired_cracker }
-	}
-
-	immediate = {
-		set_country_flag = fired_cracker
-	}
-
-	option = {
-		name = OK
-		trigger = {
-			NOR = {
-				has_valid_civic = civic_fanatic_purifiers
-				has_valid_civic = civic_machine_terminator
-			}
-		}
-	}
-
-	option = {
-		name = planet_destruction.101.a.purifexter
-		trigger = {
-			OR = {
-				has_valid_civic = civic_fanatic_purifiers
-				has_valid_civic = civic_machine_terminator
-			}
-		}
-		add_monthly_resource_mult = {
-			resource = unity
-			value = 60
-			min = 600
-			max = 3000
 		}
 	}
 }
