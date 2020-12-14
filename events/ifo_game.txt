@@ -441,7 +441,6 @@ event = {
 					federation = {
 						set_name = ifo_federation_name
 						set_federation_type = ifo_fleet_federation
-						set_federation_law = succession_term_years_20
 					}
 					every_federation_ally = {
 						limit = { not = { is_same_empire = last_created_country } }
@@ -540,6 +539,7 @@ ship_event = {
 		owner = {
 			is_ai = no
 			has_origin = ifo_origin_fleet
+			count_starbase_sizes = { starbase_size = starbase_starport count >= 1 }
 		}
 	}
 
@@ -548,7 +548,8 @@ ship_event = {
 			limit = { exists = owner }
 				owner = {
 					random_owned_starbase = {
-						solar_system = { save_event_target_as = ifo_station_system }
+						limit = { has_starbase_module = ifo_jump_drive }
+							solar_system = { save_event_target_as = ifo_station_system }
 					}
 				}
 		}
@@ -909,4 +910,304 @@ country_event = {
 		federation = { add_federation_experience = 1 }
 
 	}
+}
+
+# This = Country (Player)
+# Make a fake federation elections for president seat.
+# To simulate the view, random species is choosing from federation,
+# and installed as a Grand Admiral to Fleet Overlords.
+country_event = {
+	id = ifo.8
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+		has_origin = ifo_origin_fleet
+		exists = federation
+		federation = {
+
+		}
+	}
+
+	immediate = {
+		federation = {
+			if = {
+				limit = {
+					or = {
+						has_federation_law = succession_term_years_10
+						has_federation_law = succession_term_years_20
+						has_federation_law = succession_term_years_30
+						has_federation_law = succession_term_years_40
+					}
+				}
+				change_variable = { which = irm_election_decade value = 1 }
+			}
+			else = {
+				set_variable = { which = irm_election_decade value = 0 }
+			}
+			switch = {
+				trigger = has_federation_law
+					succession_term_years_10 = {
+						if = {
+							limit = {
+								or = {
+									check_variable = { which = irm_election_decade value = 1 }
+									check_variable = { which = irm_election_decade value > 1 }
+								}
+							}
+						}
+						ifo_elect_leader = yes
+						set_variable = { which = irm_election_decade value = 0 }
+					}
+					succession_term_years_20 = {
+						if = {
+							limit = {
+								or = {
+									check_variable = { which = irm_election_decade value = 2 }
+									check_variable = { which = irm_election_decade value > 2 }
+								}
+							}
+						}
+						ifo_elect_leader = yes
+						set_variable = { which = irm_election_decade value = 0 }
+					}
+					succession_term_years_30 = {
+						if = {
+							limit = {
+								or = {
+									check_variable = { which = irm_election_decade value = 3 }
+									check_variable = { which = irm_election_decade value > 3 }
+								}
+							}
+						}
+						ifo_elect_leader = yes
+						set_variable = { which = irm_election_decade value = 0 }
+					}
+					succession_term_years_40 = {
+						if = {
+							limit = {
+								or = {
+									check_variable = { which = irm_election_decade value = 4 }
+									check_variable = { which = irm_election_decade value > 4 }
+								}
+							}
+						}
+						ifo_elect_leader = yes
+						set_variable = { which = irm_election_decade value = 0 }
+					}
+			}
+		}
+		
+	}
+
+}
+
+# This = Planet
+# Prevents player to gain a system control
+# Just transfer last conquered system to federation
+planet_event = {
+	id = ifo.9
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		fromfrom = {
+			is_ai = no
+			has_origin = ifo_origin_fleet
+		}
+	}
+
+	immediate = {
+		solar_system = {
+			closest_system = {
+				limit = {
+					exists = space_owner
+					space_owner = { is_in_federation_with = fromfrom }
+					not = { is_same_value = prev }
+				}
+				root = { set_controller = prev.space_owner }
+			}
+		}
+	}
+
+}
+
+# This = Planet
+# Prevents player to gain a system control
+# Just transfer last conquered system to federation
+planet_event = {
+	id = ifo.10
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			is_ai = no
+			has_origin = ifo_origin_fleet
+		}
+	}
+
+	immediate = {
+		planet_event = { id = ifo.101 days = 1 }
+	}
+
+}
+#	^
+	planet_event = {
+		id = ifo.101
+		hide_window = yes
+		is_triggered_only = yes
+
+		trigger = {
+			owner = {
+				is_ai = no
+				has_origin = ifo_origin_fleet
+			}
+		}
+
+		immediate = {
+			solar_system = {
+				closest_system = {
+					limit = {
+						exists = space_owner
+						space_owner = { is_in_federation_with = root.owner }
+						not = { is_same_value = prev }
+					}
+					prev.starbase = {
+						fleet = { set_controller = prev.space_owner }
+						root = { set_controller = prev.space_owner }
+					}
+				}
+			}
+		}
+
+	}
+
+# This = Ship (Starbase)
+# Prevents player to gain a system control
+# Just transfer last conquered system to federation
+ship_event = {
+	id = ifo.11
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		or = {
+			is_ship_size = starbase_outpost
+			is_ship_size = starbase_starport
+			is_ship_size = starbase_starhold
+			is_ship_size = starbase_starfortress
+			is_ship_size = starbase_citadel
+		}
+		exists = from.owner
+		from.owner = {
+			is_ai = no
+			has_origin = ifo_origin_fleet
+		}
+	}
+
+	immediate = {
+		fleet.solar_system = {
+			closest_system = {
+				limit = {
+					exists = space_owner
+					space_owner = { is_in_federation_with = from.owner }
+					not = { is_same_value = prev }
+				}
+				root.fleet = {
+					set_controller = prev.space_owner
+				}
+			}
+		}
+	}
+
+}
+
+# This = Country (Player)
+# Automatically set joined empire as subject
+country_event = {
+	id = ifo.13
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+		has_origin = ifo_origin_fleet
+	}
+
+	immediate = { 
+		from.federation = {
+			switch = {
+				trigger = has_federation_law
+					ifo_taxation_none = { from = { set_subject_of = { who = root subject_type = ifo_incorporation } } }
+					ifo_taxation_low = { from = { set_subject_of = { who = root subject_type = ifo_incorporation_1 } } }
+					ifo_taxation_medium = { from = { set_subject_of = { who = root subject_type = ifo_incorporation_2 } } }
+					ifo_taxation_high = { from = { set_subject_of = { who = root subject_type = ifo_incorporation_3 } } }
+			}
+			add_cohesion = 100
+		}
+	}
+
+}
+
+# This = Country (Player)
+# Transfer claims to federation memebers
+country_event = {
+	id = ifo.14
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+		has_origin = ifo_origin_fleet
+	}
+
+	immediate = {
+		log = "test 1"
+		from = {
+			every_war_participant = {
+				limit = { root = { has_claim = prev } }
+					log = "test 2"
+					every_system_within_border = {
+						limit = { root = { has_claim = prev } }
+							log = "test 3"
+							remove_claims = { who = root }
+							closest_system = {
+								limit = {
+									exists = space_owner
+									space_owner = { is_in_federation_with = root }
+									not = { is_same_value = prev }
+								}
+								prev = {
+									log = "test 4"
+									add_claims = { who = prev.space_owner num_of_claims = 3 show_notification = no }
+								}
+							}
+					}
+			}
+		}
+	}
+
+}
+
+# This = Planet
+# Prevent colonization for player
+ship_event = {
+	id = ifo.15
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_ship_size = colonizer
+		owner = {
+			is_ai = no
+			has_origin = ifo_origin_fleet
+		}
+	}
+
+	immediate = {
+		delete_ship = root
+	}
+
 }
