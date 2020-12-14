@@ -667,7 +667,7 @@ country_event = {
 				name = "pioneer_search_1_destroyed_poi"
 				desc = "pioneer_search_1_destroyed_poi_desc"
 				event_chain = "pioneer_chain"
-				location = last_created_ambient_object.solar_system
+				location = last_created_ambient_object
 			}
 		}
 		last_created_ambient_object = {
@@ -1890,7 +1890,9 @@ fleet_event = {
 	option = {
 		name = pioneer.704.b
 		owner = { add_resource = { influence = 100 } }
-		from = { finish_site = yes }
+		destroy_archaeological_site = from
+#		from = { finish_site = root.owner }
+#		owner = { set_country_flag = pioneer_spoiled_opportunity }
 	}
 }
 
@@ -1982,13 +1984,20 @@ country_event = {
 	immediate = {
 		from = {
 			every_planet = {
-#				destroy_archaeological_site = this
-				archaeological_site = {
-					finish_site = yes
+				limit = {
+					archaeological_site = {
+						is_site_type = pioneer_primitive_colony_1
+						NOT = { is_site_completed = yes }
+					}
 				}
+				archaeological_site = {
+					destroy_archaeological_site = this
+				}
+#				archaeological_site = {
+#					finish_site = yes
+#				}
 			}
 		}
-
 	}
 	
 	option = {
@@ -2039,7 +2048,8 @@ country_event = {
 #		destroy_archaeological_site = fromfrom
 		fromfrom = {
 			archaeological_site = {
-				finish_site = yes
+#				finish_site = yes
+				destroy_archaeological_site = this
 			}
 		}
 	}
