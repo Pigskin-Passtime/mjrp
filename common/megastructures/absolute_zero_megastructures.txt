@@ -1,3 +1,11 @@
+#########################
+#
+# absolute zero megastructures
+#
+# Written by RegiZero
+#
+#########################
+
 field_beacon_0 = {
 	entity = "construction_platform_entity"
 	construction_entity = "construction_platform_entity"
@@ -99,46 +107,6 @@ field_beacon_0 = {
 	on_build_start = {}
 	on_build_cancel = {}
 	on_build_complete = {
-		if = {
-			limit = {
-				from = {
-					NOT = {
-						has_country_flag = capital_2222_destruction_flag
-					}
-				}
-			}
-			remove_megastructure = fromfrom
-			spawn_megastructure = {
-				type = field_beacon_0
-				location = fromfrom.planet
-				orbit_distance = 15
-				orbit_angle = 0
-			}
-			spawn_megastructure = {
-				type = field_beacon_0
-				location = fromfrom.planet
-				orbit_distance = 15
-				orbit_angle = 72
-			}
-			spawn_megastructure = {
-				type = field_beacon_0
-				location = fromfrom.planet
-				orbit_distance = 15
-				orbit_angle = 144
-			}
-			spawn_megastructure = {
-				type = field_beacon_0
-				location = fromfrom.planet
-				orbit_distance = 15
-				orbit_angle = 216
-			}
-			spawn_megastructure = {
-				type = field_beacon_0
-				location = fromfrom.planet
-				orbit_distance = 15
-				orbit_angle = 288
-			}
-		}
 		fromfrom.planet = {
 			set_planet_flag = has_megastructure
 			if = {
@@ -149,6 +117,46 @@ field_beacon_0 = {
 					dismantle = yes
 				}
 			}
+		}
+		if = {
+			limit = {
+				from = {
+					NOT = {
+						has_country_flag = capital_2222_destruction_flag
+					}
+				}
+			}
+			spawn_megastructure = {
+				type = field_beacon_0
+				location = fromfrom.planet
+				orbit_distance = 20
+				orbit_angle = 0
+			}
+			spawn_megastructure = {
+				type = field_beacon_0
+				location = fromfrom.planet
+				orbit_distance = 20
+				orbit_angle = 72
+			}
+			spawn_megastructure = {
+				type = field_beacon_0
+				location = fromfrom.planet
+				orbit_distance = 20
+				orbit_angle = 144
+			}
+			spawn_megastructure = {
+				type = field_beacon_0
+				location = fromfrom.planet
+				orbit_distance = 20
+				orbit_angle = 216
+			}
+			spawn_megastructure = {
+				type = field_beacon_0
+				location = fromfrom.planet
+				orbit_distance = 20
+				orbit_angle = 288
+			}
+			remove_megastructure = fromfrom
 		}
 	}
 }
@@ -224,17 +232,6 @@ field_beacon_1 = {
 				}
 			}
 		}
-		fromfrom.planet = {
-			set_planet_flag = has_megastructure
-
-			if = {
-				limit = { has_orbital_station = yes }
-				orbital_station = {
-					dismantle = yes
-				}
-			}
-		}
-		#remove_megastructure = fromfrom
 	}
 }
 
@@ -269,25 +266,13 @@ field_beacon_2 = {
 	possible = {
 		custom_tooltip = {
 			fail_text = "not_a_dying_star"
-			fromfrom.planet = {
+			solar_system.star = {
 				NOT = {
-					is_planet_class = pc_shielded_m_star
+					is_star_class = sc_null_star
 				}
 			}
 		}
 	}
 
-	on_build_complete = {
-		fromfrom.planet = {
-			set_planet_flag = has_megastructure
-
-			if = {
-				limit = { has_orbital_station = yes }
-				orbital_station = {
-					dismantle = yes
-				}
-			}
-		}
-		#remove_megastructure = fromfrom
-	}
+	on_build_complete = {}
 }
