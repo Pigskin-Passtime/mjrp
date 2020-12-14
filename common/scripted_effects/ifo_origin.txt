@@ -385,3 +385,21 @@ ifo_create_transport2 = {
 		}
 	}
 }
+
+# This = Federation
+# Prev = Country (President)
+# Simulates election, just rotating the species for leader
+ifo_elect_leader = {
+	random_member = {
+		limit = { is_federation_leader = no }
+			owner_species = { save_event_target_as = ifo_president_species }
+	}
+	prev = {
+		set_federation_leader = root
+		create_leader = {
+			class = ruler
+			species = event_target:ifo_president_species
+		}
+		assign_leader = last_created_leader
+	}
+}
