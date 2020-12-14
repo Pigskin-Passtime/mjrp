@@ -115,6 +115,7 @@ country_event = {
 											distance = {
 												source = prevprev
 												max_distance <= 50
+												max_jumps = 4
 												type = euclidean
 											}
 											NOT = { is_same_value = prevprev }
@@ -127,6 +128,7 @@ country_event = {
 											distance = {
 												source = prevprev
 												max_distance <= 50
+												max_jumps = 4
 												type = euclidean
 											}
 											NOT = { is_same_value = prevprev }
@@ -416,6 +418,13 @@ country_event = {
 			}
 		}
 
+		# Give additional techs
+		this = {
+			give_technology = { tech = tech_physics_1 message = no }
+			give_technology = { tech = tech_society_1 message = no }
+			give_technology = { tech = tech_engineering_1 message = no }
+		}
+
 		# Survey nearby systems
 		this = {
 			every_system = {
@@ -423,6 +432,7 @@ country_event = {
 					distance = {
 						source = event_target:narrow_escape_origin_homeworld
 						max_distance <= 50
+						max_jumps = 4
 						type = euclidean
 					}
 				}
@@ -819,12 +829,8 @@ country_event = {
 					}
 					NAND = {
 						check_variable = {
-							which = narrow_escape_origin_first_colony_pops
-							value = 22
-						}
-						check_variable = {
 							which = narrow_escape_origin_second_colony_pops
-							value = 10
+							value = 0
 						}
 						check_variable = {
 							which = narrow_escape_origin_second_colony_pops
@@ -832,22 +838,26 @@ country_event = {
 						}
 					}
 				}
-				set_variable = {
+				change_variable = {
 					which = narrow_escape_origin_first_colony_pops
-					value = 22
+					value = narrow_escape_origin_second_colony_pops
+				}
+				change_variable = {
+					which = narrow_escape_origin_first_colony_pops
+					value = narrow_escape_origin_third_colony_pops
 				}
 				set_variable = {
 					which = narrow_escape_origin_second_colony_pops
-					value = 10
+					value = 0
 				}
 				set_variable = {
 					which = narrow_escape_origin_third_colony_pops
 					value = 0
 				}
-				if = {
+				while = {
 					limit = {
 						count_owned_ship = {
-							count > 2
+							count > 1
 							limit = {
 								has_modifier = narrow_escape_origin_populated_colony_ship
 							}
@@ -860,10 +870,38 @@ country_event = {
 						delete_ship = this
 					}
 				}
-				else_if = {
+			}
+			else_if = {
+				limit = {
+					check_variable = {
+						which = narrow_escape_origin_first_colony_pops
+						value = 0
+					}
+					NOT = {
+						check_variable = {
+							which = narrow_escape_origin_second_colony_pops
+							value = 0
+						}
+					}
+					NOT = {
+						check_variable = {
+							which = narrow_escape_origin_third_colony_pops
+							value = 0
+						}
+					}
+				}
+				change_variable = {
+					which = narrow_escape_origin_second_colony_pops
+					value = narrow_escape_origin_third_colony_pops
+				}
+				set_variable = {
+					which = narrow_escape_origin_third_colony_pops
+					value = 0
+				}
+				while = {
 					limit = {
 						count_owned_ship = {
-							count < 2
+							count > 1
 							limit = {
 								has_modifier = narrow_escape_origin_populated_colony_ship
 							}
@@ -873,23 +911,7 @@ country_event = {
 						limit = {
 							has_modifier = narrow_escape_origin_populated_colony_ship
 						}
-						create_fleet = {
-							name = "Last Hope"
-							settings = {
-								can_disband = no
-							}
-							effect = {
-								set_owner = root
-								set_location = prev
-								create_ship = {
-									name = random
-									random_existing_design = colonizer
-									prefix = yes
-								}
-								add_modifier = { modifier = narrow_escape_origin_populated_colony_ship }
-								set_fleet_stance = evasive
-							}
-						}
+						delete_ship = this
 					}
 				}
 			}
@@ -3230,7 +3252,7 @@ planet_event = {
 			limit = {
 				owner = {
 					check_variable = {
-						which = narrow_escape_origin_second_colony_pops
+						which = narrow_escape_origin_third_colony_pops
 						value > 0
 					}
 				}
@@ -6165,7 +6187,28 @@ planet_event = {
 
 	option = {
 		name = narrow_escape.33.a
+
 		add_modifier = { modifier = narrow_escape_origin_capital_colonized_2 days = 360 }
+
+		owner = {
+			custom_tooltip = narrow_escape_colonization_fever_1_added
+			hidden_effect = {
+				switch = {
+					trigger = years_passed
+					10 >= { add_modifier = { modifier = narrow_escape_colonization_fever_1 days = 3600 } }
+					9 >= { add_modifier = { modifier = narrow_escape_colonization_fever_1 days = 3420 } }
+					8 >= { add_modifier = { modifier = narrow_escape_colonization_fever_1 days = 3240 } }
+					7 >= { add_modifier = { modifier = narrow_escape_colonization_fever_1 days = 3060 } }
+					6 >= { add_modifier = { modifier = narrow_escape_colonization_fever_1 days = 2880 } }
+					5 >= { add_modifier = { modifier = narrow_escape_colonization_fever_1 days = 2700 } }
+					4 >= { add_modifier = { modifier = narrow_escape_colonization_fever_1 days = 2520 } }
+					3 >= { add_modifier = { modifier = narrow_escape_colonization_fever_1 days = 2340 } }
+					2 >= { add_modifier = { modifier = narrow_escape_colonization_fever_1 days = 2160 } }
+					1 >= { add_modifier = { modifier = narrow_escape_colonization_fever_1 days = 1980 } }
+					default = { add_modifier = { modifier = narrow_escape_colonization_fever_1 days = 1800 } }
+				}
+			}
+		}
 	}
 }
 
@@ -6181,7 +6224,28 @@ planet_event = {
 
 	option = {
 		name = narrow_escape.34.a
+
 		add_modifier = { modifier = narrow_escape_origin_capital_colonized days = 360 }
+
+		owner = {
+			custom_tooltip = narrow_escape_colonization_fever_1_added
+			hidden_effect = {
+				switch = {
+					trigger = years_passed
+					10 >= { add_modifier = { modifier = narrow_escape_colonization_fever_1 days = 3600 } }
+					9 >= { add_modifier = { modifier = narrow_escape_colonization_fever_1 days = 3420 } }
+					8 >= { add_modifier = { modifier = narrow_escape_colonization_fever_1 days = 3240 } }
+					7 >= { add_modifier = { modifier = narrow_escape_colonization_fever_1 days = 3060 } }
+					6 >= { add_modifier = { modifier = narrow_escape_colonization_fever_1 days = 2880 } }
+					5 >= { add_modifier = { modifier = narrow_escape_colonization_fever_1 days = 2700 } }
+					4 >= { add_modifier = { modifier = narrow_escape_colonization_fever_1 days = 2520 } }
+					3 >= { add_modifier = { modifier = narrow_escape_colonization_fever_1 days = 2340 } }
+					2 >= { add_modifier = { modifier = narrow_escape_colonization_fever_1 days = 2160 } }
+					1 >= { add_modifier = { modifier = narrow_escape_colonization_fever_1 days = 1980 } }
+					default = { add_modifier = { modifier = narrow_escape_colonization_fever_1 days = 1800 } }
+				}
+			}
+		}
 	}
 }
 
@@ -6197,7 +6261,28 @@ planet_event = {
 
 	option = {
 		name = narrow_escape.35.a
+
 		add_modifier = { modifier = narrow_escape_origin_second_colonized days = 360 }
+
+		owner = {
+			custom_tooltip = narrow_escape_colonization_fever_2_added
+			hidden_effect = {
+				switch = {
+					trigger = years_passed
+					10 >= { add_modifier = { modifier = narrow_escape_colonization_fever_2 days = 1800 } }
+					9 >= { add_modifier = { modifier = narrow_escape_colonization_fever_2 days = 1692 } }
+					8 >= { add_modifier = { modifier = narrow_escape_colonization_fever_2 days = 1584 } }
+					7 >= { add_modifier = { modifier = narrow_escape_colonization_fever_2 days = 1476 } }
+					6 >= { add_modifier = { modifier = narrow_escape_colonization_fever_2 days = 1368 } }
+					5 >= { add_modifier = { modifier = narrow_escape_colonization_fever_2 days = 1260 } }
+					4 >= { add_modifier = { modifier = narrow_escape_colonization_fever_2 days = 1152 } }
+					3 >= { add_modifier = { modifier = narrow_escape_colonization_fever_2 days = 1044 } }
+					2 >= { add_modifier = { modifier = narrow_escape_colonization_fever_2 days = 936 } }
+					1 >= { add_modifier = { modifier = narrow_escape_colonization_fever_2 days = 828 } }
+					default = { add_modifier = { modifier = narrow_escape_colonization_fever_2 days = 720 } }
+				}
+			}
+		}
 	}
 }
 
@@ -6213,7 +6298,28 @@ planet_event = {
 
 	option = {
 		name = narrow_escape.36.a
+
 		add_modifier = { modifier = narrow_escape_origin_third_colonized days = 360 }
+
+		owner = {
+			custom_tooltip = narrow_escape_colonization_fever_3_added
+			hidden_effect = {
+				switch = {
+					trigger = years_passed
+					10 >= { add_modifier = { modifier = narrow_escape_colonization_fever_3 days = 900 } }
+					9 >= { add_modifier = { modifier = narrow_escape_colonization_fever_3 days = 846 } }
+					8 >= { add_modifier = { modifier = narrow_escape_colonization_fever_3 days = 792 } }
+					7 >= { add_modifier = { modifier = narrow_escape_colonization_fever_3 days = 738 } }
+					6 >= { add_modifier = { modifier = narrow_escape_colonization_fever_3 days = 684 } }
+					5 >= { add_modifier = { modifier = narrow_escape_colonization_fever_3 days = 630 } }
+					4 >= { add_modifier = { modifier = narrow_escape_colonization_fever_3 days = 576 } }
+					3 >= { add_modifier = { modifier = narrow_escape_colonization_fever_3 days = 522 } }
+					2 >= { add_modifier = { modifier = narrow_escape_colonization_fever_3 days = 468 } }
+					1 >= { add_modifier = { modifier = narrow_escape_colonization_fever_3 days = 414 } }
+					default = { add_modifier = { modifier = narrow_escape_colonization_fever_3 days = 360 } }
+				}
+			}
+		}
 	}
 }
 
