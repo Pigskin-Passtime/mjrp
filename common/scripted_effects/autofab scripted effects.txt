@@ -1,7 +1,19 @@
 add_autofab_mine = {
+	if = {
+		limit = {
+			AND = {
+				is_planet_class = pc_habitat
+				has_planet_flag = mining_habitat
+			}
+		}
+		add_deposit = autofab_mine_habitat
+		change_variable = { which = autofab_mine_habitat value = 1 }		
+	}
+	else = {
+		add_deposit = autofab_mine
+		change_variable = { which = autofab_mine value = 1 }
+	}
 	remove_planet_flag = factory_expanding
-	add_deposit = autofab_mine
-	change_variable = { which = autofab_mine value = 1 }
 }
 
 add_autofab_farm = {
@@ -11,8 +23,20 @@ add_autofab_farm = {
 }
 
 add_autofab_power = {
-	add_deposit = autofab_power
-	change_variable = { which = autofab_power value = 1 }
+	if = {
+		limit = {
+			AND = {
+				is_planet_class = pc_habitat
+				has_planet_flag = energy_habitat
+			}
+		}
+		add_deposit = autofab_power_habitat
+		change_variable = { which = autofab_power_habitat value = 1 }
+	}
+	else = {
+		add_deposit = autofab_power
+		change_variable = { which = autofab_power value = 1 }
+	}
 	remove_planet_flag = factory_expanding
 }
 
@@ -92,6 +116,7 @@ upgrade_factory = {
 }
 
 country_energy_check = {
+	log = "Check Country Energy"
 	if = {
 		limit = {
 			num_owned_planets > 2
@@ -154,6 +179,7 @@ country_energy_check = {
 }
 
 country_food_check = {
+	log = "Check Country Food"
 	if = {
 		limit = {
 			resource_income_compare = { resource = food  value > 100 }
@@ -229,6 +255,7 @@ country_food_check = {
 }
 
 country_minerals_check = {
+	log = "Check Country Minerals"
 	if = {
 		limit = {
 			num_owned_planets > 4
@@ -326,6 +353,7 @@ country_minerals_check = {
 }
 
 country_consumer_goods_check = {
+	log = "Check Country CGs"
 	if = {
 		limit = {
 			num_owned_planets < 3

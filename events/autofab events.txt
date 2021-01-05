@@ -329,14 +329,17 @@ planet_event = {
 				district_generator = {
 					remove_district = district_generator
 					add_deposit = autofab_power
+					change_variable = { which = autofab_power value = 1 }
 				}
 				district_farming = {
 					remove_district = district_farming
 					add_deposit = autofab_farm
+					change_variable = { which = autofab_farm value = 1 }
 				}
 				district_mining = {
 					remove_district = district_mining
 					add_deposit = autofab_mine
+					change_variable = { which = autofab_mine value = 1 }
 				}
 			}
 			switch = {
@@ -344,26 +347,32 @@ planet_event = {
 				building_foundry_1 = {
 					remove_building = building_foundry_1
 					add_deposit = autofab_foundry
+					change_variable = { which = autofab_foundry value = 1 }
 				}
 				building_foundry_2 = {
 					remove_building = building_foundry_2
 					add_deposit = autofab_foundry_2
+					change_variable = { which = autofab_foundry_2 value = 1 }
 				}
 				building_foundry_3 = {
 					remove_building = building_foundry_3
 					add_deposit = autofab_foundry_3
+					change_variable = { which = autofab_foundry_3 value = 1 }
 				}
 				building_factory_1 = {
 					remove_building = building_factory_1
 					add_deposit = autofab_factory
+					change_variable = { which = autofab_factory value = 1 }
 				}
 				building_factory_2 = {
 					remove_building = building_factory_2
 					add_deposit = autofab_factory_2
+					change_variable = { which = autofab_factory_2 value = 1 }
 				}
 				building_factory_3 = {
 					remove_building = building_factory_3
 					add_deposit = autofab_factory_3
+					change_variable = { which = autofab_factory_3 value = 1 }
 				}
 			}
 		}
@@ -373,8 +382,8 @@ planet_event = {
 country_event = {
 	id = autofab.25
 	is_triggered_only = yes
-	hide_window = yes
-	
+	title = "autofab.25.name"
+	desc = "autofab.25.desc"
 	immediate = {
 	}
 }
@@ -394,6 +403,7 @@ planet_event = {
 				}
 				owner = {
 					is_ai = yes
+					has_origin = origin_autofab
 					resource_stockpile_compare = {
 						resource = minerals
 						value >= 200
@@ -441,7 +451,7 @@ event = {
 				limit = {
 					has_planet_flag = has_autofab
 				}
-				planet_event = { id = autofab.31 days = 10 }
+				planet_event = { id = autofab.31 }
 			}
 		}
 	}
@@ -456,6 +466,8 @@ planet_event = {
 		set_variable = { which = autofab_farm_temp value = autofab_farm }
 		set_variable = { which = autofab_mine_temp value = autofab_mine }
 		set_variable = { which = autofab_power_temp value = autofab_power }
+		set_variable = { which = autofab_mine_habitat_temp value = autofab_mine_habitat }
+		set_variable = { which = autofab_power_habitat_temp value = autofab_power_habitat }
 		set_variable = { which = autofab_foundry_temp value = autofab_foundry }
 		set_variable = { which = autofab_foundry_temp_2 value = autofab_foundry_2 }
 		set_variable = { which = autofab_foundry_temp_3 value = autofab_foundry_3 }
@@ -465,6 +477,8 @@ planet_event = {
 		set_variable = { which = autofab_refinery_temp value = autofab_refinery }
 		set_variable = { which = autofab_chemical_temp value = autofab_chemical }
 		set_variable = { which = autofab_translucer_temp value = autofab_translucer }
+		set_variable = { which = autofab_mine_habitat_temp value = autofab_mine_habitat }
+		set_variable = { which = autofab_power_habitat_temp value = autofab_power_habitat }
 		if = {
 			limit = {
 				has_planet_flag = has_autofab
@@ -484,16 +498,9 @@ planet_event = {
 			}
 			add_deposit = autofab_refinery_extractor
 		}
-		planet_event = { id = autofab.32 days = 5 }
 	}
-}
-
-planet_event = {
-	id = autofab.32
-	is_triggered_only = yes
-	hide_window = yes
 	
-	immediate = {
+	after = {
 		every_deposit = {
 			limit = {
 				OR = {
@@ -509,16 +516,29 @@ planet_event = {
 					is_deposit_type = autofab_gases_refinery
 					is_deposit_type = autofab_motes_refinery
 					is_deposit_type = autofab_crystals_refinery
+					is_deposit_type = autofab_mine_habitat
+					is_deposit_type = autofab_power_habitat
 				}
 			}
 			remove_deposit = yes
 		}
+		planet_event = { id = autofab.32 days = 2 }
+	}
+}
+
+planet_event = {
+	id = autofab.32
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
 	}
 	
 	after = {
 		while = {
 			limit = {
 				check_variable = { which = autofab_farm_temp value > 0 }
+				num_free_districts = { type = district_farming value > 0 }
 			}
 			add_deposit = autofab_farm
 			change_variable = { which = autofab_farm_temp value = -1 }
@@ -526,6 +546,7 @@ planet_event = {
 		while = {
 			limit = {
 				check_variable = { which = autofab_mine_temp value > 0 }
+				num_free_districts = { type = district_mining value > 0 }
 			}
 			add_deposit = autofab_mine
 			change_variable = { which = autofab_mine_temp value = -1 }
@@ -533,9 +554,24 @@ planet_event = {
 		while = {
 			limit = {
 				check_variable = { which = autofab_power_temp value > 0 }
+				num_free_districts = { type = district_generator value > 0 }
 			}
 			add_deposit = autofab_power
 			change_variable = { which = autofab_power_temp value = -1 }
+		}
+		while = {
+			limit = {
+				check_variable = { which = autofab_mine_habitat_temp value > 0 }
+			}
+			add_deposit = autofab_mine_habitat
+			change_variable = { which = autofab_mine_habitat_temp value = -1 }
+		}
+		while = {
+			limit = {
+				check_variable = { which = autofab_power_habitat_temp value > 0 }
+			}
+			add_deposit = autofab_power_habitat
+			change_variable = { which = autofab_power_habitat_temp value = -1 }
 		}
 		while = {
 			limit = {
@@ -600,5 +636,19 @@ planet_event = {
 			add_deposit = autofab_crystals_refinery
 			change_variable = { which = autofab_translucer_temp value = -1 }
 		}
+		while = {
+			limit = {
+				check_variable = { which = autofab_mine_habitat_temp value > 0 }
+			}
+			add_deposit = autofab_mine_habitat
+			change_variable = { which = autofab_mine_habitat_temp value = -1 }
+		}
+		while = {
+			limit = {
+				check_variable = { which = autofab_power_habitat_temp value > 0 }
+			}
+			add_deposit = autofab_power_habitat
+			change_variable = { which = autofab_power_habitat_temp value = -1 }
+		}w
 	}
 }

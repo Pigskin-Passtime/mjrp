@@ -10,27 +10,6 @@ event = {
 			limit = {
 				has_origin = origin_autofab
 			}
-			every_owned_planet = {
-				limit = {
-					NOT = {
-						has_planet_flag = factory_expanding
-					}
-					OR = {
-						owner = {
-							is_ai = yes
-						}
-						has_planet_flag = autofab_automation
-					}
-					OR = {
-						can_expand_factory = yes
-						can_upgrade_foundry = yes
-						can_upgrade_factory = yes
-					}
-				}
-				ROOT = {
-					change_variable = { which = autofab_auto_planets value = 1 }
-				}
-			}
 			random_list = {
 				10 = {
 					country_event = { id = autofab_automation.1000 days = 1 }
@@ -45,23 +24,10 @@ event = {
 					country_event = { id = autofab_automation.1000 days = 271 }
 				}
 			}
-			country_energy_check = yes
-			country_food_check = yes
-			country_minerals_check = yes
-			country_consumer_goods_check = yes
 		}
 	}
 	#Automation Counting Logic
 	after = {
-		every_country = {
-			limit = {
-				has_origin = origin_autofab
-			}
-			set_variable = { which = country_energy_need_debug value = country_energy_need }
-			set_variable = { which = country_food_need_debug value = country_food_need }
-			set_variable = { which = country_minerals_need_debug value = country_minerals_need }
-			set_variable = { which = country_consumer_goods_need_debug value = country_consumer_goods_need }
-		}
 	}
 }
 
@@ -73,9 +39,57 @@ country_event = {
 	hide_window = yes
 	
 	immediate = {
+		set_variable = { which = autofab_auto_planets value = 0 }
+		every_owned_planet = {
+			limit = {
+				NOT = {
+					has_planet_flag = factory_expanding
+				}
+				OR = {
+					owner = {
+						is_ai = yes
+					}
+					has_planet_flag = autofab_automation
+				}
+				OR = {
+					can_expand_factory = yes
+					can_upgrade_foundry = yes
+					can_upgrade_factory = yes
+				}
+			}
+			PREV = {
+				change_variable = { which = autofab_auto_planets value = 1 }
+			}
+			log = "1 planet with automation"
+		}
+		set_variable = { which = country_consumer_goods_need value = 0 }
+		set_variable = { which = country_minerals_need value = 0 }
+		set_variable = { which = country_food_need value = 0 }
+		set_variable = { which = country_energy_need value = 0 }
+		set_variable = { which = autofab_auto_planets_debug value = autofab_auto_planets }
 	}
 	
 	after = {
+		country_energy_check = yes
+		country_food_check = yes
+		country_minerals_check = yes
+		country_consumer_goods_check = yes
+		country_event = { id = autofab_automation.1001 days = 1 }
+	}
+}
+country_event = {
+	id = autofab_automation.1001
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+	}
+	
+	after = {
+		set_variable = { which = country_energy_need_debug value = country_energy_need }
+		set_variable = { which = country_food_need_debug value = country_food_need }
+		set_variable = { which = country_minerals_need_debug value = country_minerals_need }
+		set_variable = { which = country_consumer_goods_need_debug value = country_consumer_goods_need }
 		every_owned_planet = {
 			limit = {
 				NOT = {
@@ -118,9 +132,16 @@ planet_event = {
 					}
 				}
 			}
+			log = "Building Logic Fired"
 			if = {
 				limit = {
-					num_free_districts = { type = district_generator value > 0 }
+					OR = {
+						num_free_districts = { type = district_generator value > 0 }
+						AND = {
+							planet_class = pc_habitat
+							has_planet_flag = energy_habitat
+						}
+					}
 					owner = {
 						check_variable = { which = country_energy_need value >= 1 }
 						resource_stockpile_compare = {
@@ -133,6 +154,7 @@ planet_event = {
 						}
 					}
 				}
+				log = "Power Plant"
 				owner = {
 					add_resource = {
 						minerals = @Negdistrictcost
@@ -162,6 +184,7 @@ planet_event = {
 						resource_income_compare = { resource = energy  value > 5 }
 					}
 				}
+				log = "Food Plant"
 				owner = {
 					add_resource = {
 						minerals = @Negdistrictcost
@@ -205,6 +228,7 @@ planet_event = {
 						}
 					}
 				}
+				log = "CG Plant"
 				if = {
 					limit = {
 						has_deposit = autofab_factory_2
@@ -321,6 +345,7 @@ planet_event = {
 						resource_income_compare = { resource = energy  value > 8 }
 					}
 				}
+				log = "Extractor"
 				owner = {
 					add_resource = {
 						minerals = @Negdistrictcost
@@ -349,6 +374,7 @@ planet_event = {
 						resource_income_compare = { resource = energy  value > 8 }
 					}
 				}
+				log = "Translucer"
 				owner = {
 					add_resource = {
 						minerals = @Negdistrictcost
@@ -377,6 +403,7 @@ planet_event = {
 						resource_income_compare = { resource = energy  value > 8 }
 					}
 				}
+				log = "Gas Refinery"
 				owner = {
 					add_resource = {
 						minerals = @Negdistrictcost
@@ -405,6 +432,7 @@ planet_event = {
 						resource_income_compare = { resource = energy  value > 8 }
 					}
 				}
+				log = "Chemical Plant"
 				owner = {
 					add_resource = {
 						minerals = @Negdistrictcost
@@ -419,7 +447,13 @@ planet_event = {
 			}
 			else_if = {
 				limit = {
-					num_free_districts = { type = district_mining value > 0 }
+					OR = {
+						num_free_districts = { type = district_mining value > 0 }
+						AND = {
+							planet_class = pc_habitat
+							has_planet_flag = mining_habitat
+						}
+					}
 					owner = {
 						check_variable = { which = country_minerals_need value >= 1 }
 						resource_stockpile_compare = {
@@ -433,6 +467,7 @@ planet_event = {
 						resource_income_compare = { resource = energy  value > 5 }
 					}
 				}
+				log = "Mining Plant"
 				owner = {
 					add_resource = {
 						minerals = @Negdistrictcost
@@ -448,7 +483,28 @@ planet_event = {
 			}		
 			else_if = {
 				limit = {
+					OR = {
+						num_free_districts = { type = district_farming value < 1 }
+						owner = {
+							check_variable = { which = country_food_need value <= 1 }
+						}
+					}
+					OR = {
+						num_free_districts = { type = district_generator value < 1 }
+						owner = {
+							check_variable = { which = country_energy_need value <= 1 }
+						}
+					}
+					OR = {
+						num_free_districts = { type = district_mining value < 1 }
+						owner = {
+							check_variable = { which = country_minerals_need value <= 1 }
+						}
+					}
+						
 					owner = {
+						check_variable = { which = country_consumer_goods_need value <= 1 }			
+					
 						resource_income_compare = { resource = energy  value > 6 }
 						resource_income_compare = { resource = minerals  value > 12 }
 						resource_stockpile_compare = {
@@ -457,6 +513,7 @@ planet_event = {
 						}
 					}
 				}
+				log = "Foundry Plant"
 				if = {
 					limit = {
 						has_deposit = autofab_foundry_2
