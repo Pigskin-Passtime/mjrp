@@ -96,6 +96,7 @@ country_event = {
 			remove_all_buildings = yes
 			remove_all_districts = yes
 			# Alters the capital
+			#create_archaeological_site = site_tecdawn_debug
 			change_pc = pc_tecdawn
 			set_planet_flag = tecdawn_planet@root
 			set_planet_flag = tecdawn_first_world
@@ -137,6 +138,7 @@ country_event = {
 						set_planet_entity = {
 							entity = pc_shattered
 						}
+						#create_archaeological_site = site_tecdawn_debug
 						change_pc = pc_shattered
 						set_planet_flag = tecdawn_planet@root
 						# This is done to avoid the animation, anyway it will probably be spawned :(
@@ -161,6 +163,7 @@ country_event = {
 						create_ambient_object = {
 							type = tecdawn_observer
 						}
+						#create_archaeological_site = site_tecdawn_debug
 						last_created_ambient_object = {
 							set_ambient_object_flag = tecdawn_ae_observer
 						}
@@ -257,6 +260,7 @@ country_event = {
 						set_planet_entity = {
 							entity = pc_shattered
 						}
+						#create_archaeological_site = site_tecdawn_debug
 						change_pc = pc_shattered
 						set_planet_flag = tecdawn_shattered_world
 						set_planet_flag = tecdawn_planet@root
@@ -284,6 +288,7 @@ country_event = {
 									has_planet_flag = tecdawn_first_world
 								}
 							}
+							#create_archaeological_site = site_tecdawn_debug
 							set_planet_size = 8
 							set_planet_entity = {
 								entity = pc_shattered
@@ -310,6 +315,7 @@ country_event = {
 								has_planet_flag = tecdawn_planet@root
 							}
 						}
+						#create_archaeological_site = site_tecdawn_debug
 						change_pc = pc_toxic
 						set_planet_size = 15
 						set_planet_flag = tecdawn_toxic_world@root
@@ -406,6 +412,7 @@ country_event = {
 							limit = { 
 								has_planet_flag = prescripted_ideal 
 							}
+							#create_archaeological_site = site_tecdawn_debug
 							save_event_target_as = tecdawn_colony
 							tecdawn_generate_synth_deposits_and_blockers = yes
 							add_deposit = d_tecdawn_locked_vault_1
@@ -449,6 +456,7 @@ country_event = {
 							limit = { 
 								has_planet_flag = prescripted_ideal 
 							}
+							#create_archaeological_site = site_tecdawn_debug
 							set_planet_size = 16
 							set_planet_flag = tecdawn_toxic_world@root
 							set_planet_flag = tecdawn_third_world
@@ -484,6 +492,7 @@ country_event = {
 							limit = { 
 								has_planet_flag = prescripted_ideal 
 							}
+							#create_archaeological_site = site_tecdawn_debug
 							save_event_target_as = tecdawn_colony
 							tecdawn_generate_synth_deposits_and_blockers = yes
 							add_deposit = d_tecdawn_locked_vault_1
@@ -548,6 +557,7 @@ country_event = {
 									is_planet_class = pc_toxic
 								}
 							}
+							#create_archaeological_site = site_tecdawn_debug
 							set_planet_size = 16
 							set_planet_flag = tecdawn_toxic_world@root
 							set_planet_flag = tecdawn_third_world
@@ -606,6 +616,7 @@ country_event = {
 									is_planet_class = pc_toxic
 								}
 							}
+							#create_archaeological_site = site_tecdawn_debug
 							save_event_target_as = tecdawn_colony
 							tecdawn_generate_synth_deposits_and_blockers = yes
 							add_deposit = d_tecdawn_locked_vault_1
@@ -670,6 +681,7 @@ country_event = {
 									is_planet_class = pc_toxic
 								}
 							}
+							#create_archaeological_site = site_tecdawn_debug
 							set_planet_size = 16
 							set_planet_flag = tecdawn_toxic_world@root
 							set_planet_flag = tecdawn_third_world
@@ -722,6 +734,7 @@ country_event = {
 					set_planet_entity = {
 						entity = pc_shattered
 					}
+					#create_archaeological_site = site_tecdawn_debug
 					change_pc = pc_shattered
 					set_planet_flag = tecdawn_planet@root
 					# This is done to avoid the animation, anyway it will probably be spawned :(
@@ -759,6 +772,7 @@ country_event = {
 							is_planet_class = pc_barren_cold
 						}
 					}
+					#create_archaeological_site = site_tecdawn_debug
 					set_planet_entity = {
 						entity = pc_shattered
 					}
@@ -946,6 +960,7 @@ country_event = {
 # tecdawn101 - A twin world
 
 ship_event = {
+	location = from
 	id = tecdawn.101
 	is_triggered_only = yes
 	picture = GFX_evt_star_chart
@@ -1016,12 +1031,43 @@ ship_event = {
 					end_event_chain = "tecdawn_promised_land_chain"
 				}
 			}
+
+			# Prevent empty planet bug
+			from = {
+				if = {
+					limit = { 
+						NOR = {
+							has_deposit = d_tecdawn_synthetic_flora
+							has_deposit = d_tecdawn_synthetic_fauna
+							has_deposit = d_tecdawn_natural_biosphere
+							# min
+							has_deposit = d_tecdawn_tidal_conduits
+							has_deposit = d_tecdawn_energy_conduits
+							# energy
+							has_deposit = d_tecdawn_recyclers
+							has_deposit = d_tecdawn_exposed_chasm
+						}
+					}
+					tecdawn_generate_synth_deposits_and_blockers = yes
+				}
+							
+				if = {
+					limit = { 
+						NOT = {
+							has_deposit = d_tecdawn_locked_vault_1
+						}
+					}
+					add_deposit = d_tecdawn_locked_vault_1
+				}
+			}
 		}
 	}
+	
 }
 
 
 ship_event = {
+	location = from
 	id = tecdawn.102
 	is_triggered_only = yes
 	picture = GFX_evt_toxic
@@ -1072,6 +1118,12 @@ ship_event = {
 			}
 		}
 	}
+
+	after = {
+		from = {
+			add_deposit = d_energy_10
+		}
+	}
 }
 
 # On colonization of that planet
@@ -1106,6 +1158,7 @@ planet_event = {
 
 # After X years spawn the primitives - Reflections of the past
 planet_event = {
+	location = this
 	id = tecdawn.111
 	picture = GFX_evt_alien_cavemen
 	is_triggered_only = yes
@@ -1556,6 +1609,7 @@ planet_event = {
 
 # 114 - Regular primitive uplifting 
 planet_event = {
+	location = this
 	id = tecdawn.114
 	picture = GFX_evt_alien_cavemen
 	is_triggered_only = yes
@@ -1664,6 +1718,7 @@ planet_event = {
 
 # 115 - Forced primitive uplifting
 planet_event = {
+	location = this
 	id = tecdawn.115
 	picture = GFX_evt_cybernetics
 	is_triggered_only = yes
@@ -1778,6 +1833,7 @@ planet_event = {
 
 # Discovery of the ruined array - First digsite after 6 years
 planet_event = {
+	location = this
 	id = tecdawn.120
 	is_triggered_only = yes
 	picture = GFX_evt_habitable_dig_site
@@ -2058,6 +2114,7 @@ fleet_event = {
 # After the digsite is finished, 5 years delay and the next step is marked
 planet_event = {
 	id = tecdawn.130
+	location = this
 	is_triggered_only = yes
 	picture = GFX_evt_physics_research
 	show_sound = event_ancient_drone
@@ -2285,6 +2342,7 @@ fleet_event = {
 # tecdawn200 - The missing Link
 country_event = {
 	id = tecdawn.200
+	location = capital_scope
 	title = "tecdawn.200.name"
 	desc = "tecdawn.200.desc"
 	picture = GFX_evt_physics_research
@@ -2307,6 +2365,7 @@ country_event = {
 # After special project is done, marks 4 locations for investigation
 country_event = {
 	id = tecdawn.201
+	location = capital_scope
 	title = "tecdawn.201.name"
 	desc = "tecdawn.201.desc"
 	picture = GFX_evt_physics_research
@@ -2320,44 +2379,66 @@ country_event = {
 			event_chain = "tecdawn_locate_missing_link_chain"
 			target = ROOT
 		}
-		random_planet_within_border = {
-			limit = {
-			#	is_planet_class = pc_toxic
-				has_planet_flag = tecdawn_has_observer
-				has_planet_flag = tecdawn_fourth_world
-				has_planet_flag = tecdawn_toxic_world@root
+		capital_scope = {
+			closest_system = {
+				limit = {
+					any_system_planet = {
+						has_planet_flag = tecdawn_fourth_world
+						has_planet_flag = tecdawn_toxic_world@root
+					}
+				}
+				random_system_planet = {
+					limit = {
+						has_planet_flag = tecdawn_fourth_world
+						has_planet_flag = tecdawn_toxic_world@root
+					}
+					enable_special_project = {
+						name = "TECDAWN_MISLINK_OBSERVER_PROJECT"
+						location = this
+						owner = root
+					}
+				}
 			}
-			enable_special_project = {
-				name = "TECDAWN_MISLINK_OBSERVER_PROJECT"
-				location = this
-				owner = root
+			closest_system = {
+				limit = {
+					any_system_planet = {
+						has_planet_flag = tecdawn_third_world
+							has_planet_flag = tecdawn_toxic_world@root
+					}
+				}
+				random_system_planet = {
+					limit = {
+						has_planet_flag = tecdawn_third_world
+						has_planet_flag = tecdawn_toxic_world@root
+					}
+					enable_special_project = {
+						name = "TECDAWN_MISLINK_TOXIC_PROJECT"
+						location = this
+						owner = root
+					}
+				}
 			}
-		}
-		random_planet_within_border = {
-			limit = {
-			#	is_planet_class = pc_toxic
-				has_planet_flag = tecdawn_third_world
-				has_planet_flag = tecdawn_toxic_world@root
-			}
-			enable_special_project = {
-				name = "TECDAWN_MISLINK_TOXIC_PROJECT"
-				location = this
-				owner = root
+			closest_system = {
+				limit = {
+					any_system_planet = {
+						is_planet_class = pc_shattered
+						has_planet_flag = tecdawn_planet@root
+					}
+				}
+				random_system_planet = {
+					limit = {
+						is_planet_class = pc_shattered
+						has_planet_flag = tecdawn_planet@root
+					}
+					enable_special_project = {
+						name = "TECDAWN_MISLINK_SHATTERED_PROJECT"
+						location = this
+						owner = root
+					}
+				}
 			}
 		}
 		
-		random_planet_within_border = {
-			limit = {
-				is_planet_class = pc_shattered
-				has_planet_flag = tecdawn_planet@root
-			}
-			enable_special_project = {
-				name = "TECDAWN_MISLINK_SHATTERED_PROJECT"
-				location = this
-				owner = root
-			}
-		}
-
 		random_planet_within_border = {
 			limit = {
 				OR = {
@@ -2387,6 +2468,7 @@ country_event = {
 
 # shattered
 ship_event = {
+	location = this
 	id = tecdawn.205
 	title = "tecdawn.205.name"
 	desc = "tecdawn.205.desc"
@@ -2445,6 +2527,7 @@ ship_event = {
 # Collapsed
 ship_event = {
 	id = tecdawn.206
+	location = this
 	title = "tecdawn.206.name"
 	desc = "tecdawn.206.desc"
 	picture = GFX_evt_nuclear_explosion
@@ -2506,6 +2589,7 @@ ship_event = {
 # Toxic
 ship_event = {
 	id = tecdawn.207
+	location = this
 	title = "tecdawn.207.name"
 	desc = "tecdawn.207.desc"
 	picture = GFX_evt_toxic
@@ -2567,6 +2651,7 @@ ship_event = {
 # Observer
 ship_event = {
 	id = tecdawn.208
+	location = this
 	title = "tecdawn.208.name"
 	desc = "tecdawn.208.desc"
 	picture = GFX_evt_space_debris
@@ -2624,6 +2709,7 @@ ship_event = {
 # Impact crater manager - Why non habitable planets are so DULL to code T-T
 country_event = {
 	id = tecdawn.209
+	
 	hide_window = yes
 	is_triggered_only = yes
 
@@ -2670,6 +2756,7 @@ planet_event = {
 
 country_event = {
 	id = tecdawn.211
+	location = capital_scope
 	title = "tecdawn.211.name"
 	desc = "tecdawn.211.desc"
 	picture = GFX_evt_ship_offloading_cargo
@@ -2679,12 +2766,22 @@ country_event = {
 
 	immediate = {
 		hidden_effect = {
-			random_planet_within_border = {
-				limit = {
-					has_planet_flag = tecdawn_collapsed_@root
+			capital_scope = {
+				closest_system = {
+					limit = {
+						any_system_planet = {
+							has_planet_flag = tecdawn_collapsed_@root
+						}
+					}
+					random_system_planet = {
+						limit = {
+							has_planet_flag = tecdawn_collapsed_@root
+						}
+						save_event_target_as = event_target:tecdawn_collapsed_planet
+					}
 				}
-				save_event_target_as = event_target:tecdawn_collapsed_planet
 			}
+			
 	
 		}
 	}
@@ -2880,6 +2977,7 @@ country_event = {
 # First array completed
 planet_event = {
 	id = tecdawn.309
+	location = this
 	title = "tecdawn.309.name"
 	desc = "tecdawn.309.desc"
 	picture = GFX_evt_busy_spaceport
@@ -2887,11 +2985,23 @@ planet_event = {
 
 	is_triggered_only = yes
 
+	trigger = {
+		owner = {
+			NOT = {
+				has_country_flag = tecdawn_built_first_array
+			}
+		}
+	}
+
 	option = {
 		name = tecdawn.309.ok
+	}
 
+	after = {
 		hidden_effect = {
-			
+			owner = {
+				set_country_flag = tecdawn_built_first_array
+			}
 		}
 	}
 }
@@ -2899,6 +3009,7 @@ planet_event = {
 # Second array completed
 planet_event = {
 	id = tecdawn.310
+	location = this
 	title = "tecdawn.310.name"
 	desc = "tecdawn.310.desc"
 	picture = GFX_evt_busy_spaceport
@@ -2906,9 +3017,21 @@ planet_event = {
 
 	is_triggered_only = yes
 
+	trigger = {
+		owner = {
+			NOT = {
+				has_country_flag = tecdawn_built_second_array
+			}
+		}
+	}
+
 	option = {
 		name = tecdawn.310.ok
+	}
 
+
+	immediate = {
+		
 		hidden_effect = {
 			owner = {
 				country_event = {
@@ -2918,11 +3041,18 @@ planet_event = {
 			}
 		}
 	}
+
+	after = {
+		owner = {
+			set_country_flag = tecdawn_built_second_array
+		}
+	}
 }
 
 # Both arrays completed
 country_event = {
 	id = tecdawn.311
+	location = capital_scope
 	title = "tecdawn.311.name"
 	desc = "tecdawn.311.desc"
 	picture = GFX_evt_busy_spaceport
@@ -2930,10 +3060,20 @@ country_event = {
 
 	is_triggered_only = yes
 
+	trigger = {
+		NOT = {
+			has_country_flag = tecdawn_storm_happened
+		}
+	}
+
 	option = {
 		name = tecdawn.311.ok
 
+	}
+
+	after = {
 		hidden_effect = {
+			set_country_flag = tecdawn_storm_happened
 			end_event_chain = tecdawn_build_arrays_chain
 			country_event = {
 				id = tecdawn.312
@@ -2946,6 +3086,7 @@ country_event = {
 
 country_event = {
 	id = tecdawn.312
+	location = capital_scope
 	title = "tecdawn.312.name"
 	desc = "tecdawn.312.desc"
 	picture = GFX_evt_baol_datacrystals
@@ -2955,7 +3096,9 @@ country_event = {
 
 	option = {
 		name = tecdawn.312.ok
+	}
 
+	after = {
 		hidden_effect = {
 			enable_special_project = {
 				name = TECDAWN_RESCAN_ARRAY
@@ -2968,6 +3111,7 @@ country_event = {
 
 # digsite on the second guaranteed system
 country_event = {
+	location = event_target:tecdawn_silent_target
 	id = tecdawn.313
 	title = "tecdawn.313.name"
 	desc = "tecdawn.313.desc"
@@ -2976,9 +3120,22 @@ country_event = {
 
 	is_triggered_only = yes
 
+	immediate = {
+		hidden_effect = {
+			random_planet = {
+				limit = {
+					has_planet_flag = tecdawn_fourth_world
+					has_planet_flag = tecdawn_toxic_world@root
+				}
+				save_event_target_as = tecdawn_silent_target
+			}	
+		}
+	}
 	option = {
 		name = tecdawn.313.ok
+	}
 
+	after = {
 		hidden_effect = {
 			random_planet = {
 				limit = {
@@ -2987,7 +3144,7 @@ country_event = {
 				}
 				create_archaeological_site = site_tecdawn_silent
 			}
-		}
+		}	
 	}
 }
 

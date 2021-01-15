@@ -16,6 +16,9 @@ building_tecdawn_array = {
 		OR = {
 			has_planet_flag = tecdawn_planet
 			is_planet_class = pc_tecdawn
+			owner = {
+				has_country_flag = tecdawn_planet_@prev
+			}
 		}
 		owner = {
 			has_origin = origin_tecdawn
@@ -33,10 +36,6 @@ building_tecdawn_array = {
 					has_origin = origin_tecdawn
 				}
 			}
-			NOR = {
-				has_planet_flag = tecdawn_planet
-				is_planet_class = pc_tecdawn
-			}
 			owner = {
 				has_country_flag = tecdawn_flexible_array
 			}	
@@ -52,145 +51,65 @@ building_tecdawn_array = {
 	}
 
 	on_built = {
-		root.owner = {
-			set_variable = {
-				which = tecdawn_built_arrays
-				value = 1
-			}
-		}
-		root.owner = {
-			if = {
-				limit = { 
-					check_variable = {
-						which = tecdawn_built_arrays
-						value = 0
-					}
-					NOT = {
-						has_country_flag = tecdawn_built_first_array
-					}
+		hidden_effect = {
+			root.owner = {
+				change_variable = {
+					which = tecdawn_built_arrays
+					value = 1
 				}
-				set_country_flag = tecdawn_built_first_array
-				root = {
-					planet_event = {
-						id = tecdawn.309
-					}
-					
-					if = {
-						limit = { 
-							owner = {
-								OR = {
-									check_variable = {
-										which = tecdawn_built_arrays
-										value = 2
-									}
-									AND = {
-										has_country_flag = tecdawn_built_first_array
-										has_country_flag = tecdawn_built_second_array
-									}
-								}
-								
-							}	
-						}
-						prev = { 
-							country_event = {
-								id = tecdawn.311
-								days = 90
-							}
+				add_event_chain_counter = {
+					event_chain = tecdawn_build_arrays_chain
+					counter = tecdawn_built_arrays
+					amount = 1
+				}
+				if = {
+					limit = { 
+						root = {
+							has_planet_flag = tecdawn_first_world
+							has_planet_flag = tecdawn_planet@root
 						}
 					}
+					remove_point_of_interest = tecdawn_array_poi_1	
 				}
-			}
-			if = {
-				limit = {
-					check_variable = {
-						which = tecdawn_built_arrays
-						value > 0
+				if = {
+					limit = { 
+						root = {
+							has_planet_flag = tecdawn_second_world
+							has_planet_flag = tecdawn_planet@root
+						}
 					}
-					NOT = {
-						has_country_flag = tecdawn_built_second_array
-					}
+					remove_point_of_interest = tecdawn_array_poi_2
 				}
-				root = {
-					planet_event = {
-						id = tecdawn.310
-					}
-					owner = {
-						set_variable = {
+
+				if = {
+					limit = {
+						check_variable = {
 							which = tecdawn_built_arrays
 							value = 1
 						}
-						set_country_flag = tecdawn_built_second_array
 					}
-					if = {
-						limit = { 
-							owner = {
-								OR = {
-									check_variable = {
-										which = tecdawn_built_arrays
-										value = 2
-									}
-									AND = {
-										has_country_flag = tecdawn_built_first_array
-										has_country_flag = tecdawn_built_second_array
-									}
-								}
-								
-							}	
-						}
-						prev = { 
-							country_event = {
-								id = tecdawn.311
-								days = 90
-							}
+					root = {
+						planet_event = {
+							id = tecdawn.309
 						}
 					}
 				}
-			}
-			# Just for the sake of avoiding any problem
-			if = {
-				limit = {
-					check_variable = {
-						which = tecdawn_built_arrays
-						value > 0
-					}
-				}
-				root = {
-					planet_event = {
-						id = tecdawn.310
-					}
-					owner = {
-						set_variable = {
+
+				if = {
+					limit = {
+						check_variable = {
 							which = tecdawn_built_arrays
-							value = 1
+							value = 2
 						}
-						set_country_flag = tecdawn_built_second_array
 					}
-					if = {
-						limit = { 
-							owner = {
-								OR = {
-									check_variable = {
-										which = tecdawn_built_arrays
-										value = 2
-									}
-									AND = {
-										has_country_flag = tecdawn_built_first_array
-										has_country_flag = tecdawn_built_second_array
-									}
-								}
-								
-							}	
-						}
-						prev = { 
-							country_event = {
-								id = tecdawn.311
-								days = 90
-							}
+					root = {
+						planet_event = {
+							id = tecdawn.310
 						}
 					}
 				}
 			}
-		}
+		}	
 	}
 
 	triggered_planet_modifier = {
@@ -405,6 +324,9 @@ building_tecdawn_array_good = {
 
 	potential = {
 		OR = {
+			owner = {
+				has_country_flag = tecdawn_planet_@prev
+			}
 			has_planet_flag = tecdawn_planet
 			is_planet_class = pc_tecdawn
 		}
@@ -422,10 +344,6 @@ building_tecdawn_array_good = {
 					has_origin = origin_tecdawn
 				}
 			}
-			NOR = {
-				has_planet_flag = tecdawn_planet
-				is_planet_class = pc_tecdawn
-			}	
 		}
 	}
 
