@@ -1,1 +1,0 @@
-StellarisModJam2020
