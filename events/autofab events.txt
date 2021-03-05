@@ -300,6 +300,7 @@ country_event = {
 					}
 					add_building = building_spawning_pool
 				}
+				planet_event = { id = autofab.31 days = 2 }
 			}
 		}
 		
@@ -338,6 +339,21 @@ planet_event = {
 				}
 				district_mining = {
 					remove_district = district_mining
+					add_deposit = autofab_mine
+					change_variable = { which = autofab_mine value = 1 }
+				}
+				district_generator_uncapped = {
+					remove_district = district_generator_uncapped
+					add_deposit = autofab_power
+					change_variable = { which = autofab_power value = 1 }
+				}
+				district_farming_uncapped = {
+					remove_district = district_farming_uncapped
+					add_deposit = autofab_farm
+					change_variable = { which = autofab_farm value = 1 }
+				}
+				district_mining_uncapped = {
+					remove_district = district_mining_uncapped
 					add_deposit = autofab_mine
 					change_variable = { which = autofab_mine value = 1 }
 				}
@@ -522,7 +538,19 @@ planet_event = {
 			}
 			remove_deposit = yes
 		}
+		if = {
+			limit = {
+				has_district = district_city
+			}
+			remove_district = district_city
+			add_district = district_city
+		}
+		else = {
+			add_district = district_city
+			remove_district = district_city
+		}
 		planet_event = { id = autofab.32 days = 2 }
+		
 	}
 }
 
