@@ -115,6 +115,132 @@ upgrade_factory = {
 	}
 }
 
+basic_resource_swap = {
+	while = {
+		limit = {
+			num_districts = { type = district_mining value > 0 }
+		}
+		remove_district = district_mining
+		add_deposit = autofab_mine
+		change_variable = { which = autofab_mine value = 1 }
+	}
+	while = {
+		limit = {
+			num_districts = { type = district_farming value > 0 }
+		}
+		remove_district = district_farming
+		add_deposit = autofab_farm
+		change_variable = { which = autofab_farm value = 1 }
+	}
+	while = {
+		limit = {
+			num_districts = { type = district_generator value > 0 }
+		}
+		remove_district = district_generator
+		add_deposit = autofab_power
+		change_variable = { which = autofab_power value = 1 }
+	}
+	while = {
+		limit = {
+			num_districts = { type = district_mining_uncapped value > 0 }
+		}
+		remove_district = district_mining_uncapped
+		add_deposit = autofab_mine
+		change_variable = { which = autofab_mine value = 1 }
+	}
+	while = {
+		limit = {
+			num_districts = { type = district_farming_uncapped value > 0 }
+		}
+		remove_district = district_farming_uncapped
+		add_deposit = autofab_farm
+		change_variable = { which = autofab_farm value = 1 }
+	}
+	while = {
+		limit = {
+			num_districts = { type = district_generator_uncapped value > 0 }
+		}
+		remove_district = district_generator_uncapped
+		add_deposit = autofab_power
+		change_variable = { which = autofab_power value = 1 }
+	}
+}
+
+advanced_resource_swap = {
+	while = {
+		limit = {
+			has_building = building_refinery
+		}
+		remove_building = building_refinery
+		add_deposit = autofab_gases_refinery
+		change_variable = { which = autofab_refinery value = 1 }
+	}
+	while = {
+		limit = {
+			has_building = building_chemical_plant
+		}
+		remove_building = building_chemical_plant
+		add_deposit = autofab_motes_refinery
+		change_variable = { which = autofab_chemical value = 1 }
+	}
+	while = {
+		limit = {
+			has_building = building_crystal_plant
+		}
+		remove_building = building_crystal_plant
+		add_deposit = autofab_crystals_refinery
+		change_variable = { which = autofab_translucer value = 1 }
+	}
+	while = {
+		limit = {
+			has_building = building_foundry_1
+		}
+		remove_building = building_foundry_1
+		add_deposit = autofab_foundry
+		change_variable = { which = autofab_foundry value = 1 }
+	}
+	while = {
+		limit = {
+			has_building = building_foundry_2
+		}
+		remove_building = building_foundry_2
+		add_deposit = autofab_foundry_2
+		change_variable = { which = autofab_foundry_2 value = 1 }
+	}
+	while = {
+		limit = {
+			has_building = building_foundry_3
+		}
+		remove_building = building_foundry_3
+		add_deposit = autofab_foundry_3
+		change_variable = { which = autofab_foundry_3 value = 1 }
+	}
+	while = {
+		limit = {
+			has_building = building_factory_1
+		}
+		remove_building = building_factory_1
+		add_deposit = autofab_factory
+		change_variable = { which = autofab_factory value = 1 }
+	}
+	while = {
+		limit = {
+			has_building = building_factory_2
+		}
+		remove_building = building_factory_2
+		add_deposit = autofab_factory_2
+		change_variable = { which = autofab_factory_2 value = 1 }
+	}
+	while = {
+		limit = {
+			has_building = building_factory_3
+		}
+		remove_building = building_factory_3
+		add_deposit = autofab_factory_3
+		change_variable = { which = autofab_factory_3 value = 1 }
+	}
+}
+
 country_energy_check = {
 	log = "Check Country Energy"
 	if = {
@@ -180,6 +306,7 @@ country_energy_check = {
 
 country_food_check = {
 	log = "Check Country Food"
+	country_uses_food = yes
 	if = {
 		limit = {
 			resource_income_compare = { resource = food  value > 100 }
@@ -354,6 +481,7 @@ country_minerals_check = {
 
 country_consumer_goods_check = {
 	log = "Check Country CGs"
+	country_uses_consumer_goods = yes
 	if = {
 		limit = {
 			num_owned_planets < 3
