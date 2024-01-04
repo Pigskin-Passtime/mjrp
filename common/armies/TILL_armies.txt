@@ -1,0 +1,47 @@
+fractal_army = {
+	damage = 5.0
+	health = 5.0
+	has_morale = no
+	has_species = no
+	morale_damage = 5.0
+	collateral_damage = 0
+	war_exhaustion = 1.00
+	pop_limited = no
+	time = 360
+	icon = GFX_army_type_fractal_armies
+	prerequisites = { "tech_fractal_armies" }
+	resources = {
+		category = armies
+		cost = {
+			alloys = 500
+			volatile_motes = 50
+			exotic_gases = 50
+		}
+
+		upkeep = {
+			energy = 10
+			exotic_gases = 0.5
+			volatile_motes = 0.5
+		}
+	}
+
+
+	ai_weight = {
+		base = 100
+		modifier = {
+			set = 0
+			OR = {
+				is_fallen_empire = yes
+				has_technology = tech_telepathy
+				has_technology = tech_gene_seed_purification
+				AND = {
+					OR = {
+						has_ethic = ethic_militarist
+						has_ethic = ethic_fanatic_militarist
+					}
+					has_technology = tech_gene_banks
+				}
+			}
+		}
+	}
+}
