@@ -1,0 +1,30 @@
+##Void Governor scripted spawn effect
+
+spawn_void_governor = {
+	set_global_flag = void_governor_system_spawned
+	random_system_planet = {
+		limit = {
+			is_star = no
+			is_asteroid = no
+		}
+		set_planet_flag = void_governor_planet
+	}
+		log = "spawned [This.GetName]"
+}
+
+void_governor_black_hole_system = {
+    random_planet_within_border = {
+        limit = {
+            has_planet_flag = void_governor_planet
+        }
+        spawn_system = {
+            min_distance >= 20
+            max_distance <= 30
+            max_jumps = 1
+            initializer = void_governor_black_hole_initializer
+        }
+    }
+	last_created_system = {
+		log = "spawned [This.GetName]"
+	}
+}

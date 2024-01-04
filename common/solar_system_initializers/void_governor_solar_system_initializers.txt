@@ -1,0 +1,77 @@
+void_governor_black_hole_initializer = {
+    name = "Desires Consequence"
+    class = sc_black_hole
+
+    flags = { void_governor_system }
+
+    asteroid_belt = {
+        type = rocky_asteroid_belt
+        radius = 70
+    }
+
+    planet = {
+        class = pc_black_hole
+        size = { min = 30 max = 30 }
+        orbit_distance = 0
+        orbit_angle = 1
+		init_effect = {
+			set_planet_flag = void_governor_black_hole
+			save_global_event_target_as = void_governor_black_hole
+            prevent_anomaly = yes
+		}
+	}
+
+    change_orbit = 10
+    init_effect = {
+    create_ambient_object = {
+        type = "large_debris_object"
+        location = this
+    }
+    last_created_ambient_object = {
+        set_location = {
+            target = prev
+            distance = 0
+            angle = 20
+        }
+    }
+    }
+    change_orbit = 70
+    planet = {
+		count = 1
+		name = "Desires End"
+		class = "pc_barren"
+		size = { min = 22 max = 23 }
+		orbit_angle = { min = 90 max = 270 }
+		init_effect = {
+			prevent_anomaly = yes
+            set_planet_flag = void_governor_crash_site
+            save_global_event_target_as = void_governor_crash_site
+		}
+
+		change_orbit = @base_moon_distance
+
+		moon = {
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 6
+			size = { min = 9 max = 12 }
+			class = "pc_molten"
+			init_effect = {
+				prevent_anomaly = yes
+			}
+		}
+	}
+    change_orbit = 0
+    init_effect = {
+    create_ambient_object = {
+        type = "large_debris_object"
+        location = this
+    }
+    last_created_ambient_object = {
+        set_location = {
+            target = event_target:void_governor_crash_site
+            distance = 0
+            angle = 0
+        }
+    }
+    }
+}

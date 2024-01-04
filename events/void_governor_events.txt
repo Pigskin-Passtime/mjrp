@@ -1,0 +1,463 @@
+namespace = vg
+
+ship_event = {
+	id = vg.1
+	title = "vg.1.name"
+	desc = vg.1.desc
+	picture = GFX_evt_sabotaged_ship
+	show_sound = event_finding_loot
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = "vg.1.a"
+		enable_special_project = {
+			name = "void_governor_special_project"
+			location = from
+			owner = root.owner
+		}
+	}
+	
+}
+
+# Special Project Complete
+ship_event = {
+	id = vg.2
+	title = "vg.2.name"
+	desc = vg.2.desc
+	picture = GFX_evt_ghost_ship
+	show_sound = event_ship_bridge
+	location = from
+	event_chain = void_governor_chain
+
+	immediate = {
+		begin_event_chain = {
+			event_chain = "void_governor_chain"
+			target = this.owner
+		}
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = vg.2.a
+		tooltip = {
+			begin_event_chain = {
+				event_chain = "void_governor_chain"
+				target = this.owner
+			}
+		}
+
+		hidden_effect = {
+				closest_system = {
+					min_steps = 1
+					max_steps = 1
+					spawn_system = {
+						min_distance >= 10
+						max_distance <= 25
+						min_orientation_angle = 24
+						max_orientation_angle = 66
+						initializer = void_governor_black_hole_initializer
+					}
+				}
+		}
+		add_extra_hyperlane_to_spawned_system_effect = yes
+		create_point_of_interest = {
+			id = main_void_ship
+			name = "void_governor_black_hole_poi"
+			desc = void_governor_black_hole_desc
+			event_chain = void_governor_chain
+			location = event_target:void_governor_black_hole
+		}
+	}
+}
+
+# On entering the Void Governors System
+fleet_event = {
+	id = vg.3
+	title = "vg.3.name"
+	desc = "vg.3.desc"
+	picture = GFX_evt_junkheap
+	show_sound = event_ship_bridge
+	location = event_target:void_governor_black_hole
+	trackable = yes
+	event_chain = void_governor_chain
+
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			has_event_chain = void_governor_chain
+			NOT = {
+				has_country_flag = discovered_void_governor_black_hole
+			}
+		}
+		exists = event_target:void_governor_black_hole
+		solar_system = {
+			any_system_planet = {
+				is_same_value = event_target:void_governor_black_hole
+			}
+		}
+	}
+
+	immediate = {
+#		event_target:void_governor_black_hole = {
+#			set_surveyed = {
+#				surveyed = yes
+#				surveyor = root.owner
+#			}
+#			create_archaeological_site = void_governor_black_hole 
+#		}
+		event_target:void_governor_crash_site = {
+			hidden_effect = {
+				set_surveyed = {
+					surveyed = yes
+					surveyor = root.owner
+				}
+				}
+			create_archaeological_site = void_governor_crash_site
+		}
+
+		owner = {
+			set_country_flag = discovered_void_governor_black_hole
+			remove_point_of_interest = main_void_ship
+			add_event_chain_counter = {
+				event_chain = "void_governor_chain"
+				counter = "void_governor_black_hole"
+				amount = 1
+			}
+		}
+#		owner = {
+#			country_event = {id = vg.100 days = 2}
+#		}
+		create_fleet = {
+			name = "NAME_Ancient_Mining_Drones"
+			effect = {
+				set_owner = event_target:drone_country
+				while = {
+					count = 26
+					create_ship = {
+						name = ""
+						design = "NAME_Ancient_Mining_Drone"
+					}
+				}
+				while = {
+					count = 16
+					create_ship = {
+						name = ""
+						design = "NAME_Ancient_Combat_Drone"
+					}
+				}
+				while = {
+					count = 10
+					create_ship = {
+						name = ""
+						design = "NAME_Ancient_Destroyer"
+					}
+				}
+				set_location = event_target:void_governor_crash_site
+				set_fleet_stance = aggressive
+				set_aggro_range_measure_from = return_point
+				set_aggro_range = 500
+				queue_actions = {
+					repeat = {
+						wait = {
+							duration = 999
+							random = 10
+						}
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = vg.3.a
+	}
+
+}
+
+
+# Void Governor Spawn Event
+
+country_event = {
+	id = vg.100
+	title = "vg.100.name"
+	desc = "vg.100.desc"
+	picture = GFX_evt_drifting_gateway
+	show_sound = event_radio_chatter
+	location = event_target:void_governor_black_hole
+	fire_only_once = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = {
+			trigger = { is_gestalt = no }
+			text = "vg.100.a"
+		}
+		hidden_effect = {
+			create_country = {
+				name = "NAME_inanis"
+				type = paragon_event_country
+				auto_delete = yes
+				flag = {
+					icon = {
+						category = "special"
+						file = "unknown.dds"
+					}
+					background = {
+						category = "backgrounds"
+						file = "00_solid.dds"
+					}
+					colors = {
+						"red"
+						"red"
+						"null"
+						"null"
+					}
+				}
+				effect = {
+					save_global_event_target_as = inanis_country
+				}
+			}
+			event_target:inanis_country = {
+				set_country_flag = inanis_country_flag
+				set_faction_hostility = {
+					target = root.owner
+					set_hostile = no
+					set_neutral = yes
+					set_friendly = no
+				}
+				create_species = {
+					name = "NAME_Unknown"
+					class = MAM
+					portrait = void_governor_art
+					namelist = "PRT1"
+					
+					traits = {
+					#	trait = "trait_presapient_starborn"
+					#	trait = "trait_survivor"
+					#	trait = "trait_nomadic"
+					}
+					effect = {
+						save_event_target_as = inanis_species
+					}
+				}
+				}
+				create_leader = {
+					species = event_target:inanis_species
+					event_leader = yes
+					class = official
+					name = "Inanis of the Void"
+					skill = 7
+					randomize_traits = no
+					skip_background_generation = yes
+					background_ethic = ethic_pacifist
+					#custom_catch_phrase = huh
+					custom_description = inanis_desc
+					can_manually_change_location = yes
+					traits = {
+					add_trait = leader_trait_time_warper
+					add_trait = leader_trait_pop_focused_3
+					add_trait = subclass_official_governor
+					add_trait = leader_trait_bureaucrat_2
+					add_trait = leader_trait_architectural_interest_2
+					add_trait = leader_trait_venerated_2
+					add_trait = leader_trait_melancholic
+					######
+					#add_trait = leader_trait_intemporal
+					}
+					gender = indeterminable
+					set_age = 107
+					immortal = yes
+					effect = {
+					set_leader_flag = inanis
+					set_leader_flag = legendary_leader
+					set_leader_flag = immune_to_negative_traits
+					save_global_event_target_as = inanis_leader
+					set_owner = root
+					exile_leader_as = inanis_leader
+					}
+				}
+			}
+			country_event = {
+				id = vg.101 days = 2 
+			}
+		}	
+	}
+
+
+
+# Azaryn: HIRE/DISMISS
+country_event = {
+	id = vg.101
+	title = "vg.101.name"
+	desc = "vg.101.desc"
+	show_sound = par_event_azaryn
+	location = fromfrom
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { exists = event_target:inanis_leader_clone }
+	}
+
+	event_window_type = leader_recruit
+	picture_event_data = {
+		portrait = event_target:inanis_leader
+		#room = paragon_azaryn_room
+		room = personality_fallen_empire_cyan_room
+	}
+	picture = GFX_leader_recruitment_bg_renowned
+
+	immediate = {	
+	}
+
+	option = { # Who are you
+		name = vg.101.a
+		is_dialog_only = yes
+		set_country_flag = inanis_lore_dialog_step_1
+		response_text = "I am Inanis, a high official in the Ishdan Empire. I was in charge of our Ark project, a mission to ensure the safety of our race after we were played for fools.
+		
+		My ship was the last remaining group of our species untouched by its corruption. But even that was for naught now." 
+	}
+	option = { #played for fools?
+		name = vg.101.b
+		is_dialog_only = yes
+		allow = {
+			has_country_flag = inanis_lore_dialog_step_1
+		}
+		set_country_flag = inanis_lore_dialog_step_2
+		hide_option_if_not_allowed = yes
+		response_text = "We were contacted by a so called 'Worm', a god promising us love if only we worshiped it. What misguided fools we were, by the time we realised what its love was. It was already too late, its corrupting influence spread through our core worlds, warping the minds of our empire. 
+		
+		This ark was built upon our outer colonies, to save as many who were untouched as possible. The remains of that project are shattered around this sytem. It failed, we hadn't time to build defenses, we were easy pickings for the mining robots." 
+}
+	option = { # I am sorry for you
+		name = vg.101.c
+		is_dialog_only = yes
+		allow = {
+			has_country_flag = inanis_lore_dialog_step_2
+		}
+		set_country_flag = inanis_lore_dialog_step_3
+		hide_option_if_not_allowed = yes
+		response_text = "It was our folly, not yours. I now need to live with the consequences of our desires. I only hope you can learn from our mistakes."
+	}
+
+	option = { #The Ishdan empire? We have no records of this at all.
+		name = vg.101.d
+		is_dialog_only = yes
+		allow = {
+			has_country_flag = inanis_lore_dialog_step_3
+		}
+		set_country_flag = inanis_lore_dialog_step_4
+		hide_option_if_not_allowed = yes
+		response_text = "Based on your estimates, it appears I have been within that black hole for countless millenia, though for me, only a mere few years have passed by. It is highly likely that anything I knew is gone.
+		
+		The Ishdan empire was my home. It had flaws, but it was still mine. We dreamed big, always. Our asperations unbeatable. We incessantly chased technological excellence, daring to shatter the boundaries of science but alas, we pushed too far. We had a saying: curiosity killed the Felis. In the end, it appears my people became the Felis. It hardly matters now, maybe some day I will take the time to write it down."
+	}
+
+	option = { # Time travels faster in your presence, it even affected a significant portion of the black hole, how?
+		name = vg.101.e
+		is_dialog_only = yes
+		allow = {
+			has_country_flag = inanis_lore_dialog_step_4
+		}
+		set_country_flag = inanis_lore_dialog_step_5
+		hide_option_if_not_allowed = yes
+		response_text = "Truth be told, I haven't the faintest idea. I have had strange dreams ever since I entered this black hole. They always had the same theme, controlling gravity by my desire and using my sight to bend time.These dreams tormented me with my empires mistakes, but through them I learnt to manipulate gravity and time itself.
+		
+		Did I always have this power? Was being exposed to the black hole the catalyst? Or was I cursed with it? I do not know..."
+	}
+
+	option = { # Would you work for us? You would be provided all you need and more? Together we could learn more about your power.
+		name = vg.101.f
+		is_dialog_only = yes
+		allow = {
+			has_country_flag = inanis_lore_dialog_step_5
+		}
+		set_country_flag = inanis_lore_dialog_step_6
+		hide_option_if_not_allowed = yes
+		response_text = "You have freed me from an impossible prison, offered me refuge when I have nothing. I would be honoured to serve your empire to the best of my abilities."
+	}
+
+
+	option = { # HIRE
+		name = HIRE
+		tag = hire_leader
+		custom_tooltip = "§HInanis of the Void§! joins our Empire as a Official!"
+		#sound = par_azaryn_hire
+
+		hidden_effect = {
+			random_owned_planet = {
+				limit = {
+					is_variable_set = paragon_memory_vault
+				}
+				change_variable = {
+					which = paragon_memory_vault
+					value = 1
+				}
+			}
+			set_country_flag = inanis_owned
+			clone_leader = {
+				target = event_target:inanis_leader
+			}
+			last_created_leader = {
+				set_leader_flag = legendary_leader
+				save_global_event_target_as = inanis_leader_clone
+				set_leader_flag = immune_to_negative_traits
+				set_leader_flag = inanis
+				set_leader_flag = inanis_clone
+			}
+		}
+	}
+
+	option = { # DISMISS
+		#sound = par_azaryn_dismiss
+		name = DISMISS
+		tag = dismiss_leader
+		hidden_effect = {
+			remove_country_flag = inanis_owned
+			event_target:inanis_leader = {
+				kill_leader = { show_notification = no }
+			}
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			#remove_country_flag = flag_azaryn_what_is_astrocreation
+		}
+	}
+}
+
+country_event = {
+	id = vg.102
+	#title = "vg.102.name"
+	#desc = vg.1.desc
+	picture = GFX_evt_sabotaged_ship
+	show_sound = event_finding_loot
+	location = ROOT
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_flag = inanis_owned
+	}
+
+	immediate = {
+		event_target:inanis_leader = {
+			kill_leader = { show_notification = no }
+		}
+		remove_country_flag = inanis_owned
+		remove_country_flag = inanis_lore_dialog_step_1
+		remove_country_flag = inanis_lore_dialog_step_2
+		remove_country_flag = inanis_lore_dialog_step_3
+		remove_country_flag = inanis_lore_dialog_step_4
+		remove_country_flag = inanis_lore_dialog_step_5
+		remove_country_flag = inanis_lore_dialog_step_6
+	}
+
+}
