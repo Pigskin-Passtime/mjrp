@@ -1,0 +1,2010 @@
+### MOD NAME:
+### The Forgotten One
+### CONTRIBUTORS:
+### AlexMeowler
+
+namespace = TFO
+
+############################
+#######UTILITY EVENTS#######
+############################
+#utility event to set allowed flag on game start
+event = {
+    id = TFO.1000
+    is_triggered_only = yes
+    hide_window = yes
+
+    immediate = {
+        set_global_flag = TFO_allowed
+    }
+}
+
+#Utility event to save system in event target
+system_event = {
+    id = TFO.1001
+    is_triggered_only = yes
+    hide_window = yes
+
+    immediate = {
+        save_global_event_target_as = TFO_system
+    }
+}
+
+# On monthly pulse update stockpile variables for resource
+country_event = {
+    id = TFO.1002
+    is_triggered_only = yes
+    hide_window = yes
+
+    trigger = {
+        has_technology = TFO_tech_shroud_condensers
+    }
+
+    immediate = {
+        export_resource_income_to_variable = {
+            resource = TFO_sr_shroud_condensers
+            variable = TFO_sr_shroud_condensers_income
+        }
+        set_variable = {
+            which = TFO_sr_shroud_condensers_income_rounded
+            value = TFO_sr_shroud_condensers_income
+        }
+        round_variable = TFO_sr_shroud_condensers_income_rounded
+
+        export_resource_stockpile_to_variable = {
+            resource = TFO_sr_shroud_condensers
+            variable = TFO_sr_shroud_condensers_current
+        }
+        set_variable = {
+            which = TFO_sr_shroud_condensers_current_rounded
+            value = TFO_sr_shroud_condensers_current
+        }
+        round_variable = TFO_sr_shroud_condensers_current_rounded
+
+        export_modifier_to_variable = {
+            modifier = country_resource_max_add
+            variable = TFO_sr_shroud_condensers_max
+        }
+        change_variable = {
+            which = TFO_sr_shroud_condensers_max
+            value = @TFO_sr_shroud_condensers_max
+        }
+
+        country_event = {
+            id = TFO.1003
+        }
+    }
+}
+
+#If we are about to reach 0 resource in N < 12 months or capped, send notification
+country_event = {
+    id = TFO.1003
+    is_triggered_only = yes
+    hide_window = yes
+
+    immediate = {
+        if = {
+            limit = {
+                has_country_flag = TFO_sr_shroud_condensers_max_notification_fired
+                check_variable = {
+                    which = TFO_sr_shroud_condensers_current
+                    value < TFO_sr_shroud_condensers_max
+                }
+            }
+
+            remove_country_flag = TFO_sr_shroud_condensers_max_notification_fired
+        }
+
+        if = {
+            limit = {
+                check_variable = {
+                    which = TFO_sr_shroud_condensers_income
+                    value < 0
+                }
+            }
+
+            set_variable = {
+                which = TFO_sr_shroud_condensers_income_abs
+                value = TFO_sr_shroud_condensers_income
+            }
+
+            multiply_variable = {
+                which = TFO_sr_shroud_condensers_income_abs
+                value = -1
+            }
+
+            set_variable = {
+                which = TFO_sr_shroud_condensers_months_left
+                value = TFO_sr_shroud_condensers_current
+            }
+
+            divide_variable = {
+                which = TFO_sr_shroud_condensers_months_left
+                value = TFO_sr_shroud_condensers_income_abs
+            }
+            ceiling_variable = TFO_sr_shroud_condensers_months_left
+
+            if = {
+                limit = {
+                    check_variable = {
+                        which = TFO_sr_shroud_condensers_months_left
+                        value <= 12
+                    }
+                    check_variable = {
+                        which = TFO_sr_shroud_condensers_months_left
+                        value > 0
+                    }
+                }
+
+                create_message = {
+                    type = TFO_MESSAGE_STOCKPILE_LOW
+                    localization = TFO_MESSAGE_STOCKPILE_LOW_DESC
+                    days = 10
+                    target = this
+                }
+            }
+        }
+
+        if = {
+            limit = {
+                check_variable = {
+                    which = TFO_sr_shroud_condensers_income
+                    value > 0
+                }
+                check_variable = {
+                    which = TFO_sr_shroud_condensers_current
+                    value = TFO_sr_shroud_condensers_max
+                }
+                NOT = {
+                    has_country_flag = TFO_sr_shroud_condensers_max_notification_fired
+                }
+            }
+
+            set_country_flag = TFO_sr_shroud_condensers_max_notification_fired
+            create_message = {
+                type = TFO_MESSAGE_STOCKPILE_MAX
+                localization = TFO_MESSAGE_STOCKPILE_MAX_DESC
+                days = 15
+                target = this
+            }
+        }
+    }
+}
+
+country_event = {
+    id = TFO.1004
+    title = TFO.1004.name
+    desc = TFO.1004.desc
+    is_triggered_only = yes
+    picture = GFX_evt_deficit
+    show_sound = event_air_raid_siren
+
+    option = {
+        name = TFO.1004.a
+    }
+}
+
+############################
+#########MAIN EVENTS########
+############################
+
+#When our black hole is scanned, fire visible event
+planet_event = {
+    id = TFO.1
+    is_triggered_only = yes
+    hide_window = yes
+
+    trigger = {
+        is_star = yes
+        has_planet_flag = TFO_black_hole
+    }
+
+    immediate = {
+        from = {
+            country_event = {
+                id = TFO.2
+            }
+        }
+    }
+}
+
+#From = Planet (?)
+#This = Country
+#Say that it's unusual, fire next event in chain
+country_event = {
+    id = TFO.2
+    title = TFO.2.name
+    is_triggered_only = yes
+
+    desc = {
+        text = TFO.2.desc_fleet
+        trigger = {
+            exists = fromfromfrom
+            exists = fromfromfrom.leader
+        }
+    }
+    desc = {
+        text = TFO.2.desc_intel
+        trigger = {
+            NAND = {
+                exists = fromfromfrom
+                exists = fromfromfrom.leader
+            }
+        }
+    }
+
+    location = this
+
+    picture = GFX_evt_black_hole
+
+    option = {
+        name = TFO.2.a
+        trigger = {
+            TFO_is_civic_crisis_candidate = no
+        }
+
+        TFO_event_2_add_trait_and_start_chain = yes
+    }
+
+    option = {
+        name = TFO.2.b
+        trigger = {
+            TFO_is_civic_crisis_candidate = yes
+        }
+
+        TFO_event_2_add_trait_and_start_chain = yes
+
+    }
+}
+
+#There is signal from the planet, create situation log
+country_event = {
+    id = TFO.3
+    is_triggered_only = yes
+    title = TFO.3.name
+    desc = TFO.3.desc
+
+    location = this
+
+    picture = GFX_evt_black_hole
+
+    option = {
+        name = TFO.3.a
+        from.solar_system = {
+            every_system_planet = {
+                limit = {
+                    is_star = no
+                    has_planet_flag = TFO_planet
+                }
+                enable_special_project = {
+                    name = TFO_SCAN_LEADER_PLANET
+                    location = this
+                    owner = root
+                }
+            }
+        }
+    }
+}
+
+#special project complete
+ship_event = {
+    id = TFO.4
+    title = TFO.4.name
+    is_triggered_only = yes
+
+    location = from
+
+    desc = {
+        text = TFO.4.desc.a
+        trigger = {
+            NOT = {
+                has_global_flag = TFO_first_contact_dialogue
+            }
+        }
+    }
+    desc = {
+        text = TFO.4.desc.b
+        trigger = {
+            has_global_flag = TFO_first_contact_dialogue
+        }
+    }
+
+    picture = GFX_evt_ship_in_orbit
+
+    option = {
+        name = KEEP_SEARCHING
+        trigger = {
+            NOT = {
+                has_global_flag = TFO_first_contact_dialogue
+            }
+        }
+
+        hidden_effect = {
+            if = {
+                limit = {
+                    exists = owner
+                }
+
+                owner = {
+                    country_event = {
+                        id = TFO.5
+                        days = 1
+                    }
+                }
+            }
+        }
+    }
+
+    option = {
+        name = DISCONCERTING
+        trigger = {
+            has_global_flag = TFO_first_contact_dialogue
+        }
+
+        hidden_effect = {
+            if = {
+                limit = {
+                    exists = owner
+                }
+
+                owner = {
+                    TFO_set_year_variable = yes
+                    TFO_fire_second_contact_ready_event = yes
+                }
+            }
+        }
+    }
+}
+
+#first encounter, no signal
+country_event = {
+    id = TFO.5
+    title = TFO.5.name
+    desc = TFO.5.desc
+    is_triggered_only = yes
+
+    diplomatic = yes
+
+    picture_event_data = {
+        room = no_video_feed_room
+    }
+
+    option = {
+        inline_script = {
+            script = localization/TFO_localize_empire
+            BLOCK = name
+            KEY = TFO.5.a
+        }
+
+        hidden_effect = {
+            set_global_flag = TFO_first_contact_dialogue
+            country_event = {
+                id = TFO.6
+                days = 1
+            }
+        }
+        custom_gui = "enclave_caravaneer_option"
+    }
+}
+
+#signal disappeared, fire delayed event for checking second contact (if you already have perk, need to wait some time)
+country_event = {
+    id = TFO.6
+    title = TFO.6.name
+    desc = TFO.6.desc
+    is_triggered_only = yes
+
+    picture = GFX_evt_shattered_planet
+
+    immediate = {
+        TFO_set_year_variable = yes
+    }
+
+    option = {
+        name = CURIOUS
+        hidden_effect = {
+            TFO_fire_second_contact_ready_event = yes
+        }
+    }
+}
+
+#second encounter set readiness flag and fire second contact event
+country_event = {
+    id = TFO.7
+    is_triggered_only = yes
+    hide_window = yes
+
+    immediate = {
+        set_country_flag = TFO_ready_second_encounter
+        country_event = {
+            id = TFO.9
+        }
+    }
+}
+
+#intermediate event when ascension perk picked, if ready for second contact then start it in 120 +0-60 days
+country_event = {
+    id = TFO.8
+    is_triggered_only = yes
+    hide_window = yes
+
+    trigger = {
+        TFO_trigger = yes
+    }
+
+    immediate = {
+        country_event = {
+            id = TFO.9
+            days = 120
+            random = 60
+        }
+    }
+}
+
+#second encounter, will start dialogue if requirements met
+country_event = {
+    id = TFO.9
+    title = TFO.9.name
+    desc = TFO.9.desc
+    is_triggered_only = yes
+
+    trigger = {
+        TFO_trigger = yes
+    }
+
+    picture = GFX_evt_communication_event
+    show_sound = advisor_notification_incoming_transmission
+
+    option = {
+        name = ON_SCREEN
+        hidden_effect = {
+            country_event = {
+                id = TFO.10
+                days = 1
+            }
+        }
+    }
+}
+
+#Second encounter, intro dialogue
+country_event = {
+    id = TFO.10
+    title = TFO.10.name
+    desc = TFO.10.desc
+    show_sound = event_conversation
+    is_triggered_only = yes
+
+    trigger = {
+        TFO_trigger = yes
+    }
+
+    diplomatic = yes
+
+    picture_event_data = {
+        portrait = event_target:TFO_leader
+        room = TFO_broken_planet_room
+    }
+
+    immediate = {
+        create_country = {
+            name = "NAME_Unknown"
+            type = global_event
+            auto_delete = yes
+            flag = {
+                icon = {
+                    category = "special"
+                    file = "unknown.dds"
+                }
+                background = {
+                    category = "backgrounds"
+                    file = "00_solid.dds"
+                }
+                colors = {
+                    "purple"
+                    "blue"
+                    "null"
+                    "null"
+                }
+            }
+        }
+        last_created_country = {
+            copy_ethos_and_authority = prev
+            create_species = {
+                name = NAME_Unknown
+                class = EXD
+                portrait = exd1_leader
+                name_list = Extradimensional
+            }
+            create_leader = {
+                species = last_created_species
+                event_leader = yes
+                class = scientist
+                name = TFO_leader_name
+                skill = 6
+                randomize_traits = yes
+                skip_background_generation = yes
+                custom_catch_phrase = TFO_leader_catchphrase
+                custom_description = TFO_leader_desription
+                can_manually_change_location = no
+                background_ethic = ethic_materialist
+                gender = indeterminable
+                hide_age = yes
+                immortal = yes
+                effect = {
+                    TFO_set_leader_traits = yes
+
+                    save_event_target_as = TFO_leader
+                    set_leader_flag = legendary_leader
+                    set_leader_flag = is_in_recruit_window
+                    set_global_flag = TFO_leader_spawned
+                }
+            }
+        }
+    }
+
+    option = {
+        inline_script = {
+            script = localization/TFO_localize_empire
+            BLOCK = name
+            KEY = TFO.10.a
+        }
+
+        response_text = TFO.10.a.response
+        is_dialog_only = yes
+    }
+    option = {
+        name = TFO.10.b
+        response_text = TFO.10.b.response
+        is_dialog_only = yes
+    }
+    option = {
+        inline_script = {
+            script = localization/TFO_localize_empire
+            BLOCK = name
+            KEY = TFO.10.c
+        }
+
+        hidden_effect = {
+            country_event = {
+                id = TFO.11
+            }
+        }
+        custom_gui = "enclave_caravaneer_option"
+    }
+}
+
+#Second encounter, recruitment dialogue
+country_event = {
+    id = TFO.11
+    title = TFO.11.name
+    desc = TFO.11.desc
+    show_sound = event_custodian_greeting
+    is_triggered_only = yes
+
+    diplomatic = yes
+
+    event_window_type = leader_recruit
+
+    picture_event_data = {
+        portrait = event_target:TFO_leader
+    }
+
+    picture = GFX_TFO_leader_recruitment
+
+    option = {
+        inline_script = {
+            script = localization/TFO_localize_empire
+            BLOCK = name
+            KEY = TFO.11.a
+        }
+
+        response_text = TFO.11.a.response
+        is_dialog_only = yes
+    }
+
+    option = {
+        inline_script = {
+            script = localization/TFO_localize_empire
+            BLOCK = name
+            KEY = TFO.11.b
+        }
+
+        response_text = TFO.11.b.response
+        is_dialog_only = yes
+    }
+
+    option = {
+        inline_script = {
+            script = localization/TFO_localize_empire
+            BLOCK = name
+            KEY = TFO.11.c
+        }
+
+        response_text = TFO.11.c.response
+        is_dialog_only = yes
+    }
+
+    option = {
+        inline_script = {
+            script = localization/TFO_localize_empire
+            BLOCK = name
+            KEY = TFO.11.d
+        }
+
+        tag = hire_leader
+        custom_tooltip = TFO.11.d.custom_tooltip1
+        custom_tooltip = TFO.11.d.custom_tooltip2
+
+        allow = {
+            resource_stockpile_compare = {
+                resource = energy
+                value >= 500
+            }
+        }
+
+        add_resource = {
+            energy = -500
+        }
+
+        hidden_effect = {
+            clone_leader = {
+                target = event_target:TFO_leader
+            }
+            last_created_leader = {
+                set_skill = 1
+                add_skill_without_trait_selection = 5
+                TFO_set_leader_traits = yes
+
+                set_leader_flag = legendary_leader
+                set_leader_flag = immune_to_negative_traits
+                save_global_event_target_as = TFO_leader
+            }
+            save_global_event_target_as = TFO_leader_owner
+            create_message = {
+                type = MESSAGE_RECRUITED_LEADER
+                localization =  MESSAGE_RECRUITED_LEADER_DESC
+                days = @toast_message_days
+                target = event_target:TFO_leader
+                variable = {
+                    type = name
+                    localization = LEADER
+                    scope = event_target:TFO_leader
+                }
+                variable = {
+                    key = "border"
+                    value = "GFX_border_legendary"
+                }
+            }
+        }
+    }
+
+    option = {
+        inline_script = {
+            script = localization/TFO_localize_empire
+            BLOCK = name
+            KEY = TFO.11.e
+        }
+
+        tag = dismiss_leader
+        custom_tooltip = TFO.11.e.custom_tooltip
+        event_target:TFO_leader = {
+            kill_leader = { show_notification = no }
+        }
+    }
+}
+
+#Pulse event start megastructure chain (dialogue, starts special project)
+country_event = {
+    id = TFO.12
+    title = TFO.12.name
+    desc = TFO.12.desc
+    fire_only_once = yes
+    show_sound = advisor_notification_incoming_transmission
+    is_triggered_only = yes
+
+    diplomatic = yes
+
+    picture_event_data = {
+        portrait = event_target:TFO_leader
+        room = ethic_spaceship_room
+    }
+
+    trigger = {
+        TFO_can_unlock_mega = yes
+    }
+
+    option = {
+        name = TFO.12.a
+        custom_gui = "enclave_caravaneer_option"
+        enable_special_project = {
+            name = TFO_GET_SYSTEM_READINGS
+            location = event_target:TFO_system.star
+            owner = root
+        }
+    }
+}
+
+#When megastructure project is complete, need to wait to get megastructure
+ship_event = {
+    id = TFO.13
+    title = TFO.13.name
+    desc = TFO.13.desc
+    is_triggered_only = yes
+
+    picture = GFX_evt_ship_travel
+
+    option = {
+        name = TFO.13.a
+        hidden_effect = {
+            owner = {
+                country_event = {
+                    id = TFO.14
+                    days = 90
+                    random = 60
+                }
+            }
+        }
+    }
+}
+
+# Create "Stable construction spot" megastructure placeholder
+country_event = {
+    id = TFO.14
+    title = TFO.14.name
+    desc = TFO.14.desc
+    is_triggered_only = yes
+
+    picture = GFX_evt_star_chart
+
+    trigger = {
+        exists = event_target:TFO_leader
+    }
+
+    option = {
+        name = TFO.14.a
+        custom_tooltip = TFO.14.a.tooltip1
+        custom_tooltip = TFO.14.a.tooltip2
+        TFO_spawn_SCP = yes
+        set_country_flag = TFO_can_build_SRC
+    }
+}
+
+# Unlocking 1st update chain
+country_event = {
+    id = TFO.15
+    title = TFO.15.name
+    desc = TFO.15.desc
+    show_sound = advisor_notification_incoming_transmission
+    is_triggered_only = yes
+
+    diplomatic = yes
+
+    picture_event_data = {
+        portrait = event_target:TFO_leader
+        room = ethic_spaceship_room
+    }
+
+    trigger = {
+        TFO_can_unlock_mega_1st_upgrade = yes
+    }
+
+    option = {
+        inline_script = {
+            script = localization/TFO_localize_empire
+            BLOCK = name
+            KEY = TFO.15.a
+        }
+
+        custom_gui = "enclave_caravaneer_option"
+        hidden_effect = {
+            country_event = {
+                id = TFO.16
+                days = 720
+            }
+        }
+    }
+}
+
+country_event = {
+    id = TFO.16
+    title = TFO.16.name
+    desc = TFO.16.desc
+    show_sound = advisor_notification_incoming_transmission
+    is_triggered_only = yes
+
+    diplomatic = yes
+
+    picture_event_data = {
+        portrait = event_target:TFO_leader
+        room = ethic_spaceship_room
+    }
+
+    trigger = {
+        exists = event_target:TFO_leader
+    }
+
+    option = {
+        name = TFO.16.a
+        custom_tooltip = TFO.16.a.tooltip
+        custom_gui = "enclave_caravaneer_option"
+        set_country_flag = TFO_can_build_ATG
+    }
+}
+
+#Technology unlock event
+country_event = {
+    id = TFO.17
+    title = TFO.17.name
+    desc = TFO.17.desc
+    show_sound = advisor_notification_incoming_transmission
+    is_triggered_only = yes
+
+    diplomatic = yes
+
+    picture_event_data = {
+        portrait = event_target:TFO_leader
+        room = ethic_spaceship_room
+    }
+
+    trigger = {
+        TFO_can_unlock_shroud_condensers = yes
+    }
+
+    option = {
+        inline_script = {
+            script = localization/TFO_localize_empire
+            BLOCK = name
+            KEY = TFO.17.a
+        }
+
+        response_text = TFO.17.a.response
+        is_dialog_only = yes
+    }
+
+    option = {
+        name = TFO.17.b
+        custom_tooltip = TFO.17.b.tooltip
+        set_country_flag = TFO_unlock_shroud_condensers
+        custom_gui = "enclave_caravaneer_option"
+    }
+}
+
+#Unlocking 2nd update , 1y after first has been built, stage 5 crisis, year pulse
+country_event = {
+    id = TFO.18
+    title = TFO.18.name
+    desc = TFO.18.desc
+    show_sound = advisor_notification_incoming_transmission
+    is_triggered_only = yes
+
+    diplomatic = yes
+
+    picture_event_data = {
+        portrait = event_target:TFO_leader
+        room = ethic_spaceship_room
+    }
+
+    trigger = {
+        exists = event_target:TFO_leader
+    }
+
+    #calculate if we have crisis sphere
+    immediate = {
+        if = {
+            limit = {
+                any_owned_megastructure = {
+                    is_crisis_sphere = yes
+                }
+            }
+
+            set_country_flag = TFO_has_crisis_sphere
+        }
+    }
+
+    after = {
+        if = {
+            limit = {
+                has_country_flag = TFO_has_crisis_sphere
+            }
+
+            remove_country_flag = TFO_has_crisis_sphere
+        }
+    }
+
+    option = {
+        name = TFO.18.a
+        custom_gui = "enclave_caravaneer_option"
+
+        custom_tooltip = TFO.18.a.tooltip1
+
+        if = {
+            limit = {
+                has_country_flag = TFO_has_crisis_sphere
+            }
+
+            custom_tooltip = TFO.18.a.tooltip2
+        }
+
+        set_country_flag = TFO_can_build_NMPA
+    }
+}
+
+#Bankrupcy shroud condensers
+situation_event = {
+    id = TFO.19
+    title = BANKRUPTCY
+    desc = TFO.19.desc
+    picture = GFX_evt_deficit
+    show_sound = event_life_support_fail
+    is_triggered_only = yes
+    situation = this
+    force_open = yes
+
+    option = {
+        name = UNFORTUNATE
+        custom_tooltip = TFO_end_deficit_effect_tooltip
+
+        hidden_effect = {
+            event_target:TFO_megastructure = {
+                if = {
+                    limit = {
+                        exists = owner
+                        owner = {
+                            is_same_value = root.owner
+                        }
+                    }
+                    delete_megastructure = this
+                }
+            }
+            TFO_spawn_SCP = yes
+
+            owner = {
+                add_resource = {
+                    TFO_sr_shroud_condensers = @bailout_strategic_base_amount
+                    mult = value:bailout_scaling_factor
+                }
+                remove_modifier = TFO_SRC_research_speed
+
+                every_owned_ship = {
+                    limit = {
+                        is_ship_class = shipclass_military
+                        TFO_has_aetherophasic_components = yes
+                    }
+                    random = {
+                        chance = 50
+                        if = {
+                            limit = {
+                                exists = leader
+                            }
+                            leader = {
+                                unassign_leader = this
+                            }
+                        }
+                        delete_ship = this
+                    }
+                }
+
+                every_owned_megastructure = {
+                    limit = {
+                        is_crisis_sphere = yes
+                        has_modifier = TFO_ATG_AE_build_buff
+                    }
+                    remove_modifier = TFO_ATG_AE_build_buff
+                }
+            }
+        }
+
+    }
+    after = {
+        destroy_situation = this
+    }
+}
+
+#Destiny trait event chain
+country_event = {
+    id = TFO.20
+    title = TFO.20.name
+    desc = TFO.20.desc
+    show_sound = advisor_notification_incoming_transmission
+    is_triggered_only = yes
+    fire_only_once = yes
+
+    diplomatic = yes
+
+    picture_event_data = {
+        portrait = event_target:TFO_leader
+        room = ethic_spaceship_room
+    }
+
+    trigger = {
+        is_ai = no
+        exists = event_target:TFO_leader
+        exists = event_target:TFO_leader_owner
+        is_same_value = event_target:TFO_leader_owner
+    }
+
+    option = {
+        name = TFO.20.a
+        custom_tooltip = TFO.20.a.tooltip
+        add_modifier = {
+            modifier = TFO_tight_schedule
+            years = 10
+        }
+        custom_gui = "enclave_caravaneer_option"
+    }
+
+    option = {
+        name = TFO.20.b
+        custom_tooltip = TFO.20.b.tooltip
+        add_modifier = {
+            modifier = TFO_resources_allocated
+            years = 10
+        }
+        hidden_effect = {
+            country_event = {
+                id = TFO.21
+                days = 1
+            }
+        }
+        custom_gui = "enclave_caravaneer_option"
+    }
+
+}
+
+country_event = {
+    id = TFO.21
+    title = TFO.21.name
+    desc = TFO.21.desc
+    is_triggered_only = yes
+    fire_only_once = yes
+
+    picture = GFX_evt_star_chart
+
+    option = {
+        name = TFO.21.a
+        event_target:TFO_system = {
+            every_system_planet = {
+                limit = {
+                    has_planet_flag = TFO_planet
+                }
+
+                enable_special_project = {
+                    name = TFO_PERFORM_NEW_SCAN
+                    location = this
+                    owner = root
+                }
+            }
+        }
+    }
+}
+
+#TFO_PERFORM_NEW_SCAN is complete, now create archaeological site
+ship_event = {
+    id = TFO.22
+    title = TFO.22.name
+    desc = TFO.22.desc
+    is_triggered_only = yes
+    fire_only_once = yes
+
+    picture = GFX_evt_star_chart
+
+    option = {
+        name = TFO.22.a
+        if = {
+            limit = {
+                exists = leader
+            }
+
+            leader = {
+                add_skill = 1
+            }
+        }
+
+        if = {
+            limit = {
+                exists = owner
+            }
+
+            owner = {
+                set_country_flag = TFO_can_excavate_digsite
+            }
+        }
+
+        if = {
+            limit = {
+                exists = event_target:TFO_leader
+            }
+
+            event_target:TFO_leader = {
+                add_skill = 1
+            }
+        }
+
+        fromfrom = {
+            create_archaeological_site = TFO_leader_story_digsite
+        }
+    }
+}
+
+#Digsite events
+fleet_event = {
+    id = TFO.23
+    title = TFO.23.name
+    desc = TFO.23.desc
+    is_triggered_only = yes
+    location = from
+    show_sound = event_metal_fatigue
+
+    archaeology = yes
+
+    picture = GFX_evt_underground_civilization
+
+    immediate = {
+        from = { set_site_progress_locked = yes }
+    }
+
+    after = {
+        from = { set_site_progress_locked = no }
+    }
+
+    abort_trigger = {
+        NOT = {
+            exists = event_target:TFO_leader
+        }
+    }
+
+    option = {
+        name = TFO.23.a
+        if = {
+            limit = {
+                exists = owner
+            }
+
+            owner = {
+                add_monthly_resource_mult = {
+                    resource = physics_research
+                    value = @tier2researchreward
+                    min = @tier2researchmin
+                    max = @tier2researchmax
+                }
+            }
+        }
+    }
+}
+
+fleet_event = {
+    id = TFO.24
+    title = TFO.24.name
+    desc = TFO.24.desc
+    is_triggered_only = yes
+    location = from
+    show_sound = event_metal_fatigue
+
+    archaeology = yes
+
+    picture = GFX_evt_underground_city
+
+    immediate = {
+        from = { set_site_progress_locked = yes }
+    }
+
+    after = {
+        from = { set_site_progress_locked = no }
+    }
+
+    abort_trigger = {
+        NOT = {
+            exists = event_target:TFO_leader
+        }
+    }
+
+    option = {
+        name = TFO.24.a
+        if = {
+            limit = {
+                exists = owner
+            }
+
+            owner = {
+                add_monthly_resource_mult = {
+                    resource = society_research
+                    value = @tier2researchreward
+                    min = @tier2researchmin
+                    max = @tier2researchmax
+                }
+            }
+        }
+    }
+}
+
+fleet_event = {
+    id = TFO.25
+    title = TFO.25.name
+    desc = TFO.25.desc
+    is_triggered_only = yes
+    location = from
+    show_sound = event_metal_fatigue
+
+    archaeology = yes
+
+    picture = GFX_evt_society_research
+
+    immediate = {
+        from = { set_site_progress_locked = yes }
+    }
+
+    after = {
+        from = { set_site_progress_locked = no }
+    }
+
+    abort_trigger = {
+        NOT = {
+            exists = event_target:TFO_leader
+        }
+    }
+
+    option = {
+        name = TFO.25.a
+    }
+}
+
+fleet_event = {
+    id = TFO.26
+    title = TFO.26.name
+    desc = TFO.26.desc
+    is_triggered_only = yes
+    location = from
+    show_sound = event_metal_fatigue
+
+    archaeology = yes
+
+    picture = GFX_evt_society_research
+
+    immediate = {
+        from = { set_site_progress_locked = yes }
+    }
+
+    after = {
+        from = { set_site_progress_locked = no }
+    }
+
+    abort_trigger = {
+        NOT = {
+            exists = event_target:TFO_leader
+        }
+    }
+
+    option = {
+        name = TFO.26.a
+        event_target:TFO_leader = {
+            add_skill = 1
+        }
+
+        if = {
+            limit = {
+                exists = owner
+            }
+
+            owner = {
+                add_monthly_resource_mult = {
+                    resource = engineering_research
+                    value = @tier2researchreward
+                    min = @tier2researchmin
+                    max = @tier2researchmax
+                }
+            }
+        }
+
+        event_target:TFO_system = {
+            every_system_planet = {
+                limit = {
+                    has_planet_flag = TFO_planet
+                }
+
+                every_moon = {
+                    enable_special_project = {
+                        name = TFO_SCAN_THE_MOON
+                        location = this
+                        owner = root.owner
+                    }
+                }
+            }
+        }
+    }
+}
+
+#TFO_SCAN_THE_MOON is complete, now create archaeological site
+ship_event = {
+    id = TFO.27
+    title = TFO.27.name
+    is_triggered_only = yes
+    fire_only_once = yes
+
+    picture = GFX_evt_star_chart
+
+    trigger = {
+        exists = event_target:TFO_leader
+    }
+
+    desc = {
+        text = TFO.27.desc.other
+        trigger = {
+            leader = {
+                NOT = {
+                    is_same_value = event_target:TFO_leader
+                }
+            }
+        }
+    }
+
+    desc = {
+        text = TFO.27.desc.TFO
+        trigger = {
+            leader = {
+                is_same_value = event_target:TFO_leader
+            }
+        }
+    }
+
+    option = {
+        name = {
+            text = TFO.27.a.other
+            trigger = {
+                leader = {
+                    NOT = {
+                        is_same_value = event_target:TFO_leader
+                    }
+                }
+            }
+        }
+
+        name = {
+            text = TFO.27.a.TFO
+            trigger = {
+                leader = {
+                    is_same_value = event_target:TFO_leader
+                }
+            }
+        }
+
+        hidden_effect = {
+            if = {
+                limit = {
+                    exists = owner
+                }
+
+                leader = {
+                    save_event_target_as = TFO_27_leader
+                }
+
+                owner = {
+                    country_event = {
+                        id = TFO.28
+                        days = 1
+                    }
+                }
+            }
+        }
+    }
+}
+
+country_event = {
+    id = TFO.28
+    title = TFO.28.name
+    show_sound = advisor_notification_incoming_transmission
+    fire_only_once = yes
+    is_triggered_only = yes
+
+    desc = {
+        text = TFO.28.desc.other
+        trigger = {
+            event_target:TFO_27_leader = {
+                NOT = {
+                    is_same_value = event_target:TFO_leader
+                }
+            }
+        }
+    }
+
+    desc = {
+        text = TFO.28.desc.TFO
+        trigger = {
+            event_target:TFO_27_leader = {
+                is_same_value = event_target:TFO_leader
+            }
+        }
+    }
+
+    diplomatic = yes
+
+    picture_event_data = {
+        portrait = event_target:TFO_leader
+        room = ethic_spaceship_room
+    }
+
+    trigger = {
+        exists = event_target:TFO_leader
+    }
+
+    option = {
+        name = TFO.28.a
+        custom_gui = "enclave_caravaneer_option"
+        custom_tooltip = TFO.28.a.tooltip
+
+        event_target:TFO_leader = {
+            TFO_add_leader_destiny_trait = yes
+        }
+    }
+}
+
+country_event = {
+    id = TFO.29
+    title = TFO.29.name
+    is_triggered_only = yes
+
+    picture = GFX_evt_metropolis
+
+    inline_script = {
+        script = localization/TFO_localize_empire
+        BLOCK = desc
+        KEY = TFO.29.desc
+    }
+
+    trigger = {
+        has_global_flag = TFO_system_spawned
+        NOT = {
+            has_global_flag = TFO_leader_spawned
+            has_country_flag = TFO_crisis_suggested
+            has_origin = origin_slavers
+        }
+    }
+
+    option = {
+        name = TFO.29.a
+        trigger = {
+            is_xenophile = no
+        }
+    }
+
+    option = {
+        name = TFO.29.a.xenophile
+        trigger = {
+            is_xenophile = yes
+        }
+    }
+
+    after = {
+        set_country_flag = TFO_crisis_suggested
+    }
+
+}
+
+############################
+####TECHNOLOGICAL EVENTS####
+############################
+
+#Unlock technology
+country_event = {
+    id = TFO.500
+    is_triggered_only = yes
+    fire_only_once = yes
+    hide_window = yes
+
+    trigger = {
+        TFO_can_unlock_shroud_condensers = yes
+    }
+
+    immediate = {
+        country_event = {
+            id = TFO.17
+            days = 1
+            random = 180
+        }
+    }
+}
+
+#When mod strategic resource unlocked, add modifier to country to display resource
+country_event = {
+    id = TFO.501
+    is_triggered_only = yes
+    title = TFO.501.name
+    desc = TFO.501.desc
+    picture = GFX_evt_physics_research
+    force_open = yes
+
+    trigger = {
+        exists = event_target:TFO_leader_owner
+        is_same_value = event_target:TFO_leader_owner
+        last_increased_tech = TFO_tech_shroud_condensers
+    }
+
+    immediate = {
+        set_variable = {
+            which = TFO_sr_shroud_condensers_income
+            value = 0
+        }
+        set_variable = {
+            which = TFO_sr_shroud_condensers_current
+            value = 0
+        }
+        set_variable = {
+            which = TFO_sr_shroud_condensers_max
+            value = 0
+        }
+        add_modifier = {
+            modifier = TFO_shroud_condensers_stockpile_status
+        }
+    }
+
+    option = {
+        name = TFO.501.a
+        custom_tooltip = TFO.501.a.tooltip1
+        custom_tooltip = TFO.501.a.tooltip2
+        icon = {
+            icon = GFX_situation_approach_suspicious
+            icon_background = GFX_situation_approach_bg_red
+            text = set_situation_approach_icon_text
+        }
+    }
+}
+
+############################
+####MEGASTRUCTURE EVENTS####
+############################
+#Start with id=750
+
+#When built crisis mega and have mod mega - add modifiers
+country_event = {
+    id = TFO.750
+    is_triggered_only = yes
+    hide_window = yes
+
+    trigger = {
+        exists = event_target:TFO_megastructure
+        is_same_value = event_target:TFO_megastructure.owner
+        event_target:TFO_megastructure = {
+            OR = {
+                is_megastructure_type = TFO_mega_research_station_2
+                is_megastructure_type = TFO_mega_research_station_3
+            }
+        }
+        any_owned_megastructure = {
+            is_crisis_sphere = yes
+            NOT = {
+                has_modifier = TFO_ATG_AE_build_buff
+            }
+        }
+    }
+
+    immediate = {
+        TFO_buff_AE = yes
+    }
+}
+
+#When upgraded to ATG/NMPA - add modifiers to crisis mega
+country_event = {
+    id = TFO.751
+    is_triggered_only = yes
+    hide_window = yes
+
+    trigger = {
+        from = {
+            is_megastructure_type = TFO_mega_research_station_2
+        }
+        is_same_value = event_target:TFO_leader_owner
+    }
+
+    immediate = {
+        TFO_buff_AE = yes
+    }
+}
+
+country_event = {
+    id = TFO.752
+    is_triggered_only = yes
+    hide_window = yes
+
+    trigger = {
+        from = {
+            is_megastructure_type = TFO_mega_research_station_3
+        }
+        is_same_value = event_target:TFO_leader_owner
+    }
+
+    immediate = {
+        add_modifier = {
+            modifier = TFO_NMPA_star_eater_build_speed
+        }
+    }
+}
+
+#When megastructure owner change - if we lose our RSC/ATG/NMPA mega -> remove modifiers, if we gain it -> add modifiers
+country_event = {
+    id = TFO.753
+    is_triggered_only = yes
+    hide_window = yes
+
+    trigger = {
+        from = {
+            OR = {
+                is_megastructure_type = TFO_mega_research_station_1
+                is_megastructure_type = TFO_mega_research_station_2
+                is_megastructure_type = TFO_mega_research_station_3
+            }
+        }
+    }
+
+    immediate = {
+        if = {
+            limit = {
+                not = {
+                    is_same_value = event_target:TFO_leader_owner
+                }
+                event_target:TFO_leader_owner = {
+                    has_modifier = TFO_SRC_research_speed
+                }
+            }
+            event_target:TFO_leader_owner = {
+                remove_modifier = TFO_SRC_research_speed
+            }
+        }
+
+        if = {
+            limit = {
+                is_same_value = event_target:TFO_leader_owner
+                NOT = {
+                    has_modifier = TFO_SRC_research_speed
+                }
+            }
+            add_modifier = {
+                modifier = TFO_SRC_research_speed
+            }
+        }
+
+    }
+}
+
+country_event = {
+    id = TFO.754
+    is_triggered_only = yes
+    hide_window = yes
+
+    trigger = {
+        from = {
+            OR = {
+                is_megastructure_type = TFO_mega_research_station_2
+                is_megastructure_type = TFO_mega_research_station_3
+            }
+        }
+    }
+
+    immediate = {
+        if = {
+            limit = {
+                not = {
+                    is_same_value = event_target:TFO_leader_owner
+                }
+            }
+            event_target:TFO_leader_owner = {
+                every_owned_megastructure = {
+                    limit = {
+                        is_crisis_sphere = yes
+                        has_modifier = TFO_ATG_AE_build_buff
+                    }
+                    remove_modifier = TFO_ATG_AE_build_buff
+                }
+            }
+        }
+
+        if = {
+            limit = {
+                is_same_value = event_target:TFO_leader_owner
+            }
+            every_owned_megastructure = {
+                limit = {
+                    is_crisis_sphere = yes
+                    NOT = {
+                        has_modifier = TFO_ATG_AE_build_buff
+                    }
+                }
+                add_modifier = {
+                    modifier = TFO_ATG_AE_build_buff
+                }
+            }
+        }
+    }
+}
+
+country_event = {
+    id = TFO.755
+    is_triggered_only = yes
+    hide_window = yes
+
+    trigger = {
+        from = {
+            is_megastructure_type = TFO_mega_research_station_3
+        }
+        always = yes
+    }
+
+    immediate = {
+        if = {
+            limit = {
+                not = {
+                    is_same_value = event_target:TFO_leader_owner
+                }
+                event_target:TFO_leader_owner = {
+                    has_modifier = TFO_NMPA_star_eater_build_speed
+                }
+            }
+            event_target:TFO_leader_owner = {
+                remove_modifier = TFO_NMPA_star_eater_build_speed
+            }
+        }
+
+        if = {
+            limit = {
+                is_same_value = event_target:TFO_leader_owner
+                NOT = {
+                    has_modifier = TFO_NMPA_star_eater_build_speed
+                }
+            }
+            add_modifier = {
+                modifier = TFO_NMPA_star_eater_build_speed
+            }
+        }
+    }
+}
+
+#When captured ruined crisis mega - add modifier
+country_event = {
+    id = TFO.756
+    is_triggered_only = yes
+    hide_window = yes
+
+    trigger = {
+        from = {
+            is_crisis_sphere = yes
+        }
+    }
+
+    immediate = {
+        if = {
+            limit = {
+                not = {
+                    is_same_value = event_target:TFO_leader_owner
+                }
+                from = {
+                    has_modifier = TFO_ATG_AE_build_buff
+                }
+            }
+            from = {
+                remove_modifier = TFO_ATG_AE_build_buff
+            }
+        }
+
+        if = {
+            limit = {
+                is_same_value = event_target:TFO_leader_owner
+                any_owned_megastructure = {
+                    OR = {
+                        is_megastructure_type = TFO_mega_research_station_2
+                        is_megastructure_type = TFO_mega_research_station_3
+                    }
+                }
+                from = {
+                    NOT = {
+                        has_modifier = TFO_ATG_AE_build_buff
+                    }
+                }
+            }
+            from = {
+                add_modifier = {
+                    modifier = TFO_ATG_AE_build_buff
+                }
+            }
+        }
+    }
+}
+
+#When megastructure is ownerless - if this is mod mega, remove all modifiers
+system_event = {
+    id = TFO.757
+    is_triggered_only = yes
+    hide_window = yes
+
+    trigger = {
+        from = {
+            OR = {
+                is_megastructure_type = TFO_mega_research_station_1
+                is_megastructure_type = TFO_mega_research_station_2
+                is_megastructure_type = TFO_mega_research_station_3
+            }
+        }
+        exists = fromfrom
+        fromfrom = {
+            is_same_value = event_target:TFO_leader_owner
+        }
+    }
+
+    immediate = {
+        fromfrom = {
+            every_owned_megastructure = {
+                limit = {
+                    is_crisis_sphere = yes
+                    has_modifier = TFO_ATG_AE_build_buff
+                }
+                remove_modifier = TFO_ATG_AE_build_buff
+            }
+
+            if = {
+                limit = {
+                    has_modifier = TFO_SRC_research_speed
+                }
+                remove_modifier = TFO_SRC_research_speed
+            }
+
+            if = {
+                limit = {
+                    has_modifier = TFO_NMPA_star_eater_build_speed
+                }
+                remove_modifier = TFO_NMPA_star_eater_build_speed
+            }
+        }
+    }
+}
+
+country_event = {
+    id = TFO.758
+    is_triggered_only = yes
+    hide_window = yes
+
+    trigger = {
+        from = {
+            is_megastructure_type = crisis_sphere_4
+        }
+    }
+}
+
+#Unlock mega, fire after random days
+country_event = {
+    id = TFO.759
+    is_triggered_only = yes
+    fire_only_once = yes
+    hide_window = yes
+
+    trigger = {
+        TFO_can_unlock_mega = yes
+    }
+
+    immediate = {
+        log = "mega unlock event is fired by \\[This.GetName]"
+        country_event = {
+            id = TFO.12
+            days = 1
+            random = 180
+        }
+    }
+}
+
+#After SRC is built, set flag for first upgrade in 5 years
+country_event = {
+    id = TFO.760
+    is_triggered_only = yes
+    fire_only_once = yes
+    hide_window = yes
+
+    trigger = {
+        from = {
+            is_megastructure_type = TFO_mega_research_station_1
+        }
+    }
+
+    immediate = {
+        event_target:TFO_leader_owner = {
+            country_event = {
+                id = TFO.761
+                days = 1800
+            }
+        }
+    }
+}
+
+country_event = {
+    id = TFO.761
+    is_triggered_only = yes
+    fire_only_once = yes
+    hide_window = yes
+
+    immediate = {
+        set_country_flag = TFO_can_unlock_mega_1st_upgrade_flag
+    }
+}
+
+country_event = {
+    id = TFO.762
+    is_triggered_only = yes
+    fire_only_once = yes
+    hide_window = yes
+
+    trigger = {
+        TFO_can_unlock_mega_1st_upgrade = yes
+    }
+
+    immediate = {
+        country_event = {
+            id = TFO.15
+            days = 1
+            random = 180
+        }
+    }
+}
+
+#After ATG is built, set flag for technology in 3 years and NMPA for 5 years
+country_event = {
+    id = TFO.763
+    is_triggered_only = yes
+    fire_only_once = yes
+    hide_window = yes
+
+    trigger = {
+        from = {
+            is_megastructure_type = TFO_mega_research_station_2
+        }
+    }
+
+    immediate = {
+        event_target:TFO_leader_owner = {
+            country_event = {
+                id = TFO.764
+                days = 1080
+            }
+            country_event = {
+                id = TFO.765
+                days = 1800
+            }
+        }
+    }
+}
+
+country_event = {
+    id = TFO.764
+    is_triggered_only = yes
+    fire_only_once = yes
+    hide_window = yes
+
+    immediate = {
+        set_country_flag = TFO_can_unlock_shroud_condensers_flag
+    }
+}
+
+country_event = {
+    id = TFO.765
+    is_triggered_only = yes
+    fire_only_once = yes
+    hide_window = yes
+
+    immediate = {
+        set_country_flag = TFO_can_unlock_mega_2nd_upgrade_flag
+    }
+}
+
+#Unlock 2nd upgrade when final crisis stage
+country_event = {
+    id = TFO.766
+    is_triggered_only = yes
+    fire_only_once = yes
+    hide_window = yes
+
+    trigger = {
+        TFO_can_unlock_mega_2nd_upgrade = yes
+    }
+
+    immediate = {
+        country_event = {
+            id = TFO.18
+            days = 1
+            random = 180
+        }
+    }
+}

@@ -1,0 +1,137 @@
+### MOD NAME:
+### The Forgotten One
+### CONTRIBUTORS:
+### AlexMeowler
+
+spawn_TFO = {
+    set_global_flag = TFO_system_spawned
+
+    spawn_system = {
+        initializer = TFO_the_other_side
+        max_jumps = 0
+        hyperlane = yes
+    }
+}
+
+#To be called directly from TFO.2 event (to avoid code duplication)
+TFO_event_2_add_trait_and_start_chain = {
+    if = {
+        limit = {
+            exists = fromfromfrom
+            exists = fromfromfrom.leader
+        }
+
+        fromfromfrom.leader = {
+            add_trait = leader_trait_carefree
+        }
+    }
+
+    hidden_effect = {
+        country_event = {
+            id = TFO.3
+            days = 1
+            scopes = {
+                from = from
+            }
+        }
+    }
+}
+
+#Country scope
+TFO_set_year_variable = {
+    set_variable = {
+        which = TFO_first_contact_date
+        value = 2200
+    }
+    change_variable = {
+        which = TFO_first_contact_date
+        value = this.trigger:years_passed
+    }
+}
+
+#Country scope
+TFO_fire_second_contact_ready_event = {
+    country_event = {
+        id = TFO.7
+        days = 720
+        random = 360
+    }
+}
+
+#Leader scope
+TFO_set_leader_traits = {
+    remove_all_traits = yes
+    if = {
+        limit = {
+            owner = {
+                is_gestalt = no
+            }
+        }
+
+        add_trait_no_notify = subclass_scientist_councilor
+        add_trait_no_notify = leader_trait_inquisitive_2
+        add_trait_no_notify = leader_trait_expertise_particles_2
+        add_trait_no_notify = leader_trait_expertise_field_manipulation_2
+        add_trait_no_notify = leader_trait_expertise_voidcraft_2
+        add_trait_no_notify = leader_trait_spark_of_genius_2
+    }
+    else = {
+        add_trait_no_notify = subclass_scientist_governor
+        add_trait_no_notify = leader_trait_collaborator_2
+        add_trait_no_notify = leader_trait_manufacturer_2
+        add_trait_no_notify = TFO_leader_trait_philosopher
+        add_trait_no_notify = leader_trait_physics_focus_2
+        add_trait_no_notify = leader_trait_adventurous_spirit_3
+    }
+}
+
+#Leader scope
+TFO_add_leader_destiny_trait = {
+    add_skill_without_trait_selection = 1
+    if = {
+        limit = {
+            owner = {
+                is_gestalt = no
+            }
+        }
+
+        add_trait = TFO_leader_trait_relict_from_the_past
+    }
+    else = {
+        add_trait = TFO_leader_trait_relict_from_the_past_gestalt
+    }
+}
+
+#Any scope
+TFO_spawn_SCP = {
+    event_target:TFO_system = {
+        spawn_megastructure = {
+            type = TFO_stable_construction_point
+            owner = this.space_owner
+            planet = star
+            init_effect = {
+                save_global_event_target_as = TFO_megastructure
+            }
+        }
+    }
+}
+
+#Country scope
+TFO_buff_AE = {
+    every_owned_megastructure = {
+        limit = {
+            is_crisis_sphere = yes
+            NOT = {
+                has_modifier = TFO_ATG_AE_build_buff
+            }
+        }
+        add_modifier = {
+            modifier = TFO_ATG_AE_build_buff
+        }
+    }
+}
+
+#Situation scope
+TFO_de = {
+
+}
