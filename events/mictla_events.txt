@@ -1,0 +1,1263 @@
+# mictla_arc_events
+#pat173
+
+namespace = mictla_arc_events
+ship_event = {
+	id = mictla_arc_events.1
+	is_triggered_only = yes
+	title = "mictla_arc_events.1.name"
+	desc = "mictla_arc_events.1.desc"
+	picture = GFX_evt_ancient_alien_temple
+	show_sound = event_ghost_town
+
+	immediate = {
+		set_global_flag = mictla_site_started
+		from = { prevent_anomaly = yes }
+	}
+
+	option = {
+		name = mictla_temple_intro_a
+
+		from = {
+			create_archaeological_site = site_mictla_temple
+		}
+	}
+}
+fleet_event = { #The Descent
+	id = mictla_arc_events.2
+	is_triggered_only = yes
+	archaeology = yes
+	title = "mictla_arc_events.2.name"
+	desc = "mictla_arc_events.2.desc"
+	picture = GFX_evt_excavation_team
+	show_sound = event_wind_ruins
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no }
+	}
+
+	option = {
+		name = "mictla_arc_events.2.a"
+	}
+}
+
+fleet_event = { #Rubble Pile
+	id = mictla_arc_events.3
+	is_triggered_only = yes
+	archaeology = yes
+	title = "mictla_arc_events.3.name"
+	desc = "mictla_arc_events.3.desc"
+	picture = GFX_evt_in_the_dark
+	show_sound = event_dig_site
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no }
+
+		}
+
+	option = {
+		name = "mictla_arc_events.3.a"
+	}
+
+	option = {
+		name = "mictla_arc_events.3.b"
+		
+		hidden_effect = {
+			orbit = {
+				archaeological_site = {
+					set_archaeology_flag = mictla_difficulty_increased_S
+				}
+			}
+		}
+
+		fleet_event = {
+			id = mictla_arc_events.98
+			days = 10
+		}
+
+	}
+
+	option = { 
+		name = "mictla_arc_events.3.c"
+
+		hidden_effect = {
+			orbit = {
+				archaeological_site = {
+					set_archaeology_flag = mictla_difficulty_increased_M
+				}
+			}
+		}
+
+		fleet_event = {
+			id = mictla_arc_events.98
+			days = 10
+		}
+	}
+}
+
+fleet_event = { #Extended Excavation
+	id = mictla_arc_events.98
+	archaeology = yes
+	is_triggered_only = yes
+	title = "mictla_arc_events.3a.name"
+	desc = "mictla_arc_events.3a.desc"
+	picture = GFX_evt_habitable_dig_site
+	show_sound = event_collapsing_ruins
+
+	option = {
+		name = UNFORTUNATE
+		orbit = {
+			archaeological_site = {
+				if = {
+					limit = { has_archaeology_flag = mictla_difficulty_increased_S } 
+					set_site_progress_locked = yes
+					prevprev = {
+						fleet_event = {
+							id = mictla_arc_events.99
+							days = 360
+						}
+					}
+				} 
+					
+				if = {
+					limit = { has_archaeology_flag = mictla_difficulty_increased_M } 
+					set_site_progress_locked = yes
+					prevprev = {
+						fleet_event = {
+							id = mictla_arc_events.99
+							days = 1080
+						}
+					}
+				} 
+	
+				}
+		}
+		
+	}
+}
+
+fleet_event = { #Resumed Excavation
+	id = mictla_arc_events.99
+	archaeology = yes
+	is_triggered_only = yes
+	title = "mictla_arc_events.3b.name"
+	desc = "mictla_arc_events.3b.desc"
+	picture = GFX_evt_habitable_dig_site
+	show_sound = event_drilling
+
+	option = {
+		name = GOOD
+		orbit = {
+			archaeological_site = {
+				set_site_progress_locked = no
+				}
+		}
+		
+		if = {
+			limit = {
+				orbit = {
+					archaeological_site = {
+						has_archaeology_flag = mictla_difficulty_increased_S
+					}
+				}
+			}
+			small_artifact_reward = yes
+
+			if = {
+				limit = { has_ancrel = no }
+				owner = {
+					add_resource = { consumer_goods = 500 }
+					add_resource = { minerals = 1000 }
+				}
+			}
+
+		}
+
+		if = {
+			limit = {
+				orbit = {
+					archaeological_site = {
+						has_archaeology_flag = mictla_difficulty_increased_M
+					}
+				}
+			}
+			medium_artifact_reward = yes
+
+			if = {
+				limit = { has_ancrel = no }
+				owner = {
+					add_resource = { consumer_goods = 2000 }
+					add_resource = { minerals = 2000 }
+				}
+			}
+
+		}
+	}
+}
+
+fleet_event = { #Chamber Complex
+	id = mictla_arc_events.4
+	is_triggered_only = yes
+	archaeology = yes
+	title = "mictla_arc_events.4.name"
+	desc = "mictla_arc_events.4.desc"
+	picture = GFX_evt_underground_city
+	show_sound = event_drilling
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no }
+	}
+
+	option = {
+		name = "mictla_arc_events.4.a"
+
+	}
+}
+
+fleet_event = { #Religious Vault
+	id = mictla_arc_events.5
+	is_triggered_only = yes
+	archaeology = yes
+	title = "mictla_arc_events.5.name"
+	desc = "mictla_arc_events.5.desc"
+	picture = GFX_evt_treasure_pile
+	show_sound = event_finding_loot
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no }
+	}
+
+	option = {
+		name = "mictla_arc_events.5.a"
+		medium_artifact_reward = yes
+		owner = {
+			add_resource = {
+				rare_crystals = 200
+			}
+		}
+	}
+}
+
+fleet_event = { #Archive Room
+	id = mictla_arc_events.6
+	is_triggered_only = yes
+	archaeology = yes
+	title = "mictla_arc_events.6.name"
+	desc = "mictla_arc_events.6.desc"
+	picture = GFX_evt_ancient_records
+	show_sound = event_bad_omen
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no }
+	}
+
+	option = {
+		name = "mictla_arc_events.6.a"
+	}
+}
+
+fleet_event = { #Sealed Conciousness
+	id = mictla_arc_events.7
+	is_triggered_only = yes
+	archaeology = yes
+	title = "mictla_arc_events.7.name"
+	desc = "mictla_arc_events.7.desc"
+	picture = GFX_evt_necrophage
+	show_sound = event_bad_omen
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+		leader = {
+			save_event_target_as = leader_scientist
+		}
+	}
+
+	after = {
+		from = { set_site_progress_locked = no }
+	}
+
+	option = {
+		name = "mictla_arc_events.7.a"
+		trigger = {
+			event_target:leader_scientist = {
+				species = {
+					is_robotic = no
+				}
+			}
+		} 
+		hidden_effect = {
+			event_target:leader_scientist = {
+				kill_leader = { show_notification = no }
+			}
+		}
+		event_target:leader_scientist = {
+			species = {
+				save_event_target_as = mictla_species
+			}
+		}
+
+		owner = {
+			country_event = {
+				id = mictla_events.1
+				days = 30
+			}
+		}
+	}
+
+	option = {
+		name = "mictla_arc_events.7.b"
+		trigger = {
+			owner_main_species = {
+				is_robotic = no
+			}
+		}
+		owner = {
+			country_event = {
+				id = mictla_events.1
+				days = 30
+			}
+			owner_main_species = {
+				save_event_target_as = mictla_species
+			}
+		}
+	}
+
+	option = {
+		name = "mictla_arc_events.7.c"
+
+	}
+}
+
+fleet_event = {
+	id = mictla_arc_events.11
+	is_triggered_only = yes
+	archaeology = yes
+	title = "mictla_arc_events.11.name"
+	desc = "mictla_arc_events.11.desc"
+	picture = GFX_evt_disease_outbreak
+	show_sound = event_bad_omen
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no }
+	}
+
+	option = {
+		name = "mictla_arc_events.11.a"
+	}
+}
+
+fleet_event = {
+	id = mictla_arc_events.12
+	is_triggered_only = yes
+	archaeology = yes
+	title = "mictla_arc_events.12.name"
+	desc = "mictla_arc_events.12.desc"
+	picture = GFX_evt_infested
+	show_sound = event_bad_omen
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no }
+	}
+
+	option = {
+		name = "mictla_arc_events.12.a"
+	}
+}
+
+fleet_event = {
+	id = mictla_arc_events.13
+	is_triggered_only = yes
+	archaeology = yes
+	title = "mictla_arc_events.13.name"
+	desc = "mictla_arc_events.13.desc"
+	picture = GFX_evt_surreal_visions
+	show_sound = event_bad_omen
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no }
+	}
+
+	option = {
+		name = "mictla_arc_events.13.a"
+		trigger = {
+			owner = {
+				has_country_flag = mictla_recruited
+			}
+		}
+		owner = {
+			country_event = {
+				id = mictla_arc_events.14
+			}
+		}
+	}
+
+	option = {
+		name = "mictla_arc_events.14.b" #If only Mictla was still around, we could understand how to use this.
+		trigger = {
+			owner = {
+				NOT = {
+					has_country_flag = mictla_recruited
+				}
+			}
+		}
+	}
+}
+
+country_event = { #Wailing resonance acquired
+	id = mictla_arc_events.14
+	is_triggered_only = yes
+	title = "mictla_arc_events.14.name"
+	desc = "mictla_arc_events.14.desc"
+	picture = GFX_evt_ancient_records
+	show_sound = event_bad_omen
+	diplomatic_title = BLANK_STRING
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:mictla_leader
+		room = enclave_curator_room
+	}	
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no }
+	}
+
+	option = {
+		name = "mictla_arc_events.14.a"
+
+		owner = {
+			add_relic = r_mictla_wail
+			hidden_effect = {
+				country_event = {
+					id = mictla_events.3
+					days = 720
+				}
+			}
+		}
+	}
+}
+
+namespace = mictla_events
+
+country_event = {
+	id = mictla_events.1
+	title = "mictla_events.1.name"
+	desc = "mictla_events.1.desc"
+	show_sound = event_necrophage
+	picture = GFX_evt_necrophage
+
+	is_triggered_only = yes
+
+
+	option = {
+		name = CURIOUS
+		country_event = {
+			id = mictla_events.2
+		}
+	}
+	
+}
+
+country_event = { #Hiring Mictla
+	id = mictla_events.2
+	title = "mictla_events.2.name"
+	desc = "mictla_events.2.desc"
+	show_sound = event_necrophage
+	picture = GFX_leader_recruitment_bg_legendary_mictla
+	is_triggered_only = yes
+
+
+	event_window_type = leader_recruit
+
+	immediate = {
+		create_leader = {
+			species = event_target:mictla_species
+			event_leader = yes
+			class = scientist
+			name = "NAME_Mictla"
+			skill = 2
+			immortal = yes
+			randomize_traits = no
+			can_manually_change_location = no
+			can_assign_to_council = yes
+			skip_background_generation = yes
+			custom_catch_phrase = mictla_catchphrase
+			custom_description = mictla_backstory
+			traits = {
+				trait = leader_trait_mictla
+			}
+			gender = indeterminable
+			set_age = 0
+			hide_age = yes
+			effect = {
+
+				species = {
+					save_global_event_target_as = mictla_species
+				}
+
+				save_global_event_target_as = mictla_leader
+				set_leader_flag = legendary_leader
+				set_leader_flag = mictla
+				set_leader_flag = immune_to_negative_traits
+				set_leader_flag = leader_death_events_blocked
+			}
+		}
+	}
+
+	picture_event_data = {
+		portrait = event_target:mictla_leader
+		room = galactic_emperor_room
+	}
+
+	option = {
+		name = "mictla_events.question.a"
+		response_text = "mictla_events.desc.a"
+		is_dialog_only = yes
+	}
+	option = {
+		name = "mictla_events.question.b"
+		response_text = "mictla_events.desc.b"
+		is_dialog_only = yes
+	}
+	option = {
+		name = "mictla_events.question.c"
+		response_text = "mictla_events.desc.c"
+		is_dialog_only = yes
+	}
+	option = {
+		name = mictla_events.2.a
+		# Special tag to make mark this is the hire option
+		custom_tooltip = mictla_events.2.a_custom_tooltip
+		tag = hire_leader
+		sound = event_bad_omen
+
+		create_message = {
+			type = MESSAGE_RECRUITED_LEADER
+			localization =  MESSAGE_RECRUITED_LEADER_DESC
+			days = @toast_message_days
+			target = event_target:mictla_leader
+			variable = {
+				type = name
+				localization = LEADER
+				scope = event_target:mictla_leader
+			}
+			variable = {
+				key = "border"
+				value = "GFX_border_legendary"
+			}
+		}
+		set_country_flag = mictla_recruited
+
+		event_target:mictla_leader = {
+			set_owner = root
+		}
+
+		hidden_effect = {
+			country_event = {
+				id = mictla_pulse_events.3 days = 360 #Pulse event?
+			}
+			country_event = {
+				id = mictla_events.99 days = 3600 #Pulse event?
+			}
+			random_owned_planet = {
+				limit = {
+					is_variable_set = paragon_memory_vault
+				}
+				change_variable = {
+					which = paragon_memory_vault
+					value = 1
+				}
+			}
+		}
+	}
+	option = {
+		name = mictla_events.2.d
+		custom_tooltip = mictla_events.2.d_custom_tooltip
+		# Special tag to mark this as the dismiss option
+		tag = dismiss_leader
+		remove_country_flag = mictla_recruited
+		event_target:mictla_leader = {
+			exile_leader_as = exiled_leader
+		}
+		sound = event_ghost_town
+	}
+}
+
+country_event = { # Setup for mictla sovereignty, triggered after activating the relic
+	id = mictla_events.3
+	title = "mictla_events.3.name"
+	desc = "mictla_events.3.desc"
+	show_sound = event_necrophage
+	picture = GFX_evt_necrophage
+	fire_only_once = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = used_mictla_relic
+	}
+
+	after = {
+		owner = {
+			start_situation = {
+				type = situation_mictla_resonant_pulse
+			}
+		}
+
+	}
+
+	option = {
+		trigger = {
+			has_ethic = ethic_spiritualist
+			has_country_flag = mictla_recruited
+		}
+
+		name = "mictla_events.3.a"
+	}
+
+	option = {
+		trigger = {
+			has_country_flag = mictla_recruited
+		}
+
+		name = "mictla_events.3.a"
+	}
+
+	option = {
+		name = "mictla_events.3.b"
+
+		trigger = {
+			NOT = {
+				has_country_flag = mictla_recruited
+			}
+		}
+
+		add_modifier = {
+			modifier = mictla_wailing_resonance_consequences
+			days = 3600
+		}
+	}
+	
+}
+
+country_event = { # If dismissed Mictla during situation
+	id = mictla_events.4
+	title = "mictla_events.3.name"
+	desc = "mictla_events.3.desc"
+	show_sound = event_necrophage
+	picture = GFX_evt_necrophage
+	fire_only_once = yes
+	is_triggered_only = yes
+
+	after = {
+		owner = {
+			add_modifier = {
+				modifier = mictla_rejected_gift
+				days = 7200
+			}
+		}
+
+	}
+
+	option = {
+		name = UNFORTUNATE
+	}
+	
+}
+
+country_event = { # If finished situation submitting, Mictla Becomes Ruler
+	id = mictla_events.5
+	title = "mictla_events.5.name"
+	desc = "mictla_events.5.desc"
+	picture = GFX_evt_psionics
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+
+	trigger = {
+		is_country_type = default
+		NOT = { has_country_flag = chosen_one_ruler_event }
+		OR = {
+			# Either you've not Imperial and have a Chosen One
+			AND = {
+				OR = {
+					has_authority = auth_democratic
+					has_authority = auth_oligarchic
+					has_authority = auth_imperial
+					has_authority = auth_corporate
+				}
+				any_owned_leader = {
+					has_leader_flag = mictla
+				}
+			}
+			# Or you're Imperial and the Chosen One is your current ruler or heir.
+			AND = {
+				has_authority = auth_dictatorial
+				any_owned_leader = {
+					has_leader_flag = mictla
+					is_ruler = yes
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "mictla_events.5.b"
+		if = {
+			limit = {
+				has_origin = origin_legendary_leader_imperial
+			}
+			set_origin = origin_legendary_leader_dictatorial
+		}
+		shift_ethic = "ethic_authoritarian"
+		shift_ethic = "ethic_fanatic_spiritualist"
+		change_government = {
+			authority = auth_dictatorial
+			cooldown = no
+			remove_invalid_civics = yes
+		}
+		enable_special_project = {
+			name = MICTLA_MUTUALISM
+		}
+ 		set_government_cooldown = no
+		set_country_flag = mictla_leading
+		add_modifier = {
+			modifier = mictla_accepted_gift
+			days = 3600
+		}
+		# The ruler doesn't need to abdicate if they're being crowned.
+		if = {
+			limit = {
+				ruler = {
+					NOT = {
+						is_same_value = event_target:mictla_leader
+					}
+				}
+			}
+			set_leader = event_target:mictla_leader
+		}
+		hidden_effect = {
+			set_ruler_title_male = "Resonant"
+			set_ruler_title_female = "Resonant"
+			country_event = { id = utopia.3402 days = 5 }
+		}
+	}
+}
+
+country_event = { # Assimilate Mictla onto government and pops, triggered by finishing special project
+	id = mictla_events.6
+	title = "mictla_events.6.name"
+	desc = "mictla_events.6.desc"
+	picture = GFX_evt_psionics
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+
+	immediate = {
+		every_owned_pop = {
+			LIMIT = {
+				has_ethic = ethic_spiritualist
+				species = {
+					is_robotic = no
+				}
+			}
+			modify_species = {
+				species = this
+						add_trait = trait_mictla_mutualism
+						add_traits_at_start_of_list = yes
+						effect = {
+							set_citizenship_type = {
+								country = root.owner
+								type = citizenship_full
+								cooldown = no
+							}
+						}
+			}
+		}
+	}
+
+	option = {
+		name = GOOD
+		force_add_civic = mictla_sovereign
+		custom_tooltip = mictla_mutualism_project_success
+	}
+
+}
+
+country_event = { # If finished situation Resisting
+	id = mictla_events.7
+	title = "mictla_events.7.name"
+	desc = "mictla_events.7.desc"
+	show_sound = event_necrophage
+	picture = GFX_evt_necrophage
+	fire_only_once = yes
+	is_triggered_only = yes
+	diplomatic_title = BLANK_STRING
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:mictla_leader
+		room = enclave_curator_room
+	}	
+
+	after = {
+		add_modifier = {
+			modifier = mictla_wailing_resonance_consequences
+			days = 3600
+		}
+	}
+
+	option = {
+		name = GOOD
+	}
+	
+}
+
+country_event = { #UTILITY - Mictla Pulse Events Launcher
+	id = mictla_events.99
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_flag = mictla_recruited
+	}
+
+	immediate = {
+		fire_on_action = { on_action = on_decade_pulse_mictla_country }
+		country_event = {
+			id = mictla_events.99 days = 3600 random = 5400
+		}
+	}
+}
+
+namespace = mictla_situation_events
+
+situation_event = { # The Mictla Cult Purge
+	id = mictla_situation_events.1
+	title = "mictla_situation_events.1.name"
+	desc = "mictla_situation_events.1.desc"
+	show_sound = event_necrophage
+	picture = GFX_evt_necrophage
+	is_triggered_only = yes
+
+	after = {
+
+		owner = {
+			random_owned_leader = {
+				limit = { 
+					NOT = {
+						has_leader_flag = legendary_leader
+					}
+					is_ruler = no
+					}
+				kill_leader = {
+					show_notification = yes
+				}
+			}
+		}
+
+		custom_tooltip = "mictla_situation_events_popsDied"
+		hidden_effect = {
+			owner = {
+				while = {
+					count = 5
+					random_owned_pop = {
+						limit = {
+							is_sapient = yes
+						}
+						kill_pop = yes
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "mictla_situation_events.1.a"
+	}
+}
+
+situation_event = { # The Mictla veneration growing
+	id = mictla_situation_events.2
+	title = "mictla_situation_events.2.name"
+	desc = "mictla_situation_events.2.desc"
+	show_sound = event_necrophage
+	picture = GFX_evt_necrophage
+	is_triggered_only = yes
+
+	after = {
+
+		custom_tooltip = "mictla_situation_events_popsConverted"
+		hidden_effect = {
+			owner = {
+				while = {
+					count = 5
+					random_owned_pop = {
+						limit = {
+							is_sapient = yes
+						}
+						pop_change_ethic = ethic_spiritualist
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		trigger = {
+			owner = {
+				has_ethic = ethic_spiritualist
+			}
+		}
+		name = GOOD
+	}
+
+	option = {
+		name = CURIOUS
+	}
+}
+
+situation_event = { # The Mictla veneration growing
+	id = mictla_situation_events.3
+	title = "mictla_situation_events.3.name"
+	desc = "mictla_situation_events.3.desc"
+	show_sound = event_necrophage
+	picture = GFX_evt_necrophage
+	is_triggered_only = yes
+
+	after = {
+
+		custom_tooltip = "mictla_situation_events_popsConverted"
+		hidden_effect = {
+			owner = {
+
+				while = {
+					count = 10
+					random_owned_pop = {
+						limit = {
+							is_sapient = yes
+						}
+						pop_change_ethic = ethic_spiritualist
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		trigger = {
+			owner = {
+				has_ethic = ethic_spiritualist
+			}
+		}
+		name = GOOD
+	}
+
+	option = {
+		name = CURIOUS
+	}
+}
+
+namespace = mictla_pulse_events
+
+country_event = { #Get Unique Technology - Formless Flesh
+	id = mictla_pulse_events.1
+	title = "mictla_pulse_events.1.name"
+	desc = "mictla_pulse_events.1.desc"
+	picture = GFX_evt_engineering_research
+	show_sound = event_bad_omen
+	is_triggered_only = yes
+	fire_only_once = yes
+	diplomatic_title = BLANK_STRING
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:mictla_leader
+		room = enclave_curator_room
+	}	
+
+
+	trigger = {
+		has_country_flag = mictla_recruited
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = "mictla_pulse_events.1.a"
+		add_research_option = tech_mictla_formless_flesh
+		add_tech_progress = {
+			tech = tech_mictla_formless_flesh
+			progress = 0.15
+		}
+	}
+}
+
+country_event = { #Get Unique Technology - Tuned Cells
+	id = mictla_pulse_events.2
+	title = "mictla_pulse_events.2.name"
+	desc = "mictla_pulse_events.2.desc"
+	picture = GFX_evt_engineering_research
+	show_sound = event_bad_omen
+	is_triggered_only = yes
+	fire_only_once = yes
+	diplomatic_title = BLANK_STRING
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:mictla_leader
+		room = enclave_curator_room
+	}	
+
+
+	trigger = {
+		has_country_flag = mictla_recruited
+	}
+
+	immediate = {
+	}
+
+	option = { #Get Mictla leader tech, unhappiness
+		name = "mictla_pulse_events.2.a"
+		add_research_option = tech_mictla_leader_communalism
+		add_tech_progress = {
+			tech = tech_mictla_leader_communalism
+			progress = 0.10
+		}
+		if = {
+			limit = { 
+				NOT = {
+					has_country_flag = mictla_leading 
+				}
+			}
+			add_modifier = {
+				modifier = pop_mictla_unhappiness_modifier
+				days = 3600
+			}
+		}
+	}
+
+	option = {
+		name = "mictla_pulse_events.2.b"
+		trigger = {
+			has_country_flag = mictla_leading
+		}
+		add_research_option = tech_mictla_leader_communalism
+		add_tech_progress = {
+			tech = tech_mictla_leader_communalism
+			progress = 0.10
+		}
+	}
+
+	option = {
+		name = "mictla_pulse_events.2.c"
+	}
+}
+
+country_event = { #Price to pay
+	id = mictla_pulse_events.3
+	title = "mictla_pulse_events.3.name"
+	desc = "mictla_pulse_events.3.desc"
+	picture = GFX_evt_engineering_research
+	show_sound = event_bad_omen
+	is_triggered_only = yes
+	diplomatic_title = BLANK_STRING
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:mictla_leader
+		room = enclave_curator_room
+	}	
+
+
+	trigger = {
+		AND = {
+			has_country_flag = mictla_recruited
+			NOT = {
+				event_target:mictla_leader = {
+					has_level = 10
+				}
+			}
+		}
+	}
+
+	immediate = {
+		country_event = {
+			id = mictla_pulse_events.3 days = 1800 random = 1600
+		}
+	}
+
+	option = { 
+		name = "mictla_pulse_events.3.a"
+
+		random_owned_leader = {
+			limit = { 
+				NOT = {
+					has_leader_flag = legendary_leader
+				}
+				is_ruler = no
+				}
+			kill_leader = {
+				show_notification = yes
+			}
+		}
+		event_target:mictla_leader = {
+			add_skill = 1
+		}
+		#Kill a leader, level mictla up?
+	}
+	option = {
+		name = "mictla_pulse_events.3.b"
+	}
+
+	option = {
+		name = "mictla_pulse_events.3.c"
+
+		event_target:mictla_leader = {
+			exile_leader_as = exiled_leader
+		}
+		#Dismiss mictla
+	}
+}
+
+country_event = { #Mictla Relic
+	id = mictla_pulse_events.4
+	is_triggered_only = yes
+	title = "mictla_pulse_events.4.name"
+	desc = "mictla_pulse_events.4.desc"
+	picture = GFX_evt_engineering_research
+	fire_only_once = yes
+	diplomatic_title = BLANK_STRING
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:mictla_leader
+		room = enclave_curator_room
+	}	
+
+	option = { 								# Mictla allowed
+		name = CURIOUS
+		if = {
+			capital_scope = {
+				solar_system = {
+					random_neighbor_system = {
+						limit = {
+							distance = {
+								min_jumps = 1
+								max_jumps = 1
+							}
+						}
+						spawn_mictla_relic = yes
+					}
+				}
+			}
+		}
+	}
+
+}
+
+namespace = mictla_bridge
+
+planet_event = {
+	id = mictla_bridge.1
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_planet_flag = mictla_planet
+	}
+
+	immediate = {
+		log = "mictla anomaly"
+		add_anomaly = {
+			category = mictla_planet_anomaly #change
+			target = from
+		}
+	}
+}
+
+planet_event = {
+	id = mictla_bridge.2
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_planet_flag = mictla_whispers_planet
+	}
+
+	immediate = {
+		create_archaeological_site = site_mictla_whispers
+	}
+}
+
+country_event = {
+	id = mictla_bridge.3
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_country_flag = mictla_recruited
+		from = {
+			event_target:mictla_leader = {
+				has_leader_flag = mictla
+			}
+		}
+	}
+
+	immediate = {
+		owner = {
+			country_event = {
+				id = mictla_bridge.4
+				days = 2
+			}
+		}
+
+	}
+}
+
+country_event = {
+	id = mictla_bridge.4
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { exists = event_target:mictla_leader }
+	}
+
+	immediate = {
+		remove_country_flag = mictla_recruited
+		remove_country_flag = mictla_leading
+		clear_global_event_target = mictla_leader
+		clear_global_event_target = mictla_species
+	}
+}
+
