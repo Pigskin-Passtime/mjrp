@@ -1,0 +1,117 @@
+
+#Spawn Planet and System
+ursa_minor_leader_start_site = {
+	name = "NAME_Ursa_Major_Leader_System"
+	class = sc_black_hole
+	usage = misc_system_init
+	spawn_chance = 0
+	usage_odds = {
+		base = 0
+	}
+	max_instances = 1
+	flags = { legendary_leader_spawn_system }
+	init_effect = {
+		random_system = {
+			spawn_system = {
+				min_distance = 10
+				max_distance = 30
+				max_jumps = 0
+				initializer = "legendary_leader_1st_site"
+				hyperlane = yes
+				is_discovered = yes
+			}
+		}
+		reroll_random = yes
+		random_system = {
+			spawn_system = {
+				min_distance = 10
+				max_distance = 30
+				max_jumps = 0
+				initializer = "legendary_leader_2nd_site"
+				hyperlane = yes
+				is_discovered = yes
+			}
+		}
+		reroll_random = yes
+		random_system = {
+			spawn_system = {
+				min_distance = 10
+				max_distance = 30
+				max_jumps = 0
+				initializer = "legendary_leader_3rd_site"
+				hyperlane = yes
+				is_discovered = yes
+			}
+		}
+	}
+
+
+	planet = {
+		count = 1
+		class = star
+		orbit_distance = 0
+		orbit_angle = 1
+		size = 30
+		has_ring = no
+	}
+
+	change_orbit = 60
+
+	planet = {
+		class = pc_barren
+		orbit_angle = 15
+		size = 16
+		flags = { ursa_minor_spawning_planet }
+		#flags = { legendary_leader_meet_point legendary_leader_planet }
+
+		init_effect = {
+			clear_deposits = yes
+			prevent_anomaly = yes
+			save_global_event_target_as = ursa_minor_planet
+
+			create_country = {
+				name = "NAME_Ursa_Minor_Jamming_Drone"
+				type = faction
+			}
+			last_created_country = {
+				set_country_flag = ursa_minor_jamming_drone_country
+	
+				create_fleet = {
+					name = "NAME_Ursa_Minor_Jamming_Drone_fleet"
+					settings = { spawn_debris = no }
+					effect = {
+						set_owner = PREV
+						set_fleet_flag = ursa_minor_jamming_drone_fleet
+						create_ship = {
+							name = "NAME_Ursa_Minor_Jamming_Drone_ship"
+							design = "NAME_Ursa_Minor_Jamming_Drone_class"
+							graphical_culture = "mammalian_01"
+						}
+						create_ship = {
+							name = "NAME_Ursa_Minor_Jamming_Drone_ship"
+							design = "NAME_Ursa_Minor_Jamming_Drone_class"
+							graphical_culture = "mammalian_01"
+						}
+						create_ship = {
+							name = "NAME_Ursa_Minor_Jamming_Drone_ship"
+							design = "NAME_Ursa_Minor_Jamming_Drone_class"
+							graphical_culture = "mammalian_01"
+						}
+						create_ship = {
+							name = "NAME_Ursa_Minor_Jamming_Drone_ship"
+							design = "NAME_Ursa_Minor_Jamming_Drone_class"
+							graphical_culture = "mammalian_01"
+						}
+						set_location = event_target:ursa_minor_planet
+						set_fleet_stance = aggressive
+						set_aggro_range_measure_from = return_point
+						set_aggro_range = 20 #very small range, it only cares about jamming signals
+					}
+				}
+			}
+		}
+		
+
+	}
+
+}
