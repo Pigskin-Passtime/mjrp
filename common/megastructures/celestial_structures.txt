@@ -1,0 +1,127 @@
+# celestial_structures.txt
+# By MadeinCanada
+
+celestial_crystal_gate = {
+	entity = "natural_wormhole_entity"
+	portrait = "GFX_megastructure_underpass_background"
+	place_entity_on_planet_plane = no
+	show_galactic_map_icon = no
+	show_in_outliner = no
+	potential = {
+		has_country_flag = celestial_unlocked_underpasses
+	}
+	possible = {
+	}
+	upgrade_from = {
+	}
+	build_time = 1800
+	resources = {
+		category = megastructures
+		cost = {
+			alloys = 2500
+			energy = 6000
+		}
+	}
+	construction_blocks_and_blocked_by = self_type
+
+	bypass_type = celestial_underpass
+	on_build_complete = {
+		# activate_gateway = fromfrom
+	}
+}
+
+celestial_harmonic_resonator = {
+	entity = "plantoid_01_military_station_large_entity"
+	construction_entity = "plantoid_01_military_station_large_construction_entity"
+	portrait = "GFX_megastructure_resonator_background"
+	place_entity_on_planet_plane = no
+	build_outside_gravity_well = yes
+	show_galactic_map_icon = no
+	show_in_outliner = no
+	build_time = 720
+	resources = {
+		category = megastructures
+		cost = {
+			alloys = 2000
+			influence = 100
+		}
+
+		upkeep = {
+			energy = 5
+		}
+	}
+	construction_blocks_and_blocked_by = self_type
+
+	potential = {
+		has_technology = tech_celestial_harmonic_resonator
+	}
+
+	possible = {
+		exists = starbase
+		# custom_tooltip = {
+		# 	fail_text = "requires_inside_border_or_subject"
+		# 	OR = {
+		# 		is_inside_border = from
+		# 		AND = {
+		# 			exists = owner
+		# 			owner = {
+		# 				is_subject = yes
+		# 				overlord = { is_same_value = from }
+		# 			}
+		# 		}
+		# 	}
+		# }
+		custom_tooltip = {
+			fail_text = "requires_surveyed_system" # or is in my subject's territory
+			OR = {
+				NOT = {
+					any_system_planet = {
+						is_surveyed = {
+							who = prev.from
+							status = no
+						}
+					}
+				}
+				AND = {
+					exists = owner
+					owner = {
+						is_subject = yes
+						overlord = { is_same_value = from }
+					}
+				}
+			}
+		}
+		custom_tooltip = {
+			fail_text = "requires_no_existing_resonator"
+			NOR = {
+				has_megastructure = celestial_harmonic_resonator
+			}
+		}
+		custom_tooltip = {
+			fail_text = "requires_technology_resonator"
+			from = { has_technology = tech_celestial_harmonic_resonator }
+		}
+	}
+
+	placement_rules = {
+	}
+
+	# root = system
+	# from = country
+	ai_weight = {
+		factor = 0
+	}
+
+	on_build_queued = {
+	}
+	on_build_unqueued = {
+	}
+	on_build_complete = {
+		from = {
+			country_event = { id = celestial.5 }
+		}
+		root = {
+			system_event = { id = celestial.6 }
+		}
+	}
+}

@@ -1,0 +1,269 @@
+# celestial_diplomacy_events.txt
+# By MadeinCanada
+
+namespace = celestial_diplo
+
+# (Hidden) Set diplo flag
+country_event = {
+	id = celestial_diplo.0
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+		NOR = {
+			has_country_flag = celestial_diplo_opened
+		}
+		has_country_flag = celestial_cosmic_emporium_established
+		FROM = { is_country_type = celestial_emporium_country }
+	}
+
+	immediate = {
+		set_country_flag = celestial_diplo_opened  
+		if = {
+			limit = { has_country_flag = celestial_wayfarer_awol }
+			country_event = {
+				id = celestial_diplo.3
+			}
+		}
+		else = {
+			country_event = {
+				id = celestial_diplo.1
+			}
+		}
+	}
+}
+
+# Main Diplomacy Event
+country_event = {
+	id = celestial_diplo.1
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_caravaneer_window"
+	picture_event_data = {
+		portrait = event_target:celestial_emporium_country
+		room = paragon_keides_room
+    }
+
+	title = CELESTIAL_DIPLO_TITLE
+	desc = {
+		text = "celestial_diplo_1"
+	}
+	desc = {
+		text = "celestial_diplo_2"
+	}
+	desc = {
+		text = "celestial_diplo_3"
+	}
+	desc = {
+		text = "celestial_diplo_4"
+	}
+	desc = {
+		text = "celestial_diplo_5"
+	}
+	desc = {
+		text = "celestial_diplo_6"
+	}
+	desc = {
+		text = "celestial_diplo_7"
+	}
+	
+	trigger = {
+		exists = event_target:celestial_leader
+		NOR = {
+			has_country_flag = celestial_wayfarer_awol
+			# has_country_flag = celestial_diplo_opened
+		}
+	}
+
+	immediate = {
+	}
+
+	after = {
+		remove_country_flag = celestial_diplo_opened
+		hidden_effect = {
+        }
+	}
+
+	option = {
+		custom_gui = "enclave_caravaneer_option"
+		name = "celestial_diplo.1.a"
+		hidden_effect = {
+			country_event = {
+				id = celestial_diplo.2
+			}
+		}
+		allow = {
+			custom_tooltip_fail = {
+				text = celestial_emporium_scope_country
+				is_scope_type = country
+			}
+		}
+	}
+	option = {
+		custom_gui = "enclave_caravaneer_option"
+		default_hide_option = yes
+		name = "celestial_diplo.1.b"
+	}
+}
+
+country_event = {
+	id = celestial_diplo.2
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "celestial_diplomacy_window"
+	picture_event_data = {
+		portrait = event_target:celestial_emporium_country
+		room = paragon_keides_room
+    }
+
+	title = CELESTIAL_DIPLO_TITLE
+	desc = {
+		text = "celestial_diplo_8"
+	}
+	desc = {
+		text = "celestial_diplo_9"
+	}
+	desc = {
+		text = "celestial_diplo_10"
+	}
+	desc = {
+		text = "celestial_diplo_11"
+	}
+	desc = {
+		text = "celestial_diplo_12"
+	}
+	
+	trigger = {
+		exists = event_target:celestial_leader
+		NOR = {
+			has_global_flag = celestial_wayfarer_awol
+			# has_country_flag = celestial_diplo_opened
+		}
+	}
+
+	immediate = {
+	}
+
+	after = {
+		remove_country_flag = celestial_diplo_opened
+		hidden_effect = {
+        }
+	}
+	
+	option = {
+		custom_gui = "celestial_diplomacy_option"
+		name = "SELECT"
+		allow = {
+			custom_tooltip_fail = {
+				text = celestial_emporium_scope_country
+				is_scope_type = country
+			}
+			custom_tooltip_fail = {
+				text = celestial_emporium_relic_must_be_selected
+				OR = {
+					has_country_flag = celestial_emporium_relic_1
+					has_country_flag = celestial_emporium_relic_2
+					has_country_flag = celestial_emporium_relic_3
+					has_country_flag = celestial_emporium_relic_4
+					has_country_flag = celestial_emporium_relic_5
+					has_country_flag = celestial_emporium_relic_6
+				}
+			}
+			custom_tooltip_fail = {
+				text = celestial_emporium_relic_mission_ongoing
+				NOR = {
+					has_country_flag = celestial_relic_quest1_selected
+					has_country_flag = celestial_relic_quest2_selected
+					has_country_flag = celestial_relic_quest3_selected
+					has_country_flag = celestial_relic_quest4_selected
+					has_country_flag = celestial_relic_quest5_selected
+					has_country_flag = celestial_relic_quest6_selected
+				}
+			}
+		}
+		hidden_effect = {
+			# set country flag to make slot closed and add effect
+			if = {
+				limit = { has_country_flag = celestial_emporium_relic_1 }
+				set_country_flag = celestial_relic_quest1_selected
+			}
+			else_if = {
+				limit = { has_country_flag = celestial_emporium_relic_2 }
+				set_country_flag = celestial_relic_quest2_selected
+			}
+			else_if = {
+				limit = { has_country_flag = celestial_emporium_relic_3 }
+				set_country_flag = celestial_relic_quest3_selected
+			}
+			else_if = {
+				limit = { has_country_flag = celestial_emporium_relic_4 }
+				set_country_flag = celestial_relic_quest4_selected
+			}
+			else_if = {
+				limit = { has_country_flag = celestial_emporium_relic_5 }
+				set_country_flag = celestial_relic_quest5_selected
+			}
+			else_if = {
+				limit = { has_country_flag = celestial_emporium_relic_6 }
+				set_country_flag = celestial_relic_quest6_selected
+			}
+		}
+		random_system_within_border = {
+			random_system_planet = {
+				limit = {
+					is_star = yes
+				}
+				enable_special_project = {
+					name = celestial_relic_mission_spawning
+					location = THIS
+					owner = root.owner
+				}
+			}
+		}
+		is_dialog_only = yes
+		response_text = "cosmic_emporium_relic_response"
+	}
+	
+	option = {
+		custom_gui = "celestial_diplomacy_option"
+		default_hide_option = yes
+		name = "BACK"
+		hidden_effect = {
+			country_event = {
+				id = celestial_diplo.1
+			}
+		}
+	}
+}
+
+# Wayfarer AWOL
+country_event = {
+	id = celestial_diplo.3
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_caravaneer_window"
+	picture_event_data = {
+		room = no_video_feed_room
+    }
+
+	title = CELESTIAL_DIPLO_TITLE
+	desc = {
+		text = "celestial_diplo_awol"
+	}
+	
+	trigger = {
+		has_country_flag = celestial_wayfarer_awol
+	}
+
+	immediate = {
+	}
+
+	after = {
+		remove_country_flag = celestial_diplo_opened
+	}
+
+	option = {
+		custom_gui = "enclave_caravaneer_option"
+		name = "celestial_diplo.1.b"
+	}
+}

@@ -1,0 +1,291 @@
+# celestial_general_events.txt
+# By MadeinCanada
+
+namespace = celestial
+
+# Aetherial Codex Activation
+country_event = {
+	id = celestial.1
+	title = celestial.1.name
+	desc = celestial.1.desc
+	picture = GFX_evt_engineering_research
+	show_sound = event_default
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_legendary"
+
+	picture_event_data = {
+		portrait = event_target:celestial_codex_target
+	}
+	
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				NOR = {
+					has_leader_flag = legendary_leader
+					has_leader_flag = celestial_immune_to_codex
+				}
+			}
+			save_event_target_as = celestial_codex_target
+		}
+	}
+
+	option = {
+		name = celestial.1.a
+		custom_tooltip = celestial.1.tt
+		hidden_effect = {
+			event_target:celestial_codex_target = {
+				random_list = {
+					20 = {
+						while = {
+							count = 2
+							add_trait = random_negative
+						}
+					}
+					80 = {
+						add_trait = random_negative
+					}
+				}
+			}
+		}
+	}
+}
+
+# Spectral Beacon: Spread Portal Sickness
+planet_event = {
+	id = celestial.2
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_planet_flag = celestial_beacon_active
+		has_modifier = celestial_beacon_modifier
+	}
+	
+	immediate = {
+		random_list = {
+			50 = {
+				# Nothing
+			}
+			25 = {
+				celestial_spread_portal_sickness = yes
+			}
+			25 = {
+				while = {
+					count = 2
+					celestial_spread_portal_sickness = yes
+				}
+			}
+		}
+		planet_event = {
+			id = celestial.2
+			days = 360
+		}
+	}
+}
+
+# Cinders of a Star: Upgrade Station (Necessary to ensure only one is done at a time)
+starbase_event = {
+	id = celestial.3
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			NOT = {
+				has_country_flag = celestial_core_building_built
+			}
+		}
+	}
+	
+	immediate = {
+		celestial_core_effect_starbase = yes
+		owner = {
+			set_timed_country_flag = {
+				flag = celestial_core_building_built
+				days = 5
+			}
+		}
+	}
+}
+
+# Tainted Crystal: End of relic activation, remove flags and wormhole (send message?)
+country_event = {
+	id = celestial.4
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+		remove_country_flag = celestial_crystal_target1_set
+		remove_country_flag = celestial_tainted_crystal_used_up
+		every_owned_megastructure = {
+			limit = {
+				has_megastructure_flag = celestial_crystal_wormhole
+			}
+			remove_megastructure = this
+		}
+		every_planet_within_border = {
+			limit = {
+				is_star = yes
+				OR = {
+					has_planet_flag = celestial_crystal_wormhole_star_1
+					has_planet_flag = celestial_crystal_wormhole_star_2
+				}
+			}
+			remove_planet_flag = celestial_crystal_wormhole_star_1
+			remove_planet_flag = celestial_crystal_wormhole_star_2
+		}
+		create_message = {
+			type = MESSAGE_TAINTED_CRYSTAL_OVER
+			localization = MESSAGE_TAINTED_CRYSTAL_OVER
+			days = 30
+			target = root
+		}
+	}
+}
+
+# 5
+
+# 6
+
+# On built Temporal Spire
+planet_event = {
+	id = celestial.7
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	pre_triggers = {
+		is_ai = no
+	}
+
+	trigger = {
+		has_building = building_celestial_temporal_spire
+		NOT = {
+			has_planet_flag = celestial_temporal_spire_built_here
+		}
+	}
+
+	immediate = {
+		set_timed_planet_flag = {
+			flag = celestial_temporal_spire_built_here
+			days = 9000 # 25 years
+		}
+		add_modifier = {
+			modifier = celestial_temporal_spire_modifier
+			days = 9000 # 25 years
+		}
+		planet_event = {
+			id = celestial.8
+			days = 9000 # 25 years
+		}
+		planet_event = {
+			id = celestial.9
+			days = 180
+			random = 720
+		}
+	}
+}
+
+# Remove Temporal Spire
+planet_event = {
+	id = celestial.8
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	pre_triggers = {
+	}
+
+	trigger = {
+		has_building = building_celestial_temporal_spire
+		NOT = {
+			has_planet_flag = celestial_temporal_spire_built_here
+		}
+	}
+
+	immediate = {
+		remove_building = building_celestial_temporal_spire
+	}
+}
+
+# Every 5ish years - Temporal Spires have negative effects
+planet_event = {
+	id = celestial.9
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	pre_triggers = {
+	}
+
+	trigger = {
+		has_modifier = celestial_temporal_spire_modifier
+	}
+
+	immediate = {
+		planet_event = {
+			id = celestial.9
+			days = 1700 # 5 years ish
+			random = 100
+		}
+
+		random_list = {
+			20 = {
+				add_modifier = {
+					modifier = celestial_temporal_spire_malus_1
+					days = 1440 # 4 years
+				}
+			}
+			20 = {
+				add_modifier = {
+					modifier = celestial_temporal_spire_malus_2
+					days = 1440 # 4 years
+				}
+			}
+			20 = {
+				add_modifier = {
+					modifier = celestial_temporal_spire_malus_3
+					days = 1440 # 4 years
+				}
+			}
+			20 = {
+				add_modifier = {
+					modifier = celestial_temporal_spire_malus_4
+					days = 1440 # 4 years
+				}
+			}
+			20 = {
+				modifier = {
+					factor = 0
+					owner = {
+						is_gestalt = yes
+					}
+				}
+				add_modifier = {
+					modifier = celestial_temporal_spire_malus_5
+					days = 1440 # 4 years
+				}
+			}
+			20 = {
+				modifier = {
+					factor = 0
+					owner = {
+						is_gestalt = no
+					}
+				}
+				add_modifier = {
+					modifier = celestial_temporal_spire_malus_5_gestalt
+					days = 1440 # 4 years
+				}
+			}
+		}
+	}
+}

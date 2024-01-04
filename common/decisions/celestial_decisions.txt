@@ -1,0 +1,88 @@
+# celestial_decisions.txt
+# By MadeinCanada
+
+decision_celestial_beacon_installation = {
+	owned_planets_only = yes
+	icon = decision_psi_inoculate_pops
+
+	resources = {
+		category = decisions
+		cost = {
+			energy = 2000
+		}
+	}
+
+	potential = {
+		exists = owner
+		owner = {
+			has_relic = r_celestial_spectral_beacon
+		}
+	}
+
+	allow = {
+		custom_tooltip_fail = {
+			text = celestial_beacon_installation_limit
+			owner = {
+				check_variable = {
+					which = celestial_beacon_decision_used
+					value < celestial_beacon_decision_limit
+				}
+			}
+		}
+		custom_tooltip_fail = {
+			text = celestial_beacon_installation_used
+			NOR = {
+				has_modifier = celestial_beacon_modifier
+				has_planet_flag = celestial_beacon_active
+			}
+		}
+	}
+	
+	effect = {
+		celestial_beacon_effect_planet = yes
+	}
+}
+
+decision_celestial_crystal_usage = {
+	icon = decision_wormhole
+
+	resources = {
+		category = decisions
+		cost = {
+			energy = 1000
+		}
+	}
+
+	potential = {
+		exists = space_owner
+		space_owner = { is_same_value = from }
+		from = {
+			has_relic = r_celestial_quantum_gem
+		}
+		is_star = yes
+		NOR = {
+			has_planet_flag = celestial_crystal_wormhole_star_1
+			has_planet_flag = celestial_crystal_wormhole_star_2
+		}
+	}
+
+	allow = {
+		custom_tooltip_fail = {
+			text = celestial_crystal_used
+			space_owner = {
+				NOT = { has_country_flag = celestial_tainted_crystal_used_up }
+			}
+		}
+		custom_tooltip_fail = {
+			text = celestial_crystal_inactive
+			space_owner = {
+				has_country_flag = celestial_tainted_crystal_active
+			}
+		}
+	}
+	
+	effect = {
+		celestial_crystal_effect_decision = yes
+		# add modifier to planet/star
+	}
+}

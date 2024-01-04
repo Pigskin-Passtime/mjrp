@@ -1,0 +1,69 @@
+# celestialstarbase_buildings.txt
+# By MadeinCanada
+
+celestial_star_core = {
+	icon = "GFX_sb_celestial_star_core"
+	construction_days = 180
+
+	potential = {
+		exists = owner
+		owner = {
+			has_relic = r_celestial_star_core
+		}
+		is_normal_starbase = yes
+	}
+
+	possible = {
+		custom_tooltip_fail = {
+			text = celestial_core_build_limit
+			owner = {
+				has_country_flag = celestial_can_build_star_core_building
+			}
+		}
+		custom_tooltip_fail = {
+			text = celestial_core_module_used
+			NOR = {
+				fleet = { has_modifier = celestial_star_core_modifier }
+				has_starbase_flag = celestial_star_core_used
+				has_starbase_building = celestial_star_core
+			}
+		}
+		custom_tooltip_fail = {
+			text = celestial_core_build_one_at_a_time
+			owner = {
+				any_owned_starbase = {
+					NOT = { is_starbase_building_building = celestial_star_core }
+				}
+			}
+		}
+	}
+
+	resources = {
+		category = starbase_buildings
+		cost = {
+			energy = 3000
+		}
+		upkeep = {
+			energy = 3
+		}
+	}
+
+	on_finished = {
+		# celestial_core_effect_starbase = yes 	# done in event
+		starbase_event = { id = celestial.3 days = 1 }
+	}
+	custom_tooltip = celestial_star_core_station_effect_tt
+
+	on_destroyed = {
+	}
+
+	station_modifier = {
+		ship_shield_mult = 0.15
+		ship_fire_rate_mult = 0.05
+	}
+
+	defense_platform_modifier = {
+		ship_shield_mult = 0.15
+		ship_fire_rate_mult = 0.05
+	}
+}
