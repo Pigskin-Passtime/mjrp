@@ -1,0 +1,423 @@
+###########
+# trime_buttons
+# made by:
+# tr33
+#
+###########
+
+
+trime_button1 = {
+	# military ship speed builöding
+	potential = {
+		always = yes
+	}
+	allow = {
+		custom_tooltip = {
+			fail_text = "trime_leader_2young_tt"
+			event_target:trime_time_lord = {
+				check_variable_arithmetic = {
+					which = this.trigger:leader_age
+					#mult = 100				
+					value >= 50
+				}
+			}
+		}
+		NOT = {
+			has_modifier = trime_chronomancer_on_cooldown
+		}
+	}
+	effect = {
+		custom_tooltip = trime_button1_title
+		add_modifier = {
+			modifier = trime_speed_building
+			days = 360
+		}
+		event_target:trime_time_lord = {
+			add_age = -50
+		}
+		hidden_effect = {
+			trime_setportrait = yes
+			add_modifier = {
+				modifier = trime_chronomancer_on_cooldown
+				days = 720
+			}
+		}
+	}
+}
+
+trime_button2 = {
+	#deage leaders
+	potential = {
+		always = yes
+	}
+	allow = {
+		custom_tooltip = {
+			fail_text = "trime_leader_2young_tt"
+			event_target:trime_time_lord = {
+				check_variable_arithmetic = {
+					which = this.trigger:leader_age
+					#mult = 100				
+					value >= 50
+				}
+			}
+		}
+		NOT = {
+			has_modifier = trime_chronomancer_on_cooldown
+		}
+	}
+	effect = {
+		custom_tooltip = trime_button2_title
+		custom_tooltip = trime_button2_deage_all_tt
+		event_target:trime_time_lord = {
+			add_age = -50
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					NOR = {
+						has_trait = trime_leader_trait_exhaustion
+						has_trait = trime_leader_trait_legendary_timeskipper
+					}
+				}
+				add_age = -20
+				add_timed_trait = {
+					trait = trime_leader_trait_exhaustion
+					days = 360
+				}
+				event_target:trime_time_lord = {
+					add_age = 40
+				}
+			}
+		}
+		hidden_effect = {
+			trime_setportrait = yes
+			add_modifier = {
+				modifier = trime_chronomancer_on_cooldown
+				days = 3600
+			}
+		}
+	}
+}
+
+trime_button3 = {
+	# dunno 
+	potential = {
+		always = yes
+	}
+	allow = {
+		custom_tooltip = {
+			fail_text = "trime_leader_2young_tt"
+			event_target:trime_time_lord = {
+				check_variable_arithmetic = {
+					which = this.trigger:leader_age
+					#mult = 100				
+					value >= 50
+				}
+			}
+		}
+		NOT = {
+			has_modifier = trime_chronomancer_on_cooldown
+		}
+	}
+	effect = {
+		custom_tooltip = trime_button3_title
+		#custom_tooltip = trime_button2_deage_all_tt
+		event_target:trime_time_lord = {
+			add_age = -50
+		}
+		add_monthly_resource_mult = {
+			resource = physics_research
+			value = 6
+		}
+		add_monthly_resource_mult = {
+			resource = society_research
+			value = 6
+		}
+		add_monthly_resource_mult = {
+			resource = engineering_research
+			value = 6
+		}
+		hidden_effect = {
+			trime_setportrait = yes
+			add_modifier = {
+				modifier = trime_chronomancer_on_cooldown
+				days = 1800
+			}
+		}
+	}
+}
+
+trime_button4 = {
+	# speed production 
+	potential = {
+		always = yes
+	}
+	allow = {
+		custom_tooltip = {
+			fail_text = "trime_leader_2young_tt"
+			event_target:trime_time_lord = {
+				check_variable_arithmetic = {
+					which = this.trigger:leader_age
+					#mult = 100				
+					value >= 100
+				}
+			}
+		}
+		NOT = {
+			has_modifier = trime_chronomancer_on_cooldown
+		}
+	}
+	effect = {
+		custom_tooltip = trime_button4_title
+		custom_tooltip = trime_button4_speed_production_decision
+		event_target:trime_time_lord = {
+			add_age = -100
+		}
+		hidden_effect = {
+			set_country_flag = trime_speed_production
+		}
+		hidden_effect = {
+			trime_setportrait = yes
+			add_modifier = {
+				modifier = trime_chronomancer_on_cooldown
+				days = 720
+			}
+		}
+	}
+}
+
+trime_button5 = {
+	# future war
+	potential = {
+		always = yes
+	}
+	allow = {
+		custom_tooltip = {
+			fail_text = "trime_leader_2young_tt"
+			event_target:trime_time_lord = {
+				check_variable_arithmetic = {
+					which = this.trigger:leader_age
+					#mult = 100				
+					value >= 150
+				}
+			}
+		}
+		NOT = {
+			has_modifier = trime_chronomancer_on_cooldown
+		}
+		custom_tooltip = {
+			fail_text = "trime_alreadyfutureproof_tt"
+			NOT = {
+				has_country_flag = trime_future_war
+			}
+		}
+	}
+	effect = {
+		custom_tooltip = trime_button5_title
+		custom_tooltip = trime_button5_future_war_tt
+		event_target:trime_time_lord = {
+			add_age = -150
+		}
+		hidden_effect = {
+			set_country_flag = trime_future_war
+			every_owned_planet = {
+				limit = {
+					is_colony = yes
+					num_pops > 10
+				}
+				while = {
+					count = this.value:ten_percent_species
+					random_owned_pop = {
+						kill_pop = yes
+					}
+				}
+				#every_owned_pop = {
+				#	limit = {
+				#		from = {
+				#			num_pops > 10
+				#		}
+				#	}
+				#	random = {
+				#		chance = 0.1
+				#		kill_pop = yes
+				#	}
+				#	
+				#}
+			}
+		}
+		hidden_effect = {
+			trime_setportrait = yes
+			add_modifier = {
+				modifier = trime_chronomancer_on_cooldown
+				days = 1800
+			}
+		}
+	}
+}
+
+trime_button6 = {
+	# freeze enemies
+	potential = {
+		always = yes
+	}
+	allow = {
+		custom_tooltip = {
+			fail_text = "trime_leader_2young_tt"
+			event_target:trime_time_lord = {
+				check_variable_arithmetic = {
+					which = this.trigger:leader_age
+					#mult = 100				
+					value >= 200
+				}
+			}
+		}
+		custom_tooltip = {
+			fail_text = "trime_leader_noenemies_or_rivals"
+			AND = {
+				is_at_war = no
+				any_rival_country = {
+					NOT = {
+						exists = this
+					}
+				}
+			}
+		}
+		NOT = {
+			has_modifier = trime_chronomancer_on_cooldown
+		}
+	}
+	effect = {
+		custom_tooltip = trime_button6_title
+		custom_tooltip = trime_button6_freeze_enemies
+		event_target:trime_time_lord = {
+			add_age = -200
+		}
+		hidden_effect = {
+			every_rival_country = {
+				add_modifier = {
+					modifier = trime_ship_frozen
+					days = 90
+				}
+				create_message = {
+					type = trime_future_fleet_frozen
+					localization = "trime_future_fleet_frozen_title"
+					days = 30
+				}
+			}
+			every_war = {
+				every_war_participant = {
+					limit = {
+						is_at_war_with = root
+					}
+					add_modifier = {
+						modifier = trime_ship_frozen
+						days = 90
+					}
+					create_message = {
+						type = trime_future_fleet_frozen
+						localization = "trime_future_fleet_frozen_title"
+						days = 30
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			trime_setportrait = yes
+			add_modifier = {
+				modifier = trime_chronomancer_on_cooldown
+				days = 3600
+			}
+		}
+	}
+}
+
+trime_button7 = {
+	# skip megastructure
+	potential = {
+		always = yes
+	}
+	allow = {
+		custom_tooltip = {
+			fail_text = "trime_leader_2young_tt"
+			event_target:trime_time_lord = {
+				check_variable_arithmetic = {
+					which = this.trigger:leader_age
+					#mult = 100				
+					value >= 200
+				}
+			}
+		}
+		custom_tooltip = {
+			fail_text = "trime_already_has_instant_mega_tt"
+			NOT = {
+				has_country_flag = trime_instant_mega
+			}
+		}
+		NOT = {
+			has_modifier = trime_chronomancer_on_cooldown
+		}
+	}
+	effect = {
+		custom_tooltip = trime_button7_title
+		custom_tooltip = trime_button7_instant_mega_tt
+		event_target:trime_time_lord = {
+			add_age = -200
+		}
+		hidden_effect = {
+			set_country_flag = trime_instant_mega
+		}
+		hidden_effect = {
+			trime_setportrait = yes
+			add_modifier = {
+				modifier = trime_chronomancer_on_cooldown
+				days = 3600
+			}
+		}
+	}
+}
+
+trime_button8 = {
+	# skip relic
+	potential = {
+		always = yes
+	}
+	allow = {
+		custom_tooltip = {
+			fail_text = "trime_leader_2young_tt"
+			event_target:trime_time_lord = {
+				check_variable_arithmetic = {
+					which = this.trigger:leader_age
+					#mult = 100				
+					value >= 200
+				}
+			}
+		}
+		custom_tooltip = {
+			fail_text = "trime_already_has_instant_relic_tt"
+			NOR = {
+				has_country_flag = trime_instant_relic_2
+				has_country_flag = trime_instant_relic_1
+			}
+		}
+		NOT = {
+			has_modifier = trime_chronomancer_on_cooldown
+		}
+	}
+	effect = {
+		custom_tooltip = trime_button8_title
+		custom_tooltip = trime_button8_removecooldown_tt
+		event_target:trime_time_lord = {
+			add_age = -200
+		}
+		hidden_effect = {
+			set_country_flag = trime_instant_relic_2
+		}
+		hidden_effect = {
+			trime_setportrait = yes
+			add_modifier = {
+				modifier = trime_chronomancer_on_cooldown
+				days = 3600
+			}
+		}
+	}
+}
