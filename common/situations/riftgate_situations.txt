@@ -1,0 +1,166 @@
+
+situation_riftgate_convergence_corruption = {
+	picture = GFX_evt_surreal_visions
+	start_value = 100
+	abort_trigger = {
+		OR = {
+			owner = {
+				NOT = {
+					 has_country_flag = gamemaster_recaptured_country 
+				}
+			}
+			event_target:riftgate_gamemaster = {# Convergence has won through other means and is now the emperor
+				is_ruler = yes
+			}
+		}
+	}
+	# 0 to 100 willpower
+	progress_direction = bidirectional
+	complete_category = positive
+	fail_category = negative 
+
+	complete_icon = GFX_situation_outcome_negative
+	complete_icon_frame = GFX_situation_outcome_frame_red
+	fail_icon = GFX_situation_outcome_meh
+	fail_icon_frame = GFX_situation_outcome_frame_green
+
+	on_fail = {
+		custom_tooltip = riftgate_dominated_by_Convergence_tooltip
+		owner = {
+			remove_country_flag = gamemaster_recaptured_country
+			country_event = {
+				id = riftgate_p.8
+				days = 15
+			}
+		}
+		destroy_situation = this #failsafe
+	}
+	on_progress_complete = { #dominate Convergence
+		custom_tooltip = riftgate_dominate_Convergence_tooltip
+		owner = {
+			remove_country_flag = gamemaster_recaptured_country
+			country_event = {
+				id = riftgate_p.9
+				days = 15
+			}
+		}
+		destroy_situation = this #failsafe
+	}
+
+	stages = {
+		stage_riftgate_acceptance = {
+			end = 80
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_red
+			on_first_enter = {
+				set_situation_flag = lost_the_will_to_resist
+			}
+			modifier = {
+				
+			}
+		}
+		stage_riftgate_compromise = {
+			end = 200
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_red
+			modifier = {
+				
+			}
+		}
+		stage_riftgate_resist_everything = {
+			end = 400
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_green
+			target_modifier = {
+				planet_stability_add = -15
+			}
+			on_first_enter = {
+				set_situation_flag = the_end_approaches
+			}
+			modifier = {
+
+			}
+		}
+	}
+
+	approach = {
+		name = approach_resist_convergence
+		icon = GFX_situation_approach_unity
+		icon_background = GFX_situation_approach_bg_green
+		target_modifier = {
+			planet_stability_add = -15
+			country_unity_produces_mult = -0.15
+		}
+		potential = {
+			NOT = {
+				has_situation_flag = lost_the_will_to_resist
+			}
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				physics_research = 50
+				society_research = 50
+				engineering_research = 50
+				unity = 50
+			}
+		}
+	}
+
+	approach = {
+		name = approach_compromise_with_convergence
+		icon = GFX_situation_approach_shrug
+		icon_background = GFX_situation_approach_bg_yellow
+		default = yes
+		target_modifier = {
+			planet_stability_add = -5
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				physics_research = 10
+				society_research = 10
+				engineering_research = 10
+				unity = 10
+			}
+		}
+	}
+
+	approach = {
+		name = approach_accept_convergence
+		icon = GFX_situation_approach_this_is_fine
+		icon_background = GFX_situation_approach_bg_red
+
+		resources = {
+			category = situations
+			produces = {
+				physics_research = 20
+				society_research = 20
+				engineering_research = 20
+				unity = 20
+			}
+		}
+		target_modifier = {
+			planet_stability_add = 15
+			country_unity_produces_mult = 0.15
+		}
+	}
+
+	monthly_progress = {
+		modifier = {
+			desc = string_current_approach
+			current_situation_approach = approach_resist_convergence
+			add = 1
+		}
+		modifier = {
+			desc = string_current_approach
+			current_situation_approach = approach_compromise_with_convergence
+			add = 0
+		}
+		modifier = {
+			desc = string_current_approach
+			current_situation_approach = approach_accept_convergence
+			subtract = 1
+		}
+	}
+}

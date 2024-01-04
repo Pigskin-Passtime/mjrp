@@ -1,0 +1,122 @@
+
+riftgate_space_system_nodlc = {
+	class = "sc_riftgate_shroud"
+	planet = {
+		name = "Pillar"
+		class = pc_black_hole
+		orbit_distance = 0
+		orbit_angle = 1
+		size = 25
+		has_ring = no
+		init_effect = {
+			save_global_event_target_as = riftgate_end_shrine
+		}
+	}#crisis-amoeba bubbles
+
+	planet = {
+		name = "Pillar"
+		class = "pc_black_hole"
+		orbit_distance = 45
+		orbit_angle = random
+		size = 15
+		has_ring = no
+		init_effect = {
+			save_global_event_target_as = riftgate_composer_shrine
+		}
+	}#crisis-prethoryn
+
+	planet = {
+		name = "Pillar"
+		class = "pc_black_hole"
+		orbit_distance = 90
+		orbit_angle = random
+		size = 15
+		has_ring = no
+		init_effect = {
+			save_global_event_target_as = riftgate_instrument_shrine
+		}
+	}#crisis-psychic
+
+	planet = {
+		name = "Pillar"
+		class = "pc_black_hole"
+		orbit_distance = 135
+		orbit_angle = random
+		size = 15
+		has_ring = no
+		init_effect = {
+			save_global_event_target_as = riftgate_whisperer_shrine
+		}
+	}#crisis-AI
+
+	planet = {
+		name = "Pillar"
+		class = "pc_black_hole"
+		orbit_distance = 180
+		orbit_angle = random
+		size = 15
+		has_ring = no
+		init_effect = {
+			save_global_event_target_as = riftgate_eater_shrine
+		}
+	}#crisis-great khan
+
+	init_effect = {
+		set_star_flag = riftgate_nexus
+		save_global_event_target_as = riftgate_shroud_system
+		every_system_planet = {
+			set_planet_flag = cant_build_here
+			set_planet_flag = cant_target_this_planet
+			create_ambient_object = {
+				type = "psi_storm_1"
+				scale = 0.5
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 0
+					angle = 0
+				}
+			}
+		}
+		star = {
+			save_global_event_target_as = riftgate_home
+			create_ambient_object = {
+				type = "nebula_L7_entity"
+				location = this
+			}
+		}
+		solar_system = {
+			spawn_megastructure = { 
+				type = "riftgate_no_dlc"
+				orbit_distance = 150
+				orbit_angle = 150
+			}
+		}
+	}
+}
+
+riftgate_starting_system_nodlc = {
+	class = "sc_riftgate_shroud"
+	planet = {
+		name = "Mysterious black hole"
+		class = pc_black_hole
+		orbit_distance = 0
+		orbit_angle = 1
+		size = 10
+		has_ring = no
+	}
+	init_effect = {
+		set_star_flag = riftgate_node
+		solar_system = {
+			spawn_megastructure = { 
+			type = "riftgate_no_dlc"
+			orbit_distance = 120
+			orbit_angle = 5
+			}
+			random_system_planet = {
+				create_archaeological_site = riftgate_key_site
+			}
+		}
+	}
+}
