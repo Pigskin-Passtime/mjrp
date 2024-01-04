@@ -1,0 +1,109 @@
+# Triggers event when each country first sends a ship into the system (once per country)
+# Scope = Ship
+# From = System
+# FromFrom = Country
+on_entering_system_first_time = {
+	events = {
+		EVJ24.1
+		#EVJ24.103
+	}
+}
+
+# A fleet has entered a system | See also: on_fleet_auto_move_arrival
+# Scope = Fleet
+# From = System
+on_entering_system_fleet = {
+	events = {
+		EVJ24.103 #Middle event 1, fleet enters system with pirates.
+	}
+}
+
+# This = Ship
+# From = Disabler Ship
+on_ship_disabled = {
+	events = {
+		EVJ24.104
+		EVJ24.840
+		EVJ24.850
+		EVJ24.905
+	}
+}
+
+# This = owner of fleet 1 (combatant)
+# From = owner of fleet 2 (destroyed)
+# FromFrom = fleet 1
+# FromFromFrom = fleet 2
+on_fleet_destroyed_perp = {
+	events = {
+		EVJ24.9
+		EVJ24.122
+	}
+}
+
+# Executed as a leader is hired
+# This = Leader
+on_leader_hired = {
+	events = {
+		#EVJ24.900
+	}
+}
+
+# Planet has taken damage from orbital bombardment - Damage is applied daily
+# This = Planet
+# From = Bombarder
+on_planet_bombarded = {
+	events = {
+		EVJ24.845
+	}
+}
+
+# This = Aggressor Fleet
+# From = Attacked Fleet
+# FromFrom = Additional Attacked Fleet (if part of ongoing combat)
+# FromFromFrom = Additional Attacked Fleet (if part of ongoing combat)
+on_fleet_combat_joined_attacker = {
+	events = {
+		EVJ24.827
+	}
+}
+
+# Triggers country_event for the defender upon victory
+# Root = country, planet owner
+# From = country, attack leader
+# FromFrom = planet
+on_planet_defenders_win = {
+	events = {
+		EVJ24.230
+	}
+}
+
+# Triggers country_event for the defender upon defeat
+# This = country, planet owner
+# From = country, attack leader
+# FromFrom = planet
+on_planet_defenders_lose = {
+	events = {
+		EVJ24.222
+	}
+}
+
+# Triggers country_event for the attacker upon victory (before controller is switched)
+# This = country, lead attacker
+# From = country, planet owner
+# FromFrom = planet
+# 'Attacker' is the side that "IsHostile" to the planet controller. For example: spawned monster armies are attackers, but if they win and the player attempts to retake the planet, the player is the attacker
+on_planet_attackers_win = {
+	events = {
+		EVJ24.226
+	}
+}
+
+# Note: The _queued on_actions also fire when the command is made even if there is nothing else in the queue
+# Similarly, the _unqueued on_actions fire even if you cancel the order while the weapon is on the wind-up to fire
+# They use the same scopes as the standard events
+
+on_destroy_planet_with_PLANET_KILLER_CRACKER = {
+	events = {
+		EVJ24.910
+	}
+}

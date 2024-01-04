@@ -1,0 +1,55 @@
+@activation_cost = 3000
+@triumph_duration = 3600
+@triumph_duration_short = 1800
+@triumph_duration_veryshort = 900
+
+r_EVJ24_manuscript = {
+	activation_duration = @triumph_duration
+	portrait = "GFX_relic_omnicodex"
+	sound = "relic_activation_generic"
+
+	resources = {
+		category = relics
+		# Activation cost
+		cost = {
+			influence = 300
+		}
+	}
+
+	ai_weight = {
+		weight = 100
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			always = yes
+		}
+		planet_jobs_worker_produces_mult = 0.1
+	}
+
+	score = 100
+
+	active_effect = {
+		add_modifier = {
+			modifier = "EVJ24_relic_activation"
+			days = 1800
+		}
+		custom_tooltip = EVJ24_relic_active_tooltip
+		custom_tooltip = relic_triumph_cooldown
+		hidden_effect = {
+			country_event = { id = EVJ24.915 days = 1800 }
+			add_modifier = {
+				modifier = "relic_activation_cooldown"
+				days = @triumph_duration_short
+			}
+		}
+	}
+
+	# Possible check for activation
+	possible = {
+		inline_script = {
+			script = relics/activation_checks
+			RELIC = r_EVJ24_manuscript
+		}
+	}
+}
