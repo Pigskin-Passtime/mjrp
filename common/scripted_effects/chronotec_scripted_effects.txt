@@ -1,0 +1,383 @@
+# common\scripted_effects\chronotec_scripted_effects.txt
+
+# Authors: Rodahtnov & Zyralynn
+
+# Mandatory leader debug/spawn system
+spawn_chronotec = {
+	# As this effect would be spawned either by menu or manual
+	# at system level in theory...
+	root = {
+		save_event_target_as = chronotec_spawn_country
+	}
+	# Redundancy in case its forcespawned
+	set_global_flag = chronotec_anomaly_spawned
+
+	# Dynamic scope
+	[[SCOPE]
+		$SCOPE$ = {
+			save_event_target_as = chronotec_spawn_scope
+		}
+	]
+	# Fallback scope to the capital
+	[[!SCOPE]
+		save_event_target_as = chronotec_spawn_scope
+	]
+
+	# Spawns the system
+		event_target:chronotec_spawn_scope = {	# Redundancy to be safe
+			spawn_system = {
+				min_distance = 5
+				max_distance = 15
+				max_jumps = 0
+				initializer = "chronotec_chronolord_system"
+			}
+		}	
+	# /
+
+	# Debug surveys the system
+	[[SURVEY]
+		last_created_system = {	# Scoping to the created system
+			every_system_planet = {
+				set_surveyed = {
+					surveyed = yes
+					surveyor = event_target:chronotec_spawn_country
+				}
+			}
+		}
+	]
+	[[!SURVEY]
+
+	]
+
+	# Bypass digsite, adds the leader immediately but allows investigating it
+	[[DIGSITE_DEBUG]
+		every_archaeological_site = {
+			limit = {
+				is_site_type = digsite_chronotec_world
+			}
+			set_archaeology_flag = chronotec_digsite_debug
+		}
+	]
+	[[!DIGSITE_DEBUG]
+	]
+
+	# Force spawns the leader
+	[[LEADER_DEBUG]
+		root = {
+			country_event = {
+				id = chronotec_narrative.30
+			}
+		}
+	]
+	[[!LEADER_DEBUG]
+	]
+
+	# In case we want to add extra sauce dynamically to the effect
+	$EXTRA_EFFECT$
+}
+
+	# Usage:
+		# For standard spawning (adds the system)
+		#spawn_chronotec = {
+		#	SCOPE = scope
+		#	SURVEY = no
+		#	DIGSITE_DEBUG = no
+		#	LEADER_DEBUG = no
+		#	EXTRA_EFFECT = ""
+		#}
+		# Debug the system entirely (appears link to capital) and spawn the leader
+		#spawn_chronotec = {
+		#	SURVEY = no
+		#	DIGSITE_DEBUG = yes
+		#	LEADER_DEBUG = yes
+		#	EXTRA_EFFECT = ""
+		#}
+	# /
+
+	# Shortcut
+		chronotec_test_spawn_effect = {
+			random_system = {
+				limit = {
+					NOT = {
+						is_in_cluster = leader_spawn
+					}
+				}
+				spawn_chronotec = {
+					SURVEY = yes
+					SCOPE = this
+					DIGSITE_DEBUG = yes
+					LEADER_DEBUG = yes
+					EXTRA_EFFECT = ""
+				}
+				create_cluster = {
+					id = leader_spawn
+					radius = 150
+					center = THIS
+				}
+			}
+		}
+	# /
+# /
+
+chronotec_convert_into_leader_effect = {
+	create_fleet = {
+		name = "NAME_Other_Science_Ship"
+		effect = {
+			set_owner = prev
+			create_ship = {
+				name = random
+				random_existing_design = science
+			}
+			set_leader = chronotec_exiled_as_relic
+			unassign_leader = this
+			destroy_fleet = this
+		}
+	}
+	# Reduncancy
+	remove_country_flag = chronotec_exiled_as_relic
+	remove_relic = r_chronotec_standard
+}
+
+chronotec_increase_charges_effect = {
+	event_target:chronotec_chronolord_leader = {	# Should be global!
+		if = {	# 5 > Perfect
+			limit = {
+				has_trait = leader_trait_chronotec_chronolord_infusion_5
+			}
+			remove_trait = leader_trait_chronotec_chronolord_infusion_5
+			add_trait = leader_trait_chronotec_chronolord_infusion_perfect
+			set_global_flag = chronotec_perfected
+			owner = {
+				country_event = {
+					id = chronotec_relic.30
+				}
+				remove_country_flag = chronotec_exiled_as_relic
+				if = {
+					limit = {
+						has_relic = r_chronotec_standard
+					}
+					remove_relic = r_chronotec_standard
+				}
+				if = {
+					limit = {
+						NOT = {
+							has_relic = r_chronotec_perfected
+						}
+					}
+					add_relic = r_chronotec_perfected
+				}
+			}
+			change_leader_portrait = chronotec_chronolord_portrait_perfected
+		}
+		else_if = {	# 4
+			limit = {
+				has_trait = leader_trait_chronotec_chronolord_infusion_4
+			}
+			remove_trait = leader_trait_chronotec_chronolord_infusion_4
+			add_trait = leader_trait_chronotec_chronolord_infusion_5
+		}
+		else_if = {	# 3
+			limit = {
+				has_trait = leader_trait_chronotec_chronolord_infusion_3
+			}
+			remove_trait = leader_trait_chronotec_chronolord_infusion_3
+			add_trait = leader_trait_chronotec_chronolord_infusion_4
+		}
+		else_if = {	# 2
+			limit = {
+				has_trait = leader_trait_chronotec_chronolord_infusion_2
+			}
+			remove_trait = leader_trait_chronotec_chronolord_infusion_2
+			add_trait = leader_trait_chronotec_chronolord_infusion_3
+		}
+		else_if = {	# 1
+			limit = {
+				has_trait = leader_trait_chronotec_chronolord_infusion_1
+			}
+			remove_trait = leader_trait_chronotec_chronolord_infusion_1
+			add_trait = leader_trait_chronotec_chronolord_infusion_2
+		}
+		else_if = {	# 1
+			limit = {
+				has_trait = leader_trait_chronotec_chronolord_infusion_neutral
+			}
+			remove_trait = leader_trait_chronotec_chronolord_infusion_neutral
+			add_trait = leader_trait_chronotec_chronolord_infusion_1
+		}
+		else_if = { # -1
+			limit = {
+				has_trait = leader_trait_chronotec_chronolord_corruption_1
+			}
+			remove_trait = leader_trait_chronotec_chronolord_corruption_1
+			add_trait = leader_trait_chronotec_chronolord_infusion_neutral
+		}
+		else_if = { # -2
+			limit = {
+				has_trait = leader_trait_chronotec_chronolord_corruption_2
+			}
+			remove_trait = leader_trait_chronotec_chronolord_corruption_2
+			add_trait = leader_trait_chronotec_chronolord_corruption_1
+		}
+		else_if = { # -3
+			limit = {
+				has_trait = leader_trait_chronotec_chronolord_corruption_3
+			}
+			remove_trait = leader_trait_chronotec_chronolord_corruption_3
+			add_trait = leader_trait_chronotec_chronolord_corruption_2
+		}
+		else_if = { # -4
+			limit = {
+				has_trait = leader_trait_chronotec_chronolord_corruption_4
+			}
+			remove_trait = leader_trait_chronotec_chronolord_corruption_4
+			add_trait = leader_trait_chronotec_chronolord_corruption_3
+		}
+		else_if = { # -5
+			limit = {
+				has_trait = leader_trait_chronotec_chronolord_corruption_5
+			}
+			remove_trait = leader_trait_chronotec_chronolord_corruption_5
+			add_trait = leader_trait_chronotec_chronolord_corruption_4
+		}
+	}
+}
+chronotec_decrease_charges_effect = {
+	event_target:chronotec_chronolord_leader = {	# Should be global!
+		if = {	# -5 > corrupted
+			limit = {
+				has_trait = leader_trait_chronotec_chronolord_corruption_5
+			}
+			remove_trait = leader_trait_chronotec_chronolord_corruption_5
+			add_trait = leader_trait_chronotec_chronolord_corruption_total
+			set_global_flag = chronotec_corrupted
+			owner = {
+				country_event = {
+					id = chronotec_relic.30
+				}
+				remove_country_flag = chronotec_exiled_as_relic
+				if = {
+					limit = {
+						has_relic = r_chronotec_standard
+					}
+					remove_relic = r_chronotec_standard
+				}
+				if = {
+					limit = {
+						NOT = {
+							has_relic = r_chronotec_corrupted
+						}
+					}
+					add_relic = r_chronotec_corrupted
+				}
+			}
+			change_leader_portrait = chronotec_chronolord_portrait_corrupted
+		}
+		else_if = {	# -4 > -5
+			limit = {
+				has_trait = leader_trait_chronotec_chronolord_corruption_4
+			}
+			remove_trait = leader_trait_chronotec_chronolord_corruption_4
+			add_trait = leader_trait_chronotec_chronolord_corruption_5
+		}
+		else_if = {	# -3 > -4
+			limit = {
+				has_trait = leader_trait_chronotec_chronolord_corruption_3
+			}
+			remove_trait = leader_trait_chronotec_chronolord_corruption_3
+			add_trait = leader_trait_chronotec_chronolord_corruption_4
+		}
+		else_if = {	# -2 > -3
+			limit = {
+				has_trait = leader_trait_chronotec_chronolord_corruption_2
+			}
+			remove_trait = leader_trait_chronotec_chronolord_corruption_2
+			add_trait = leader_trait_chronotec_chronolord_corruption_3
+		}
+		else_if = {	# -1 > -2
+			limit = {
+				has_trait = leader_trait_chronotec_chronolord_corruption_1
+			}
+			remove_trait = leader_trait_chronotec_chronolord_corruption_1
+			add_trait = leader_trait_chronotec_chronolord_corruption_2
+		}
+		else_if = {	# 0 > -1
+			limit = {
+				has_trait = leader_trait_chronotec_chronolord_infusion_neutral
+			}
+			remove_trait = leader_trait_chronotec_chronolord_infusion_neutral
+			add_trait = leader_trait_chronotec_chronolord_corruption_1
+		}
+		else_if = { # 1 > 0
+			limit = {
+				has_trait = leader_trait_chronotec_chronolord_infusion_1
+			}
+			remove_trait = leader_trait_chronotec_chronolord_infusion_1
+			add_trait = leader_trait_chronotec_chronolord_infusion_neutral
+		}
+		else_if = { # 2 > 1
+			limit = {
+				has_trait = leader_trait_chronotec_chronolord_infusion_2
+			}
+			remove_trait = leader_trait_chronotec_chronolord_infusion_2
+			add_trait = leader_trait_chronotec_chronolord_infusion_1
+		}
+		else_if = { # 3 > 2
+			limit = {
+				has_trait = leader_trait_chronotec_chronolord_infusion_3
+			}
+			remove_trait = leader_trait_chronotec_chronolord_infusion_3
+			add_trait = leader_trait_chronotec_chronolord_infusion_2
+		}
+		else_if = { # 4 > 3
+			limit = {
+				has_trait = leader_trait_chronotec_chronolord_infusion_4
+			}
+			remove_trait = leader_trait_chronotec_chronolord_infusion_4
+			add_trait = leader_trait_chronotec_chronolord_infusion_3
+		}
+		else_if = { # 5 > 4
+			limit = {
+				has_trait = leader_trait_chronotec_chronolord_infusion_5
+			}
+			remove_trait = leader_trait_chronotec_chronolord_infusion_5
+			add_trait = leader_trait_chronotec_chronolord_infusion_4
+		}
+	}
+}
+
+
+# Archaeology site
+site_chronotec_world_random_events = {
+	random_list = {
+		10 = { fleet_event = { id = ancrel.8040 } }
+		10 = { fleet_event = { id = ancrel.8055 } }
+		10 = {
+			fleet_event = { id = ancrel.8070 }
+			modifier = {
+				factor = 2
+				leader = { has_trait = leader_trait_percussive_maintainer }
+			}
+		}
+		2 = { fleet_event = { id = ancrel.8075 } }
+		10 = {
+			modifier = {
+				factor = 0
+				has_ancrel = no
+			}
+			fleet_event = { id = ancrel.8080 } #Minor Artifacts Discovered
+		}
+		10 = { fleet_event = { id = ancrel.8100 } }
+		10 = { fleet_event = { id = ancrel.8110 } }
+	}
+}
+
+# ------------------------------------------------------------------------------
+# Testing
+chronotec_test_system = {
+	spawn_system = {
+		min_distance = 10
+		max_distance = 50
+		max_jumps = 0
+		initializer = "chronotec_chronolord_system"
+	}
+}

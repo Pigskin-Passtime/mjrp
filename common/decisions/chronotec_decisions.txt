@@ -1,0 +1,191 @@
+# common\decisions\chronotec_decisions.txt
+
+# Authors: Rodahtnov & Zyralynn
+
+decision_chronotec_chronoacceleration = {
+	owned_planets_only = yes
+	sound = event_mystic_reveal
+	icon = decision_chronotec_chronoacceleration
+
+	enactment_time = 1
+
+	potential = {
+		exists = leader
+		leader = {
+			chronotec_has_normal_infusion = yes	
+		}
+	}
+
+	allow = {
+		NOR = {
+			has_modifier = pm_chronotec_chronoacceleration
+			has_modifier = pm_chronotec_chronoacceleration_corrupted
+			has_modifier = pm_chronotec_chronoacceleration_perfected
+			hidden_trigger = {	# Lets avoid cheesing the leader
+				exists = owner
+				owner = {
+					has_country_flag = chronotec_chronoacceleration_locked
+				}
+			}
+		}
+	}
+
+	resources = {
+		category = decisions
+		cost = {
+			unity = 1000
+		}
+	}
+
+	effect = {
+		# Normal effects, normal backlash
+		custom_tooltip = decision_chronotec_chronoacceleration_tooltip
+
+		hidden_effect = {
+			add_modifier = {
+				modifier = pm_chronotec_chronoacceleration_corrupted
+			}
+			planet_event = {	# Triggers the negative
+				id = chronotec_leader.50001
+				days = 1800
+			}
+			owner = {
+				set_timed_country_flag = {
+					flag = chronotec_chronoacceleration_locked
+					years = 10
+				}
+			}
+			# Reduce 1 charge to the leader
+			event_target:chronotec_chronolord_leader = {
+				chronotec_decrease_charges_effect = yes
+			}
+		}
+	}
+
+	ai_weight = {
+		weight = 5
+	}
+}
+decision_chronotec_chronoacceleration_corrupted = {
+	owned_planets_only = yes
+	sound = event_mystic_reveal
+	icon = decision_chronotec_chronoacceleration_corrupted
+
+	enactment_time = 1
+
+	potential = {
+		exists = leader
+		leader = {
+			has_trait = leader_trait_chronotec_chronolord_corruption_total
+		}
+	}
+
+	allow = {
+		NOR = {
+			has_modifier = pm_chronotec_chronoacceleration
+			has_modifier = pm_chronotec_chronoacceleration_corrupted
+			has_modifier = pm_chronotec_chronoacceleration_perfected
+			hidden_trigger = {	# Lets avoid cheesing the leader
+				exists = owner
+				owner = {
+					has_country_flag = chronotec_chronoacceleration_locked
+				}
+			}
+		}
+	}
+
+	resources = {
+		category = decisions
+		cost = {
+			unity = 2500
+			influence = 50
+		}
+	}
+
+	effect = {
+		# Higher effect, volatile backlash
+		custom_tooltip = decision_chronotec_chronoacceleration_corrupted_tooltip
+
+		hidden_effect = {
+			add_modifier = {
+				modifier = pm_chronotec_chronoacceleration_corrupted
+			}
+			owner = {
+				set_timed_country_flag = {
+					flag = chronotec_chronoacceleration_locked
+					years = 10
+				}
+			}
+			planet_event = {	# Triggers the negative
+				id = chronotec_leader.50002
+				days = 3600
+			}
+		}
+	}
+
+	ai_weight = {
+		weight = 5
+	}
+}
+decision_chronotec_chronoacceleration_perfected = {
+	owned_planets_only = yes
+	sound = event_mystic_reveal
+	icon = decision_chronotec_chronoacceleration_perfected
+
+	enactment_time = 1
+
+	potential = {
+		exists = leader
+		leader = {
+			has_trait = leader_trait_chronotec_chronolord_infusion_perfect
+		}
+	}
+
+	allow = {
+		NOR = {
+			has_modifier = pm_chronotec_chronoacceleration
+			has_modifier = pm_chronotec_chronoacceleration_corrupted
+			has_modifier = pm_chronotec_chronoacceleration_perfected
+			hidden_trigger = {	# Lets avoid cheesing the leader
+				exists = owner
+				owner = {
+					has_country_flag = chronotec_chronoacceleration_locked
+				}
+			}
+		}
+	}
+
+	resources = {
+		category = decisions
+		cost = {
+			unity = 2500
+			influence = 50
+		}
+	}
+
+	effect = {
+		# Higher effect, volatile backlash
+		custom_tooltip = decision_chronotec_chronoacceleration_perfected_tooltip
+
+		hidden_effect = {
+			add_modifier = {
+				modifier = pm_chronotec_chronoacceleration_perfected
+			}
+			owner = {
+				set_timed_country_flag = {
+					flag = chronotec_chronoacceleration_locked
+					years = 10
+				}
+			}
+			planet_event = {	# Incremental
+				id = chronotec_leader.50003
+				days = 360
+			}
+		}
+	}
+
+	ai_weight = {
+		weight = 5
+	}
+}
+
