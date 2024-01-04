@@ -1,0 +1,982 @@
+namespace = hskv_hunt
+
+# Eve Online time
+country_event = {
+	id = hskv_hunt.1000
+	title = hskv_hunt.1000.name
+	desc = hskv_hunt.1000.desc
+	picture = GFX_evt_deficit
+	show_sound = event_ship_bridge
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = hskv_ignore_dismiss_effect
+		set_variable = {
+			which = hskv_total_num_valid_ships
+			value = 0
+		}
+		every_owned_ship = {
+			limit = {
+				is_designable = yes
+				is_in_combat = no
+				is_owned_by = PREV
+				OR = {
+					is_ship_size = constructor
+					is_ship_size = corvette
+					is_ship_size = frigate
+					is_ship_size = destroyer
+					is_ship_size = cruiser
+				}
+			}
+			change_variable = {
+				which = hskv_total_num_valid_ships
+				value = 1
+			}
+		}
+		set_variable = {
+			which = hskv_num_targeted_ships
+			value = hskv_total_num_valid_ships
+		}
+		divide_variable = {
+			which = hskv_num_targeted_ships
+			value = 5
+		}
+		if = {
+			limit = {
+				is_at_war = yes
+			}
+			divide_variable = {
+				which = hskv_num_targeted_ships
+				value = 4
+			}
+		}
+	}
+
+
+	option = {
+		name = hskv_hunt.1000.response
+		custom_tooltip = hskv_hunt.1000.response.tooltip
+		hidden_effect = {
+			country_event = {
+				id = hskv_hunt.1001
+			}
+		}
+		owner = {
+			add_resource = {
+				energy = -1000
+				minerals = -1000
+				consumer_goods = -1000
+				alloys = -1000
+				rare_crystals = -100
+				exotic_gases = -100
+				volatile_motes = -100
+			}
+			random_owned_leader = {
+				limit = {
+					has_leader_flag = hskv_thayo_everdawn_leader
+				}
+				kill_leader = {
+					show_notification = no
+				}
+			}
+			
+			random_owned_leader = {
+				limit = {
+					is_ruler = no
+					NOR = {
+						has_leader_flag = renowned_leader
+						has_leader_flag = legendary_leader
+					}
+				}
+				kill_leader = {
+					show_notification = no
+				}
+			} 
+			if = {
+				limit = {
+					num_owned_leaders > 12
+				}
+				random_owned_leader = {
+					limit = {
+						is_ruler = no
+						NOR = {
+							has_leader_flag = renowned_leader
+							has_leader_flag = legendary_leader
+						}
+					}
+					kill_leader = {
+						show_notification = no
+					}
+				} 
+			}
+			while = {
+				count = hskv_num_targeted_ships
+				random_owned_ship = {
+					limit = {
+						is_designable = yes
+						is_in_combat = no
+						is_owned_by = PREV
+						OR = {
+							is_ship_size = constructor
+							is_ship_size = corvette
+							is_ship_size = frigate
+							is_ship_size = destroyer
+							is_ship_size = cruiser
+						}
+					}
+					delete_ship = this
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = hskv_hunt.1001
+	title = hskv_hunt.1001.name
+	desc = hskv_hunt.1001.desc
+	picture = GFX_evt_board_meeting
+	show_sound = event_ship_bridge
+	is_triggered_only = yes
+
+	immediate = {
+		hskv_get_codebreaking_score = yes
+		if = {
+			limit = {
+				check_variable = {
+					which = hskv_codebreaking
+					value > 5
+				}
+			}
+			set_country_flag = hskv_manhunt_high_crypto
+		}
+	}
+
+	option = {
+		name = hskv_hunt.1001.response
+		owner = {
+			start_situation = {
+				type = hskv_situation_thayo_manhunt
+				target = root
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = hskv_hunt.1002
+				days = 30
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv_hunt.1002
+	title = hskv_hunt.1002.name
+	desc = hskv_hunt.1002.desc
+	picture = GFX_evt_board_meeting
+	show_sound = event_ship_bridge
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_flag = hskv_thayo_under_constant_surveillance
+	}
+
+	immediate = {
+		hskv_get_thayo_manhunt_situation = yes
+	}
+
+	option = {
+		name = EXCELLENT
+		owner = {
+			event_target:hskv_situation_thayo_manhunt = {
+				add_situation_progress = 10
+			}
+		}
+	}
+}
+
+##########################################################################################################
+##########################################################################################################
+##########################################################################################################
+# If you are frgual or Normal these events trigger
+situation_event = {
+	id = hskv_hunt.1010
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		owner = {
+			random_list = {
+				2 = {}
+				1 = { country_event = { id = hskv_hunt.1020 } }
+				1 = { country_event = { id = hskv_hunt.1021 } }
+				1 = { country_event = { id = hskv_hunt.1022 } }
+				1 = { country_event = { id = hskv_hunt.1023 } }
+				1 = { country_event = { id = hskv_hunt.1024 } }
+				1 = { country_event = { id = hskv_hunt.1025 } }
+				1 = { country_event = { id = hskv_hunt.1026 } }
+				1 = { country_event = { id = hskv_hunt.1027 } }
+				1 = { country_event = { id = hskv_hunt.1030 } }
+				1 = { country_event = { id = hskv_hunt.1031 } }
+				1 = { country_event = { id = hskv_hunt.1040 } }
+				1 = { country_event = { id = hskv_hunt.1041 } }
+				1 = { country_event = { id = hskv_hunt.1042 } }
+			}
+		}
+	}
+}
+# If you are careful these events trigger
+situation_event = {
+	id = hskv_hunt.1011
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		owner = {
+			random_list = {
+				2 = {}
+				1 = { country_event = { id = hskv_hunt.1021 } }
+				1 = { country_event = { id = hskv_hunt.1022 } }
+				1 = { country_event = { id = hskv_hunt.1025 } }
+				4 = { country_event = { id = hskv_hunt.1027 } }
+				4 = { country_event = { id = hskv_hunt.1030 } }
+				4 = { country_event = { id = hskv_hunt.1031 } }
+				2 = { country_event = { id = hskv_hunt.1040 } }
+				2 = { country_event = { id = hskv_hunt.1041 } }
+				2 = { country_event = { id = hskv_hunt.1042 } }
+			}
+		}
+	}
+}
+# If you are aggressive these events trigger
+situation_event = {
+	id = hskv_hunt.1012
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		owner = {
+			random_list = {
+				2 = {}
+				3 = { country_event = { id = hskv_hunt.1020 } }
+				3 = { country_event = { id = hskv_hunt.1021 } }
+				3 = { country_event = { id = hskv_hunt.1022 } }
+				3 = { country_event = { id = hskv_hunt.1023 } }
+				3 = { country_event = { id = hskv_hunt.1024 } }
+				3 = { country_event = { id = hskv_hunt.1025 } }
+				3 = { country_event = { id = hskv_hunt.1026 } }
+				3 = { country_event = { id = hskv_hunt.1027 } }
+				2 = { country_event = { id = hskv_hunt.1030 } }
+				2 = { country_event = { id = hskv_hunt.1031 } }
+				1 = { country_event = { id = hskv_hunt.1040 } }
+				1 = { country_event = { id = hskv_hunt.1041 } }
+				1 = { country_event = { id = hskv_hunt.1042 } }
+			}
+		}
+	}
+}
+
+# --------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------
+# Negative Outcomes
+# Investigation into a factory triggers an explosion
+country_event = {
+	id = hskv_hunt.1020
+	title = hskv_hunt.1020.name
+	desc = hskv_hunt.1020.desc
+	picture = GFX_evt_space_station
+	show_sound = event_ship_bridge
+	is_triggered_only = yes
+
+	option = {
+		name = EXCELLENT
+		owner = {
+			random_owned_planet = {
+				add_planet_devastation = 20
+				ruin_building = random_no_capital
+				random_owned_pop = { kill_pop = yes }
+			}
+		}
+	}
+}
+
+# A pirate base is spawned
+country_event = {
+	id = hskv_hunt.1021
+	title = hskv_hunt.1021.name
+	desc = hskv_hunt.1021.desc
+	picture = GFX_evt_space_station
+	show_sound = event_ship_bridge
+	is_triggered_only = yes
+
+	immediate = {
+		save_event_target_as = pirate_target
+		owner_species = { save_event_target_as = owner_species }
+		random_system_within_border = {
+			limit = {
+				has_trade_route = yes
+				trade_intercepted_value > 0
+			}
+			save_event_target_as = pirate_system
+			create_normal_pirate_country = yes
+			create_pirate_fleet = yes
+		}
+	}
+
+	option = {
+		name = EXCELLENT
+		owner = {
+		}
+	}
+}
+
+# Random Crime Wave
+country_event = {
+	id = hskv_hunt.1022
+	title = hskv_hunt.1022.name
+	desc = hskv_hunt.1022.desc
+	picture = GFX_evt_space_station
+	show_sound = event_ship_bridge
+	is_triggered_only = yes
+
+	option = {
+		name = EXCELLENT
+		owner = {
+			random_owned_planet = {
+				limit = {
+					NOT = {
+						has_modifier = crime_wave
+					}
+				}
+				add_modifier = {
+					modifier = crime_wave
+					years = 10
+				}
+			}
+			random_owned_planet = {
+				limit = {
+					NOT = {
+						has_modifier = crime_wave
+					}
+				}
+				add_modifier = {
+					modifier = crime_wave
+					years = 10
+				}
+			}
+		}
+	}
+}
+
+# One planet gets resource penalty and crime
+country_event = {
+	id = hskv_hunt.1023
+	title = hskv_hunt.1023.name
+	desc = hskv_hunt.1023.desc
+	picture = GFX_evt_space_station
+	show_sound = event_ship_bridge
+	is_triggered_only = yes
+
+	option = {
+		name = EXCELLENT
+		owner = {
+			random_owned_planet = {
+				add_modifier = {
+					modifier = hskv_resources_being_stolen
+					years = 10
+				}
+			}
+		}
+	}
+}
+# Resources stolen
+country_event = {
+	id = hskv_hunt.1024
+	title = hskv_hunt.1024.name
+	desc = hskv_hunt.1024.desc
+	picture = GFX_evt_space_station
+	show_sound = event_ship_bridge
+	is_triggered_only = yes
+
+	option = {
+		name = EXCELLENT
+		owner = {
+			add_resource = {
+				energy = -500
+			}
+		}
+	}
+}
+# Mining Stations vulnerable - lower production for X years
+country_event = {
+	id = hskv_hunt.1025
+	title = hskv_hunt.1025.name
+	desc = hskv_hunt.1025.desc
+	picture = GFX_evt_space_station
+	show_sound = event_ship_bridge
+	is_triggered_only = yes
+
+	option = {
+		name = EXCELLENT
+		owner = {
+			add_modifier = {
+				modifier = hskv_mining_stations_vulnerable
+				years = 10
+			}
+		}
+	}
+}
+# False accusation - Leader is falsely accused of being a Thayo Sympathizer. Gets a temporary modifier for X years
+country_event = {
+	id = hskv_hunt.1026
+	title = hskv_hunt.1026.name
+	desc = hskv_hunt.1026.desc
+	picture = GFX_evt_space_station
+	show_sound = event_ship_bridge
+	is_triggered_only = yes
+
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				is_ruler = no
+			}
+			save_event_target_as = hskv_false_leader_sympathizer
+		}
+	}
+
+	option = {
+		name = EXCELLENT
+		owner = {
+			event_target:hskv_false_leader_sympathizer = {
+				add_timed_trait = {
+					trait = hskv_leader_trait_indignant_outrage
+					years = 10
+				}
+			}
+		}
+	}
+}
+# Random Setback
+country_event = {
+	id = hskv_hunt.1027
+	title = hskv_hunt.1027.name
+	desc = hskv_hunt.1027.desc
+	picture = GFX_evt_space_station
+	show_sound = event_ship_bridge
+	is_triggered_only = yes
+	immediate = {
+		hskv_get_thayo_manhunt_situation = yes
+	}
+
+	option = {
+		name = EXCELLENT
+		owner = {
+			event_target:hskv_situation_thayo_manhunt = {
+				add_situation_progress = -12
+			}
+		}
+	}
+}
+
+# --------------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------------
+# Neutral Outcomes
+# Offer a bribe to make progress, refusing causes a setback
+country_event = {
+	id = hskv_hunt.1030
+	title = hskv_hunt.1030.name
+	desc = hskv_hunt.1030.desc
+	picture = GFX_evt_space_station
+	show_sound = event_ship_bridge
+	is_triggered_only = yes
+
+	immediate = {
+		hskv_get_thayo_manhunt_situation = yes
+	}
+
+
+	option = {
+		name = hskv_hunt.1030.option.a
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 750
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				energy = -750
+			}
+			event_target:hskv_situation_thayo_manhunt = {
+				add_situation_progress = 12
+			}
+		}
+	}
+	option = {
+		name = hskv_hunt.1030.option.b
+		owner = {
+			event_target:hskv_situation_thayo_manhunt = {
+				add_situation_progress = -6
+			}
+		}
+	}
+}
+# Stole resources, but they failed to cover their tracks
+country_event = {
+	id = hskv_hunt.1031
+	title = hskv_hunt.1031.name
+	desc = hskv_hunt.1031.desc
+	picture = GFX_evt_space_station
+	show_sound = event_ship_bridge
+	is_triggered_only = yes
+
+	immediate = {
+		hskv_get_thayo_manhunt_situation = yes
+	}
+
+
+	option = {
+		name = EXCELLENT
+		owner = {
+			add_resource = {
+				energy = -750
+			}
+			event_target:hskv_situation_thayo_manhunt = {
+				add_situation_progress = 6
+			}
+		}
+	}
+
+}
+
+# --------------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------------
+# Postive Outcomes
+# Boon! Some lost resources recovered!
+country_event = {
+	id = hskv_hunt.1040
+	title = hskv_hunt.1040.name
+	desc = hskv_hunt.1040.desc
+	picture = GFX_evt_space_station
+	show_sound = event_ship_bridge
+	is_triggered_only = yes
+
+	option = {
+		name = EXCELLENT
+		owner = {
+			add_resource = {
+				energy = -750
+			}
+		}
+	}
+}
+# Recover another country's resources. But they have no idea you have it. Keep or get opinion
+country_event = {
+	id = hskv_hunt.1041
+	title = hskv_hunt.1041.name
+	desc = hskv_hunt.1041.desc
+	picture = GFX_evt_space_station
+	show_sound = event_ship_bridge
+	is_triggered_only = yes
+
+	immediate = {
+		random_playable_country = {
+			limit = { 
+				NOT = {
+					has_country_flag = hskv_thayo_everdawn_country
+				}
+			}
+			save_event_target_as = hskv_target_country_theft
+		}
+	}
+
+	option = {
+		name = hskv_hunt.1041.option.a
+		owner = {
+			event_target:hskv_target_country_theft = {
+				add_opinion_modifier = {
+					who = root
+					modifier = opinion_returned_supplies
+				}
+				add_favors = {
+					target = root
+					value = 1
+				}
+			}
+		}
+	}
+	option = {
+		name =  hskv_hunt.1041.option.b
+		owner = {
+			add_resource = {
+				energy = 500
+			}
+		}
+	}
+}
+# Random Breakthrough
+country_event = {
+	id = hskv_hunt.1042
+	title = hskv_hunt.1042.name
+	desc = hskv_hunt.1042.desc
+	picture = GFX_evt_space_station
+	show_sound = event_ship_bridge
+	is_triggered_only = yes
+
+	immediate = {
+		hskv_get_thayo_manhunt_situation = yes
+	}
+
+	option = {
+		name = EXCELLENT
+		owner = {
+			event_target:hskv_situation_thayo_manhunt = {
+				add_situation_progress = 12
+			}
+		}
+	}
+}
+
+# --------------------------------------------------------------------------------------------
+# When we reach the second phase, trigger pirate attack
+situation_event = {
+	id = hskv_hunt.1050
+	title = hskv_hunt.1050.name
+	desc = hskv_hunt.1050.desc
+	picture = GFX_evt_space_station
+	show_sound = event_ship_bridge
+	is_triggered_only = yes
+
+	immediate = {
+		owner = {
+			save_event_target_as = pirate_target
+			owner_species = { save_event_target_as = owner_species }
+			random_system_within_border = {
+				limit = {
+					has_trade_route = yes
+					trade_intercepted_value > 0
+				}
+				save_event_target_as = pirate_system
+				create_normal_pirate_country = yes
+				create_pirate_fleet = yes
+			}
+			random_system_within_border = {
+				limit = {
+					has_trade_route = yes
+					trade_intercepted_value > 0
+				}
+				save_event_target_as = pirate_system
+				create_normal_pirate_country = yes
+				create_pirate_fleet = yes
+			}
+			random_system_within_border = {
+				limit = {
+					has_trade_route = yes
+					trade_intercepted_value > 0
+				}
+				save_event_target_as = pirate_system
+				create_normal_pirate_country = yes
+				create_pirate_fleet = yes
+			}
+		}
+	}
+
+	option = {
+		name = EXCELLENT
+		owner = {
+			add_modifier = {
+				modifier = hskv_piracy_on_the_rise
+				years = 10
+			}
+		}
+	}
+}
+
+# --------------------------------------------------------------------------------------------
+situation_event = {
+	id = hskv_hunt.2100
+	title = hskv_hunt.2100.name
+	desc = hskv_hunt.2100.desc
+	picture = GFX_evt_spymaster
+	show_sound = event_ship_bridge
+	is_triggered_only = yes
+
+	option = {
+		name =  hskv_hunt.2100.response
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_hunt.2101
+				}
+			}
+		}
+	}
+	after = { destroy_situation = this }
+}
+##########################################################################################################
+##########################################################################################################
+##########################################################################################################
+country_event = {
+	id = hskv_hunt.2101
+	title = hskv_hunt.2101.name
+	desc = hskv_hunt.2101.desc
+	picture = GFX_evt_space_station
+	show_sound = event_ship_bridge
+	is_triggered_only = yes
+
+	option = {
+		name = EXCELLENT
+		owner = {
+			country_event = {
+				id = hskv_hunt.2102
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv_hunt.2102
+	title = hskv_hunt.2102.name
+	desc = hskv_hunt.2102.desc
+	show_sound = event_ship_bridge
+	diplomatic = yes
+	is_triggered_only = yes
+	picture_event_data = {
+		portrait = hskv_thayo_portrait
+		room = ethic_spaceship_room
+	}
+
+	option = {
+		name = hskv_hunt.2102.option.a
+		response_text = hskv_hunt.2102.option.a.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = hskv_hunt.2102.option.b
+		response_text = hskv_hunt.2102.option.b.response
+		is_dialog_only = yes
+	}
+
+
+	option = {
+		name =  hskv_hunt.2102.option.c
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_hunt.2103
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv_hunt.2103
+	title = hskv_hunt.2103.name
+	desc = hskv_hunt.2103.desc
+	show_sound = event_ship_bridge
+	diplomatic = yes
+	is_triggered_only = yes
+	picture_event_data = {
+		portrait = hskv_thayo_portrait
+		room = ethic_spaceship_room
+	}
+
+	# Forgiveness
+	option = {
+		name =  hskv_hunt.2103.option.1
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_hunt.2110
+				}
+			}
+		}
+	}
+	# Retribution
+	option = {
+		name =  hskv_hunt.2103.option.2
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_hunt.2104
+				}
+			}
+		}
+	}
+}
+
+# I warned you
+country_event = {
+	id = hskv_hunt.2104
+	title = hskv_hunt.2104.name
+	desc = hskv_hunt.2104.desc
+	show_sound = event_ship_bridge
+	diplomatic = yes
+	is_triggered_only = yes
+	picture_event_data = {
+		portrait = hskv_thayo_portrait
+		room = ethic_spaceship_room
+	}
+
+	option = {
+		name =  hskv_hunt.2104.response
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_hunt.2105
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = hskv_hunt.2105
+	title = hskv_hunt.2105.name
+	desc = hskv_hunt.2105.desc
+	diplomatic = yes
+	is_triggered_only = yes
+	picture_event_data = {
+		room = no_video_feed_room
+	}
+
+	option = {
+		name =  CURSES
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_hunt.2106
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = hskv_hunt.2106
+	title = hskv_hunt.2105.name
+	desc = hskv_hunt.2106.desc
+	picture = GFX_evt_debris
+	show_sound = event_ship_explosion
+	is_triggered_only = yes
+
+	option = {
+		name =  CURSES
+		hidden_effect = {
+			owner = {
+			}
+		}
+	}
+}
+
+# Lets get back to work
+country_event = {
+	id = hskv_hunt.2110
+	title = hskv_hunt.2102.name
+	desc = hskv_hunt.2110.desc
+	show_sound = event_ship_bridge
+	diplomatic = yes
+	is_triggered_only = yes
+	picture_event_data = {
+		portrait = hskv_thayo_portrait
+		room = ethic_spaceship_room
+	}
+
+	option = {
+		name =  hskv_hunt.2104.response
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_hunt.2111
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = hskv_hunt.2111
+	title = hskv_hunt.2102.name
+	desc = hskv_hunt.2111.desc
+	show_sound = event_ship_bridge
+	diplomatic = yes
+	is_triggered_only = yes
+	picture_event_data = {
+		portrait = hskv_thayo_portrait
+		room = ethic_spaceship_room
+	}
+
+	option = {
+		name =  UNDERSTOOD
+		hidden_effect = {
+			owner = {
+				set_country_flag = hskv_can_build_wormhole_module
+				remove_country_flag = hskv_ignore_dismiss_effect
+				# Go back to regular events
+				country_event = {
+					id = hskv.1112
+					days = 30
+				}
+				begin_event_chain = {
+					event_chain = "hskv_thayo_create_wormhole_chain"
+				}
+
+
+				create_species = {
+					name = UNKNOWN
+					class = AVI
+					portrait = hskv_thayo_portrait
+					namelist = random_class
+					traits = { }
+					immortal = no
+					allow_negative_traits = no
+					effect = {
+						save_event_target_as = hskv_leader_species
+					}
+				}
+				create_leader = {
+					class = official
+					species = event_target:hskv_leader_species
+					name = NAME_hskv_thayo_everdawn
+					skill = 1
+					gender = male
+					event_leader = yes
+					background_ethic = ethic_authoritarian
+					skip_background_generation = yes
+					custom_description = hskv_thayo_everdawn_leader_desc
+					custom_catch_phrase = hskv_thayo_everdawn_leader_catch_phrase
+					immortal = yes
+					hide_age = yes
+		
+					randomize_traits = yes
+					effect = {
+						set_age = 20
+						add_skill_without_trait_selection = 10
+						remove_all_traits = yes
+						set_skill = 1
+						remove_all_traits = yes
+
+						set_leader_flag = legendary_leader
+						set_leader_flag = immune_to_negative_traits
+						set_leader_flag = cannot_be_ruler
+						set_leader_flag = cannot_explore_rift
+						set_leader_flag = hskv_thayo_everdawn_leader
+			
+						add_trait_no_notify = subclass_official_diplomacy_councilor #todo flag for paragons?
+						add_trait_no_notify = hskv_leader_trait_thayo_everdawn_4
+						add_trait_no_notify = leader_trait_psionic
+						add_trait_no_notify = trait_ruler_charismatic_2
+						
+						add_trait_no_notify = hskv_leader_trait_population_oversight
+						add_trait_no_notify = hskv_leader_trait_zro_dealer_contact
+						add_trait_no_notify = hskv_leader_trait_pinnacle
+
+						#TODO plus any event ones he used to have (perhaps with less negative effects)
+						
+						save_event_target_as = hskv_thayo_everdawn_leader
+					}
+				}
+
+				hire_event_leader_message = {
+					LEADER = hskv_thayo_everdawn_leader
+				}
+			}
+		}
+	}
+}

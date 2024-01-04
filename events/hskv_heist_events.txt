@@ -1,0 +1,2215 @@
+namespace = hskv_heist
+
+
+# Time to Heist!
+# Phase 1 - The Outside Defenses
+# TODO Reminder, make all event chains have a 1 day delay so it continues to pause
+country_event = {
+	id = hskv_heist.1131
+	title = hskv_heist.1131.name
+	desc = hskv_heist.1131.desc
+	picture = GFX_evt_enigmatic_fortress
+	show_sound = event_default
+	hide_window = no
+	is_triggered_only = yes
+
+	immediate = {
+	}
+
+	option ={
+		name = hskv_heist.1131.option.a
+		custom_tooltip = hskv_heist.1131.option.a.tooltip
+		owner = {
+		}
+		hidden_effect = {
+			hskv_create_vault_defense_force_2 = yes
+		}
+	}
+	option ={
+		name = hskv_heist.1131.option.b
+		custom_tooltip = hskv_heist.1131.option.b.tooltip
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = volatile_motes
+					value >= 2000
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				volatile_motes = -2000
+			}
+			hskv_get_event_target_everdawn_vault = yes
+			enable_special_project = {
+				name = hskv_vault_phase1_explosion_special_project
+				location = event_target:hskv_fortress_vault
+				owner = root.owner
+			}
+		}
+	}
+}
+# Explosive Special Project complete
+ship_event = {
+	id = hskv_heist.1132
+	title = hskv_heist.1131.name
+	desc = hskv_heist.1132.desc
+	picture = GFX_evt_sabotaged_ship
+	show_sound = event_ship_explosion
+	hide_window = no
+	is_triggered_only = yes
+	
+	option = {
+		name = EXCELLENT
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2200
+					days = 1
+				}
+			}
+		}
+	}
+}
+
+
+# This = owner of fleet 1 (combatant)
+# From = owner of fleet 2 (destroyed)
+# FromFrom = fleet 1
+# FromFromFrom = fleet 2
+country_event = {
+	id = hskv_heist.1133
+	title = hskv_heist.1131.name
+	desc = hskv_heist.1133.desc
+	picture = GFX_evt_enigmatic_fortress
+	show_sound = event_default
+	hide_window = no
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	trigger = {
+		FromFromFrom = {
+			has_fleet_flag = hskv_vault_defense_fleet
+		}
+		# any_system = {
+		# 	has_star_flag = hskv_dawns_end_system
+		# 	NOT = {
+		# 		any_fleet_in_system = {
+		# 			has_fleet_flag = hskv_vault_defense_fleet
+		# 		}
+		# 	}
+		# }
+	}
+
+	option = {
+		name = EXCELLENT
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2200
+					days = 1
+				}
+			}
+		}
+	}
+}
+
+# ----------------------------------------------------------------------
+# Phase 2. A Big Door
+country_event = {
+	id = hskv_heist.2200
+	title = hskv_heist.2200.name
+	desc = hskv_heist.2200.desc
+	picture = GFX_evt_discovered_hidden_door
+	show_sound = event_default
+	hide_window = no
+	is_triggered_only = yes
+	immediate = {
+		hskv_get_vault_situation = yes
+	}
+	option = {
+		name = hskv_heist.2200.option.a
+		custom_tooltip = hskv_heist.2200.option.a.tooltip
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = volatile_motes
+					value >= 2000
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				volatile_motes = -2000
+			}
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2210
+					days = 1
+				}
+			}
+		}
+	}
+	option = {
+		name = hskv_heist.2200.option.b
+		custom_tooltip = hskv_heist.2200.option.b.tooltip
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2220
+					days = 1
+				}
+			}
+		}
+	}
+	option = {
+		name = hskv_heist.2200.option.c
+		custom_tooltip = hskv_heist.2200.option.c.tooltip
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2230
+					days = 150
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = hskv_heist.2210
+	title = hskv_heist.2200.name
+	desc = hskv_heist.2210.desc
+	picture = GFX_evt_sabotaged_ship
+	show_sound = event_ship_explosion
+	hide_window = no
+	is_triggered_only = yes
+	immediate = {
+		hskv_get_vault_situation = yes
+	}
+	option = {
+		name = EXCELLENT
+		owner = {
+			event_target:hskv_vault_situation = {
+				add_situation_progress = 1
+			}
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2300
+					days = 1
+				}
+			}
+		}
+	}
+}
+
+
+
+country_event = {
+	id = hskv_heist.2220
+	title = hskv_heist.2200.name
+	desc = hskv_heist.2220.desc
+	picture = GFX_evt_synth_sabotage
+	show_sound = event_ship_explosion
+	hide_window = no
+	is_triggered_only = yes
+	immediate = {
+		hskv_get_vault_situation = yes
+		hskv_get_codebreaking_score = yes
+		set_variable = {
+			which = hskv_codebreaking_duration
+			value = 8
+		}
+		subtract_variable = {
+			which = hskv_codebreaking_duration
+			value = hskv_codebreaking
+		}
+		if = {
+			limit = {
+				check_variable = {
+					which = hskv_codebreaking_duration
+					value < 0
+				}
+			}
+			set_variable = {
+				which = hskv_codebreaking_duration
+				value = 0
+			}
+		}
+		log = "hskv_codebreaking_duration=[This.hskv_codebreaking_duration]"
+	}
+
+	option = {
+		name = EXCELLENT
+		owner = {
+			event_target:hskv_vault_situation = {
+				add_situation_progress = Prev.hskv_codebreaking_duration
+			}
+		}
+
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2300
+					days = 1
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = hskv_heist.2230
+	title = hskv_heist.2200.name
+	desc = hskv_heist.2230.desc
+	picture = GFX_evt_sabotaged_ship
+	show_sound = event_ship_explosion
+	hide_window = no
+	is_triggered_only = yes
+	
+	option = {
+		name = EXCELLENT
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2300
+					days = 1
+				}
+			}
+		}
+	}
+}
+# ----------------------------------------------------------------------
+# Phase 3. Automated Defenses
+country_event = {
+	id = hskv_heist.2300
+	title = hskv_heist.2300.name
+	desc = hskv_heist.2300.desc
+	picture = GFX_evt_guardians 
+	show_sound = event_default
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		name = hskv_heist.2300.option.a
+		custom_tooltip = hskv_heist.2300.option.a.tooltip
+		owner = {
+			hskv_get_event_target_everdawn_vault = yes
+			enable_special_project = {
+				name = hskv_vault_phase3_army_special_project
+				location = event_target:hskv_fortress_vault
+				owner = root.owner
+			}
+		}
+	}
+	option = {
+		name = hskv_heist.2300.option.b
+		custom_tooltip = hskv_heist.2300.option.b.tooltip
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2320
+					days = 1
+				}
+			}
+		}
+	}
+	option = {
+		name = hskv_heist.2300.option.c
+		custom_tooltip = hskv_heist.2300.option.c.tooltip
+		allow = {
+			has_relic = r_war_forge
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2330
+					days = 1
+				}
+			}
+		}
+	}
+	option = {
+		name = hskv_heist.2300.option.d
+		custom_tooltip = hskv_heist.2300.option.d.tooltip
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2301
+					days = 1
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = hskv_heist.2301
+	title = hskv_heist.2300.name
+	desc = hskv_heist.2301.desc
+	picture = GFX_evt_guardians
+	show_sound = event_default
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		name = hskv_heist.2300.option.a
+		custom_tooltip = hskv_heist.2300.option.a.tooltip
+		owner = {
+			hskv_get_event_target_everdawn_vault = yes
+			enable_special_project = {
+				name = hskv_vault_phase3_army_special_project
+				location = event_target:hskv_fortress_vault
+				owner = root.owner
+			}
+		}
+	}
+	option = {
+		name = hskv_heist.2300.option.b
+		custom_tooltip = hskv_heist.2300.option.b.tooltip
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2320
+					days = 1
+				}
+			}
+		}
+	}
+	option = {
+		name = hskv_heist.2300.option.c
+		custom_tooltip = hskv_heist.2300.option.c.tooltip
+		allow = {
+			has_relic = r_war_forge
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2330
+					days = 1
+				}
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = hskv_heist.2310
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		save_event_target_as = hskv_commander_leader_temp
+		if = {
+			limit = {
+				OR = {
+					# Either have High ground power
+					from = {
+						fleet_power > 1000
+					}
+					# Or a High leader
+					Leader = {
+						has_skill > 5
+					}
+				}
+			}
+			owner = {
+				country_event = {
+					id = hskv_heist.2311
+					days = 1
+				}
+			}
+		}
+		else = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2312
+					days = 1
+				}
+			}
+		}
+	}
+}
+# Success!
+country_event = {
+	id = hskv_heist.2311
+	title = hskv_heist.2300.name
+	desc = hskv_heist.2311.desc
+	picture = GFX_evt_sabotaged_ship
+	show_sound = event_ship_explosion
+	hide_window = no
+	is_triggered_only = yes
+	
+	option = {
+		name = EXCELLENT
+		event_target:hskv_commander_leader_temp = {
+			add_experience = 300
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2400
+					days = 1
+				}
+			}
+		}
+	}
+}
+# Setback!
+country_event = {
+	id = hskv_heist.2312
+	title = hskv_heist.2300.name
+	desc = hskv_heist.2312.desc
+	picture = GFX_evt_sabotaged_ship
+	show_sound = event_ship_explosion
+	hide_window = no
+	is_triggered_only = yes
+	immediate = {
+		hskv_get_vault_situation = yes
+	}
+
+	option = {
+		name = EXCELLENT
+		owner = {
+			event_target:hskv_vault_situation = {
+				add_situation_progress = 2
+			} 
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2400
+					days = 1
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv_heist.2320
+	title = hskv_heist.2300.name
+	desc = hskv_heist.2320.desc
+	picture = GFX_evt_synth_sabotage
+	show_sound = event_ship_explosion
+	hide_window = no
+	is_triggered_only = yes
+	immediate = {
+		hskv_get_vault_situation = yes
+		hskv_get_codebreaking_score = yes
+		set_variable = {
+			which = hskv_codebreaking_duration
+			value = 12
+		}
+		subtract_variable = {
+			which = hskv_codebreaking_duration
+			value = hskv_codebreaking
+		}
+		if = {
+			limit = {
+				check_variable = {
+					which = hskv_codebreaking_duration
+					value < 0
+				}
+			}
+			set_variable = {
+				which = hskv_codebreaking_duration
+				value = 0
+			}
+		}
+	}
+
+	option = {
+		name = EXCELLENT
+		owner = {
+			event_target:hskv_vault_situation = {
+				add_situation_progress = hskv_codebreaking_duration
+			} 
+			capital_scope = {
+				create_army = {
+					owner = THIS
+					type = cybrex_warform
+				}
+				create_army = {
+					owner = THIS
+					type = cybrex_warform
+				}
+				create_army = {
+					owner = THIS
+					type = cybrex_warform
+				}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2400
+					days = 1
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = hskv_heist.2330
+	title = hskv_heist.2300.name
+	desc = hskv_heist.2330.desc
+	picture = GFX_evt_sabotaged_ship
+	show_sound = event_ship_explosion
+	hide_window = no
+	is_triggered_only = yes
+	
+	option = {
+		name = EXCELLENT
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2400
+					days = 1
+				}
+			}
+		}
+	}
+}
+# ----------------------------------------------------------------------
+# Phase 4. DECIDE Which path
+country_event = {
+	id = hskv_heist.2400
+	title = hskv_heist.2400.name
+	desc = hskv_heist.2400.desc
+	picture = GFX_evt_derelict_interior
+	show_sound = event_default
+	hide_window = no
+	is_triggered_only = yes
+	immediate = {
+		hskv_get_vault_situation = yes
+	}
+
+	option = {
+		name = hskv_heist.2400.option.a
+		custom_tooltip = hskv_heist.2400.option.a.tooltip
+		owner = {
+			event_target:hskv_vault_situation = {
+				add_situation_progress = 3
+			} 
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2450
+					days = 1
+				}
+			}
+		}
+	}
+	option = {
+		name = hskv_heist.2400.option.b
+		custom_tooltip = hskv_heist.2400.option.b.tooltip
+		owner = {
+			event_target:hskv_vault_situation = {
+				add_situation_progress = 6
+			} 
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2500
+					days = 1
+				}
+			}
+		}
+	}
+}
+
+# ----------------------------------------------------------------------
+# Phase 4a. Central Command
+country_event = {
+	id = hskv_heist.2450
+	title = hskv_heist.2450.name
+	desc = hskv_heist.2450.desc
+	picture = GFX_evt_crusher_droid
+	show_sound = event_default
+	hide_window = no
+	is_triggered_only = yes
+	immediate = {
+		hskv_get_vault_situation = yes
+	}
+	option = {
+		name = hskv_heist.2450.option.a
+		custom_tooltip = hskv_heist.2450.option.a.tooltip
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 2500
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				energy = -2500
+			}
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2460
+					days = 1
+				}
+			}
+		}
+	}
+	option = {
+		name = hskv_heist.2450.option.b
+		custom_tooltip = hskv_heist.2450.option.b.tooltip
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = exotic_gases
+					value >= 750
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				exotic_gases = -750
+			}
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2470
+					days = 1
+				}
+			}
+		}
+	}
+	option = {
+		name = hskv_heist.2450.option.c
+		custom_tooltip = hskv_heist.2450.option.c.tooltip
+		allow = {
+			has_modifier = killer_librarian_organism
+		}
+		owner = {
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2480
+					days = 1
+				}
+			}
+		}
+	}
+	option = {
+		name = hskv_heist.2450.option.d
+		custom_tooltip = hskv_heist.2450.option.d.tooltip
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = volatile_motes
+					value >= 750
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				volatile_motes = -750
+			}
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2490
+					days = 1
+				}
+			}
+		}
+	}
+	option = {
+		name = hskv_heist.2450.option.e
+		custom_tooltip = hskv_heist.2450.option.e.tooltip
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2495
+					days = 1
+				}
+			}
+		}
+	}
+	option = {
+		name = hskv_heist.2450.option.f
+		custom_tooltip = hskv_heist.2450.option.f.tooltip
+		owner = {
+			event_target:hskv_vault_situation = {
+				add_situation_progress = 5
+			} 
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2500
+					days = 1
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = hskv_heist.2460
+	title = hskv_heist.2450.name
+	desc = hskv_heist.2460.desc
+	picture = GFX_evt_sabotaged_ship
+	show_sound = event_ship_explosion
+	hide_window = no
+	is_triggered_only = yes
+	immediate = {
+		hskv_get_vault_situation = yes
+	}
+
+	option = {
+		name = EXCELLENT
+		owner = {
+			event_target:hskv_vault_situation = {
+				add_situation_progress = 1
+			}
+			event_target:hskv_vault_situation = {
+				add_situation_progress = -5
+			}
+			event_target:hskv_vault_situation = {
+				add_situation_progress = 4
+			}
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2500
+					days = 1
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = hskv_heist.2470
+	title = hskv_heist.2450.name
+	desc = hskv_heist.2470.desc
+	picture = GFX_evt_sabotaged_ship
+	show_sound = event_ship_explosion
+	hide_window = no
+	is_triggered_only = yes
+	immediate = {
+		hskv_get_vault_situation = yes
+	}
+
+	option = {
+		name = EXCELLENT
+		owner = {
+			event_target:hskv_vault_situation = {
+				add_situation_progress = 1
+			} 
+			event_target:hskv_vault_situation = {
+				add_situation_progress = -5
+			} 
+			event_target:hskv_vault_situation = {
+				add_situation_progress = 2
+			} 
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2500
+					days = 1
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = hskv_heist.2480
+	title = hskv_heist.2450.name
+	desc = hskv_heist.2480.desc
+	picture = GFX_evt_sabotaged_ship
+	show_sound = event_ship_explosion
+	hide_window = no
+	is_triggered_only = yes
+	immediate = {
+		hskv_get_vault_situation = yes
+	}
+	option = {
+		name = EXCELLENT
+		owner = {
+			event_target:hskv_vault_situation = {
+				add_situation_progress = 1
+			} 
+			event_target:hskv_vault_situation = {
+				add_situation_progress = -5
+			} 
+			event_target:hskv_vault_situation = {
+				add_situation_progress = 2
+			} 
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2500
+					days = 1
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = hskv_heist.2490
+	title = hskv_heist.2450.name
+	desc = hskv_heist.2490.desc
+	picture = GFX_evt_sabotaged_ship
+	show_sound = event_ship_explosion
+	hide_window = no
+	is_triggered_only = yes
+	immediate = {
+		hskv_get_vault_situation = yes
+	}
+	option = {
+		name = EXCELLENT
+		owner = {
+			event_target:hskv_vault_situation = {
+				add_situation_progress = 1
+			} 
+			event_target:hskv_vault_situation = {
+				add_situation_progress = -5
+			} 
+			event_target:hskv_vault_situation = {
+				add_situation_progress = 6
+			} 
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2500
+					days = 1
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv_heist.2495
+	title = hskv_heist.2450.name
+	desc = hskv_heist.2495.desc
+	picture = GFX_evt_sabotaged_ship
+	show_sound = event_ship_explosion
+	hide_window = no
+	is_triggered_only = yes
+	immediate = {
+		hskv_get_vault_situation = yes
+		hskv_get_codebreaking_score = yes
+		set_variable = {
+			which = hskv_codebreaking_duration
+			value = 8
+		}
+		subtract_variable = {
+			which = hskv_codebreaking_duration
+			value = hskv_codebreaking
+		}
+		if = {
+			limit = {
+				check_variable = {
+					which = hskv_codebreaking_duration
+					value < 0
+				}
+			}
+			set_variable = {
+				which = hskv_codebreaking_duration
+				value = 0
+			}
+		}
+		log = "hskv_codebreaking_duration=[This.hskv_codebreaking_duration]"
+	}
+
+	option = {
+		name = EXCELLENT
+		owner = {
+			event_target:hskv_vault_situation = {
+				add_situation_progress = Prev.hskv_codebreaking_duration
+			}
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2500
+					days = 1
+				}
+			}
+		}
+	}
+}
+
+# ----------------------------------------------------------------------
+# Phase 5. Traps
+country_event = {
+	id = hskv_heist.2500
+	title = hskv_heist.2500.name
+	desc = hskv_heist.2500.desc
+	picture = GFX_evt_laser_grid
+	show_sound = event_default
+	hide_window = no
+	is_triggered_only = yes
+	immediate = {
+		hskv_get_vault_situation = yes
+	}
+	option = {
+		name = hskv_heist.2500.option.a
+		custom_tooltip = hskv_heist.2500.option.a.tooltip
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 3000
+				}
+			}
+		}
+		owner = {
+			hskv_get_event_target_everdawn_vault = yes
+			enable_special_project = {
+				name = hskv_vault_phase5_scientist_special_project
+				location = event_target:hskv_fortress_vault
+				owner = root.owner
+			}
+		}
+	}
+	option = {
+		name = hskv_heist.2500.option.b
+		custom_tooltip = hskv_heist.2500.option.b.tooltip
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2520
+					days = 1
+				}
+			}
+		}
+	}
+	option = {
+		name = hskv_heist.2500.option.c
+		custom_tooltip = hskv_heist.2500.option.c.tooltip
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2530
+					days = 1
+				}
+			}
+		}
+	}
+	option = {
+		name = hskv_heist.2500.option.d
+		custom_tooltip = hskv_heist.2500.option.d.tooltip
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = volatile_motes
+					value >= 1000
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				volatile_motes = -1000
+			}
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2540
+					days = 1
+				}
+			}
+		}
+	}
+}
+ship_event = {
+	id = hskv_heist.2510
+	title = hskv_heist.2500.name
+	desc = hskv_heist.2510.desc
+	picture = GFX_evt_sabotaged_ship
+	show_sound = event_ship_explosion
+	hide_window = no
+	is_triggered_only = yes
+	
+	immediate = {
+		from.leader = {
+			set_leader_flag = hskv_potential_laser_victim
+		}
+
+
+
+		set_variable = {
+			which = hskv_energy_cost
+			value = 16000
+		}
+		if = {
+			limit = {
+				owner = {
+					has_technology = tech_shields_2
+				}
+			}
+			change_variable = {
+				which = hskv_energy_cost
+				value = -500
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_technology = tech_shields_3
+				}
+			}
+			change_variable = {
+				which = hskv_energy_cost
+				value = -1000
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_technology = tech_shields_4
+				}
+			}
+			change_variable = {
+				which = hskv_energy_cost
+				value = -1000
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_technology = tech_shields_5
+				}
+			}
+			change_variable = {
+				which = hskv_energy_cost
+				value = -2000
+			}
+		}
+		if = {
+			limit = {
+				Prev.leader = {
+					has_skill > 3 
+				}
+			}
+			change_variable = {
+				which = hskv_energy_cost
+				value = -400
+			}
+		}
+		if = {
+			limit = {
+				Prev.leader = {
+					has_skill > 5
+				}
+			}
+			change_variable = {
+				which = hskv_energy_cost
+				value = -600
+			}
+		}
+		if = {
+			limit = {
+				Prev.leader = {
+					has_skill > 7
+				}
+			}
+			change_variable = {
+				which = hskv_energy_cost
+				value = -700
+			}
+		}
+		if = {
+			limit = {
+				Prev.leader = {
+					has_skill > 9
+				}
+			}
+			change_variable = {
+				which = hskv_energy_cost
+				value = -800
+			}
+		}
+	}
+
+	# TODO Allow Leader skill to help
+	# Prev.leader = {
+	# 	has_skill < 3
+	# }
+	option = {
+		name = hskv_heist.2500.option.a
+		allow = {
+			owner = {
+				NOR = {
+					has_technology = tech_shields_3
+					has_technology = tech_shields_4
+					has_technology = tech_shields_5
+				}
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 16000
+				}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2511
+					days = 1
+				}
+			}
+		}
+	}
+	option = {
+		name = hskv_heist.2500.option.a
+		allow = {
+			owner = {
+				has_technology = tech_shields_3
+				NOR = {
+					has_technology = tech_shields_4
+					has_technology = tech_shields_5
+				}
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 15000
+				}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2511
+					days = 1
+				}
+			}
+		}
+	}
+	option = {
+		name = hskv_heist.2500.option.a
+		allow = {
+			owner = {
+				has_technology = tech_shields_4
+				NOT = {
+					has_technology = tech_shields_5
+				}
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 13000
+				}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2511
+					days = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = hskv_heist.2500.option.a
+		allow = {
+			owner = {
+				has_technology = tech_shields_5
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 10000
+				}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2511
+					days = 1
+				}
+			}
+		}
+	}
+	option = {
+		name = hskv_heist.2500.option.b
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2512
+					days = 1
+				}
+			}
+		}
+	}
+}
+# Success
+country_event = {
+	id = hskv_heist.2511
+	title = hskv_heist.2500.name
+	desc = hskv_heist.2511.desc
+	picture = GFX_evt_sabotaged_ship
+	show_sound = event_ship_explosion
+	hide_window = no
+	is_triggered_only = yes
+	
+	option = {
+		name = EXCELLENT
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2600
+					days = 1
+				}
+			}
+		}
+	}
+}
+# Failure
+country_event = {
+	id = hskv_heist.2512
+	title = hskv_heist.2500.name
+	desc = hskv_heist.2511.desc
+	picture = GFX_evt_sabotaged_ship
+	show_sound = event_ship_explosion
+	hide_window = no
+	is_triggered_only = yes
+	immediate = {
+		hskv_get_vault_situation = yes
+	}
+	option = {
+		name = CURSES
+		owner = {
+			event_target:hskv_vault_situation = {
+				add_situation_progress = 3
+			}
+			random_owned_leader = {
+				limit = {
+					has_leader_flag = hskv_potential_laser_victim
+				}
+				kill_leader = { show_notification = no }
+			}
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2600
+					days = 1
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv_heist.2520
+	title = hskv_heist.2500.name
+	desc = hskv_heist.2520.desc
+	picture = GFX_evt_sabotaged_ship
+	show_sound = event_ship_explosion
+	hide_window = no
+	is_triggered_only = yes
+	immediate = {
+		hskv_get_vault_situation = yes
+	}
+	option = {
+		name = EXCELLENT
+		owner = {
+			event_target:hskv_vault_situation = {
+				add_situation_progress = 6
+			} 
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2600
+					days = 1
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = hskv_heist.2530
+	title = hskv_heist.2500.name
+	desc = hskv_heist.2530.desc
+	picture = GFX_evt_sabotaged_ship
+	show_sound = event_ship_explosion
+	hide_window = no
+	is_triggered_only = yes
+	immediate = {
+		hskv_get_vault_situation = yes
+		hskv_get_codebreaking_score = yes
+		set_variable = {
+			which = hskv_codebreaking_duration
+			value = 11
+		}
+		subtract_variable = {
+			which = hskv_codebreaking_duration
+			value = hskv_codebreaking
+		}
+		if = {
+			limit = {
+				check_variable = {
+					which = hskv_codebreaking_duration
+					value < 0
+				}
+			}
+			set_variable = {
+				which = hskv_codebreaking_duration
+				value = 0
+			}
+		}
+	}
+
+	option = {
+		name = EXCELLENT
+		owner = {
+			event_target:hskv_vault_situation = {
+				add_situation_progress = hskv_codebreaking_duration
+			} 
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2600
+					days = 1
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = hskv_heist.2540
+	title = hskv_heist.2500.name
+	desc = hskv_heist.2520.desc
+	picture = GFX_evt_sabotaged_ship
+	show_sound = event_ship_explosion
+	hide_window = no
+	is_triggered_only = yes
+	immediate = {
+		hskv_get_vault_situation = yes
+	}
+	option = {
+		name = EXCELLENT
+		owner = {
+			event_target:hskv_vault_situation = {
+				add_situation_progress = 4
+			} 
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2600
+					days = 1
+				}
+			}
+		}
+	}
+}
+# ----------------------------------------------------------------------
+# Phase 6. A Distraction
+country_event = {
+	id = hskv_heist.2600
+	title = hskv_heist.2600.name
+	desc = hskv_heist.2600.desc
+	picture = GFX_evt_treasure_pile
+	show_sound = event_default
+	hide_window = no
+	is_triggered_only = yes
+	immediate = {
+		hskv_get_vault_situation = yes
+	}
+	option = {
+		name = hskv_heist.2600.option.a
+		custom_tooltip = hskv_heist.2600.option.a.tooltip
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2610
+					days = 1
+				}
+			}
+		}
+	}
+	option = {
+		name = hskv_heist.2600.option.b
+		custom_tooltip = hskv_heist.2600.option.b.tooltip
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2620
+					days = 1
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = hskv_heist.2610
+	title = hskv_heist.2600.name
+	desc = hskv_heist.2610.desc
+	picture = GFX_evt_sabotaged_ship
+	show_sound = event_ship_explosion
+	hide_window = no
+	is_triggered_only = yes
+	
+	option = {
+		name = EXCELLENT
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2800
+					days = 1
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = hskv_heist.2620
+	title = hskv_heist.2600.name
+	desc = hskv_heist.2620.desc
+	picture = GFX_evt_sabotaged_ship
+	show_sound = event_ship_explosion
+	hide_window = no
+	is_triggered_only = yes
+	immediate = {
+		hskv_get_vault_situation = yes
+	}
+	option = {
+		name = EXCELLENT
+		owner = {
+			event_target:hskv_vault_situation = {
+				add_situation_progress = 5
+			} 
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+			}
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+			}
+			add_resource = {
+				energy = 2000
+				minerals = 1000
+				alloys = 1000
+				volatile_motes = 250
+				exotic_gases = 250
+				rare_crystals = 250
+			}
+			if = {
+				limit = {
+					has_ancrel = yes
+				}
+				add_resource = {
+					minor_artifacts = 500
+				}
+			}
+			give_fe_tech = yes
+			hskv_give_random_fe_building = yes
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2800
+					days = 1
+				}
+			}
+		}
+	}
+}
+
+
+# ----------------------------------------------------------------------
+# Phase 7. something... But I can't think of anything so lets skip it
+# country_event = {
+# 	id = hskv_heist.2700
+# 	title = hskv_heist.2700.name
+# 	desc = hskv_heist.2700.desc
+# 	picture = GFX_evt_discovered_hidden_door
+# 	show_sound = event_default
+# 	hide_window = no
+# 	is_triggered_only = yes
+
+# 	option = {
+# 		name = hskv_heist.2700.option.a
+# 		custom_tooltip = hskv_heist.2700.option.a.tooltip
+# 		hidden_effect = {
+# 			owner = {
+# 				country_event = {
+# 					id = hskv_heist.2710
+# 				}
+# 			}
+# 		}
+# 	}
+# 	option = {
+# 		name = hskv_heist.2700.option.b
+# 		custom_tooltip = hskv_heist.2700.option.b.tooltip
+# 		hidden_effect = {
+# 			owner = {
+# 				country_event = {
+# 					id = hskv_heist.2720
+# 				}
+# 			}
+# 		}
+# 	}
+# 	option = {
+# 		name = hskv_heist.2700.option.c
+# 		custom_tooltip = hskv_heist.2700.option.c.tooltip
+# 		hidden_effect = {
+# 			owner = {
+# 				country_event = {
+# 					id = hskv_heist.2730
+# 				}
+# 			}
+# 		}
+# 	}
+# }
+# country_event = {
+# 	id = hskv_heist.2710
+# 	title = hskv_heist.2700.name
+# 	desc = hskv_heist.2730.desc
+# 	picture = GFX_evt_sabotaged_ship
+# 	show_sound = event_ship_explosion
+# 	hide_window = no
+# 	is_triggered_only = yes
+	
+# 	option = {
+# 		name = EXCELLENT
+# 		hidden_effect = {
+# 			owner = {
+# 				country_event = {
+# 					id = hskv_heist.2800
+# 				}
+# 			}
+# 		}
+# 	}
+# }
+# country_event = {
+# 	id = hskv_heist.2720
+# 	title = hskv_heist.2700.name
+# 	desc = hskv_heist.2730.desc
+# 	picture = GFX_evt_sabotaged_ship
+# 	show_sound = event_ship_explosion
+# 	hide_window = no
+# 	is_triggered_only = yes
+	
+# 	option = {
+# 		name = EXCELLENT
+# 		hidden_effect = {
+# 			owner = {
+# 				country_event = {
+# 					id = hskv_heist.2800
+# 				}
+# 			}
+# 		}
+# 	}
+# }
+# country_event = {
+# 	id = hskv_heist.2730
+# 	title = hskv_heist.2700.name
+# 	desc = hskv_heist.2730.desc
+# 	picture = GFX_evt_sabotaged_ship
+# 	show_sound = event_ship_explosion
+# 	hide_window = no
+# 	is_triggered_only = yes
+	
+# 	option = {
+# 		name = EXCELLENT
+# 		hidden_effect = {
+# 			owner = {
+# 				country_event = {
+# 					id = hskv_heist.2800
+# 				}
+# 			}
+# 		}
+# 	}
+# }
+
+# ----------------------------------------------------------------------
+# Phase 8. The Final Challenge... but maybe all options yield the same where Thayo deals with it
+country_event = {
+	id = hskv_heist.2800
+	title = hskv_heist.2800.name
+	desc = hskv_heist.2800.desc
+	picture = GFX_evt_astral_rift_advisor_evil
+	show_sound = event_default
+	hide_window = no
+	is_triggered_only = yes
+	immediate = {
+		hskv_get_vault_situation = yes
+		#TODO, Once you get here, you are in the clear from the situation failure condition
+	}
+	option = {
+		name = hskv_heist.2800.option.a
+		custom_tooltip = hskv_heist.2800.option.a.tooltip
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = volatile_motes
+					value >= 1000
+				}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2810
+					days = 1
+				}
+			}
+		}
+	}
+	option = {
+		name = hskv_heist.2800.option.b
+		custom_tooltip = hskv_heist.2800.option.b.tooltip
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2810
+					days = 1
+				}
+			}
+		}
+	}
+	option = {
+		name = hskv_heist.2800.option.c
+		custom_tooltip = hskv_heist.2800.option.c.tooltip
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2810
+					days = 1
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = hskv_heist.2810
+	title = hskv_heist.2800.name
+	desc = hskv_heist.2810.desc
+	picture = GFX_evt_sabotaged_ship
+	show_sound = event_ship_explosion
+	hide_window = no
+	is_triggered_only = yes
+	
+	option = {
+		name = CONTINUE
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2811
+					days = 1
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = hskv_heist.2811
+	title = hskv_heist.2800.name
+	desc = hskv_heist.2811.desc
+	picture = GFX_evt_sabotaged_ship
+	show_sound = event_ship_explosion
+	hide_window = no
+	is_triggered_only = yes
+	
+	option = {
+		name = CONTINUE
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2812
+					days = 1
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = hskv_heist.2812
+	title = hskv_heist.2800.name
+	desc = hskv_heist.2812.desc
+	picture = GFX_evt_sabotaged_ship
+	show_sound = event_ship_explosion
+	hide_window = no
+	is_triggered_only = yes
+	
+	option = {
+		name = AMAZING
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.2813
+					days = 1
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = hskv_heist.2813
+	title = hskv_heist.2800.name
+	desc = hskv_heist.2813.desc
+	picture = GFX_evt_sabotaged_ship
+	show_sound = event_ship_explosion
+	hide_window = no
+	is_triggered_only = yes
+	
+	option = {
+		name = CONTINUE
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.3000
+					days = 1
+				}
+			}
+		}
+	}
+}
+
+# All the loot
+#TODO This crashes the game
+country_event = {
+	id = hskv_heist.3000
+	title = hskv_heist.3000.name
+	desc = hskv_heist.3000.desc
+	picture = GFX_evt_enigmatic_fortress
+	show_sound = event_default
+	hide_window = no
+	is_triggered_only = yes
+	immediate = {
+		hskv_get_event_target_azure_dream_system = yes
+		hskv_get_event_target_thayo_leader = yes
+		hskv_get_vault_situation = yes
+
+		# If you are super good with the situation, frame another empire
+		if = {
+			limit = {
+				event_target:hskv_vault_situation = {
+					situation_progress <= 50
+				}
+			}
+			owner = {
+				# False Flag Operation
+				country_event = {
+					id = hskv_heist.3010
+					days = 1
+				}
+			}
+		}
+		else = {
+			# FE gets paranoid
+			country_event = {
+				id = hskv_heist.3005
+				days = 150
+			}
+		}
+		destroy_situation = event_target:hskv_vault_situation
+	}
+
+	option ={
+		name = EXCELLENT
+		hidden_effect = {
+			random_system = {
+				limit = {
+					has_star_flag = hskv_dawns_end_system
+				}
+				# If there is a starbase, remove it
+				every_fleet_in_system = {
+					limit = {
+						is_ship_class = shipclass_starbase
+					}
+					destroy_fleet = this
+				}
+				# Move everyone but the vault out
+				every_fleet_in_system = {
+					limit = {
+						NOT = {
+							has_fleet_flag = hskv_fortress_vault_fleet
+						}
+					}
+					set_location = {
+						target = event_target:hskv_azure_dream_system
+						distance = 20
+						angle = 20
+					}
+					clear_orders = yes
+				}
+				
+				every_megastructure = {
+					limit = {
+						is_megastructure_type = hskv_fake_wormhole
+					}
+					delete_megastructure = this
+				}
+				event_target:hskv_azure_dream_system = {
+					every_megastructure = {
+						limit = {
+							is_megastructure_type = hskv_fake_wormhole
+						}
+						delete_megastructure = this
+					}
+				}
+				#TODO Need to Delay this by a month
+				event_target:hskv_target_fe_country = {
+					random_system_within_border = {
+						add_hyperlane = {
+							from = event_target:hskv_azure_dream_system
+							to = THIS
+						}
+					}
+				}
+			}
+			
+			owner = {
+				# Thayo's final upgrade
+				event_target:hskv_thayo_everdawn_leader = {
+					# Make him no longer immortal
+					#TODO Is cyborg enough?
+					remove_trait = hskv_leader_trait_thayo_everdawn_4
+					add_trait = hskv_leader_trait_thayo_everdawn_5
+					add_trait = leader_trait_cyborg
+					set_age = 20
+					set_immortal = no
+					set_skill = 10
+				}
+
+				# Free ships!
+				create_fleet = {
+					effect = {
+						set_owner = root.owner
+						while = {
+							count = 4
+							create_ship = {
+								name = random
+								design = "NAME_Beta"
+								graphical_culture = "fallen_empire_01"
+							}
+						}
+						while = {
+							count = 6
+							create_ship = {
+								name = random
+								design = "NAME_Gamma"
+								graphical_culture = "fallen_empire_01"
+							}
+						}
+						set_location = event_target:hskv_azure_dream_system
+					}
+				}
+
+				# Also all that cool tech
+				add_monthly_resource_mult = {
+					resource = engineering_research
+					value = @tier5researchreward
+					min = @tier4researchmin
+				}
+				add_monthly_resource_mult = {
+					resource = physics_research
+					value = @tier4researchreward
+					min = @tier4researchmin
+				}
+				add_monthly_resource_mult = {
+					resource = society_research
+					value = @tier5researchreward
+					min = @tier4researchmin
+				}
+				add_resource = {
+					energy = 5000
+					minerals = 5000
+					alloys = 4000
+					volatile_motes = 1000
+					exotic_gases = 1000
+					rare_crystals = 1000
+					sr_zro = 200
+					sr_dark_matter = 100
+					nanites = 100
+					sr_living_metal = 100
+				}
+				if = {
+					limit = {
+						has_ancrel = yes
+					}
+					add_resource = {
+						minor_artifacts = 750
+					}
+				}
+				give_fe_tech = yes
+				hskv_give_random_fe_building = yes
+				hskv_give_random_fe_building = yes
+			}
+		}
+	}
+}
+
+# FE Becomes Paranoid
+country_event = {
+	id = hskv_heist.3005
+	title = hskv_heist.3005.name
+	desc = hskv_heist.3005.desc
+	picture = GFX_evt_spymaster
+	show_sound = event_default
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		name = WORRYING
+		owner = {
+			every_playable_country = {
+				limit = {
+					is_fallen_empire = no
+					has_country_flag = hskv_thayo_everdawn_country
+				}
+				event_target:hskv_target_fe_country = {
+					add_opinion_modifier = {
+						who = prev
+						modifier = hskv_opinion_fe_paranoid
+					}
+				}
+			}
+		}
+	}
+}
+
+# False Flag Operation
+country_event = {
+	id = hskv_heist.3010
+	title = hskv_heist.3010.name
+	desc = hskv_heist.3010.desc
+	picture = GFX_evt_spymaster
+	show_sound = event_default
+	hide_window = no
+	is_triggered_only = yes
+
+	trigger = {
+		count_playable_country = {
+			limit = {
+				opinion = {
+					who = Root
+					value < 0
+				}
+			}
+			count > 0
+		}
+	}
+
+	immediate = {
+		random_playable_country = {
+			limit = {
+				NOR = {
+					is_same_value = Root
+					has_country_flag = hskv_fe_false_flag_candidate
+				}
+				opinion = {
+					who = Root
+					value < 0
+				}
+			}
+			set_country_flag = hskv_fe_false_flag_candidate
+			save_event_target_as = hskv_fe_false_flag_candidate_1
+		}
+		random_playable_country = {
+			limit = {
+				NOR = {
+					is_same_value = Root
+					has_country_flag = hskv_fe_false_flag_candidate
+				}
+				opinion = {
+					who = Root
+					value < 0
+				}
+			}
+			set_country_flag = hskv_fe_false_flag_candidate
+			save_event_target_as = hskv_fe_false_flag_candidate_2
+		}
+		random_playable_country = {
+			limit = {
+				NOR = {
+					is_same_value = Root
+					has_country_flag = hskv_fe_false_flag_candidate
+				}
+				opinion = {
+					who = Root
+					value < 0
+				}
+			}
+			set_country_flag = hskv_fe_false_flag_candidate
+			save_event_target_as = hskv_fe_false_flag_candidate_3
+		}
+		random_playable_country = {
+			limit = {
+				NOR = {
+					is_same_value = Root
+					has_country_flag = hskv_fe_false_flag_candidate
+				}
+				opinion = {
+					who = Root
+					value < 0
+				}
+			}
+			set_country_flag = hskv_fe_false_flag_candidate
+			save_event_target_as = hskv_fe_false_flag_candidate_4
+		}
+		random_playable_country = {
+			limit = {
+				NOR = {
+					is_same_value = Root
+					has_country_flag = hskv_fe_false_flag_candidate
+				}
+				opinion = {
+					who = Root
+					value < 0
+				}
+			}
+			set_country_flag = hskv_fe_false_flag_candidate
+			save_event_target_as = hskv_fe_false_flag_candidate_5
+		}
+	}
+
+	option = {
+		name = hskv_heist.3010.option.a
+		custom_tooltip = hskv_heist.3010.option.a.tooltip
+		trigger = {
+			any_country = {
+				has_country_flag = hskv_fe_false_flag_candidate_1
+			}
+		}
+		hidden_effect = {
+			event_target:hskv_fe_false_flag_candidate_1 = {
+				country_event = {
+					id = hskv_heist.3011
+					days = 90
+				}
+			}
+		}
+	}
+	option = {
+		name = hskv_heist.3010.option.b
+		custom_tooltip = hskv_heist.3010.option.b.tooltip
+		trigger = {
+			any_country = {
+				has_country_flag = hskv_fe_false_flag_candidate_2
+			}
+		}
+		hidden_effect = {
+			event_target:hskv_fe_false_flag_candidate_2 = {
+				country_event = {
+					id = hskv_heist.3011
+					days = 90
+				}
+			}
+		}
+	}
+	option = {
+		name = hskv_heist.3010.option.c
+		custom_tooltip = hskv_heist.3010.option.c.tooltip
+		trigger = {
+			any_country = {
+				has_country_flag = hskv_fe_false_flag_candidate_3
+			}
+		}
+		hidden_effect = {
+			event_target:hskv_fe_false_flag_candidate_3 = {
+				country_event = {
+					id = hskv_heist.3011
+					days = 90
+				}
+			}
+		}
+	}
+	option = {
+		name = hskv_heist.3010.option.d
+		custom_tooltip = hskv_heist.3010.option.d.tooltip
+		trigger = {
+			any_country = {
+				has_country_flag = hskv_fe_false_flag_candidate_4
+			}
+		}
+		hidden_effect = {
+			event_target:hskv_fe_false_flag_candidate_4 = {
+				country_event = {
+					id = hskv_heist.3011
+					days = 90
+				}
+			}
+		}
+	}
+	option = {
+		name = hskv_heist.3010.option.e
+		custom_tooltip = hskv_heist.3010.option.e.tooltip
+		trigger = {
+			any_country = {
+				has_country_flag = hskv_fe_false_flag_candidate_5
+			}
+		}
+		hidden_effect = {
+			event_target:hskv_fe_false_flag_candidate_5 = {
+				country_event = {
+					id = hskv_heist.3011
+					days = 150
+				}
+			}
+		}
+	}
+	option = {
+		name = hskv_heist.3010.option.f
+	}
+}
+
+# The target of FE rage
+country_event = {
+	id = hskv_heist.3011
+	title = hskv_heist.3011.name
+	desc = hskv_heist.3011.desc
+	picture = GFX_evt_spymaster
+	show_sound = event_default
+	diplomatic = yes
+	is_triggered_only = yes
+	picture_event_data = {
+		portrait = event_target:hskv_target_fe_country
+		planet_background = event_target:hskv_target_fe_country
+		graphical_culture = event_target:hskv_target_fe_country
+		city_level = event_target:hskv_target_fe_country
+		room = event_target:hskv_target_fe_country.ruler
+	}
+
+	immediate = {
+		hskv_get_event_target_fe_country = yes
+		event_target:hskv_target_fe_country = {
+			add_opinion_modifier = {
+				who = prev
+				modifier = hskv_opinion_fe_pissed
+			}
+		}
+		event_target:hskv_target_fe_country = {
+			declare_war = {
+				target = Prev
+				attacker_war_goal = wg_fe_humiliation
+			}
+		}
+	}
+
+	option = {
+		name = hskv_heist.3011.response
+	}
+}

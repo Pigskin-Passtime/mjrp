@@ -1,0 +1,455 @@
+hskv_spawn = {
+	if = {
+		limit = {
+			NOT = {
+				has_global_flag = hskv_system_spawned
+			}
+		}
+		set_global_flag = hskv_system_spawned
+		spawn_system = {
+			initializer = hskv_azure_dream_system
+		}
+		# TODO, clean up all log files
+		# This is the initalization for the mod
+		random_country = {
+			limit = {
+				is_country_type = fallen_empire
+				OR = {
+					has_ethic = ethic_fanatic_xenophobe
+					has_ethic = ethic_fanatic_spiritualist
+					has_ethic = ethic_fanatic_materialist
+				}
+			}
+			# Sorry MrFreake, While there is probably a way to do this without a global event,
+			# it is everywhere in my loc and elsewhere.
+			# So I am spending my global event target currency here because
+			# I'll go crazy trying to set the event target of this every single time
+			# even if its for events that don't trigger much
+			set_country_flag = hskv_target_fe_country
+			save_global_event_target_as = hskv_target_fe_country
+		}
+		last_created_system = {
+			log = "spawned [This.GetName]"
+		}
+	}
+}
+
+
+
+
+hskv_get_event_target_vault_country = {
+	random_country = {
+		limit = {
+			has_country_flag = hskv_vault_country
+		}
+		save_event_target_as = hskv_vault_country
+	}
+}
+hskv_get_event_target_fe_country = {
+	random_country = {
+		limit = {
+			has_country_flag = hskv_target_fe_country
+		}
+		save_event_target_as = hskv_target_fe_country
+	}
+}
+hskv_get_event_target_azure_prison_planet = {
+	random_system = {
+		limit = {
+			has_star_flag = hskv_azure_dream_system
+		}
+		random_system_planet = {
+			limit = {
+				has_planet_flag = hskv_azure_prison_planet
+			}
+			save_event_target_as = hskv_azure_prison_planet
+		}
+	}
+}
+hskv_get_event_target_azure_dream_system = {
+	random_system = {
+		limit = {
+			has_star_flag = hskv_azure_dream_system
+		}
+		save_event_target_as = hskv_azure_dream_system
+	}
+}
+hskv_get_event_target_thayo_leader = {
+	random_owned_leader = {
+		limit = {
+			has_leader_flag = hskv_thayo_everdawn_leader
+		}
+		save_event_target_as = hskv_thayo_everdawn_leader
+	}
+}
+hskv_get_event_target_dawns_end_system = {
+	random_system = {
+		limit = {
+			has_star_flag = hskv_dawns_end_system
+		}
+		save_event_target_as = hskv_dawns_end_system
+	}
+}
+hskv_get_event_target_everdawn_vault = {
+	random_system = {
+		limit = {
+			has_star_flag = hskv_dawns_end_system
+		}
+		random_ship_in_system = {
+			limit = {
+				has_ship_flag = hskv_fortress_vault
+			}
+			save_event_target_as = hskv_fortress_vault
+		}
+	}
+}
+hskv_get_thayo_manhunt_situation = {
+	every_situation = {
+		limit = {
+			is_situation_type = hskv_situation_thayo_manhunt
+		}
+		save_event_target_as = hskv_situation_thayo_manhunt
+	}
+}
+hskv_get_vault_situation = {
+	every_situation = {
+		limit = {
+			is_situation_type = hskv_situation_vault
+		}
+		save_event_target_as = hskv_vault_situation
+	}
+}
+
+hskv_get_codebreaking_score = {
+	set_variable = {
+		which = hskv_codebreaking
+		value = 0
+	}
+	if = {
+		limit = {
+			has_technology = tech_decryption_1
+		}
+		change_variable = {
+			which = hskv_codebreaking
+			value = 2
+		}
+	}
+	if = {
+		limit = {
+			has_technology = tech_decryption_2
+		}
+		change_variable = {
+			which = hskv_codebreaking
+			value = 2
+		}
+	}
+	if = {
+		limit = {
+			has_technology = tech_decryption_3
+		}
+		change_variable = {
+			which = hskv_codebreaking
+			value = 2
+		}
+	}
+	if = {
+		limit = {
+			has_tradition = tr_psionics_shrouded_encryption
+		}
+		change_variable = {
+			which = hskv_codebreaking
+			value = 2
+		}
+	}
+	if = {
+		limit = {
+			has_agenda_selected = agenda_uncover_secrets
+		}
+		change_variable = {
+			which = hskv_codebreaking
+			value = 2
+		}
+	}
+	if = {
+		limit = {
+			has_civic = civic_cutthroat_politics
+		}
+		change_variable = {
+			which = hskv_codebreaking
+			value = 1
+		}
+	}
+	if = {
+		limit = {
+			has_civic = civic_shadow_council
+		}
+		change_variable = {
+			which = hskv_codebreaking
+			value = 1
+		}
+	}
+	if = {
+		limit = {
+			has_civic = civic_criminal_heritage
+		}
+		change_variable = {
+			which = hskv_codebreaking
+			value = 1
+		}
+	}
+	if = {
+		limit = {
+			has_civic = civic_ruthless_competition
+		}
+		change_variable = {
+			which = hskv_codebreaking
+			value = 1
+		}
+	}
+	if = {
+		limit = {
+			has_tradition = tr_subterfuge_adopt
+		}
+		change_variable = {
+			which = hskv_codebreaking
+			value = 1
+		}
+	}
+	if = {
+		limit = {
+			has_tradition = tr_subterfuge_operational_security
+		}
+		change_variable = {
+			which = hskv_codebreaking
+			value = 1
+		}
+	}
+	if = {
+		limit = {
+			has_civic = civic_inwards_perfection
+		}
+		change_variable = {
+			which = hskv_codebreaking
+			value = -1
+		}
+	}
+	log = "Codebreaking Score - [This.hskv_codebreaking]"
+}
+
+hskv_give_random_fe_building = {
+	random_list = {
+		1 = {
+			country_event = {
+				id = ancrel.10004
+			}
+		}
+		1 = {
+			country_event = {
+				id = ancrel.10005
+			}
+		}
+		1 = {
+			country_event = {
+				id = ancrel.10006
+			}
+		}
+		1 = {
+			country_event = {
+				id = ancrel.10007
+			}
+		}
+		1 = {
+			country_event = {
+				id = ancrel.10008
+			}
+		}
+		1 = {
+			country_event = {
+				id = ancrel.10009
+			}
+		}
+	}
+}
+
+
+
+hskv_create_fe_aux_defense_country = {
+	if = {
+		limit = {
+			NOT = {
+				any_country = {
+					has_country_flag = hskv_fe_aux_defense_country
+				}
+			}
+		}
+		create_country = {
+			name = NAME_hskv_fe_empire
+			type = faction
+			species = event_target:hskv_target_fe_country
+			flag = event_target:hskv_target_fe_country
+			effect = {
+				save_event_target_as = hskv_fe_aux_defense_country
+				set_country_flag = hskv_fe_aux_defense_country
+			}
+		}
+	}
+}
+
+hskv_create_shield_defense_force = {
+	event_target:hskv_fe_aux_defense_country = {
+		every_system = {
+			limit = {
+				has_star_flag = hskv_azure_dream_system
+			}
+			save_event_target_as = hskv_spawn_point
+			every_system_planet = {
+				limit = {
+					has_planet_flag = hskv_azure_prison_planet
+				}
+				save_event_target_as = hskv_spawn_point
+			}
+		}
+
+		create_fleet = {
+			name = "NAME_Pirate_Fleet"
+			settings = {
+				spawn_debris = no
+			}
+			effect = {
+				set_owner = event_target:hskv_fe_aux_defense_country
+				while = {
+					count = 5
+					create_ship = {
+						name = random
+						design = "NAME_Gamma"
+						graphical_culture = "fallen_empire_04" #Hack, I know I am using the same one for all three valid FEs
+					}
+				}
+				set_location = event_target:hskv_spawn_point
+				set_fleet_stance = aggressive
+				set_aggro_range_measure_from = self
+				set_aggro_range = 1000
+				set_fleet_flag = hskv_shield_defense_force_fleet
+			}
+		}
+	}
+}
+
+hskv_create_vault_defense_force ={
+	event_target:hskv_fe_aux_defense_country = {
+		every_system = {
+			limit = {
+				has_star_flag = hskv_dawns_end_system
+			}
+			random_system_planet = {
+				limit = {
+					has_planet_flag = hskv_spawn_point
+				}
+				save_event_target_as = hskv_spawn_point
+			}
+		}
+
+		owner = {
+			create_leader = {
+				class = commander
+				species = owner_main_species
+				name = random
+				skill = 10
+				leader_age_min = 25
+				leader_age_max = 45
+			}
+		}
+
+		create_fleet = {
+			name = "NAME_Pirate_Fleet"
+			settings = {
+				spawn_debris = yes
+			}
+			effect = {
+				set_owner = event_target:hskv_fe_aux_defense_country
+				
+				while = {
+					count = 2
+					create_ship = {
+						name = random
+						design = "NAME_Gamma"
+						graphical_culture = "fallen_empire_04"
+					}
+				}
+				while = {
+					count = 1
+					create_ship = {
+						name = random
+						design = "NAME_Beta"
+						graphical_culture = "fallen_empire_04"
+					}
+				}
+				set_location = event_target:hskv_spawn_point
+				set_fleet_stance = aggressive
+				set_aggro_range_measure_from = self
+				set_aggro_range = 1000
+				set_fleet_flag = hskv_vault_defense_force_fleet
+			}
+		}
+		last_created_fleet = { assign_leader = last_created_leader }
+	}
+}
+
+hskv_create_vault_defense_force_2 ={
+	random_country = {
+		limit = {
+			has_country_flag = hskv_fe_aux_defense_country
+		}
+		save_event_target_as = hskv_fe_aux_defense_country
+	}
+
+	event_target:hskv_fe_aux_defense_country = {
+		every_system = {
+			limit = {
+				has_star_flag = hskv_dawns_end_system
+			}
+			random_system_planet = {
+				limit = {
+					has_planet_flag = hskv_spawn_point
+				}
+				save_event_target_as = hskv_spawn_point
+			}
+		}
+
+		owner = {
+			create_leader = {
+				class = commander
+				species = owner_main_species
+				name = random
+				skill = 8
+				leader_age_min = 25
+				leader_age_max = 45
+			}
+		}
+
+		create_fleet = {
+			name = "NAME_Pirate_Fleet"
+			settings = {
+				spawn_debris = yes
+			}
+			effect = {
+				set_owner = event_target:hskv_fe_aux_defense_country
+				
+				while = {
+					count = 1
+					create_ship = {
+						name = random
+						design = "NAME_Devastator"
+						graphical_culture = "fallen_empire_04"
+					}
+				}
+				set_location = event_target:hskv_spawn_point
+				set_fleet_stance = aggressive
+				set_aggro_range_measure_from = self
+				set_aggro_range = 1000
+				set_fleet_flag = hskv_vault_defense_fleet
+			}
+		}
+		last_created_fleet = { assign_leader = last_created_leader }
+	}
+}
