@@ -1,0 +1,76 @@
+#########################
+#
+# Warpeo Legendary Leader - twll_projects.txt
+#
+# Written by RegiZero
+#
+#########################
+
+special_project = {
+	key = "WARPEO_GUARDIANS_PROJECT"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_analyzing_artifacts
+
+	event_scope = ship_event
+
+	requirements = {
+		# shipclass_science_ship = 1
+		# leader = scientist
+	}
+
+	on_success = {
+		prev = {
+			country_event = {
+				id = twll_events.5
+			}
+		}
+	}
+
+	on_fail = {
+	}
+}
+special_project = {
+	key = "WARPEO_GUARDIANS_RESET_PROJECT"
+	cost = 0
+	days_to_research = 180
+	tech_department = society_technology
+	picture = GFX_evt_analyzing_artifacts
+
+	event_scope = ship_event
+
+	requirements = {
+		# shipclass_science_ship = 1
+		# leader = scientist
+	}
+
+	on_success = {
+		random_system = {
+			limit = {
+				has_star_flag = legendary_leader_warpeo_puzzle_system
+			}
+			every_fleet_in_system = {
+				limit = {
+					has_fleet_flag = warpeo_guardian_station
+				}
+				delete_fleet = this
+			}
+			create_warpeo_guardians = yes
+		}
+		remove_global_flag = warpeo_puzzle_key_1_activated_flag
+		remove_global_flag = warpeo_puzzle_key_2_activated_flag
+		remove_global_flag = warpeo_puzzle_key_3_activated_flag
+		remove_global_flag = warpeo_puzzle_key_4_activated_flag
+		remove_global_flag = warpeo_puzzle_key_5_activated_flag
+		remove_global_flag = warpeo_puzzle_key_activation_failed_flag
+		prev = {
+			country_event = {
+				id = twll_events.5
+			}
+		}
+	}
+
+	on_fail = {
+	}
+}
