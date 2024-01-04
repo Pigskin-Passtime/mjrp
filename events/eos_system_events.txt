@@ -1,0 +1,93 @@
+namespace = eos
+
+
+
+
+system_event = {
+    id = eos.2010
+    trigger = {
+        has_star_flag = eos_system
+    }
+    is_triggered_only = yes
+    hide_window = yes
+    immediate = {
+        if = {
+            limit = {
+                exists = fromfrom
+            }
+            fromfrom = {
+                save_event_target_as = owner_prev
+            }
+            every_system_planet = {
+                limit = {
+                    has_planet_flag = eos_ethic_planet
+                }
+                eos_execute_on_ethic_planet = {
+                    action = eos_restore_ethic_planet
+                }
+            }
+        }
+
+        if = {
+            limit = {
+                exists = from
+            }
+            from = {
+                save_event_target_as = owner
+            }
+            every_system_planet = {
+                limit = {
+                    has_planet_flag = eos_ethic_planet
+                }
+                eos_execute_on_ethic_planet = {
+                    action = eos_adapt_ethic_planet
+                }
+            }
+        }
+    }
+}
+
+country_event = {
+    id = eos.2011
+    trigger = {
+        from = {
+            has_star_flag = eos_system
+        }
+    }
+    is_triggered_only = yes
+    hide_window = yes
+    immediate = {
+        save_event_target_as = owner
+        from = {
+            every_system_planet = {
+                limit = {
+                    has_planet_flag = eos_ethic_planet
+                }
+                eos_execute_on_ethic_planet = {
+                    action = eos_adapt_ethic_planet
+                }
+            }
+        }
+    }
+}
+
+country_event = {
+    id = eos.2012
+    trigger = {
+        from = {
+            has_star_flag = eos_system
+        }
+    }
+    is_triggered_only = yes
+    hide_window = yes
+    immediate = {
+        from = {
+            every_system_planet = {
+                limit = {
+                    has_planet_flag = eos_ethic_planet
+                }
+                eos_restore_ethic_planet_raw = yes
+            }
+        }
+    }
+}

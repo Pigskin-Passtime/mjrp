@@ -1,0 +1,116 @@
+# eos
+# LubieKakao1212
+
+spawn_eos = {
+    set_global_flag = eos_system_spawned
+    spawn_system = {
+        #test
+        initializer = eos_system_initializer
+        max_jumps = 1
+        direction = corewards
+        min_distance = 100
+    }
+}
+
+# scope (this = planet, prev = system)
+eos_adapt_ethic_planet = {
+    if = {
+        limit = {
+            event_target:owner = {
+                has_ethic = ethic_$ethic$
+            }
+        }
+        change_pc = {
+            class = pc_barren
+            inherit_entity = no
+        }
+        set_deposit = eos_d_unity_1
+    }
+    else_if = {
+        limit = {
+            event_target:owner = {
+                has_ethic = ethic_fanatic_$ethic$
+            }
+        }
+        change_pc = {
+            class = pc_molten
+            inherit_entity = no
+        }
+        set_deposit = eos_d_unity_2
+    }
+}
+
+eos_restore_ethic_planet = {
+    if = {
+        limit = {
+            event_target:owner_prev = {
+                OR = {
+                    has_ethic = ethic_$ethic$
+                    has_ethic = ethic_fanatic_$ethic$
+                }
+            }
+        }
+        eos_restore_ethic_planet_raw = yes
+    }
+}
+
+eos_restore_ethic_planet_raw = {
+    if = {
+        limit = {
+            NOT = {
+                is_planet_class = pc_shattered
+            }
+        }
+        change_pc = {
+            class = pc_shattered
+            inherit_entity = no
+        }
+        clear_deposits = yes
+    }
+}
+
+eos_execute_on_ethic_planet = {
+    switch = {
+        trigger = has_planet_flag
+        eos_ethic_militarist = {
+            $action$ = {
+                ethic = militarist
+            }
+        }
+        eos_ethic_pacifist = {
+            $action$ = {
+                ethic = pacifist
+            }
+        }
+        eos_ethic_xenophile = {
+            $action$ = {
+                ethic = xenophile
+            }
+        }
+        eos_ethic_xenophobe = {
+            $action$ = {
+                ethic = xenophobe
+            }
+        }
+        eos_ethic_authoritarian = {
+            $action$ = {
+                ethic = authoritarian
+            }
+        }
+        eos_ethic_egalitarian= {
+            $action$ = {
+                ethic = egalitarian
+            }
+        }
+        eos_ethic_spiritualist = {
+            $action$ = {
+                ethic = spiritualist
+            }
+        }
+        eos_ethic_materialist = {
+            $action$ = {
+                ethic = materialist
+            }
+        }
+    }
+}

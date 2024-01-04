@@ -1,0 +1,100 @@
+# eos
+# LubieKakao1212
+
+#-----------------------------------------------------------------------------
+# Militarist
+eos_find_war_target_all = {
+    #poor + terrible
+    eos_find_war_target = {
+        opinion_lo = terrible
+        opinion_hi = poor
+        force_chance = 99
+    }
+    #neutral
+    eos_find_war_target = {
+        opinion_lo = neutral
+        opinion_hi = neutral
+        force_chance = 25
+    }
+    #good
+    eos_find_war_target = {
+        opinion_lo = good
+        opinion_hi = good
+        force_chance = 25
+    }
+}
+
+eos_find_war_target = {
+    if = {
+        limit = {
+            exists = event_target:war_target
+        }
+        random = {
+            chance = $force_chance$
+            eos_find_war_target_internal = {
+                opinion_hi = $opinion_hi$
+                opinion_lo = $opinion_lo$
+            }
+        }
+    }
+    else = {
+        eos_find_war_target_internal = {
+            opinion_hi = $opinion_hi$
+            opinion_lo = $opinion_lo$
+        }
+    }
+}
+
+eos_find_war_target_internal = {
+    random_neighbor_country = {
+        limit = {
+            opinion_level = {
+                level <= $opinion_hi$
+                who = root
+            }
+            opinion_level = {
+                level >= $opinion_lo$
+                who = root
+            }
+            relative_power = {
+                who = root
+                value > pathetic
+            }
+            relative_power = {
+                value < overwhelming
+                who = root
+            }
+        }
+        save_event_target_as = war_target
+    }
+}
+
+
+#-----------------------------------------------------------------------------
+# Materialist
+eos_hyperfocus_random_modifier = {
+    locked_random_list = {
+        1 = {
+            add_modifier = {
+                modifier = eos_hyperfocus_$type$_physics
+                years = $years$
+
+            }
+        }
+        1 = {
+            add_modifier = {
+                modifier = eos_hyperfocus_$type$_society
+                years = $years$
+
+            }
+        }
+        1 = {
+            add_modifier = {
+                modifier = eos_hyperfocus_$type$_engeneering
+                years = $years$
+            }
+        }
+    }
+}
+
+

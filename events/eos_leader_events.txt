@@ -1,0 +1,429 @@
+# eos
+# LubieKakao1212
+# ThePennitentOne
+namespace = eos
+
+
+
+planet_event = {
+    id = eos.1112
+    hide_window = yes
+    is_triggered_only = yes
+    fire_only_once = yes
+    trigger = {
+        has_global_flag = eos_system_spawned
+        has_planet_flag = eos_ethic_gestalt
+    }
+
+    immediate = {
+
+        from = { country_event = { id = eos.1000  days = 14 }  }
+
+    }
+
+}
+
+
+#initial spawn
+country_event = {
+    id = eos.1000
+    title = eos_arrival
+    is_triggered_only = yes
+
+    immediate = {
+        create_country = {
+            name = "NAME_eos"
+            type = global_event
+            auto_delete = yes
+            flag = {
+                icon = {
+                    category = "special"
+                    file = "unknown.dds"
+                }
+                background = {
+                    category = "backgrounds"
+                    file = "00_solid.dds"
+                }
+                colors = {
+                    "blue"
+                    "light_blue"
+                    "null"
+                    "null"
+                }
+            }
+            effect = {
+                save_event_target_as = eos_country
+            }
+        }
+        event_target:eos_country = {
+            eos_random_leader = {
+                fat = 1
+                mil = 1
+                pop = 1
+                xen = 1
+            }
+        }
+        set_country_flag = eos_target
+    }
+
+    option = {
+        name = ala_ma_kota
+        hidden_effect = {
+            clone_leader = {
+                target = event_target:eos_leader
+                effect = {
+                    save_global_event_target_as = eos_leader
+                }
+            }
+            country_event = {
+                id = eos.1010
+                days = 3600
+                random = 3600
+            }
+        }
+    }
+    option = {
+        name = refuse
+        hidden_effect = {
+            set_country_flag = eos_dismissed
+        }
+    }
+}
+
+## ethic shift
+country_event = {
+    id = eos.1010
+    title = eos_ethic_change
+    is_triggered_only = yes
+
+    trigger = {
+        exists = event_target:eos_leader
+    }
+
+    immediate = {
+        event_target:eos_leader = {
+            save_event_target_as = eos_leader_prev
+        }
+        eos_next_leader = yes
+        event_target:eos_leader_prev = {
+            kill_leader = {
+                show_notification = no
+            }
+        }
+        country_event = {
+            id = eos.1010
+            days = 3600
+            random = 3600
+        }
+    }
+
+    option = {
+        name = ethic_militarist
+        trigger = {
+            event_target:eos_leader = {
+                has_ethic = ethic_militarist
+            }
+        }
+    }
+    option = {
+        name = ethic_pacifist
+        trigger = {
+            event_target:eos_leader = {
+                has_ethic = ethic_pacifist
+            }
+        }
+    }
+    option = {
+        name = ethic_xenophile
+        trigger = {
+            event_target:eos_leader = {
+                has_ethic = ethic_xenophile
+            }
+        }
+    }
+    option = {
+        name = ethic_xenophobe
+        trigger = {
+            event_target:eos_leader = {
+                has_ethic = ethic_xenophobe
+            }
+        }
+    }
+    option = {
+        name = ethic_authoritarian
+        trigger = {
+            event_target:eos_leader = {
+                has_ethic = ethic_authoritarian
+            }
+        }
+    }
+    option = {
+        name = ethic_egalitarian
+        trigger = {
+            event_target:eos_leader = {
+                has_ethic = ethic_egalitarian
+            }
+        }
+    }
+    option = {
+        name = ethic_spiritualist
+        trigger = {
+            event_target:eos_leader = {
+                has_ethic = ethic_spiritualist
+            }
+        }
+    }
+    option = {
+        name = ethic_materialist
+        trigger = {
+            event_target:eos_leader = {
+                has_ethic = ethic_materialist
+            }
+        }
+    }
+}
+
+##dispatch flavor
+country_event = {
+    id = eos.1100
+    is_triggered_only = yes
+    hide_window = yes
+
+    trigger = {
+        has_country_flag = eos_target
+    }
+
+    immediate = {
+        inline_script = {
+            script = eos_dispatch_event
+            good = 1
+            neutral = 1
+            bad = 1
+        }
+    }
+}
+
+
+#-----------------------------------------------------------------------------
+# Ethic: all
+# Social despair (bad)
+country_event = {
+    id = eos.1110
+    is_triggered_only = yes
+
+    title = eos_event_social_despair
+
+    immediate = {
+        every_owned_pop = {
+            limit = {
+                eos_pop_ethic_not_aligned = yes
+            }
+            add_modifier = {
+                modifier = eos_social_despair
+                years = 1
+            }
+        }
+    }
+
+    option = {
+        name = UNFORTUNATE
+    }
+}
+
+# Social joy (good)
+country_event = {
+    id = eos.1111
+    is_triggered_only = yes
+
+    title = eos_event_social_joy
+
+    immediate = {
+        every_owned_pop = {
+            limit = {
+                eos_pop_ethic_aligned = yes
+            }
+            add_modifier = {
+                modifier = eos_social_joy
+                years = 1
+            }
+        }
+    }
+
+    option = {
+        name = GOOD
+    }
+}
+
+#-----------------------------------------------------------------------------
+# Ethic: militarist
+# They Shall Burn (bad)
+country_event = {
+    id = eos.1120
+    is_triggered_only = yes
+
+    title = eos_event_they_shall_burn
+
+    immediate = {
+        start_situation = {
+            type = eos_to_war
+            target = this
+        }
+    }
+
+    option = {
+        name = eos_event_they_shall_burn_ack
+    }
+}
+
+#-----------------------------------------------------------------------------
+# Ethic: xenophile
+country_event = {
+    id = eos.1190
+    is_triggered_only = yes
+
+    title = eos_event_gift
+
+    immediate = {
+
+    }
+
+    option = {
+        name = {
+            trigger = {
+                always = yes
+            }
+            text = ACKNOWLEDGED
+        }
+    }
+}
+
+#-----------------------------------------------------------------------------
+# Ethic: spiritualist
+# TODO
+country_event = {
+
+}
+
+#-----------------------------------------------------------------------------
+# Ethic: materialist
+#Hyperfocus (neutral)
+
+country_event = {
+    id = eos.1190
+    is_triggered_only = yes
+
+    title = eos_event_hyperfocus
+
+    option = {
+        name = eos_event_hyperfocus_severe
+
+        eos_hyperfocus_random_modifier = {
+            type = severe
+            years = 5
+        }
+    }
+
+    option = {
+        name = eos_event_hyperfocus_mild
+        eos_hyperfocus_random_modifier = {
+            type = mild
+            years = 3
+        }
+    }
+}
+
+#-----------------------------------------------------------------------------
+# Ethic: Xenophob
+# Border reinforcemnet
+country_event = {
+    id = eos.1150
+    is_triggered_only = yes
+
+    title = eos_event_checkpoint
+
+    immediate = {
+        random_system_within_border = {
+            limit = {
+                any_neighbor_system = {
+                    log = "[This.GetName]"
+                    not = { is_owned_by = Root }
+
+                }
+            }
+
+            create_message = { localization = "UwU [This.GetName]"  recipient = Root days = 69 type = MESSAGE_FRUITFUL_SEED_CRITTER }
+            create_fleet = {
+                settings = { can_change_composition = no can_change_leader = no can_disband = no can_upgrade = no }
+                effect = {
+                    set_owner = root
+                    set_location = { target = prev.system_star angle = random distance = 100 }
+                    create_ship = { random_existing_design = eos_border_checkpoint }
+                }
+
+            }
+        }
+    }
+}
+
+
+country_event = {
+    id = eos.1151
+    is_triggered_only = yes
+
+    title = OK
+    hide_window = yes
+
+    trigger = {
+        has_global_flag = eos_leader_spawned
+        any_controlled_fleet = {
+            is_ship_size = eos_border_checkpoint
+        }
+    }
+
+    immediate = {
+
+        while = {
+            reroll_random = yes
+            random_controlled_fleet = {
+
+                #Get a checkpoint in a system with no borders (why is logic hard)
+                limit = {
+
+                    is_ship_size = eos_border_checkpoint
+                    closest_system = {
+                        max_steps = 0
+                        limit = {
+                            not = {
+                                any_neighbor_system = {
+                                    not = {
+                                        is_owned_by = Root
+                                    }
+                                }
+                            }
+                        }
+                        log = "[This.GetName]"
+                    }
+                }
+
+
+                #Put the checkpoint in its place (on the border)
+                root = {
+                    random_system_within_border = {
+                        limit = {
+                            any_neighbor_system = {
+                                log = "[This.GetName]"
+                                not = { is_owned_by = Root }
+
+                            }
+                        }
+                        create_message = { type = MESSAGE_FRUITFUL_SEED_PLANTED localization = "[This.GetName]" days = 34 }
+                        prevprev = {
+                            set_location = { target = prev.system_star angle = random distance = 100 }
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+}
