@@ -1,0 +1,1043 @@
+##			Mute's The Warden
+##			mtwmj24_warden_events
+##			 			
+##			
+
+
+namespace = mtwmj24_warden
+
+
+#################################################
+### EVENTS LEADING TO LEGENDARY LEADER ENLIST ###
+#################################################
+
+## Enable Anomaly when entering Warden Spawn System
+## on_entering_system_first_time
+ship_event = {
+	id = mtwmj24_warden.0000
+	title = "mtwmj24_warden.0000.name"
+	desc = "mtwmj24_warden.0000.desc"
+	picture = GFX_evt_frozen
+	show_sound = event_finding_loot
+	location = event_target:mtwmj24_warden_planet
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = { has_star_flag = mtwmj24_warden_spawn_system }
+		NOT = { has_global_flag = mtwmj24_warden_spawned }
+		exists = event_target:mtwmj24_warden_planet
+	}
+
+	immediate = {
+		FROM = {
+			random_system_planet = {
+				limit = { has_planet_flag = mtwmj24_warden_spawn_planet }
+				save_global_event_target_as = mtwmj24_warden_spawn_point
+			}
+		}
+	}
+
+	option = {
+		name = mtwmj24_warden.0000.a
+		owner = {
+			enable_special_project = {
+				name = "mtwmj24_warden_activate_digsite"
+				location = event_target:mtwmj24_warden_spawn_point
+				owner = this
+			}
+		}
+	}
+
+}
+
+## Enable ArcSite in Warden Spawn System
+## triggered via previous event
+country_event = {
+	id = mtwmj24_warden.0001
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_global_flag = mtwmj24_warden_spawned }
+		exists = event_target:mtwmj24_warden_planet
+	}
+
+	immediate = {
+		event_target:mtwmj24_warden_planet = {
+			create_archaeological_site = mtwmj24_warden_site
+		}
+	}
+
+}
+
+# Arc Site - Prison of the exiled Warden
+# Stage 1 - The Ruins of Shallash
+fleet_event = {
+	id = mtwmj24_warden.0003
+	title = mtwmj24_warden.0003.name
+	desc = mtwmj24_warden.0003.desc
+	picture = GFX_evt_city_ruins
+	show_sound = event_ghost_town
+
+	archaeology = yes
+	is_triggered_only = yes
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no }
+	}
+
+	option = {
+		name = SEARCH
+		small_artifact_reward = yes
+	}
+}
+
+# Stage 2 - Records of the Lost
+fleet_event = {
+	id = mtwmj24_warden.0004
+	title = mtwmj24_warden.0004.name
+	desc = mtwmj24_warden.0004.desc
+	picture = GFX_evt_busy_spaceport
+	show_sound = event_cityscape
+
+	archaeology = yes
+	is_triggered_only = yes
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no }
+	}
+
+	option = {
+		name = mtwmj24_warden.0004.A
+		small_artifact_reward = yes
+	}
+}
+
+# Stage 3 - The Shallarian Peace
+fleet_event = {
+	id = mtwmj24_warden.0005
+	title = mtwmj24_warden.0005.name
+	desc = mtwmj24_warden.0005.desc
+	picture = GFX_evt_diplomatic_visit
+	show_sound = event_conversation
+
+	archaeology = yes
+	is_triggered_only = yes
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no }
+	}
+
+	option = {
+		name = mtwmj24_warden.0005.A
+		trigger = {
+			leader = {
+				NOR = {
+					has_trait = leader_trait_psionic
+					has_trait = leader_trait_the_psionic_luminary
+					has_trait = leader_trait_governor_psionic_communion
+					has_trait = leader_trait_expertise_psionics_3
+					has_trait = leader_trait_expertise_psionics_2
+					has_trait = leader_trait_expertise_psionics
+				}
+			}
+		}
+		small_artifact_reward = yes
+	}
+	option = {
+		name = mtwmj24_warden.0005.B
+		trigger = {
+			leader = {
+				OR = {
+					has_trait = leader_trait_psionic
+					has_trait = leader_trait_the_psionic_luminary
+					has_trait = leader_trait_governor_psionic_communion
+					has_trait = leader_trait_expertise_psionics_3
+					has_trait = leader_trait_expertise_psionics_2
+					has_trait = leader_trait_expertise_psionics
+				}
+			}
+		}
+		small_artifact_reward = yes
+	}
+}
+
+# Stage 4 (gatekeeper)
+fleet_event = {
+	id = mtwmj24_warden.0006
+	hide_window = yes
+
+	archaeology = yes
+	is_triggered_only = yes
+
+	immediate = {
+		fleet_event = { id =  mtwmj24_warden.0007 }
+	}
+
+	after = {
+		from = { expire_site_event = mtwmj24_warden.0006 }
+	}
+}
+
+# Stage 4.A - Wiped out by the Xenophobe FE
+fleet_event = {
+	id = mtwmj24_warden.0007
+	title = mtwmj24_warden.0007.name
+	desc = mtwmj24_warden.0007.desc
+	picture = GFX_evt_exploding_planet
+	show_sound = event_screams
+
+	archaeology = yes
+	is_triggered_only = yes
+
+	immediate = {
+		fromfrom = { set_site_progress_locked = yes }
+		owner = {
+			begin_event_chain = {
+				event_chain = mtwmj24_warden_special_projects_chain
+				target = root
+			}
+			enable_special_project = {
+				name = "mtwmj24_warden_merge_leader_disable_barrier"
+				location = fromfrom.planet
+				owner = this
+			}
+			enable_special_project = {
+				name = "mtwmj24_warden_merge_leader_psychic_scientist"
+				location = fromfrom.planet
+				owner = this
+			}
+			enable_special_project = {
+				name = "mtwmj24_warden_merge_leader_psychic_commander"
+				location = fromfrom.planet
+				owner = this
+			}
+		}
+	}
+
+	option = { #A sad tale
+		name = federations2.6.A
+		trigger = {
+			owner = {
+				NOR = {
+					has_ethic = ethic_militarist
+					has_ethic = ethic_fanatic_militarist
+					has_civic = civic_fanatic_purifiers
+					has_authority = auth_machine_intelligence
+					has_civic = civic_hive_devouring_swarm
+				}
+			}
+		}
+	}
+	option = {
+		name = federations2.6.B
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_militarist
+					has_ethic = ethic_fanatic_militarist
+				}
+			}
+		}
+	}
+	option = {
+		name = federations2.6.C
+		trigger = {
+			owner = {
+				has_authority = auth_machine_intelligence
+				NOT = { has_civic = civic_machine_terminator }
+			}
+		}
+	}
+	option = {
+		name = federations2.6.D
+		trigger = {
+			owner = {
+				has_civic = civic_machine_terminator
+			}
+		}
+	}
+	option = {
+		name = federations2.6.E
+		trigger = {
+			owner = {
+				has_civic = civic_hive_devouring_swarm
+			}
+		}
+	}
+
+}
+
+## CREATE HIRE 
+
+country_event = { #
+	id = mtwmj24_warden.0008
+	title = "mtwmj24_warden.0008.name"
+	desc = "mtwmj24_warden.0008.desc"
+	picture = GFX_evt_board_meeting
+	show_sound = event_psionic
+	fire_only_once = yes
+	is_triggered_only = yes
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_legendary_keides"
+
+	immediate = {
+
+		if = {
+			limit = { 
+				has_special_project = mtwmj24_warden_activate_digsite
+			}
+			abort_special_project = {
+				type = mtwmj24_warden_activate_digsite
+			}
+		}
+		if = {
+			limit = { 
+				has_special_project = mtwmj24_warden_merge_leader_commander
+			}
+			abort_special_project = {
+				type = mtwmj24_warden_merge_leader_commander
+			}
+		}
+		if = {
+			limit = { 
+				has_special_project = mtwmj24_warden_merge_leader_psychic_commander
+			}
+			abort_special_project = {
+				type = mtwmj24_warden_merge_leader_psychic_commander
+			}
+		}
+		if = {
+			limit = { 
+				has_special_project = mtwmj24_warden_merge_leader_scientist
+			}
+			abort_special_project = {
+				type = mtwmj24_warden_merge_leader_scientist
+			}
+		}
+		if = {
+			limit = { 
+				has_special_project = mtwmj24_warden_merge_leader_psychic_scientist
+			}
+			abort_special_project = {
+				type = mtwmj24_warden_merge_leader_psychic_scientist
+			}
+		}
+		end_event_chain = mtwmj24_warden_special_projects_chain
+
+		create_country = {
+			name = "NAME_Unknown"
+			type = global_event
+			auto_delete = yes
+			flag = {
+				icon = {
+					category = "special"
+					file = "unknown.dds"
+				}
+				background = {
+					category = "backgrounds"
+					file = "00_solid.dds"
+				}
+				colors = {
+					"red"
+					"red"
+					"null"
+					"null"
+				}
+			}
+			effect = {
+				save_global_event_target_as = mtwmj24_warden_country
+			}
+		}
+		event_target:mtwmj24_warden_country = {
+			change_species = event_target:mtwmj24_warden_leader.species
+			clone_leader = {
+				target = event_target:mtwmj24_warden_leader
+			}
+			last_created_leader = {
+				set_leader_flag = mtwmj24_warden
+				set_leader_flag = legendary_leader
+				set_leader_flag = immune_to_negative_traits
+				add_trait_no_notify = leader_trait_legendary_far_from_home
+				set_owner = prev
+			}
+		}
+	}
+
+	picture_event_data = {
+		portrait = event_target:mtwmj24_warden_country
+		room = galactic_custodian_room
+	}
+
+	option = {
+		name = paragon.3115.a
+		hidden_effect = { country_event = { id = mtwmj24_warden.0009 } }
+	}
+}
+
+country_event = { # HIRE/DISMISS THE WARDEN
+	id = mtwmj24_warden.0009
+	title = "mtwmj24_warden.0009.name"
+	desc = "mtwmj24_warden.0009.desc"
+	diplomatic = yes
+	fire_only_once = yes
+	is_triggered_only = yes
+	show_sound = event_psionic
+
+	picture = GFX_leader_recruitment_bg_legendary_keides
+	event_window_type = leader_recruit
+
+	picture_event_data = {
+		portrait = event_target:mtwmj24_warden_leader
+		room = galactic_custodian_room
+	}
+
+	trigger = {
+		exists = event_target:mtwmj24_warden_leader
+	}
+
+	option = {
+		# Special tag to make mark this as the hire option
+		name = HIRE
+		tag = hire_leader
+		sound = event_psionic
+
+		custom_tooltip = mtwmj24_warden_merge_effects
+
+		hidden_effect = {
+			event_target:mtwmj24_warden_leader = {
+				set_leader_flag = mtwmj24_warden
+				set_leader_flag = legendary_leader
+				save_global_event_target_as = mtwmj24_warden_leader
+				set_leader_flag = immune_to_negative_traits
+				add_trait_no_notify = leader_trait_governor_psionic_ascended_legendary_paragon
+				set_name = "NAME_mtwmj24_the_warden"
+			}
+
+			start_situation = {
+				type = mtwmj24_first_situation
+			}
+
+			country_event = {
+				days = 900
+				random = 900
+				id = mtwmj24_warden.0103
+			}
+
+			country_event = {
+				days = 450
+				random = 1350
+				id = mtwmj24_warden.0108
+			}
+
+			## start corruption situation
+		}
+
+		create_message = {
+			type = MESSAGE_RECRUITED_LEADER
+			localization =  MESSAGE_RECRUITED_LEADER_DESC
+			days = @toast_message_days
+			target = event_target:mtwmj24_warden_leader
+			variable = {
+				type = name
+				localization = LEADER
+				scope = event_target:mtwmj24_warden_leader
+			}
+			variable = {
+				key = "border"
+				value = "GFX_border_legendary"
+			}
+		}
+	}
+
+	option = {
+		name = DISMISS
+		# Special tag to mark this as the dismiss option
+		tag = dismiss_leader
+		sound = "par_keides_dismiss"
+
+		hidden_effect = {
+			event_target:mtwmj24_warden_leader = {
+				kill_leader = { show_notification = no }
+			}
+		}
+	}
+
+	option = {
+		name = mtwmj24_warden.0009.a
+		response_text = mtwmj24_warden.0009.a.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = mtwmj24_warden.0009.b
+		response_text = mtwmj24_warden.0009.b.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = mtwmj24_warden.0009.c
+		response_text = mtwmj24_warden.0009.c.response
+		is_dialog_only = yes
+	}
+}
+
+country_event = { # Create THE WARDEN
+	id = mtwmj24_warden.0010
+	title = mtwmj24_warden.0010.name
+	desc = mtwmj24_warden.0010.desc
+	picture = GFX_evt_board_meeting
+	show_sound = event_psionic
+
+	is_triggered_only = yes
+
+	immediate = {
+	}
+
+	# Send in a Scientist
+	option = {
+		name = mtwmj24_warden.0010.a
+			enable_special_project = {
+				name = "mtwmj24_warden_merge_leader_scientist"
+				location = event_target:mtwmj24_warden_planet
+				owner = this
+			}
+			enable_special_project = {
+				name = "mtwmj24_warden_merge_leader_commander"
+				location = event_target:mtwmj24_warden_planet
+				owner = this
+			}
+	}
+}
+
+###################################
+### CORRUPTION SITUATION EVENTS ###
+###################################
+
+### Decay from Actions
+
+### Ships
+country_event = {
+	id = mtwmj24_warden.0020
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_situation = {
+			is_situation_type = mtwmj24_second_situation
+		}
+	}
+
+	immediate = {
+		random_situation = {
+			limit = {
+				is_situation_type = mtwmj24_second_situation
+			}
+			add_situation_progress = -1
+		}
+	}
+}
+
+### Wars
+country_event = {
+	id = mtwmj24_warden.0021
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_situation = {
+			is_situation_type = mtwmj24_second_situation
+		}
+	}
+
+	immediate = {
+		random_situation = {
+			limit = {
+				is_situation_type = mtwmj24_second_situation
+			}
+			add_situation_progress = -22
+		}
+	}
+}
+
+### Purge
+country_event = {
+	id = mtwmj24_warden.0022
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_situation = {
+			is_situation_type = mtwmj24_second_situation
+		}
+	}
+
+	immediate = {
+		random_situation = {
+			limit = {
+				is_situation_type = mtwmj24_second_situation
+			}
+			add_situation_progress = -55
+		}
+	}
+}
+
+### Conquer Worlds
+## on_planet_conquer
+planet_event = {
+	id = mtwmj24_warden.0023
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		from = {
+			any_situation = {
+				is_situation_type = mtwmj24_second_situation
+			}
+		}
+	}
+
+	immediate = {
+		from = {
+			random_situation = {
+				limit = {
+					is_situation_type = mtwmj24_second_situation
+				}
+				add_situation_progress = -550
+			}
+		}
+	}
+}
+
+### Destroy Worlds
+country_event = {
+	id = mtwmj24_warden.0024
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_situation = {
+			is_situation_type = mtwmj24_second_situation
+		}
+	}
+
+	immediate = {
+		random_situation = {
+			limit = {
+				is_situation_type = mtwmj24_second_situation
+			}
+			add_situation_progress = -2200
+		}
+	}
+}
+
+### Become Crisis
+country_event = {
+	id = mtwmj24_warden.0025
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_situation = {
+			is_situation_type = mtwmj24_second_situation
+		}
+		has_ascension_perk = ap_become_the_crisis
+	}
+
+	immediate = {
+		random_situation = {
+			limit = {
+				is_situation_type = mtwmj24_second_situation
+			}
+			add_situation_progress = -10999
+		}
+	}
+}
+
+################################################
+### EVENTS FOLLOWING LEGENDARY LEADER ENLIST ###
+################################################
+
+#### The Warden Home Planet System spawns
+
+### V1: Utopia Pure
+### V2: Utopia Fanatics
+### V3: Utopia Crisis Aspirant
+### V4: Non-Utopia
+
+
+#### The Warden Visions Warnings of the Future
+
+country_event = { # Early Warning, Visions, flavor only
+	id = mtwmj24_warden.0103
+	title = mtwmj24_warden.0103.name
+	desc = mtwmj24_warden.0103.desc
+	picture = GFX_evt_board_meeting
+	show_sound = event_psionic
+
+	is_triggered_only = yes
+
+	immediate = {
+
+		country_event = {
+			days = 9000
+			random = 18000
+			id = mtwmj24_warden.0102
+		}
+
+	}
+
+	option = {
+		name = UNDERSTOOD
+	}
+
+}
+
+#### The Warden Corrupted Shroud Entities Attac
+
+# Shroud Attack
+country_event = {
+	id = mtwmj24_warden.0100
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_global_flag = mtwmj24_ongoing_shroud_attack
+	}
+
+	immediate = {
+		if = {
+			limit = { NOT = { exists = event_target:shroud_country } }
+			create_country = {
+				name = "NAME_Creatures_of_the_Shroud"
+				type = shroud_spirits
+				flag = {
+					icon = {
+						category = "special"
+						file = "the_shroud.dds"
+					}
+					background= {
+						category = "backgrounds"
+						file = "00_solid.dds"
+					}
+					colors={
+						"dark_purple"
+						"black"
+						"null"
+						"null"
+					}
+				}
+			}
+			last_created_country = {
+				establish_communications_no_message = root
+				save_global_event_target_as = shroud_country
+			}
+		}
+
+		if = {
+			limit = {
+				NOT = {
+					is_variable_set = shroud_avatar_spawn_rate					
+				}
+			}
+			set_variable = {
+				which = shroud_avatar_spawn_rate
+				value = 0
+			}
+		}
+
+		change_variable = {
+			which = shroud_avatar_spawn_rate
+			value = 1
+		}
+
+		while = {
+			count = shroud_avatar_spawn_rate
+			random_system = {
+				random_system_planet = {
+					save_event_target_as = shroud_spawn_planet
+				}
+				create_fleet = {
+					name = "NAME_Corrupted_Avatar"
+					settings = {
+						spawn_debris = no
+						is_boss = yes
+					}
+					effect = {
+						set_owner = event_target:shroud_country
+						create_ship = {
+							name = "NAME_Corrupted_Avatar"
+							design = "NAME_Corrupted_Avatar"
+						}
+						set_location = event_target:shroud_spawn_planet
+						set_fleet_stance = aggressive
+						set_aggro_range_measure_from = return_point
+						set_aggro_range = 300
+					}
+				}
+			}
+			if = {
+				limit = { 
+					exists = event_target:mtwmj24_warden_country 
+				}
+				event_target:mtwmj24_warden_country = {
+					random_system_within_border = {
+						random_system_planet = {
+							save_event_target_as = shroud_spawn_planet
+						}
+						create_fleet = {
+							name = "NAME_Corrupted_Avatar"
+							settings = {
+								spawn_debris = no
+								is_boss = yes
+							}
+							effect = {
+								set_owner = event_target:shroud_country
+								create_ship = {
+									name = "NAME_Corrupted_Avatar"
+									design = "NAME_Corrupted_Avatar"
+								}
+								set_location = event_target:shroud_spawn_planet
+								set_fleet_stance = aggressive
+								set_aggro_range_measure_from = return_point
+								set_aggro_range = 300
+							}
+						}
+					}
+				}
+			}
+
+				## we recursively spawn more shroud avatars, increasing the amount of avatars spawned with each wave
+				## This continues until at least 10 Waves have been spawned, and then has a small chance to disappear
+				## The Player with the Ascended Legendary Leader can choose to sacrifice the leader to end this attack
+
+			random_country = {
+				limit = {
+					is_country_type = global_event
+				}
+				random_list = {
+					10 = {
+						modifier = {
+							factor = 0
+							check_variable = {
+								which = shroud_avatar_spawn_rate
+								value < 10
+							}
+						}
+						remove_global_flag = mtwmj24_ongoing_shroud_attack
+					}
+					90 = {
+						country_event = {
+							days = 30
+							random = 330
+							id = mtwmj24_warden.0100
+						}
+					}
+				}
+			}
+		}
+
+	}
+}
+
+country_event = { # Shroud Attack
+	id = mtwmj24_warden.0101
+	title = mtwmj24_warden.0101.name
+	desc = mtwmj24_warden.0101.desc
+	picture = GFX_evt_board_meeting
+	show_sound = event_psionic
+
+	is_triggered_only = yes
+
+	immediate = {
+	}
+
+	option = {
+		name = UNDERSTOOD
+	}
+
+}
+
+country_event = { # Visions follow-up
+	id = mtwmj24_warden.0102
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+
+		set_global_flag = mtwmj24_ongoing_shroud_attack
+
+		random_country = {
+			limit = {
+				is_country_type = global_event
+			}
+			country_event = {
+				days = 15
+				id = mtwmj24_warden.0100
+			}
+		}
+
+		every_playable_country = {
+			limit = {
+				is_ai = no
+			}
+			country_event = {
+				days = 1
+				id = mtwmj24_warden.0101
+			}
+		}
+
+	}
+}
+
+### Corruption event, this turns players into fanatic purifiers if Utopia is enabled!
+country_event = { # Situation Follow-up
+	id = mtwmj24_warden.0104
+	hide_window = yes
+	is_triggered_only = yes
+
+	after = {
+		destroy_situation = from
+	}
+
+	immediate = {
+
+		if = {
+			limit = {
+				is_megacorp = yes
+			}
+			change_government = {
+				cooldown = no
+				authority = auth_oligarchic
+				remove_invalid_civics = yes
+			}
+		}
+
+		clear_ethos = yes
+		country_add_ethic = ethic_fanatic_xenophobe
+		country_add_ethic = ethic_militarist
+		force_add_civic = civic_fanatic_purifiers
+		hidden_effect = {
+			if = {
+				limit = {
+					has_civic = civic_barbaric_despoilers
+				}
+				force_remove_civic = civic_barbaric_despoilers
+			}
+			remove_xuracorp_trades = yes
+			remove_riggan_trades = yes
+			remove_muutagan_trades = yes
+			if = {
+				limit = {
+					has_modifier = enclave_artist_patron
+				}
+				remove_modifier = enclave_artist_patron
+			}
+			if = {
+				limit = {
+					has_modifier = curator_insight
+				}
+				remove_modifier = curator_insight
+			}
+			if = {
+				limit = {
+					has_modifier = salvager_insight
+				}
+				remove_modifier = salvager_insight
+			}
+			every_playable_country = {
+				limit = {
+					exists = overlord
+					overlord = {
+						is_same_value = root
+					}
+				}
+				release_subject = yes
+			}
+			if = {
+				limit = {
+					exists = overlord
+					NOT = {
+						is_same_species = root.species
+					}
+				}
+				release_subject = yes
+			}
+			every_envoy = {
+				limit = {
+					has_envoy_task = {
+						task = improve_relations
+					}
+				}
+				unassign_leader = this
+			}
+			every_playable_country = {
+				limit = {
+					NOT = {
+						species = {
+							is_same_species = root.species
+						}
+					}
+				}
+				end_all_treaties_with = root
+			}
+			remove_from_galactic_community = yes
+		}
+
+	}
+}
+
+country_event = { # Situation Follow-up just in case
+	id = mtwmj24_warden.0105
+	hide_window = yes
+	is_triggered_only = yes
+
+	after = {
+		destroy_situation = from
+	}
+
+	immediate = {
+
+	}
+}
+
+### System Spawn Event
+
+country_event = { # Spawn System Home
+	id = mtwmj24_warden.0108
+	title = mtwmj24_warden.0108.name
+	desc = mtwmj24_warden.0108.desc
+	picture = GFX_evt_board_meeting
+	show_sound = event_psionic
+	is_triggered_only = yes
+
+	immediate = {
+		event_target:mtwmj24_warden_spawn_point = {
+			solar_system = {
+				random_neighbor_system = {
+					limit = {
+						distance = {
+							min_jumps = 1
+							max_jumps = 3
+						}
+					}
+					spawn_system = {
+						initializer = mtwmj24_legendary_leader_home_system
+					}
+				}
+			}
+		}
+	}
+}

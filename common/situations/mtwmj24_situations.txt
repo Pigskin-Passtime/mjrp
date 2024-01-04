@@ -1,0 +1,290 @@
+##			Mute's The Warden
+##			mtwmj24_situations
+##			 			
+##			
+
+## Begin Ascension Situation
+mtwmj24_first_situation = {
+	picture = GFX_evt_psionics
+	complete_icon = GFX_situation_outcome_unknown
+	complete_icon_frame = GFX_situation_outcome_frame_blue
+
+	#time is up
+	on_progress_complete = {
+		custom_tooltip =  mtwmj24_first_situation_finish
+		hidden_effect = {
+			owner = {
+				### Outcome: Corruption
+				### Begin Corruption Events instead
+				if = {
+					limit = { 
+						OR = {
+							has_ascension_perk = ap_become_the_crisis
+							has_civic = civic_fanatic_purifiers
+						}	
+					}
+				}
+				### Outcome: Ascension
+				### Begins Corruption Situation
+				else = {
+					start_situation = {
+						type = mtwmj24_second_situation
+					}
+					random_situation = {
+						limit = {
+							is_situation_type = mtwmj24_second_situation
+						}
+						add_situation_progress = 10999
+					}
+				}
+			}
+		}
+	}
+
+	stages = {
+		stage_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_blue
+			end = 40
+			custom_tooltip = mtwmj24_first_situation_first_stage
+		}
+		stage_2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_blue
+			end = 80
+			custom_tooltip = mtwmj24_first_situation_second_stage
+		}
+		stage_3 = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_green
+			end = 120
+			custom_tooltip = mtwmj24_first_situation_third_stage
+		}
+	}
+
+	### no choices
+	approach = {
+		name = mtwmj24_first_situation_waiting
+		icon = GFX_situation_approach_research
+		icon_background = GFX_situation_approach_bg_green
+		default = yes
+		on_select = {
+			custom_tooltip = mtwmj24_first_situation_waiting_tooltip
+		}
+	}
+
+	monthly_progress = {
+		base = 2.5
+		modifier = {
+			mult = 2
+			desc =mtwmj24_situation_is_psionic
+			owner = {
+				has_ascension_perk = ap_mind_over_matter
+			}
+		}
+		modifier = {
+			mult = 2
+			desc = mtwmj24_situation_is_psionic_ascended
+			owner = {
+				has_tradition = tr_psionics_finish	
+			}
+		}
+	}
+
+}
+
+
+## Corruption Situation
+mtwmj24_second_situation = {
+	picture = GFX_evt_psionics
+
+	complete_icon = GFX_situation_outcome_positive
+	complete_icon_frame = GFX_situation_outcome_frame_blue
+
+	fail_icon = GFX_situation_outcome_negative
+	fail_icon_frame = GFX_situation_outcome_frame_red
+
+	#time is up
+	on_progress_complete = {
+		custom_tooltip = mtwmj24_second_situation_finish
+		hidden_effect = {
+			### destroy situation, just in case
+			owner = {
+				country_event = {
+					id = mtwmj24_warden.0104
+				}
+			}
+		}
+	}
+
+	#become corrupted
+	on_fail = {
+		custom_tooltip = mtwmj24_second_situation_fail
+		hidden_effect = {
+			### begin corruption
+			owner = {
+				country_event = {
+					id = mtwmj24_warden.0104
+				}
+			}
+		}
+	}
+
+	stages = {
+		stage_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_blue
+			end = 4000
+			custom_tooltip = mtwmj24_second_situation_first_stage
+		}
+		stage_2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_blue
+			end = 7000
+			custom_tooltip = mtwmj24_second_situation_second_stage
+		}
+		stage_3 = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_green
+			end = 9000
+			custom_tooltip = mtwmj24_second_situation_third_stage
+		}
+		stage_3 = {
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_green
+			end = 10000
+			custom_tooltip = mtwmj24_second_situation_fourth_stage
+		}
+		stage_3 = {
+			icon = GFX_situation_stage_5
+			icon_background = GFX_situation_stage_frame_green
+			end = 11000
+			custom_tooltip = mtwmj24_second_situation_fifth_stage
+		}
+	}
+
+	#Approach Default
+	approach = {
+		name = mtwmj24_default
+		icon = GFX_situation_approach_kneel
+		icon_background = GFX_situation_approach_bg_green
+		default = yes
+		on_select = {
+			custom_tooltip = mtwmj24_second_situation_waiting
+		}
+	}
+	#Approach Give In		(increase decay)
+	approach = {
+		name = mtwmj24_giving_in
+		icon = GFX_situation_approach_kneel
+		icon_background = GFX_situation_approach_bg_green
+		on_select = {
+			custom_tooltip = mtwmj24_second_situation_giving_in
+		}
+	}
+	#Approach Steel your Nerves		(decrease decay)
+	approach = {
+		name = mtwmj24_steel_your_nerves
+		icon = GFX_situation_approach_kneel
+		icon_background = GFX_situation_approach_bg_green
+		on_select = {
+			custom_tooltip = mtwmj24_second_situation_steel_your_nerves
+		}
+	}
+	#Approach Leader Ability 		(Destroy the Invaders)
+	approach = {
+		name = mtwmj24_destroy_invaders
+		icon = GFX_situation_approach_kneel
+		icon_background = GFX_situation_approach_bg_green
+		on_select = {
+			custom_tooltip = mtwmj24_second_situation_destroy_invaders
+		}
+	}
+
+	monthly_progress = {
+		base = 0
+
+		### Slow Decay
+		### Being at war, in breach, breaching shroud or being in Stage1 reduces by 3 yearly.
+		modifier = {
+			add = -0.25
+			desc = mtwmj24_situation_is_at_war
+			owner = {
+				is_at_war = yes
+			}
+		}
+		modifier = {
+			add = -0.25
+			desc = mtwmj24_situation_is_in_breach_galcom
+			owner = {
+				is_in_breach_of_any = yes
+			}
+		}
+		modifier = {
+			add = -0.25
+			desc = mtwmj24_situation_has_breached_shroud
+			owner = {
+				has_country_flag = breached_shroud
+			}
+		}
+		modifier = {
+			add = -0.25
+			desc = mtwmj24_situation_is_stage_one
+			current_stage = stage_1
+		}
+		
+		### Quick Decay, but only for certain stages
+		### Being  Militarist, Xenophobe, Having Shroud Debuffs or being fanatic purifier penalty
+		modifier = {
+			add = -0.5
+			desc = mtwmj24_situation_is_militarist
+			OR = {
+				current_stage = stage_1
+				current_stage = stage_2
+			}
+			owner = {
+				is_militarist = yes
+			}
+		}
+		modifier = {
+			add = -1
+			desc = mtwmj24_situation_is_xenophobe
+			OR = {
+				current_stage = stage_1
+				current_stage = stage_2
+				current_stage = stage_3
+			}
+			owner = {
+				is_xenophobe = yes
+			}
+		}
+		modifier = {
+			add = -2
+			desc = mtwmj24_situation_has_shroud_debuff
+			OR = {
+				current_stage = stage_1
+				current_stage = stage_2
+				current_stage = stage_3
+				current_stage = stage_4
+			}
+			owner = {
+				has_country_flag = negative_shroud_outcome
+			}
+		}
+		modifier = {
+			add = -4
+			desc = mtwmj24_situation_is_fanatic_purifier
+			owner = {
+				has_civic = civic_fanatic_purifiers
+			}
+		}
+
+		modifier = {
+			mult = 2
+			desc =  mtwmj24_situation_is_giving_in
+			current_situation_approach = mtwmj24_giving_in
+		}
+
+	}
+
+}
