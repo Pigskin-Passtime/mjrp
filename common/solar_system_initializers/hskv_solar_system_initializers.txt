@@ -1,0 +1,240 @@
+@base_moon_distance = 10
+
+#Spawn Planet and System
+hskv_azure_dream_system = {
+	name = "NAME_hskv_azure_dream"
+	class = "sc_a"
+
+	asteroid_belt = {
+		type = rocky_asteroid_belt
+		radius = 80
+	}
+	planet = {
+		name = "NAME_hskv_azure_dream"
+		class = star
+		size = { min = 25 max = 30 }
+		orbit_distance = 0
+		orbit_angle = 1
+		init_effect = {
+			prevent_anomaly = yes
+			solar_system = {
+				set_star_flag = hskv_azure_dream_system
+			}
+		}
+	}
+	change_orbit = 30
+	planet = {
+		name = "NAME_hskv_azure_nightmare"
+		class = pc_molten
+		orbit_distance = 20
+		orbit_angle = { min = 90 max = 270 }
+	}
+
+	change_orbit = 30
+
+	planet = {
+		name = "NAME_hskv_azure_traveller"
+        count = 1
+        class = pc_asteroid
+        orbit_distance = 0
+        orbit_angle = { min = 90 max = 270 }
+    }
+
+	change_orbit = 20
+
+	planet = {
+		name = "NAME_hskv_azure_prison"
+		orbit_distance = 10
+		class = pc_shielded
+		orbit_angle = { min = 90 max = 270 }
+		size = 10
+
+		init_effect = {
+			prevent_anomaly = yes
+			set_planet_flag = hskv_azure_prison_planet
+
+			add_anomaly = {
+				category = hskv_azure_prison_anomaly
+			}
+		}
+		
+		moon = {
+			name = "NAME_hskv_azure_guardian"
+			class = pc_barren
+			size = 4
+            count = 1
+            orbit_distance = 10
+            orbit_angle = { min = 90 max = 270 }
+        }
+	}
+
+	change_orbit = 20
+	planet = {
+		name = "NAME_hskv_azure_mirror"
+		class = pc_barren_cold
+		orbit_distance = 20
+		orbit_angle = { min = 90 max = 270 }
+	}
+}
+
+
+
+# Spawn The Everdawn Vault in Dawn's End
+hskv_dawns_end_system = {
+	name = "NAME_hskv_dawns_end"
+	class = "sc_b"
+
+	flags = { 
+		crisis_spawn_exclude 
+	}
+
+	asteroid_belt = {
+		type = rocky_asteroid_belt
+		radius = 80
+	}
+	asteroid_belt = {
+		type = rocky_asteroid_belt
+		radius = 90
+	}
+	asteroid_belt = {
+		type = rocky_asteroid_belt
+		radius = 100
+	}
+	asteroid_belt = {
+		type = rocky_asteroid_belt
+		radius = 110
+	}
+	planet = {
+		name = "NAME_hskv_dawns_end"
+		class = star
+		size = { min = 30 max = 35 }
+		orbit_distance = 0
+		orbit_angle = 1
+		init_effect = {
+			prevent_anomaly = yes
+			solar_system = {
+				set_star_flag = hskv_dawns_end_system
+			}
+			add_deposit = d_energy_3
+		}
+	}
+	change_orbit = 85
+
+	planet = {
+        count = 6
+        class = pc_asteroid
+		size = { min = 3 max = 10 }
+        orbit_distance = 0
+        orbit_angle = { min = 90 max = 270 }
+		init_effect = {
+			add_deposit = d_minerals_2
+		}
+    }
+
+	change_orbit = 10
+
+	planet = {
+        count = 2
+        class = pc_asteroid
+		size = { min = 3 max = 10 }
+        orbit_distance = 0
+        orbit_angle = { min = 90 max = 270 }
+		init_effect = {
+			add_deposit = d_minerals_2
+		}
+    }
+
+	change_orbit = 5
+
+	planet = {
+        count = 2
+        class = pc_asteroid
+		size = { min = 8 max = 12 }
+        orbit_distance = 0
+        orbit_angle = { min = 90 max = 270 }
+		init_effect = {
+			add_deposit = d_minerals_3
+		}
+    }
+
+	change_orbit = 25
+
+	planet = {
+		count = 1
+		class = random_non_colonizable
+		orbit_distance = 0
+		orbit_angle = 1
+		size = 12
+		has_ring = no
+
+		init_effect = {
+			hskv_get_event_target_vault_country = yes
+			set_planet_flag = hskv_spawn_point
+			if = {
+				limit = {
+					NOT = { exists = event_target:hskv_vault_country }
+				}
+				create_country = {
+					name = "NAME_Enigmatic_Fortress"
+					type = no_contact_neutral_faction
+					flag = {
+						icon = {
+							category = "zoological"
+							file = "flag_zoological_5.dds"
+						}
+						background = {
+							category = "backgrounds"
+							file = "00_solid.dds"
+						}
+						colors = {
+							"red"
+							"red"
+							"null"
+							"null"
+						}
+					}
+					effect = {
+						set_country_flag = hskv_vault_country
+						save_event_target_as = hskv_vault_country
+					}
+				}
+				create_fleet = {
+					name = "NAME_hskv_everdawn_vault"
+					settings = {
+						spawn_debris = no
+						is_boss = yes
+					}
+					effect = {
+						set_owner = event_target:hskv_vault_country
+						while = {
+							count = 1 #just to show-case that formation will tile
+							create_ship = {
+								name = ""
+								design = "NAME_Ancient_Vault"
+								graphical_culture = "ancient"
+
+								effect = {
+									set_ship_flag = hskv_fortress_vault
+								}
+							}
+							set_formation_scale = 0.5
+							set_location = {
+								target = PREV
+								distance = 25
+								angle = 150
+							}
+							set_fleet_flag = hskv_fortress_vault_fleet
+						}
+					}
+				}
+			}
+		}
+	}
+
+	change_orbit = 30
+	planet = {
+		class = pc_barren_cold
+		orbit_distance = 30
+		orbit_angle = { min = 90 max = 270 }
+	}
+}
