@@ -1,0 +1,179 @@
+# Programmed by Tanner
+decision_pov_assimilation = {
+	owned_planets_only = yes
+	sound = event_administrative_work
+	icon = decision_cybernetics
+
+	allow = {
+	}
+	
+	enactment_time = 200
+	
+	resources = {
+		category = decisions
+		cost = {
+			alloys = 500
+			unity = 750
+		}
+	}
+
+	potential = { #Throws out scope errors if you check the decision tab on a planet without a sector. Use to be every planet without a leader (including ai), but the first if statement and the flag handles most of those
+		exists = event_target:prof_vir_leader
+		owner = { has_country_flag = prof_vir_assimilating }
+		if = {
+			OR = {
+				planet = { exists = leader }
+				exists = sector
+				owner = {
+					leader = {
+						is_same_value = event_target:prof_vir_leader
+					}
+				}
+			}
+		}
+		if = {
+			OR = {
+				sector = {
+					sector_capital = {
+						planet = {
+							leader = { has_leader_flag = prof_vir_education }
+						}
+					}
+				}
+				planet = {
+					leader = { has_leader_flag = prof_vir_education }
+				}
+				owner = {
+					leader = {
+						is_same_value = event_target:prof_vir_leader
+					}
+				}
+			}
+		}
+		NOT = {
+			has_modifier = assimilated_by_vir
+		}
+	}
+	
+	effect = {
+		custom_tooltip = decision_pov_assimilation_tooltip #throws an error for being nested but it works anyways
+		hidden_effect = {
+			owner = {
+				change_variable = {
+					which = vir_planets_assimilated
+					value = 1
+				}
+			}
+			planet_event = { id = virprof.24 }
+		}
+	}
+}
+
+decision_hive_pov_assimilation = {
+	owned_planets_only = yes
+	sound = event_administrative_work
+	icon = decision_cybernetics
+
+	allow = {
+	}
+	
+	enactment_time = 200
+	
+	resources = {
+		category = decisions
+		cost = {
+			alloys = 500
+			energy = 1000
+		}
+	}
+
+	potential = {
+		exists = event_target:prof_vir_leader
+		owner = { has_country_flag = hive_prof_vir_assimilating }
+		if = {
+			OR = {
+				planet = { exists = leader }
+				sector = {
+					sector_capital = {
+						planet = { exists = leader }
+					}
+				}
+			}
+		}
+		if = {
+			OR = {
+				sector = {
+					sector_capital = {
+						planet = {
+							leader = { has_leader_flag = prof_hive_vir_education }
+						}
+					}
+				}
+				planet = {
+					leader = { has_leader_flag = prof_hive_vir_education }
+				}
+				event_target:prof_vir_leader = {
+					is_ruler = yes
+				}
+			}
+		}
+		NOT = {
+			has_modifier = hive_assimilated_by_vir
+		}
+	}
+	
+	effect = {
+		custom_tooltip = decision_pov_assimilation_tooltip
+		hidden_effect = {
+			owner = {
+				change_variable = {
+					which = vir_planets_assimilated
+					value = 1
+				}
+			}
+			planet_event = { id = virprof.113 }
+		}
+	}
+}
+
+decision_build_macro_computer = {
+	owned_planets_only = yes
+	sound = event_administrative_work
+	icon = decision_engineering_research
+	
+	allow = {
+	}
+	
+	enactment_time = 3600
+	
+	resources = {
+		category = decisions
+		cost = {
+			energy = 7500
+			alloys = 5000
+		}
+	}
+	
+	potential = {
+		exists = event_target:prof_vir_leader
+		owner = { 
+			has_country_flag = macro_computer_unlocked
+			NOT = { has_country_flag = building_macro_computer }
+		}
+	}
+	
+	on_queued = { # only one
+		owner = { set_country_flag = building_macro_computer }
+	}
+	
+	on_unqueued= {
+		owner = { remove_country_flag = building_macro_computer }
+	}
+	
+	effect = {
+		custom_tooltip = decision_build_macro_computer_tooltip
+		hidden_effect = {
+			planet_event = { id = virprof.1011 }
+		}
+	}
+}
