@@ -1,0 +1,340 @@
+# celestial_setup_events.txt
+# By MadeinCanada
+
+namespace = celestial_flavour
+
+# todo: add variants/gestalt text
+# todo: add trigger to occur randomly 5-10 years
+
+# Workplace Accident
+country_event = {
+	id = celestial_flavour.1
+	title = celestial_flavour.1.name
+	desc = celestial_flavour.1.desc
+	picture = GFX_evt_friendly_enlightenment
+	show_sound = event_default
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	trigger = {
+		any_owned_leader = {
+			leader_class = scientist
+			NOT = { has_leader_flag = celestial }
+		}
+	}
+
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_legendary"
+
+	picture_event_data = {
+		portrait = event_target:celestial_leader
+	}
+	
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				leader_class = scientist
+				NOT = { has_leader_flag = celestial }
+			}
+			save_event_target_as = celestial_flavour_event_leader
+		}
+	}
+
+	option = { # Reprimand them.
+		name = celestial_flavour.1.a
+		event_target:celestial_flavour_event_leader = {
+			add_trait = leader_trait_maimed
+		}
+		event_target:celestial_leader = { # add tooltip about age
+			add_age = 10
+		}
+		add_monthly_resource_mult = {
+			resource = energy
+			value = 5
+			min = 1000
+			max = 50000
+		}
+		add_monthly_resource_mult = {
+			resource = influence
+			value = 20
+			min = 100
+			max = 500
+		}
+	}
+	
+	option = { # Science can be dangerous
+		name = celestial_flavour.1.b
+		event_target:celestial_flavour_event_leader = {
+			add_trait = leader_trait_maimed
+		}
+		event_target:celestial_leader = {
+			add_skill = 1
+		}
+	}
+}
+
+# A Most Peculiar Endeavour
+country_event = {
+	id = celestial_flavour.2
+	title = celestial_flavour.2.name
+	desc = celestial_flavour.2.desc
+	picture = GFX_evt_astral_rift_desert_ruins_third_chamber
+	show_sound = event_default
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	trigger = {
+	}
+
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_legendary"
+
+	picture_event_data = {
+		portrait = event_target:celestial_leader
+	}
+	
+	immediate = {
+	}
+
+	option = { # Permit it.
+		name = celestial_flavour.2.a
+		trigger = {
+			is_gestalt = no
+		}
+		allow = {
+			has_resource = {
+				type = energy
+				amount >= 2000
+			}
+			has_resource = {
+				type = consumer_goods
+				amount >= 1000
+			}
+		}
+		add_resource = {
+			energy = -2000
+			consumer_goods = -1000
+		}
+		hidden_effect = {
+			country_event = {
+				id = celestial_flavour.3
+				days = 60
+				random = 60
+			}
+		}
+	}
+	
+	option = { # Permit it.
+		name = celestial_flavour.2.a
+		trigger = {
+			is_gestalt = yes
+		}
+		allow = {
+			has_resource = {
+				type = energy
+				amount >= 2000
+			}
+			has_resource = {
+				type = minerals
+				amount >= 3000
+			}
+		}
+		add_resource = {
+			energy = -2000
+			minerals = -3000
+		}
+		hidden_effect = {
+			country_event = {
+				id = celestial_flavour.3
+				days = 60
+				random = 60
+			}
+		}
+	}
+	
+	option = { # We cannot afford to do so.
+		name = celestial_flavour.2.b
+		event_target:celestial_leader = { # add tooltip about age
+			add_age = 5
+			add_experience = -50
+		}
+		hidden_effect = {
+			country_event = {
+				id = celestial_flavour.4
+				days = 60
+				random = 60
+			}
+		}
+	}
+}
+
+# A Most Peculiar Endeavour - Research Successful
+country_event = {
+	id = celestial_flavour.3
+	title = celestial_flavour.3.name
+	desc = celestial_flavour.3.desc
+	picture = GFX_evt_scientific_experiments
+	show_sound = event_default
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	trigger = {
+	}
+
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_legendary"
+
+	picture_event_data = {
+		portrait = event_target:celestial_leader
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = celestial_flavour.3.a
+		event_target:celestial_leader = {
+			add_experience = 100
+		}
+		add_random_research_option = {
+			tier = 4
+			add_progress = 0.10
+			ignore_prereqs = yes
+			ignore_rare = yes
+		}
+		add_random_research_option = {
+			tier = 3
+			add_progress = 0.10
+			ignore_prereqs = yes
+			ignore_rare = no
+		}
+	}
+}
+
+# A Most Peculiar Endeavour - Unexpected Success
+country_event = {
+	id = celestial_flavour.4
+	title = celestial_flavour.4.name
+	desc = celestial_flavour.4.desc
+	picture = GFX_evt_archaeologists_escaping
+	show_sound = event_default
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	trigger = {
+	}
+
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_legendary"
+
+	picture_event_data = {
+		portrait = event_target:celestial_leader
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = celestial_flavour.4.a
+		event_target:celestial_leader = {
+			add_trait = leader_trait_celestial_risktaker
+		}
+		hidden_effect = {
+			capital_scope = {
+				ruin_building = random_no_capital
+			}
+		}
+		custom_tooltip = random_cap_building_ruined
+	}
+}
+
+# Arcane Powers
+country_event = {
+	id = celestial_flavour.5
+	title = celestial_flavour.5.name
+	desc = celestial_flavour.5.desc
+	picture = GFX_evt_acquire_asset
+	show_sound = event_default
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	trigger = {
+	}
+
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_legendary"
+
+	picture_event_data = {
+		portrait = event_target:celestial_leader
+	}
+	
+	immediate = {
+	}
+
+	option = { # Give the go-ahead
+		name = celestial_flavour.5.a
+		hidden_effect = {
+			country_event = {
+				id = celestial_flavour.6
+				days = 30
+				random = 60
+			}
+		}
+	}
+	
+	option = { # Do not take the risk
+		name = celestial_flavour.5.b
+		add_monthly_resource_mult = {
+			resource = unity
+			value = 10
+			min = 500
+			max = 10000
+		}
+	}
+}
+
+# Arcane Powers - Invasion
+country_event = {
+	id = celestial_flavour.6
+	title = celestial_flavour.6.name
+	desc = celestial_flavour.6.desc
+	picture = GFX_evt_fleet_evil
+	show_sound = event_default
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	trigger = {
+	}
+
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_legendary"
+
+	picture_event_data = {
+		portrait = event_target:celestial_leader
+	}
+	
+	immediate = {
+	}
+
+	option = { # Battlestations!
+		name = celestial_flavour.6.a
+		hidden_effect = {
+			create_country = {
+				name = "NAME_Astral_Incursion"
+				type = faction
+				effect = {
+					establish_communications_no_message = root.owner
+				}
+			}
+		}
+		capital_scope = {
+			while = {
+				count = 3
+				create_army = {
+					owner = last_created_country
+					type = celestial_legion
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,2510 @@
+# celestial_chain_events.txt
+# By MadeinCanada
+
+namespace = celestial_chain
+
+## EVENT CHAINS
+# 1 - Interdimensional Pursuit
+# 2 - The Last Voyage
+# 3 - The Aetherial Codex
+# 4 - The Extrasensory Arca
+# 5 - Quantum Shard
+# 6 - Dimensional Conduit
+# 7 - Remnants of the End
+# 8 - The Otherworldly Crystal
+
+# todo: add trigger to event chain 1 and 2
+
+## Recurring Events
+
+# Create Archaeological Site for Mission
+ship_event = {
+	id = celestial_chain.0
+	title = "celestial_chain.0.name"
+	desc = "celestial_chain.0.desc"
+	picture = GFX_evt_wormhole
+	is_triggered_only = yes
+	location = event_target:celestial_relic_quest_target
+
+	trigger = {
+	}
+	
+	immediate = {
+		solar_system = {
+			if = {
+				limit = { owner = { has_country_flag = celestial_relic_quest1_selected } }
+				create_celestial_mission_vortex = {
+					CELESTIAL_MISSION_TYPE = r_celestial_aetherial_codex
+				}
+			}
+			else_if = {
+				limit = { owner = { has_country_flag = celestial_relic_quest2_selected } }
+				create_celestial_mission_vortex = {
+					CELESTIAL_MISSION_TYPE = r_celestial_tainted_gem
+				}
+			}
+			else_if = {
+				limit = { owner = { has_country_flag = celestial_relic_quest3_selected } }
+				create_celestial_mission_vortex = {
+					CELESTIAL_MISSION_TYPE = r_celestial_star_core
+				}
+			}
+			else_if = {
+				limit = { owner = { has_country_flag = celestial_relic_quest4_selected } }
+				create_celestial_mission_vortex = {
+					CELESTIAL_MISSION_TYPE = r_celestial_profane_arca
+				}
+			}
+			else_if = {
+				limit = { owner = { has_country_flag = celestial_relic_quest5_selected } }
+				create_celestial_mission_vortex = {
+					CELESTIAL_MISSION_TYPE = r_celestial_quantum_gem
+				}
+			}
+			else_if = {
+				limit = { owner = { has_country_flag = celestial_relic_quest6_selected } }
+				create_celestial_mission_vortex = {
+					CELESTIAL_MISSION_TYPE = r_celestial_spectral_beacon
+				}
+			}
+			random_system_planet = {
+				limit = {
+					has_planet_flag = celestial_wayfarer_portal
+				}
+				save_event_target_as = celestial_relic_quest_target
+			}
+		}
+	}
+
+	option = {
+		name = "celestial_chain.0.a"
+		custom_tooltip = celestial_relic_quest_target_tt
+	}
+}
+
+# Archaeological Site Complete - Destroy Vortex
+fleet_event = {
+	id = celestial_chain.1
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+		solar_system = {
+			clear_celestial_mission_vortex = yes
+		}
+	}
+}
+
+
+## 1 - Interdimensional Pursuit
+
+# Call from the Beyond
+country_event = {
+	id = celestial_chain.101
+	title = "celestial_chain.101.name"
+	desc = "celestial_chain.101.desc"
+	picture = GFX_evt_astral_rift_vortex
+	is_triggered_only = yes
+	location = event_target:celestial_crux_outpost_target
+
+	trigger = {
+	}
+	
+	immediate = {
+		event_target:celestial_crux_outpost_target = {
+			create_ambient_object = {
+				type = "kaleidoscope_angry"
+				location = this
+				entity_offset_height = { min = -5 max = -10 }
+				entity_scale_to_size = yes
+				scale = 0.1
+			}
+			last_created_ambient_object = {	
+				set_ambient_object_flag = celestial_lock_gfx
+				set_location = {
+					target = prev
+					distance = 0
+					angle = random
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "celestial_chain.101.a"
+		begin_event_chain = {
+			event_chain = celestial_interdimensional_pursuit
+		}
+		hidden_effect = {
+			country_event = {
+				id = celestial_chain.102
+				days = 90
+				random = 30
+			}
+		}
+	}
+}
+
+# A Visit from the Corps
+country_event = {
+	id = celestial_chain.102
+	title = "celestial_chain.102.name"
+	desc = "celestial_chain.102.desc"
+	picture = GFX_evt_communication_event
+	is_triggered_only = yes
+	event_chain = celestial_interdimensional_pursuit
+
+	trigger = {
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = "celestial_chain.102.a"
+		hidden_effect = {
+			country_event = {
+				id = celestial_chain.103
+			}
+		}
+	}
+}
+
+# Comms Opened
+country_event = {
+	id = celestial_chain.103
+	title = "celestial_setup.8.name"
+	desc = "celestial_chain.103.desc"
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	custom_gui_option = "enclave_curator_option"
+	picture_event_data = {
+		portrait = event_target:celestial_astral_corps_country
+		room = celestial_astral_keeper_room
+    }
+	event_chain = celestial_interdimensional_pursuit
+	
+	is_triggered_only = yes
+	trigger = {
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = "celestial_chain.103.a"
+		is_dialog_only = yes
+		response_text = "celestial_chain.103.a.reply"
+	}
+	option = {
+		name = "celestial_chain.103.b" # Tell them whereabouts.
+		set_country_flag = celestial_helped_astral_corps_1
+		hidden_effect = {
+			country_event = {
+				id = celestial_chain.104
+			}
+		}
+	}
+	option = {
+		name = "celestial_chain.103.c" # Refuse to tell them.
+		hidden_effect = {
+			country_event = {
+				id = celestial_chain.105
+			}
+		}
+	}
+	
+}
+
+# Comms - Gave Information
+country_event = {
+	id = celestial_chain.104
+	title = "celestial_setup.8.name"
+	desc = "celestial_chain.104.desc"
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	custom_gui_option = "enclave_curator_option"
+	picture_event_data = {
+		portrait = event_target:celestial_astral_corps_country
+		room = celestial_astral_keeper_room
+    }
+	event_chain = celestial_interdimensional_pursuit
+	
+	is_triggered_only = yes
+	trigger = {
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = "celestial_chain.104.a"
+		add_modifier = {
+			modifier = celestial_astral_endowment
+			days = 3600
+		}
+		hidden_effect = {
+			country_event = {
+				id = celestial_chain.106
+				days = 30
+				random = 60
+			}
+		}
+	}
+	
+}
+
+# Comms - Refused Information
+country_event = {
+	id = celestial_chain.105
+	title = "celestial_setup.8.name"
+	desc = "celestial_chain.105.desc"
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	custom_gui_option = "enclave_curator_option"
+	picture_event_data = {
+		portrait = event_target:celestial_astral_corps_country
+		room = celestial_astral_keeper_room
+    }
+	event_chain = celestial_interdimensional_pursuit
+	
+	is_triggered_only = yes
+	trigger = {
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = "celestial_chain.105.a"
+		hidden_effect = {
+			country_event = {
+				id = celestial_chain.106
+				days = 30
+				random = 60
+			}
+		}
+	}
+	
+}
+
+# Wayfarer Disappears
+country_event = {
+	id = celestial_chain.106
+	title = "celestial_chain.106.name"
+	desc = "celestial_chain.106.desc"
+	picture = GFX_evt_imperial_vassal
+	is_triggered_only = yes
+	event_chain = celestial_interdimensional_pursuit
+
+	trigger = {
+	}
+	
+	immediate = {
+		clone_leader = {
+			target = event_target:celestial_leader
+		}
+		last_created_leader = {
+			set_leader_flag = legendary_leader
+			set_leader_flag = celestial
+			save_global_event_target_as = celestial_awol_leader
+			set_leader_flag = immune_to_negative_traits
+			set_owner = event_target:celestial_emporium_country
+		}
+		event_target:celestial_leader = {
+			kill_leader = {
+				show_notification = no
+				fire = yes
+			}
+		}
+		set_country_flag = celestial_wayfarer_awol
+	}
+
+	option = {
+		name = "celestial_chain.106.a"
+		custom_tooltip = celestial_wayfarer_gone_awol
+		hidden_effect = {
+			country_event = {
+				id = celestial_chain.107
+				days = 120
+				random = 30
+			}
+		}
+	}
+}
+
+# Unknown Transmission
+country_event = {
+	id = celestial_chain.107
+	title = "celestial_chain.107.name"
+	desc = "celestial_chain.107.desc"
+	picture = GFX_evt_robot_encounter
+	is_triggered_only = yes
+	event_chain = celestial_interdimensional_pursuit
+
+	trigger = {
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = "celestial_chain.107.a"
+		hidden_effect = {
+			country_event = {
+				id = celestial_chain.108
+			}
+		}
+	}
+}
+
+# Comms Opened
+country_event = {
+	id = celestial_chain.108
+	title = "celestial_chain.108.name"
+	desc = "celestial_chain.108.desc"
+	diplomatic = yes
+	picture_event_data = {
+		room = no_video_feed_room
+    }
+	event_chain = celestial_interdimensional_pursuit
+	
+	is_triggered_only = yes
+	trigger = {
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = "celestial_chain.108.a"
+		hidden_effect = {
+			country_event = {
+				id = celestial_chain.109
+			}
+		}
+	}
+}
+
+# The Wayfarer
+country_event = {
+	id = celestial_chain.109
+	title = "celestial_chain.109.name"
+	desc = "celestial_chain.109.desc"
+	diplomatic = yes
+	custom_gui = "enclave_caravaneer_window"
+	picture_event_data = {
+		portrait = event_target:celestial_awol_leader
+		room = crystalline_room
+		planet_background = pc_ice_asteroid
+    }
+	event_chain = celestial_interdimensional_pursuit
+
+	is_triggered_only = yes
+	trigger = {
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = "celestial_chain.109.a"
+		custom_gui = "enclave_caravaneer_option"
+		is_dialog_only = yes
+		response_text = "celestial_chain.109.a.reply"
+	}
+	option = {
+		name = "celestial_chain.109.b"
+		custom_gui = "enclave_caravaneer_option"
+		is_dialog_only = yes
+		response_text = "celestial_chain.109.b.reply"
+	}
+	option = {
+		name = "celestial_chain.109.c" # Help.
+		custom_gui = "enclave_caravaneer_option"
+		set_country_flag = celestial_helped_wayfarer
+		response_text = "celestial_chain.109.c.reply"
+		event_target:celestial_crux_outpost_target = {
+			enable_special_project = {
+				name = celestial_dimensional_disruption
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+	option = {
+		name = "celestial_chain.109.d" # Leave.
+		custom_gui = "enclave_caravaneer_option"
+		response_text = "celestial_chain.109.d.reply"
+		hidden_effect = {
+			random_list = {
+				70 = {
+					country_event = {
+						id = celestial_chain.110 # Astral Corps capture Wayfarer
+						days = 180
+						random = 180
+					}
+				}
+				30 = {
+					country_event = {
+						id = celestial_chain.111 # Wayfarer escapes
+						days = 180
+						random = 180
+					}
+				}
+			}
+		}
+	}
+	
+}
+
+# Wayfarer Caught - End of event chain and Wayfarer
+country_event = {
+	id = celestial_chain.110
+	title = "celestial_setup.8.name"
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	custom_gui_option = "enclave_curator_option"
+	picture_event_data = {
+		portrait = event_target:celestial_astral_corps_country
+		room = celestial_astral_keeper_room
+    }
+	event_chain = celestial_interdimensional_pursuit
+
+	desc = {
+		text = "celestial_chain.110.desc.1"
+		trigger = {
+			has_country_flag = celestial_helped_astral_corps_1
+		}
+	}
+	desc = {
+		text = "celestial_chain.110.desc.2"
+		trigger = {
+			NOT = { has_country_flag = celestial_helped_astral_corps_1 }
+		}
+	}
+	
+	is_triggered_only = yes
+	trigger = {
+	}
+	
+	immediate = {
+		event_target:celestial_awol_leader = {
+			kill_leader = {
+				show_notification = no
+			}
+		}
+		event_target:celestial_emporium_country = {
+			destroy_country = yes
+		}
+		remove_country_flag = celestial_wayfarer_awol
+		event_target:celestial_crux_outpost_target = {
+			solar_system = {
+				every_system_ambient_object = {
+					limit = {
+						OR = {
+							has_ambient_object_flag = celestial_lock_gfx
+						}
+					}
+					destroy_ambient_object = this
+				}
+			}
+			
+		}
+	}
+
+	option = {
+		name = "celestial_chain.110.a"
+		end_event_chain = celestial_interdimensional_pursuit
+		custom_tooltip = celestial_wayfarer_killed
+		trigger = {
+			has_country_flag = celestial_helped_astral_corps_1
+		}
+		add_monthly_resource_mult = {
+			resource = energy
+			value = 12
+			min = 5000
+			max = 99999
+		}
+		add_monthly_resource_mult = {
+			resource = minerals
+			value = 12
+			min = 5000
+			max = 99999
+		}
+		add_monthly_resource_mult = {
+			resource = alloys
+			value = 12
+			min = 3000
+			max = 9999
+		}
+	}
+	option = {
+		name = "celestial_chain.110.b"
+		trigger = {
+			NOT = { has_country_flag = celestial_helped_astral_corps_1 }
+		}
+	}
+}
+
+# The Wayfarer Escaped
+country_event = {
+	id = celestial_chain.111
+	title = "celestial_chain.109.name"
+	desc = "celestial_chain.111.desc"
+	diplomatic = yes
+	custom_gui = "enclave_caravaneer_window"
+	picture_event_data = {
+		portrait = event_target:celestial_awol_leader
+		room = crystalline_room
+		planet_background = pc_ice_asteroid
+    }
+	event_chain = celestial_interdimensional_pursuit
+	
+	is_triggered_only = yes
+	trigger = {
+	}
+	
+	immediate = {
+		event_target:celestial_crux_outpost_target = {
+			solar_system = {
+				every_system_ambient_object = {
+					limit = {
+						OR = {
+							has_ambient_object_flag = celestial_lock_gfx
+						}
+					}
+					destroy_ambient_object = this
+				}
+			}
+			
+		}
+		remove_country_flag = celestial_wayfarer_awol
+		clone_leader = {
+			target = event_target:celestial_awol_leader
+		}
+		last_created_leader = {
+			set_leader_flag = legendary_leader
+			set_leader_flag = celestial
+			save_global_event_target_as = celestial_leader
+			set_leader_flag = immune_to_negative_traits
+			set_owner = root
+		}
+		event_target:celestial_fleet = {
+			assign_leader = event_target:celestial_leader
+		}
+		event_target:celestial_awol_leader = {
+			kill_leader = {
+				show_notification = no
+			}
+		}
+	}
+
+	option = {
+		name = "celestial_chain.111.a"
+		custom_gui = "enclave_caravaneer_option"
+		is_dialog_only = yes
+		response_text = "celestial_chain.111.a.reply"
+	}
+	option = {
+		name = "celestial_chain.111.b"
+		custom_gui = "enclave_caravaneer_option"
+		end_event_chain = celestial_interdimensional_pursuit
+		custom_tooltip = celestial_wayfarer_returns
+		event_target:celestial_leader = {
+			add_trait = leader_trait_paranoid
+			add_trait = leader_trait_traumatized
+			if = {
+				limit = { owner = { has_country_flag = celestial_helped_astral_corps_1 } }
+				add_age = 30
+			}
+			else = {
+				add_age = 20
+			}
+		}
+	}
+	
+}
+
+# Project Completed
+country_event = {
+	id = celestial_chain.112
+	title = "celestial_chain.112.name"
+	desc = "celestial_chain.112.desc"
+	picture = GFX_evt_astral_rift_crystal_3
+	is_triggered_only = yes
+	location = event_target:celestial_crux_outpost_target
+	event_chain = celestial_interdimensional_pursuit
+
+	trigger = {
+	}
+	
+	immediate = {
+		event_target:celestial_crux_outpost_target = {
+			solar_system = {
+				every_system_ambient_object = {
+					limit = {
+						OR = {
+							has_ambient_object_flag = celestial_lock_gfx
+						}
+					}
+					destroy_ambient_object = this
+				}
+			}
+			
+		}
+	}
+
+	option = {
+		name = "celestial_chain.112.a"
+		hidden_effect = {
+			country_event = {
+				id = celestial_chain.113
+				days = 10
+			}
+		}
+	}
+}
+
+# Astral Corps Alerted
+country_event = {
+	id = celestial_chain.113
+	title = "celestial_setup.8.name"
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	custom_gui_option = "enclave_curator_option"
+	picture_event_data = {
+		portrait = event_target:celestial_astral_corps_country
+		room = celestial_astral_keeper_room
+    }
+	event_chain = celestial_interdimensional_pursuit
+
+	desc = {
+		text = "celestial_chain.113.desc.1"
+		trigger = {
+			has_country_flag = celestial_helped_astral_corps_1
+		}
+	}
+	desc = {
+		text = "celestial_chain.113.desc.2"
+		trigger = {
+			NOT = { has_country_flag = celestial_helped_astral_corps_1 }
+		}
+	}
+	
+	is_triggered_only = yes
+	trigger = {
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = "celestial_chain.113.a"
+		trigger = {
+			has_country_flag = celestial_helped_astral_corps_1
+		}
+		remove_modifier = celestial_astral_endowment
+		hidden_effect = {
+			country_event = {
+				id = celestial_chain.114
+				days = 180
+			}
+		}
+	}
+	option = {
+		name = "celestial_chain.113.b"
+		trigger = {
+			NOT = { has_country_flag = celestial_helped_astral_corps_1 }
+		}
+		add_monthly_resource_mult = {
+			resource = energy
+			value = 5
+			min = 2000
+		}
+		add_monthly_resource_mult = {
+			resource = alloys
+			value = 5
+			min = 1000
+		}
+		hidden_effect = {
+			country_event = {
+				id = celestial_chain.114
+				days = 180
+			}
+		}
+	}
+}
+
+# Wayfarer Returns, end of event chain
+country_event = {
+	id = celestial_chain.114
+	title = celestial_chain.114.name
+	desc = celestial_chain.114.desc
+	picture = GFX_evt_fleet_good
+	show_sound = event_default
+	is_triggered_only = yes
+	event_chain = celestial_interdimensional_pursuit
+
+	trigger = {
+	}
+
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_legendary"
+
+	picture_event_data = {
+		portrait = event_target:celestial_leader
+	}
+	
+	immediate = {
+		remove_country_flag = celestial_wayfarer_awol
+		clone_leader = {
+			target = event_target:celestial_awol_leader
+		}
+		last_created_leader = {
+			set_leader_flag = legendary_leader
+			set_leader_flag = celestial
+			save_global_event_target_as = celestial_leader
+			set_leader_flag = immune_to_negative_traits
+			set_owner = root
+		}
+		event_target:celestial_fleet = {
+			assign_leader = event_target:celestial_leader
+		}
+		event_target:celestial_awol_leader = {
+			kill_leader = {
+				show_notification = no
+			}
+		}
+	}
+
+	option = {
+		name = celestial_chain.114.a
+		custom_tooltip = celestial_wayfarer_returns
+		end_event_chain = celestial_interdimensional_pursuit
+		event_target:celestial_leader = {
+			if = {
+				limit = { owner = { has_country_flag = celestial_helped_astral_corps_1 } }
+				add_age = 15
+			}
+			else = {
+				add_age = 5
+			}
+			add_experience = 500
+		}
+	}
+}
+
+## 2 - The Last Voyage / The Invaders
+
+# Hidden - Check Wayfarer Age
+country_event = { 
+	id = celestial_chain.201
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		event_target:celestial_leader = {
+			leader_age > 320	# Change to alter how long the Wayfarer remains
+		}
+	}
+
+	immediate = {
+		country_event = {
+			id = celestial_chain.202
+		}
+	}
+}
+
+# Initial Event
+country_event = {
+	id = celestial_chain.202
+	title = "celestial_chain.202.name"
+	desc = "celestial_chain.202.desc"
+	picture = GFX_evt_situation_the_seal
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = "celestial_chain.202.a"
+		begin_event_chain = {
+			event_chain = celestial_the_invaders
+		}
+		hidden_effect = {
+			country_event = {
+				id = celestial_chain.203
+				days = 60
+				random = 60
+			}
+		}
+	}
+}
+
+# Wayfarer Expresses Concerns
+country_event = {
+	id = celestial_chain.203
+	title = celestial_chain.203.name
+	desc = celestial_chain.203.desc
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_default
+	is_triggered_only = yes
+	event_chain = celestial_the_invaders
+
+	trigger = {
+	}
+
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_legendary"
+
+	picture_event_data = {
+		portrait = event_target:celestial_leader
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = celestial_chain.203.a
+		capital_scope.solar_system = {
+			star = {
+				enable_special_project = {
+					name = celestial_rifts_in_space
+					location = this
+					owner = root.owner
+				}
+			}
+		}
+	}
+}
+
+# Project Complete
+country_event = {
+	id = celestial_chain.204
+	title = celestial_chain.204.name
+	desc = celestial_chain.204.desc
+	picture = GFX_evt_ship_in_orbit_3
+	show_sound = event_default
+	is_triggered_only = yes
+	location = event_target:celestial_unbidden_rift
+	event_chain = celestial_the_invaders
+
+	trigger = {
+	}
+
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_legendary"
+
+	picture_event_data = {
+		portrait = event_target:celestial_leader
+	}
+	
+	immediate = {
+		capital_scope = {
+			spawn_system = {
+				min_jumps = 1
+				max_jumps = 2
+				initializer = celestial_unbidden_system
+				hyperlane = yes
+				is_discovered = no
+			}
+		}
+	}
+
+	option = {	# Go on the journey.
+		name = celestial_chain.204.a
+		custom_tooltip = celestial_unbidden_rift_tt
+		event_target:celestial_unbidden_rift = {
+			enable_special_project = {
+				name = celestial_unbidden_rift_sp
+				location = this
+				owner = root.owner
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = celestial_chain.205
+				days = 90
+				random = 60
+			}
+		}
+	}
+}
+
+# TODO for whole event chain: alternate text and stuff for if the unbidden IS CURRENTLY a crisis or WAS a crisis
+
+# Hidden - Create Unbidden Country
+country_event = { 
+	id = celestial_chain.205
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		# Create Unbidden
+		create_species = {
+			name = "NAME_Unbidden"
+			class = EXD
+			namelist = Extradimensional
+			portrait = exd1_leader
+			traits = random
+			effect = { save_event_target_as = celestial_extradimensional_species }
+		}
+		create_country = {
+			name = "NAME_Unbidden"
+			type = "celestial_extradimensional"
+			species = event_target:celestial_extradimensional_species
+			name_list = "Extradimensional"
+			effect = { set_country_flag = celestial_unbidden }
+			flag = {
+				icon= {
+					category = "special"
+					file = "extradimensional_01.dds"
+				}
+				background= {
+					category = "backgrounds"
+					file = "circle.dds"
+				}
+				colors={
+					"indigo"
+					"blue"
+					"null"
+					"null"
+				}
+			}
+			effect = {
+				save_global_event_target_as = celestial_unbidden_country
+				set_graphical_culture = extra_dimensional_01
+			}
+		}
+		country_event = {
+			id = celestial_chain.206
+		}
+	}
+}
+
+# Unbidden Message
+country_event = {
+	id = celestial_chain.206
+	title = "celestial_chain.206.name"
+	desc = "celestial_chain.206.desc"
+	diplomatic = yes
+	picture_event_data = {
+		room = no_video_feed_room
+    }
+	event_chain = celestial_the_invaders
+	
+	is_triggered_only = yes
+	trigger = {
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = "celestial_chain.206.a"
+		is_dialog_only = yes
+		response_text = celestial_chain.206.a.reply
+	}
+
+	option = {
+		name = "celestial_chain.206.b"
+		is_dialog_only = yes
+		response_text = celestial_chain.206.b.reply
+	}
+
+	option = {
+		name = "celestial_chain.206.c"
+		hidden_effect = {
+			country_event = {
+				id = celestial_chain.207
+			}
+		}
+	}
+}
+
+# Unbidden Message 2
+country_event = {
+	id = celestial_chain.207
+	title = "celestial_chain.206.name"
+	desc = "celestial_chain.207.desc"
+	diplomatic = yes
+	picture_event_data = {
+		room = no_video_feed_room
+    }
+	event_chain = celestial_the_invaders
+	
+	is_triggered_only = yes
+	trigger = {
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = "celestial_chain.207.a"
+		response_text = celestial_chain.207.a.reply
+	}
+
+	option = {
+		name = "celestial_chain.207.b"
+		response_text = celestial_chain.207.b.reply
+	}
+}
+
+# Spatial distortions begin to get stronger
+ship_event = {
+	id = celestial_chain.208
+	title = "celestial_chain.208.name"
+	desc = "celestial_chain.208.desc"
+	picture = GFX_evt_astral_rift_vortex
+	is_triggered_only = yes
+	show_sound = event_kaleidoscopic_lights
+	location = from
+	event_chain = celestial_the_invaders
+	
+	trigger = {
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = "celestial_chain.208.a" # Leave.
+		owner = {
+			set_country_flag = celestial_invaders_left
+		}
+		hidden_effect = {
+			ship_event = {
+				id = celestial_chain.209
+				days = 90
+			}
+		}
+	}
+	option = {
+		name = "celestial_chain.208.b" # We must stay to finish it.
+		owner = {
+			set_country_flag = celestial_invaders_stayed
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = 12
+			}
+			add_resource = {
+				influence = 150
+			}
+		}
+		hidden_effect = {
+			ship_event = {
+				id = celestial_chain.209
+				days = 60
+			}
+		}
+	}
+}
+
+# Either way, the system is cut off
+# A large portal with an largish unbidden fleet appears in the system
+# If the wayfarer remains in the system and cant jump out for whatever reason, their ship will remain at 1% health
+ship_event = {
+	id = celestial_chain.209
+	title = "celestial_chain.209.name"
+	desc = "celestial_chain.209.desc"
+	picture = GFX_evt_kaleidoscopic_lights
+	is_triggered_only = yes
+	location = event_target:celestial_unbidden_rift
+	event_chain = celestial_the_invaders
+	
+	trigger = {
+	}
+
+	immediate = {
+		fleet.solar_system = {
+			every_neighbor_system = {
+				set_star_flag = celestial_invader_neighbour_system
+				remove_hyperlane = {
+					from = this
+					to = prev
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "celestial_chain.209.a"
+		custom_tooltip = celestial_chain.209.tt
+		hidden_effect = {
+			fleet.solar_system = {
+				event_target:celestial_unbidden_rift = {
+					create_ambient_object = {
+						type = "celestial_unbidden_portal"
+						location = this
+						entity_offset_height = { min = -15 max = -15 }
+						entity_scale_to_size = yes
+						scale = 1.25
+					}
+				}
+				last_created_ambient_object = {	
+					set_ambient_object_flag = celestial_unbidden_portal
+					save_global_event_target_as = celestial_unbidden_portal
+					set_location = {
+						target = prev
+						distance = -120
+						angle = 80
+					}
+				}
+				every_system_ambient_object = {
+					limit = {
+						has_ambient_object_flag = celestial_unbidden_rift
+					}
+					destroy_ambient_object = this
+				}
+				# Spawn unbidden fleet
+				if = { # Unbidden are currently the crisis
+					limit = {
+						has_global_flag = extradimensional_invasion_happened
+						NOT = { has_global_flag = extradimensional_first_portal_destroyed }
+					}
+					# Spawn mediumish fleet
+					# 8, 12, 20 is the usual fleet composition
+					event_target:celestial_unbidden_country = {
+						celestial_spawn_unbidden_fleet = {
+							revenant_num = 2
+							phantom_num = 8
+							wraith_num = 12
+						}
+					}
+				}
+				else_if = { # Unbidden WERE previously the crisis
+					limit = {
+						has_global_flag = extradimensional_invasion_happened
+						has_global_flag = extradimensional_first_portal_destroyed
+					}
+					# Spawn average fleet
+					event_target:celestial_unbidden_country = {
+						celestial_spawn_unbidden_fleet = {
+							revenant_num = 6
+							phantom_num = 10
+							wraith_num = 20
+						}
+					}
+				}
+				else = { # Unbidden have not arrived at all
+					# Spawn small fleet
+					event_target:celestial_unbidden_country = {
+						celestial_spawn_unbidden_fleet = {
+							revenant_num = 1
+							phantom_num = 3
+							wraith_num = 10
+						}
+					}
+				}
+			}
+			owner = {
+				country_event = {
+					id = celestial_chain.210
+					days = 15
+					random = 15
+				}
+			}
+		}
+	}
+}
+
+# The astral corps fleet appears with strong boons against the unbidden
+country_event = {
+	id = celestial_chain.210
+	title = "celestial_chain.210.name"
+	desc = "celestial_chain.210.desc"
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_legendary"
+	picture = GFX_evt_fleet_good
+	event_chain = celestial_the_invaders
+
+	picture_event_data = {
+		portrait = event_target:celestial_astral_corps_country
+	}
+	
+	is_triggered_only = yes
+	trigger = {
+	}
+	
+	immediate = {
+		event_target:celestial_astral_corps_country = {
+			set_faction_hostility = {
+				target = root
+				set_hostile = no
+				set_friendly = yes
+			}
+			celestial_spawn_corps_fleet = {
+				revenant_num = 18
+				phantom_num = 12
+				wraith_num = 20
+				target = event_target:celestial_unbidden_start_fleet
+			}
+		}
+	}
+
+	option = {
+		name = "celestial_chain.210.a"
+		hidden_effect = {
+			country_event = {
+				id = celestial_chain.211
+				days = 15
+			}
+		}
+	}
+}
+
+# Unbidden fleet retreats, corps contact you about a temporary alliance - they restore the hyperlanes and borrow the wayfarer # special situation
+country_event = {
+	id = celestial_chain.211
+	title = "celestial_setup.8.name"
+	desc = "celestial_chain.211.desc"
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	custom_gui_option = "enclave_curator_option"
+	picture_event_data = {
+		portrait = event_target:celestial_astral_corps_country
+		room = celestial_astral_keeper_room
+    }
+	event_chain = celestial_the_invaders
+	
+	is_triggered_only = yes
+	trigger = {
+	}
+	
+	immediate = {
+		event_target:celestial_unbidden_start_fleet = {
+			delete_fleet = {
+				target = this
+			}
+		}
+	}
+
+	option = {
+		name = "celestial_chain.211.a"
+		response_text = "celestial_chain.211.a.reply"
+		set_country_flag = celestial_invader_situation_ongoing
+		custom_tooltip = celestial_chain.211.tt
+		start_situation = { type = celestial_invaders target = root }
+		set_country_flag = celestial_wayfarer_awol
+		hidden_effect = {
+			# Restore hyperlanes to Zullius
+			event_target:celestial_unbidden_portal = {
+				solar_system = {
+					every_system = {
+						limit = { has_star_flag = celestial_invader_neighbour_system }
+						remove_star_flag = celestial_invader_neighbour_system
+						add_hyperlane = {
+							from = this
+							to = prev
+						}
+					}
+				}
+			}
+			# Wayfarer cloned and sent to astral corps
+			clone_leader = {
+				target = event_target:celestial_leader
+			}
+			last_created_leader = {
+				set_leader_flag = legendary_leader
+				set_leader_flag = celestial
+				save_global_event_target_as = celestial_astralcorps_leader
+				set_leader_flag = immune_to_negative_traits
+				set_owner = event_target:celestial_astral_corps_country
+			}
+			event_target:celestial_leader = {
+				kill_leader = {
+					show_notification = no
+					fire = yes
+				}
+			}
+			country_event = {
+				id = celestial_chain.212
+				days = 30
+			}
+		}
+	}
+}
+
+# Gatekeeper Event
+country_event = {
+	id = celestial_chain.212
+	hide_window = yes
+	
+	is_triggered_only = yes
+	trigger = {
+		has_country_flag = celestial_invader_situation_ongoing
+	}
+	
+	immediate = {
+		country_event = {
+			id = celestial_chain.212
+			days = 250
+		}
+		random_list = {
+			33 = {
+				modifier = {
+					factor = 0
+					has_country_flag = celestial_chain.213_set
+				}
+				set_country_flag = celestial_chain.213_set
+				country_event = {
+					id = celestial_chain.213
+					days = 10
+					random = 30
+				}
+			}
+			33 = {
+				modifier = {
+					factor = 0
+					has_country_flag = celestial_chain.214_set
+				}
+				set_country_flag = celestial_chain.214_set
+				country_event = {
+					id = celestial_chain.214
+					days = 10
+					random = 30
+				}
+			}
+			33 = {
+				modifier = {
+					factor = 0
+					has_country_flag = celestial_chain.215_set
+				}
+				set_country_flag = celestial_chain.215_set
+				country_event = {
+					id = celestial_chain.215
+					days = 10
+					random = 30
+				}
+			}
+		}
+	}
+}
+
+# sp event 1 - science ship
+country_event = {
+	id = celestial_chain.213
+	title = "celestial_chain.213.name"
+	desc = "celestial_chain.213.desc"
+	picture = GFX_evt_astral_rift_microverse
+	is_triggered_only = yes
+	#location = event target system
+	event_chain = celestial_the_invaders
+	
+	trigger = {
+		has_country_flag = celestial_invader_situation_ongoing
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = "celestial_chain.213.a"
+		random_planet_within_border = {
+			limit = {
+				is_star = yes
+			}
+			enable_special_project = {
+				name = celestial_situation_sp1
+				location = this
+				owner = root
+			}
+		}
+	}
+}
+
+# sp event 2 - construction ship
+country_event = {
+	id = celestial_chain.214
+	title = "celestial_chain.213.name"
+	desc = "celestial_chain.214.desc"
+	picture = GFX_evt_wormhole
+	is_triggered_only = yes
+	#location = event target system
+	event_chain = celestial_the_invaders
+	
+	trigger = {
+		has_country_flag = celestial_invader_situation_ongoing
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = "celestial_chain.213.a"
+		random_planet_within_border = {
+			limit = {
+				is_star = yes
+			}
+			enable_special_project = {
+				name = celestial_situation_sp2
+				location = this
+				owner = root
+			}
+		}
+	}
+}
+
+# sp event 3 - fleet
+country_event = {
+	id = celestial_chain.215
+	title = "celestial_chain.213.name"
+	desc = "celestial_chain.215.desc"
+	picture = GFX_evt_astral_rift_ancient_battlegrounds
+	is_triggered_only = yes
+	#location = event target system
+	event_chain = celestial_the_invaders
+	
+	trigger = {
+		has_country_flag = celestial_invader_situation_ongoing
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = "celestial_chain.213.a"
+		random_planet_within_border = {
+			limit = {
+				is_star = yes
+			}
+			enable_special_project = {
+				name = celestial_situation_sp3
+				location = this
+				owner = root
+			}
+		}
+	}
+}
+
+# sp event 1 - science ship [completed]
+country_event = {
+	id = celestial_chain.216
+	title = "celestial_chain.213.name"
+	desc = "celestial_chain.216.desc"
+	picture = GFX_evt_astral_rift_microverse
+	is_triggered_only = yes
+	event_chain = celestial_the_invaders
+	
+	trigger = {
+		has_country_flag = celestial_invader_situation_ongoing
+	}
+
+	immediate = {
+	}
+	# todo: progress the situation a certain way depending on choices, which also have boons
+	option = {
+		name = "celestial_chain.216.a"
+	}
+	option = {
+		name = "celestial_chain.216.b"
+	}
+}
+
+# sp event 2 - construction ship [completed]
+country_event = {
+	id = celestial_chain.217
+	title = "celestial_chain.213.name"
+	desc = "celestial_chain.217.desc"
+	picture = GFX_evt_wormhole
+	is_triggered_only = yes
+	event_chain = celestial_the_invaders
+	
+	trigger = {
+		has_country_flag = celestial_invader_situation_ongoing
+	}
+
+	immediate = {
+	}
+	# todo: progress the situation a certain way depending on choices, which also have boons
+	option = {
+		name = "celestial_chain.217.a"
+	}
+	option = {
+		name = "celestial_chain.217.b"
+	}
+}
+
+# sp event 3 - fleet [completed]
+country_event = {
+	id = celestial_chain.218
+	title = "celestial_chain.213.name"
+	desc = "celestial_chain.218.desc"
+	picture = GFX_evt_astral_rift_ancient_battlegrounds
+	is_triggered_only = yes
+	event_chain = celestial_the_invaders
+	
+	trigger = {
+		has_country_flag = celestial_invader_situation_ongoing
+	}
+
+	immediate = {
+	}
+	# todo: progress the situation a certain way depending on choices, which also have boons
+	option = {
+		name = "celestial_chain.218.a"
+	}
+	option = {
+		name = "celestial_chain.218.b"
+	}
+}
+
+# todo:
+# random unbidden fleet appear in system
+# if the above fleet is not defeated in 6 months, an astral corps fleet appears in the same system (but reduces the situation)
+
+# situation success - one more SP - You can send fleets to the portal to reinforce them; the more you do, the more likely it is they survive
+country_event = {
+	id = celestial_chain.220
+	title = "celestial_chain.220.name"
+	desc = "celestial_chain.220.desc"
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_legendary"
+	picture = GFX_evt_federation_fleet
+	event_chain = celestial_the_invaders
+
+	picture_event_data = {
+		portrait = event_target:celestial_astral_corps_country
+	}
+	
+	is_triggered_only = yes
+	trigger = {
+	}
+	
+	immediate = {
+		remove_country_flag = celestial_invader_situation_ongoing
+		clone_leader = {
+			target = event_target:celestial_astral_leader
+		}
+		last_created_leader = {
+			set_leader_flag = legendary_leader
+			set_leader_flag = celestial
+			save_global_event_target_as = celestial_leader
+			set_leader_flag = immune_to_negative_traits
+			set_owner = root
+		}
+		event_target:celestial_fleet = {
+			assign_leader = event_target:celestial_leader
+		}
+		event_target:celestial_astral_leader = {
+			kill_leader = {
+				show_notification = no
+			}
+		}
+	}
+
+	option = {
+		name = "celestial_chain.220.a"
+		custom_tooltip = celestial_leader_back
+		# todo: incase fleet is disbanded, remake the wayfarer ship
+		event_target:celestial_unbidden_portal = {
+			enable_special_project = {
+				name = celestial_invaders_finale
+				location = THIS
+			}
+		}
+	}
+}
+
+# SP complete - Decider
+country_event = {
+	id = celestial_chain.221
+	hide_window = yes
+	
+	is_triggered_only = yes
+	trigger = {
+	}
+	
+	#todo: alter outcome by counting ships
+	immediate = {
+		random_list = {
+			85 = {
+				country_event = {
+					id = celestial_chain.222
+					days = 3
+				}
+			}
+			15 = {
+				country_event = {
+					id = celestial_chain.224
+					days = 3
+				}
+			}
+		}
+	}
+}
+
+# success: portal closes, wayfarer says goodbye to go work with the astral corps - you get relic(s) and modifier and keep the ship
+country_event = {
+	id = celestial_chain.222
+	title = "celestial_chain.222.name"
+	desc = "celestial_chain.222.desc"
+	picture = GFX_evt_crisis_defeated
+	is_triggered_only = yes
+	event_chain = celestial_the_invaders
+	
+	trigger = {
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = "celestial_chain.223.a"
+		hidden_effect = {
+			country_event = {
+				id = celestial_chain.223
+			}
+		}
+	}
+}
+
+# part 2
+country_event = {
+	id = celestial_chain.223
+	title = "celestial_chain.223.name"
+	desc = "celestial_chain.223.desc"
+	diplomatic = yes
+	custom_gui = "enclave_caravaneer_window"
+	picture_event_data = {
+		portrait = event_target:celestial_leader
+		room = paragon_keides_room
+    }
+	event_chain = celestial_the_invaders
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = "celestial_chain.223.a"
+		custom_gui = "enclave_caravaneer_option"
+		is_dialog_only = yes
+		response_text = "celestial_chain.223.a.reply"
+	}
+	option = {
+		name = "celestial_chain.223.b"
+		custom_gui = "enclave_caravaneer_option"
+		is_dialog_only = yes
+		response_text = "celestial_chain.223.b.reply"
+	}
+	option = {
+		name = "celestial_chain.223.c"
+		custom_gui = "enclave_caravaneer_option"
+		response_text = "celestial_chain.223.c.reply"
+		end_event_chain = celestial_the_invaders
+		event_target:celestial_fleet = {
+			set_fleet_settings = {
+				can_change_composition = yes
+				can_change_leader = yes
+			}
+		}
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier4unityreward
+		}
+		add_relic = r_celestial_compass_alive # todo: another variant?
+		add_modifier = {
+			modifier = celestial_wayfarer_victory
+		}
+		hidden_effect = {
+			event_target:celestial_leader = {
+				kill_leader = {
+					show_notification = no
+				}
+			}
+		}
+		set_country_flag = celestial_completed
+		set_country_flag = celestial_outcome_1
+	}
+}
+
+# failure: portal closes, wayfarer perishes, astral corps rewards you with goods and the wayfarer's ship
+country_event = {
+	id = celestial_chain.224
+	title = "celestial_chain.222.name"
+	desc = "celestial_chain.224.desc"
+	picture = GFX_evt_crisis_defeated
+	is_triggered_only = yes
+	event_chain = celestial_the_invaders
+	
+	trigger = {
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = "celestial_chain.224.a"
+		hidden_effect = {
+			country_event = {
+				id = celestial_chain.225
+			}
+		}
+	}
+}
+
+# part 2
+country_event = {
+	id = celestial_chain.225
+	title = "celestial_chain.225.name"
+	desc = "celestial_chain.225.desc"
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	custom_gui_option = "enclave_curator_option"
+	picture_event_data = {
+		portrait = event_target:celestial_astral_corps_country
+		room = celestial_astral_keeper_room
+    }
+	event_chain = celestial_the_invaders
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = "celestial_chain.225.a"
+		is_dialog_only = yes
+		response_text = "celestial_chain.225.a.reply"
+	}
+	option = {
+		name = "celestial_chain.225.b"
+		response_text = "celestial_chain.225.b.reply"
+		end_event_chain = celestial_the_invaders
+		event_target:celestial_fleet = {
+			set_fleet_settings = {
+				can_change_composition = yes
+				can_change_leader = yes
+			}
+		}
+		add_monthly_resource_mult = {
+			resource = energy
+			value = @tier4materialreward
+		}
+		add_relic = r_celestial_compass_alive # todo: another variant?
+		add_modifier = {
+			modifier = celestial_wayfarer_sacrifice
+		}
+		hidden_effect = {
+			event_target:celestial_leader = {
+				kill_leader = {
+					show_notification = no
+				}
+			}
+		}
+		set_country_flag = celestial_completed
+		set_country_flag = celestial_outcome_2
+	}
+}
+
+# celestial_chain.226
+
+# celestial_chain.227
+
+## 3 - The Aetherial Codex
+
+# Part I
+fleet_event = { 
+	id = celestial_chain.302
+	title = "celestial_chain.302.name"
+	desc = celestial_chain.302.desc
+	picture = GFX_evt_astral_rift_library
+	show_sound = event_default
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = celestial_chain.302.a
+		owner = {
+		}
+	}
+}
+
+# Part II
+fleet_event = { 
+	id = celestial_chain.303
+	title = "celestial_chain.303.name"
+	desc = celestial_chain.303.desc
+	picture = GFX_evt_mysterious_signal
+	show_sound = event_default
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = celestial_chain.303.a
+		owner = {
+		}
+	}
+}
+
+# Part III
+fleet_event = { 
+	id = celestial_chain.304
+	title = "celestial_chain.304.name"
+	desc = celestial_chain.304.desc
+	picture = GFX_evt_striking_a_deal
+	show_sound = event_default
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = celestial_chain.304.a
+		owner = {
+		}
+	}
+}
+
+# Part IV
+fleet_event = { 
+	id = celestial_chain.305
+	title = "celestial_chain.305.name"
+	desc = celestial_chain.305.desc
+	picture = GFX_evt_astral_rift_ancient_battlegrounds
+	show_sound = event_default
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = celestial_chain.305.a
+		owner = {
+		}
+	}
+}
+
+# Part V
+fleet_event = { 
+	id = celestial_chain.306
+	title = "celestial_chain.306.name"
+	desc = celestial_chain.306.desc
+	picture = GFX_evt_astral_rift_clock
+	show_sound = event_default
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = celestial_chain.306.a
+		owner = {
+			add_relic = r_celestial_aetherial_codex
+		}
+		hidden_effect = {
+			fleet_event = {
+				id = celestial_chain.1
+				days = 3
+			}
+			owner = {
+				remove_country_flag = celestial_emporium_relic_1
+				remove_country_flag = celestial_relic_quest1_selected
+				set_country_flag = celestial_relic_quest1_completed
+			}
+		}
+	}
+}
+
+## 4 - The Extrasensory Arca
+
+# Part I
+fleet_event = { 
+	id = celestial_chain.402
+	title = "celestial_chain.402.name"
+	desc = celestial_chain.402.desc
+	picture = GFX_evt_astral_rift_bleached_planet_2
+	show_sound = event_default
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = celestial_chain.402.a
+		owner = {
+		}
+	}
+}
+
+# Part II
+fleet_event = { 
+	id = celestial_chain.403
+	title = "celestial_chain.403.name"
+	desc = celestial_chain.403.desc
+	picture = GFX_evt_shroudwalker_teachers
+	show_sound = event_default
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = celestial_chain.403.a
+		owner = {
+		}
+	}
+}
+
+# Part III
+fleet_event = { 
+	id = celestial_chain.404
+	title = "celestial_chain.404.name"
+	desc = celestial_chain.404.desc
+	picture = GFX_evt_riftworld_archsite_crater
+	show_sound = event_default
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = celestial_chain.404.a
+		owner = {
+		}
+	}
+}
+
+# Part IV
+fleet_event = { 
+	id = celestial_chain.405
+	title = "celestial_chain.405.name"
+	desc = celestial_chain.405.desc
+	picture = GFX_evt_in_the_dark
+	show_sound = event_default
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = celestial_chain.405.a
+		owner = {
+		}
+	}
+}
+
+# Part V
+fleet_event = { 
+	id = celestial_chain.406
+	title = "celestial_chain.406.name"
+	desc = celestial_chain.406.desc
+	picture = GFX_evt_hidden_door
+	show_sound = event_default
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = celestial_chain.406.a
+		owner = {
+			add_relic = r_celestial_profane_arca
+		}
+		hidden_effect = {
+			fleet_event = {
+				id = celestial_chain.1
+				days = 3
+			}
+			owner = {
+				remove_country_flag = celestial_emporium_relic_4
+				remove_country_flag = celestial_relic_quest4_selected
+				set_country_flag = celestial_relic_quest4_completed
+			}
+		}
+	}
+}
+
+## 5 - Quantum Shard
+
+# Part I
+fleet_event = { 
+	id = celestial_chain.502
+	title = "celestial_chain.502.name"
+	desc = celestial_chain.502.desc
+	picture = GFX_evt_astral_rift_whiteout_1
+	show_sound = event_default
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = celestial_chain.502.a
+		owner = {
+		}
+	}
+}
+
+# Part II
+fleet_event = { 
+	id = celestial_chain.503
+	title = "celestial_chain.503.name"
+	desc = celestial_chain.503.desc
+	picture = GFX_evt_astral_rift_whiteout_2
+	show_sound = event_default
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = celestial_chain.503.a
+		owner = {
+		}
+	}
+}
+
+# Part III
+fleet_event = { 
+	id = celestial_chain.504
+	title = "celestial_chain.504.name"
+	desc = celestial_chain.504.desc
+	picture = GFX_evt_baol_datacrystals
+	show_sound = event_default
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = celestial_chain.504.a
+		owner = {
+		}
+	}
+}
+
+# Part IV
+fleet_event = { 
+	id = celestial_chain.505
+	title = "celestial_chain.505.name"
+	desc = celestial_chain.505.desc
+	picture = GFX_evt_astral_scar
+	show_sound = event_default
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = celestial_chain.505.a
+		owner = {
+		}
+	}
+}
+
+# Part V
+fleet_event = { 
+	id = celestial_chain.506
+	title = "celestial_chain.506.name"
+	desc = celestial_chain.506.desc
+	picture = GFX_evt_crystal_sphere
+	show_sound = event_default
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = celestial_chain.506.a
+		owner = {
+			add_relic = r_celestial_quantum_gem
+		}
+		hidden_effect = {
+			fleet_event = {
+				id = celestial_chain.1
+				days = 3
+			}
+			owner = {
+				remove_country_flag = celestial_emporium_relic_5
+				remove_country_flag = celestial_relic_quest5_selected
+				set_country_flag = celestial_relic_quest5_completed
+			}
+		}
+	}
+}
+
+## 6 - Dimensional Conduit
+
+# Part I
+fleet_event = { 
+	id = celestial_chain.602
+	title = "celestial_chain.602.name"
+	desc = celestial_chain.602.desc
+	picture = GFX_evt_todo # todo
+	show_sound = event_default
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = celestial_chain.602.a
+		owner = {
+		}
+	}
+}
+
+# Part II
+fleet_event = { 
+	id = celestial_chain.603
+	title = "celestial_chain.603.name"
+	desc = celestial_chain.603.desc
+	picture = GFX_evt_todo # todo
+	show_sound = event_default
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = celestial_chain.603.a
+		owner = {
+		}
+	}
+}
+
+# Part III
+fleet_event = { 
+	id = celestial_chain.604
+	title = "celestial_chain.604.name"
+	desc = celestial_chain.604.desc
+	picture = GFX_evt_todo # todo
+	show_sound = event_default
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = celestial_chain.604.a
+		owner = {
+		}
+	}
+}
+
+# Part IV
+fleet_event = { 
+	id = celestial_chain.605
+	title = "celestial_chain.605.name"
+	desc = celestial_chain.605.desc
+	picture = GFX_evt_todo # todo
+	show_sound = event_default
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = celestial_chain.605.a
+		owner = {
+		}
+	}
+}
+
+# Part V
+fleet_event = { 
+	id = celestial_chain.606
+	title = "celestial_chain.606.name"
+	desc = celestial_chain.606.desc
+	picture = GFX_evt_todo # todo
+	show_sound = event_default
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = celestial_chain.606.a
+		owner = {
+			add_relic = r_celestial_spectral_beacon
+		}
+		hidden_effect = {
+			fleet_event = {
+				id = celestial_chain.1
+				days = 3
+			}
+			owner = {
+				remove_country_flag = celestial_emporium_relic_6
+				remove_country_flag = celestial_relic_quest6_selected
+				set_country_flag = celestial_relic_quest6_completed
+			}
+		}
+	}
+}
+
+## 7 - Remnants of the End
+
+# Part I
+fleet_event = { 
+	id = celestial_chain.702
+	title = "celestial_chain.702.name"
+	desc = celestial_chain.702.desc
+	picture = GFX_evt_todo # todo
+	show_sound = event_default
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = celestial_chain.702.a
+		owner = {
+		}
+	}
+}
+
+# Part II
+fleet_event = { 
+	id = celestial_chain.703
+	title = "celestial_chain.703.name"
+	desc = celestial_chain.703.desc
+	picture = GFX_evt_todo # todo
+	show_sound = event_default
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = celestial_chain.703.a
+		owner = {
+		}
+	}
+}
+
+# Part III
+fleet_event = { 
+	id = celestial_chain.704
+	title = "celestial_chain.704.name"
+	desc = celestial_chain.704.desc
+	picture = GFX_evt_todo # todo
+	show_sound = event_default
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = celestial_chain.704.a
+		owner = {
+		}
+	}
+}
+
+# Part IV
+fleet_event = { 
+	id = celestial_chain.705
+	title = "celestial_chain.705.name"
+	desc = celestial_chain.705.desc
+	picture = GFX_evt_todo # todo
+	show_sound = event_default
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = celestial_chain.705.a
+		owner = {
+		}
+	}
+}
+
+# Part V
+fleet_event = { 
+	id = celestial_chain.706
+	title = "celestial_chain.706.name"
+	desc = celestial_chain.706.desc
+	picture = GFX_evt_todo # todo
+	show_sound = event_default
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = celestial_chain.706.a
+		owner = {
+			add_relic = r_celestial_star_core
+			set_variable = {
+				which = celestial_core_module_uses
+				value = 5
+				# todo: change value depending on choices
+			}
+		}
+		hidden_effect = {
+			fleet_event = {
+				id = celestial_chain.1
+				days = 3
+			}
+			owner = {
+				remove_country_flag = celestial_emporium_relic_3
+				remove_country_flag = celestial_relic_quest3_selected
+				set_country_flag = celestial_relic_quest3_completed
+			}
+		}
+	}
+}
+
+## 8 - The Otherwordly Crystal
+
+# Part I
+fleet_event = { 
+	id = celestial_chain.802
+	title = "celestial_chain.802.name"
+	desc = celestial_chain.802.desc
+	picture = GFX_evt_todo # todo
+	show_sound = event_default
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = celestial_chain.802.a
+		owner = {
+		}
+	}
+}
+
+# Part II
+fleet_event = { 
+	id = celestial_chain.803
+	title = "celestial_chain.803.name"
+	desc = celestial_chain.803.desc
+	picture = GFX_evt_todo # todo
+	show_sound = event_default
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = celestial_chain.803.a
+		owner = {
+		}
+	}
+}
+
+# Part III
+fleet_event = { 
+	id = celestial_chain.804
+	title = "celestial_chain.804.name"
+	desc = celestial_chain.804.desc
+	picture = GFX_evt_todo # todo
+	show_sound = event_default
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = celestial_chain.804.a
+		owner = {
+		}
+	}
+}
+
+# Part IV
+fleet_event = { 
+	id = celestial_chain.805
+	title = "celestial_chain.805.name"
+	desc = celestial_chain.805.desc
+	picture = GFX_evt_todo # todo
+	show_sound = event_default
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = celestial_chain.805.a
+		owner = {
+		}
+	}
+}
+
+# Part V
+fleet_event = { 
+	id = celestial_chain.806
+	title = "celestial_chain.806.name"
+	desc = celestial_chain.806.desc
+	picture = GFX_evt_todo # todo
+	show_sound = event_default
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = celestial_chain.806.a
+		owner = {
+			add_relic = r_celestial_tainted_gem
+		}
+		hidden_effect = {
+			fleet_event = {
+				id = celestial_chain.1
+				days = 3
+			}
+			owner = {
+				remove_country_flag = celestial_emporium_relic_2
+				remove_country_flag = celestial_relic_quest2_selected
+				set_country_flag = celestial_relic_quest2_completed
+			}
+		}
+	}
+}

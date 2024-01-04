@@ -1,0 +1,1252 @@
+# celestial_scripted_effects.txt
+# By MadeinCanada
+
+spawn_celestial = {
+	if = {
+		limit = {
+			NOT = { has_global_flag = celestial_system_spawned }
+		}
+		set_global_flag = celestial_system_spawned
+		spawn_system = {
+			initializer = celestial_wayfarer_start_system
+		}
+		last_created_system = {
+			log = "spawned [This.GetName]"
+		}
+	}
+}
+
+reset_cosmic_emporium_flags = {
+	remove_country_flag = celestial_emporium_relic_1
+	remove_country_flag = celestial_emporium_relic_2
+	remove_country_flag = celestial_emporium_relic_3
+	remove_country_flag = celestial_emporium_relic_4
+	remove_country_flag = celestial_emporium_relic_5
+	remove_country_flag = celestial_emporium_relic_6
+}
+
+close_cosmic_emporium_effect = {
+}
+
+# todo: fire this periodically, like 10 years?
+shuffle_cosmic_emporium_items = {
+	reset_cosmic_emporium_slots = yes
+	select_emporium_slot_1 = yes
+	select_emporium_slot_2 = yes
+	select_emporium_slot_3 = yes
+}
+
+reset_cosmic_emporium_slots = {
+	remove_country_flag = cosmic_emporium_cooldown
+
+	remove_country_flag = cosmic_emporium_slot_1_bought
+	remove_country_flag = cosmic_emporium_slot_2_bought
+	remove_country_flag = cosmic_emporium_slot_3_bought
+
+	remove_country_flag = cosmic_emporium_leader_1
+	remove_country_flag = cosmic_emporium_leader_2
+	remove_country_flag = cosmic_emporium_leader_3
+	remove_country_flag = cosmic_emporium_pop_1
+	remove_country_flag = cosmic_emporium_pop_2
+	remove_country_flag = cosmic_emporium_pop_3
+	remove_country_flag = cosmic_emporium_ship_1
+	remove_country_flag = cosmic_emporium_ship_2
+	remove_country_flag = cosmic_emporium_ship_3
+	remove_country_flag = cosmic_emporium_tech_1
+	remove_country_flag = cosmic_emporium_tech_2
+	remove_country_flag = cosmic_emporium_tech_3
+	remove_country_flag = cosmic_emporium_tech_4
+	remove_country_flag = cosmic_emporium_tech_5
+	remove_country_flag = cosmic_emporium_tech_6
+}
+
+select_emporium_slot_1 = {
+	random_list = {
+		10 = {
+			set_country_flag = cosmic_emporium_tech_1
+		}
+		10 = {
+			set_country_flag = cosmic_emporium_tech_2
+		}
+		10 = {
+			set_country_flag = cosmic_emporium_tech_3
+		}
+		10 = {
+			set_country_flag = cosmic_emporium_tech_4
+		}
+		10 = {
+			set_country_flag = cosmic_emporium_pop_1
+		}
+	}
+}
+
+select_emporium_slot_2 = {
+	random_list = {
+		10 = {
+			set_country_flag = cosmic_emporium_pop_2
+		}
+		10 = {
+			set_country_flag = cosmic_emporium_pop_3
+		}
+		10 = {
+			set_country_flag = cosmic_emporium_leader_1
+		}
+		10 = {
+			set_country_flag = cosmic_emporium_leader_2
+		}
+		10 = {
+			set_country_flag = cosmic_emporium_leader_3
+		}
+	}
+}
+
+select_emporium_slot_3 = {
+	random_list = {
+		10 = {
+			set_country_flag = cosmic_emporium_ship_1
+			modifier = {
+				factor = 0
+				has_country_flag = cosmic_emporium_ship_1_gotten
+			}
+		}
+		10 = {
+			set_country_flag = cosmic_emporium_ship_2
+			modifier = {
+				factor = 0
+				has_country_flag = cosmic_emporium_ship_2_gotten
+			}
+		}
+		10 = {
+			set_country_flag = cosmic_emporium_ship_3
+			modifier = {
+				factor = 0
+				has_country_flag = cosmic_emporium_ship_3_gotten
+			}
+		}
+		10 = {
+			set_country_flag = cosmic_emporium_tech_5
+			modifier = {
+				factor = 0
+				has_country_flag = cosmic_emporium_tech_5_gotten
+			}
+		}
+		10 = {
+			set_country_flag = cosmic_emporium_tech_6
+		}
+	}
+}
+
+# TODO - Button Effects for Emporium
+# todo: add prices/costs to items AND RELICS
+cosmic_emporium_tech_1_effect = {
+	add_random_research_option = {
+		tier = 3
+		add_progress = 0.50
+		ignore_prereqs = yes
+		only_rare = yes
+	}
+}
+cosmic_emporium_tech_2_effect = {
+	add_random_research_option = {
+		tier = 4
+		add_progress = 0.25
+		ignore_prereqs = yes
+		ignore_rare = yes
+	}
+}
+cosmic_emporium_tech_3_effect = {
+	add_random_research_option = {
+		tier = 4
+		add_progress = 0.01
+		ignore_prereqs = yes
+		only_rare = yes
+	}
+}
+cosmic_emporium_tech_4_effect = {
+	add_random_research_option = {
+		tier = 5
+		add_progress = 0.01
+		ignore_prereqs = yes
+		ignore_rare = yes
+	}
+}
+cosmic_emporium_tech_5_effect = {
+	set_country_flag = celestial_resonator_given
+	give_technology = { tech = tech_celestial_harmonic_resonator message = yes }
+}
+cosmic_emporium_tech_6_effect = {
+	if = {
+		limit = {
+			NOT = {
+				has_country_flag = celestial_temporal_spire_bought
+			}
+		}
+		set_country_flag = celestial_temporal_spire_bought
+		set_variable = {
+			which = celestial_temporal_spire_build_count
+			value = 1
+		}
+	}
+	else = {
+		change_variable = {
+			which = celestial_temporal_spire_build_count
+			value = 1
+		}
+	}
+}
+cosmic_emporium_ship_1_effect = {
+	set_country_flag = celestial_solar_lightning_given
+	give_technology = { tech = tech_celestial_solar_lightning message = yes }
+}
+cosmic_emporium_ship_2_effect = {
+	set_country_flag = celestial_void_laser_given
+	give_technology = { tech = tech_celestial_void_laser message = yes }
+}
+cosmic_emporium_ship_3_effect = {
+	set_country_flag = celestial_warp1_given
+	give_technology = { tech = tech_celestial_warp_drive_1 message = yes }
+}
+cosmic_emporium_ship_4_effect = {
+	set_country_flag = celestial_warp2_given
+	give_technology = { tech = tech_celestial_warp_drive_2 message = yes }
+}
+cosmic_emporium_ship_5_effect = {
+	set_country_flag = celestial_warp3_given
+	give_technology = { tech = tech_celestial_warp_drive_3 message = yes }
+}
+cosmic_emporium_pop_1_effect = {
+	random_galaxy_species = {
+		save_event_target_as = celestial_emporium_pop1_species
+	}
+	capital_scope = {
+		while = {
+			count = 3
+			create_pop = {
+				species = celestial_emporium_pop1_species
+				ethos = random
+			}
+		}
+	}
+}
+# todo: lvl 2 and 3 warp core
+cosmic_emporium_pop_2_effect = { #todo: traits
+	random_galaxy_species = {
+		save_event_target_as = celestial_emporium_pop2_species
+	}
+	# modify_species = {
+	# 	species = event_target:celestial_emporium_pop2_species
+	# 	# add_trait = random # random advanced/good trait
+	# }
+	# todo: choose advanced trait though another scripted effect
+	capital_scope = {
+		while = {
+			count = 3
+			create_pop = {
+				species = celestial_emporium_pop2_species
+				ethos = random
+			}
+		}
+	}
+}
+cosmic_emporium_pop_3_effect = {
+	celestial_create_extradimensional_species = {
+		extradimensional_portrait = exd3_leader
+	}
+	capital_scope = {
+		while = {
+			count = 3
+			create_pop = {
+				species = last_created_species
+				ethos = random
+			}
+		}
+	}
+}
+cosmic_emporium_leader_1_effect = {		# todo: clone leader
+}
+cosmic_emporium_leader_2_effect = {		# todo: create random lvl3 leader
+}
+cosmic_emporium_leader_3_effect = {		# todo: summon a renowned paragon (must have Paragons dlc!)
+}
+
+create_celestial_wayfarer = {
+	create_country = {
+		name = "NAME_Unknown"
+		type = paragon_event_country
+		auto_delete = yes
+		flag = {
+			icon = {
+				category = "special"
+				file = "unknown.dds"
+			}
+			background = {
+				category = "backgrounds"
+				file = "00_solid.dds"
+			}
+			colors = {
+				"black"
+				"black"
+				"null"
+				"null"
+			}
+		}
+		effect = {
+			save_global_event_target_as = celestial_country
+		}
+	}
+	event_target:celestial_country = {
+		# Setup
+		set_country_flag = celestial_country_flag
+		set_faction_hostility = {
+			target = root.owner
+			set_hostile = no
+			set_neutral = yes
+			set_friendly = no
+		}
+		
+		# Species
+		create_species = {
+			name = "NAME_Unknown"
+			class = REP
+			portrait = celestial_leader # Celestial Wayfarer Portrait
+			namelist = "PRT1"
+			traits = {
+				trait = trait_quick_learners
+				trait = trait_talented
+			}
+			effect = {
+				save_event_target_as = celestial_species
+			}
+		}
+	}
+	# Leader
+	if = { # Astral Planes installed
+		limit = { has_astral_planes_dlc = yes }
+		event_target:celestial_country = {
+				create_leader = {
+					class = scientist
+					species = event_target:celestial_species
+					name = "NAME_Wayfarer"
+					skill = 7
+					randomize_traits = no
+					gender = indeterminable
+					event_leader = yes
+					skip_background_generation = yes
+					background_ethic = ethic_materialist
+					custom_catch_phrase = celestial_catch_phrase
+					custom_description = desc_celestial
+					set_age = 210
+					immortal = yes
+					traits = {
+						trait = leader_trait_frontier_adventurer
+						trait = leader_trait_celestial_vagabond_astralplanes
+						trait = leader_trait_celestial_eccentric
+						trait = leader_trait_academic_astral_rift_expert_2
+						trait = leader_trait_salvager
+						trait = trait_ruler_charismatic_2
+						trait = subclass_scientist_explorer
+					}
+					effect = {
+						set_leader_flag = legendary_leader
+						set_leader_flag = celestial
+						set_leader_flag = immune_to_negative_traits # todo: check if it should be removed
+						save_global_event_target_as = celestial_leader
+						set_owner = root
+						exile_leader_as = celestial_leader
+					}
+				}
+		}
+	}
+	else = { # Astral Planes not installed
+		event_target:celestial_country = {
+				create_leader = {
+					class = scientist
+					species = event_target:celestial_species
+					name = "NAME_Wayfarer"
+					skill = 7
+					randomize_traits = no
+					gender = indeterminable
+					event_leader = yes
+					skip_background_generation = yes
+					background_ethic = ethic_materialist
+					custom_catch_phrase = celestial_catch_phrase
+					custom_description = desc_celestial
+					set_age = 210
+					immortal = yes
+					traits = {
+						trait = leader_trait_frontier_adventurer
+						trait = leader_trait_celestial_vagabond
+						trait = leader_trait_celestial_eccentric
+						trait = leader_trait_ancient_knowledge
+						trait = leader_trait_salvager
+						trait = trait_ruler_charismatic_2
+						trait = subclass_scientist_explorer
+					}
+					effect = {
+						set_leader_flag = legendary_leader
+						set_leader_flag = celestial
+						set_leader_flag = immune_to_negative_traits # todo: check if it should be removed
+						save_global_event_target_as = celestial_leader
+						set_owner = root
+						exile_leader_as = celestial_leader
+					}
+				}
+		}
+	}
+	create_fleet = {
+					name = "NAME_TheWayfarer"
+					effect = {
+						set_owner = event_target:celestial_country
+						create_ship = {
+							name = "NAME_NomadsPillage"
+							design = "NAME_NomadsShip"
+							graphical_culture = "extra_dimensional_01"
+							prefix = no
+							upgradable = no
+						}
+						last_created_ship = {
+							set_ship_flag = iss_wayfarer
+							save_global_event_target_as = iss_wayfarer
+							set_disable_at_health = 0.05
+						}
+						set_location = {
+							target = event_target:wayfarer_target_planet # Check
+							distance = 10
+							angle = random
+						}
+						set_fleet_stance = passive
+						# assign_leader = event_target:celestial_leader
+						save_global_event_target_as = celestial_fleet
+					}
+					settings = {
+						can_upgrade = yes
+						can_change_composition = no
+						can_change_leader = no
+						spawn_debris = no
+					}
+	}
+}
+
+create_astral_corps = {
+	# Species
+	create_species = {
+		name = "NAME_Keeper"
+		class = MACHINE
+		portrait = celestial_astral_keeper
+		namelist = "PRT1"
+		traits = random
+		immortal = yes
+		effect = {
+			save_event_target_as = celestial_astral_corps_species
+		}
+	}
+
+	create_country = {
+		name = "NAME_Astral_Corps"
+		species = event_target:celestial_astral_corps_species
+		name_list = "Extradimensional"
+		type = faction
+		auto_delete = no
+		flag = {
+			icon = {
+				category = "celestial"
+				file = "astral_corps.dds"
+			}
+			background = {
+				category = "backgrounds"
+				file = "circle.dds"
+				# "flag_BG_55.dds"
+			}
+			colors = {
+				"dark_blue"
+				"blue"
+				"null"
+				"null"
+			}
+		}
+		effect = {
+			save_global_event_target_as = celestial_astral_corps_country
+			add_modifier = {
+				modifier = celestial_astral_corps
+			}
+		}
+	}
+	event_target:celestial_astral_corps_country = {
+		# Setup
+		set_country_flag = celestial_astral_corps_country
+		set_faction_hostility = {
+			target = root.owner
+			set_hostile = no
+			set_neutral = yes
+			set_friendly = no
+		}
+
+		ruler = {
+			kill_leader = { show_notification = no }
+		}
+		create_leader = {
+			class = random_ruler
+			species = event_target:celestial_astral_corps_species
+			name = "NAME_Keeper"
+			skill = 7
+			randomize_traits = no
+			gender = indeterminable
+			event_leader = yes
+			skip_background_generation = yes
+			background_ethic = ethic_materialist
+			set_age = 610
+			immortal = yes
+			traits = { }
+			effect = {
+				from = { assign_leader = prev }
+				set_leader_flag = celestial_astral_leader
+				save_global_event_target_as = celestial_astral_leader
+			}
+		}
+	}
+}
+
+create_cosmic_emporium = {
+	# Species
+	create_species = {
+		name = "NAME_Wayfarer"
+		class = REP
+		portrait = celestial_leader # Celestial Wayfarer Portrait
+		namelist = "PRT1"
+		traits = {
+			trait = trait_quick_learners
+			trait = trait_talented
+		}
+		effect = {
+			save_event_target_as = celestial_species
+		}
+	}
+
+	create_country = {
+		name = "NAME_Cosmic_Emporium"
+		species = event_target:celestial_species
+		type = celestial_emporium_country
+		auto_delete = no
+		flag = {
+			icon = {
+				category = "celestial"
+				file = "cosmic_emporium.dds"
+			}
+			background = {
+				category = "backgrounds"
+				file = "flag_BG_51.dds"
+				# "flag_BG_55.dds"
+			}
+			colors = {
+				"orange"
+				"yellow"
+				"null"
+				"null"
+			}
+		}
+		effect = {
+			save_global_event_target_as = celestial_emporium_country
+		}
+	}
+	event_target:celestial_emporium_country = {
+		# Setup
+		set_country_flag = celestial_emporium_country
+		set_faction_hostility = {
+			target = root.owner
+			set_hostile = no
+			set_neutral = no
+			set_friendly = yes
+		}
+
+		ruler = {
+			kill_leader = { show_notification = no }
+		}
+		create_leader = {
+			class = random_ruler
+			species = event_target:celestial_species
+			name = "NAME_Wayfarer"
+			skill = 7
+			randomize_traits = no
+			gender = indeterminable
+			event_leader = yes
+			skip_background_generation = yes
+			background_ethic = ethic_materialist
+			set_age = 610
+			immortal = yes
+			traits = { }
+			effect = {
+				prevprev = { assign_leader = prev }
+			}
+		}
+	}
+}
+
+create_celestial_mission_vortex = { 	# Fire on system scope
+	spawn_planet = {
+		class = pc_celestial_vortex_small
+		spawn_beyond_gravity_well = yes
+		orbit_angle_offset = 360
+		init_effect = {
+			set_planet_flag = celestial_wayfarer_portal
+			set_name = "NAME_Celestial_Vortex"
+			# add_deposit = d_physics_1
+			prevent_anomaly = yes
+			create_archaeological_site = site_$CELESTIAL_MISSION_TYPE$
+			create_ambient_object = {
+				type = "psi_storm_1"
+				location = this
+				entity_offset_height = { min = -15 max = -15 }
+				entity_scale_to_size = yes
+				scale = 0.1
+			}
+			last_created_ambient_object = {	
+				set_ambient_object_flag = celestial_temp_vortex_gfx
+				set_location = {
+					target = prev
+					distance = 0
+					angle = random
+				}
+			}
+		}
+	}
+}
+
+clear_celestial_mission_vortex = { 	# Fire on system scope
+	every_system_planet = {
+		limit = {
+			has_planet_flag = celestial_wayfarer_portal
+		}
+		remove_planet = yes
+	}
+	every_system_ambient_object = {
+		limit = {
+			has_ambient_object_flag = celestial_temp_vortex_gfx
+		}
+		destroy_ambient_object = this
+	}
+}
+
+# Aetherial Codex
+#	- Chooses 3 random tech categories (excluding Archaeostudies/Psionics)
+#	- Adds a boost to research for these categories
+#	- Partially researches a tech from these categories
+#	- Random non-legendary leader gets 1-2 random negative traits
+celestial_codex_effect = {
+	while = {
+		count = 3
+		celestial_codex_get_field_effects = yes
+	}
+	country_event = {
+		id = celestial.1
+	}
+}
+
+celestial_codex_get_field_effects = {
+		random_list = {
+			10 = {
+				r_celestial_aetherial_codex_boon = {
+					codex_field = computing
+				}
+				set_country_flag = celestial_aetherial_codex_computing
+				modifier = {
+					factor = 0
+					has_country_flag = celestial_aetherial_codex_computing
+				}
+			}
+			10 = {
+				r_celestial_aetherial_codex_boon = {
+					codex_field = field_manipulation
+				}
+				set_country_flag = celestial_aetherial_codex_field_manipulation
+				modifier = {
+					factor = 0
+					has_country_flag = celestial_aetherial_codex_field_manipulation
+				}
+			}
+			10 = {
+				r_celestial_aetherial_codex_boon = {
+					codex_field = particles
+				}
+				set_country_flag = celestial_aetherial_codex_particles
+				modifier = {
+					factor = 0
+					has_country_flag = celestial_aetherial_codex_particles
+				}
+			}
+			10 = {
+				r_celestial_aetherial_codex_boon = {
+					codex_field = biology
+				}
+				set_country_flag = celestial_aetherial_codex_biology
+				modifier = {
+					factor = 0
+					has_country_flag = celestial_aetherial_codex_biology
+				}
+			}
+			10 = {
+				r_celestial_aetherial_codex_boon = {
+					codex_field = military_theory
+				}
+				set_country_flag = celestial_aetherial_codex_military_theory
+				modifier = {
+					factor = 0
+					has_country_flag = celestial_aetherial_codex_military_theory
+				}
+			}
+			10 = {
+				r_celestial_aetherial_codex_boon = {
+					codex_field = new_worlds
+				}
+				set_country_flag = celestial_aetherial_codex_new_worlds
+				modifier = {
+					factor = 0
+					has_country_flag = celestial_aetherial_codex_new_worlds
+				}
+			}
+			10 = {
+				r_celestial_aetherial_codex_boon = {
+					codex_field = statecraft
+				}
+				set_country_flag = celestial_aetherial_codex_statecraft
+				modifier = {
+					factor = 0
+					has_country_flag = celestial_aetherial_codex_statecraft
+				}
+			}
+			10 = {
+				r_celestial_aetherial_codex_boon = {
+					codex_field = industry
+				}
+				set_country_flag = celestial_aetherial_codex_industry
+				modifier = {
+					factor = 0
+					has_country_flag = celestial_aetherial_codex_industry
+				}
+			}
+			10 = {
+				r_celestial_aetherial_codex_boon = {
+					codex_field = materials
+				}
+				set_country_flag = celestial_aetherial_codex_materials
+				modifier = {
+					factor = 0
+					has_country_flag = celestial_aetherial_codex_materials
+				}
+			}
+			10 = {
+				r_celestial_aetherial_codex_boon = {
+					codex_field = propulsion
+				}
+				set_country_flag = celestial_aetherial_codex_propulsion
+				modifier = {
+					factor = 0
+					has_country_flag = celestial_aetherial_codex_propulsion
+				}
+			}
+			10 = {
+				r_celestial_aetherial_codex_boon = {
+					codex_field = voidcraft
+				}
+				set_country_flag = celestial_aetherial_codex_voidcraft
+				modifier = {
+					factor = 0
+					has_country_flag = celestial_aetherial_codex_voidcraft
+				}
+			}
+		}
+}
+
+r_celestial_aetherial_codex_boon = {
+	add_modifier = {
+		modifier = celestial_codex_boost_$codex_field$
+		days = 3600
+	}
+	add_random_research_option = {
+		category = $codex_field$
+		add_progress = 0.50
+		ignore_prereqs = no
+		ignore_rare = no
+		ignore_insight = no
+	}
+}
+
+# Spectral Beacon
+#	- Allows 1 more use of the [todo] decision
+#	- The decision adds a special modifier to the planet
+#	- Upon finishing it, 3-5 special Extradimensional Pops are spawned with powerful traits
+#	- But other Pops can randomly gain the Not of This World/Portal Sickness traits
+celestial_beacon_effect = {
+	change_variable = {
+		which = celestial_beacon_decision_limit
+		value = 1
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = celestial_used_spectral_beacon }
+		}
+		set_variable = {
+			which = celestial_beacon_decision_used
+			value = 0
+		}
+		set_country_flag = celestial_used_spectral_beacon
+	}
+}
+
+# Done through planet decision
+celestial_beacon_effect_planet = {
+	set_planet_flag = celestial_beacon_active
+	set_planet_flag = celestial_beacon_used
+	add_modifier = {
+		modifier = celestial_beacon_modifier
+	}
+	custom_tooltip = celestial_beacon_effect_planet_tt
+	hidden_effect = {
+		owner = {
+			change_variable = {
+				which = celestial_beacon_decision_used
+				value = 1
+			}
+		}
+		random_list = {
+			10 = {
+				set_variable = {
+					which = celestial_beacon_pop_num
+					value = 3
+				}
+			}
+			10 = {
+				set_variable = {
+					which = celestial_beacon_pop_num
+					value = 4
+				}
+			}
+			10 = {
+				set_variable = {
+					which = celestial_beacon_pop_num
+					value = 5
+				}
+			}
+		}
+		random_list = {
+			5 = {
+				celestial_create_extradimensional_species = {
+					extradimensional_portrait = exd1_leader
+				}
+			}
+			10 = {
+				celestial_create_extradimensional_species = {
+					extradimensional_portrait = exd2_leader
+				}
+			}
+			10 = {
+				celestial_create_extradimensional_species = {
+					extradimensional_portrait = exd3_leader
+				}
+			}
+			5 = {
+				modifier = {
+					factor = 0
+					NOT = { has_astral_planes_dlc = yes }
+				}
+				celestial_create_extradimensional_species = {
+					extradimensional_portrait = exd4_leader
+				}
+			}
+		}
+		while = {
+			count = celestial_beacon_pop_num
+			create_pop = {
+				species = last_created_species
+			}
+		}
+		planet_event = {
+			id = celestial.2
+			days = 360
+		}
+	}
+}
+
+celestial_create_extradimensional_species = {
+	create_species = {
+		name = NAME_Celestial_Extradimensional
+		class = EXD
+		namelist = Extradimensional
+		portrait = $extradimensional_portrait$
+		traits = random
+		effect = {
+			set_species_flag = celestial_extradimensional_species
+		}
+	}
+	if = {
+		limit = {
+			has_astral_planes_dlc = yes
+		}
+		modify_species = {
+			species = last_created_species
+			add_trait = trait_celestial_extradimensionl
+			add_trait = trait_exd
+			add_traits_at_start_of_list = yes
+		}
+	}
+	else = {
+		modify_species = {
+			species = last_created_species
+			add_trait = trait_celestial_extradimensionl
+			add_traits_at_start_of_list = yes
+		}
+	}
+}
+
+celestial_spread_portal_sickness = {	# Fire on planet scope
+	random_owned_pop = {
+		limit = {
+			NOR = {
+				species = { has_species_flag = celestial_extradimensional_species }
+				pop_has_trait = trait_exd
+				pop_has_trait = trait_notofthisworld
+				pop_has_trait = trait_robot_notofthisworld
+				pop_has_trait = trait_celestial_extradimensionl
+				pop_has_trait = trait_celestial_portal_sickness
+			}
+		}
+		random_list = {
+			10 = {
+				modify_species = {
+					species = pop.species
+					add_trait = trait_notofthisworld
+					add_traits_at_start_of_list = yes
+				}
+				modifier = {
+					factor = 0
+					owner = { is_machine_empire = yes }
+				}
+			}
+			10 = {
+				modify_species = {
+					species = pop.species
+					add_trait = trait_robot_notofthisworld
+					add_traits_at_start_of_list = yes
+				}
+				modifier = {
+					factor = 0
+					owner = { is_machine_empire = no }
+				}
+			}
+			10 = {
+				modify_species = {
+					species = pop.species
+					add_trait = trait_celestial_portal_sickness
+					add_traits_at_start_of_list = yes
+				}
+				modifier = {
+					factor = 0
+					owner = { is_machine_empire = yes }
+				}
+			}
+		}
+	}
+}
+
+# Cinders of a Star
+celestial_core_effect = {
+	set_country_flag = celestial_can_build_star_core_building
+	if = {
+		limit = {
+			NOT = { has_country_flag = celestial_used_star_core }
+		}
+		set_country_flag = celestial_used_star_core
+	}
+}
+
+celestial_core_effect_starbase = {		# Fire on fleet/starbase scope
+	set_starbase_flag = celestial_star_core_used
+	fleet = {
+		add_modifier = {
+			modifier = celestial_star_core_modifier
+			days = 1800
+		}
+	}
+	if = {
+		limit = {
+			mid_game_years_passed > 0
+		}
+		set_starbase_size = starbase_citadel
+	}
+	else = {
+		set_starbase_size = starbase_starfortress
+	}
+	hidden_effect = {
+		owner = {
+			remove_country_flag = celestial_can_build_star_core_building
+			subtract_variable = {
+				which = celestial_core_module_uses
+				value = 1
+			}
+			create_message = {
+				type = MESSAGE_STAR_CORE_USED
+				localization = MESSAGE_STAR_CORE_USED
+				days = 30
+				target = from
+				variable = {
+					type = name
+					localization = SYSTEM
+					scope = from
+				}
+			}
+		}
+	}
+}
+
+# Extrasensory Tome
+celestial_tome_effect = {
+	every_playable_country = {
+		add_opinion_modifier = {
+			who = root
+			modifier = opinion_celestial_arca_activated
+		}
+	}
+}
+
+# Quantum Echo Prism
+celestial_crystal_effect = {
+	set_timed_country_flag = {
+		flag = celestial_tainted_crystal_active
+		days = 3600
+	}
+	# country_event = {
+	# 	id = celestial.4	# Remove all created wormholes and flags
+	# 	days = 3600
+	# }
+}
+
+# Done through decision on star in system
+celestial_crystal_effect_decision = {
+	if = {	# If system is first target
+		limit = {
+			space_owner = { NOT = { has_country_flag = celestial_crystal_target1_set } }
+		}
+		space_owner = { set_country_flag = celestial_crystal_target1_set }
+		set_planet_flag = celestial_crystal_wormhole_star_1
+		save_global_event_target_as = celestial_crystal_wormhole_star_1
+		custom_tooltip = celestial_crystal_effect_decision_tt1
+	}
+	else = {	# If system is second target
+		space_owner = { set_country_flag = celestial_tainted_crystal_used_up }
+		set_planet_flag = celestial_crystal_wormhole_star_2
+		save_global_event_target_as = celestial_crystal_wormhole_star_2
+		hidden_effect = { celestial_create_wormholes = yes }
+		custom_tooltip = celestial_crystal_effect_decision_tt2
+	}
+}
+
+# Uses megastructures with bypasses instead of wormholes, so that they can be removed
+celestial_create_wormholes = {
+	event_target:celestial_crystal_wormhole_star_1.solar_system = {
+		event_target:celestial_crystal_wormhole_star_2.solar_system = {
+			prev = {
+				spawn_megastructure = {
+					type = "celestial_crystal_gate"
+					owner = space_owner
+					random_pos = yes
+					orbit_distance = 210
+					orbit_angle = 180
+					init_effect = {
+						set_megastructure_flag = celestial_crystal_wormhole
+					}
+				}
+			}
+			spawn_megastructure = {
+				type = "celestial_crystal_gate"
+				owner = space_owner
+				random_pos = yes
+				orbit_distance = 210
+				orbit_angle = 360
+				init_effect = {
+					set_megastructure_flag = celestial_crystal_wormhole
+				}
+			}
+		}
+	}
+	clear_global_event_target = celestial_crystal_wormhole_star_1
+	clear_global_event_target = celestial_crystal_wormhole_star_2
+}
+
+# Tainted Crystal
+celestial_gem_effect = {
+	random_owned_leader = {
+		add_trait = leader_trait_celestial_crystal_power
+		add_skill = 2
+	}
+}
+
+celestial_spawn_unbidden_fleet = {	# fire on country scope of unbidden
+	random_list = {
+		25 = {
+			create_leader = {
+				class = commander
+				species = event_target:extradimensional_species
+				name = random
+				skill = 3
+				traits = {
+					trait = leader_trait_ethereal
+				}
+			}
+		}
+		25 = {
+			create_leader = {
+				class = commander
+				species = event_target:extradimensional_species
+				name = random
+				skill = 3
+				traits = {
+					trait = leader_trait_dimensional_stutter
+				}
+			}
+		}
+		50 = {
+			create_leader = {
+				class = commander
+				species = event_target:extradimensional_species
+				name = random
+				skill = 3
+			}
+		}
+	}
+	create_fleet = {
+		effect = {
+			set_owner = PREV
+			create_ship = {
+				name = random
+				design = "NAME_Revenant"
+				graphical_culture = "extra_dimensional_01"
+			}
+			assign_leader = last_created_leader
+			while = {
+				count = $revenant_num$
+				create_ship = {
+					name = random
+					design = "NAME_Revenant"
+					graphical_culture = "extra_dimensional_01"
+				}
+			}
+			while = {
+				count = $phantom_num$
+				create_ship = {
+					name = random
+					design = "NAME_Phantom"
+					graphical_culture = "extra_dimensional_01"
+				}
+			}
+			while = {
+				count = $wraith_num$
+				create_ship = {
+					name = random
+					design = "NAME_Wraith"
+					graphical_culture = "extra_dimensional_01"
+				}
+			}
+			set_location = {
+				target = event_target:celestial_unbidden_rift
+				distance = 5
+				angle = random
+			}
+			set_fleet_stance = aggressive
+			set_aggro_range = 500
+			set_aggro_range_measure_from = self
+			set_fleet_bombardment_stance = armageddon
+			save_global_event_target_as = celestial_unbidden_start_fleet
+		}
+	}
+}
+
+celestial_spawn_corps_fleet = {	# fire on country scope of astral corps
+	create_species = {
+		name = "NAME_Keeper"
+		class = MACHINE
+		portrait = celestial_astral_keeper
+		namelist = "PRT1"
+		traits = random
+		immortal = yes
+		effect = {
+			save_event_target_as = celestial_astral_corps_species
+		}
+	}
+	random_list = {
+		25 = {
+			create_leader = {
+				class = commander
+				species = event_target:celestial_astral_corps_species
+				name = NAME_Keeper
+				skill = 10
+				traits = {
+					trait = leader_trait_dimensional_stutter
+				}
+			}
+		}
+		25 = {
+			create_leader = {
+				class = commander
+				species = event_target:celestial_astral_corps_species
+				name = NAME_Keeper
+				skill = 7
+				traits = {
+					trait = leader_trait_dimensional_stutter
+				}
+			}
+		}
+		50 = {
+			create_leader = {
+				class = commander
+				species = event_target:celestial_astral_corps_species
+				name = NAME_Keeper
+				skill = 8
+			}
+		}
+	}
+	create_fleet = {
+		effect = {
+			set_owner = PREV
+			create_ship = {
+				name = random
+				design = "NAME_Huntress"
+				graphical_culture = "extra_dimensional_02"
+			}
+			assign_leader = last_created_leader
+			while = {
+				count = $revenant_num$
+				create_ship = {
+					name = random
+					design = "NAME_Huntress"
+					graphical_culture = "extra_dimensional_02"
+				}
+			}
+			while = {
+				count = $phantom_num$
+				create_ship = {
+					name = random
+					design = "NAME_Assassin"
+					graphical_culture = "extra_dimensional_02"
+				}
+			}
+			while = {
+				count = $wraith_num$
+				create_ship = {
+					name = random
+					design = "NAME_Predator"
+					graphical_culture = "extra_dimensional_02"
+				}
+			}
+			set_location = {
+				target = event_target:celestial_unbidden_portal
+				distance = 30
+				angle = random
+			}
+			set_fleet_stance = aggressive
+			set_aggro_range = 800
+			set_aggro_range_measure_from = self
+			set_fleet_bombardment_stance = armageddon
+			# Attack Unbidden
+			auto_follow_fleet = { target = $target$ attack_fleet = yes }
+		}
+	}
+}
