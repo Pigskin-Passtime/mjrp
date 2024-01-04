@@ -1,0 +1,181 @@
+#Srcipting: Blade Thompson
+#Artwork: Ashley Thompson
+#Writing: EgoInvicta
+
+sab_restaraunt_spy_base = {
+	base_buildtime = @b1_time
+
+	owner_type = corporate
+
+	category = resource
+
+	base_cap_amount = 1
+
+	icon = building_food_conglomerate
+
+	prerequisites = {
+		sab_spy_cafe
+	}
+
+	potential = {
+		exists = owner
+		has_branch_office = yes
+		branch_office_owner = {
+			is_ai = no
+			is_criminal_syndicate = no
+		}
+		NOR = {
+			is_planet_class = pc_hive
+			is_planet_class = pc_machine
+			is_planet_class = pc_relic
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				OR = {
+					is_anglers_empire = no
+					AND = {
+						is_anglers_empire = yes
+						PREV = { planet = { is_wet = no } }
+					}
+				}
+			}
+		}
+		modifier = {
+			job_farmer_add = 1
+			job_sab_Intel_agent_add = 2
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				is_anglers_empire = yes
+				PREV = { planet = { is_wet = yes } }
+			}
+		}
+		modifier = {
+			job_angler_add = 1
+			job_sab_Intel_agent_add = 2
+		}
+	}
+
+	resources = {
+		category = planet_branch_office_buildings
+		cost = {
+			minerals = 500
+		}
+		produces = {
+			food = 10
+			physics_research = 8
+			society_research = 8
+			engineering_research = 8
+		}
+		upkeep = {
+			energy = 6
+		}
+	}
+
+	ai_weight = {
+		factor = 1
+	}
+}
+
+sab_amusement_spy = {
+	base_buildtime = @b2_time
+	base_cap_amount = 1
+
+	owner_type = corporate
+
+	category = amenity
+
+	icon = building_amusement_megaplex
+
+	prerequisites = {
+		sab_spy_theme_park
+	}
+
+	potential = {
+		has_branch_office = yes
+	}
+
+	planet_modifier = {
+		planet_amenities_add = 10
+		job_sab_clerk_agent_add = 2
+	}
+
+	country_modifier = {
+		country_naval_cap_add = 30
+	}
+
+	resources = {
+		category = planet_branch_office_buildings
+		cost = {
+			minerals = @b3_minerals
+		}
+		produces = {
+			energy = 10
+		}
+	}
+
+	ai_weight = {
+		weight = 2
+
+		modifier = {
+			weight = 0.5
+		}
+	}
+}
+
+sab_casino_spy = {
+	base_buildtime = @b2_time
+	base_cap_amount = 1
+
+	owner_type = corporate
+
+	category = amenity
+
+	icon = building_archaeostudies_faculty
+
+	prerequisites = {
+		sab_spy_casino
+	}
+
+	potential = {
+		has_branch_office = yes
+	}
+
+	planet_modifier = {
+		planet_amenities_add = 10
+		planet_stability_add = -20
+		job_sab_dealer_agent_per_pop = 0.25
+	}
+
+	country_modifier = {
+
+		intel_decryption_add = 5
+	}
+
+	resources = {
+		category = planet_branch_office_buildings
+		cost = {
+			minerals = @b3_minerals
+		}
+		produces = {
+			energy = 10
+			influence = 0.25
+		}
+	}
+
+	ai_weight = {
+		weight = 2
+
+		modifier = {
+			weight = 0.5
+		}
+	}
+}
