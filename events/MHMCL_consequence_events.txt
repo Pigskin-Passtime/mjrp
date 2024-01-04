@@ -1,0 +1,124 @@
+# MHMCL_consequence_events
+# By Metallichydra
+
+# Mircorv Consequence Events
+
+namespace = MHMCL_consequence_event
+
+# Consequences
+
+# Consequence for changing the star: If the victim world is not an ecumenpoli or machine world, turn it into a tomb world (Machine worlds get negative modifier) because the ecosystem is not adapted for radiation.
+
+# Consequence for sacrificing ships: Create Debris Belt (Add negative modifier to victim world)
+
+# Consequence for shattering moon: Victim world blows up
+
+# After blowing up the moon, destroy victim planet
+country_event = {
+	id = MHMCL_consequence_event.1
+	title = MHMCL_consequence_event.1.name
+	desc = {
+		trigger = {
+			switch = {
+				trigger = has_country_flag
+				MHMCL_colony_destroyed = {
+					text = MHMCL_consequence_event.1.desc.colony
+				}
+				default = {
+					text = MHMCL_consequence_event.1.desc
+				}
+			}
+		}
+	}
+	picture = GFX_evt_exploding_planet
+	show_sound = event_super_explosion
+	fire_only_once = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		random_system = {
+			limit = {
+				has_star_flag = MHMCL_shielded_system
+			}
+			random_system_planet = {
+				limit = {
+					has_planet_flag = MHMCL_victim_planet
+					NOT = { is_planet_class = pc_shattered }
+				}
+				if = {
+					limit = {
+						is_colony = yes
+					}
+					every_owned_pop = { kill_pop = yes }
+					destroy_colony = yes
+					owner = { set_country_flag = MHMCL_colony_destroyed }
+				}
+				change_pc = pc_shattered
+				clear_deposits = yes
+			}
+		}
+	}
+
+	option = {
+		name = MHMCL_consequence_event.1.a
+	}
+}
+
+# If you do not protect the mircorv during the moon explosion then it will become a broken world
+
+# After blowing up the moon, destroy victim planet
+country_event = {
+	id = MHMCL_consequence_event.2
+	title = MHMCL_consequence_event.2.name
+	desc = MHMCL_consequence_event.2.desc
+	picture = GFX_evt_exploding_planet
+	show_sound = event_super_explosion
+	fire_only_once = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		random_system = {
+			limit = {
+				has_star_flag = MHMCL_shielded_system
+			}
+			random_system_planet = {
+				limit = {
+					has_planet_flag = MHMCL_shielded_planet
+					is_planet_class = pc_shielded
+				}
+				change_pc = pc_broken
+				clear_deposits = yes
+			}
+		}
+	}
+
+	option = {
+		name = MHMCL_consequence_event.2.a
+	}
+}
+
+# After Leaving the Mircorv they take their revenge
+country_event = {
+	id = MHMCL_consequence_event.3
+	title = MHMCL_consequence_event.3.name
+	desc = MHMCL_consequence_event.3.desc
+	picture = GFX_evt_exploding_planet
+	show_sound = event_super_explosion
+	fire_only_once = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		capital_scope = {
+				change_pc = pc_broken
+				clear_deposits = yes
+			}
+		}
+	}
+
+	option = {
+		name = MHMCL_consequence_event.2.a
+	}
+}

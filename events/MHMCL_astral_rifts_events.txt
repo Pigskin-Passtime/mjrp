@@ -1,0 +1,2071 @@
+# MHMCL_astral_rift_events
+# By Metallichydra
+
+# Battle for Iltrani
+
+namespace = MHMCL_rift_event
+
+# Structure: Each event appends a number behind the current event's ID
+# So in event 121, the first choice is event 1211, the second is 1211 and the second is 1212, and the third is 1213 and so on. First choice of 1211 is then 12111 etc. The very first event does not do this as there is no choice
+
+# To-Do:
+# - Pictures
+# - Sound
+# - Localization
+
+astral_rift_event = {
+	id = MHMCL_rift_event.1
+	title = MHMCL_rift_event.1.name
+	desc = {
+		trigger = {
+			switch = {
+				trigger = has_astral_rift_flag
+				description_machine_consciousness = {
+					switch = {
+						trigger = has_astral_rift_flag
+						description_exterminator = { text = MHMCL_rift_event.1.desc.exterminator } # Organic Signatures detected from one of the combetants
+						default = { text = MHMCL_rift_event.1.desc.machine }
+					}
+				}
+				description_hive_mind = {
+					text = MHMCL_rift_event.1.desc.hive
+				}
+				default = {
+					switch = {
+						trigger = has_astral_rift_flag
+						description_pacifist = { text = MHMCL_rift_event.1.desc.pacifist }
+						description_militarist = { text = MHMCL_rift_event.1.desc.militarist }
+						default = { text = MHMCL_rift_event.1.desc }
+					}
+				}
+			}
+		}
+	}
+	picture = GFX_evt_a_rift_in_space # Placeholder Battlefield
+	show_sound = ap_rift_event_0_astral_wonder # Placeholder
+	difficulty = @astral_rift_initial_difficulty
+	astral_rift = yes
+	is_triggered_only = yes
+	
+	# The Mircorv
+	option = {
+		name = MHMCL_rift_event.1.a
+		trigger = {
+			explorer = { NOT = { has_civic = civic_machine_terminator } }
+		}
+		set_next_astral_rift_event = { id = MHMCL_rift_event.2 }
+	}
+	
+	# The Lartians
+	#option = {
+	#	name = MHMCL_rift_event.1.b
+	#	trigger = {
+	#		explorer = { NOT = { has_civic = civic_machine_terminator } }
+	#	}
+	#	set_next_astral_rift_event = { id = MHMCL_rift_event.3 }
+	#}
+	
+	# Exterminators can see organic signatures and always chooses Mircorv
+	option = {
+		name = MHMCL_rift_event.1.c
+		trigger = {
+			explorer = { has_civic = civic_machine_terminator }
+		}
+		set_next_astral_rift_event = { id = MHMCL_rift_event.2 }
+	}
+	
+	# Watch from a distance
+	#option = {
+	#	name = MHMCL_rift_event.1.d
+	#	trigger = {
+	#		explorer = { NOT = { has_civic = civic_machine_terminator } }
+	#	}
+	#	set_next_astral_rift_event = { id = MHMCL_rift_event.4 }
+	#}
+}
+
+# Meeting the Mircorv
+astral_rift_event = {
+	id = MHMCL_rift_event.2
+	title = MHMCL_rift_event.2.name
+	desc = {
+		trigger = {
+			switch = {
+				trigger = has_astral_rift_flag
+				description_machine_consciousness = {
+					switch = {
+						trigger = has_astral_rift_flag
+						description_exterminator = { text = MHMCL_rift_event.2.desc.exterminator } # Organic Signatures detected from one of the combetants
+						default = { text = MHMCL_rift_event.2.desc.machine }
+					}
+				}
+				description_hive_mind = {
+					text = MHMCL_rift_event.2.desc.hive
+				}
+				default = {
+					text = MHMCL_rift_event.2.desc
+				}
+			}
+		}
+	}
+	picture = GFX_evt_a_rift_in_space # Placeholder Robot Contact Screen like the one from toxic god
+	show_sound = ap_rift_event_0_astral_wonder # Placeholder Robotic Sound / Contact
+	difficulty = @astral_rift_initial_difficulty
+	astral_rift = yes
+	is_triggered_only = yes
+	
+	# Accept their invite aboard
+	option = {
+		name = MHMCL_rift_event.2.a
+		set_next_astral_rift_event = { id = MHMCL_rift_event.3 } # Easy Difficulty
+	}
+	
+	# Resist
+	option = {
+		name = MHMCL_rift_event.2.b # Better excercise caution even though they are friendly
+		set_astral_rift_flag = MHMCL_resisted_mircorv
+		set_next_astral_rift_event = { id = MHMCL_rift_event.3 } # Hard Difficulty
+	}
+}
+
+# Idea: At one point you can leave your scientist in the past, getting them back later in a cryopod
+
+# Meeting the Mircorv - Accepted
+astral_rift_event = {
+	id = MHMCL_rift_event.3
+	title = MHMCL_rift_event.3.name
+	desc = {
+		trigger = {
+			switch = {
+				trigger = has_astral_rift_flag
+				description_machine_consciousness = {
+					text = MHMCL_rift_event.3.desc.machine
+				}
+				description_hive_mind = {
+					text = MHMCL_rift_event.3.desc.hive
+				}
+				default = {
+					text = MHMCL_rift_event.3.desc
+				}
+			}
+		}
+	}
+	picture = GFX_evt_a_rift_in_space # Placeholder Battlefield
+	show_sound = ap_rift_event_0_astral_wonder # Placeholder Organic and Machine Greeting
+	difficulty = @astral_rift_initial_difficulty
+	astral_rift = yes
+	is_triggered_only = yes
+	# The Mircorv tell about their battle with the Lartians and urges you to help them
+	
+	# Normal Empire Choices
+	# Accept
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.3.a
+		}
+		name = {
+			trigger = {
+				explorer = {
+					is_machine_empire = yes
+					NOT = { has_civic = civic_machine_terminator }
+				}
+			}
+			text = MHMCL_rift_event.3.a.machine
+		}
+		name = {
+			trigger = {
+				explorer = {
+					is_machine_empire = yes
+					has_civic = civic_machine_terminator
+				}
+			}
+			text = MHMCL_rift_event.3.a.exterminator
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.3.a.hive
+		}
+		set_next_astral_rift_event = { id = MHMCL_rift_event.4 } # 4
+	}
+	
+	# Resist
+	#option = {
+	#	name = {
+	#		trigger = { explorer = { is_gestalt = no } }
+	#		text = MHMCL_rift_event.3.b
+	#	}
+	#	name = {
+	#		trigger = { explorer = { is_machine_empire = yes } }
+	#		text = MHMCL_rift_event.3.b.machine
+	#	}
+	#	name = {
+	#		trigger = { explorer = { is_hive_empire = yes } }
+	#		text = MHMCL_rift_event.3.b.hive
+	#	}
+	#	trigger = {
+	#		explorer = { NOT = { has_civic = civic_machine_terminator } }
+	#	}
+	#	set_astral_rift_flag = MHMCL_resisted_mircorv
+	#	set_next_astral_rift_event = { id = MHMCL_rift_event.212 }
+	#}
+}
+
+# Agreed to help the Mircorv
+astral_rift_event = {
+	id = MHMCL_rift_event.4
+	title = MHMCL_rift_event.4.name
+	desc = {
+		# MHMCL_description_cyborg # MHMCL_description_synthetic
+		trigger = {
+			switch = {
+				trigger = has_astral_rift_flag
+				description_machine_consciousness = {
+					text = MHMCL_rift_event.4.desc.machine
+				}
+				description_hive_mind = {
+					switch = {
+						trigger = has_astral_rift_flag
+						MHMCL_description_cyborg = { text = MHMCL_astral_rift_event.4.desc.hive.cyborg }
+						default = { text = MHMCL_rift_event.4.desc.hive }
+					}
+				}
+				default = {
+					switch = {
+						trigger = has_astral_rift_flag
+						MHMCL_description_synthetic = { text = MHMCL_astral_rift_event.4.desc.synthetic }
+						MHMCL_description_cyborg = { text = MHMCL_astral_rift_event.4.desc.cyborg }
+						default = { text = MHMCL_rift_event.4.desc }
+					}
+				}
+			}
+		}
+	}
+	picture = GFX_evt_a_rift_in_space # Placeholder Battlefield
+	show_sound = ap_rift_event_0_astral_wonder # Placeholder Organic and Machine Greeting
+	difficulty = @astral_rift_initial_difficulty
+	astral_rift = yes
+	is_triggered_only = yes
+	# The Mircorv tell about their battle with the Lartians and urges you to help them
+	
+	# Establish Event Targets
+	immediate = {
+		explorer = {
+			save_event_target_as = MHMCL_explorer
+		}
+	}
+	
+	# Normal Empire Choices
+	# Assist with military advice
+	# Gruesome!
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.4.a
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.4.a.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.4.a.hive
+		}
+		set_astral_rift_flag = MHMCL_mircorv_advice
+		set_next_astral_rift_event = { id = MHMCL_rift_event.5 }
+	}
+	
+	# Fascinating!
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.4.b
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.4.b.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.4.b.hive
+		}
+		set_astral_rift_flag = MHMCL_mircorv_advice
+		set_next_astral_rift_event = { id = MHMCL_rift_event.5 }
+	}
+
+	# Assist with technology
+	#option = {
+	#	name = MHMCL_rift_event.4.b
+	#	trigger = {
+	#		explorer = { is_gestalt = no }
+	#	}
+	#	set_astral_rift_flag = MHMCL_mircorv_technology
+	#	set_next_astral_rift_event = { id = MHMCL_rift_event.2112 }
+	#}
+	
+	# Assist with fleets
+	#option = {
+	#	name = {
+	#		trigger = { explorer = { is_gestalt = no } }
+	#		text = MHMCL_rift_event.4.c
+	#	}
+	#	name = {
+	#		trigger = { explorer = { is_machine_empire = yes } }
+	#		text = MHMCL_rift_event.4.c.machine
+	#	}
+	#	name = {
+	#		trigger = { explorer = { is_hive_empire = yes } }
+	#		text = MHMCL_rift_event.4.c.hive
+	#	}
+	#	custom_tooltip = MHMCL_rift_event.4.c.tt # Warning: All military fleets in system will disappear
+	#	allow = {
+	#		custom_tooltip = {
+	#			fail_text = MHMCL_rift_event.4.c.allow.tooltip # Must have fleet of sufficient strength
+	#			solar_system = {
+	#				any_fleet_in_system = {
+	#					fleet_power > 10
+	#					owner = {
+	#						is_same_value = event_target:MHMCL_explorer
+	#					}
+	#				}
+	#			}
+	#		}
+	#	}
+	#	set_variable = { which = MHMCL_contributed_fleet value = 0 }
+	#	solar_system = {
+	#		every_fleet_in_system = {
+	#			limit = {
+	#				fleet_power > 10
+	#				owner = {
+	#					is_same_value = event_target:MHMCL_explorer
+	#				}
+	#			}
+	#			change_variable = { which = prevprev.MHMCL_contributed_fleet value = trigger:fleet_power }
+	#			if = {
+	#				limit = {
+	#					exists = leader
+	#				}
+	#				leader = {
+	#					kill_leader = {
+	#						show_notification = no
+	#					}
+	#				}
+	#			}
+	#			delete_fleet = {
+	#				target = this
+	#				kill_leader = yes
+	#				destroy_template = yes
+	#			}
+	#		}
+	#	}
+	#	set_astral_rift_flag = MHMCL_mircorv_fleets
+	#	set_next_astral_rift_event = { id = MHMCL_rift_event.2113 }
+	#}
+}
+
+# Meeting the Mircorv - Military Advice
+astral_rift_event = {
+	id = MHMCL_rift_event.5
+	title = MHMCL_rift_event.5.name
+	desc = {
+		trigger = {
+			switch = {
+				trigger = has_astral_rift_flag
+				description_machine_consciousness = {
+					text = MHMCL_rift_event.5.desc.machine
+				}
+				description_hive_mind = {
+					text = MHMCL_rift_event.5.desc.hive
+				}
+				default = {
+					text = MHMCL_rift_event.5.desc
+				}
+			}
+		}
+	}
+	picture = GFX_evt_a_rift_in_space # Placeholder Some sort of map
+	show_sound = ap_rift_event_0_astral_wonder # Placeholder Battlefield or meeting
+	difficulty = @astral_rift_initial_difficulty
+	astral_rift = yes
+	is_triggered_only = yes
+	# The Mircorv will tell about the Lartians capabilities
+	
+	# Plan a decisive battle
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.5.a
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.5.a.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.5.a.hive
+		}
+		set_astral_rift_flag = MHMCL_big_battle
+		set_next_astral_rift_event = { id = MHMCL_rift_event.6 }
+	}
+	
+	# Advice Scorched Earth
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.5.b
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.5.b.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.5.b.hive
+		}
+		set_astral_rift_flag = MHMCL_schorched_earth
+		set_next_astral_rift_event = { id = MHMCL_rift_event.16 }
+	}
+	
+	# Advice Trickery # Hide Behind Moon
+	#option = {
+	#	name = {
+	#		trigger = { explorer = { is_gestalt = no } }
+	#		text = MHMCL_rift_event.5.c
+	#	}
+	#	name = {
+	#		trigger = { explorer = { is_machine_empire = yes } }
+	#		text = MHMCL_rift_event.5.c.machine
+	#	}
+	#	name = {
+	#		trigger = { explorer = { is_hive_empire = yes } }
+	#		text = MHMCL_rift_event.5.c.hive
+	#	}
+	#	set_astral_rift_flag = MHMCL_trickery
+	#	set_next_astral_rift_event = { id = MHMCL_rift_event.21113 }
+	#}
+}
+
+################################
+# Decisive Battle Mircorv Line #
+################################
+
+astral_rift_event = {
+	id = MHMCL_rift_event.6
+	title = MHMCL_rift_event.6.name
+	desc = {
+		trigger = {
+			switch = {
+				trigger = has_astral_rift_flag
+				description_machine_consciousness = {
+					text = MHMCL_rift_event.6.desc.machine
+				}
+				description_hive_mind = {
+					text = MHMCL_rift_event.6.desc.hive
+				}
+				default = {
+					text = MHMCL_rift_event.6.desc
+				}
+			}
+		}
+	}
+	picture = GFX_evt_a_rift_in_space # Placeholder Battlefield
+	show_sound = ap_rift_event_0_astral_wonder # Placeholder Organic and Machine Greeting
+	difficulty = @astral_rift_initial_difficulty
+	astral_rift = yes
+	is_triggered_only = yes
+	# The Fleet experiences heavy losses
+	
+	# Normal Empire Choices
+	# Push Harder and be cruel
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.6.a
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.6.a.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.6.a.hive
+		}
+		set_next_astral_rift_event = { id = MHMCL_rift_event.7 }
+	}
+	
+	# Flee and fight later
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.6.b
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.6.b.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.6.b.hive
+		}
+		set_astral_rift_flag = MHMCL_fled
+		set_next_astral_rift_event = { id = MHMCL_rift_event.10 }
+	}
+	
+	# Blow up the nearby moons
+	#option = {
+	#	name = {
+	#		trigger = { explorer = { is_gestalt = no } }
+	#		text = MHMCL_rift_event.6.c
+	#	}
+	#	name = {
+	#		trigger = { explorer = { is_machine_empire = yes } }
+	#		text = MHMCL_rift_event.6.c.machine
+	#	}
+	#	name = {
+	#		trigger = { explorer = { is_hive_empire = yes } }
+	#		text = MHMCL_rift_event.6.c.hive
+	#	}
+	#	set_next_astral_rift_event = { id = MHMCL_rift_event.24 } # Shifts to shorched earth advice line
+	#}
+}
+
+# Push Harder
+astral_rift_event = {
+	id = MHMCL_rift_event.7
+	title = MHMCL_rift_event.7.name
+	desc = {
+		trigger = {
+			switch = {
+				trigger = has_astral_rift_flag
+				description_machine_consciousness = {
+					switch = {
+						trigger = has_astral_rift_flag
+						MHMCL_homeworld_shell = { text = MHMCL_astral_rift_event.7.desc.machine.shell }
+						default = { text = MHMCL_rift_event.7.desc.machine }
+					}
+				}
+				description_hive_mind = {
+					switch = {
+						trigger = has_astral_rift_flag
+						MHMCL_homeworld_shell = { text = MHMCL_astral_rift_event.7.desc.hive.shell }
+						default = { text = MHMCL_rift_event.7.desc.hive }
+					}
+				}
+				default = {
+					switch = {
+						trigger = has_astral_rift_flag
+						MHMCL_homeworld_shell = { text = MHMCL_astral_rift_event.7.desc.shell }
+						default = { text = MHMCL_rift_event.7.desc }
+					}
+				}
+			}
+		}
+	}
+	picture = GFX_evt_a_rift_in_space # Placeholder Battlefield / breached ship
+	show_sound = ap_rift_event_0_astral_wonder # Placeholder Organic and Machine Greeting
+	difficulty = @astral_rift_initial_difficulty
+	astral_rift = yes
+	is_triggered_only = yes
+	# Both fleets are crippled
+	
+	# Try to negotiate with the Lartians
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.7.a
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.7.a.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.7.a.hive
+		}
+		trigger = {
+			explorer = { NOT = { has_civic = civic_machine_terminator } }
+		}
+		set_astral_rift_flag = MHMCL_negotiated
+		set_next_astral_rift_event = { id = MHMCL_rift_event.8 }
+	}
+	
+	# Take the Mircorv back with you
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.7.b
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.7.b.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.7.b.hive
+		}
+		set_astral_rift_flag = MHMCL_transfered
+		set_next_astral_rift_event = { id = MHMCL_rift_event.9 }
+	}
+	
+	# Leave the Mircorv
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.7.c
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.7.c.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.7.c.hive
+		}
+		set_astral_rift_flag = MHMCL_left
+		# We left in a hurry before they got mad at us
+		#hidden_effect = {
+		#	explorer = {
+		#		country_event = {
+		#			id = MHMCL_story_events.1
+		#			days = 5
+		#		}
+		#	}
+		#}
+		# The Mircorv take their revenge
+		hidden_effect = {
+			explorer = {
+				country_event = {
+					id = MHMCL_consequence_events.3
+					days = 360
+				}
+			}
+		}
+		finish_astral_rift = yes
+	}
+}
+
+# Negotiations
+astral_rift_event = {
+	id = MHMCL_rift_event.8
+	title = MHMCL_rift_event.8.name
+	desc = {
+		trigger = {
+			switch = {
+				trigger = has_astral_rift_flag
+				description_machine_consciousness = {
+					switch = {
+						trigger = has_astral_rift_flag
+						MHMCL_last_stand = { text = MHMCL_astral_rift_event.8.desc.machine.last_stand }
+						default = { text = MHMCL_rift_event.8.desc.machine }
+					}
+				}
+				description_hive_mind = {
+					switch = {
+						trigger = has_astral_rift_flag
+						MHMCL_last_stand = { text = MHMCL_astral_rift_event.8.desc.hive.last_stand }
+						default = { text = MHMCL_rift_event.8.desc.hive }
+					}
+				}
+				default = {
+					switch = {
+						trigger = has_astral_rift_flag
+						MHMCL_last_stand = { text = MHMCL_astral_rift_event.8.desc.last_stand }
+						default = { text = MHMCL_rift_event.8.desc }
+					}
+				}
+			}
+		}
+	}
+	picture = GFX_evt_a_rift_in_space # Placeholder Battlefield / breached ship
+	show_sound = ap_rift_event_0_astral_wonder # Placeholder Organic and Machine Greeting
+	difficulty = @astral_rift_initial_difficulty
+	astral_rift = yes
+	is_triggered_only = yes
+	# The Lartians are ready to negotiate
+	# Ah, a fellow time-traveller! If we had known we'd have started negotiations earlier. We can see you for some reason is attached to this machine, so here's the key. Please wait with releasing them until you return to your own timeline. Don't worry, we'll work something out once our timelines starts overlapping, but lets take that discussion at another time
+	
+	# Accept the punishment
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.8.a
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.8.a.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.8.a.hive
+		}
+		set_astral_rift_flag = MHMCL_punishment
+		# The Mircorv are sealed
+		custom_tooltip = 8.a.tooltip
+		hidden_effect = {
+			explorer = {
+				add_relic = mhmcl_r_neutron_key
+			}
+		}
+		finish_astral_rift = yes
+	}
+	
+	# Ask the Mircorv to go back with you to the present
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.8.b
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.8.b.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.8.b.hive
+		}
+		set_astral_rift_flag = MHMCL_transfered
+		set_next_astral_rift_event = { id = MHMCL_rift_event.9 } # Shift back to transfer line
+	}
+	
+	# Leave the Mircorv
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.8.c
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.8.c.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.8.c.hive
+		}
+		set_astral_rift_flag = MHMCL_left
+		# The Mircorv take their revenge
+		hidden_effect = {
+			explorer = {
+				country_event = {
+					id = MHMCL_consequence_events.3
+					days = 360
+				}
+			}
+		}
+		finish_astral_rift = yes
+	}
+}
+
+# Asking Mircorv to be transfered
+astral_rift_event = {
+	id = MHMCL_rift_event.9
+	title = MHMCL_rift_event.9.name
+	desc = {
+		trigger = {
+			switch = {
+				trigger = has_astral_rift_flag
+				description_machine_consciousness = {
+					switch = {
+						trigger = has_astral_rift_flag
+						MHMCL_negotiated = { text = MHMCL_rift_event.9.desc.machine.negotiated }
+						default = { text = MHMCL_rift_event.9.desc.machine }
+					}
+				}
+				description_hive_mind = {
+					switch = {
+						trigger = has_astral_rift_flag
+						MHMCL_negotiated = { text = MHMCL_rift_event.9.desc.hive.negotiated }
+						default = { text = MHMCL_rift_event.9.desc.hive }
+					}
+				}
+				default = {
+					switch = {
+						trigger = has_astral_rift_flag
+						MHMCL_negotiated = { text = MHMCL_rift_event.9.desc.negotiated }
+						default = { text = MHMCL_rift_event.9.desc }
+					}
+				}
+			}
+		}
+	}
+	picture = GFX_evt_a_rift_in_space # Placeholder Battlefield / breached ship
+	show_sound = ap_rift_event_0_astral_wonder # Placeholder Organic and Machine Greeting
+	difficulty = @astral_rift_initial_difficulty
+	astral_rift = yes
+	is_triggered_only = yes
+	# The Mircorv explains that it is the planet, not a single drone
+	
+	# Accept the key
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.9.a
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.9.a.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.9.a.hive
+		}
+		set_astral_rift_flag = MHMCL_punishment
+		# The Mircorv are sealed
+		custom_tooltip = 9.a.tooltip
+		hidden_effect = {
+			explorer = {
+				add_relic = mhmcl_r_neutron_key
+			}
+		}
+		finish_astral_rift = yes
+	}
+	
+	# Tell that you can only take them back
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.9.b
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.9.b.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.9.b.hive
+		}
+		set_astral_rift_flag = MHMCL_transfered
+		hidden_effect = {
+			explorer = {
+				country_event = {
+					id = MHMCL_story_events.8 # After adjusting, the Mircorv is ready to work for us
+					days = 10
+				}
+			}
+		}
+		finish_astral_rift = yes
+	}
+}
+
+# Fleeing after decisive Battle
+astral_rift_event = {
+	id = MHMCL_rift_event.10
+	title = MHMCL_rift_event.10.name
+	desc = {
+		trigger = {
+			switch = {
+				trigger = has_astral_rift_flag
+				description_machine_consciousness = {
+					switch = {
+						trigger = has_astral_rift_flag
+						description_exterminator = { text = MHMCL_rift_event.10.desc.exterminator }
+						default = { text = MHMCL_rift_event.10.desc.machine }
+					}
+				}
+				description_hive_mind = {
+					text = MHMCL_rift_event.10.desc.hive
+				}
+				default = {
+					text = MHMCL_rift_event.10.desc
+				}
+			}
+		}
+	}
+	picture = GFX_evt_a_rift_in_space # Placeholder Battlefield
+	show_sound = ap_rift_event_0_astral_wonder # Placeholder Organic and Machine Greeting
+	difficulty = @astral_rift_initial_difficulty
+	astral_rift = yes
+	is_triggered_only = yes
+	# The Lartians reconverge towards the homeworld
+	
+	# Fly there before they can
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.10.a
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.10.a.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.10.a.hive
+		}
+		set_astral_rift_flag = MHMCL_defender
+		set_next_astral_rift_event = { id = MHMCL_rift_event.11 }
+	}
+	
+	# Launch an attack
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.10.b
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.10.b.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.10.b.hive
+		}
+		set_astral_rift_flag = MHMCL_intervention
+		set_next_astral_rift_event = { id = MHMCL_rift_event.14 }
+	}
+	
+	# Wait from a distance
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.10.c
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.10.c.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.10.c.hive
+		}
+		set_astral_rift_flag = MHMCL_fear_of_patience
+		set_next_astral_rift_event = { id = MHMCL_rift_event.15 }
+	}
+}
+
+# Flying to homeworld after fleeing
+astral_rift_event = {
+	id = MHMCL_rift_event.11
+	title = MHMCL_rift_event.11.name
+	desc = {
+		trigger = {
+			switch = {
+				trigger = has_astral_rift_flag
+				description_machine_consciousness = {
+					switch = {
+						trigger = has_astral_rift_flag
+						MHMCL_fled = { text = MHMCL_rift_event.11.desc.machine.fled }
+						MHMCL_intervention = { text = MHMCL_rift_event.11.desc.machine.intervention }
+						MHMCL_warped = { text = MHMCL_rift_event.11.desc.machine.warped }
+						default = { text = MHMCL_rift_event.11.desc.machine }
+					}
+				}
+				description_hive_mind = {
+					switch = {
+						trigger = has_astral_rift_flag
+						MHMCL_fled = { text = MHMCL_rift_event.11.desc.hive.fled }
+						MHMCL_intervention = { text = MHMCL_rift_event.11.desc.hive.intervention }
+						MHMCL_warped = { text = MHMCL_rift_event.11.desc.hive.warped }
+						default = { text = MHMCL_rift_event.11.desc.hive }
+					}
+				}
+				default = {
+					switch = {
+						trigger = has_astral_rift_flag
+						MHMCL_fled = { text = MHMCL_rift_event.11.desc.fled }
+						MHMCL_intervention = { text = MHMCL_rift_event.11.desc.intervention }
+						MHMCL_warped = { text = MHMCL_rift_event.11.desc.warped }
+						default = { text = MHMCL_rift_event.11.desc }
+					}
+				}
+			}
+		}
+	}
+	picture = GFX_evt_a_rift_in_space # Placeholder Battlefield in orbit
+	show_sound = ap_rift_event_0_astral_wonder # Placeholder Organic and Machine Greeting
+	difficulty = @astral_rift_initial_difficulty
+	astral_rift = yes
+	is_triggered_only = yes
+	# Battle in the skies
+	
+	# Continue the attack
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.11.a
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.11.a.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.11.a.hive
+		}
+		set_next_astral_rift_event = { id = MHMCL_rift_event.12 }
+	}
+	
+	# Try to contact the Lartians
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.11.b
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.11.b.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.11.b.hive
+		}
+		trigger = {
+			explorer = { NOT = { has_civic = civic_machine_terminator } }
+		}
+		set_astral_rift_flag = MHMCL_negotiated
+		set_next_astral_rift_event = { id = MHMCL_rift_event.8 } # Shift back to negotiations line
+	}
+}
+
+# The battle continues
+astral_rift_event = {
+	id = MHMCL_rift_event.12
+	title = MHMCL_rift_event.12.name
+	desc = {
+		trigger = {
+			switch = {
+				trigger = has_astral_rift_flag
+				description_machine_consciousness = {
+					switch = {
+						trigger = has_astral_rift_flag
+						MHMCL_self_shielder = { text = MHMCL_rift_event.12.desc.machine.self_shielder } # Shielding the homeworld yourself
+						MHMCL_desperate = { text = MHMCL_rift_event.12.desc.machine.desperate } # Intervening, then returning to homeworld
+						MHMCL_artillery = { text = MHMCL_rift_event.12.desc.machine.artillery } # We tried to stop them with artillery, but it didn't help
+						MHMCL_fled = { text = MHMCL_rift_event.12.desc.machine.fled } # Fleeing, then returning to homeworld
+						MHMCL_intervention = { text = MHMCL_rift_event.12.desc.machine.intervention } # Intervening, then trying to take out them all
+						MHMCL_warped = { text = MHMCL_rift_event.12.desc.machine.warped } # Warped back in, but doesn't make it in time
+						MHMCL_warped_out = { text = MHMCL_rift_event.12.desc.machine.warped_out } # Warped out but got destroyed during the warp because of too much damage beforehand
+						default = { text = MHMCL_rift_event.12.desc.machine }
+					}
+				}
+				description_hive_mind = {
+					switch = {
+						trigger = has_astral_rift_flag
+						MHMCL_self_shielder = { text = MHMCL_rift_event.12.desc.hive.self_shielder } # Shielding the homeworld yourself
+						MHMCL_desperate = { text = MHMCL_rift_event.12.desc.hive.desperate }
+						MHMCL_artillery = { text = MHMCL_rift_event.12.desc.hive.artillery }
+						MHMCL_fled = { text = MHMCL_rift_event.12.desc.hive.fled }
+						MHMCL_intervention = { text = MHMCL_rift_event.12.desc.hive.intervention }
+						MHMCL_warped = { text = MHMCL_rift_event.12.desc.hive.warped }
+						default = { text = MHMCL_rift_event.12.desc.hive }
+					}
+				}
+				default = {
+					switch = {
+						trigger = has_astral_rift_flag
+						MHMCL_self_shielder = { text = MHMCL_rift_event.12.desc.self_shielder } # Shielding the homeworld yourself
+						MHMCL_desperate = { text = MHMCL_rift_event.12.desc.desperate }
+						MHMCL_artillery = { text = MHMCL_rift_event.12.desc.artillery }
+						MHMCL_fled = { text = MHMCL_rift_event.12.desc.fled }
+						MHMCL_intervention = { text = MHMCL_rift_event.12.desc.intervention }
+						MHMCL_warped = { text = MHMCL_rift_event.12.desc.warped }
+						default = { text = MHMCL_rift_event.12.desc }
+					}
+				}
+			}
+		}
+	}
+	picture = GFX_evt_a_rift_in_space # Placeholder Battlefield in orbit
+	show_sound = ap_rift_event_0_astral_wonder # Placeholder Organic and Machine Greeting
+	difficulty = @astral_rift_initial_difficulty
+	astral_rift = yes
+	is_triggered_only = yes
+	# The Lartians use their pacifier after crippling the Mircorv fleet
+	
+	# You cannot change the past...
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.12.a
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.12.a.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.12.a.hive
+		}
+		explorer = {
+			add_modifier = {
+				modifier = MHMCL_cant_change_the_past
+				days = -1
+			}
+		}
+		finish_astral_rift = yes
+	}
+	
+	# We must free the Mircorv! # ...But you can change the future!
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.12.b
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.12.b.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.12.b.hive
+		}
+		set_next_astral_rift_event = { id = MHMCL_rift_event.13 }
+	}
+}
+
+# The Mircorvs Last Action
+astral_rift_event = {
+	id = MHMCL_rift_event.13
+	title = MHMCL_rift_event.13.name
+	desc = {
+		trigger = {
+			switch = {
+				trigger = has_astral_rift_flag
+				description_machine_consciousness = {
+					switch = {
+						trigger = has_astral_rift_flag
+						MHMCL_intervention = { text = MHMCL_rift_event.13.desc.machine.intervention }
+						MHMCL_fled = { text = MHMCL_rift_event.13.desc.machine.fled }
+						MHMCL_artillery = { text = MHMCL_rift_event.13.desc.machine.artillery }
+						MHMCL_warped = { text = MHMCL_rift_event.13.desc.machine.warped }
+						default = { text = MHMCL_rift_event.13.desc.machine }
+					}
+				}
+				description_hive_mind = {
+					switch = {
+						trigger = has_astral_rift_flag
+						MHMCL_intervention = { text = MHMCL_rift_event.13.desc.hive.intervention }
+						MHMCL_fled = { text = MHMCL_rift_event.13.desc.hive.fled }
+						MHMCL_artillery = { text = MHMCL_rift_event.13.desc.hive.artillery }
+						MHMCL_warped = { text = MHMCL_rift_event.13.desc.hive.warped }
+						default = { text = MHMCL_rift_event.13.desc.hive }
+					}
+				}
+				default = {
+					switch = {
+						trigger = has_astral_rift_flag
+						MHMCL_intervention = { text = MHMCL_rift_event.13.desc.intervention }
+						MHMCL_fled = { text = MHMCL_rift_event.13.desc.fled }
+						MHMCL_artillery = { text = MHMCL_rift_event.13.desc.artillery }
+						MHMCL_warped = { text = MHMCL_rift_event.13.desc.warped }
+						default = { text = MHMCL_rift_event.13.desc }
+					}
+				}
+			}
+		}
+	}
+	picture = GFX_evt_a_rift_in_space # Placeholder Battlefield in orbit
+	show_sound = ap_rift_event_0_astral_wonder # Placeholder Organic and Machine Greeting
+	difficulty = @astral_rift_initial_difficulty
+	astral_rift = yes
+	is_triggered_only = yes
+	# The Mircorv points towards the neutron destabilizer
+	
+	# We will use it well
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.13.a
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.13.a.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.13.a.hive
+		}
+		explorer = {
+			add_relic = mhmcl_r_neutron_key
+		}
+		finish_astral_rift = yes
+	}
+}
+
+# Intercept the Lartians
+astral_rift_event = {
+	id = MHMCL_rift_event.14
+	title = MHMCL_rift_event.14.name
+	desc = {
+		trigger = {
+			switch = {
+				trigger = has_astral_rift_flag
+				description_machine_consciousness = {
+					switch = {
+						trigger = has_astral_rift_flag
+						description_exterminator = { text = MHMCL_rift_event.14.desc.exterminator }
+						default = { text = MHMCL_rift_event.14.desc.machine }
+					}
+				}
+				description_hive_mind = {
+					text = MHMCL_rift_event.14.desc.hive
+				}
+				default = {
+					text = MHMCL_rift_event.14.desc
+				}
+			}
+		}
+	}
+	picture = GFX_evt_a_rift_in_space # Placeholder Battle in space
+	show_sound = ap_rift_event_0_astral_wonder # Placeholder Organic and Machine Greeting
+	difficulty = @astral_rift_initial_difficulty
+	astral_rift = yes
+	is_triggered_only = yes
+	# Battle in space, taking heavy losses
+	
+	# Retreat to Homeworld for a last stand
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.14.a
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.14.a.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.14.a.hive
+		}
+		set_astral_rift_flag = MHMCL_last_stand
+		set_next_astral_rift_event = { id = MHMCL_rift_event.11 }
+	}
+	
+	# Try to take out as many ships as possible
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.14.b
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.14.b.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.14.b.hive
+		}
+		set_astral_rift_flag = MHMCL_desperate
+		set_next_astral_rift_event = { id = MHMCL_rift_event.12 } # Shift back to world pacified line
+	}
+}
+
+# Waiting
+astral_rift_event = {
+	id = MHMCL_rift_event.15
+	title = MHMCL_rift_event.15.name
+	desc = {
+		trigger = {
+			switch = {
+				trigger = has_astral_rift_flag
+				description_machine_consciousness = {
+					switch = {
+						trigger = has_astral_rift_flag
+						MHMCL_drawn_away = { text = MHMCL_rift_event.15.desc.machine.drawn_away }
+						MHMCL_warped = { text = MHMCL_rift_event.15.desc.machine.warped }
+						default = { text = MHMCL_rift_event.15.desc.machine } # Waiting
+					}
+				}
+				description_hive_mind = {
+					switch = {
+						trigger = has_astral_rift_flag
+						MHMCL_drawn_away = { text = MHMCL_rift_event.15.desc.hive.drawn_away }
+						MHMCL_warped = { text = MHMCL_rift_event.15.desc.hive.warped }
+						default = { text = MHMCL_rift_event.15.desc.hive }
+					}
+				}
+				default = {
+					switch = {
+						trigger = has_astral_rift_flag
+						MHMCL_drawn_away = { text = MHMCL_rift_event.15.desc.drawn_away }
+						MHMCL_warped = { text = MHMCL_rift_event.13.desc.warped }
+						default = { text = MHMCL_rift_event.13.desc }
+					}
+				}
+			}
+		}
+	}
+	picture = GFX_evt_a_rift_in_space # Placeholder Battlefield
+	show_sound = ap_rift_event_0_astral_wonder # Placeholder Organic and Machine Greeting
+	difficulty = @astral_rift_initial_difficulty
+	astral_rift = yes
+	is_triggered_only = yes
+	# The Lartians enter orbit of homeworld
+	
+	# Warp back
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.15.a
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.15.a.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.15.a.hive
+		}
+		set_astral_rift_flag = MHMCL_warped
+		set_next_astral_rift_event = { id = MHMCL_rift_event.11 } # Shift back to battle in the skies
+	}
+	
+	# Artillery
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.15.b
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.15.b.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.15.b.hive
+		}
+		set_astral_rift_flag = MHMCL_artillery
+		set_next_astral_rift_event = { id = MHMCL_rift_event.12 } # Shift back to world pacified line
+	}
+}
+
+###############################
+# Scorched Earth Mircorv Line #
+###############################
+
+# Planning a Scorhed Earth Tactic
+astral_rift_event = {
+	id = MHMCL_rift_event.16
+	title = MHMCL_rift_event.16.name
+	desc = {
+		trigger = {
+			switch = {
+				trigger = has_astral_rift_flag
+				description_machine_consciousness = {
+					switch = {
+						trigger = has_astral_rift_flag
+						description_exterminator = { text = MHMCL_rift_event.16.desc.exterminator }
+						default = { text = MHMCL_rift_event.16.desc.machine }
+					}
+				}
+				description_hive_mind = {
+					text = MHMCL_rift_event.16.desc.hive
+				}
+				default = {
+					text = MHMCL_rift_event.16.desc
+				}
+			}
+		}
+	}
+	picture = GFX_evt_a_rift_in_space # Placeholder Desolation
+	show_sound = ap_rift_event_0_astral_wonder # Placeholder Organic and Machine Greeting
+	difficulty = @astral_rift_initial_difficulty
+	astral_rift = yes
+	is_triggered_only = yes
+	# The Mircorv asks for what kind of schorched earth would be the best
+	
+	# Sacrifice some ships to create a belt of debris
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.16.a
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.16.a.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.16.a.hive
+		}
+		set_astral_rift_flag = MHMCL_sacrificer
+		set_next_astral_rift_event = { id = MHMCL_rift_event.17 }
+	}
+	
+	# Blow up a nearby moon
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.16.b
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.16.b.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.16.b.hive
+		}
+		set_astral_rift_flag = MHMCL_moon
+		explorer = { country_event = { id = MHMCL_consequence_event.1 days = 10 } }
+		set_next_astral_rift_event = { id = MHMCL_rift_event.24 }
+	}
+	
+	# Destabilize the star
+	#option = {
+	#	name = {
+	#		trigger = { explorer = { is_gestalt = no } }
+	#		text = MHMCL_rift_event.16.c
+	#	}
+	#	name = {
+	#		trigger = { explorer = { is_machine_empire = yes } }
+	#		text = MHMCL_rift_event.16.c.machine
+	#	}
+	#	name = {
+	#		trigger = { explorer = { is_hive_empire = yes } }
+	#		text = MHMCL_rift_event.16.c.hive
+	#	}
+	#	set_astral_rift_flag = MHMCL_star_destabilizer
+	#	set_next_astral_rift_event = { id = MHMCL_rift_event.211123 } 
+	#}
+}
+
+# Sacrificing own ships
+astral_rift_event = {
+	id = MHMCL_rift_event.17
+	title = MHMCL_rift_event.17.name
+	desc = {
+		trigger = {
+			switch = {
+				trigger = has_astral_rift_flag
+				description_machine_consciousness = {
+					switch = {
+						trigger = has_astral_rift_flag
+						MHMCL_moon = { text = MHMCL_rift_event.17.desc.machine.moon }
+						default = { text = MHMCL_rift_event.17.desc.machine }
+					}
+				}
+				description_hive_mind = {
+					switch = {
+						trigger = has_astral_rift_flag
+						MHMCL_moon = { text = MHMCL_rift_event.17.desc.hive.moon }
+						default = { text = MHMCL_rift_event.17.desc.hive }
+					}
+				}
+				default = {
+					switch = {
+						trigger = has_astral_rift_flag
+						MHMCL_moon = { text = MHMCL_rift_event.17.desc.moon }
+						default = { text = MHMCL_rift_event.17.desc }
+					}
+				}
+			}
+		}
+	}
+	picture = GFX_evt_a_rift_in_space # Placeholder ships blowing up
+	show_sound = ap_rift_event_0_astral_wonder # Placeholder Organic and Machine Greeting
+	difficulty = @astral_rift_initial_difficulty
+	astral_rift = yes
+	is_triggered_only = yes
+	# The ships are sacrificed, creating a belt of debris, and the Lartian ships take heavy damage, though they quickly put up their shields and return fire - add a modifier to the system that does something bad
+	
+	# Return fire as well
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.17.a
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.17.a.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.17.a.hive
+		}
+		set_astral_rift_flag = MHMCL_returned_fire
+		set_next_astral_rift_event = { id = MHMCL_rift_event.18 }
+	}
+	
+	# Flee
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.17.b
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.17.b.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.17.b.hive
+		}
+		set_next_astral_rift_event = { id = MHMCL_rift_event.20 }
+	}
+}
+
+# Return Fire!
+astral_rift_event = {
+	id = MHMCL_rift_event.18
+	title = MHMCL_rift_event.18.name
+	desc = {
+		trigger = {
+			switch = {
+				trigger = has_astral_rift_flag
+				description_machine_consciousness = {
+					switch = {
+						trigger = has_astral_rift_flag
+						description_exterminator = { text = MHMCL_rift_event.18.desc.exterminator }
+						default = { text = MHMCL_rift_event.18.desc.machine }
+					}
+				}
+				description_hive_mind = {
+					text = MHMCL_rift_event.18.desc.hive
+				}
+				default = {
+					text = MHMCL_rift_event.18.desc
+				}
+			}
+		}
+	}
+	picture = GFX_evt_a_rift_in_space # Placeholder Space Battle
+	show_sound = ap_rift_event_0_astral_wonder # Placeholder Organic and Machine Greeting
+	difficulty = @astral_rift_initial_difficulty
+	astral_rift = yes
+	is_triggered_only = yes
+	# The Mircorv return fire upon the lartians, but they warp through the debris belt - They are now in open battle
+	
+	# Battle it out
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.18.a
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.18.a.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.18.a.hive
+		}
+		set_astral_rift_flag = MHMCL_returned_fire
+		set_next_astral_rift_event = { id = MHMCL_rift_event.19 }
+	}
+	
+	# Warp out
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.18.b
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.18.b.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.18.b.hive
+		}
+		set_astral_rift_flag = MHMCL_warped_out
+		set_next_astral_rift_event = { id = MHMCL_rift_event.15 } # Shift back to waiting line
+	}
+}
+
+# Battle it out
+astral_rift_event = {
+	id = MHMCL_rift_event.19
+	title = MHMCL_rift_event.19.name
+	desc = {
+		trigger = {
+			switch = {
+				trigger = has_astral_rift_flag
+				description_machine_consciousness = {
+					switch = {
+						trigger = has_astral_rift_flag
+						description_exterminator = { text = MHMCL_rift_event.19.desc.exterminator }
+						default = { text = MHMCL_rift_event.19.desc.machine }
+					}
+				}
+				description_hive_mind = {
+					text = MHMCL_rift_event.19.desc.hive
+				}
+				default = {
+					text = MHMCL_rift_event.19.desc
+				}
+			}
+		}
+	}
+	picture = GFX_evt_a_rift_in_space # Placeholder Space Battle
+	show_sound = ap_rift_event_0_astral_wonder # Placeholder Organic and Machine Greeting
+	difficulty = @astral_rift_initial_difficulty
+	astral_rift = yes
+	is_triggered_only = yes
+	# We are now in open battle, and despite the damage dealt to the lartians they outnumber us. It appears as if their ranks grow, even though no fleets are entering the system
+	
+	# Continue the battle
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.19.a
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.19.a.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.19.a.hive
+		}
+		set_astral_rift_flag = MHMCL_intervention
+		set_next_astral_rift_event = { id = MHMCL_rift_event.12 } # Shift back to world pacified line
+	}
+	
+	# Warp out
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.19.b
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.19.b.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.19.b.hive
+		}
+		set_astral_rift_flag = MHMCL_warped_out
+		set_next_astral_rift_event = { id = MHMCL_rift_event.12 } # Shift back to world pacified line
+	}
+}
+
+# Flee!
+astral_rift_event = {
+	id = MHMCL_rift_event.20
+	title = MHMCL_rift_event.20.name
+	desc = {
+		trigger = {
+			switch = {
+				trigger = has_astral_rift_flag
+				description_machine_consciousness = {
+					switch = {
+						trigger = has_astral_rift_flag
+						description_exterminator = { text = MHMCL_rift_event.20.desc.exterminator }
+						default = { text = MHMCL_rift_event.20.desc.machine }
+					}
+				}
+				description_hive_mind = {
+					text = MHMCL_rift_event.20.desc.hive
+				}
+				default = {
+					text = MHMCL_rift_event.20.desc
+				}
+			}
+		}
+	}
+	picture = GFX_evt_a_rift_in_space # Placeholder Space Battle
+	show_sound = ap_rift_event_0_astral_wonder # Placeholder Organic and Machine Greeting
+	difficulty = @astral_rift_initial_difficulty
+	astral_rift = yes
+	is_triggered_only = yes
+	# The Lartians pursue us through the scrap belt
+	
+	# Battle it out
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.20.a
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.20.a.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.20.a.hive
+		}
+		set_next_astral_rift_event = { id = MHMCL_rift_event.21 }
+	}
+	
+	# Draw Lartians Away
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.20.b
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.20.b.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.20.b.hive
+		}
+		set_astral_rift_flag = MHMCL_drawn_away
+		set_next_astral_rift_event = { id = MHMCL_rift_event.15 } # Shift back to waiting line
+	}
+}
+
+# Battle it out after fleeing
+astral_rift_event = {
+	id = MHMCL_rift_event.21
+	title = MHMCL_rift_event.21.name
+	desc = {
+		trigger = {
+			switch = {
+				trigger = has_astral_rift_flag
+				description_machine_consciousness = {
+					text = MHMCL_rift_event.21.desc.machine
+				}
+				description_hive_mind = {
+					text = MHMCL_rift_event.21.desc.hive
+				}
+				default = {
+					text = MHMCL_rift_event.21.desc
+				}
+			}
+		}
+	}
+	picture = GFX_evt_a_rift_in_space # Placeholder Space Battle
+	show_sound = ap_rift_event_0_astral_wonder # Placeholder Organic and Machine Greeting
+	difficulty = @astral_rift_initial_difficulty
+	astral_rift = yes
+	is_triggered_only = yes
+	# We engage the Lartians inside the belt of debris. Many ships are crippled, until the Lartians make a tactical retreat and go for the homeworld
+	
+	# Pursue
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.21.a
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.21.a.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.21.a.hive
+		}
+		set_next_astral_rift_event = { id = MHMCL_rift_event.22 }
+	}
+	
+	# Artillery
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.21.b
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.21.b.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.21.b.hive
+		}
+		set_astral_rift_flag = MHMCL_artillery
+		set_next_astral_rift_event = { id = MHMCL_rift_event.12 } # Shift back to world pacified line
+	}
+}
+
+# Pursuing the Lartians en route to homeworld
+astral_rift_event = {
+	id = MHMCL_rift_event.22
+	title = MHMCL_rift_event.22.name
+	desc = {
+		trigger = {
+			switch = {
+				trigger = has_astral_rift_flag
+				description_machine_consciousness = {
+					text = MHMCL_rift_event.22.desc.machine
+				}
+				description_hive_mind = {
+					text = MHMCL_rift_event.22.desc.hive
+				}
+				default = {
+					text = MHMCL_rift_event.22.desc
+				}
+			}
+		}
+	}
+	picture = GFX_evt_a_rift_in_space # Placeholder Space Battle
+	show_sound = ap_rift_event_0_astral_wonder # Placeholder Organic and Machine Greeting
+	difficulty = @astral_rift_initial_difficulty
+	astral_rift = yes
+	is_triggered_only = yes
+	# We reach the Lartians just outside orbit. Their fleets turn and face us, firing at us
+	
+	# Battle it out
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.22.a
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.22.a.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.22.a.hive
+		}
+		set_next_astral_rift_event = { id = MHMCL_rift_event.23 }
+	}
+	
+	# Form formation around homeworld
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.22.b
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.22.b.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.22.b.hive
+		}
+		set_astral_rift_flag = MHMCL_homeworld_shell
+		set_next_astral_rift_event = { id = MHMCL_rift_event.7 } # Shift back to push harder line
+	}
+}
+
+# Battle it out near orbit
+astral_rift_event = {
+	id = MHMCL_rift_event.23
+	title = MHMCL_rift_event.23.name
+	desc = {
+		trigger = {
+			switch = {
+				trigger = has_astral_rift_flag
+				description_machine_consciousness = {
+					text = MHMCL_rift_event.23.desc.machine
+				}
+				description_hive_mind = {
+					text = MHMCL_rift_event.23.desc.hive
+				}
+				default = {
+					text = MHMCL_rift_event.23.desc
+				}
+			}
+		}
+	}
+	picture = GFX_evt_a_rift_in_space # Placeholder Space Battle
+	show_sound = ap_rift_event_0_astral_wonder # Placeholder Organic and Machine Greeting
+	difficulty = @astral_rift_initial_difficulty
+	astral_rift = yes
+	is_triggered_only = yes
+	# We manage to take out many Lartians, but suddenly more appear - They look eerily familiar, almost as if they are the same ships, just repaired.
+	
+	# Warp Out
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.23.a
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.23.a.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.23.a.hive
+		}
+		set_astral_rift_flag = MHMCL_warped_out
+		set_next_astral_rift_event = { id = MHMCL_rift_event.12 } # Shift back to world pacified line
+	}
+	
+	# Form formation around homeworld
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.23.b
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.23.b.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.23.b.hive
+		}
+		set_astral_rift_flag = MHMCL_homeworld_shell
+		set_next_astral_rift_event = { id = MHMCL_rift_event.7 } # Shift back to push harder line
+	}
+}
+
+# Blowing up a nearby moon
+astral_rift_event = {
+	id = MHMCL_rift_event.24
+	title = MHMCL_rift_event.24.name
+	desc = {
+		trigger = {
+			switch = {
+				trigger = has_astral_rift_flag
+				description_machine_consciousness = {
+					text = MHMCL_rift_event.24.desc.machine
+				}
+				description_hive_mind = {
+					text = MHMCL_rift_event.24.desc.hive
+				}
+				default = {
+					text = MHMCL_rift_event.24.desc
+				}
+			}
+		}
+	}
+	picture = GFX_evt_a_rift_in_space # Placeholder planet blowing up
+	show_sound = ap_rift_event_0_astral_wonder # Placeholder Organic and Machine Greeting
+	difficulty = @astral_rift_initial_difficulty
+	astral_rift = yes
+	is_triggered_only = yes
+	# The moon is blow up, but now giant pieces of rock is heading towards the homeworld
+	
+	# Destroy the rocks
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.24.a
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.24.a.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.24.a.hive
+		}
+		set_next_astral_rift_event = { id = MHMCL_rift_event.17 } # Shift back to ships sacrificed line
+	}
+	
+	# Deploy experimental shield on homeworld
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.24.b
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.24.b.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.24.b.hive
+		}
+		allow = {
+			explorer = {
+				has_technology = tech_shields_4
+			}
+		}
+		set_astral_rift_flag = MHMCL_self_shielder
+		set_next_astral_rift_event = { id = MHMCL_rift_event.12 } # Shift back to world pacified line
+	}
+	
+	# Fire on the Lartians
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.24.c
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.24.c.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.24.c.hive
+		}
+		set_next_astral_rift_event = { id = MHMCL_rift_event.25 }
+	}
+}
+
+# Picking of Lartians
+astral_rift_event = {
+	id = MHMCL_rift_event.25
+	title = MHMCL_rift_event.25.name
+	desc = {
+		trigger = {
+			switch = {
+				trigger = has_astral_rift_flag
+				description_machine_consciousness = {
+					text = MHMCL_rift_event.25.desc.machine
+				}
+				description_hive_mind = {
+					text = MHMCL_rift_event.25.desc.hive
+				}
+				default = {
+					text = MHMCL_rift_event.25.desc
+				}
+			}
+		}
+	}
+	picture = GFX_evt_a_rift_in_space # Placeholder planet blowing up
+	show_sound = ap_rift_event_0_astral_wonder # Placeholder Organic and Machine Greeting
+	difficulty = @astral_rift_initial_difficulty
+	astral_rift = yes
+	is_triggered_only = yes
+	# The giant pieces of rock hit the Mircorv Homeworld. As soon as the Mircorv turn off, the Lartians warp/shimmer out
+	
+	# This might be our fault # The world explodes in a supernova, creating a shockwave that completely annihilates the nearby systems
+	option = {
+		name = {
+			trigger = { explorer = { is_gestalt = no } }
+			text = MHMCL_rift_event.25.a
+		}
+		name = {
+			trigger = { explorer = { is_machine_empire = yes } }
+			text = MHMCL_rift_event.25.a.machine
+		}
+		name = {
+			trigger = { explorer = { is_hive_empire = yes } }
+			text = MHMCL_rift_event.25.a.hive
+		}
+		set_astral_rift_flag = MHMCL_neglect
+		# The Mircorv planet explodes
+		#hidden_effect = {
+		#	explorer = {
+		#		country_event = {
+		#			id = MHMCL_consequence_events.2
+		#			days = 10
+		#		}
+		#	}
+		#}
+		explorer = { country_event = { id = MHMCL_consequence_event.2 days = 10 } }
+		finish_astral_rift = yes
+	}
+}
+
+# Event to setup the localization flags on Astral Rifts
+# Directly using the exploring leader causes problem in the persistence of the texts
+# once the leader has finished the exploration or is dead
+# From = Astral Rift being explored
+# FromFrom = Exploring fleet
+country_event = {
+	id = MHMCL_rift_event.9999
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_global_flag = MHMCL_system_spawned
+		has_astral_planes_dlc = yes
+	}
+
+	immediate = {
+		from = {
+			# Cyborg leader
+			if = {
+				limit = {
+					NOT = { has_astral_rift_flag = MHMCL_description_cyborg }
+					leader.species = {
+						has_trait = leader_trait_cyborg
+					}
+				}
+				set_astral_rift_flag = MHMCL_description_cyborg
+			}
+			# Synthetic leader
+			if = {
+				limit = {
+					NOT = { has_astral_rift_flag = MHMCL_description_synthetic }
+					leader.species = {
+						has_trait = leader_trait_synthetic
+					}
+				}
+				set_astral_rift_flag = MHMCL_description_synthetic
+			}
+		}
+	}
+}
