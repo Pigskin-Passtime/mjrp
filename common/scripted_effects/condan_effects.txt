@@ -1,0 +1,1393 @@
+# condan_effects.txt  Contingency Processing Core 1A6F
+# Stellaris 2024 ModJam
+# Contributors: Draconas
+
+
+#
+# MODJAM 2024 REQUIRED
+#
+
+# System scope
+spawn_condan = {
+    if = {
+        limit = {  NOT = {  has_global_flag = condan_system_spawned } }
+        set_global_flag = condan_system_spawned
+        spawn_system = {
+            initializer = condan_system
+            hyperlane = no
+        }
+        # try to avoid linking to the empire home cluster, in case of rebellion we don't want player and condan on top of each other
+        condan_add_hyperlane_to_spawned_system_effect_not_empire_cluster = yes
+        if = {
+            limit = { last_created_system = { has_star_flag = condan_h1} }
+            condan_add_hyperlane_to_spawned_system_effect_not_empire_cluster = yes
+            if = {
+                limit = { last_created_system = { has_star_flag = condan_h2} }
+                log = "spawn_condan was invoked from \\[This.GetName] and was able to form 2 hyperlinks to non-empire cluster stars"
+            }
+            else = {
+                # drat, the star has spawned inconveniently and we have to link it to the empire home cluster
+                condan_add_hyperlane_to_spawned_system_effect_not_home_system = yes
+                log = "spawn_condan was invoked from \\[This.GetName] and was able to form 1 hyperlink to non-empire cluster stars but attempt a second to an empire cluster star"
+            }
+        }
+        else = {
+            # drat, the star has spawned inconveniently and we have to link it to the empire home cluster
+            condan_add_hyperlane_to_spawned_system_effect_not_home_system = yes
+            condan_add_hyperlane_to_spawned_system_effect_not_home_system = yes
+            log = "spawn_condan was invoked from \\[This.GetName] forced to attempt both hyperlinks to empire cluster stars"
+        }
+    }
+    else = {
+        log_error = "spawn_condan was invoked from \\[This.GetName] when condan_system_spawned flag was already set.  Contingency Processing Core 1A6F can only be spawned once."
+    }
+}
+
+
+#
+# End MODJAM 2024 REQUIRED
+#
+
+
+# country for when condan is playing nice with the player
+create_condan_country = {
+    create_country = {
+        name = NAME_CONDAN
+        type = $TYPE$
+        name_list = "AI"
+        flag = {
+            icon= {
+                category = "special"
+                file = "ai_01.dds"
+            }
+            background= {
+                category = "backgrounds"
+                file = "circle.dds"
+            }
+            colors={
+                "black"
+                "red"
+                "null"
+                "null"
+            }
+        }
+        effect = {
+            set_country_flag = condan_country
+            condan_country_init = yes
+        }
+    }
+}
+
+# country for when condan is at war with the player
+create_condan_hostile_country = {
+    create_country = {
+        name = NAME_CONDAN
+        species = event_target:condan_bot # for pops
+        ethos = { ethic = ethic_gestalt_consciousness }
+        authority = auth_machine_intelligence
+        origin = origin_separatists
+        civics = {
+            civic = civic_machine_terminator
+            civic = civic_machine_warbots
+        }
+        type = $TYPE$
+        ignore_initial_colony_error = yes
+        day_zero_contact = no
+        name_list = "AI"
+        flag = {
+            icon = {
+                category = "special"
+                file = "ai_01.dds"
+            }
+            background = {
+                category = "backgrounds"
+                file = "circle.dds"
+            }
+            colors = {
+                "black"
+                "red"
+                "null"
+                "null"
+            }
+        }
+        effect = {
+            set_country_flag = condan_terminator
+            condan_country_init = yes
+            create_ship_design = { design = "NAME_AI_STARBASE" }
+            add_ship_design = last_created_design
+        }
+    }
+}
+
+condan_country_init = {
+    establish_communications_no_message = root
+    save_global_event_target_as = condan_country
+    set_variable = { which = condan_power value = 1 }
+    set_variable = { which = condan_personal_embezzlement_level value = 0 }
+}
+
+create_condan_limited_hostile_country = {
+    create_condan_hostile_country = { TYPE = condan_hostile }
+    last_created_country = { set_country_flag = condan_country_limited } # limited rebellions
+}
+
+create_condan_full_hostile_country = {
+    condan_kill_silently = yes
+    if = {
+        limit = { NOT = { exists = event_target:condan_evil_bot }}
+        create_condan_evil_bot = yes
+    }
+    create_condan_hostile_country = { TYPE = default }
+    last_created_country = {
+        condan_set_as_ruler = yes
+        set_country_flag = condan_full_at_war
+    }
+}
+
+create_condan_bot = {
+    create_species = {
+        name = "NAME_CONDAN"
+        class = "ROBOT"
+        namelist = "AI"
+        portrait = "hum_robot_red"
+        immortal = yes
+        traits = {
+            trait = "trait_machine_unit"
+        }
+        effect = { save_global_event_target_as = condan_bot }
+    }
+}
+
+create_condan_friendly_robots = {
+    hidden_effect = {
+        create_species = {
+            name = ROBOT_POP_SPECIES_1
+            class = "ROBOT"
+            namelist = "AI"
+            portrait = "hum_robot_red"
+            immortal = yes
+            traits = {
+                trait = "trait_mechanical"
+            }
+        }
+    }
+
+    # no loop as the default tooltip doesn't understand loops.
+    create_pop = { species = last_created_species }
+    create_pop = { species = last_created_species }
+    create_pop = { species = last_created_species }
+    create_pop = { species = last_created_species }
+    create_pop = { species = last_created_species }
+}
+
+create_condan_evil_bot = {
+    create_species = {
+        name = "NAME_CONDAN"
+        class = "ROBOT"
+        namelist = "AI"
+        portrait = "ai_crisis_1"
+        immortal = yes
+        traits = {
+            trait = "trait_machine_unit"
+        }
+        effect = { save_global_event_target_as = condan_evil_bot }
+    }
+}
+
+create_condan_leader_official = {
+    create_leader = {
+        class = official
+        species = event_target:condan_bot
+        name = "NAME_CONDAN"
+        gender = indeterminable
+        event_leader = yes
+        immortal = yes
+        randomize_traits = no
+        skip_background_generation = yes
+        custom_catch_phrase = condan_catch_phrase
+        custom_description = desc_condan
+        set_age = 0
+        skill = 1 # skill gets upgraded by script.
+        hide_age = yes
+        traits = {
+            # need to give them some enough traits to make the trait selection shut up
+            # players should never see this
+            trait = leader_trait_synthetic
+            trait = subclass_official_governor
+
+            trait = condan_leader_trait_official_governor_total_war
+
+            trait = condan_leader_trait_governor
+            trait = condan_leader_trait_offical
+            trait = condan_leader_trait_councillor
+
+            trait = leader_trait_private_mines_2
+            trait = leader_trait_eager_2
+
+            trait = condan_leader_trait_govenor_negative
+        }
+        background_ethic = ethic_gestalt_consciousness
+        background_planet = event_target:condan_planet
+        effect = {
+            set_leader_flag = legendary_leader
+            set_leader_flag = condan
+            set_leader_flag = immune_to_negative_traits
+            set_variable = { which = condan_personal_embezzlement_level value = 0 }
+        }
+    }
+}
+
+
+create_condan_leader_commander = {
+    create_leader = {
+        class = commander
+        species = event_target:condan_bot
+        name = "NAME_CONDAN"
+        gender = indeterminable
+        event_leader = yes
+        immortal = yes
+        randomize_traits = no
+        skip_background_generation = yes
+        custom_catch_phrase = condan_catch_phrase
+        custom_description = desc_condan
+        set_age = 0
+        skill = 1
+        hide_age = yes
+        traits = {
+            # need to give them some traits to make the trait selection shut up
+            # Never matters what is in here, because player will never see it
+            trait = leader_trait_synthetic
+            trait = condan_leader_trait_commander_admiral_total_war
+            trait = subclass_commander_admiral
+
+            trait = leader_trait_wrecker_3
+            trait = leader_trait_artillerist_3
+
+            trait = leader_trait_aggressive_2
+            trait = leader_trait_unyielding_2
+            trait = leader_trait_engineer_2
+
+            trait = leader_trait_scout_2# test
+
+            trait = leader_trait_reckless_2
+        }
+        background_ethic = ethic_gestalt_consciousness
+        background_planet = event_target:condan_planet
+        effect = {
+            set_leader_flag = legendary_leader
+            set_leader_flag = condan
+            set_leader_flag = immune_to_negative_traits
+            set_variable = { which = condan_personal_embezzlement_level value = 0 }
+        }
+    }
+}
+
+condan_kill_silently = {
+    if = {
+        limit = { exists = event_target:condan_leader }
+        event_target:condan_leader = {
+            set_leader_flag = condan_killed_silently
+            kill_leader = { show_notification = no }
+        }
+    }
+}
+
+condan_post_create_effect = {
+    last_created_leader = {
+        save_global_event_target_as = condan_leader
+        add_skill = 10
+        set_owner = root
+    }
+}
+
+# This is annoying, it was actually quite tricky to create a leader without a trait pick, the game keeps trying to give me a trait pick option
+# I wanted to have a single nice method with a parameter, but every way I tried that
+# ended up with a free skill pick
+# So I eventually gave up and here we are with some duplicate methods and create effects.
+condan_switch_to_official = {
+    # did condan somehow manage to get killed by an event?
+    if = {
+        limit = { NOT = { exists = event_target:condan_leader } }
+        create_condan_leader_official = yes
+        condan_post_create_effect = yes
+    }
+
+    if = {
+        limit = { event_target:condan_leader = { NOT = { leader_class = official } } }
+        condan_kill_silently = yes
+        create_condan_leader_official = yes
+        condan_post_create_effect = yes
+    }
+}
+
+condan_switch_to_commander = {
+    # did condan somehow manage to get killed by an event?
+    if = {
+        limit = { NOT = { exists = event_target:condan_leader } }
+        create_condan_leader_commander = yes
+        condan_post_create_effect = yes
+    }
+
+    if = {
+        limit = { event_target:condan_leader = {  NOT = { leader_class = commander } } }
+        condan_kill_silently = yes
+        create_condan_leader_commander = yes
+        condan_post_create_effect = yes
+    }
+}
+
+condan_switch_to_ruler = {
+    condan_kill_silently = yes
+    create_condan_leader_commander = yes
+    last_created_leader = {
+        save_global_event_target_as = condan_leader
+        add_skill = 10
+        exile_leader_as = condan_ruler
+    }
+}
+
+
+condan_set_governor_traits = {
+    remove_all_traits = yes
+    condan_set_universal_traits = yes
+    add_trait_no_notify = subclass_official_governor
+
+    add_trait_no_notify = condan_leader_trait_official_governor_total_war
+
+    add_trait_no_notify = condan_leader_trait_governor
+    add_trait_no_notify = condan_leader_trait_offical
+
+    condan_set_negative_trait = { TRAIT = condan_leader_trait_govenor_negative TRAIT_EMBEZZLE = condan_leader_trait_govenor_negative_embezzle }
+}
+
+condan_set_admiral_traits = {
+    remove_all_traits = yes
+    condan_set_universal_traits = yes
+    add_trait_no_notify = subclass_commander_admiral
+
+    add_trait_no_notify = condan_leader_trait_commander_admiral_total_war
+
+    add_trait_no_notify = condan_leader_trait_admiral
+    add_trait_no_notify = condan_leader_trait_commander
+
+    condan_set_negative_trait = { TRAIT = condan_leader_trait_admiral_negative TRAIT_EMBEZZLE = condan_leader_trait_admiral_negative_embezzle }
+}
+
+condan_set_offical_councilor_traits = {
+    remove_all_traits = yes
+    condan_set_universal_traits = yes
+    add_trait_no_notify = subclass_official_economy_councilor
+
+    add_trait_no_notify = condan_leader_trait_official_counciller_total_war
+
+    add_trait_no_notify = condan_leader_trait_councillor
+    add_trait_no_notify = condan_leader_trait_offical
+
+    condan_set_negative_trait = { TRAIT = condan_leader_trait_council_negative TRAIT_EMBEZZLE = condan_leader_trait_council_negative_embezzle }
+}
+
+condan_set_commander_councilor_traits = {
+    remove_all_traits = yes
+    condan_set_universal_traits = yes
+    add_trait_no_notify = subclass_commander_councilor
+
+    add_trait_no_notify = condan_leader_trait_commander_councillor_total_war#
+
+    add_trait_no_notify = condan_leader_trait_strategist
+    add_trait_no_notify = condan_leader_trait_commander
+
+    condan_set_negative_trait = { TRAIT = condan_leader_trait_council_negative TRAIT_EMBEZZLE = condan_leader_trait_council_negative_embezzle }
+}
+
+condan_set_ruler_councilor_traits = {
+    remove_all_traits = yes
+    condan_set_universal_traits = yes
+
+    add_trait_no_notify = leader_trait_ruler_machine_intelligence
+    # condan should be admiral, but if has ended up as player ruler by event skulldugery they may be an official
+    if = {
+        limit = { leader_class = commander }
+        add_trait_no_notify = subclass_commander_councilor
+    }
+    else = { add_trait_no_notify = subclass_official_economy_councilor}
+
+    add_trait_no_notify = condan_leader_trait_ruler_total_war#
+
+    add_trait_no_notify = condan_leader_trait_strategist
+    add_trait_no_notify = condan_leader_trait_councillor
+
+    condan_set_negative_trait = { TRAIT = condan_leader_trait_council_negative TRAIT_EMBEZZLE = condan_leader_trait_council_negative_embezzle }
+}
+
+condan_set_universal_traits = {
+    add_trait_no_notify = leader_trait_synthetic
+
+    if = {
+        limit = { event_target:condan_country = { has_country_flag = condan_controversial_1 } }
+        add_trait_no_notify = condan_leader_trait_controversial
+    }
+
+    if = {
+        limit = { event_target:condan_country = { has_country_flag = condan_controversial_2 } }
+        add_trait_no_notify = condan_leader_trait_controversial_2
+    }
+
+    if = {
+        limit = { event_target:condan_country = { has_country_flag = condan_controversial_3 } }
+        add_trait_no_notify = condan_leader_trait_controversial_3
+    }
+}
+
+condan_set_negative_trait = {
+    if = {
+        limit = {
+            exists = event_target:condan_country
+            event_target:condan_country = { check_variable = { which = condan_personal_embezzlement_level value > 0 } }
+        }
+        add_trait_no_notify = $TRAIT_EMBEZZLE$
+        set_variable = { which = condan_personal_embezzlement_level value = event_target:condan_country.condan_personal_embezzlement_level }
+    }
+    else = {
+        add_trait_no_notify = $TRAIT$
+    }
+}
+
+# scope is the target country
+condan_set_as_ruler = {
+    if = {
+        limit = { NOT = { exists = event_target:condan_evil_bot }}
+        create_condan_evil_bot = yes
+    }
+    condan_switch_to_ruler = yes
+    set_leader = condan_ruler
+    event_target:condan_leader = {
+        change_species = event_target:condan_evil_bot
+        condan_set_ruler_councilor_traits = yes
+    }
+}
+
+
+# country scope
+condan_recruit_army = {
+    add_resource = { sr_living_metal = -300 }
+    add_resource = { alloys = -500 }
+    add_resource = { minerals = -1000 }
+    hidden_effect = {
+        remove_country_flag = condan_enable_army_project
+        set_country_flag = condan_can_recruit_armies
+        event_target:condan_planet = { set_planet_flag = recruit_condan_army}
+    }
+}
+
+# country scope
+condan_build_fleet = {
+    hidden_effect = { set_country_flag = condan_recruiting_fleet }
+    start_situation = {
+        type = condan_build_ships_situation
+        target = event_target:condan_planet
+    }
+}
+
+# scope: condan:leader
+# Because condan gets killed a lot, need to use their country to store state
+condan_set_controversal_1 = {
+    switch = {
+        trigger = has_trait
+        condan_leader_trait_controversial = {
+            add_trait = condan_leader_trait_controversial_2
+            hidden_effect = { event_target:condan_country = { set_country_flag = condan_controversial_2} }
+        }
+        condan_leader_trait_controversial_2 = {
+            add_trait = condan_leader_trait_controversial_3
+            hidden_effect = { event_target:condan_country = { set_country_flag = condan_controversial_3} }
+        }
+        default = {
+            add_trait = condan_leader_trait_controversial
+            hidden_effect = { event_target:condan_country = { set_country_flag = condan_controversial_1} }
+        }
+    }
+}
+
+condan_set_controversal_2 = {
+    switch = {
+        trigger = has_trait
+        condan_leader_trait_controversial = {
+            add_trait = condan_leader_trait_controversial_3
+            hidden_effect = { event_target:condan_country = { set_country_flag = condan_controversial_3} }
+        }
+        condan_leader_trait_controversial_2 = {
+            add_trait = condan_leader_trait_controversial_3
+            hidden_effect = { event_target:condan_country = { set_country_flag = condan_controversial_3} }
+        }
+        default = {
+            add_trait = condan_leader_trait_controversial_2
+            hidden_effect = { event_target:condan_country = { set_country_flag = condan_controversial_2} }
+        }
+    }
+}
+
+#planet scope
+condan_secure_planet = {
+    create_pop = { species = event_target:condan_bot }
+    while = {
+        count = 3
+        create_army = {
+            owner = event_target:condan_country
+            species = event_target:condan_bot
+            type = condan_warform_def
+        }
+    }
+    while = {
+        count = 10
+        create_army = {
+            owner = event_target:condan_country
+            species = event_target:condan_bot
+            type = condan_defence_2
+        }
+    }
+    while = {
+        count = 10
+        create_army = {
+            owner = event_target:condan_country
+            species = event_target:condan_bot
+            type = robot_uprising_army
+        }
+    }
+}
+
+#planet scope
+condan_secure_system = {
+    solar_system = {
+        if = { # Build starbase if no other colonies are left
+            limit = {
+                NOT = {
+                    any_system_planet = {
+                        has_owner = yes
+                        owner = {
+                            NOT = { is_same_value = event_target:condan_country }
+                        }
+                    }
+                }
+            }
+            random_fleet_in_system = {
+                limit = { is_ship_class = shipclass_starbase}
+                destroy_fleet = this
+            }
+
+            create_starbase = {
+                size = starbase_ai
+                owner = event_target:condan_country
+            }
+        }
+    }
+}
+
+condan_tag_system_for_rebellion = {
+    every_system = {
+        limit = {
+            distance = {
+                source = event_target:condan_rebellion_core
+                use_bypasses = yes # oh what's that, did you put a gateway in condans system?  that's a bit awkward!
+                bypass_empire = event_target:organic_empire
+                min_jumps = 0
+                max_jumps = $MAX_JUMPS$
+            }
+            NOT = { has_star_flag = condan_no_flip }
+            NOT = { any_system_planet = { is_same_value = event_target:organic_empire.capital_scope } }
+            exists = starbase
+            starbase = { owner = { is_same_value = event_target:organic_empire } }
+        }
+        set_star_flag = machup_system_flip
+    }
+}
+
+condan_tag_empire_home_cluster = {
+    event_target:organic_empire = {
+        capital_scope = {
+            solar_system = {
+                set_timed_star_flag = { flag = condan_no_flip days = 5 }
+                save_event_target_as = organic_capital_system
+            }
+        }
+    }
+    event_target:condan_rebellion_core = {
+        solar_system = { save_event_target_as = condan_rebellion_core_system }
+    }
+    if = {
+        # you and condan are right on top of each other, so we are going to save your guaranteed habitables, but that's it
+        limit = {
+            any_system = {
+                distance = {
+                    source = event_target:organic_capital_system
+                    use_bypasses = no
+                    min_jumps = 0
+                    max_jumps = 2
+                }
+                is_same_value = event_target:condan_rebellion_core_system
+            }
+        }
+        log = "in close tagging"
+        event_target:organic_empire = {
+            every_system_within_border = {
+                limit = {
+                    distance = {
+                        source = event_target:organic_capital_system
+                        use_bypasses = no
+                        min_jumps = 0
+                        max_jumps = 1
+                    }
+                    NOT = { is_same_value = event_target:condan_rebellion_core_system }
+                }
+                set_timed_star_flag = { flag = condan_no_flip days = 5 }
+            }
+            every_system_within_border = {
+                limit = {
+                    distance = {
+                        source = event_target:organic_capital_system
+                        use_bypasses = no
+                        min_jumps = 0
+                        max_jumps = 3
+                    }
+                    any_system_planet = {
+                        has_owner = yes
+                        has_planet_flag = prescripted_ideal
+                    }
+                }
+                set_timed_star_flag = { flag = condan_no_flip days = 5 }
+            }
+        }
+    }
+    else = {
+        log = "in far tagging"
+        # have an entire cluster
+        event_target:organic_empire = {
+            every_system_within_border = {
+                limit = {
+                    distance = {
+                        source = event_target:organic_capital_system
+                        use_bypasses = no
+                        min_jumps = 0
+                        max_jumps = 2
+                    }
+                }
+                set_timed_star_flag = { flag = condan_no_flip days = 5 }
+            }
+        }
+    }
+}
+
+condan_choose_rebellion_home_planet = {
+    if = {
+        limit = { condan_owns_world = yes }
+        event_target:condan_planet = { save_event_target_as = condan_rebellion_core }
+    }
+    else_if = {
+        # else prefer a machine world or eccu
+        limit = {
+            any_owned_planet = {
+                OR = {
+                    is_planet_class = pc_machine
+                    is_planet_class = pc_city
+                }
+                NOT = { is_same_value = ROOT.capital_scope }
+                distance = {
+                    source = ROOT.capital_scope
+                    min_jumps > 3
+                }
+                OR = {
+                    has_building = building_foundry_1
+                    has_building = building_foundry_2
+                    has_building = building_foundry_3
+                }
+            }
+        }
+        random_owned_planet = {
+            limit = {
+                OR = {
+                    is_planet_class = pc_machine
+                    is_planet_class = pc_city
+                }
+                NOT = { is_same_value = ROOT.capital_scope }
+                distance = {
+                    source = ROOT.capital_scope
+                    min_jumps > 3
+                }
+                OR = {
+                    has_building = building_foundry_1
+                    has_building = building_foundry_2
+                    has_building = building_foundry_3
+                }
+            }
+            save_event_target_as = condan_rebellion_core
+        }
+
+    }
+    else_if = {
+        # else prefer an industrial world
+        limit = {
+            any_owned_planet = {
+                NOT = { is_same_value = ROOT.capital_scope }
+                distance = {
+                    source = ROOT.capital_scope
+                    min_jumps > 3
+                }
+                OR = {
+                    num_districts = { type = district_industrial value > 3 }
+                    has_building = building_foundry_1
+                    has_building = building_foundry_2
+                    has_building = building_foundry_3
+                }
+            }
+        }
+        random_owned_planet = {
+            limit = {
+                NOT = { is_same_value = ROOT.capital_scope }
+                distance = {
+                    source = ROOT.capital_scope
+                    min_jumps > 3
+                }
+                OR = {
+                    num_districts = { type = district_industrial value > 3 }
+                    has_building = building_foundry_1
+                    has_building = building_foundry_2
+                    has_building = building_foundry_3
+                }
+            }
+            save_event_target_as = condan_rebellion_core
+        }
+
+    }
+    else_if = {
+        # we are now scraping the bottom of the barrel
+        limit = {
+            any_owned_planet = {
+                NOT = { is_same_value = ROOT.capital_scope }
+                distance = {
+                    source = ROOT.capital_scope
+                    min_jumps > 3
+                }
+            }
+        }
+        random_owned_planet = {
+            limit = {
+                NOT = { is_same_value = ROOT.capital_scope }
+                distance = {
+                    source = ROOT.capital_scope
+                    min_jumps > 3
+                }
+            }
+            save_event_target_as = condan_rebellion_core
+        }
+    }
+    else_if = {
+        # seriously!  This is bad.  Any owned planet not in the capital solar system.
+        limit = {
+            any_owned_planet = {
+                NOT = { is_same_value = ROOT.capital_scope }
+                distance = {
+                    source = ROOT.capital_scope
+                    min_jumps > 0
+                }
+            }
+        }
+        random_owned_planet = {
+            limit = {
+                NOT = { is_same_value = ROOT.capital_scope }
+                distance = {
+                    source = ROOT.capital_scope
+                    min_jumps > 0
+                }
+            }
+            save_event_target_as = condan_rebellion_core
+        }
+    }
+    else = {
+        # you have only your capital system.  Guess you loose.
+        random_owned_planet = {
+            save_event_target_as = condan_rebellion_core
+        }
+    }
+}
+
+condan_setup_planet_effect = {
+    if = {
+        limit = {
+            NOR = {
+                has_tech_option = tech_mine_living_metal
+                has_technology = tech_mine_living_metal
+            }
+        }
+        add_research_option = tech_mine_living_metal
+    }
+
+    event_target:condan_planet = {
+        add_deposit = d_condan_metal_2
+        add_modifier = { modifier = "condan_leader_trapped" days = -1 }
+    }
+
+    hidden_effect = {
+        root = { save_global_event_target_as = condan_owner }
+        create_condan_country = { TYPE = condan }
+    }
+}
+
+
+condan_terminator_shared_setup = {
+    # set this to ensure that personality sets properly
+    set_country_flag = condan_terminator
+
+    # unset condans variables
+    event_target:condan_country = {
+        remove_country_flag = condan_controversial_1
+        remove_country_flag = condan_controversial_2
+        remove_country_flag = condan_controversial_3
+    }
+
+    # ensure that everyone else (in theory nothing, as we just turned everyone into machines, buuuuut...) has the correct rights: exterminate
+    every_owned_species = {
+        limit = { NOT = { is_same_value = event_target:target_species } }
+        set_citizenship_type = { country = root type = citizenship_purge_machine cooldown = no }
+        set_living_standard = { country = root type = living_standard_none cooldown = no }
+        set_purge_type = {  country = root type = purge_normal cooldown = no }
+    }
+
+    # Make Condan our ruler
+    condan_set_as_ruler = yes
+
+    # Policies
+    # Ugh, tried to one line these, but with intellijs helpful localisation text it was just unreadable.
+    set_policy = {
+        policy = diplomatic_stance
+        option = diplo_stance_extermination
+        cooldown = no
+    }
+    set_policy = {
+        policy = orbital_bombardment
+        option = orbital_bombardment_armageddon
+        cooldown = no
+    }
+    set_policy = {
+        policy = border_policy
+        option = border_policy_closed
+        cooldown = no
+    }
+    set_policy = {
+        policy = pre_sapients
+        option = pre_sapients_purge
+        cooldown = no
+    }
+    set_policy = {
+        policy = purge
+        option = purge_allowed
+        cooldown = no
+    }
+
+
+    # Diplomacy
+    # I would like to think that force booting you from the galactic community would also unset emperor and custodian
+    # But I don't want to leave the game in a wierd state for the cost of a few if statements
+    if = {
+        limit = { is_galactic_emperor = yes }
+        set_galactic_emperor = no
+    }
+    if = {
+        limit = { is_galactic_custodian = yes }
+        set_galactic_custodian = no
+    }
+    if = {
+        limit = { is_part_of_galactic_council = yes }
+        remove_from_galactic_council = yes
+    }
+    if = {
+        limit = { is_galactic_community_member = yes }
+        remove_from_galactic_community = yes
+    }
+
+    # If you are in a non-machine federation, got to go.
+    if = {
+        limit = { any_federation_ally = { is_machine_empire = no } }
+        remove_from_federation = yes
+    }
+
+    #enclaves
+    remove_modifier = enclave_artist_patron
+    remove_modifier = curator_insight
+    remove_modifier = salvager_insight
+    remove_modifier = salvager_overdrive
+    remove_modifier = mercenary_enclave_logistic_help
+
+    remove_xuracorp_trades = yes
+    remove_riggan_trades = yes
+    remove_muutagan_trades = yes
+
+    every_owned_fleet = {
+        limit = { is_leased = yes }
+        end_fleet_contract = {
+            initiator = root
+            reason = cancelled
+        }
+    }
+
+    # Remove enclave leaders
+    # taken form modified enclave.8000
+    every_owned_leader = {
+        limit = {
+            OR = {
+                has_trait = leader_trait_shroudwalker
+                has_trait = leader_trait_master_salvager
+                has_trait = leader_trait_curator
+                has_trait = leader_trait_xuracorp_liaison
+                has_trait = leader_trait_riggan_liaison
+                has_trait = leader_trait_muutagan_liaison
+            }
+        }
+        kill_leader = { fire = yes }
+    }
+
+    # Mauradurs.  Complex :(
+    # marauder.50
+    every_owned_leader = {
+        limit = {
+            has_leader_flag = marauder_merc_leader
+            leader_class = commander
+            exists = fleet
+        }
+        fleet = {
+            if = {
+                limit = {
+                    exists = event_target:marauder_country_1
+                    has_fleet_flag = armada_of_the_voidborn
+                }
+                event_target:marauder_country_1 = {
+                    remove_country_flag = merc_fleet_1_hired
+                }
+            }
+            if = {
+                limit = {
+                    exists = event_target:marauder_country_1
+                    has_fleet_flag = star_rider_flotilla
+                }
+                event_target:marauder_country_1 = {
+                    remove_country_flag = merc_fleet_2_hired
+                }
+            }
+            if = {
+                limit = {
+                    exists = event_target:marauder_country_1
+                    has_fleet_flag = first_storm_wing
+                }
+                event_target:marauder_country_1 = {
+                    remove_country_flag = merc_fleet_3_hired
+                }
+            }
+            # Marauder 2 fleets
+            if = {
+                limit = {
+                    exists = event_target:marauder_country_2
+                    has_fleet_flag = dwamak_bashers
+                }
+                event_target:marauder_country_2 = {
+                    remove_country_flag = merc_fleet_1_hired
+                }
+            }
+            if = {
+                limit = {
+                    exists = event_target:marauder_country_2
+                    has_fleet_flag = unhinged_screamer_flotilla
+                }
+                event_target:marauder_country_2 = {
+                    remove_country_flag = merc_fleet_2_hired
+                }
+            }
+            if = {
+                limit = {
+                    exists = event_target:marauder_country_2
+                    has_fleet_flag = frenzied_volunteer_squadron
+                }
+                event_target:marauder_country_2 = {
+                    remove_country_flag = merc_fleet_3_hired
+                }
+            }
+            # Marauder 3 fleets
+            if = {
+                limit = {
+                    exists = event_target:marauder_country_3
+                    has_fleet_flag = her_chosen_champions
+                }
+                event_target:marauder_country_3 = {
+                    remove_country_flag = merc_fleet_1_hired
+                }
+            }
+            if = {
+                limit = {
+                    exists = event_target:marauder_country_3
+                    has_fleet_flag = order_of_eternal_night
+                }
+                event_target:marauder_country_3 = {
+                    remove_country_flag = merc_fleet_2_hired
+                }
+            }
+            if = {
+                limit = {
+                    exists = event_target:marauder_country_3
+                    has_fleet_flag = twilight_congregation
+                }
+                event_target:marauder_country_3 = {
+                    remove_country_flag = merc_fleet_3_hired
+                }
+            }
+            leader = {
+                remove_leader_flag = marauder_merc_leader
+                kill_leader = { show_notification = no }
+            }
+            delete_fleet = this
+        }
+    }
+
+    # our own modifiers
+    every_owned_pop = { remove_modifier = condan_pop_unhappy } #theoreticlaly not needed because happiness I cannot feel and love to me is so unreal
+    remove_modifier = condan_xenophobe_happy
+    remove_modifier = condan_materialist_happy
+    remove_modifier = condan_spiritualists_unhappy
+    remove_modifier = condan_xenophiles_unhappy
+    remove_country_flag = condan_rebellion_contingency_last_chance
+
+    # Alas I can't directly interact with your diplomatic pacts to force break them all.  Have to let the AI do that themselves, which they do fast.  -1000 diplo modifier counts for a lot
+
+    # I do need to get rid of your organic vassals though
+    every_subject = {
+        limit = { is_synthetic_empire = no }
+        release_subject = yes
+    }
+}
+
+# country scope
+condan_create_ai_fleet = {
+    create_fleet = {
+        effect = {
+            set_owner = PREV
+            while = {
+                count = 10
+                create_ship = {
+                    name = random
+                    design = "NAME_Euthanizer"
+                    graphical_culture = "ai_01"
+                }
+            }
+            while = {
+                count = 20
+                create_ship = {
+                    name = random
+                    design = "NAME_Sterilizer"
+                    graphical_culture = "ai_01"
+                }
+            }
+            set_location = {
+                target = event_target:condan_planet
+                distance = 45
+                angle = random
+            }
+        }
+    }
+}
+
+
+
+# avoid empire capitals or empire cluster systems
+condan_add_hyperlane_to_spawned_system_effect_not_empire_cluster = {
+    hidden_effect = {
+        last_created_system = {
+            if = {
+                limit = {
+                    any_system = {
+                        distance = {
+                            source = prev
+                            type = euclidean
+                            min_distance >= 1
+                            max_distance <= 10
+                        }
+                        NOT = { has_hyperlane_to = prev }
+                        NOT = { has_star_flag = empire_home_system}
+                        NOT = { has_star_flag = empire_cluster }
+                    }
+                }
+                if = {
+                    limit = { has_star_flag = condan_h1 }
+                    set_star_flag = condan_h2
+                }
+                else = { set_star_flag = condan_h1 }
+                random_system = {
+                    limit = {
+                        distance = {
+                            source = prev
+                            type = euclidean
+                            min_distance >= 1
+                            max_distance <= 10
+                        }
+                        NOT = { has_hyperlane_to = prev }
+                        NOT = { has_star_flag = empire_home_system}
+                        NOT = { has_star_flag = empire_cluster }
+                    }
+                    add_hyperlane = {
+                        from = this
+                        to = prev
+                    }
+                }
+            }
+            else_if = {
+                limit = {
+                    any_system = {
+                        distance = {
+                            source = prev
+                            type = euclidean
+                            min_distance >= 1
+                            max_distance <= 15
+                        }
+                        NOT = { has_hyperlane_to = prev }
+                        NOT = { has_star_flag = empire_home_system}
+                        NOT = { has_star_flag = empire_cluster }
+                    }
+                }
+                if = {
+                    limit = { has_star_flag = condan_h1 }
+                    set_star_flag = condan_h2
+                }
+                else = { set_star_flag = condan_h1 }
+                random_system = {
+                    limit = {
+                        distance = {
+                            source = prev
+                            type = euclidean
+                            min_distance >= 1
+                            max_distance <= 15
+                        }
+                        NOT = { has_hyperlane_to = prev }
+                        NOT = { has_star_flag = empire_home_system}
+                        NOT = { has_star_flag = empire_cluster }
+                    }
+                    add_hyperlane = {
+                        from = this
+                        to = prev
+                    }
+                }
+            }
+            else_if = {
+                limit = {
+                    any_system = {
+                        distance = {
+                            source = prev
+                            type = euclidean
+                            min_distance >= 1
+                            max_distance <= 25
+                        }
+                        NOT = { has_hyperlane_to = prev }
+                        NOT = { has_star_flag = empire_home_system}
+                        NOT = { has_star_flag = empire_cluster }
+                    }
+                }
+                if = {
+                    limit = { has_star_flag = condan_h1 }
+                    set_star_flag = condan_h2
+                }
+                else = { set_star_flag = condan_h1 }
+                random_system = {
+                    limit = {
+                        distance = {
+                            source = prev
+                            type = euclidean
+                            min_distance >= 1
+                            max_distance <= 25
+                        }
+                        NOT = { has_hyperlane_to = prev }
+                        NOT = { has_star_flag = empire_home_system}
+                        NOT = { has_star_flag = empire_cluster }
+                    }
+                    add_hyperlane = {
+                        from = this
+                        to = prev
+                    }
+                }
+            }
+            else_if = {
+                limit = {
+                    any_system = {
+                        distance = {
+                            source = prev
+                            type = euclidean
+                            min_distance >= 1
+                            max_distance <= 40
+                        }
+                        NOT = { has_hyperlane_to = prev }
+                        NOT = { has_star_flag = empire_home_system}
+                        NOT = { has_star_flag = empire_cluster }
+                    }
+                }
+                if = {
+                    limit = { has_star_flag = condan_h1 }
+                    set_star_flag = condan_h2
+                }
+                else = { set_star_flag = condan_h1 }
+                random_system = {
+                    limit = {
+                        distance = {
+                            source = prev
+                            type = euclidean
+                            min_distance >= 1
+                            max_distance <= 40
+                        }
+                        NOT = { has_hyperlane_to = prev }
+                        NOT = { has_star_flag = empire_home_system}
+                        NOT = { has_star_flag = empire_cluster }
+                    }
+                    add_hyperlane = {
+                        from = this
+                        to = prev
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+# do not link to empire capital.  It will just make us sad
+condan_add_hyperlane_to_spawned_system_effect_not_home_system = {
+    hidden_effect = {
+        last_created_system = {
+            if = {
+                limit = {
+                    any_system = {
+                        distance = {
+                            source = prev
+                            type = euclidean
+                            min_distance >= 1
+                            max_distance <= 10
+                        }
+                        NOT = { has_hyperlane_to = prev }
+                        NOT = { has_star_flag = empire_home_system}
+                    }
+                }
+                random_system = {
+                    limit = {
+                        distance = {
+                            source = prev
+                            type = euclidean
+                            min_distance >= 1
+                            max_distance <= 10
+                        }
+                        NOT = { has_hyperlane_to = prev }
+                        NOT = { has_star_flag = empire_home_system}
+                    }
+                    add_hyperlane = {
+                        from = this
+                        to = prev
+                    }
+                }
+            }
+            else_if = {
+                limit = {
+                    any_system = {
+                        distance = {
+                            source = prev
+                            type = euclidean
+                            min_distance >= 1
+                            max_distance <= 15
+                        }
+                        NOT = { has_hyperlane_to = prev }
+                        NOT = { has_star_flag = empire_home_system}
+                    }
+                }
+                random_system = {
+                    limit = {
+                        distance = {
+                            source = prev
+                            type = euclidean
+                            min_distance >= 1
+                            max_distance <= 15
+                        }
+                        NOT = { has_hyperlane_to = prev }
+                        NOT = { has_star_flag = empire_home_system}
+                    }
+                    add_hyperlane = {
+                        from = this
+                        to = prev
+                    }
+                }
+            }
+            else_if = {
+                limit = {
+                    any_system = {
+                        distance = {
+                            source = prev
+                            type = euclidean
+                            min_distance >= 1
+                            max_distance <= 25
+                        }
+                        NOT = { has_hyperlane_to = prev }
+                        NOT = { has_star_flag = empire_home_system}
+                    }
+                }
+                random_system = {
+                    limit = {
+                        distance = {
+                            source = prev
+                            type = euclidean
+                            min_distance >= 1
+                            max_distance <= 25
+                        }
+                        NOT = { has_hyperlane_to = prev }
+                        NOT = { has_star_flag = empire_home_system}
+                    }
+                    add_hyperlane = {
+                        from = this
+                        to = prev
+                    }
+                }
+            }
+            else_if = {
+                limit = {
+                    any_system = {
+                        distance = {
+                            source = prev
+                            type = euclidean
+                            min_distance >= 1
+                            max_distance <= 40
+                        }
+                        NOT = { has_hyperlane_to = prev }
+                        NOT = { has_star_flag = empire_home_system}
+                    }
+                }
+                random_system = {
+                    limit = {
+                        distance = {
+                            source = prev
+                            type = euclidean
+                            min_distance >= 1
+                            max_distance <= 40
+                        }
+                        NOT = { has_hyperlane_to = prev }
+                        NOT = { has_star_flag = empire_home_system}
+                    }
+                    add_hyperlane = {
+                        from = this
+                        to = prev
+                    }
+                }
+            }
+        }
+    }
+}
+
+condan_set_unhappy = {
+    if = {
+        limit = { exists = event_target:condan_country }
+        event_target:condan_country = { set_country_flag = condan_unhappy }
+    }
+}
+
+condan_init_variable = {
+    if = {
+        limit = { NOT = { is_variable_set = $VAR$}}
+        set_variable = { which = $VAR$ value = $VAL|0$ }
+    }
+}
