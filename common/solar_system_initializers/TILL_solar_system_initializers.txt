@@ -1,0 +1,186 @@
+TILL_breachpoint_01 = {
+	class = "sc_pulsar"
+  	flags = { THE_INTELEGENCE_SPAWN_SYSTEM }
+	name = "Breachpoint"
+	usage = misc_system_init
+	asteroid_belt = {
+		type = rocky_asteroid_belt
+		radius = 50
+	}
+	max_instances = 1
+
+	usage_odds = {
+		base = 50  #Will be Triggered through a scripted effect by the Modjam
+	}
+	#Remove # before final submition
+	#usage_odds = {
+	#	base = 0
+	#	modifier = {
+	#		factor = 100
+	#		has_global_flag = Fragment_allowed
+	#	}
+	#
+	#}
+
+	planet = {
+		class = star
+		size = 10
+		orbit_distance = 10
+		init_effect = {
+			prevent_anomaly = yes
+			#set_star_flag = THE_INTELEGENCE_SPAWN_SYSTEM
+		}
+
+	}
+
+	planet = {
+		class = pc_black_hole
+		size = 8
+		name = "Breachpoint"
+		change_orbit = 15
+		init_effect = {
+			prevent_anomaly = yes
+		}
+	}
+ 
+	change_orbit = 35
+	planet = {
+		class = pc_shattered
+		size = 15
+		orbit_angle = {min = 1 max = 360}
+	}
+
+	planet = {
+		class = pc_broken
+		size = 12
+		orbit_angle = {min = 1 max = 360}
+	}
+
+	planet = {
+		class = pc_gas_giant
+		size = 27
+		orbit_angle = {min = 1 max = 360}
+	}
+
+	planet = {
+		class = pc_barren_cold
+		size = 20
+		orbit_angle = 180
+
+
+		moon = {
+			class = pc_barren_cold
+			size = 8
+			orbit_distance = 5
+
+		}
+	}
+
+	init_effect = {
+		create_species = {
+			name = Fragments
+			class = MACHINE
+			traits = {
+				trait = trait_machine_unit
+			}
+			portrait = sd_avi_robot
+			effect = {
+				save_global_event_target_as = FRAGMENTSPECIES
+			}
+		}
+		create_country = {
+			name = "The Intelegence Ship"
+			type = the_intelegence_ship
+			ignore_initial_colony_error = yes
+		}
+		last_created_country = {
+			save_global_event_target_as = THEINTELEGENCE
+		}
+		spawn_megastructure = {
+			type = Y_gate_base
+			orbit_distance = 200
+			orbit_angle = 180
+			
+			init_effect = {
+				set_owner = event_target:THEINTELEGENCE
+				save_global_event_target_as = YGATEINTELEGENCE
+			}
+		}
+			create_fleet = {
+				name = "Intelegence"
+				settings = {
+					is_boss = yes
+				}
+				effect = {
+					set_owner = event_target:THEINTELEGENCE
+					create_ship = {
+						name = "THE INTELEGENCE"
+						design = "NAME_TILLA_SHIP"
+						graphical_culture = "npf_01_dirty"
+						
+						effect = {
+							set_ship_flag = FLAGINTELEGENCESHIP
+							set_disable_at_health = 0.05
+							save_global_event_target_as = GTINTELEGENCESHIP
+						}
+					}
+					set_location = {
+						target = event_target:YGATEINTELEGENCE
+						distance = 10
+						angle = 0
+					}
+				}
+			}
+
+		}
+	}
+
+
+
+TILL_final_02 = {
+	class = sc_m
+	usage = misc_system_init
+	name = "Last Light"
+	usage_odds = 0
+	init_effect = {
+		set_star_flag = TILLA_darkness
+	}
+	flags = { TILLA_darkness }
+
+
+
+	planet = {
+		class = star
+		size = 35
+		name = "Last Light"
+		init_effect = {
+			prevent_anomaly = yes
+			#set_star_flag = TILLA_darkness
+		}
+	}
+
+	planet = {
+		class = pc_barren_cold
+		change_orbit = 45
+		size = 16
+		init_effect = {
+			save_global_event_target_as = FINALFRAGMENTSHOWDOWN
+		}
+	}
+
+	planet = {
+		class = pc_barren_cold
+		change_orbit = 45
+		size = 12
+	}
+
+
+	planet = {
+		class = pc_gas_giant
+	}
+
+	planet = {
+		class = pc_gas_giant
+	}
+
+}

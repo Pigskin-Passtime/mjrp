@@ -1,0 +1,88 @@
+utility_component_template = {
+	key = "singularity_drive"
+	size = small
+	icon = "GFX_ship_part_singularity_drive"
+	icon_frame = 1
+	power = 150
+	resources = {
+		category = ship_components
+		cost = {
+			alloys = 50
+			sr_dark_matter = 15
+			exotic_gases = 15
+		}
+		upkeep = {
+			sr_dark_matter = 1
+		}
+	}
+	ftl = yes
+	jumpdrive = yes
+	ship_modifier = {
+		ship_disengage_opportunities_add = 2
+		ship_windup_mult = 2
+		ship_ftl_jumpdrive_range_mult = 1
+		ship_speed_mult = .85
+		ship_shield_add = -50
+	}
+
+	ai_weight = {
+		weight = 5
+	}
+
+	class_restriction = { shipclass_military shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport shipclass_military_special shipclass_starbase }
+	prerequisites = { "tech_singularity_drive" }
+	component_set = "ftl_components"
+}
+
+weapon_component_template = {
+	key = "dark_flare_cannon"
+	size = extra_large
+	type = instant
+
+	icon = "GFX_ship_part_dark_flare_cannon"
+	icon_frame = 1
+
+	damage = { min = 9998 max = 9999 }
+    windup = { min = 180 max = 360}
+    total_fire_time = 1
+    range = 280
+    accuracy = 1.0
+	shield_penetration = 1.0
+	armor_penetration = 1.0
+	power = -750
+
+	firing_arc = 90.0
+	min_range = 10.0
+	use_ship_kill_target = no
+
+	prerequisites = { "tech_dark_flare_cannon" }
+	component_set = "dark_flare_cannon"
+	projectile_gfx = "dark_flare_cannon_file"
+	tags = { weapon_type_energy weapon_role_artillery x_slot }
+	ai_tags = { weapon_role_artillery artillery }
+	ai_tag_weight = 0
+	resources = {
+		category = ship_components
+		cost = {
+			alloys = 150
+			sr_dark_matter = 50
+		}
+		upkeep = {
+			alloys = 5
+			sr_dark_matter = 1
+		}
+	}
+
+	target_weights = {
+		titan = 3
+		battleship = 2
+	}
+
+	ai_weight = {
+		weight = 1
+		modifier = {
+			factor = 0.0
+			no_resource_for_component = { RESOURCE = sr_dark_matter }
+		}
+	}
+}
