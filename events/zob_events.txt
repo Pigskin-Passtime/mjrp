@@ -1,0 +1,196 @@
+namespace = zob
+namespace = zob_stage
+
+#Manually Spawn Zob System for testing purposes
+country_event = {
+	id = zob.100
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		random_system_within_border = {
+			spawn_system = { 
+				min_distance = 20
+				max_distance = 50
+				initializer = "zob_system"
+				hyperlane = yes
+				# is_discovered = yes
+			}
+		}
+	}
+}
+
+
+### Zob Abducts Scientist
+fleet_event = {
+	id = zob_stage.4
+	title = "zob_stage.4.name"
+	desc = "zob_stage.4.desc"
+	picture = GFX_evt_crusher_droid
+	show_sound = event_metal_fatigue
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+		leader = {
+			save_event_target_as = collected_scientist
+		}
+	}
+
+	after = {
+		from = { set_site_progress_locked = no }
+		event_target:collected_scientist = {
+			exile_leader_as = collected_scientist
+		}
+	}
+
+	option = {
+		name = ONSCREEN
+		country_event = {
+			id = zob.10
+			days = 3
+		}
+	}
+}
+
+
+### Zob Makes Contact Through Scientist
+country_event = {
+	id = zob.10
+	title = "zob.10.name"
+	desc = {
+		trigger = {
+			always = yes
+		}
+		text = zob.10.desc
+	}
+	show_sound = par_event_azaryn
+	location = fromfrom
+	is_triggered_only = yes
+
+	trigger = {
+		zob_allowed = yes
+	}
+
+	event_window_type = leader_recruit
+	picture_event_data = {
+		portrait = event_target:zob_leader #collected scientist instead?
+		room = paragon_azaryn_room
+	}
+	picture = GFX_leader_recruitment_bg_legendary_azaryn
+
+	immediate = {
+		hidden_effect = {
+			create_country = {
+				name = "NAME_Unknown"
+				type = global_event
+				auto_delete = yes
+				flag = {
+					icon = {
+						category = "special"
+						file = "unknown.dds"
+					}
+					background = {
+						category = "backgrounds"
+						file = "00_solid.dds"
+					}
+					colors = {
+						"red"
+						"red"
+						"null"
+						"null"
+					}
+				}
+				effect = {
+					save_event_target_as = zob_country
+				}
+			}
+			event_target:zob_country = {
+				create_species = {
+					name = "name_zob_species"
+					class = PARAGON
+					portrait = pla12
+					namelist = "PRT1"
+					traits = {
+						trait = trait_quick_learners
+						trait = trait_talented
+						trait = trait_hive_mind
+					}
+					effect = {
+						save_event_target_as = zob_species
+					}
+				}
+				create_leader = {
+					species = event_target:zob_species
+					event_leader = yes
+					class = official
+					name = "name_zob"
+					skill = 5
+					randomize_traits = no
+					skip_background_generation = yes
+					background_ethic = ethic_gestalt_consciousness
+					# custom_catch_phrase = sadtoid_catch_phrase
+					# custom_description = astrocreator_azaryn_backstory
+					# can_manually_change_location = no
+					# homeworld = this
+					traits = {
+						trait = trait_mind_collector
+					}
+					gender = indeterminable
+					set_age = 758
+					immortal = yes
+					effect = {
+						save_global_event_target_as = zob_leader
+						set_leader_flag = legendary_leader
+						set_leader_flag = zob
+						set_owner = root
+						exile_leader_as = zob_leader
+					}
+				}
+			}
+		}
+	}
+
+	option = { 
+		name = zob.10.a
+		is_dialog_only = yes
+		response_text = zob.10.a.response
+	}
+	option = { 
+		name = zob.10.b
+		is_dialog_only = yes
+		response_text = zob.10.b.response
+	}
+	option = { # HIRE
+		name = HIRE
+		tag = hire_leader
+		custom_tooltip = zob.10.custom_tooltip # Zob joins
+		sound = par_azaryn_hire
+
+		hidden_effect = {
+			clone_leader = {
+				target = event_target:zob_leader
+			}
+			last_created_leader = {
+				set_leader_flag = legendary_leader
+				save_global_event_target_as = zob_leader
+				set_leader_flag = immune_to_negative_traits
+				set_leader_flag = zob
+			}
+		}
+	}
+
+	option = { # DISMISS
+		sound = par_azaryn_dismiss
+		name = DISMISS
+		tag = dismiss_leader
+		hidden_effect = {
+			event_target:collected_scientist = {
+				kill_leader = { show_notification = no } #should probably add a negative trait instead
+			}
+		}
+	}
+}
