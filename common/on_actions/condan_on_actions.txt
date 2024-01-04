@@ -1,0 +1,126 @@
+# condan_on_actions.txt  Contingency Processing Core 1A6F
+# Stellaris 2024 ModJam
+# Contributors: Draconas
+
+on_game_start = {
+    events = {
+        condan_events.000 # Set condan enabled flag if the host has synthetic dawn.
+    }
+}
+
+# A country has gained a surveyed status on a planet. Happens after "on_survey" if a science ship surveyed a planet. (Can also happen without a ship through changes in intel levels)
+# Root = Planet
+# From = Country
+# FromFrom = Fleet of the science ship that surveyed it, if any
+on_planet_surveyed = {
+    events = {
+        condan_events.002 # spawn condan dig
+    }
+}
+
+on_yearly_pulse_country = {
+    events = {
+        condan_comms.040 # congratulate synthetics
+        condan_events.120 # warn you off crisis level 1
+        condan_events.121 # declare war if crisis 5
+    }
+}
+
+on_five_year_pulse_country = {
+    events = {
+        condan_events.040# increases condans power level
+        condan_events.041# midgame: unhappy condan is embezzling
+        condan_events.042# lategame: unhappy condan is going to rebell
+        condan_events.043# condan meets the contingency
+        condan_events.081# condan spawns a machine fleet every 5 years
+        condan_events.130 # condan flavour events
+    }
+}
+
+on_custom_diplomacy = {
+    events = {
+        condan_comms.010# Condan Pre repair
+        condan_comms.030# Condan Post Repair Regular Empire
+        condan_comms.031 # Condan Post Repair Machine Intelligence
+    }
+}
+
+# Triggers country_event for the attacker upon victory (before controller is switched)
+# This = country, lead attacker
+# From = country, planet owner
+# FromFrom = planet
+# 'Attacker' is the side that "IsHostile" to the planet controller. For example: spawned monster armies are attackers, but if they win and the player attempts to retake the planet, the player is the attacker
+on_planet_attackers_win = {
+    events = {
+        condan_events.051 # condan conquers your planet : engage purging
+        condan_events.052 # you conquer the planet back from condan before it finishes purging : stop purging
+        condan_events.054 # you conquer the planet back after it finishes purging
+    }
+}
+
+# Triggers country_event for the defender upon victory
+# Root = country, planet owner
+# From = country, attack leader
+# FromFrom = planet
+on_planet_defenders_win = {
+    events = {
+        condan_events.055 # condan fails to conquer the planet from you
+    }
+}
+
+# A pop has finished purging
+# This = Planet scope
+# From = Country
+# FromFrom = Pop
+on_pop_purged = {
+    events = {
+        condan_events.053 # condan has purged your planet
+    }
+}
+
+# Executed as a leader has been fired
+# This = Country
+# From = Leader
+on_leader_fired = {
+    events = {
+        condan_events.090
+    }
+}
+
+# Executed as a leader has died
+# This = Country
+# From = Leader
+on_leader_death = {
+    events = {
+        condan_events.091
+    }
+}
+
+
+
+#This = destroyed country
+#From = optional, destroyer (country)
+on_country_destroyed = {
+    events = {
+        condan_events.103# condan dead, give relic?
+    }
+}
+
+# A war has ended
+# Root = Loser
+# From = Main Winner
+on_war_ended = {
+    events = {
+
+    }
+}
+
+# A war has been won
+# Root = Winner Warleader
+# From = Loser Warleader
+# FromFrom = War
+on_war_won = {
+    events = {
+        condan_events.102# condan dead, give relic?
+    }
+}

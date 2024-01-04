@@ -1,0 +1,986 @@
+# condan_situations.txt  Contingency Processing Core 1A6F
+# Stellaris 2024 ModJam
+# Contributors: Draconas
+
+condan_generate_unity_situation = {
+    category = positive
+    picture = GFX_evt_news_room
+    complete_icon_frame = GFX_situation_outcome_frame_green
+    complete_icon = GFX_situation_outcome_positive
+    fail_icon_frame = GFX_situation_outcome_frame_red
+    fail_icon = GFX_situation_outcome_meh
+
+    on_progress_complete = {
+        destroy_situation = this
+        custom_tooltip = condan_generate_unity_situation_finish
+    }
+
+    on_fail = {
+        custom_tooltip = condan_empty_string
+        destroy_situation = this
+        hidden_effect = {
+            target = {
+                set_country_flag = condan_took_other_ap
+                country_event = { id = condan_comms.130 }
+            }
+            condan_set_unhappy = yes
+        }
+    }
+
+    on_abort = { destroy_situation = this }
+
+    abort_trigger = {
+        OR = {
+            target = { NOT = { any_owned_leader = { has_leader_flag = condan } } }
+            AND = {
+                has_situation_flag = ap_synthetic_evolution
+                target = { has_ascension_perk = ap_synthetic_evolution}
+            }
+            AND = {
+                has_situation_flag = tr_synthetics_synthetic_age
+                target = { has_tradition = tr_synthetics_synthetic_age }
+            }
+        }
+    }
+
+    stages = {
+        stage_1 = {
+            icon = GFX_situation_stage_1
+            icon_background = GFX_situation_stage_frame_green
+            end = 100
+            custom_tooltip = condan_generate_unity_situation_effect
+        }
+    }
+
+    approach = {#Encourage
+        name = approach_encourage
+        on_select = {
+            custom_tooltip = condan_generate_unity_situation_approve
+        }
+        resources = { 						#Resource table as standard
+            category = situations
+            cost = { }
+            upkeep = {
+                influence = 0.5
+                energy = 100
+            }
+            produces = {
+                unity = 300
+            }
+        }
+        allow = {
+            owner = {
+                NOR = {
+                    has_deficit = energy
+                    has_deficit = influence
+                }
+            }
+        }
+        icon = GFX_situation_approach_amenities
+        icon_background = GFX_situation_approach_bg_green
+        ai_weight = {
+            base = 10
+        }
+        default = yes
+    }
+    approach = {#Discourage
+        name = approach_discourage
+        on_select = {
+            custom_tooltip = condan_generate_unity_situation_discourage
+        }
+        icon = GFX_situation_approach_shrug
+        icon_background = GFX_situation_approach_bg_yellow
+        ai_weight = {
+            base = 0
+        }
+    }
+
+    monthly_progress = {
+        base = 4
+        modifier = {
+            desc = string_current_approach
+            current_situation_approach = approach_encourage
+        }
+        modifier = {
+            desc = string_current_approach
+            current_situation_approach = approach_discourage
+        }
+        modifier = {
+            add = -10000
+            desc = condan_generate_unity_situation_otherap
+            target = { condan_has_non_synth_ascension_path = yes }
+        }
+    }
+}
+
+condan_repair_shipyard_situation = {
+    category = positive
+    picture = GFX_evt_ai_planet
+    complete_icon_frame = GFX_situation_outcome_frame_green
+    complete_icon = GFX_situation_outcome_positive
+    fail_icon_frame = GFX_situation_outcome_frame_red
+    fail_icon = GFX_situation_outcome_meh
+
+    on_progress_complete = {
+        custom_tooltip = condan_repair_shipyard_situation_finish
+        hidden_effect = {
+            destroy_situation = this
+            target.owner = {
+                country_event = { id = condan_comms.081 }
+            }
+        }
+    }
+    on_fail = {
+        custom_tooltip = condan_empty_string
+        destroy_situation = this
+    }
+
+    on_abort = {
+        destroy_situation = this
+        if = {
+            limit = { exists = root.owner }
+            root.owner = { set_country_flag = condan_enable_fleet_project}
+        }
+    }
+
+    abort_trigger = {
+        OR = {
+            NOT = { exists = target.owner }
+            target.owner = { NOT = { is_same_value = root.owner } }
+        }
+    }
+
+    triggered_target_modifier = {
+        potential = { NOT = { current_situation_approach = approach_none } }
+        modifier = {
+            planet_jobs_alloys_produces_mult = -0.25
+        }
+    }
+
+    stages = {
+        stage_1 = {
+            icon = GFX_situation_stage_1
+            icon_background = GFX_situation_stage_frame_green
+            end = 100
+            custom_tooltip = condan_repair_shipyard_situation_effect
+        }
+    }
+
+    approach = {# Do it
+        name = approach_doit
+        on_select = { custom_tooltip = condan_repair_shipyard_situation_doit }
+        resources = { 
+            category = situations
+            upkeep = {
+                alloys = 50
+                energy = 100
+                sr_living_metal = 5
+                engineering_research = 100
+            }
+        }
+        allow = {
+            owner = {
+                NOR = {
+                    has_deficit = alloys
+                    has_deficit = energy
+                    has_deficit = sr_living_metal
+                }
+                # living metal does not get deficit.
+                OR = {
+                    resource_stockpile_compare = {  resource = sr_living_metal value > 5 }
+                    resource_income_compare = { resource = sr_living_metal value  > 5 }
+                }
+            }
+        }
+
+        icon = GFX_situation_approach_balance_sheet
+        icon_background = GFX_situation_approach_bg_green
+        ai_weight = { base = 10 }
+        default = yes
+    }
+    approach = {# Do it faster
+        name = approach_doitharder
+        on_select = { custom_tooltip = condan_repair_shipyard_situation_doitharder }
+        resources = { 
+            category = situations
+            upkeep = {
+                alloys = 250
+                energy = 400
+                sr_living_metal = 20
+                engineering_research = 300
+            }
+        }
+        allow = {
+            owner = {
+                NOR = {
+                    has_deficit = alloys
+                    has_deficit = energy
+                    has_deficit = sr_living_metal
+                }
+                # living metal does not get deficit.
+                OR = {
+                    resource_stockpile_compare = {  resource = sr_living_metal value > 5 }
+                    resource_income_compare = { resource = sr_living_metal value  > 5 }
+                }
+            }
+        }
+        icon = GFX_situation_approach_energy_credits
+        icon_background = GFX_situation_approach_bg_green
+        ai_weight = { base = 0 }
+    }
+
+
+
+    approach = {# No Resource
+        name = approach_none
+        on_select = {
+            custom_tooltip = condan_repair_shipyard_situation_none
+        }
+        icon = GFX_situation_approach_shrug
+        icon_background = GFX_situation_approach_bg_red
+        ai_weight = { base = 0 }
+    }
+
+    monthly_progress = {
+        base = 0
+        modifier = {
+            add = 1
+            desc = string_current_approach
+            current_situation_approach = approach_doit
+        }
+         modifier = {
+             add = 3
+            desc = string_current_approach
+            current_situation_approach = approach_doitharder
+        }
+        modifier = {
+            desc = string_current_approach
+            current_situation_approach = approach_none
+        }
+    }
+}
+
+condan_build_ships_situation = {
+    category = positive
+    picture = GFX_evt_ai_planet
+    complete_icon_frame = GFX_situation_outcome_frame_green
+    complete_icon = GFX_situation_outcome_positive
+    fail_icon_frame = GFX_situation_outcome_frame_red
+    fail_icon = GFX_situation_outcome_meh
+
+    on_progress_complete = {
+        custom_tooltip = condan_build_ships_situation_finish
+        hidden_effect = {
+            destroy_situation = this
+            target.owner = {
+                remove_country_flag = condan_recruiting_fleet
+                country_event = { id = condan_comms.082 }
+            }
+        }
+    }
+    on_fail = {
+        custom_tooltip = condan_empty_string
+        destroy_situation = this
+    }
+
+    on_abort = {
+        destroy_situation = this
+        if = {
+            limit = { exists = root.owner }
+            root.owner = { remove_country_flag = condan_recruiting_fleet}
+        }
+    }
+
+    abort_trigger = {
+        OR = {
+            NOT = { exists = target.owner }
+            target.owner = { NOT = { is_same_value = root.owner } }
+        }
+    }
+
+    stages = {
+        stage_1 = {
+            icon = GFX_situation_stage_1
+            icon_background = GFX_situation_stage_frame_green
+            end = 50
+            custom_tooltip = condan_build_ships_situation_stage_1
+        }
+        stage_2 = {
+            icon = GFX_situation_stage_2
+            icon_background = GFX_situation_stage_frame_green
+            end = 80
+            custom_tooltip = condan_build_ships_situation_stage_2
+        }
+        stage_3 = {
+            icon = GFX_situation_stage_3
+            icon_background = GFX_situation_stage_frame_green
+            end = 100
+            custom_tooltip = condan_build_ships_situation_stage_3
+        }
+    }
+
+    approach = { # Do it
+        name = approach_doit
+        on_select = { custom_tooltip = condan_build_ships_situation_doit }
+        resources = {
+            category = situations
+            upkeep = {
+                alloys = 300
+                sr_living_metal = 4
+                trigger = { current_stage = stage_1 }
+            }
+            upkeep = {
+                alloys = 100
+                exotic_gases = 5
+                sr_living_metal = 1
+                trigger = { current_stage = stage_2 }
+            }
+            upkeep = {
+                alloys = 50
+                rare_crystals = 8
+                volatile_motes = 2
+                exotic_gases = 2
+                trigger = { current_stage = stage_3 }
+            }
+        }
+        allow = {
+            OR = {
+                AND = {
+                    current_stage = stage_1
+                    owner = {
+                        NOR = {
+                            has_deficit = alloys
+                            has_deficit = sr_living_metal
+                        }
+                        # living metal does not get deficit.
+                        # this is technically overly harsh depending on exactly how the calculation ticks, but it is close enough to stop you cheesing the requirement.
+                        OR = {
+                            resource_income_compare = { resource = sr_living_metal value  > 4 }
+                            resource_stockpile_compare = {  resource = sr_living_metal value > 4 }
+                        }
+                    }
+                }
+                AND = {
+                    current_stage = stage_2
+                    owner = {
+                        NOR = {
+                            has_deficit = alloys
+                            has_deficit = exotic_gases
+                            has_deficit = sr_living_metal
+                        }
+                        # living metal does not get deficit.
+                        # this is technically overly harsh depending on exactly how the calculation ticks, but it is close enough to stop you cheesing the requirement.
+                        OR = {
+                            resource_income_compare = { resource = sr_living_metal value  > 1 }
+                            resource_stockpile_compare = {  resource = sr_living_metal value > 1 }
+                        }
+                    }
+                }
+                AND = {
+                     current_stage = stage_3
+                    owner = {
+                        NOR = {
+                            has_deficit = alloys
+                            has_deficit = rare_crystals
+                            has_deficit = volatile_motes
+                            has_deficit = exotic_gases
+                        }
+                    }
+                }
+            }
+        }
+        icon = GFX_situation_approach_balance_sheet
+        icon_background = GFX_situation_approach_bg_green
+        ai_weight = { base = 10 }
+        default = yes
+    }
+    approach = {# Do it faster
+        name = approach_doitharder
+        on_select = { custom_tooltip = condan_build_ships_situation_doitharder }
+        resources = {
+            category = situations
+            upkeep = {
+                alloys = 900
+                sr_living_metal = 15
+                trigger = { current_stage = stage_1 }
+            }
+            upkeep = {
+                alloys = 300
+                exotic_gases = 15
+                sr_living_metal = 3
+                trigger = { current_stage = stage_2 }
+            }
+            upkeep = {
+                alloys = 150
+                rare_crystals = 24
+                volatile_motes = 6
+                exotic_gases = 6
+                trigger = { current_stage = stage_3 }
+            }
+        }
+        allow = {
+            OR = {
+                AND = {
+                    current_stage = stage_1
+                    owner = {
+                        NOR = {
+                            has_deficit = alloys
+                            has_deficit = sr_living_metal
+                        }
+                        # living metal does not get deficit.
+                        # this is technically overly harsh depending on exactly how the calculation ticks, but it is close enough to stop you cheesing the requirement.
+                        OR = {
+                            resource_income_compare = { resource = sr_living_metal value  > 15 }
+                            resource_stockpile_compare = {  resource = sr_living_metal value > 15 }
+                        }
+                    }
+                }
+                AND = {
+                    current_stage = stage_2
+                    owner = {
+                        NOR = {
+                            has_deficit = alloys
+                            has_deficit = exotic_gases
+                            has_deficit = sr_living_metal
+                        }
+                        # living metal does not get deficit.
+                        # this is technically overly harsh depending on exactly how the calculation ticks, but it is close enough to stop you cheesing the requirement.
+                        OR = {
+                            resource_income_compare = { resource = sr_living_metal value  > 3 }
+                            resource_stockpile_compare = {  resource = sr_living_metal value > 3 }
+                        }
+                    }
+                }
+                AND = {
+                    current_stage = stage_3
+                    owner = {
+                        NOR = {
+                            has_deficit = alloys
+                            has_deficit = rare_crystals
+                            has_deficit = volatile_motes
+                            has_deficit = exotic_gases
+                        }
+                    }
+                }
+            }
+        }
+        icon = GFX_situation_approach_energy_credits
+        icon_background = GFX_situation_approach_bg_green
+        ai_weight = { base = 0 }
+    }
+
+    approach = {# No Resource
+        name = approach_none
+        on_select = { custom_tooltip = condan_build_ships_situation_no }
+        icon = GFX_situation_approach_shrug
+        icon_background = GFX_situation_approach_bg_red
+        ai_weight = { base = 0 }
+    }
+
+    monthly_progress = {
+        base = 0
+        modifier = {
+            add = 1.5 # takes 67 months or just over 5 years
+            desc = string_current_approach
+            current_situation_approach = approach_doit
+        }
+         modifier = {
+            add = 3 # 34 months or just under 3 years
+            desc = string_current_approach
+            current_situation_approach = approach_doitharder
+        }
+        modifier = {
+            desc = string_current_approach
+            current_situation_approach = approach_none
+        }
+    }
+}
+
+
+
+
+condan_become_terminator_situation_regular = {
+    category = positive
+    picture = GFX_evt_machine_sapience
+    complete_icon_frame = GFX_situation_outcome_frame_green
+    complete_icon = GFX_situation_outcome_positive
+    fail_icon_frame = GFX_situation_outcome_frame_red
+    fail_icon = GFX_situation_outcome_meh
+
+    on_progress_complete = {
+        custom_tooltip = condan_become_terminator_situation_regular_finish
+        hidden_effect = {
+            destroy_situation = this
+            target = { country_event = { id = condan_events.030 } }
+        }
+    }
+    on_fail = {
+        custom_tooltip = condan_empty_string
+        destroy_situation = this
+    }
+
+    on_abort = { destroy_situation = this }
+    abort_trigger = { target = { NOT = { any_owned_leader = { has_leader_flag = condan }} } }
+
+    stages = {
+        stage_1 = { # building core intelligence
+            icon = GFX_situation_stage_1
+            icon_background = GFX_situation_stage_frame_green
+            end = 100
+            custom_tooltip = condan_become_terminator_situation_regular_stage_1
+        }
+        stage_2 = { # updating bodies and establishing network
+            icon = GFX_situation_stage_2
+            icon_background = GFX_situation_stage_frame_green
+            end = 200
+            custom_tooltip = condan_become_terminator_situation_regular_stage_2
+            on_first_enter = { situation_event = { id = condan_events.142 } }
+            triggered_modifier = {
+                potential = { target = { condan_ethic_dislikes_condan = yes } }
+                modifier = {
+                    biological_pop_happiness = -0.2
+                    planet_stability_add = -10
+                }
+            }
+        }
+        stage_3 = { # enabling network and coming online
+            icon = GFX_situation_stage_3
+            icon_background = GFX_situation_stage_frame_green
+            end = 300
+            custom_tooltip = condan_become_terminator_situation_regular_stage_3
+            on_first_enter = { situation_event = { id = condan_events.143 } }
+            triggered_modifier = {
+                potential = {
+                    target = { condan_ethic_dislikes_condan = yes }
+                    has_situation_flag = increased_costs
+                }
+                modifier = {
+                    biological_pop_happiness = -0.33
+                    planet_stability_add = -30
+                }
+            }
+        }
+    }
+
+    approach = { # Do it
+        name = approach_doit
+        on_select = { custom_tooltip = condan_become_terminator_situation_regular_doit }
+        resources = {
+            category = situations
+            upkeep = { influence = 4 }
+            upkeep = {
+                influence = 3
+                trigger = { has_situation_flag = increased_costs}
+            }
+
+            upkeep = {
+                energy = 50
+                minerals = 50
+                sr_living_metal = 0.1
+                physics_research = 40
+                engineering_research = 75
+                multiplier = target.trigger:num_owned_planets
+                trigger = { current_stage = stage_1 }
+            }
+
+            upkeep = {
+                energy = 2
+                unity = 2
+                sr_living_metal = 0.01
+                physics_research = 1
+                society_research = 2
+                engineering_research = 1
+                multiplier = target.trigger:num_pops
+                trigger = { current_stage = stage_2 }
+            }
+
+            upkeep = {
+                energy = 2
+                unity = 2
+                multiplier = target.trigger:num_pops
+                trigger = {
+                    current_stage = stage_2
+                    has_situation_flag = increased_costs
+                }
+            }
+
+            upkeep = {
+                energy = 3
+                unity = 5
+                society_research = 3
+                engineering_research = 3
+                sr_living_metal = 0.01
+                multiplier = target.trigger:num_pops
+                trigger = { current_stage = stage_3 }
+            }
+
+            upkeep = {
+                energy = 2
+                unity = 3
+                society_research = 1
+                engineering_research = 1
+                sr_living_metal = 0.01
+                multiplier = target.trigger:num_pops
+                trigger = {
+                    current_stage = stage_3
+                    has_situation_flag = increased_costs
+                }
+            }
+        }
+        icon = GFX_situation_approach_balance_sheet
+        icon_background = GFX_situation_approach_bg_green
+        ai_weight = { base = 10 }
+        default = yes
+    }
+    approach = {# Do it faster
+        name = approach_doitharder
+        on_select = { custom_tooltip = condan_become_terminator_situation_regular_doitharder }
+        resources = {
+            category = situations
+            upkeep = { influence = 8 }
+            upkeep = {
+                influence = 4
+                trigger = { has_situation_flag = increased_costs}
+            }
+
+            upkeep = {
+                energy = 150
+                minerals = 150
+                sr_living_metal = 0.3
+                physics_research = 120
+                engineering_research = 21
+                multiplier = target.trigger:num_owned_planets
+                trigger = { current_stage = stage_1 }
+            }
+
+            upkeep = {
+                energy = 6
+                unity = 6
+                sr_living_metal = 0.03
+                physics_research = 3
+                society_research = 6
+                engineering_research = 3
+                multiplier = target.trigger:num_pops
+                trigger = { current_stage = stage_2 }
+            }
+
+            upkeep = {
+                energy = 4
+                unity = 4
+                multiplier = target.trigger:num_pops
+                trigger = {
+                    current_stage = stage_2
+                    has_situation_flag = increased_costs
+                }
+            }
+
+            upkeep = {
+                energy = 9
+                unity = 15
+                society_research = 9
+                engineering_research = 9
+                sr_living_metal = 0.03
+                multiplier = target.trigger:num_pops
+                trigger = { current_stage = stage_3 }
+            }
+
+            upkeep = {
+                energy = 4
+                unity = 6
+                society_research = 2
+                engineering_research = 2
+                sr_living_metal = 0.02
+                multiplier = target.trigger:num_pops
+                trigger = {
+                    current_stage = stage_3
+                    has_situation_flag = increased_costs
+                }
+            }
+        }
+        icon = GFX_situation_approach_energy_credits
+        icon_background = GFX_situation_approach_bg_green
+        ai_weight = { base = 0 }
+    }
+
+    approach = {# No Resource
+        name = approach_none
+        on_select = { custom_tooltip = condan_become_terminator_situation_regular_no }
+        icon = GFX_situation_approach_shrug
+        icon_background = GFX_situation_approach_bg_red
+        ai_weight = { base = 0 }
+    }
+
+    monthly_progress = {
+        base = 0
+        modifier = {
+            add = 5 # takes 60 months
+            desc = string_current_approach
+            current_situation_approach = approach_doit
+        }
+        modifier = {
+            add = 10 # 34 months or just under 3 years
+            desc = string_current_approach
+            current_situation_approach = approach_doitharder
+        }
+        modifier = {
+            desc = string_current_approach
+            current_situation_approach = approach_none
+        }
+        modifier = {
+            factor = 0.25
+            desc = condan_become_terminator_situation_regular_deficit
+            target = {
+                OR = {
+                    has_deficit = influence
+                    has_deficit = energy
+                    has_deficit = sr_living_metal
+                    has_deficit = physics_research
+                    has_deficit = engineering_research
+                    resource_stockpile_compare = {  resource = sr_living_metal value < 5 }
+                }
+            }
+            current_stage = stage_1
+        }
+
+        modifier = {
+            factor = 0.25
+            desc = condan_become_terminator_situation_regular_deficit
+            target = {
+                OR = {
+                    has_deficit = influence
+                    has_deficit = energy
+                    has_deficit = unity
+                    has_deficit = sr_living_metal
+                    has_deficit = physics_research
+                    has_deficit = society_research
+                    has_deficit = engineering_research
+                    resource_stockpile_compare = {  resource = sr_living_metal value < 5 }
+                }
+            }
+            current_stage = stage_2
+        }
+
+        modifier = {
+            factor = 0.25
+            desc = condan_become_terminator_situation_regular_deficit
+            target = {
+                OR = {
+                    has_deficit = influence
+                    has_deficit = energy
+                    has_deficit = unity
+                    has_deficit = society_research
+                    has_deficit = engineering_research
+                    resource_stockpile_compare = {  resource = sr_living_metal value < 5 }
+                }
+            }
+            current_stage = stage_3
+        }
+    }
+}
+
+
+condan_become_terminator_situation_machine = {
+    category = positive
+    picture = GFX_evt_machine_sapience
+    complete_icon_frame = GFX_situation_outcome_frame_green
+    complete_icon = GFX_situation_outcome_positive
+    fail_icon_frame = GFX_situation_outcome_frame_red
+    fail_icon = GFX_situation_outcome_meh
+
+    on_progress_complete = {
+        custom_tooltip = condan_become_terminator_situation_machine_finish
+        hidden_effect = {
+            destroy_situation = this
+            target = { country_event = { id = condan_events.030 } }
+        }
+    }
+    on_fail = {
+        custom_tooltip = condan_empty_string
+        destroy_situation = this
+    }
+    on_abort = { destroy_situation = this }
+    abort_trigger = { target = { NOT = { any_owned_leader = { has_leader_flag = condan }} } }
+
+
+    stages = {
+        stage_1 = { # building core intelligence
+            icon = GFX_situation_stage_1
+            icon_background = GFX_situation_stage_frame_green
+            end = 100
+            custom_tooltip = condan_become_terminator_situation_regular_stage_1
+        }
+    }
+
+    approach = { # Do it
+        name = approach_doit
+        on_select = { custom_tooltip = condan_become_terminator_situation_machine_doit }
+        resources = {
+            category = situations
+            upkeep = { influence = 2 }
+            upkeep = {
+                energy = 5
+                unity = 10
+                sr_living_metal = 0.05
+                society_research = 10
+                engineering_research = 10
+                multiplier = target.trigger:num_owned_planets
+            }
+        }
+        icon = GFX_situation_approach_balance_sheet
+        icon_background = GFX_situation_approach_bg_green
+        ai_weight = { base = 10 }
+        default = yes
+    }
+    approach = {# Do it faster
+        name = approach_doitharder
+        on_select = { custom_tooltip = condan_become_terminator_situation_machine_doitharder }
+        resources = {
+            category = situations
+            upkeep = { influence = 3 }
+            upkeep = {
+                energy = 5
+                unity = 10
+                sr_living_metal = 0.05
+                society_research = 10
+                engineering_research = 10
+                multiplier = target.trigger:num_owned_planets
+            }
+            upkeep = {
+                energy = 5
+                unity = 10
+                sr_living_metal = 0.05
+                society_research = 10
+                engineering_research = 10
+                multiplier = target.trigger:num_owned_planets
+            }
+            upkeep = {
+                energy = 5
+                unity = 10
+                sr_living_metal = 0.05
+                society_research = 10
+                engineering_research = 10
+                multiplier = target.trigger:num_owned_planets
+            }
+        }
+        icon = GFX_situation_approach_energy_credits
+        icon_background = GFX_situation_approach_bg_green
+        ai_weight = { base = 0 }
+    }
+
+    approach = {# No Resource
+        name = approach_none
+        on_select = { custom_tooltip = condan_become_terminator_situation_machine_no }
+        icon = GFX_situation_approach_shrug
+        icon_background = GFX_situation_approach_bg_red
+        ai_weight = { base = 0 }
+    }
+
+    monthly_progress = {
+        base = 0
+        modifier = {
+            add = 2.5 # takes just over 3 years
+            desc = string_current_approach
+            current_situation_approach = approach_doit
+        }
+        modifier = {
+            add = 5
+            desc = string_current_approach
+            current_situation_approach = approach_doitharder
+        }
+        modifier = {
+            desc = string_current_approach
+            current_situation_approach = approach_none
+        }
+        modifier = {
+            factor = 0.25
+            desc = condan_become_terminator_situation_machine_deficit
+            target = {
+                OR = {
+                    has_deficit = influence
+                    has_deficit = energy
+                    has_deficit = sr_living_metal
+                    has_deficit = society_research
+                    has_deficit = engineering_research
+                    resource_stockpile_compare = {  resource = sr_living_metal value < 5 }
+                }
+            }
+        }
+    }
+}
+
+condan_generate_money_situation = {
+    category = positive
+    picture = GFX_evt_galactic_market
+    complete_icon_frame = GFX_situation_outcome_frame_green
+    complete_icon = GFX_situation_outcome_positive
+
+    on_progress_complete = {
+        custom_tooltip = condan_empty_string
+        destroy_situation = this
+    }
+    on_fail = {
+        custom_tooltip = condan_empty_string
+        destroy_situation = this
+    }
+    on_abort = { destroy_situation = this }
+    abort_trigger = { target = { NOT = { any_owned_leader = { has_leader_flag = condan }} } }
+
+    stages = {
+        stage_1 = {
+            icon = GFX_situation_stage_1
+            icon_background = GFX_situation_stage_frame_green
+            end = 18
+            custom_tooltip = condan_generate_money_situation_stage_1
+        }
+        stage_2 = {
+            icon = GFX_situation_stage_1
+            icon_background = GFX_situation_stage_frame_green
+            end = 36
+            custom_tooltip = condan_generate_money_situation_stage_2
+        }
+    }
+
+    approach = {
+        name = approach_proceed
+        on_select = { custom_tooltip = condan_generate_money_situation_proceed }
+        icon = GFX_situation_approach_energy_credits
+        icon_background = GFX_situation_approach_bg_yellow
+        resources = {
+            category = situations
+            produces = {
+                energy = 1
+                minerals = 0.5
+                mult = value:condan_consumer_goods_stash_value
+                trigger = { current_stage = stage_1}
+            }
+            produces = {
+                energy = 300
+                minerals = 300
+                trigger = { current_stage = stage_1}
+            }
+
+            produces = {
+                energy = 1
+                minerals = 0.5
+                mult = value:condan_consumer_goods_stash_value
+                trigger = { current_stage = stage_2}
+            }
+            produces = {
+                energy = 150
+                minerals = 150
+                trigger = { current_stage = stage_2}
+            }
+        }
+        ai_weight = { base = 0 }
+        default = yes
+    }
+
+    monthly_progress = {
+        base = 0
+        modifier = {
+            add = 1
+            desc = string_current_approach
+            current_situation_approach = approach_proceed
+        }
+    }
+}

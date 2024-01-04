@@ -1,0 +1,49 @@
+# condan_decisions.txt  Contingency Processing Core 1A6F
+# Stellaris 2024 ModJam
+# Contributors: Draconas
+
+condan_repair_planet = {
+    owned_planets_only = yes
+    enactment_time = 720
+
+    potential = {
+        has_modifier = condan_wrecked_planet
+        exists = owner
+        owner = {
+            not = {
+                has_authority = auth_hive_mind
+            }
+        }
+    }
+
+    allow = {
+        exists = owner
+        owner = {
+            has_technology = tech_mine_living_metal
+        }
+    }
+
+    resources = {
+        category = decisions
+
+        cost = {
+            unity = 1000
+            minerals = 5000
+            alloys = 1000
+            sr_living_metal = 500
+        }
+    }
+
+    effect = {
+        remove_modifier = condan_wrecked_planet
+        remove_modifier = unstable_tectonics
+        clear_blockers = yes
+        planet_event = {
+            id = condan_events.010
+        }
+    }
+
+    ai_weight = {
+        weight = 0
+    }
+}
