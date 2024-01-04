@@ -1,0 +1,38 @@
+dmj_shroud_tunnel = {
+	name = SHROUD_TUNNEL_GALACTIC
+	is_pathfind = yes
+	requires_exploration = no
+	uses_action = no
+	always_active = yes
+	windup_time = 40
+	winddown_time = 20
+	ftl_multiplier = 0 #instant
+	extends_sensors = no
+	icon_frame = 25
+	remember_instances = no
+	galactic_map_tooltip_header = SHROUD_TUNNEL_GALACTIC
+	galactic_map_tooltip_desc = SHROUD_TUNNEL_GALACTIC_DESC
+	system_view_tooltip_header = BYPASS_NAME_SHROUD_TUNNEL
+	connection_type = one_to_one
+	can_bypass_be_locked = yes
+
+	ftl_ship_effect	= "gateway_ftl_ship_effect_entity"
+	ftl_bypass_effect = "gateway_ftl_bypass_effect_entity"
+	animation_time = 3 # number of days to wait for the jump animation to be played
+
+	country_can_use = { # this = country; from = system owner | default = yes
+		OR = {
+			has_technology = tech_psionic_theory
+			custom_tooltip = {
+				text = shroud_beacon_active_tooltip
+				has_country_flag = shroudwalker_enclave_bought_shroud_beacon
+					any_system_within_border = {
+					starbase = {
+						has_starbase_building = shroud_beacon
+					}
+				}
+			}
+		}
+	}
+	on_action = "on_entering_shroud_tunnel" # To be fired upon entering FTL into this bypass | this = fleet; from = system being jumped to; fromfrom = system being jumped from
+}

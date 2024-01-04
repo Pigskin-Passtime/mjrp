@@ -1,0 +1,202 @@
+dmj_spawn_daniel_effect = {
+	create_country = {
+		name = "NAME_dmj_daniel"
+		type = paragon_event_country
+		flag = {
+			icon = {
+				category = "special"
+				file = "unknown.dds"
+			}
+			background = {
+				category = "backgrounds"
+				file = "00_solid.dds"
+			}
+			colors = {
+				"purple"
+				"purple"
+				"null"
+				"null"
+			}
+		}
+		effect = {
+			save_global_event_target_as = dmj_daniel_country
+		}
+	}
+	event_target:dmj_daniel_country = {
+		set_country_flag = dmj_country_flag
+		set_faction_hostility = {
+			target = root.owner
+			set_hostile = no
+			set_neutral = yes
+			set_friendly = no
+		}
+		create_species = {
+			name = NAME_Human
+			plural = NAME_Human_plural
+			class = "HUM"
+			portrait = dmj_daniel
+			traits = {
+				trait = "trait_adaptive"
+				trait = "trait_nomadic"
+				trait = "trait_wasteful"
+			}
+		}
+		last_created_species = {
+			save_event_target_as = dmj_daniel_species
+		}
+		create_leader = {
+			class = official
+			species = event_target:dmj_daniel_species
+			name = "NAME_dmj_daniel"
+			skill = 1
+			gender = male
+			hide_age = yes
+			event_leader = yes
+			skip_background_generation = yes
+			background_ethic = ethic_authoritarian
+			background_planet = event_target:dmj_earth
+			custom_catch_phrase = dmj_daniel_catch_phrase
+			custom_description = dmj_daniel_desc
+			randomize_traits = no
+			effect = {
+				set_leader_flag = legendary_leader
+			}
+		}
+		last_created_leader = {
+			set_leader_flag = dmj_daniel
+			set_leader_flag = immune_to_negative_traits
+			change_leader_portrait = dmj_daniel
+			save_global_event_target_as = dmj_daniel
+			set_owner = event_target:dmj_daniel_country
+			add_skill_without_trait_selection = 9
+			remove_all_traits = yes
+			add_trait = leader_trait_chosen
+			add_trait = leader_trait_devotion_conduit
+			add_trait = leader_trait_supreme_organizer
+			add_trait = leader_trait_legendary_military_knowledge_2
+			add_trait = leader_trait_legendary_evervigilant_2
+			add_trait = leader_trait_legendary_high_king_2
+			add_trait = leader_trait_tyrannical
+			add_trait = subclass_official_economy_councilor
+			set_immortal = yes
+		}
+	}
+	set_global_flag = dmj_daniel_spawned
+	country_event = { id = dmj.8 }
+}
+
+dmj_spawn_michael_effect = {
+	create_country = {
+		name = "NAME_dmj_michael"
+		type = paragon_event_country
+		flag = {
+			icon = {
+				category = "special"
+				file = "unknown.dds"
+			}
+			background = {
+				category = "backgrounds"
+				file = "00_solid.dds"
+			}
+			colors = {
+				"blue"
+				"blue"
+				"null"
+				"null"
+			}
+		}
+		effect = {
+			save_global_event_target_as = dmj_michael_country
+		}
+	}
+	event_target:dmj_michael_country = {
+		set_country_flag = dmj_country_flag
+		set_faction_hostility = {
+			target = root.owner
+			set_hostile = no
+			set_neutral = yes
+			set_friendly = no
+		}
+		create_species = {
+			name = NAME_Human
+			plural = NAME_Human_plural
+			class = "HUM"
+			portrait = dmj_michael
+			traits = {
+				trait = "trait_adaptive"
+				trait = "trait_nomadic"
+				trait = "trait_wasteful"
+			}
+		}
+		last_created_species = {
+			save_event_target_as = dmj_michael_species
+		}
+		create_leader = {
+			class = official
+			species = event_target:dmj_michael_species
+			name = "NAME_dmj_michael"
+			skill = 1
+			gender = male
+			hide_age = yes
+			event_leader = yes
+			skip_background_generation = yes
+			background_ethic = ethic_spiritualist
+			background_planet = event_target:dmj_earth
+			custom_catch_phrase = dmj_michael_catch_phrase
+			custom_description = dmj_michael_desc
+			randomize_traits = no
+			effect = {
+				set_leader_flag = legendary_leader
+			}
+		}
+		last_created_leader = {
+			set_leader_flag = dmj_michael
+			set_leader_flag = immune_to_negative_traits
+			change_leader_portrait = dmj_michael
+			save_global_event_target_as = dmj_michael
+			set_owner = event_target:dmj_michael_country
+			add_skill_without_trait_selection = 9
+			remove_all_traits = yes
+			add_trait = leader_trait_chosen
+			add_trait = leader_trait_devotion_conduit
+			add_trait = leader_trait_master_diplomat
+			add_trait = leader_trait_legendary_great_teacher_2
+			add_trait = leader_trait_legendary_pious_ascet_2
+			add_trait = leader_trait_legendary_natural_ruler_2
+			add_trait = leader_trait_irenic
+			add_trait = subclass_official_diplomacy_councilor
+			set_immortal = yes
+			set_variable = { which = dmj_devotion_value_leader value = 0 }
+		}
+	}
+	country_event = { id = dmj_test.1 }
+}
+
+dmj_testers_setup = { # You're welcome :)
+	add_resource = {
+		energy = 20000
+		minerals = 20000
+		food = 20000
+		influence = 800
+		alloys = 10000
+		consumer_goods = 10000
+		rare_crystals = 1000
+		volatile_motes = 1000
+		exotic_gases = 1000
+		sr_dark_matter = 100
+	}
+	create_fleet = {
+		name = "NAME_dmj_Test_Fleet"
+		effect = {
+			set_owner = root
+			while = {
+				count < 20
+				create_ship = {
+					name = "NAME_dmj_Test_Cruiser"
+					design = "NAME_dmj_cruiser_ship"
+				}
+			}
+			set_location = root.capital_scope
+		}
+	}
+}

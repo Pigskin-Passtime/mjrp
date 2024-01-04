@@ -1,0 +1,560 @@
+# dmj_flavor_events
+# By Jin2188
+
+namespace = dmj_flavor
+
+country_event = { # Flavor events intializer
+	id = dmj_flavor.1
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		any_owned_leader = {
+			is_same_value = event_target:dmj_daniel
+		}
+	}
+
+	immediate = {
+		event_target:dmj_daniel = {
+			random_list = {
+				15 = { leader_event = { id = dmj_flavor.2 days = 1 random = 1800 } }
+				15 = {
+					leader_event = { id = dmj_flavor.3 days = 1 random = 1800 }
+					modifier = {
+						factor = 0
+						owner = {
+							has_modifier = dmj_reinhard_infiltration_buff
+							NOT = {
+								any_owned_system = { # I don't know if this works, if there's a better way then tell me
+									any_system_planet = {
+										owner = { is_country_type = primitive }
+									}
+								}
+							}
+						}
+					}
+				}
+				15 = {
+					leader_event = { id = dmj_flavor.4 days = 1 random = 1800 }
+					modifier = {
+						factor = 0
+						owner = {
+							NOT = {
+								any_owned_planet = { has_building = dmj_reinhardist_temple }
+							}
+							has_resource = { type = minerals amount < 1000 }
+						}
+					}
+				}
+				15 = {
+					leader_event = { id = dmj_flavor.5 days = 1 random = 1800 }
+					modifier = {
+						factor = 0
+						owner = {
+							NOT = {
+								any_owned_leader = {
+									OR = {
+										has_ethic = ethic_authoritarian
+										has_ethic = ethic_spiritualist
+										has_ethic = ethic_militarist
+										num_leader_traits = {
+											value > 0
+											negative = yes
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				15 = {
+					leader_event = { id = dmj_flavor.6 days = 1 random = 1800 }
+					modifier = {
+						factor = 0
+						owner = {
+							NOR = {
+								any_pop_faction = {
+									is_pop_faction_type = reinhardist
+								}
+								count_owned_pop = {
+									limit = {
+										pop_faction = {
+											is_pop_faction_type = reinhardist
+										}
+									}
+									count >= 5
+								}
+							}
+						}
+					}
+				}
+				15 = {
+					leader_event = { id = dmj_flavor.7 days = 1 random = 1800 }
+					modifier = {
+						factor = 0
+						owner = {
+							NOT = {
+								any_pop_faction = {
+									is_pop_faction_type = reinhardist
+								}
+							}
+						}
+					}
+				}
+				10 = {}
+			}
+		}
+	}
+}
+
+leader_event = { # Gives psionic techs
+	id = dmj_flavor.2
+	name = "dmj_flavor.2.name"
+	desc = "dmj_flavor.2.desc"
+
+	picture = GFX_evt_zro_2
+	show_sound = event_psionic
+
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_renowned"
+
+	trigger = {
+		exists = owner
+	}
+
+	option = {
+		name = "dmj_flavor.2.a"
+		owner = {
+			if = { # This is an extremely long if statement, I am so very sorry
+				limit = {
+					NAND = {
+						has_technology = tech_psionic_theory
+						has_technology = tech_mine_zro
+					}
+				}
+				random_list = {
+					50 = {
+						if = {
+							limit = { NOT = { has_research_option = tech_psionic_theory } }
+							add_research_option = tech_psionic_theory
+							add_tech_progress = { tech = tech_psionic_theory progress = 0.25 }
+						}
+						else = {
+							add_tech_progress = { tech = tech_psionic_theory progress = 0.25 }
+						}
+						modifier = {
+							factor = 0
+							has_technology = tech_psionic_theory
+						}
+					}
+					50 = {
+						if = {
+							limit = { NOT = { has_research_option = tech_mine_zro } }
+							add_research_option = tech_mine_zro
+							add_tech_progress = { tech = tech_mine_zro progress = 0.25 }
+						}
+						else = {
+							add_tech_progress = { tech = tech_mine_zro progress = 0.25 }
+						}
+						modifier = {
+							factor = 0
+							has_technology = tech_mine_zro
+						}
+					}
+				}
+			}
+			else if = {
+				limit = {
+					NAND = {
+						has_technology = tech_telepathy
+						has_technology = tech_thought_enforcement
+					}
+				}
+				if = {
+					limit = { NOT = { has_technology = tech_telepathy } }
+					if = {
+						limit = { NOT = { has_research_option = tech_telepathy } }
+						add_research_option = tech_telepathy
+						add_tech_progress = { tech = tech_telepathy progress = 0.25 }
+					}
+					else = {
+						add_tech_progress = { tech = tech_telepathy progress = 0.25 }
+					}
+				}
+				else = {
+					if = {
+						limit = { NOT = { has_research_option = tech_thought_enforcement } }
+						add_research_option = tech_thought_enforcement
+						add_tech_progress = { tech = tech_thought_enforcement progress = 0.25 }
+					}
+					else = {
+						add_tech_progress = { tech = tech_thought_enforcement progress = 0.25 }
+					}
+				}
+			}
+			else if = {
+				limit = {
+					NAND = {
+						has_technology = tech_precognition_interface
+						has_technology = tech_psi_jump_drive_1
+						has_technology = tech_cloaking_psi
+						has_technology = tech_psionic_barrier
+						has_technology = tech_psionic_shield
+					}
+				}
+				50 = {
+					if = {
+						limit = { NOT = { has_technology = tech_precognition_interface } }
+						if = {
+							limit = { NOT = { has_research_option = tech_precognition_interface } }
+							add_research_option = tech_precognition_interface
+							add_tech_progress = { tech = tech_precognition_interface progress = 0.25 }
+						}
+						else = {
+							add_tech_progress = { tech = tech_precognition_interface progress = 0.25 }
+						}
+					}
+					else_if = {
+						limit = { NOT = { has_technology = tech_psi_jump_drive_1 } }
+						if = {
+							limit = { NOT = { has_research_option = tech_psi_jump_drive_1 } }
+							add_research_option = tech_psi_jump_drive_1
+							add_tech_progress = { tech = tech_psi_jump_drive_1 progress = 0.25 }
+						}
+						else = {
+							add_tech_progress = { tech = tech_psi_jump_drive_1 progress = 0.25 }
+						}
+					}
+					else_if = {
+						limit = {
+							has_first_contact_dlc = yes
+							NOT = { has_technology = tech_cloaking_psi }
+						}
+						if = {
+							limit = { NOT = { has_research_option = tech_cloaking_psi } }
+							add_research_option = tech_cloaking_psi
+							add_tech_progress = { tech = tech_cloaking_psi progress = 0.25 }
+						}
+						else = {
+							add_tech_progress = { tech = tech_cloaking_psi progress = 0.25 }
+						}
+					}
+					modifier = {
+						factor = 0
+						AND = {
+							has_technology = tech_precognition_interface
+							has_technology = tech_psi_jump_drive_1
+							OR = {
+								NOT = { has_first_contact_dlc = yes }
+								has_technology = tech_cloaking_psi
+							}
+						}
+					}
+				}
+				50 = {
+					if = {
+						limit = { NOT = { has_technology = tech_precognition_interface } }
+						if = {
+							limit = { NOT = { has_research_option = tech_psionic_barrier } }
+							add_research_option = tech_psionic_barrier
+							add_tech_progress = { tech = tech_psionic_barrier progress = 0.25 }
+						}
+						else = {
+							add_tech_progress = { tech = tech_psionic_barrier progress = 0.25 }
+						}
+					}
+					else_if = {
+						limit = { NOT = { has_technology = tech_psionic_shield } }
+						if = {
+							limit = { NOT = { has_research_option = tech_psionic_shield } }
+							add_research_option = tech_psionic_shield
+							add_tech_progress = { tech = tech_psionic_shield progress = 0.25 }
+						}
+						else = {
+							add_tech_progress = { tech = tech_psionic_shield progress = 0.25 }
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					has_technology = tech_colossus
+					NOT = { has_technology = tech_pk_godray }
+				}
+				if = {
+					limit = { NOT = { has_research_option = tech_pk_godray } }
+					add_research_option = tech_pk_godray
+					add_tech_progress = { tech = tech_pk_godray progress = 0.25 }
+				}
+				else = {
+					add_tech_progress = { tech = tech_pk_godray progress = 0.25 }
+				}
+			}
+			else = {
+				add_random_research_option = {
+					add_progress = 0.25
+					category = psionics
+					fail_effects = {
+						add_monthly_resource_mult = {
+							resource = society_research
+							value = @tier3researchreward
+							min = @tier3researchmin
+							max = @tier3researchmax
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+leader_event = { # Gives buffs to primitive infiltration, only if you have First Contact DLC
+	id = dmj_flavor.3
+	name = "dmj_flavor.3.name"
+	desc = "dmj_flavor.3.desc"
+
+	picture = GFX_evt_infiltration_neutral
+	show_sound = event_inhabited_solar_system
+
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_renowned"
+
+	trigger = {
+		exists = owner
+		has_first_contact_dlc = yes
+	}
+
+	option = {
+		name = "dmj_flavor.3.a"
+		owner = {
+			add_modifier = {
+				modifier = dmj_reinhard_infiltration_buff
+				days = 3600
+			}
+		}
+	}
+}
+
+leader_event = { # Reinhard "borrows" some resources, what could he be doing with them?
+	id = dmj_flavor.4
+	name = "dmj_flavor.4.name"
+	desc = "dmj_flavor.4.desc"
+
+	picture = GFX_evt_gunrunning
+	show_sound = event_administrative_work
+
+	trigger = {
+		exists = owner
+	}
+
+	option = {
+		name = "dmj_flavor.4.a"
+		owner = {
+			add_resource = {
+				minerals = -1000
+			}
+		}
+		hidden_effect = {
+			leader_event = { id = dmj_flavor.40 days = 720 random = 1080 } # Between 2 and 5 years
+		}
+	}
+}
+
+leader_event = { # Builds a Reinhardist Cathedral on a random planet
+	id = dmj_flavor.40
+	name = "dmj_flavor.40.name"
+	desc = "dmj_flavor.40.desc"
+
+	picture = GFX_evt_busy_spaceport
+	show_sound = event_construction
+
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_renowned"
+
+	trigger = {
+		exists = owner
+	}
+
+	immediate = {
+		random_owned_planet = {
+			limit = { NOT = { has_building = dmj_reinhardist_temple } }
+			save_event_target_as = dmj_event_temple_planet # used in loc... when I get around to writing it that is
+		}
+	}
+
+	option = {
+		name = "dmj_flavor.40.a"
+		owner = {
+			event_target:dmj_event_temple_planet = {
+				add_building = dmj_reinhardist_temple
+			}
+		}
+	}
+}
+
+leader_event = { # Random leader becomes a Reinhardist Devotee
+	id = dmj_flavor.5
+	name = "dmj_flavor.5.name"
+	desc = "dmj_flavor.5.desc"
+
+	picture = GFX_evt_knights
+	show_sound = event_hand_shake
+
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_renowned"
+
+	trigger = {
+		exists = owner
+	}
+
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				OR = {
+					has_ethic = ethic_authoritarian
+					has_ethic = ethic_spiritualist
+					has_ethic = ethic_militarist
+					num_leader_traits = {
+						value > 0
+						negative = yes
+					}
+				}
+			}
+			save_event_target_as = dmj_event_devotee # used in loc... when I get around to writing it that is
+		}
+	}
+
+	option = {
+		name = "dmj_flavor.5.a"
+		event_target:dmj_event_devotee = {
+			add_trait = leader_trait_dmj_reinhardist_devotee
+			add_trait = "random_negative"
+			if = {
+				limit = {
+					NOR = {
+						has_ethic = ethic_authoritarian
+						has_ethic = ethic_spiritualist
+						has_ethic = ethic_militarist
+					}
+				}
+				random_list = {
+					33 = {
+						change_background_ethic = ethic_authoritarian
+					}
+					33 = {
+						change_background_ethic = ethic_spiritualist
+					}
+					33 = {
+						change_background_ethic = ethic_militarist
+					}
+				}
+			}
+		}
+	}
+}
+
+leader_event = { # A group of pops sacrifice their souls to Reinhard
+	id = dmj_flavor.6
+	name = "dmj_flavor.6.name"
+	desc = "dmj_flavor.6.desc"
+
+	picture = GFX_evt_necrophage
+	show_sound = event_death_cult
+
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_renowned"
+
+	trigger = {
+		exists = owner
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				exists = planet
+				planet = {
+					count_owned_pop = {
+						limit = {
+							pop_faction = {
+								is_pop_faction_type = reinhardist
+							}
+						}
+						count >= 5
+					}
+				}
+			}
+			planet = { save_event_target_as = dmj_event_sacrifice_planet } # used in loc... when I get around to writing it that is
+		}
+		else = {
+			random_owned_planet = {
+				limit = {
+					count_owned_pop = {
+						limit = {
+							pop_faction = {
+								is_pop_faction_type = reinhardist
+							}
+						}
+						count >= 5
+					}
+				}
+				save_event_target_as = dmj_event_sacrifice_planet
+			}
+		}
+		dmj_event_sacrifice_planet = {
+			set_variable_to_random_value = { which = dmj_sacrifice_pops min = 2 max = 5 rounded = yes }
+		}
+	}
+
+	option = {
+		name = "dmj_flavor.6.a"
+		event_target:dmj_event_sacrifice_planet = {
+			while = {
+				count < dmj_sacrifice_pops
+				random_owned_pop = {
+					limit = {
+						pop_faction = {
+							is_pop_faction_type = reinhardist
+						}
+					}
+					kill_pop = yes
+				}
+			}
+		}
+		hidden_effect = {
+			event_target:dmj_event_sacrifice_planet = {
+				clear_variable = dmj_sacrifice_pops
+			}
+		}
+	}
+}
+
+leader_event = { # Reinhardist Agitation, reduces Reinhardist Faction approval
+	id = dmj_flavor.7
+	name = "dmj_flavor.7.name"
+	desc = "dmj_flavor.7.desc"
+
+	picture = GFX_evt_civil_action
+	show_sound = event_assembly_fight
+
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_renowned"
+
+	trigger = {
+		exists = owner
+	}
+
+	immediate = {
+		random_pop_faction = {
+			limit = { is_pop_faction_type = reinhardist }
+			save_event_target_as = dmj_event_agitation_faction
+		}
+	}
+
+	option = {
+		name = "dmj_flavor.7.a"
+		custom_tooltip = "dmj_flavor.7.effects"
+		hidden_effect = {
+			set_timed_country_flag = { flag = dmj_agitation days = 3600 }
+		}
+	}
+}

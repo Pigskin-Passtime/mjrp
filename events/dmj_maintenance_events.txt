@@ -1,0 +1,249 @@
+# dmj_maintenance_events
+# By Jin2188
+
+namespace = dmj_maintenance
+
+country_event = { # Update Devotion variable monthly
+	id = dmj_maintenance.1
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		export_resource_income_to_variable = {
+			resource = dmj_sr_devotion
+			variable = dmj_devotion_value
+		}
+		if = {
+			limit = { any_owned_leader = { is_same_value = event_target:dmj_daniel } }
+			event_target:dmj_daniel = {
+				set_variable = { which = dmj_devotion_value_leader value = root.dmj_devotion_value }
+			}
+		}
+		if = {
+			limit = { any_owned_leader = { is_same_value = event_target:dmj_michael } }
+			event_target:dmj_michael = {
+				set_variable = { which = dmj_devotion_value_leader value = root.dmj_devotion_value }
+			}
+		}
+	}
+}
+
+country_event = { # Change leader portraits back, if they somehow get changed
+	id = dmj_maintenance.2
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_owned_leader = {
+			OR = {
+				is_same_value = event_target:dmj_daniel
+				is_same_value = event_target:dmj_michael
+			}
+		}	
+	}
+
+	immediate = {
+		event_target:dmj_daniel = {
+			change_leader_portrait = dmj_daniel
+		}
+		event_target:dmj_michael = {
+			change_leader_portrait = dmj_michael
+		}
+	}
+}
+
+country_event = { # Destroy Reinhard battleform when not at war
+	id = dmj_maintenance.3
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_owned_fleet = {
+			has_fleet_flag = dmj_reinhard_battleform
+		}
+		is_at_war = no
+	}
+
+	immediate = {
+		every_owned_fleet = {
+			limit = { has_fleet_flag = dmj_reinhard_battleform }
+			if = {
+				limit = { leader = event_target:dmj_daniel }
+				event_target:dmj_daniel = {
+					unassign_leader = this
+					remove_subclass = yes
+					remove_all_traits = yes
+					change_leader_class = official
+					add_trait_no_notify = leader_trait_chosen
+					add_trait_no_notify = leader_trait_devotion_conduit
+					add_trait_no_notify = leader_trait_supreme_organizer
+					add_trait_no_notify = leader_trait_legendary_military_knowledge_2
+					add_trait_no_notify = leader_trait_legendary_evervigilant_2
+					add_trait_no_notify = leader_trait_legendary_high_king_2
+					add_trait_no_notify = leader_trait_legendary_harsh_ruler
+					add_trait_no_notify = subclass_official_economy_councilor
+				}
+			}
+		}
+		event_target:dmj_daniel_clone = {
+			kill_leader = {
+				show_notification = no
+				fire = yes
+			}
+		}
+		every_owned_fleet = {
+			limit = { has_fleet_flag = dmj_reinhard_battleform }
+			destroy_fleet = {
+				target = this
+				kill_leader = no
+				destroy_template = no
+			}
+		}
+	}
+}
+
+country_event = { # If Reinhardist Faction does not exist within a year, force create it
+	id = dmj_maintenance.4
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_owned_leader = {
+			is_same_value = event_target:dmj_daniel
+		}
+		NOT = {
+			any_pop_faction = {
+				is_pop_faction_type = reinhardist
+			}
+		}
+		is_faction_allowed = yes
+	}
+
+	immediate = {
+		while = {
+			count < 5
+			random_owned_pop = {
+				random_list = {
+					33 = {
+						pop_change_ethic = ethic_authoritarian
+					}
+					33 = {
+						pop_change_ethic = ethic_spiritualist
+					}
+					33 = {
+						pop_change_ethic = ethic_militarist
+					}					
+				}
+				enable_faction_of_type = reinhardist
+				random_pop_faction = {
+					limit = { is_pop_faction_type = reinhardist }
+					save_event_target_as = dmj_reinhardist_faction
+				}
+				set_pop_faction = event_target:dmj_reinhardist_faction
+			}
+		}
+	}
+}
+
+country_event = { # Trigger dmj_sol.7 if you open communications with Faulkner after you recruited Reinhard
+	id = dmj_maintenance.5
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_communications = event_target:dmj_sol_country
+		has_country_flag = owns_reinhard
+		NOT = { has_country_flag = dmj_been_chewed_out }
+	}
+
+	immediate = {
+		country_event = { id = dmj_sol.7 }
+	}
+}
+
+country_event = { # Create Michael's Battleform if he is at war
+	id = dmj_maintenance.6
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_same_value = event_target:dmj_sol_country
+		is_at_war = yes
+		NOT = {
+			any_owned_fleet = {
+				is_fleet_flag = dmj_faulkner_battleform
+			}
+		}
+	}
+
+	immediate = {
+		create_fleet = {
+			name = "NAME_dmj_Faulkner_Battleform"
+			settings = {
+				can_change_leader = no
+				spawn_debris = no
+				is_boss = yes
+			}
+			effect = {
+				set_owner = root
+				create_ship = {
+					name = "NAME_dmj_Faulkner_Battleform"
+					design = "NAME_dmj_Psionic_Battleform"
+				}
+				set_location = root.capital_scope
+				set_fleet_flag = dmj_psionic_battleform
+				set_fleet_flag = dmj_faulkner_battleform
+				event_target:dmj_michael = {
+       					clone_leader = {
+						target = ruler
+						class = commander
+						effect = {
+							remove_subclass = yes
+							remove_all_traits = yes
+							add_trait_no_notify = leader_trait_chosen
+							add_trait_no_notify = leader_trait_devotion_conduit_milship
+							add_trait_no_notify = leader_trait_spacebender_dmj
+							add_trait_no_notify = leader_trait_cautious_2
+							add_trait_no_notify = leader_trait_scout_3
+							add_trait_no_notify = leader_trait_energy_weapon_specialist
+							add_trait_no_notify = leader_trait_nervous
+							add_trait_no_notify = subclass_commander_admiral
+							save_global_event_target_as = dmj_michael_clone
+						}
+					}
+				}
+				set_leader = event_target:dmj_michael_clone
+			}
+		}		
+	}
+}
+
+country_event = { # Destroy Faulkner battleform when not at war
+	id = dmj_maintenance.7
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_owned_fleet = {
+			has_fleet_flag = dmj_faulkner_battleform
+		}
+		is_at_war = no
+	}
+
+	immediate = {
+		event_target:dmj_michael_clone = {
+			kill_leader = {
+				show_notification = no
+				fire = yes
+			}
+		}
+		every_owned_fleet = {
+			limit = { has_fleet_flag = dmj_faulkner_battleform }
+			destroy_fleet = {
+				target = this
+				kill_leader = no
+				destroy_template = no
+			}
+		}
+	}
+}

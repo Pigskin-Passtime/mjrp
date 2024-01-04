@@ -1,0 +1,49 @@
+# dmj_idk_events_2
+# By Jin2188
+
+namespace = dmj_idk_2
+
+country_event = {
+	id = dmj_idk_2.1 # For some reason, putting this event into a separate file makes it work properly. Don't ask why, because I don't know.
+	title = "dmj.15.name"
+	desc = "dmj.15.desc"
+	is_triggered_only = yes
+
+	picture = GFX_evt_open_revolt
+	show_sound = event_open_revolt
+
+	option = {
+		name = dmj.15.original
+		custom_tooltip = dmj_rebellion_play_original
+	}
+
+	option = {
+		name = dmj.15.reinhardists
+		custom_tooltip = dmj_rebellion_play_reinhardists
+		trigger = {
+			event_target:dmj_rebellion_originator = { is_ai = no }
+		}
+		hidden_effect = {
+			if = {
+				limit = { event_target:dmj_rebellion_originator = { num_owned_planets > 0 } }
+				event_target:dmj_reinhardist_uprising = {
+					set_player = event_target:dmj_rebellion_originator
+					add_modifier = {
+						modifier = uprising_player_buff
+						days = 1800
+					}
+				}
+			}
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			event_target:dmj_rebellion_originator = {
+				remove_country_flag = owns_reinhard
+				remove_country_flag = dmj_reinhardists_radicalizing
+				set_country_flag = dmj_reinhardists_revolting
+            		}
+        	}
+    	}
+}

@@ -1,0 +1,856 @@
+# dmj_sol_events
+# By Jin2188
+
+namespace = dmj_sol
+
+country_event = { # Search for Sol
+	id = dmj_sol.1
+	title = "dmj_sol.1.name"
+	desc = "dmj_sol.1.desc"
+	desc = {
+		trigger = {
+			any_system = {
+				has_star_flag = sol
+				is_in_sensor_range_of_country = root
+				NOT = { is_owned_by = root }
+			}
+		}
+		text = "dmj_sol.1.knows_sol_desc"
+	}
+	desc = {
+		trigger = {
+			any_system = {
+				has_star_flag = sol
+				NOT = { is_in_sensor_range_of_country = root }
+				NOT = { is_owned_by = root } # Just in case
+			}
+		}
+		text = "dmj_sol.1.not_knows_sol_desc"
+	}
+	is_triggered_only = yes
+
+	picture = GFX_evt_ancient_databank
+	show_sound = event_scanner
+
+	trigger = {
+		NOR = {
+			has_communications = event_target:dmj_sol_country
+			any_system = {
+				AND = {
+					has_star_flag = sol
+					is_owned_by = root
+				}
+			}
+		}
+	}
+
+	option = {
+		name = dmj_sol.1.a
+		begin_event_chain = { event_chain = dmj_sol_reclamation_chain target = root }
+		if = {
+			limit = {
+				any_system = {
+					has_star_flag = sol
+					NOT = { is_in_sensor_range_of_country = root }
+				}
+			}
+			enable_special_project = {
+				name = "dmj_SOL_SEARCH"
+				owner = root
+			}
+		}
+		else_if = {
+			limit = {
+				any_system = {
+					has_star_flag = sol
+					is_in_sensor_range_of_country = root
+				}
+			}
+			country_event = { id = dmj_sol.3 days = 3600 }
+			random_system = {
+				limit = {
+					has_star_flag = sol
+					is_in_sensor_range_of_country = root
+				}
+				random_system_planet = {
+					limit = {
+						OR = {
+							has_planet_flag = planet_earth
+							has_planet_flag = nuked_earth
+						}
+					}
+					save_event_target_as = dmj_terra
+				}
+			}
+			create_point_of_interest = { id = dmj_terra name = "dmj_terra_poi" desc = "dmj_terra_poi_desc" event_chain = dmj_sol_reclamation_chain location = event_target:dmj_terra }
+		}
+	}
+}
+
+country_event = { # Search for Sol Completed
+	id = dmj_sol.2
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = dmj_sol_discovered
+		if = {
+			limit = {
+				any_system = {
+					has_star_flag = sol
+					any_system_planet = {
+						has_planet_flag = planet_earth
+						NOT = { has_planet_flag = dmj_weird_earth }
+					}
+				}
+			}
+			country_event = { id = dmj_sol.4 }
+			create_point_of_interest = { id = dmj_terra name = "dmj_terra_poi" desc = "dmj_terra_poi_desc" event_chain = dmj_sol_reclamation_chain location = event_target:dmj_terra }
+		}
+		else_if = {
+			limit = {
+				any_system = {
+					has_star_flag = sol
+					any_system_planet = {
+						has_planet_flag = nuked_earth
+					}
+				}
+			}
+			country_event = { id = dmj_sol.5 }
+			create_point_of_interest = { id = dmj_terra name = "dmj_terra_poi" desc = "dmj_terra_poi_desc" event_chain = dmj_sol_reclamation_chain location = event_target:dmj_terra }
+		}
+		else_if = {
+			limit = { exists = event_target:dmj_sol_country }
+			establish_communications_no_message = event_target:dmj_sol_country
+			country_event = { id = dmj_sol.6 }
+		}
+	}
+}
+
+country_event = { # Reinhard leaves after failed Sol Reclamation
+	id = dmj_sol.3
+	title = "dmj_sol.3.name"
+	desc = "dmj_sol.3.desc"
+	is_triggered_only = yes
+
+	picture = GFX_evt_ship_travel
+	show_sound = event_default
+
+	trigger = {
+		any_owned_leader = {
+			is_same_value = event_target:dmj_daniel
+		}
+		NOT = { has_country_flag = reinhardist_empire }
+		NOT = { has_country_flag = dmj_sol_discovered }
+	}
+
+	immediate = {
+		event_target:dmj_daniel = {
+			kill_leader = {
+				show_notification = no
+				fire = yes
+			}
+		}
+		remove_country_flag = owns_reinhard
+	}
+
+	option = {
+		name = "dmj_sol.3.a"
+	}
+}
+
+country_event = { # Discover Primitive Sol
+	id = dmj_sol.4
+	title = "dmj_sol.4.name"
+	desc = "dmj_sol.4.desc"
+	is_triggered_only = yes
+
+	picture = GFX_evt_ship_travel
+	show_sound = event_default
+
+	immediate = {
+		root.capital_scope = {
+			spawn_natural_wormhole = {
+				bypass_type = dmj_shroud_tunnel
+				random_pos = no
+				orbit_angle = 360
+				orbit_distance = 15
+			}
+		}
+		random_system = {
+			limit = {
+				has_star_flag = sol
+				any_system_planet = {
+					has_planet_flag = planet_earth
+				}
+			}
+			spawn_natural_wormhole = {
+				bypass_type = dmj_shroud_tunnel
+				random_pos = no
+				orbit_angle = 360
+			}
+			link_wormholes = root.capital_scope
+			set_surveyed = { surveyed = yes surveyor = root }
+		}
+	}
+
+	option = {
+		name = "dmj_sol.4.a"
+	}
+}
+
+country_event = { # Discover Nuked Sol
+	id = dmj_sol.5
+	title = "dmj_sol.5.name"
+	desc = "dmj_sol.5.desc"
+	is_triggered_only = yes
+
+	picture = GFX_evt_ship_travel
+	show_sound = event_default
+
+	immediate = {
+		root.capital_scope = {
+			spawn_natural_wormhole = {
+				bypass_type = dmj_shroud_tunnel
+				random_pos = no
+				orbit_angle = 360
+				orbit_distance = 15
+			}
+		}
+		random_system = {
+			limit = {
+				has_star_flag = sol
+				any_system_planet = {
+					has_planet_flag = nuked_earth
+				}
+			}
+			spawn_natural_wormhole = {
+				bypass_type = dmj_shroud_tunnel
+				random_pos = no
+				orbit_angle = 360
+			}
+			link_wormholes = root.capital_scope
+			set_surveyed = { surveyed = yes surveyor = root }
+		}
+	}
+
+	option = {
+		name = "dmj_sol.5.a"
+	}
+}
+
+country_event = { # Open Communications with Faulkner's empire
+	id = dmj_sol.6
+	title = "dmj_sol.6.name"
+	desc = "dmj_sol.6.desc"
+	is_triggered_only = yes
+
+	picture = GFX_evt_star_chart
+	show_sound = event_alien_signal
+
+	option = {
+		name = "dmj_sol.6.a"
+		country_event = { id = dmj_sol.7 }
+	}
+}
+
+country_event = { # Faulkner chews you out for freeing Reinhard
+	id = dmj_sol.7
+	title = "dmj_sol.7.name"
+	desc = "dmj_sol.7.desc"
+	is_triggered_only = yes
+
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:dmj_michael
+		planet_background = event_target:dmj_sol_country.capital_scope
+		graphical_culture = event_target:dmj_sol_country
+		city_level = event_target:dmj_sol_country.capital_scope
+		room = event_target:dmj_sol_country.ruler
+	}
+
+	immediate = {
+		set_country_flag = dmj_been_chewed_out
+	}
+
+	option = { # War immediately, no negotiation
+		name = "dmj_sol.7.a"
+		response_text = "dmj_sol.7.a.response"
+		event_target:dmj_sol_country = {
+			declare_war = {
+				target = root
+				name = {
+					key = "NAME_dmj_Reimprisonment_War"
+					variable_string = "[This.MainDefender.GetAdj]"
+				}
+				attacker_war_goal = "wg_dmj_reinhard_reimprisonment"
+			}			
+		}
+	}
+
+	option = { # Attempt negotiation, receive demand to reimprison Reinhard
+		name = "dmj_sol.7.b"
+		trigger = {
+			NOT = { has_country_flag = reinhardist_empire }
+		}
+		country_event = { id = dmj.8 }
+	}
+}
+
+country_event = { # Receive ultimatum, reimprison Reinhard or war
+	id = dmj_sol.8
+	title = "dmj_sol.8.name"
+	desc = "dmj_sol.8.desc"
+	is_triggered_only = yes
+
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:dmj_michael
+		planet_background = event_target:dmj_sol_country.capital_scope
+		graphical_culture = event_target:dmj_sol_country
+		city_level = event_target:dmj_sol_country.capital_scope
+		room = event_target:dmj_sol_country.ruler
+	}
+
+	option = { # War
+		name = "dmj_sol.8.a"
+		response_text = "dmj_sol.8.a.response"
+		event_target:dmj_sol_country = {
+			declare_war = {
+				target = root
+				name = {
+					key = "NAME_dmj_Reimprisonment_War"
+					variable_string = "[This.MainDefender.GetAdj]"
+				}
+				attacker_war_goal = "wg_dmj_reinhard_reimprisonment"
+			}
+		}
+	}
+
+	option = { # Accept
+		name = "dmj_sol.8.b"
+		response_text = "dmj_sol.8.b.response"
+		country_event = { id = dmj.9 days = 1 random = 9 }
+	}
+}
+
+country_event = { # Reinhard finds out, is pissed
+	id = dmj_sol.9
+	title = "dmj_sol.9.name"
+	desc = "dmj_sol.9.desc"
+	is_triggered_only = yes
+
+	picture = GFX_evt_dimensional_horror
+	show_sound = event_screams
+
+	immediate = {
+		# Check where he is, if he's governing a planet, save it as an event target, if not, save the empire capital as an event target
+		if = {
+			limit = {
+				any_owned_planet = {
+					leader = { is_same_value = event_target:dmj_daniel }
+				}
+			}
+			random_owned_planet = {
+				limit = {
+					leader = { is_same_value = event_target:dmj_daniel }
+				}
+				save_event_target_as = dmj_pissed_reinhard_spawn_location
+			}
+		}
+		else = {
+			root.capital_scope = { save_event_target_as = dmj_pissed_reinhard_spawn_location }
+		}
+
+		if = {
+			limit = { NOT = { exists = event_target:dmj_daniel_country_shroud } }
+			create_country = {
+				name = "NAME_dmj_daniel"
+				type = shroud_spirits
+				flag = {
+					icon = {
+						category = "special"
+						file = "unknown.dds"
+					}
+					background = {
+						category = "backgrounds"
+						file = "00_solid.dds"
+					}
+					colors = {
+						"yellow"
+						"yellow"
+						"null"
+						"null"
+					}
+				}
+				effect = {
+					save_global_event_target_as = dmj_daniel_country_shroud
+				}
+			}
+		}
+		create_fleet = {
+			name = "NAME_dmj_Reinhard_Battleform"
+			settings = {
+				can_change_leader = no
+				spawn_debris = no
+				is_boss = yes
+			}
+			effect = {
+				set_owner = event_target:dmj_daniel_country_shroud
+				create_ship = {
+					name = "NAME_dmj_Reinhard_Battleform"
+					design = "NAME_dmj_Psionic_Battleform"
+				}
+				set_location = event_target:dmj_pissed_reinhard_spawn_location
+				set_fleet_stance = aggressive
+				set_aggro_range_measure_from = return_point
+				set_aggro_range = 300
+				set_fleet_flag = dmj_psionic_battleform
+				set_fleet_flag = dmj_pissed_reinhard
+				event_target:dmj_daniel = {
+					remove_subclass = yes
+					remove_all_traits = yes
+					change_leader_class = commander
+					add_trait_no_notify = leader_trait_chosen
+					add_trait_no_notify = leader_trait_devotion_conduit_milship
+					add_trait_no_notify = leader_trait_spacebender_dmj
+					add_trait_no_notify = leader_trait_trickster_2
+					add_trait_no_notify = leader_trait_scout_3
+					add_trait_no_notify = leader_trait_energy_weapon_specialist
+					add_trait_no_notify = leader_trait_micromanager
+					add_trait_no_notify = subclass_commander_admiral
+					set_owner = event_target:dmj_daniel_country_shroud
+				}
+				set_leader = event_target:dmj_daniel
+			}
+		}
+		remove_country_flag = owns_reinhard
+	}
+	option = {
+		name = ONSCREEN
+		country_event = { id = dmj_sol.10 }
+	}	
+}
+
+country_event = { # Pissed Reinhard rants a little
+	id = dmj_sol.10
+	title = "dmj_sol.10.name"
+	desc = "dmj_sol.10.desc"
+	is_triggered_only = yes
+
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:dmj_daniel
+		room = extradimensional_room
+	}
+
+	option = {
+		name = "dmj_sol.10.a"
+		response_text = "dmj_sol.10.a.response"
+	}
+}
+
+country_event = { # Reinhard ded
+	id = dmj_sol.11
+	title = "dmj_sol.11.name"
+	desc = "dmj_sol.11.desc"
+	is_triggered_only = yes
+
+	picture = GFX_evt_astral_rift_entangled_dark_matter
+	show_sound = event_energy_field
+
+	trigger = {
+		fromfromfrom = { has_fleet_flag = dmj_pissed_reinhard }
+	}
+
+	immediate = {
+		event_target:dmj_daniel = {
+			kill_leader = {
+				show_notification = no
+				fire = yes
+			}
+		}
+		destroy_country = event_target:dmj_daniel_country_shroud
+		every_system = {
+			limit = { has_star_flag = dmj_spawn_system }
+			set_star_class = sc_black_hole
+			every_system_ambient_object = {
+				destroy_ambient_object = this
+			}
+			every_system_planet = {
+				limit = { is_star = yes }
+				create_ambient_object = {
+					type = "psi_storm_1"
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 0
+						angle = random
+					}
+				}
+				set_planet_size = 50
+				change_pc = pc_black_hole
+				clear_deposits = yes
+				add_deposit = d_dark_matter_deposit_10
+			}
+			every_system_planet = {
+				limit = { is_planet_class = pc_shattered }
+				change_pc = pc_shrouded
+				clear_deposits = yes
+				add_deposit = d_zro_deposit_3
+			}
+			random_system_planet = {
+				limit = {
+					is_planet_class = pc_shrouded
+					NOR = {
+						is_same_value = event_target:dmj_bastion_1
+						is_same_value = event_target:dmj_bastion_2
+					}
+				}
+				save_global_event_target_as = dmj_bastion_1
+				create_ambient_object = {
+					type = "shroud_rift_object"
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 0
+						angle = random
+					}
+					save_global_event_target_as = dmj_bastion_effect_1
+				}
+			}
+			random_system_planet = {
+				limit = {
+					is_planet_class = pc_shrouded
+					NOR = {
+						is_same_value = event_target:dmj_bastion_1
+						is_same_value = event_target:dmj_bastion_2
+					}
+				}
+				save_global_event_target_as = dmj_bastion_2
+				create_ambient_object = {
+					type = "shroud_rift_object"
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 0
+						angle = random
+					}
+					save_global_event_target_as = dmj_bastion_effect_2
+				}
+			}
+		}
+		remove_global_flag = dmj_reinhard_free
+		set_country_flag = dmj_reimprisoned_reinhard
+	}
+
+	option = {
+		name = "dmj_sol.11.regular"
+	}
+
+	option = {
+		name = "dmj_sol.11.authoritarian"
+	}
+}
+
+country_event = {
+	id = dmj_sol.12
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		root = {
+			is_same_value = event_target:dmj_sol_country
+		}
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				NOT = {
+					exists = event_target:dmj_michael
+				}
+			}
+			country_event = { id = dmj_leader.7 }
+		}
+		from = { country_event = { id = dmj_sol.13 } }
+	}
+}
+
+country_event = { # Faulkner captured
+	id = dmj_sol.13
+	title = "dmj_sol.13.name"
+	desc = "dmj_sol.13.desc"
+	is_triggered_only = yes
+
+	picture = GFX_evt_psionic_battle
+	show_sound = event_ground_battle
+
+	option = {
+		name = ONSCREEN
+		country_event = { id = dmj_sol.14 }
+	}
+}
+
+country_event = { # Faulkner makes you feel bad about yourself
+	id = dmj_sol.14
+	title = "dmj_sol.14.name"
+	desc = "dmj_sol.14.desc"
+	is_triggered_only = yes
+
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:dmj_michael
+		room = extradimensional_room
+	}
+
+	option = {
+		name = "dmj_sol.14.evil"
+		exclusive_trigger = {
+			OR = {
+				is_authoritarian = yes
+				is_xenophobe = yes
+			}
+			NOR = {
+				is_egalitarian = yes
+				is_pacifist = yes
+				is_xenophile = yes
+			}
+		}
+	}
+
+	option = {
+		name = "dmj_sol.14.good"
+		exclusive_trigger = {
+			OR = {
+				is_egalitarian = yes
+				is_pacifist = yes
+				is_xenophile = yes
+			}
+			NOR = {
+				is_authoritarian = yes
+				is_xenophobe = yes
+			}
+		}
+	}
+
+	after = {
+		if = {
+			limit = { exists = event_target:dmj_michael_country }
+			event_target:dmj_michael_country = {
+				destroy_country = yes
+			}
+		}
+		country_event = { id = dmj_sol.14 }
+	}
+}
+
+country_event = { # Faulkner Imprisoned
+	id = dmj_sol.15
+	title = "dmj_sol.15.name"
+	desc = "dmj_sol.15.desc"
+	is_triggered_only = yes
+
+	picture = GFX_evt_astral_rift_entangled_dark_matter
+	show_sound = event_energy_field
+
+	immediate = {
+		event_target:dmj_michael = {
+			kill_leader = {
+				show_notification = no
+				fire = yes
+			}
+		}
+		every_system = {
+			limit = { has_star_flag = dmj_spawn_system }
+			set_star_class = sc_black_hole
+			every_system_ambient_object = {
+				destroy_ambient_object = this
+			}
+			every_system_planet = {
+				limit = { is_star = yes }
+				create_ambient_object = {
+					type = "psi_storm_1"
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 0
+						angle = random
+					}
+				}
+				set_planet_size = 50
+				change_pc = pc_black_hole
+				clear_deposits = yes
+				add_deposit = d_dark_matter_deposit_10
+			}
+			every_system_planet = {
+				limit = { is_planet_class = pc_shattered }
+				change_pc = pc_shrouded
+				clear_deposits = yes
+				add_deposit = d_zro_deposit_3
+			}
+			random_system_planet = {
+				limit = {
+					is_planet_class = pc_shrouded
+					NOR = {
+						is_same_value = event_target:dmj_bastion_1
+						is_same_value = event_target:dmj_bastion_2
+					}
+				}
+				save_global_event_target_as = dmj_bastion_1
+				create_ambient_object = {
+					type = "shroud_rift_object"
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 0
+						angle = random
+					}
+					save_global_event_target_as = dmj_bastion_effect_1
+				}
+			}
+			random_system_planet = {
+				limit = {
+					is_planet_class = pc_shrouded
+					NOR = {
+						is_same_value = event_target:dmj_bastion_1
+						is_same_value = event_target:dmj_bastion_2
+					}
+				}
+				save_global_event_target_as = dmj_bastion_2
+				create_ambient_object = {
+					type = "shroud_rift_object"
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 0
+						angle = random
+					}
+					save_global_event_target_as = dmj_bastion_effect_2
+				}
+			}
+			set_star_flag = dmj_michael_imprisoned
+		}
+		remove_global_flag = dmj_michael_exists
+	}
+
+	option = {
+		name = "dmj_sol.15.a"
+	}
+}
+
+country_event = { # Reinhard Reimprisoned
+	id = dmj_sol.16
+	title = "dmj_sol.16.name"
+	desc = "dmj_sol.16.desc"
+	is_triggered_only = yes
+
+	picture = GFX_evt_astral_rift_entangled_dark_matter
+	show_sound = event_energy_field
+
+	immediate = {
+		event_target:dmj_daniel = {
+			kill_leader = {
+				show_notification = no
+				fire = yes
+			}
+		}
+		every_system = {
+			limit = { has_star_flag = dmj_spawn_system }
+			set_star_class = sc_black_hole
+			every_system_ambient_object = {
+				destroy_ambient_object = this
+			}
+			every_system_planet = {
+				limit = { is_star = yes }
+				create_ambient_object = {
+					type = "psi_storm_1"
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 0
+						angle = random
+					}
+				}
+				set_planet_size = 50
+				change_pc = pc_black_hole
+				clear_deposits = yes
+				add_deposit = d_dark_matter_deposit_10
+			}
+			every_system_planet = {
+				limit = { is_planet_class = pc_shattered }
+				change_pc = pc_shrouded
+				clear_deposits = yes
+				add_deposit = d_zro_deposit_3
+			}
+			random_system_planet = {
+				limit = {
+					is_planet_class = pc_shrouded
+					NOR = {
+						is_same_value = event_target:dmj_bastion_1
+						is_same_value = event_target:dmj_bastion_2
+					}
+				}
+				save_global_event_target_as = dmj_bastion_1
+				create_ambient_object = {
+					type = "shroud_rift_object"
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 0
+						angle = random
+					}
+					save_global_event_target_as = dmj_bastion_effect_1
+				}
+			}
+			random_system_planet = {
+				limit = {
+					is_planet_class = pc_shrouded
+					NOR = {
+						is_same_value = event_target:dmj_bastion_1
+						is_same_value = event_target:dmj_bastion_2
+					}
+				}
+				save_global_event_target_as = dmj_bastion_2
+				create_ambient_object = {
+					type = "shroud_rift_object"
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 0
+						angle = random
+					}
+					save_global_event_target_as = dmj_bastion_effect_2
+				}
+			}
+		}
+		remove_country_flag = owns_reinhard
+		remove_global_flag = dmj_reinhard_free
+	}
+
+	option = {
+		name = "dmj_sol.16.a"
+	}
+}
