@@ -1,0 +1,294 @@
+# wp02_solar_system_initializers
+# By bpainecraft
+
+wp02_initializer_01 = {
+	name = "wp02_system_name_1"
+	max_instances = 1
+	spawn_chance = 0
+
+	class = sc_g
+	asteroid_belt = {
+		type = empty_asteroid_belt
+		radius = 150
+	}
+	asteroid_belt = {
+		type = empty_asteroid_belt
+		radius = 151
+	}
+	flags = { suppress_archaeological_sites }
+
+	planet = {
+		class = pc_g_star
+		size = 30
+		orbit_distance = 0
+	}
+
+	planet = {
+		class = pc_molten
+		orbit_distance = 80
+		orbit_angle = { min = 90 max = 270 }
+		size = 18
+	}
+
+	planet = {
+		class = pc_barren
+		orbit_distance = 40
+		orbit_angle = { min = 90 max = 270 }
+		size = 25
+	}
+	planet = {
+		class = pc_barren
+		orbit_distance = 50
+		orbit_angle = { min = 90 max = 270 }
+		size = 25
+		has_ring = yes
+
+		init_effect = {
+			prevent_anomaly = yes
+			create_ambient_object = {
+				type = small_debris_object
+				location = this
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 5
+					angle = 275
+				}
+				set_ambient_object_flag = wp02_debris_object
+			}
+
+			create_ambient_object = {
+				type = abandoned_station_object
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 5
+					angle = 275
+				}
+				save_global_event_target_as = wp02_station_object
+			}
+			set_planet_flag = wp02_planet
+			save_global_event_target_as = wp02_planet
+		}
+	}
+
+	planet = {
+		class = pc_gas_giant
+		orbit_distance = 80
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 20 max = 35 }
+
+		change_orbit = 11
+
+		moon = {
+			class = pc_barren
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+			size = 10
+		}
+
+		moon = {
+			class = pc_barren
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 7
+			size = 12
+		}
+	}
+
+	planet = {
+		class = pc_gas_giant
+		orbit_distance = 80
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 20 max = 35 }
+
+		change_orbit = 11
+
+		moon = {
+			class = pc_barren_cold
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+	}
+	init_effect = {
+		save_global_event_target_as = wp02_system_1
+	}
+}
+
+wp02_initializer_02 = {
+	name = "wp02_system_name_2"
+	max_instances = 1
+	spawn_chance = 0
+
+	class = sc_m_giant
+	asteroid_belt = {
+		type = empty_asteroid_belt
+		radius = 240
+	}
+	flags = { suppress_archaeological_sites }
+
+	planet = {
+		class = pc_m_giant_star
+		size = 40
+		orbit_distance = 0
+		init_effect = {
+			prevent_anomaly = yes
+			set_planet_flag = wp02_star
+		}
+	}
+
+	planet = {
+		class = pc_molten
+		orbit_distance = 80
+		orbit_angle = { min = 90 max = 270 }
+		size = 22
+		init_effect = {
+			prevent_anomaly = yes
+		}
+	}
+
+	planet = {
+		class = pc_molten
+		orbit_distance = 35
+		orbit_angle = { min = 90 max = 270 }
+		size = 22
+		init_effect = {
+			prevent_anomaly = yes
+		}
+	}
+
+	planet = {
+		class = pc_arid
+		orbit_distance = 35
+		orbit_angle = { min = 90 max = 270 }
+		size = 22
+		init_effect = {
+			prevent_anomaly = yes
+		}
+	}
+
+	planet = {
+		class = pc_continental
+		orbit_distance = 35
+		orbit_angle = { min = 90 max = 270 }
+		size = 25
+		init_effect = {
+			prevent_anomaly = yes
+			save_global_event_target_as = wp02_rp
+		}
+	}
+
+	planet = {
+		class = pc_relic
+		orbit_distance = 35
+		orbit_angle = { min = 90 max = 270 }
+		size = 25
+		init_effect = {
+			save_event_target_as = wp02_or
+			prevent_anomaly = yes
+		}
+	}
+	
+	planet = {
+		class = pc_tundra
+		orbit_distance = 35
+		orbit_angle = { min = 90 max = 270 }
+		size = 23
+		init_effect = {
+			prevent_anomaly = yes
+		}
+	}
+
+	planet = {
+		class = pc_gas_giant
+		orbit_distance = 35
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 20 max = 35 }
+
+		change_orbit = 11
+
+		moon = {
+			class = pc_barren
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+			size = 10
+		}
+
+		moon = {
+			class = pc_barren
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 7
+			size = 12
+		}
+	}
+
+	planet = {
+		class = pc_gas_giant
+		orbit_distance = 35
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 20 max = 35 }
+
+		change_orbit = 11
+
+		moon = {
+			class = pc_barren_cold
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+		init_effect = {
+			save_event_target_as = wp02_ttr
+			prevent_anomaly = yes
+		}
+	}
+
+	planet = {
+		class = pc_frozen
+		size = 5
+		orbit_distance = 50
+		init_effect = {
+			save_event_target_as = wp02_out
+		}
+	}
+
+	init_effect = {
+		# spawn_megastructure = {
+		# 	type = habitat_central_complex_ruined
+		# 	orbit_distance = 20
+		# 	orbit_angle = { min = 90 max = 270 }
+		# }
+		spawn_megastructure = {
+			type = think_tank_ruined
+			planet = event_target:wp02_ttr
+		}
+		if = {
+			limit = {
+				has_federations_dlc = yes
+			}
+			spawn_megastructure = {
+				type = mega_shipyard_ruined
+			}
+		}
+		if = {
+			limit = {
+				has_overlord_dlc = yes
+			}
+			spawn_megastructure = {
+				type = orbital_ring_ruined
+				planet = event_target:wp02_or
+			}
+		}
+
+		spawn_natural_wormhole = {
+			bypass_type = wormhole
+			random_pos = no
+			orbit_distance = 90
+			orbit_angle = 270
+			graphics_entity_name = strange_wormhole_entity
+			init_effect = {
+				save_global_event_target_as = wp02_wormhole_2
+			}
+		}
+		save_global_event_target_as = wp02_system_2
+	}
+}

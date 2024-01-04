@@ -1,0 +1,963 @@
+# wp02_special_projects
+# By bpainecraft
+
+# Chain 1
+
+special_project = {
+	key = "wp02_search_project"
+	event_chain = "wp02_event_chain_1"
+	cost = 0
+	days_to_research = 30
+	tech_department = society_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+	location = yes
+
+	event_scope = ship_event
+
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+	}
+
+	on_success = {
+		ship_event = {
+			id = wp02event.2
+		}
+		owner = {
+			abort_special_project = {
+				type = wp02_scrap_project
+			}
+		}
+	}
+}
+
+special_project = {
+	key = "wp02_scrap_project"
+	event_chain = "wp02_event_chain_1"
+	cost = 0
+	days_to_research = 30
+	tech_department = engineering_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+	location = yes
+
+	same_option_group_as = { wp02_search_project }
+
+	event_scope = ship_event
+
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+	}
+
+	on_success = {
+		ship_event = {
+			id = wp02event.3
+		}
+		owner = {
+			abort_special_project = {
+				type = wp02_search_project
+			}
+			set_global_flag = wp02_station_scrapped
+		}
+	}
+}
+
+special_project = {
+	key = "wp02_power_ai_project"
+	event_chain = "wp02_event_chain_1"
+	cost = 1000
+	tech_department = engineering_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+	location = yes
+
+	event_scope = ship_event
+
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+	}
+
+	on_success = {
+		if = {
+			limit = {
+				has_global_flag = wp02_station_scrapped
+			}
+			event_target:wp02_planet = {
+				ship_event = {
+					id = wp02event.5
+				}
+			}
+			else = {
+				owner = {
+					country_event = {
+						id = wp02event.10
+					}
+				}
+			}
+		}
+		owner = {
+			# if = {
+			# 	limit = {
+			# 		has_global_flag = wp02_station_scrapped
+			# 	}
+			# 	event_target:wp02_planet = {
+			# 		ship_event = {
+			# 			id = wp02event.5
+			# 		}
+			# 	}
+			# }
+			# else = {
+			# 	country_event = {
+			# 		id = wp02event.10
+			# 	}
+			# }
+			end_event_chain = wp02_event_chain_1
+		}
+	}
+}
+
+special_project = {
+	key = "wp02_destroy_ai_project"
+	event_chain = "wp02_event_chain_1"
+	cost = 1000
+	tech_department = engineering_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+	location = yes
+
+	same_option_group_as = { wp02_power_ai_project }
+
+	event_scope = ship_event
+
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+	}
+
+	on_success = { 
+		ship_event = {
+			id = wp02event.5
+		}
+		owner = {
+			end_event_chain = wp02_event_chain_1
+		}
+	}
+}
+
+# Chain 2
+
+special_project = {
+	key = "wp02_reverse_engineer_1"
+	event_chain = "wp02_event_chain_2"
+	days_to_research = 30
+	tech_department = engineering_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+	location = yes
+
+	event_scope = ship_event
+
+	requirements = {
+		leader = commander
+		has_trait = leader_trait_wp02
+	}
+
+	on_success = {
+		owner = {
+			country_event = {
+				id = wp02event.21
+			}
+		}
+	}
+}
+
+special_project = {
+	key = "wp02_hack_the_database"
+	event_chain = wp02_event_chain_2
+	cost = 1000
+	tech_department = physics_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+	location = yes
+
+	event_scope = ship_event
+
+	requirements = {
+		leader = commander
+		has_trait = leader_trait_wp02
+	}
+
+	on_success = {
+		owner = {
+			random_list = {
+				50 = {
+					country_event = {
+						id = wp02event.22
+					}
+				}
+				50 = {
+					country_event = {
+						id = wp02event.23
+					}
+				}
+			}
+		}
+	}
+}
+
+special_project = {
+	key = "wp02_reverse_engineer_2"
+	event_chain = "wp02_event_chain_2"
+	cost = 1000
+	tech_department = engineering_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+	location = yes
+
+	event_scope = ship_event
+
+	requirements = {
+		leader = commander
+		has_trait = leader_trait_wp02
+	}
+
+	on_success = {
+		owner = {
+			country_event = {
+				id = wp02event.24
+			}
+		}
+	}
+}
+
+special_project = {
+	key = "wp02_reverse_engineer_3"
+	event_chain = "wp02_event_chain_2"
+	cost = 1000
+	tech_department = engineering_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+	location = yes
+
+	event_scope = ship_event
+
+	requirements = {
+		leader = commander
+		has_trait = leader_trait_wp02
+	}
+
+	on_success = {
+		owner = {
+			country_event = {
+				id = wp02event.25
+			}
+		}
+	}
+}
+
+special_project = {
+	key = "wp02_reverse_engineer_4"
+	event_chain = "wp02_event_chain_2"
+	cost = 1000
+	tech_department = engineering_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+	location = yes
+
+	event_scope = ship_event
+
+	requirements = {
+		leader = commander
+		has_trait = leader_trait_wp02
+	}
+
+	on_success = {
+		owner = {
+			country_event = {
+				id = wp02event.26
+			}
+		}
+	}
+}
+
+special_project = {
+	key = "wp02_reverse_engineer_5"
+	event_chain = "wp02_event_chain_2"
+	days_to_research = 90
+	tech_department = engineering_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+	location = yes
+
+	event_scope = ship_event
+
+	requirements = {
+		leader = commander
+		has_trait = leader_trait_wp02
+	}
+
+	on_success = { 
+		owner = {
+			country_event = {
+				id = wp02event.29
+			}
+		}
+	}
+}
+
+special_project = {
+	key = "wp02_reverse_engineer_6"
+	event_chain = "wp02_event_chain_2"
+	cost = 1000
+	tech_department = engineering_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+	location = yes
+
+	event_scope = ship_event
+
+	requirements = {
+		leader = commander
+		has_trait = leader_trait_wp02
+	}
+
+	on_success = { 
+		owner = {
+			country_event = {
+				id = wp02event.30
+			}
+		}
+	}
+}
+
+special_project = {
+	key = "wp02_reverse_engineer_7"
+	event_chain = "wp02_event_chain_2"
+	cost = 2500
+	tech_department = engineering_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+	location = yes
+
+	event_scope = ship_event
+
+	requirements = {
+		leader = commander
+		has_trait = leader_trait_wp02
+	}
+
+	on_success = {
+		owner = {
+			country_event = {
+				id = wp02event.31
+			}
+		}
+	}
+}
+
+# Chain 3
+
+special_project = {
+	key = "wp02_make_mobile_1"
+	event_chain = "wp02_event_chain_3"
+	cost = 1000
+	tech_department = engineering_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+	location = yes
+
+	event_scope = ship_event
+
+	on_success = { 
+		event_target:wp02_chain_owner = {
+			country_event = {
+				id = wp02event.41
+			}
+		}
+	}
+}
+
+special_project = {
+	key = "wp02_make_mobile_2"
+	event_chain = "wp02_event_chain_3"
+	cost = 1000
+	tech_department = engineering_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+	location = yes
+
+	event_scope = ship_event
+
+	requirements = {
+		shipclass_constructor = 1
+	}
+
+	on_success = {
+		owner = {
+			country_event = {
+				id = wp02event.42
+			}
+		}
+	}
+}
+
+special_project = {
+	key = "wp02_make_mobile_3"
+	event_chain = "wp02_event_chain_3"
+	cost = 1000
+	tech_department = engineering_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+	location = yes
+
+	event_scope = ship_event
+
+	requirements = {
+		shipclass_constructor = 1
+	}
+
+	on_success = { 
+		owner = {
+			country_event = {
+				id = wp02event.43
+			}
+		}
+	}
+}
+
+special_project = {
+	key = "wp02_make_mobile_4"
+	event_chain = "wp02_event_chain_3"
+	cost = 2500
+	tech_department = engineering_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+	location = yes
+
+	event_scope = ship_event
+
+	requirements = {
+		shipclass_constructor = 1
+	}
+
+	on_success = { 
+		owner = {
+			country_event = {
+				id = wp02event.44
+			}
+		}
+	}
+}
+
+special_project = {
+	key = "wp02_make_mobile_5"
+	event_chain = "wp02_event_chain_3"
+	days_to_research = 10
+	tech_department = engineering_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+	location = yes
+
+	event_scope = ship_event
+
+	requirements = {
+		leader = commander
+		has_trait = leader_trait_wp02
+	}
+
+	on_success = {
+		owner = {
+			country_event = {
+				id = wp02event.45
+			}
+		}
+	}
+}
+
+#Chain 4
+
+special_project = {
+	key = "wp02_station_project_1"
+	event_chain = "wp02_event_chain_4"
+	cost = 1000
+	tech_department = engineering_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+	location = yes
+
+	event_scope = ship_event
+
+	requirements = {
+		leader = commander
+		has_trait = leader_trait_wp02
+	}
+
+	on_success = {
+		owner = {
+			country_event = {
+				id = wp02event.51
+			}
+		}
+	}
+}
+
+special_project = {
+	key = "wp02_station_project_2"
+	event_chain = "wp02_event_chain_4"
+	cost = 1000
+	tech_department = engineering_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+	location = yes
+
+	event_scope = ship_event
+
+	requirements = {
+		leader = commander
+		has_trait = leader_trait_wp02
+	}
+
+	on_success = {
+		owner = {
+			country_event = {
+				id = wp02event.52
+			}
+		}
+	}
+}
+
+special_project = {
+	key = "wp02_station_project_3"
+	event_chain = "wp02_event_chain_4"
+	cost = 2500
+	tech_department = engineering_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+	location = yes
+
+	event_scope = ship_event
+
+	requirements = {
+		leader = commander
+		has_trait = leader_trait_wp02
+	}
+
+	on_success = {
+		owner = {
+			country_event = {
+				id = wp02event.53
+			}
+		}
+	}
+}
+
+special_project = {
+	key = "wp02_station_project_4"
+	event_chain = "wp02_event_chain_4"
+	cost = 2500
+	tech_department = engineering_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+	location = yes
+
+	event_scope = ship_event
+
+	requirements = {
+		leader = commander
+		has_trait = leader_trait_wp02
+	}
+
+	on_success = {
+		owner = {
+			country_event = {
+				id = wp02event.54
+			}
+		}
+	}
+}
+
+special_project = {
+	key = "wp02_station_project_5"
+	event_chain = "wp02_event_chain_4"
+	cost = 5000
+	energy = 1000
+	tech_department = engineering_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+	location = yes
+
+	event_scope = ship_event
+
+	requirements = {
+		leader = commander
+		has_trait = leader_trait_wp02
+	}
+
+	on_success = {
+		owner = {
+			country_event = {
+				id = wp02event.55
+			}
+		}
+	}
+}
+
+# Chain 5
+special_project = {
+	key = "wp02_arcsan_project_1"
+	event_chain = "wp02_event_chain_5"
+	days_to_research = 5
+	tech_department = engineering_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+	location = yes
+
+	event_scope = ship_event
+
+	requirements = {
+		leader = commander
+		has_trait = leader_trait_wp02
+	}
+
+	on_success = {
+		owner = {
+			country_event = {
+				id = wp02event.61
+			}
+		}
+	}
+}
+
+special_project = {
+	key = "wp02_arcsan_project_2"
+	event_chain = "wp02_event_chain_5"
+	timelimit = 30
+	days_to_research = 5
+	tech_department = engineering_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+	location = yes
+
+	event_scope = ship_event
+
+	requirements = {
+		fleet_power = 10000
+	}
+
+	on_success = { 
+		owner = {
+			country_event = {
+				id = wp02event.64
+			}
+		}
+	}
+	on_fail = {
+		owner = {
+			country_event = {
+				id = wp02event.63
+			}
+		}
+	}
+}
+
+special_project = {
+	key = "wp02_arcsan_project_3"
+	event_chain = "wp02_event_chain_5"
+	days_to_research = 5
+	tech_department = engineering_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+	location = yes
+
+	event_scope = ship_event
+
+	requirements = {
+		fleet_power = 15000
+	}
+
+	on_success = { 
+		owner = {
+			country_event = {
+				id = wp02event.64
+			}
+		}
+	}
+}
+
+special_project = {
+	key = "wp02_arcsan_project_4"
+	event_chain = "wp02_event_chain_5"
+	days_to_research = 5
+	tech_department = engineering_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+	location = yes
+
+	event_scope = ship_event
+
+	requirements = {
+		shipclass_science_ship = 1
+	}
+
+	on_success = { 
+		owner = {
+			country_event = {
+				id = wp02event.66
+			}
+		}
+	}
+}
+
+special_project = {
+	key = "wp02_arcsan_project_5"
+	event_chain = "wp02_event_chain_5"
+	days_to_research = 10
+	tech_department = engineering_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+	location = yes
+
+	event_scope = ship_event
+
+	requirements = {
+		shipclass_science_ship = 1
+	}
+
+	on_success = { 
+		owner = {
+			country_event = {
+				id = wp02event.67
+			}
+		}
+	}
+}
+
+special_project = {
+	key = "wp02_arcsan_project_6"
+	event_chain = "wp02_event_chain_5"
+	days_to_research = 10
+	tech_department = engineering_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+	location = yes
+
+	event_scope = ship_event
+
+	requirements = {
+		shipclass_science_ship = 1
+	}
+
+	on_success = { 
+		owner = {
+			country_event = {
+				id = wp02event.68
+			}
+		}
+	}
+}
+
+special_project = {
+	key = "wp02_arcsan_project_7"
+	event_chain = "wp02_event_chain_5"
+	days_to_research = 10
+	tech_department = engineering_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+	location = yes
+
+	event_scope = ship_event
+
+	requirements = {
+		shipclass_science_ship = 1
+	}
+
+	on_success = { 
+		owner = {
+			country_event = {
+				id = wp02event.69
+			}
+		}
+	}
+}
+
+special_project = {
+	key = "wp02_arcsan_project_8"
+	event_chain = "wp02_event_chain_5"
+	days_to_research = 10
+	tech_department = engineering_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+	location = yes
+
+	event_scope = ship_event
+
+	requirements = {
+		shipclass_science_ship = 1
+	}
+
+	on_success = { 
+		owner = {
+			country_event = {
+				id = wp02event.70
+			}
+		}
+	}
+}
+
+special_project = {
+	key = "wp02_arcsan_project_9"
+	event_chain = "wp02_event_chain_5"
+	days_to_research = 10
+	tech_department = engineering_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+	location = yes
+
+	event_scope = ship_event
+
+	requirements = {
+		shipclass_science_ship = 1
+	}
+
+	on_success = { 
+		owner = {
+			country_event = {
+				id = wp02event.71
+			}
+		}
+	}
+}
+
+special_project = {
+	key = "wp02_arcsan_project_10"
+	event_chain = "wp02_event_chain_5"
+	days_to_research = 10
+	tech_department = engineering_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+	location = yes
+
+	event_scope = ship_event
+
+	requirements = {
+		shipclass_science_ship = 1
+	}
+
+	on_success = { 
+		owner = {
+			country_event = {
+				id = wp02event.72
+			}
+		}
+	}
+}
+
+special_project = {
+	key = "wp02_arcsan_project_11"
+	event_chain = "wp02_event_chain_5"
+	days_to_research = 10
+	tech_department = engineering_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+	location = yes
+
+	event_scope = ship_event
+
+	requirements = {
+		shipclass_science_ship = 1
+	}
+
+	on_success = { 
+		owner = {
+			country_event = {
+				id = wp02event.74
+			}
+		}
+	}
+}
+
+special_project = {
+	key = "wp02_arcsan_project_12"
+	event_chain = "wp02_event_chain_5"
+	days_to_research = 30
+	tech_department = engineering_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+	location = yes
+
+	event_scope = ship_event
+
+	requirements = {
+		shipclass_science_ship = 1
+	}
+
+	on_success = { 
+		owner = {
+			country_event = {
+				id = wp02event.75
+			}
+		}
+	}
+}
+
+special_project = {
+	key = "wp02_arcsan_project_13"
+	event_chain = "wp02_event_chain_5"
+	cost = 1000
+	tech_department = physics_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+
+	event_scope = country_event
+
+	on_success = { 
+		country_event = {
+			id = wp02event.76
+		}
+	}
+}
+
+special_project = {
+	key = "wp02_arcsan_project_14"
+	event_chain = "wp02_event_chain_5"
+	cost = 1000
+	tech_department = physics_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+
+	event_scope = country_event
+
+	on_success = { 
+		country_event = {
+			id = wp02event.77
+		}
+	}
+}
+
+special_project = {
+	key = "wp02_arcsan_project_15"
+	event_chain = "wp02_event_chain_5"
+	days_to_research = 30
+	tech_department = engineering_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_planet.dds"
+	picture = GFX_evt_satellite_in_orbit
+	location = yes
+
+	event_scope = ship_event
+
+	requirements = {
+		leader = commander
+		has_trait = leader_trait_wp02
+	}
+
+	on_success = { 
+		owner = {
+			country_event = {
+				id = wp02event.81
+			}
+		}
+	}
+}

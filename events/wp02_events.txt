@@ -1,0 +1,2025 @@
+# wp02_events
+# By bpainecraft
+
+namespace = wp02event
+
+event = {
+	id = wp02event.0
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				has_synthethic_dawn = yes
+                has_utopia = yes
+			}
+			set_global_flag = wp02_allowed
+		}
+	}
+}
+
+# Chain 1
+
+ship_event = {
+	id = wp02event.1
+	title = "wp02event.1.name"
+	desc = "wp02event.1.desc"
+	picture = GFX_evt_space_debris
+	show_sound = event_ship_bridge
+	hide_window = no
+	location = from
+	is_triggered_only = yes
+	trigger = {
+		from = {
+			has_planet_flag = wp02_planet
+		}
+		NOT = {
+			has_global_flag = wp02_discovered
+		}
+		owner = {
+			wp02_trigger = yes
+		}
+	}
+
+	immediate = {
+		owner = { 
+			set_country_flag = wp02_chain_owner
+			save_global_event_target_as = wp02_chain_owner
+		}
+		set_global_flag = wp02_discovered
+		event_target:wp02_planet = {
+			every_deposit = {
+				remove_deposit = yes
+			}
+		}
+	}
+
+	option = {
+		name = wp02search
+		owner = {
+			begin_event_chain = {
+				event_chain = wp02_event_chain_1
+			}
+		}
+		event_target:wp02_planet = {
+			enable_special_project = {
+				name = wp02_search_project
+			}
+		}
+		hidden_effect = {
+			event_target:wp02_planet = {
+				enable_special_project = {
+					name = wp02_scrap_project
+				}
+			}
+		}
+	}
+	option = {
+		name = SCRAPIT
+		owner = {
+			begin_event_chain = {
+				event_chain = wp02_event_chain_1
+			}
+		}
+		event_target:wp02_planet = {
+			enable_special_project = {
+				name = wp02_scrap_project
+			}
+		}
+		hidden_effect = {
+			event_target:wp02_planet = {
+				enable_special_project = {
+					name = wp02_search_project
+				}
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = wp02event.2
+	title = "wp02event.2.name"
+	desc = "wp02event.2.desc"
+	picture = GFX_evt_ancient_databank
+	show_sound = event_ship_bridge
+	hide_window = no
+	location = event_target:wp02_planet
+	is_triggered_only = yes
+
+	option = {
+		name = wp02_power_ai
+		event_target:wp02_planet = {
+			set_deposit = d_engineering_25
+			enable_special_project = {
+				name = wp02_power_ai_project
+			}
+		}
+		hidden_effect = {
+			event_target:wp02_planet = {
+				enable_special_project = {
+					name = wp02_destroy_ai_project
+				}
+			}
+		}
+	}
+	option = {
+		name = wp02_destroy_ai
+		event_target:wp02_planet = {
+			set_deposit = d_alloys_5
+			enable_special_project = {
+				name = wp02_destroy_ai_project
+			}
+		}
+		hidden_effect = {
+			event_target:wp02_planet = {
+				enable_special_project = {
+					name = wp02_power_ai_project
+				}
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = wp02event.3
+	title = "wp02event.3.name"
+	desc = "wp02event.3.desc"
+	picture = GFX_evt_ancient_databank
+	show_sound = event_ship_bridge
+	hide_window = no
+	location = event_target:wp02_planet
+	is_triggered_only = yes
+
+	option = {
+		name = wp02_power_ai
+		event_target:wp02_planet = {
+			add_deposit = d_engineering_25
+			enable_special_project = {
+				name = wp02_power_ai_project
+			}
+		}
+		hidden_effect = {
+			event_target:wp02_planet = {
+				enable_special_project = {
+					name = wp02_destroy_ai_project
+				}
+			}
+		}
+	}
+	option = {
+		name = wp02_destroy_ai
+		event_target:wp02_planet = {
+			add_deposit = d_alloys_5
+			enable_special_project = {
+				name = wp02_destroy_ai_project
+			}
+		}
+		hidden_effect = {
+			event_target:wp02_planet = {
+				enable_special_project = {
+					name = wp02_power_ai_project
+				}
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = wp02event.5
+	title = "wp02event.5.name"
+	desc = "wp02event.5.desc"
+	picture = GFX_evt_large_explosion
+	show_sound = event_ship_bridge
+	hide_window = no
+	location = event_target:wp02_planet
+	is_triggered_only = yes
+
+	option = {
+		name = UNFORTUNATE
+		event_target:wp02_planet = {
+			set_deposit = d_alloys_1
+		}
+		owner = {
+			add_resource = {
+				alloys = 100
+			}
+		}
+		destroy_ambient_object = event_target:wp02_station_object
+	}
+}
+
+country_event = {
+	id = wp02event.10
+	title = wp02event.10.name
+	desc = wp02event.10.desc
+	show_sound = par_event_beholder
+	location = event_target:wp02_planet
+	is_triggered_only = yes
+
+	event_window_type = leader_recruit
+
+	picture_event_data = {
+		portrait = event_target:wp02_leader
+	}
+
+	picture = GFX_leader_recruitment_bg_legendary_beholder
+	
+	immediate = {
+		create_country = {
+			name = "wp02_name"
+			type = global_event
+			auto_delete = yes
+
+			flag = {
+				icon = {
+					category = "special"
+					file = "unknown.dds"
+				}
+				background = {
+					category = "backgrounds"
+					file = "00_solid.dds"
+				}
+				colors = {
+					"red"
+					"red"
+					"null"
+					"null"
+				}
+			}
+			effect = {
+				save_global_event_target_as = wp02_country
+			}
+		}
+		event_target:wp02_country = {
+			create_species = {
+				name = "wp02_name"
+				class = PARAGON
+				portrait = sd_rep_robot
+				namelist = "PRT1"
+				traits = random
+				effect = {
+					save_event_target_as = wp02_species
+				}
+			}
+			create_leader = {
+				species = event_target:wp02_species
+				event_leader = yes
+				class = commander
+				name = "NAME_wp02"
+				skill = 4
+				immortal = yes
+				background_ethic = ethic_militarist
+				randomize_traits = no
+				can_manually_change_location = no
+				can_assign_to_council = no
+				skip_background_generation = yes
+				custom_catch_phrase = wp02_catch_phrase
+				custom_description = wp02_backstory
+				traits = {
+					trait = subclass_commander_admiral
+					trait = leader_trait_rocketry_specialization_3
+					trait = leader_trait_wp02
+					trait = leader_trait_destiny_engineer
+					trait = leader_trait_master_gunner
+				}
+				gender = indeterminable
+				set_age = 152
+				effect = {
+					save_global_event_target_as = wp02_leader
+					set_leader_flag = legendary_leader
+					set_leader_flag = immune_to_negative_traits
+					set_leader_flag = leader_death_events_blocked
+					set_owner = root
+					exile_leader_as = wp02_leader
+				}
+			}
+		}
+	}
+
+	option = {
+		name = HIRE
+		tag = hire_leader
+		custom_tooltip = wp02_joins
+		sound = par_beholder_hire
+
+		hidden_effect = {
+			clone_leader = {
+				target = event_target:wp02_leader
+			}
+			last_created_leader = {
+				save_global_event_target_as = wp02_leader
+				set_leader_flag = legendary_leader
+				set_leader_flag = immune_to_negative_traits
+				set_leader_flag = leader_death_events_blocked
+				if ={
+					limit = {
+						has_paragon_dlc = no
+					}
+					add_skill = 1
+				}
+				add_trait_no_notify = leader_trait_wp02
+				set_owner = root
+			}
+			create_fleet = {
+				name = "wp02_name"
+				settings = {
+					can_upgrade = no
+					can_change_composition = no
+					can_change_leader = no
+					can_disband = no
+					spawn_debris = no
+				}
+				effect = {
+					set_owner = root.owner
+					create_ship_design = {
+						design = NAME_wp02_ship
+					}
+					create_ship = {
+						design = last_created_design
+						name = "NAME_wp02_ship"
+						prefix = no
+						upgradable = no
+						effect = {
+							set_ship_flag = is_wp02_ship
+							save_global_event_target_as = wp02_ship
+						}
+					}
+					if = {
+						limit = {
+							exists = event_target:wp02_planet
+						}
+						set_location = {
+							target = event_target:wp02_planet
+							distance = 5
+							angle = 275
+						}
+						destroy_ambient_object = event_target:wp02_station_object
+					}
+					else = {
+						set_location = {
+							target = owner.capital_scope
+							distance = 1
+							angle = random
+						}
+					}
+					save_global_event_target_as = wp02_fleet
+					assign_leader = event_target:wp02_leader
+				}
+			}
+			
+			create_message = {
+				type = MESSAGE_RECRUITED_LEADER
+				localization =  MESSAGE_RECRUITED_LEADER_DESC
+				days = @toast_message_days
+				target = event_target:wp02_leader
+				variable = {
+					type = name
+					localization = LEADER
+					scope = event_target:wp02_leader
+				}
+				variable = {
+					key = "border"
+					value = "GFX_border_legendary"
+				}
+			}
+		}
+
+	}
+
+	option = { 
+	name = DISMISS
+	tag = dismiss_leader
+	sound = par_beholder_dismiss
+
+		hidden_effect = {
+			event_target:wp02_leader = {
+				kill_leader = { show_notification = no }
+			}
+		}
+	}
+
+	option = {
+		name = wp02.1.a # To what end to you seek energy?
+		response_text = wp02.1.a.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = wp02.1.b # What can you do for our civilization?
+		response_text = wp02.1.b.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = wp02.1.c # What are you?
+		response_text = wp02.1.c.response
+		is_dialog_only = yes
+	}
+}
+
+# Chain 2
+event = {
+	id = wp02event.19
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		event_target:wp02_chain_owner = {
+			has_completed_event_chain = wp02_event_chain_1
+			NOR = {
+				has_completed_event_chain = wp02_event_chain_2
+				has_event_chain = wp02_event_chain_2
+				has_event_chain = wp02_event_chain_3
+				has_event_chain = wp02_event_chain_4
+				has_event_chain = wp02_event_chain_5
+			}
+		}
+	}
+
+	immediate = {
+		event_target:wp02_chain_owner = {
+			country_event = {
+				id = wp02event.20
+			}
+		}
+	}
+}
+
+country_event = {
+	id = wp02event.20
+	title = "wp02event.20.name"
+	desc = "wp02event.20.desc"
+	picture = GFX_evt_engineering_research
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+	# trigger = {
+	# 	event_target:wp02_chain_owner = {
+	# 		has_completed_event_chain = wp02_event_chain_1
+	# 		NOR = {
+	# 			has_completed_event_chain = wp02_event_chain_2
+	# 			has_event_chain = wp02_event_chain_2
+	# 			has_event_chain = wp02_event_chain_3
+	# 			has_event_chain = wp02_event_chain_4
+	# 			has_event_chain = wp02_event_chain_5
+	# 		}
+	# 	}
+	# 	owner = {
+	# 	}
+	# }
+
+	option = {
+		trigger = {
+			is_pacifist = no
+		}
+		name = wp02_research
+		begin_event_chain = {
+			event_chain = wp02_event_chain_2
+		}
+		event_target:wp02_ship = {
+			enable_special_project = {
+				name = wp02_reverse_engineer_1
+			}
+		}
+	}
+
+	option = {
+		trigger = {
+			is_militarist = no
+		}
+		name = wp02_no_need
+		begin_event_chain = {
+			event_chain = wp02_event_chain_2
+		}
+		end_event_chain = wp02_event_chain_2
+	}
+}
+
+country_event = {
+	id = wp02event.21
+	title = "wp02event.21.name"
+	desc = "wp02event.21.desc"
+	picture = GFX_evt_decryption
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		name = wp02_hack
+		event_target:wp02_ship = {
+			enable_special_project = {
+				name = wp02_hack_the_database
+			}
+		}
+
+	}
+	option = {
+		name = wp02_develop_without
+		event_target:wp02_ship = {
+			enable_special_project = {
+				name = wp02_reverse_engineer_2
+			}
+		}	
+	}
+}
+
+country_event = {
+	id = wp02event.22
+	title = "wp02event.22.name"
+	desc = "wp02event.22.desc"
+	picture = GFX_evt_glitchy_matrix
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		name = CURSES
+		event_target:wp02_ship = {
+			enable_special_project = {
+				name = wp02_reverse_engineer_2
+			}
+		}
+		#set_global_flag = wp02_database_lost
+		#fix
+	}
+}
+
+country_event = {
+	id = wp02event.23
+	title = "wp02event.23.name"
+	desc = "wp02event.23.desc"
+	picture = GFX_evt_decryption
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		name = EXCELLENT
+		owner = {
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+				max = @tier2researchmax
+			}
+		}
+		event_target:wp02_ship = {
+			enable_special_project = {
+				name = wp02_reverse_engineer_4
+			}
+		}
+	}
+}
+
+country_event = {
+	id = wp02event.24
+	title = "wp02event.24.name"
+	desc = "wp02event.24.desc"
+	picture = GFX_evt_engineering_research
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		name = OK
+		event_target:wp02_ship = {
+			enable_special_project = {
+				name = wp02_reverse_engineer_3
+			}
+		}
+	}
+}
+
+country_event = {
+	id = wp02event.25
+	title = "wp02event.25.name"
+	desc = "wp02event.25.desc"
+	picture = GFX_evt_physics_research
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		name = SPLENDID
+		event_target:wp02_ship = {
+			enable_special_project = {
+				name = wp02_reverse_engineer_4
+			}
+		}
+	}
+}
+
+country_event = {
+	id = wp02event.26
+	title = "wp02event.26.name"
+	desc = "wp02event.26.desc"
+	picture = GFX_evt_engineering_research
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		name = wp02_test
+		random_list = {
+			50 = {
+				country_event = {
+					days = 1
+					id = wp02event.27
+				}
+			}
+			50 = {
+				country_event = {
+					days = 1
+					id = wp02event.28
+				}
+			}
+		}
+	}
+
+	option = {
+		name = wp02_check
+		event_target:wp02_ship = {
+			enable_special_project = {
+				name = wp02_reverse_engineer_5
+			}
+		}
+	}
+}
+
+country_event = {
+	id = wp02event.27
+	title = "wp02event.27.name"
+	desc = "wp02event.27.desc"
+	picture = GFX_evt_engineering_research
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		name = AMAZING
+		event_target:wp02_ship = {
+			enable_special_project = {
+				name = wp02_reverse_engineer_7
+			}			
+		}
+	}
+}
+
+country_event = {
+	id = wp02event.28
+	title = "wp02event.28.name"
+	desc = "wp02event.28.desc"
+	picture = GFX_evt_archaeologists_escaping
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		name = UNFORTUNATE
+		event_target:wp02_ship = {
+			enable_special_project = {
+				name = wp02_reverse_engineer_6
+			}
+		}
+	}
+}
+
+country_event = {
+	id = wp02event.29
+	title = "wp02event.29.name"
+	desc = "wp02event.29.desc"
+	picture = GFX_evt_engineering_research
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		name = GOOD
+		event_target:wp02_ship = {
+			enable_special_project = {
+				name = wp02_reverse_engineer_7
+			}
+		}
+	}
+}
+
+country_event = {
+	id = wp02event.30
+	title = "wp02event.29.name"
+	desc = "wp02event.30.desc"
+	picture = GFX_evt_engineering_research
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		name = OK
+		event_target:wp02_ship = {
+			enable_special_project = {
+				name = wp02_reverse_engineer_7
+			}
+		}
+	}
+}
+
+country_event = {
+	id = wp02event.31
+	title = "wp02event.31.name"
+	desc = "wp02event.31.desc"
+	picture = GFX_evt_engineering_research
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		name = MARVELOUS
+		owner = {
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+		}
+		give_technology = {
+			tech = tech_wp02_missile_l
+		}
+		end_event_chain = wp02_event_chain_2
+	}
+}
+
+# Chain 3
+event = {
+	id = wp02event.39
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		event_target:wp02_chain_owner = {
+			has_technology = tech_battleships
+			has_completed_event_chain = wp02_event_chain_1
+			NOR = {
+				has_event_chain = wp02_event_chain_2
+				has_event_chain = wp02_event_chain_3
+				has_completed_event_chain = wp02_event_chain_3
+			}
+		}
+	}
+
+	immediate = {
+		event_target:wp02_chain_owner = {
+			country_event = {
+				id = wp02event.40
+			}
+		}
+	}
+}
+
+country_event = {
+	id = wp02event.40
+	title = "wp02event.40.name"
+	desc = "wp02event.40.desc"
+	picture = GFX_evt_communication_event
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		name = MAKE_IT_SO
+		begin_event_chain = {
+			event_chain = wp02_event_chain_3
+		}
+		event_target:wp02_ship = {
+			enable_special_project = {
+				name = wp02_make_mobile_1
+			}
+		}
+		hidden_effect = {
+			remove_country_flag = wp02_temp
+		}
+	}
+
+	option = {
+		name = NOTIME
+	}
+}
+
+country_event = {
+	id = wp02event.41
+	title = "wp02event.41.name"
+	desc = "wp02event.41.desc"
+	picture = GFX_evt_engineering_research
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		name = wp02_engines
+		event_target:wp02_ship = {
+			enable_special_project = {
+				name = wp02_make_mobile_2
+			}
+		}
+	}
+
+	option = {
+		name = wp02_hull
+		event_target:wp02_ship = {
+			enable_special_project = {
+				name = wp02_make_mobile_3
+			}
+		}
+	}
+}
+
+country_event = {
+	id = wp02event.42
+	title = "wp02event.42.name"
+	desc = "wp02event.42.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	immediate = {
+		event_target:wp02_ship = {
+			save_event_target_as = wp02_station
+		}
+		create_fleet = {
+			name = "wp02_name"
+			settings = {
+				can_upgrade = no
+				can_change_composition = yes
+				can_change_leader = no
+				can_disband = no
+				spawn_debris = no
+			}
+			effect = {
+				set_owner = root.owner
+				create_ship_design = {
+					design = NAME_wp02_mobile_ship
+				}
+				create_ship = {
+					design = last_created_design
+					name = "NAME_wp02_mobile_ship"
+					prefix = no
+					upgradable = no
+					effect = {
+						set_ship_flag = is_wp02_ship
+						save_global_event_target_as = wp02_ship
+					}
+				}
+				if = {
+					limit = {
+						exists = event_target:wp02_planet
+					}
+					set_location = {
+						target = event_target:wp02_planet
+						distance = 5
+						angle = 275
+					}
+				}
+				else = {
+					set_location = {
+						target = owner.capital_scope
+						distance = 1
+						angle = random
+					}
+				}
+				save_global_event_target_as = wp02_fleet
+				assign_leader = event_target:wp02_leader
+			}
+		}
+		event_target:wp02_station = {
+			delete_ship = event_target:wp02_station
+		}
+	}
+
+	option = {
+		name = wp02_celebrate
+		owner = {
+			every_planet_within_border = {
+				limit = {
+					is_homeworld = yes
+				}
+				enable_special_project = {
+					name = wp02_make_mobile_5
+				}
+			}	
+		}
+	}
+
+	option = {
+		name = NOTIME
+		end_event_chain = wp02_event_chain_3
+	}
+}
+
+country_event = {
+	id = wp02event.43
+	title = "wp02event.43.name"
+	desc = "wp02event.43.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		name = SCRAPIT
+		event_target:wp02_ship = {
+			enable_special_project = {
+				name = wp02_make_mobile_4
+			}
+		}
+		event_target:wp02_planet = {
+			set_deposit = d_alloys_5
+		}
+	}
+
+	option = {
+		name = wp02_search_2
+		event_target:wp02_ship = {
+			enable_special_project = {
+				name = wp02_make_mobile_4
+			}
+		}
+		event_target:wp02_planet = {
+			add_deposit = d_engineering_10
+			create_ambient_object = {
+				type = abandoned_station_object
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 5
+					angle = 275
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = wp02event.44
+	title = "wp02event.44.name"
+	desc = "wp02event.44.desc"
+	picture = GFX_evt_ship_in_orbit
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	immediate = {
+		event_target:wp02_ship = {
+			save_event_target_as = wp02_station
+		}
+		create_fleet = {
+			name = "wp02_name"
+			settings = {
+				can_upgrade = no
+				can_change_composition = yes
+				can_change_leader = no
+				can_disband = no
+				spawn_debris = no
+			}
+			effect = {
+				set_owner = root.owner
+				create_ship_design = {
+					design = NAME_wp02_battleship
+				}
+				create_ship = {
+					design = last_created_design
+					name = "NAME_wp02_battleship"
+					prefix = no
+					upgradable = no
+					effect = {
+						set_ship_flag = is_wp02_ship
+						save_global_event_target_as = wp02_ship
+					}
+				}
+				if = {
+					limit = {
+						exists = event_target:wp02_planet
+					}
+					set_location = {
+						target = event_target:wp02_planet
+						distance = 5
+						angle = 275
+					}
+				}
+				else = {
+					set_location = {
+						target = owner.capital_scope
+						distance = 1
+						angle = random
+					}
+				}
+				save_global_event_target_as = wp02_fleet
+				assign_leader = event_target:wp02_leader
+			}
+		}
+		event_target:wp02_station = {
+			delete_ship = event_target:wp02_station
+		}
+	}
+
+	option = {
+		name = wp02_celebrate
+		owner = {
+			every_planet_within_border = {
+				if = {
+					limit = {
+						is_homeworld = yes
+					}
+					enable_special_project = {
+						name = wp02_make_mobile_5
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = NOTIME
+		end_event_chain = wp02_event_chain_3
+	}
+}
+
+country_event = {
+	id = wp02event.45
+	title = "wp02event.45.name"
+	desc = "wp02event.45.desc"
+	picture = GFX_evt_engineering_research
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		name = EXCELLENT
+		owner = {
+			add_monthly_resource_mult = {
+				resource = unity
+				value = @tier3unityreward
+				min = @tier3unitymin
+				max = @tier3unitymax
+			}
+		}
+		end_event_chain = wp02_event_chain_3
+	}
+}
+
+# Chain 4
+event = {
+	id = wp02event.49
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		event_target:wp02_chain_owner = {
+			has_completed_event_chain = wp02_event_chain_3
+			NOR = {
+				has_completed_event_chain = wp02_event_chain_4
+				has_event_chain = wp02_event_chain_2
+				has_event_chain = wp02_event_chain_4
+				has_event_chain = wp02_event_chain_5
+			}
+		}
+	}
+
+	immediate = {
+		event_target:wp02_chain_owner = {
+			random_owned_starbase = {
+				save_event_target_as = wp02_starbase
+			}
+			country_event = {
+				id = wp02event.50
+			}
+		}
+	}
+}
+
+country_event = {
+	id = wp02event.50
+	title = "wp02event.50.name"
+	desc = "wp02event.50.desc"
+	picture = GFX_evt_space_station
+	show_sound = event_ship_bridge
+	hide_window = no
+	location = event_target:wp02_starbase
+	is_triggered_only = yes
+
+	option = {
+		name = UNDERSTOOD
+		owner = {
+			begin_event_chain = {
+				event_chain = wp02_event_chain_4
+			}
+		}
+		event_target:wp02_starbase = {
+			enable_special_project = {
+				name = wp02_station_project_1
+			}
+		}
+	}
+}
+
+country_event = {
+	id = wp02event.51
+	title = "wp02event.51.name"
+	desc = "wp02event.51.desc"
+	picture = GFX_evt_cover_blown
+	show_sound = event_ship_bridge
+	hide_window = no
+	location = event_target:wp02_starbase
+	is_triggered_only = yes
+
+	option = {
+		name = wp02_out_of_the_question
+		event_target:wp02_starbase = {
+			enable_special_project = {
+				name = wp02_station_project_2
+			}
+		}
+	}
+	option = {
+		name = MAKE_IT_SO
+		event_target:wp02_starbase = {
+			enable_special_project = {
+				name = wp02_station_project_3
+			}
+		}
+	}
+}
+
+country_event = {
+	id = wp02event.52
+	title = "wp02event.52.name"
+	desc = "wp02event.52.desc"
+	picture = GFX_evt_hangar_bay
+	show_sound = event_ship_bridge
+	hide_window = no
+	location = event_target:wp02_starbase
+	is_triggered_only = yes
+
+	option = {
+		name = ACKNOWLEDGED
+		end_event_chain = wp02_event_chain_4
+	}
+}
+
+country_event = {
+	id = wp02event.53
+	title = "wp02event.53.name"
+	desc = "wp02event.53.desc"
+	picture = GFX_evt_engineering_research
+	show_sound = event_ship_bridge
+	hide_window = no
+	location = event_target:wp02_starbase
+	is_triggered_only = yes
+
+	option = {
+		name = CURIOUS
+		event_target:wp02_starbase = {
+			enable_special_project = {
+				name = wp02_station_project_4
+			}
+		}
+	}
+}
+
+country_event = {
+	id = wp02event.54
+	title = "wp02event.54.name"
+	desc = "wp02event.54.desc"
+	picture = GFX_evt_intelligence_report
+	show_sound = event_ship_bridge
+	hide_window = no
+	location = event_target:wp02_starbase
+	is_triggered_only = yes
+
+	option = {
+		name = wp02_no_energy
+		give_technology = {
+			tech = tech_wp02_starbase_1
+		}
+		end_event_chain = wp02_event_chain_4
+	}
+
+	option = {
+		name = MAKE_IT_SO
+		event_target:wp02_starbase = {
+			enable_special_project = {
+				name = wp02_station_project_5
+			}
+		}
+	}
+}
+
+country_event = {
+	id = wp02event.55
+	title = "wp02event.55.name"
+	desc = "wp02event.55.desc"
+	picture = GFX_evt_space_station
+	show_sound = event_ship_bridge
+	hide_window = no
+	location = event_target:wp02_starbase
+	is_triggered_only = yes
+
+	option = {
+		name = INCREDIBLE
+		give_technology = {
+			tech = tech_wp02_starbase_2
+		}
+		end_event_chain = wp02_event_chain_4
+	}
+}
+
+# Chain 5
+event = {
+	id = wp02event.59
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		event_target:wp02_chain_owner = {
+			has_completed_event_chain = wp02_event_chain_3
+			NOR = {
+				has_completed_event_chain = wp02_event_chain_5
+				has_event_chain = wp02_event_chain_2
+				has_event_chain = wp02_event_chain_4
+				has_event_chain = wp02_event_chain_5
+			}
+		}
+	}
+
+	immediate = {
+		event_target:wp02_system_1 = {
+			spawn_system = {
+				max_jumps = 0
+				initializer = wp02_initializer_02
+			}
+			spawn_natural_wormhole = {
+				bypass_type = wormhole
+				random_pos = no
+				orbit_distance = 90
+				orbit_angle = 270
+				graphics_entity_name = strange_wormhole_entity
+				init_effect = {
+					save_event_target_as = wp02_wormhole_1
+				}
+			}
+			remove_hyperlane = {
+				from = event_target:wp02_system_1
+				to = event_target:wp02_system_2
+			}
+			link_wormholes = event_target:wp02_system_2
+		}
+		event_target:wp02_chain_owner = {
+			country_event = {
+				id = wp02event.60
+			}
+		}
+	}
+}
+
+country_event = {
+	id = wp02event.60
+	title = "wp02event.60.name"
+	desc = "wp02event.60.desc"
+	picture = GFX_evt_wormhole
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				NOT = {
+					has_country_flag = encountered_first_wormhole
+				}
+			}
+			country_event = {
+				id = wp02event.100
+			}
+		}
+	}
+
+	option = {
+		name = PECULIAR
+		begin_event_chain = {
+			event_chain = wp02_event_chain_5
+		}
+		event_target:wp02_system_1 = {
+			enable_special_project = {
+				name = wp02_arcsan_project_1
+			}
+		}
+	}
+}
+
+country_event = {
+	id = wp02event.61
+	title = "wp02event.61.name"
+	desc = "wp02event.61.desc"
+	picture = GFX_evt_face_off_in_space
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	immediate = {
+		event_target:wp02_fleet = {
+			set_event_locked = yes
+		}
+	}
+
+	option = {
+		name = DISCONCERTING
+		country_event = {
+			days = 5
+			id = wp02event.62
+		}
+	}
+}
+
+country_event = {
+	id = wp02event.62
+	title = "wp02event.62.name"
+	desc = "wp02event.62.desc"
+	picture = GFX_evt_small_space_battle
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		name = BATTLESTATIONS
+		event_target:wp02_system_1 = {
+			enable_special_project = {
+				name = wp02_arcsan_project_2
+			}
+		}	
+	}
+}
+
+country_event = {
+	id = wp02event.63
+	title = "wp02event.63.name"
+	desc = "wp02event.63.desc"
+	picture = GFX_evt_federation_fleet
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+	immediate = {
+		event_target:wp02_fleet = {
+			set_location = event_target:wp02_out
+		}
+	}
+
+	option = {
+		name = UNDERSTOOD
+		event_target:wp02_system_1 = {
+			enable_special_project = {
+				name = wp02_arcsan_project_3
+			}
+		}
+	}
+}
+
+country_event = {
+	id = wp02event.64
+	title = "wp02event.64.name"
+	desc = "wp02event.64.desc"
+	picture = GFX_evt_exploding_ship
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		name = WORRYING
+		country_event = {
+			days = 5
+			id = wp02event.65
+		}
+	}
+}
+
+country_event = {
+	id = wp02event.65
+	title = "wp02event.65.name"
+	desc = "wp02event.65.desc"
+	picture = GFX_evt_wormhole
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+	
+	immediate = {
+		event_target:wp02_fleet = {
+			set_location = event_target:wp02_out
+		}
+	}
+
+	option = {
+		name = ACKNOWLEDGED
+		event_target:wp02_system_2 = {
+			enable_special_project = {
+				name = wp02_arcsan_project_4
+			}
+		}
+		
+	}
+}
+
+country_event = {
+	id = wp02event.66
+	title = "wp02event.66.name"
+	desc = "wp02event.66.desc"
+	picture = GFX_evt_ruined_system
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		name = WORRYING
+		if = {
+			limit = {
+				has_federations_dlc = yes
+			}
+			event_target:wp02_system_2 = {
+				enable_special_project = {
+					name = wp02_arcsan_project_9
+				}
+			}
+		}
+		else = {
+			event_target:wp02_system_2 = {
+				enable_special_project = {
+					name = wp02_arcsan_project_5
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_overlord_dlc = yes
+			}
+			event_target:wp02_or = {
+				enable_special_project = {
+					name = wp02_arcsan_project_10
+				}
+			}
+		}
+		else = {
+			event_target:wp02_or = {
+				enable_special_project = {
+					name = wp02_arcsan_project_6
+				}
+			}	
+		}
+		event_target:wp02_ttr = {
+			enable_special_project = {
+				name = wp02_arcsan_project_7
+			}
+		}
+		event_target:wp02_rp = {
+			enable_special_project = {
+				name = wp02_arcsan_project_8
+			}
+		}
+	}
+}
+
+country_event = {
+	id = wp02event.67
+	title = "wp02event.67.name"
+	desc = "wp02event.67.desc"
+	picture = GFX_evt_star_yellow
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		trigger = {
+				OR = {
+					has_completed_special_project_in_log = wp02_arcsan_project_5
+					has_completed_special_project_in_log = wp02_arcsan_project_9
+				}
+				OR = {
+					has_completed_special_project_in_log = wp02_arcsan_project_6
+					has_completed_special_project_in_log = wp02_arcsan_project_10
+				}
+				has_completed_special_project_in_log = wp02_arcsan_project_7
+				has_completed_special_project_in_log = wp02_arcsan_project_8
+		}
+		name = KEEP_SEARCHING
+		country_event = {
+			days = 10
+			id = wp02event.73
+		}
+	}
+
+	option = {
+		trigger = {
+			NAND = {
+				has_completed_special_project_in_log = wp02_arcsan_project_7
+				has_completed_special_project_in_log = wp02_arcsan_project_8
+				OR = {
+					has_completed_special_project_in_log = wp02_arcsan_project_5
+					has_completed_special_project_in_log = wp02_arcsan_project_9
+				}
+				OR = {
+					has_completed_special_project_in_log = wp02_arcsan_project_6
+					has_completed_special_project_in_log = wp02_arcsan_project_10
+				}
+			}
+		}
+		name = KEEP_SEARCHING
+	}
+}
+
+country_event = {
+	id = wp02event.68
+	title = "wp02event.68.name"
+	desc = "wp02event.68.desc"
+	picture = GFX_evt_relic_world
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		trigger = {
+			OR = {
+				has_completed_special_project_in_log = wp02_arcsan_project_5
+				has_completed_special_project_in_log = wp02_arcsan_project_9
+			}
+			OR = {
+				has_completed_special_project_in_log = wp02_arcsan_project_6
+				has_completed_special_project_in_log = wp02_arcsan_project_10
+			}
+			has_completed_special_project_in_log = wp02_arcsan_project_7
+			has_completed_special_project_in_log = wp02_arcsan_project_8
+		}
+		name = KEEP_SEARCHING
+		country_event = {
+			days = 10
+			id = wp02event.73
+		}
+	}
+
+	option = {
+		trigger = {
+			NAND = {
+				has_completed_special_project_in_log = wp02_arcsan_project_7
+				has_completed_special_project_in_log = wp02_arcsan_project_8
+				OR = {
+					has_completed_special_project_in_log = wp02_arcsan_project_5
+					has_completed_special_project_in_log = wp02_arcsan_project_9
+				}
+				OR = {
+					has_completed_special_project_in_log = wp02_arcsan_project_6
+					has_completed_special_project_in_log = wp02_arcsan_project_10
+				}
+			}
+		}
+		name = KEEP_SEARCHING
+	}
+}
+
+country_event = {
+	id = wp02event.69
+	title = "wp02event.69.name"
+	desc = "wp02event.69.desc"
+	picture = GFX_evt_gas_giant
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		trigger = {
+			OR = {
+				has_completed_special_project_in_log = wp02_arcsan_project_5
+				has_completed_special_project_in_log = wp02_arcsan_project_9
+			}
+			OR = {
+				has_completed_special_project_in_log = wp02_arcsan_project_6
+				has_completed_special_project_in_log = wp02_arcsan_project_10
+			}
+			has_completed_special_project_in_log = wp02_arcsan_project_7
+			has_completed_special_project_in_log = wp02_arcsan_project_8
+		}
+		name = KEEP_SEARCHING
+		country_event = {
+			days = 10
+			id = wp02event.73
+		}
+	}
+
+	option = {
+		trigger = {
+			NAND = {
+				has_completed_special_project_in_log = wp02_arcsan_project_7
+				has_completed_special_project_in_log = wp02_arcsan_project_8
+				OR = {
+					has_completed_special_project_in_log = wp02_arcsan_project_5
+					has_completed_special_project_in_log = wp02_arcsan_project_9
+				}
+				OR = {
+					has_completed_special_project_in_log = wp02_arcsan_project_6
+					has_completed_special_project_in_log = wp02_arcsan_project_10
+				}
+			}
+		}
+		name = KEEP_SEARCHING
+	}
+}
+
+country_event = {
+	id = wp02event.70
+	title = "wp02event.70.name"
+	desc = "wp02event.70.desc"
+	picture = GFX_evt_animal_wildlife
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		trigger = {
+			OR = {
+				has_completed_special_project_in_log = wp02_arcsan_project_5
+				has_completed_special_project_in_log = wp02_arcsan_project_9
+			}
+			OR = {
+				has_completed_special_project_in_log = wp02_arcsan_project_6
+				has_completed_special_project_in_log = wp02_arcsan_project_10
+			}
+			has_completed_special_project_in_log = wp02_arcsan_project_7
+			has_completed_special_project_in_log = wp02_arcsan_project_8
+		}
+		name = KEEP_SEARCHING
+		country_event = {
+			days = 10
+			id = wp02event.73
+		}
+	}
+
+	option = {
+		trigger = {
+			NAND = {
+				has_completed_special_project_in_log = wp02_arcsan_project_7
+				has_completed_special_project_in_log = wp02_arcsan_project_8
+				OR = {
+					has_completed_special_project_in_log = wp02_arcsan_project_5
+					has_completed_special_project_in_log = wp02_arcsan_project_9
+				}
+				OR = {
+					has_completed_special_project_in_log = wp02_arcsan_project_6
+					has_completed_special_project_in_log = wp02_arcsan_project_10
+				}
+			}
+		}
+		name = KEEP_SEARCHING
+	}
+}
+
+country_event = {
+	id = wp02event.71
+	title = "wp02event.71.name"
+	desc = "wp02event.71.desc"
+	picture = GFX_evt_star_yellow
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		trigger = {
+			OR = {
+				has_completed_special_project_in_log = wp02_arcsan_project_5
+				has_completed_special_project_in_log = wp02_arcsan_project_9
+			}
+			OR = {
+				has_completed_special_project_in_log = wp02_arcsan_project_6
+				has_completed_special_project_in_log = wp02_arcsan_project_10
+			}
+			has_completed_special_project_in_log = wp02_arcsan_project_7
+			has_completed_special_project_in_log = wp02_arcsan_project_8
+		}
+		name = KEEP_SEARCHING
+		country_event = {
+			days = 10
+			id = wp02event.73
+		}
+	}
+
+	option = {
+		trigger = {
+			NAND = {
+				has_completed_special_project_in_log = wp02_arcsan_project_7
+				has_completed_special_project_in_log = wp02_arcsan_project_8
+				OR = {
+					has_completed_special_project_in_log = wp02_arcsan_project_5
+					has_completed_special_project_in_log = wp02_arcsan_project_9
+				}
+				OR = {
+					has_completed_special_project_in_log = wp02_arcsan_project_6
+					has_completed_special_project_in_log = wp02_arcsan_project_10
+				}
+			}
+		}
+		name = KEEP_SEARCHING
+	}
+}
+
+country_event = {
+	id = wp02event.72
+	title = "wp02event.72.name"
+	desc = "wp02event.72.desc"
+	picture = GFX_evt_relic_world
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		trigger = {
+			OR = {
+				has_completed_special_project_in_log = wp02_arcsan_project_5
+				has_completed_special_project_in_log = wp02_arcsan_project_9
+			}
+			OR = {
+				has_completed_special_project_in_log = wp02_arcsan_project_6
+				has_completed_special_project_in_log = wp02_arcsan_project_10
+			}
+			has_completed_special_project_in_log = wp02_arcsan_project_7
+			has_completed_special_project_in_log = wp02_arcsan_project_8
+		}
+		name = KEEP_SEARCHING
+		country_event = {
+			days = 10
+			id = wp02event.73
+		}
+	}
+
+	option = {
+		trigger = {
+			NAND = {
+				has_completed_special_project_in_log = wp02_arcsan_project_7
+				has_completed_special_project_in_log = wp02_arcsan_project_8
+				OR = {
+					has_completed_special_project_in_log = wp02_arcsan_project_5
+					has_completed_special_project_in_log = wp02_arcsan_project_9
+				}
+				OR = {
+					has_completed_special_project_in_log = wp02_arcsan_project_6
+					has_completed_special_project_in_log = wp02_arcsan_project_10
+				}
+			}
+		}
+		name = KEEP_SEARCHING
+	}
+}
+
+country_event = {
+	id = wp02event.73
+	title = "wp02event.73.name"
+	desc = "wp02event.73.desc"
+	picture = GFX_evt_mysterious_signal
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+	trigger = {
+		NOT = {
+			has_country_flag = wp02_temp
+		}
+	}
+	immediate = {
+		set_country_flag = wp02_temp
+	}
+
+	option = {
+		name = ACKNOWLEDGED
+		event_target:wp02_out = {
+			enable_special_project = {
+				name = wp02_arcsan_project_11
+			}
+		}
+	}
+}
+
+country_event = {
+	id = wp02event.74
+	title = "wp02event.74.name"
+	desc = "wp02event.74.desc"
+	picture = GFX_evt_worrying_signal
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		name = wp02_very_well
+		event_target:wp02_system_1 = {
+			enable_special_project = {
+				name = wp02_arcsan_project_12
+			}
+		}
+	}
+
+	option = {
+		name = wp02_need_answers
+		enable_special_project = {
+			name = wp02_arcsan_project_13
+		}
+	}
+
+	option = {
+		name = wp02_out_of_the_question
+		enable_special_project = {
+			name = wp02_arcsan_project_14
+		}
+	}
+}
+
+country_event = {
+	id = wp02event.75
+	title = "wp02event.75.name"
+	desc = "wp02event.75.desc"
+	picture = GFX_evt_supernova
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	immediate = {
+		event_target:wp02_system_2 = {
+			destroy_star_system = yes
+		}
+	}
+
+	option = {
+		name = wp02_may_see_again
+		country_event = {
+			days = 30
+			id = wp02event.82
+		}
+	}
+}
+
+country_event = {
+	id = wp02event.76
+	title = "wp02event.76.name"
+	desc = "wp02event.76.desc"
+	picture = GFX_evt_worrying_signal
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		name = wp02_leave
+		event_target:wp02_system_1 = {
+			enable_special_project = {
+				name = wp02_arcsan_project_12
+			}
+		}
+	}
+
+	option = {
+		name = wp02_attack
+		country_event = {
+			days = 5
+			id = wp02event.79
+		}
+	}
+}
+
+country_event = {
+	id = wp02event.77
+	title = "wp02event.77.name"
+	desc = "wp02event.77.desc"
+	picture = GFX_evt_worrying_signal
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		name = DOTDOTDOT
+		country_event = {
+			days = 30
+			id = wp02event.78
+		}
+	}
+}
+
+country_event = {
+	id = wp02event.78
+	title = "wp02event.78.name"
+	desc = "wp02event.78.desc"
+	picture = GFX_evt_ship_in_orbit_3
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		name = wp02_very_well
+		event_target:wp02_fleet = {
+			set_event_locked = no
+		}
+		event_target:wp02_wormhole_1 = {
+			enable_special_project = {
+				name = wp02_arcsan_project_15
+			}
+		}
+	}
+}
+
+country_event = {
+	id = wp02event.79
+	title = "wp02event.79.name"
+	desc = "wp02event.79.desc"
+	picture = GFX_evt_supernova
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		name = CURSES
+		country_event = {
+			days = 180
+			id = wp02event.80
+		}
+	}
+}
+
+country_event = {
+	id = wp02event.80
+	title = "wp02event.80.name"
+	desc = "wp02event.80.desc"
+	picture = GFX_evt_intelligence_report
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		name = TERRIBLE
+		end_event_chain = wp02_event_chain_5
+	}
+}
+
+country_event = {
+	id = wp02event.81
+	title = "wp02event.81.name"
+	desc = "wp02event.81.desc"
+	picture = GFX_evt_supernova
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		name = GOOD
+		country_event = {
+			days = 30
+			id = wp02event.83
+		}
+	}
+}
+
+country_event = {
+	id = wp02event.82
+	title = "wp02event.82.name"
+	desc = "wp02event.82.desc"
+	picture = GFX_evt_engineering_research
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		name = wp02_thank
+		give_technology = {
+			tech = tech_wp02_missile_x
+		}
+		end_event_chain = wp02_event_chain_5
+	}
+}
+
+country_event = {
+	id = wp02event.83
+	title = "wp02event.83.name"
+	desc = "wp02event.83.desc"
+	picture = GFX_evt_engineering_research
+	show_sound = event_ship_bridge
+	hide_window = no
+	is_triggered_only = yes
+
+	option = {
+		name = wp02_thank
+		give_technology = {
+			tech = tech_wp02_missile_x
+		}
+		end_event_chain = wp02_event_chain_5
+	}
+}
+
+country_event = {
+	id = wp02event.100
+	title = "apoc.5.name"
+	desc = "apoc.5.desc"
+	picture = GFX_evt_wormhole
+	show_sound = event_radio_chatter
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = encountered_first_wormhole
+		add_seen_bypass_type = wormhole
+	}
+
+	option = {
+		name = apoc.5.a
+	}
+}
