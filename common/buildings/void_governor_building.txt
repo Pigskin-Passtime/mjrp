@@ -1,0 +1,54 @@
+building_void_governor_research = {
+	base_buildtime = 480
+	exempt_from_ai_planet_specialization = yes
+	empire_limit = 1
+	category = research
+
+	potential = {
+		NOR = {
+			has_modifier = resort_colony
+			has_modifier = slave_colony
+			has_modifier = crucible_colony
+		}
+	}
+
+	destroy_trigger = {
+		OR = {
+			has_modifier = resort_colony
+			has_modifier = slave_colony
+			has_modifier = crucible_colony
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = { is_hive_empire = no }
+		}
+		modifier = {
+			job_void_governor_researcher_add = 4
+		}
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			exists = owner
+			has_planet_flag = inanis_governing
+		}
+		physics_tech_cost_mult = -0.1
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = @b1_minerals
+		}
+		upkeep = {
+			sr_dark_matter = 1
+		}
+	}
+
+	prerequisites = {
+		"tech_void_governor_research"
+	}
+}
