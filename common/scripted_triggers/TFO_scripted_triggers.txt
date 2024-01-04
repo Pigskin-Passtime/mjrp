@@ -1,0 +1,106 @@
+### MOD NAME:
+### The Forgotten One
+### CONTRIBUTORS:
+### AlexMeowler
+
+# Country scope
+TFO_trigger = {
+    is_ai = no
+    has_ascension_perk = ap_become_the_crisis
+
+    has_global_flag = TFO_allowed
+
+    has_country_flag = TFO_ready_second_encounter
+    NOT = {
+        has_global_flag = TFO_leader_spawned
+    }
+}
+
+#Country scope
+TFO_is_civic_crisis_candidate = {
+    NOR = {
+        has_ethic = ethic_xenophile
+        has_ethic = ethic_fanatic_xenophile
+        has_ethic = ethic_pacifist
+        has_ethic = ethic_fanatic_pacifist
+        has_civic = civic_machine_servitor
+    }
+}
+
+#Country scope
+TFO_can_unlock_mega = {
+    exists = event_target:TFO_leader
+    event_target:TFO_leader = {
+        is_owned_by = this
+    }
+
+    NOT = {
+        any_archaeological_site = {
+            exists = excavator_fleet
+            excavator_fleet = {
+                exists = leader
+                leader = {
+                    is_same_value = event_target:TFO_leader
+                }
+            }
+        }
+    }
+
+    has_country_flag = crisis_special_project_1_complete
+}
+
+#Country scope
+TFO_can_unlock_mega_1st_upgrade = {
+    has_country_flag = TFO_can_unlock_mega_1st_upgrade_flag
+    has_country_flag = crisis_special_project_2_complete
+    exists = event_target:TFO_leader
+    event_target:TFO_leader = {
+        is_owned_by = this
+    }
+    exists = event_target:TFO_megastructure
+    event_target:TFO_megastructure = {
+        is_owned_by = this
+        is_megastructure_type = TFO_mega_research_station_1
+    }
+}
+
+TFO_can_unlock_shroud_condensers = {
+    has_country_flag = TFO_can_unlock_shroud_condensers_flag
+    has_country_flag = crisis_special_project_3_complete
+    exists = event_target:TFO_leader
+    event_target:TFO_leader = {
+        is_owned_by = this
+    }
+    exists = event_target:TFO_megastructure
+    event_target:TFO_megastructure = {
+        is_owned_by = this
+        is_megastructure_type = TFO_mega_research_station_2
+    }
+}
+
+#Country scope
+TFO_can_unlock_mega_2nd_upgrade = {
+    has_country_flag = TFO_can_unlock_mega_2nd_upgrade_flag
+    has_country_flag = crisis_special_project_4_complete
+    exists = event_target:TFO_leader
+    event_target:TFO_leader = {
+        is_owned_by = this
+    }
+    exists = event_target:TFO_megastructure
+    event_target:TFO_megastructure = {
+        is_owned_by = this
+        is_megastructure_type = TFO_mega_research_station_2
+    }
+}
+
+#Ship scope
+TFO_has_aetherophasic_components = {
+    OR = {
+        has_component = TFO_SMALL_AE_LASER
+        has_component = TFO_MEDIUM_AE_LASER
+        has_component = TFO_LARGE_AE_LASER
+        has_component = TFO_SMALL_AE_DEFLECTOR
+        has_component = TFO_MEDIUM_AE_DEFLECTOR
+        has_component = TFO_LARGE_AE_DEFLECTOR
+    }
+}

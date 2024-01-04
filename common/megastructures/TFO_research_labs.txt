@@ -1,0 +1,262 @@
+### MOD NAME:
+### The Forgotten One
+### CONTRIBUTORS:
+### AlexMeowler
+
+# Shroud Research Complex
+TFO_stable_construction_point = {
+    entity = ""
+    portrait = GFX_TFO_megastructure_SCP_background
+    rotate_to_center = yes
+    place_entity_on_planet_plane = yes
+    show_galactic_map_icon = yes
+    show_in_outliner = yes
+
+    entity_offset = {
+        x = -40
+        y = 40
+    }
+
+    #Fake modifier, used to display mod resource stockpile
+    country_modifier = {
+        TFO_display_shroud_condensers_scripted_modifier = 1
+    }
+
+    construction_blocks_and_blocked_by = none
+
+    potential = {
+        always = no
+    }
+}
+
+# Shroud Research Complex
+TFO_mega_research_station_1 = {
+    entity = TFO_shroud_research_complex
+    construction_entity = construction_platform_entity
+    portrait = GFX_TFO_megastructure_SRC_ATG_background
+    rotate_to_center = yes
+    place_entity_on_planet_plane = yes
+    show_galactic_map_icon = yes
+    show_in_outliner = yes
+
+    entity_offset = {
+        x = -40
+        y = 40
+    }
+
+    construction_blocks_and_blocked_by = none
+
+    upgrade_from = {
+        TFO_stable_construction_point
+    }
+
+    potential = {
+        has_country_flag = TFO_can_build_SRC
+    }
+
+    possible = {
+        custom_tooltip = {
+            fail_text = TFO_requires_mega_engineering_tech
+            from = {
+                has_technology = tech_mega_engineering
+            }
+        }
+    }
+
+    #Fake modifier, used to display mod resource stockpile
+    country_modifier = {
+        TFO_display_shroud_condensers_scripted_modifier = 1
+    }
+
+    build_time = 1800
+    resources = {
+        category = megastructures
+        cost = {
+            alloys = 1250
+            unity = 2500
+        }
+        produces = {
+            sr_dark_matter = @TFO_deposit_production
+            trigger = {
+                exists = owner
+                owner = {
+                    has_technology = tech_mine_dark_matter
+                }
+            }
+        }
+    }
+
+    on_build_complete = {
+        from = {
+            add_modifier = {
+                modifier = TFO_SRC_research_speed
+            }
+        }
+    }
+}
+
+#Aetherophasic Testing Grounds
+TFO_mega_research_station_2 = {
+    entity = TFO_aetherophasic_testing_grounds
+    construction_entity = TFO_aetherophasic_testing_grounds
+    portrait = GFX_TFO_megastructure_SRC_ATG_background
+    rotate_to_center = yes
+    place_entity_on_planet_plane = yes
+    show_galactic_map_icon = yes
+    show_in_outliner = yes
+
+    entity_offset = {
+        x = -40
+        y = 40
+    }
+
+    construction_blocks_and_blocked_by = none
+
+    upgrade_from = {
+        TFO_mega_research_station_1
+    }
+
+    potential = {
+        has_country_flag = TFO_can_build_ATG
+    }
+
+    possible = {
+        custom_tooltip = {
+            fail_text = TFO_requires_mega_engineering_tech
+            from = {
+                has_technology = tech_mega_engineering
+            }
+        }
+    }
+
+    #Fake modifier, used to display mod resource stockpile
+    country_modifier = {
+        TFO_display_shroud_condensers_scripted_modifier = 1
+    }
+
+    build_time = 1800
+    resources = {
+        category = megastructures
+        cost = {
+            alloys = 2500
+            unity = 5000
+        }
+        produces = {
+            trigger = {
+                exists = owner
+                owner = {
+                    has_technology = TFO_tech_shroud_condensers
+                }
+            }
+            TFO_sr_shroud_condensers = @TFO_mega_research_station_2_production
+        }
+        produces = {
+            sr_dark_matter = @TFO_deposit_production
+            trigger = {
+                exists = owner
+                owner = {
+                    has_technology = tech_mine_dark_matter
+                }
+            }
+        }
+    }
+}
+
+#Negative-Mass Particle Accelerator
+TFO_mega_research_station_3 = {
+    entity = TFO_negative_mass_particle_accelerator
+    construction_entity = construction_platform_entity
+    portrait = GFX_TFO_megastructure_NMPA_background
+    place_entity_on_planet_plane = yes
+    entity_offset = { x = 0 y = 0 }
+    scales_with_planet = yes
+    show_galactic_map_icon = yes
+    show_in_outliner = yes
+
+    construction_blocks_and_blocked_by = none
+
+    upgrade_from = {
+        TFO_mega_research_station_2
+    }
+
+    potential = {
+        has_country_flag = TFO_can_build_NMPA
+    }
+
+    possible = {
+        custom_tooltip = {
+            fail_text = TFO_requires_mega_engineering_tech
+            from = {
+                has_technology = tech_mega_engineering
+            }
+        }
+        custom_tooltip = {
+            fail_text = TFO_requires_shroud_condensers_tech_unknown
+            from = {
+                has_country_flag = TFO_unlock_shroud_condensers
+            }
+        }
+        custom_tooltip = {
+            fail_text = TFO_requires_shroud_condensers_tech
+            from = {
+                OR = {
+                    AND = {
+                        has_country_flag = TFO_unlock_shroud_condensers
+                        has_technology = TFO_tech_shroud_condensers
+                    }
+                    NOR = {
+                        has_country_flag = TFO_unlock_shroud_condensers
+                        has_technology = TFO_tech_shroud_condensers
+                    }
+                }
+            }
+        }
+    }
+
+    #Fake modifier, used to display mod resource stockpile
+    country_modifier = {
+        country_TFO_sr_shroud_condensers_produces_mult = 0.33
+        TFO_display_shroud_condensers_scripted_modifier = 1
+    }
+
+    build_time = 1800
+    resources = {
+        category = megastructures
+        cost = {
+            TFO_sr_shroud_condensers = 2500
+            alloys = 5000
+            unity = 10000
+
+            trigger = {
+                has_technology = TFO_tech_shroud_condensers
+            }
+        }
+        cost = {
+            alloys = 5000
+            unity = 10000
+            trigger = {
+                NOT = {
+                    has_technology = TFO_tech_shroud_condensers
+                }
+            }
+        }
+        produces = {
+            trigger = {
+                exists = owner
+                owner = {
+                    has_technology = TFO_tech_shroud_condensers
+                }
+            }
+            TFO_sr_shroud_condensers = @TFO_mega_research_station_3_production
+        }
+        upkeep = {
+            trigger = {
+                exists = owner
+                owner = {
+                    has_technology = TFO_tech_shroud_condensers
+                }
+            }
+            TFO_sr_shroud_condensers = @TFO_mega_research_station_3_upkeep
+        }
+    }
+}

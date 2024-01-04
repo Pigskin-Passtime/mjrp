@@ -1,0 +1,94 @@
+### MOD NAME:
+### The Forgotten One
+### CONTRIBUTORS:
+### AlexMeowler
+
+TFO_containment_field_operator = {
+    category = specialist
+    condition_string = SPECIALIST_JOB_TRIGGER
+    building_icon = TFO_building_black_hole_containment_complex
+    clothes_texture_index = 3
+
+    possible_pre_triggers = {
+        has_owner = yes
+        is_being_purged = no
+        is_being_assimilated = no
+        is_sapient = yes
+    }
+
+    possible_precalc = can_fill_specialist_job
+
+    resources = {
+        category = TFO_planet_containment_field_operators
+        produces = {
+            TFO_sr_shroud_condensers = 2
+        }
+        upkeep = {
+            sr_dark_matter = 0.1
+        }
+    }
+
+    weight = {
+        weight = @specialist_job_weight
+        mult = value:job_weights_modifier|JOB|TFO_containment_field_operator|RESOURCE|TFO_sr_shroud_condensers|
+        modifier = {
+            factor = 0.2
+            has_citizenship_rights = no
+            NOT = { has_trait = trait_mechanical }
+        }
+        modifier = {
+            factor = 0.1
+            can_take_servant_job = yes
+        }
+        modifier = {
+            factor = 7
+            has_job = TFO_containment_field_operator
+        }
+        modifier = {
+            factor = 1.2
+            is_enslaved = yes
+            has_slavery_type = { type = slavery_indentured }
+        }
+    }
+}
+
+TFO_containment_field_operator_drone = {
+    category = complex_drone
+    condition_string = DRONE_JOB_TRIGGER
+    building_icon = TFO_building_black_hole_containment_complex
+    icon = TFO_containment_field_operator
+
+    possible_pre_triggers = {
+        has_owner = yes
+        is_enslaved = no
+        is_being_purged = no
+        is_being_assimilated = no
+        is_sapient = yes
+    }
+
+    possible_precalc = can_fill_drone_job
+
+    possible = { can_think = yes }
+
+    resources = {
+        category = TFO_planet_containment_field_operators
+        produces = {
+            TFO_sr_shroud_condensers = 2
+        }
+        upkeep = {
+            sr_dark_matter = 0.1
+        }
+    }
+
+    weight = {
+        weight = @complex_drone_job_weight
+        mult = value:job_weights_modifier|JOB|TFO_containment_field_operator_drone|RESOURCE|TFO_sr_shroud_condensers|
+        modifier = {
+            factor = 0.9
+            exists = owner
+            years_passed < 1
+            owner = { has_valid_civic = civic_machine_assimilator }
+            has_trait = trait_cybernetic
+        }
+    }
+}
