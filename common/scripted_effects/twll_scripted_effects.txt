@@ -1,0 +1,204 @@
+#########################
+#
+# Warpeo Legendary Leader - twll_scripted_effects.txt
+#
+# Written by RegiZero
+#
+#########################
+
+spawn_warpeo = {
+	set_global_flag = warpeo_system_spawned
+	spawn_system = {
+		initializer = legendary_leader_warpeo_puzzle
+	}
+	last_created_system = {
+		log = "spawned [This.GetName]"
+	}
+}
+
+create_warpeo_guardian_country = {
+	optimize_memory
+	if = {
+		limit = {
+			NOT = {
+				exists = event_target:warpeo_guardian_country
+			}
+		}
+		create_country = {
+			name = "NAME_Dimentional_Guardians"
+			type = warpeo_guardians
+			flag = {
+				icon = {
+					category = "zoological"
+					file = "flag_zoological_1.dds"
+				}
+				background= {
+					category = "backgrounds"
+					file = "00_solid.dds"
+				}
+				colors={
+					"black"
+					"black"
+					"null"
+					"null"
+				}
+			}
+			effect = {
+				save_global_event_target_as = warpeo_guardian_country
+				every_country = {
+					limit = {
+						has_country_flag = warpeo_guardians_encountered
+					}
+					establish_communications_no_message = prev
+					establish_communication_with_subjects_and_federation = {
+						FLAG = warpeo_guardians_encountered
+					}
+				}
+			}
+		}
+	}
+}
+
+create_warpeo_guardians = {
+	remove_global_flag = warpeo_puzzle_key_1_activated_flag
+	remove_global_flag = warpeo_puzzle_key_2_activated_flag
+	remove_global_flag = warpeo_puzzle_key_3_activated_flag
+	remove_global_flag = warpeo_puzzle_key_4_activated_flag
+	remove_global_flag = warpeo_puzzle_key_5_activated_flag
+	random_system_planet = {
+		limit = {
+			is_star = yes
+		}
+		event_target:warpeo_guardian_country = {
+			create_fleet = {
+				name = "NAME_Warpeo_Guardian"
+				settings = {
+					spawn_debris = no
+					uses_naval_capacity = no
+				}
+				effect = {
+					set_owner = event_target:warpeo_guardian_country
+					set_fleet_flag = warpeo_guardian_station
+					create_ship = {
+						name = ""
+						design = "NAME_Aberrant_Portal"
+						graphical_culture = "extra_dimensional_01"
+	
+						effect = {
+							set_ship_flag = warpeo_puzzle_key_3_flag
+						}
+					}
+	
+					set_location = {
+						target = prevprev
+						distance = @station_distance
+						angle = 0
+					}
+				}
+			}
+			create_fleet = {
+				name = "NAME_Warpeo_Guardian"
+				settings = {
+					spawn_debris = no
+					uses_naval_capacity = no
+				}
+				effect = {
+					set_owner = event_target:warpeo_guardian_country
+					set_fleet_flag = warpeo_guardian_station
+					create_ship = {
+						name = ""
+						design = "NAME_Aberrant_Portal"
+						graphical_culture = "extra_dimensional_01"
+	
+						effect = {
+							set_ship_flag = warpeo_puzzle_key_1_flag
+						}
+					}
+	
+					set_location = {
+						target = prevprev
+						distance = @station_distance
+						angle = 72
+					}
+				}
+			}
+			create_fleet = {
+				name = "NAME_Warpeo_Guardian"
+				settings = {
+					spawn_debris = no
+					uses_naval_capacity = no
+				}
+				effect = {
+					set_owner = event_target:warpeo_guardian_country
+					set_fleet_flag = warpeo_guardian_station
+					create_ship = {
+						design = "NAME_Aberrant_Portal"
+						graphical_culture = "extra_dimensional_01"
+	
+						effect = {
+							set_ship_flag = warpeo_puzzle_key_5_flag
+						}
+					}
+	
+					set_location = {
+						target = prevprev
+						distance = @station_distance
+						angle = 144
+					}
+				}
+			}
+			create_fleet = {
+				name = "NAME_Warpeo_Guardian"
+				settings = {
+					spawn_debris = no
+					uses_naval_capacity = no
+				}
+				effect = {
+					set_owner = event_target:warpeo_guardian_country
+					set_fleet_flag = warpeo_guardian_station
+					create_ship = {
+						name = ""
+						design = "NAME_Aberrant_Portal"
+						graphical_culture = "extra_dimensional_01"
+	
+						effect = {
+							set_ship_flag = warpeo_puzzle_key_2_flag
+						}
+					}
+	
+					set_location = {
+						target = prevprev
+						distance = @station_distance
+						angle = 216
+					}
+				}
+			}
+			create_fleet = {
+				name = "NAME_Warpeo_Guardian"
+				settings = {
+					spawn_debris = no
+					uses_naval_capacity = no
+				}
+				effect = {
+					set_owner = event_target:warpeo_guardian_country
+					set_fleet_flag = warpeo_guardian_station
+					create_ship = {
+						name = ""
+						design = "NAME_Aberrant_Portal"
+						graphical_culture = "extra_dimensional_01"
+	
+						effect = {
+							set_ship_flag = warpeo_puzzle_key_4_flag
+						}
+					}
+	
+					set_location = {
+						target = prevprev
+						distance = @station_distance
+						angle = 288
+					}
+				}
+			}
+		}
+	}
+}
