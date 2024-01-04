@@ -1,0 +1,1237 @@
+# narll_events.txt
+# By Lithrandil2
+namespace = narll
+
+# TODO: sounds for 10, 11, 12, 13
+# TODO: picture data for 210, 230, 231, 232, 233, 240, 241, 402, 403, 404, 700
+# TODO: change test values
+# TODO: fix bugs ^^
+
+#debug events
+
+#country_event = {
+#	id = narll.0
+#	is_triggered_only = yes 
+#	hide_window = yes
+#
+#	immediate = {
+#		country_event = {
+#			id = narll.1
+#		}
+#	}
+#}
+#
+#country_event = {
+#	id = narll.700
+#	title = narll.700.title
+#	desc = narll.700.desc
+#	is_triggered_only = yes
+#
+#	option = {
+#		name = narll.700.a
+#		event_target:narll_leader = {
+#			kill_leader = { }
+#		}
+#	}
+#}
+
+country_event = {
+	id = narll.1
+	title = narll.1.name
+	desc = narll.1.desc
+	show_sound = event_conversation
+	is_triggered_only = yes
+
+	event_window_type = leader_recruit
+	picture_event_data = {
+		portrait = event_target:narll_leader
+		room = ethic_spaceship_room
+	}
+	picture = GFX_leader_recruitment_bg_renowned
+
+
+	immediate = {
+		random_country = {
+			limit = {
+				OR = {
+					is_country_type = fallen_empire
+					is_country_type = awakened_fallen_empire
+				}
+			}
+			set_country_flag = narll_creator
+			set_global_flag = narll_creator_exists
+		}
+		create_country = {
+            name = "NAME_Nar"
+            type = global_event
+            auto_delete = yes
+            flag = {
+                icon = {
+                    category = "special"
+                    file = "unknown.dds"
+                }
+                background = {
+                    category = "backgrounds"
+                    file = "00_solid.dds"
+                }
+                colors = {
+                    "red"
+                    "red"
+                    "null"
+                    "null"
+                }
+            }
+            effect = {
+                save_event_target_as = narll_country
+            }
+        }
+        event_target:narll_country = {
+			create_species = {
+				name = "NAME_Unknown"
+				class = EXD
+				portrait = exd2_leader
+				namelist = "PRT1"
+				traits = {
+					trait = trait_enduring
+				}
+				effect = {
+					save_event_target_as = narll_species
+				}
+			}
+			create_leader = {
+				species = event_target:narll_species
+				event_leader = yes
+				class = scientist
+				name = "NAME_Nar"
+				skill = 7
+				immortal = yes
+				randomize_traits = no
+				can_manually_change_location = no
+				can_assign_to_council = no
+				skip_background_generation = yes
+				custom_catch_phrase = narll_catch_phrase
+				custom_description = narll_backstory
+				traits = {
+					trait = subclass_scientist_explorer
+					trait = narll_leader_trait_energy_being
+					trait = leader_trait_meticulous_2
+					trait = leader_trait_tuner_2
+					trait = narll_leader_trait_legendary_energy_manipulation
+				}
+				gender = indeterminable
+				set_age = 0
+				hide_age = yes
+				effect = {
+					save_global_event_target_as = narll_leader
+					set_leader_flag = legendary_leader
+					set_leader_flag = immune_to_negative_traits
+					set_owner = root
+					exile_leader_as = narll_leader
+					set_leader_flag = narll
+				}
+			}
+			last_created_leader = {
+				add_trait_no_notify = leader_trait_prospector_2
+			}
+		}
+	}
+
+	option = { # HIRE
+		name = HIRE
+		tag = hire_leader
+		custom_tooltip = narll_legendary_joins
+
+		allow = {
+			hidden_trigger = {
+				has_country_flag = narll_talk_c
+			}
+		}
+
+		hidden_effect = {
+			clone_leader = {
+				target = event_target:narll_leader
+			}
+			last_created_leader = {
+				save_global_event_target_as = narll_leader
+				set_leader_flag = legendary_leader
+				set_leader_flag = immune_to_negative_traits
+				set_leader_flag = narll
+				set_leader_flag = cannot_be_ruler
+			}
+			create_message = {
+				type = MESSAGE_RECRUITED_LEADER
+				localization =  MESSAGE_RECRUITED_LEADER_DESC
+				days = @toast_message_days
+				target = event_target:narll_leader
+				variable = {
+					type = name
+					localization = LEADER
+					scope = event_target:narll_leader
+				}
+				variable = {
+					key = "border"
+					value = "GFX_border_legendary"
+				}
+			}
+			set_country_flag = has_narll
+			country_event = {
+				id = narll.200
+				days = 1800
+				random = 1800
+			}
+			event_target:narll_leader = {
+				leader_event = {
+					id = narll.300
+					days = 5
+				}
+			}
+			#country_event = {
+			#	id = narll.700
+			#	days = 1080
+			#}
+
+		}
+	}
+
+	option = { # DISMISS
+		name = DISMISS
+		tag = dismiss_leader
+
+		hidden_effect = {
+			set_country_flag = narll_dismissed
+			event_target:narll_leader = {
+				kill_leader = { show_notification = no }
+			}
+		}
+	} #TODO: doing this offers their effects to another, random empire
+
+	option = {
+		name = narll.1.a # What are you?
+		response_text = narll.1.a.response
+		is_dialog_only = yes
+		hidden_effect = {
+			set_country_flag = narll_talk_a
+		}
+	}
+	option = {
+		name = narll.1.b # What are you?
+		response_text = narll.1.b.response
+		is_dialog_only = yes
+		hidden_effect = {
+			set_country_flag = narll_talk_b
+		}
+	}
+	option = {
+		allow = {
+			hidden_trigger = {
+				has_country_flag = narll_talk_a
+				has_country_flag = narll_talk_b	
+			}
+		}
+		name = narll.1.c # What are you planning to do now?
+		response_text = narll.1.c.response
+		is_dialog_only = yes
+		hidden_effect = {
+			set_country_flag = narll_talk_c
+		}
+	}
+
+	option = {
+		allow = {
+			hidden_trigger = {
+				has_country_flag = narll_talk_c
+			}
+		}
+		name = narll.1.d # What can you offer to our empire?
+		response_text = narll.1.d.response
+		is_dialog_only = yes
+		hidden_effect = {
+			set_country_flag = narll_talk_d
+		}
+	}
+}
+
+fleet_event = { # entrances
+	id = narll.10
+	title = narll.10.title
+	desc = narll.10.desc
+	picture = GFX_evt_astral_rift_research_lab # TODO better images
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = narll.10.a
+		owner = {
+			if = {
+				limit = {
+					host_has_dlc = "Ancient Relics Story Pack"
+				}
+				small_artifact_reward = yes
+				else = {
+					add_resource = {
+						minerals = 200
+					}
+				}
+			}
+			
+		}
+	}
+}
+
+fleet_event = { # energy stores
+	id = narll.11
+	title = narll.11.title
+	desc = narll.11.desc
+	picture = GFX_evt_astral_rift_research_lab # TODO better images
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = narll.11.a
+		owner = {
+			add_resource = {
+				energy = 1000
+			}
+		}
+	}
+
+	option = {
+		name = narll.11.b
+		owner = {
+			if = {
+				limit = {
+					host_has_dlc = "Ancient Relics Story Pack"
+				}
+				medium_artifact_reward = yes
+				add_monthly_resource_mult = {
+					resource = engineering_research
+					value = 10
+				}
+			} else = {
+				add_resource = {
+					alloys = 200
+				}
+				add_monthly_resource_mult = {
+					resource = engineering_research
+					value = 14
+				}
+			}			
+		}
+	}
+}
+
+fleet_event = { # data server
+	id = narll.12
+	title = narll.12.title
+	desc = narll.12.desc
+	picture = GFX_evt_astral_rift_research_lab # TODO better images
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = narll.12.a
+		owner = {
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = 10
+			}
+		}
+	}
+
+	option = {
+		name = narll.12.b
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = 10
+			}
+		}
+
+	}
+}
+
+fleet_event = { # surviving sensory computer
+	id = narll.13
+	title = narll.13.title
+	desc = narll.13.desc
+	picture = GFX_evt_astral_rift_research_lab # TODO better images
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = narll.13.a
+		controller = {
+			begin_event_chain = {
+				event_chain = narll_chain
+			}
+		}
+		system_star = {
+			enable_special_project = {
+				name = "narll_signals"
+				location = this
+				owner = root.controller
+			}
+		}
+	}
+	option = {
+		name = narll.13.b
+		hidden_effect = {
+			remove_global_flag = narll_alive
+		}
+
+	}
+}
+
+ship_event = { # on project success
+	id = narll.20
+	title = narll.20.title
+	desc = narll.20.desc
+	picture = GFX_evt_astral_rift_research_lab # TODO: AND GET ANOTHER GOOD SUN IMAGE
+	is_triggered_only = yes
+	location = from
+
+	immediate = {
+		owner = {
+			end_event_chain = narll_chain
+		}
+	}
+	option = {
+		name = narll.20.a
+		controller = {
+			country_event = {
+				id = narll.1
+				days = 1
+			}
+		}
+	}
+}
+
+ship_event = { # on project fail
+	id = narll.21
+	picture = GFX_evt_astral_rift_research_lab # TODO: AND GET ANOTHER GOOD SUN IMAGE
+	is_triggered_only = yes
+	location = from
+	hide_window = yes
+
+	immediate = {
+		owner = {
+			end_event_chain = narll_chain
+		}
+		remove_global_flag = narll_alive
+	}
+}
+
+ship_event = { # on project cancel
+	id = narll.22
+	picture = GFX_evt_astral_rift_research_lab # TODO: AND GET ANOTHER GOOD SUN IMAGE
+	is_triggered_only = yes
+	location = from
+	hide_window = yes
+
+	immediate = {
+		owner = {
+			end_event_chain = narll_chain
+		}
+		remove_global_flag = narll_alive
+	}
+}
+
+country_event = {
+	id = narll.100
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		from = {
+			AND = {
+				species = {
+					has_trait = narll_trait_energy_being 
+				}
+				NOT = {
+					has_trait = narll_leader_trait_energy_being
+				}
+			}
+		}
+	}
+
+	immediate = {
+		from = {
+			add_trait_no_notify = narll_leader_trait_energy_being
+		}
+	}
+}
+
+country_event = { # random flavour selector
+	id = narll.200
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		has_country_flag = has_narll
+	}
+
+	immediate = {
+		log = "Triggered Flavour Selector"
+		if = {
+			limit = {
+				NOT = {
+					has_country_flag = narll_disembodied
+				}
+			}
+			random_list = {
+				50 = {
+					country_event = {
+						id = narll.210
+						days = 1
+					}
+				} # Positive modifier
+				20 = {
+					modifier = {
+						factor = 0
+						OR = {
+							has_country_flag = narll_started_turning
+							has_country_flag = narll_rejected_turning
+						}
+					}
+					country_event = {
+						id = narll.230
+						days = 1
+					}
+				} # Energy lifeform
+				15 = {
+					modifier = {
+						factor = 0
+						OR = {
+							has_country_flag = narll_dark_energy
+							has_country_flag = narll_rejected_de
+						}
+					}
+					country_event = {
+						id = narll.240
+						days = 1
+					}
+				} # Dark Energy
+				10 = {
+					modifier = {
+						factor = 0
+						OR = {
+							has_country_flag = narll_fe_demanded_deletion
+							NOT = {
+								has_global_flag = narll_creator_exists
+							}
+						}
+					}
+					country_event = {
+						id = narll.220
+						days = 1
+					}
+				} # FE knows that you raided lab
+				0 = {
+					modifier = {
+						add = 5
+						has_global_flag = narll_creator_exists
+						NOT = {
+							has_country_flag = narll_fe_asked_murder
+						}
+						mid_game_years_passed >= 0
+					}
+					modifier = {
+						factor = 6
+						has_country_flag = narll_fe_denied_deletion
+					}
+					country_event = {
+						id = narll.250
+						days = 1
+					}
+				} # FE strife
+			}
+			country_event = {
+				id = narll.200
+				days = 1800
+				random = 1800
+			}
+		} else = {
+			country_event = {
+				id = narll.200
+				days = 360
+			}
+		}
+	}
+}
+
+country_event = { # choice of positive modifier
+	id = narll.210
+	title = narll.210.title
+	desc = narll.210.desc
+	is_triggered_only = yes
+	event_window_type = leader_story
+
+	picture_event_data = {
+		portrait = event_target:narll_leader
+		room = ethic_spaceship_room
+	}
+
+	option = {
+		name = narll.210.a
+		add_modifier = {
+			modifier = narll_physics
+			days = 1800
+		}
+	}
+	option = {
+		name = narll.210.b
+		add_modifier = {
+			modifier = narll_energy
+			days = 1800
+		}
+	}
+	option = {
+		name = narll.210.c
+		add_modifier = {
+			modifier = narll_weapons
+			days = 1800
+		}
+	}
+	option = {
+		name = narll.210.d
+		add_modifier = {
+			modifier = narll_shields
+			days = 1800
+		}
+	}
+}
+
+country_event = { # FE demands you delete the data you found
+	id = narll.220
+	title = narll.220.title
+	desc = narll.220.desc
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:narll_creator
+		planet_background = event_target:narll_creator
+		graphical_culture = event_target:narll_creator
+		city_level = event_target:narll_creator
+		room = event_target:narll_creator.ruler
+	}
+
+	immediate = {
+		set_country_flag = narll_fe_demanded_deletion
+		random_country = {
+			limit = {
+				has_country_flag = narll_creator
+			}
+			save_event_target_as = narll_creator
+		}
+	}
+
+	option = {
+		name = narll.220.a
+		add_modifier = {
+			modifier = narll_deleted_data
+			days = 3600
+		}
+		event_target:narll_creator = {
+			add_opinion_modifier = {
+				who = root
+				modifier = narll_opinion_deleted_data
+			}
+		}
+	}
+
+	option = {
+		name = narll.220.b
+		custom_tooltip = narll.220.b.tt
+		hidden_effect = {
+			random_list = {
+				50 = {
+					country_event = {
+						id = narll.221
+						days = 15
+					}
+				}
+				0 = {
+					modifier = {
+						add = 10
+						is_counter_espionage > 5
+					}
+					modifier = {
+						add = 10
+						is_counter_espionage > 6
+					}
+					modifier = {
+						add = 10
+						is_counter_espionage > 7
+					}
+					modifier = {
+						add = 20
+						is_counter_espionage > 8
+					}
+					modifier = {
+						add = 20
+						is_counter_espionage > 9
+					}
+					modifier = {
+						add = 30
+						is_counter_espionage > 10
+					}
+					event_target:narll_creator = {
+						add_opinion_modifier = {
+							who = root
+							modifier = narll_opinion_deleted_data
+						}
+					}
+				}
+			}
+			
+		}
+	}
+
+	option = {
+		name = narll.220.c
+		event_target:narll_creator = {
+			add_opinion_modifier = {
+				who = root
+				modifier = narll_opinion_refused_deletion
+			}
+		}
+		hidden_effect = {
+			set_country_flag = narll_fe_denied_deletion
+		}
+	}
+}
+
+country_event = {
+	id = narll.221
+	title = narll.221.title
+	desc = narll.221.desc
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:narll_creator
+		planet_background = event_target:narll_creator
+		graphical_culture = event_target:narll_creator
+		city_level = event_target:narll_creator
+		room = event_target:narll_creator.ruler
+	}
+
+	immediate = {
+		random_country = {
+			limit = {
+				has_country_flag = narll_creator
+			}
+			save_event_target_as = narll_creator
+		}
+	}
+
+	option = {
+		name = narll.221.a
+		event_target:narll_creator = {
+			add_opinion_modifier = {
+				who = root
+				modifier = narll_opinion_tried_tricking
+			}
+		}
+	}
+
+}
+
+country_event = { # you can turn the your pops
+	id = narll.230
+	title = narll.230.title
+	desc = narll.230.desc
+	is_triggered_only = yes
+	event_window_type = leader_story
+
+	picture_event_data = {
+		portrait = event_target:narll_leader
+		room = ethic_spaceship_room
+	}
+
+	option = { # yes, prepare
+		name = narll.230.a
+		set_country_flag = narll_started_turning
+		enable_special_project = {
+			name = narll_turning_physics
+		}
+	}
+	option = { # never ask again
+		name = narll.230.b
+		hidden_effect = {
+			set_country_flag = narll_rejected_turning
+		}
+
+	}
+}
+
+country_event = { # you can turn the your pops
+	id = narll.231
+	title = narll.231.title
+	desc = narll.231.desc
+	is_triggered_only = yes
+
+	option = { # yes, prepare
+		name = narll.231.a
+		set_country_flag = narll_started_turning
+		enable_special_project = {
+			name = narll_turning_society
+		}
+	}
+}
+
+country_event = { # you can turn the your pops
+	id = narll.232
+	title = narll.232.title
+	desc = narll.232.desc
+	is_triggered_only = yes
+
+	option = { # yes, prepare
+		name = narll.232.a
+		enable_special_project = {
+			name = narll_turning
+		}
+	}
+}
+
+country_event = { # you can turn the your pops
+	id = narll.233
+	title = narll.233.title
+	desc = narll.233.desc
+	is_triggered_only = yes
+
+	option = { # yes, prepare
+		name = narll.233.a
+		hidden_effect = {
+			every_owned_pop = {
+				limit = {
+					is_same_species = root
+				}
+				modify_species = {
+					species = this
+					add_trait = narll_trait_energy_being
+					effect = {
+						save_event_target_as = energy_species
+					}
+				}
+			}
+			every_owned_leader = {
+				limit = {
+					is_same_species = root
+					NOT = {
+						has_trait = narll_leader_trait_energy_being
+					}
+				}
+				add_trait = narll_leader_trait_energy_being
+			}
+		}
+		change_dominant_species = { species = event_target:energy_species change_all = yes }
+	}
+}
+
+country_event = { # Dark Energy (need build machine)
+	id = narll.240
+	title = narll.240.title
+	desc = narll.240.desc
+	is_triggered_only = yes
+	event_window_type = leader_story
+
+	picture_event_data = {
+		portrait = event_target:narll_leader
+		room = ethic_spaceship_room
+	}
+
+	option = { # yes, begin the creation
+		name = narll.240.a
+		hidden_effect = {
+			set_country_flag = narll_dark_energy
+		}
+		enable_special_project = {
+			name = narll_de_unlock
+		}
+	}
+	option = { # never
+		name = narll.240.b
+		hidden_effect = {
+			set_country_flag = narll_rejected_de
+		}
+	}
+}
+
+country_event = {
+	id = narll.241
+	title = narll.241.title
+	desc = narll.241.desc
+	is_triggered_only = yes
+	event_window_type = leader_story
+
+	picture_event_data = {
+		portrait = event_target:narll_leader
+		room = ethic_spaceship_room
+	}
+
+	option = {
+		name = narll.241.a
+		hidden_effect = {
+			give_fe_tech = yes
+			random_list = {
+				90 = {}
+				10 = {
+					give_fe_tech = yes
+				}
+			}
+		}
+	}
+	option = {
+		name = narll.241.b
+		hidden_effect = {
+			set_country_flag = narll_perma_dead
+		}
+		event_target:narll_leader = {
+			kill_leader = {}
+		}
+		give_fe_tech = yes
+		give_fe_tech = yes
+		random_list = {
+			80 = {}
+			20 = {
+				give_fe_tech = yes
+			}
+		}
+	}
+}
+
+country_event = { # FE knows Narll survived
+	id = narll.250
+	title = narll.250.title
+	desc = narll.250.desc
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:narll_creator
+		planet_background = event_target:narll_creator
+		graphical_culture = event_target:narll_creator
+		city_level = event_target:narll_creator
+		room = event_target:narll_creator.ruler
+	}
+
+
+	immediate = {
+		random_country = {
+			limit = {
+				has_country_flag = narll_creator
+			}
+			save_event_target_as = narll_creator
+		}
+		set_country_flag = narll_fe_asked_murder
+	}
+
+	option = {
+		name = narll.250.a
+		event_target:narll_leader = {
+			kill_leader = {
+				show_notification = yes
+			}
+		}
+		event_target:narll_creator = {
+			add_opinion_modifier = {
+				who = root
+				modifier = narll_opinion_delivered
+			}
+		}
+		hidden_effect = {
+			set_country_flag = narll_perma_dead
+			remove_country_flag = has_narll
+			remove_global_flag = narll_alive
+		}
+	}
+	option = {
+		name = narll.250.b
+		event_target:narll_creator = {
+			add_opinion_modifier = {
+				who = root
+				modifier = narll_opinion_refused
+			}
+		}
+	}
+
+}
+
+# doesn't work
+leader_event = { # add random deposits
+	id = narll.300
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_global_flag =  narll_alive
+	}
+
+	immediate = {
+		log = "Called narll300"
+		random_list = {
+			80 = {
+				log = "Did not trigger prospection"
+			} # 80 normally
+			20 = {
+				modifier = {
+					factor = 0
+					OR = {
+						has_leader_flag = narll_recuperating
+						owner = {
+							has_country_flag = narll_disembodied
+						}
+					}
+				}
+				log = "Triggered prospection"
+				leader_event = {
+					id = narll.310
+				}
+			}
+		}
+
+		leader_event = {
+			id = narll.300
+			days = 30
+		}
+	}
+}
+
+leader_event = {
+	id = narll.310
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		solar_system = {
+			random_system_planet = {
+				limit = {
+					is_colonizable = no
+				}
+				log = "In [This.getName]"
+				if = {
+					limit = {
+						is_colonizable = yes
+					}
+					narll_colonizable_deposits = yes
+				} else_if = {
+					limit = {
+						is_star = yes
+					}
+					if = {
+						limit = {
+							has_deposit_for = shipclass_mining_station
+						}
+						random_list = {
+							24 = {
+								narll_energy_deposits = yes
+							}
+						}
+					} else_if = {
+						limit = {
+							has_deposit_for = shipclass_research_station
+						}
+						narll_stars_research_deposits = yes
+					} else = {
+						random_list = {
+							51 = {
+								modifier = {
+									add = 4
+									has_astral_planes_dlc = yes
+								}
+								narll_stars_research_deposits = yes
+							}
+							24 = {
+								narll_energy_deposits = yes
+							}
+						}
+					}
+				} else_if = {
+					limit = {
+						is_a_planet = yes
+					}
+					if = {
+						limit = {
+							has_deposit_for = shipclass_mining_station
+						}
+						narll_planet_mining_deposits = yes
+					} else_if = {
+						limit = {
+							has_deposit_for = shipclass_research_station
+						}
+						narll_planet_research_deposits = yes
+					} else = {
+						random_list = {
+							96 = {
+								modifier = {
+									add = 3
+									has_astral_planes_dlc = yes
+								}
+								narll_planet_research_deposits = yes
+							}
+							126 = {
+								modifier = {
+									add = 8
+									is_planet_class = pc_gas_giant
+								}
+								narll_planet_mining_deposits = yes
+							}
+						}
+					}
+				} 
+			}
+		}
+		reroll_random = yes
+	}
+}
+
+# TODO: doesn't spawn at death location, only capital
+country_event = { # on-death
+	id = narll.400
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		from = {
+			has_leader_flag = narll
+		}
+	}
+
+	immediate = {
+		log = "Revive triggered"
+		set_country_flag = narll_disembodied
+		if = {
+			limit = {
+				NOT = {
+					OR = {
+						has_country_flag = narll_perma_dead
+						# has_country_flag = narll_consumed later, once I figure out how to check that hte fleet that killed it was stellarite devourer
+					}
+				}
+				
+			}
+			enable_special_project = {
+				name = narll_revive_machine
+				location = this.capital_scope
+			}
+			#if = {
+			#	limit = {
+			#		has_country_flag = narll_reanimator_constructed
+			#	}
+			#	enable_special_project = {
+			#		name = narll_revive_machine
+			#		location = this.capital_scope
+			#	}
+			#} else = {
+			#	enable_special_project = {
+			#		name = narll_revive
+			#		location = from
+			#	}
+			#}
+		}
+	}
+}
+
+
+# TODO: doesn't work
+country_event = { # on revive
+	id = narll.402
+	is_triggered_only = yes
+	title = narll.402.title
+	desc = narll.402.desc
+
+	event_window_type = leader_story
+
+	picture_event_data = {
+		portrait = event_target:narll_leader
+		room = ethic_spaceship_room
+	}
+	
+	immediate = {
+		remove_country_flag = narll_disembodied
+		clone_leader = {
+			target = event_target:narll_leader
+		}
+		last_created_leader = {
+			save_global_event_target_as = narll_leader
+			set_leader_flag = legendary_leader
+			set_leader_flag = immune_to_negative_traits
+			set_leader_flag = narll
+			set_leader_flag = cannot_be_ruler
+		}
+		
+	}
+
+	option = {
+		name = narll.402.a
+	}
+
+	#after = {
+	#	if = {
+	#		limit = {
+	#			owner = {
+	#				NOT = {
+	#					OR = {
+	#						has_country_flag = narll_reanimator_constructed
+	#						has_special_project = narll_build_revive_machine
+	#					}
+	#				}
+	#			}
+	#		}
+	#		owner = {
+	#			country_event = {
+	#				id = narll.404
+	#			}
+	#		}
+	#	}
+	#}
+
+}
+
+country_event = { # constructed reanimator
+	id = narll.403
+	is_triggered_only = yes
+	title = narll.403.title
+	desc = narll.403.desc
+
+	immediate = {
+		set_country_flag = narll_reanimator_constructed
+	}
+
+	option = {
+		name = narll.403.a
+	}
+	
+}
+
+country_event = { # machine building proposal
+	id = narll.404
+	is_triggered_only = yes
+	title = narll.404.title
+	desc = narll.404.desc
+
+	option = {
+		name = narll.404.a
+		enable_special_project = {
+			name = narll_build_revive_machine
+		}
+	}
+
+	option = {
+		name = narll.404.b
+	}
+	
+}

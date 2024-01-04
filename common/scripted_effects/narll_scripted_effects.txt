@@ -1,0 +1,369 @@
+# narll_scripted_effects.txt
+# By Lithrandil2
+
+spawn_nar = {
+	set_global_flag = narll_system_spawned
+	last_created_system = {
+		log = "spawned Nar in [This.GetName]"
+	}
+	spawn_system = {
+		initializer = narll_init
+	}
+	set_global_flag = narll_alive
+}
+
+narll_dig_site_failure = {
+	random_list = {
+		10 = { site_laser_grid_trap = yes }
+		10 = { site_sentry_guns_trap = yes }
+		10 = { site_crusher_droids_trap = yes }
+		10 = { site_guardian_droids_trap = yes }
+		10 = { site_collapsed_roof = yes }
+		10 = { fleet_event = { id = ancrel.8040 } }
+		10 = { fleet_event = { id = ancrel.8045 } }
+		10 = { fleet_event = { id = ancrel.8050 } }
+		10 = { fleet_event = { id = ancrel.8055 } }
+		10 = { fleet_event = { id = ancrel.8060 } }
+		10 = {
+			modifier = {
+				factor = 0
+				owner = { is_machine_empire = yes }
+			}
+			fleet_event = { id = ancrel.8065 } # Organics only
+		}
+		10 = {
+			fleet_event = { id = ancrel.8070 }
+			modifier = {
+				factor = 2
+				leader = { has_trait = leader_trait_percussive_maintainer }
+			}
+		}
+		2 = { fleet_event = { id = ancrel.8075 } } # Scientist vanishes
+		10 = { fleet_event = { id = ancrel.8080 } }
+		10 = { fleet_event = { id = ancrel.8110 } }
+		5 = {
+			modifier = {
+				factor = 0
+				owner = {
+					OR = {
+						is_gestalt = yes
+						country_uses_food = no
+						has_country_flag = triggered_sentinels_random_event
+					}
+				}
+			}
+			fleet_event = { id = ancrel.4078 } # Fire (food shortages)
+		}
+		10 = {
+			modifier = {
+				factor = 0
+				owner = { is_gestalt = yes }
+			}
+			fleet_event = { id = ancrel.13030 } #Disturbing Vision
+		}
+	}
+}
+
+narll_trade_deposits = { # total weight: 24
+	random_list = {
+		2 = {
+			add_deposit = d_trade_value_3
+		}
+		4 = {
+			add_deposit = d_trade_value_4
+		}
+		6 = {
+			add_deposit = d_trade_value_5
+		}
+		6 = {
+			add_deposit = d_trade_value_6
+		}
+		4 = {
+			add_deposit = d_trade_value_7
+		}
+		2 = {
+			add_deposit = d_trade_value_8
+		}
+	}
+}
+
+narll_physics_deposits = { # 24
+	random_list = {
+		2 = {
+			add_deposit = d_physics_2
+		}
+		4 = {
+			add_deposit = d_physics_3
+		}
+		6 = {
+			add_deposit = d_physics_4
+		}
+		6 = {
+			add_deposit = d_physics_5
+		}
+		4 = {
+			add_deposit = d_physics_6
+		}
+		2 = {
+			add_deposit = d_physics_7
+		}
+	}
+}
+
+narll_engineering_deposits = { # 24
+	random_list = {
+		2 = {
+			add_deposit = d_engineering_2
+		}
+		4 = {
+			add_deposit = d_engineering_3
+		}
+		6 = {
+			add_deposit = d_engineering_4
+		}
+		6 = {
+			add_deposit = d_engineering_5
+		}
+		4 = {
+			add_deposit = d_engineering_6
+		}
+		2 = {
+			add_deposit = d_engineering_7
+		}
+	}
+}
+
+narll_society_deposits = { # 24
+	random_list = {
+		2 = {
+			add_deposit = d_society_2
+		}
+		4 = {
+			add_deposit = d_society_3
+		}
+		6 = {
+			add_deposit = d_society_4
+		}
+		6 = {
+			add_deposit = d_society_5
+		}
+		4 = {
+			add_deposit = d_society_6
+		}
+		2 = {
+			add_deposit = d_society_7
+		}
+	}
+}
+
+narll_planet_research_deposits = { # total 96 (99 with Astral Planes)
+	random_list = {
+		24 = {
+			narll_physics_deposits = yes
+		}
+		24 = {
+			narll_engineering_deposits = yes
+		}
+		24 = {
+			narll_society_deposits = yes
+		}
+		24 = {
+			narll_trade_deposits = yes
+		}
+		2 = {
+			modifier = {
+				factor = 0
+				has_astral_planes_dlc = yes
+			}
+			add_deposit = d_astral_threads_deposit_1
+		}
+		1 = {
+			modifier = {
+				factor = 0
+				has_astral_planes_dlc = yes
+			}
+			add_deposit = d_astral_threads_deposit_2
+		}
+	}
+}
+
+narll_mineral_deposits = { # 24
+	random_list = {
+		2 = {
+			add_deposit = d_minerals_2
+		}
+		4 = {
+			add_deposit = d_minerals_3
+		}
+		6 = {
+			add_deposit = d_minerals_4
+		}
+		6 = {
+			add_deposit = d_minerals_5
+		}
+		4 = {
+			add_deposit = d_minerals_6
+		}
+		2 = {
+			add_deposit = d_minerals_7
+		}
+	}
+}
+
+narll_energy_deposits = { # 24
+	random_list = {
+		2 = {
+			add_deposit = d_energy_2
+		}
+		4 = {
+			add_deposit = d_energy_3
+		}
+		6 = {
+			add_deposit = d_energy_4
+		}
+		6 = {
+			add_deposit = d_energy_5
+		}
+		4 = {
+			add_deposit = d_energy_6
+		}
+		2 = {
+			add_deposit = d_energy_7
+		}
+	}
+}
+
+narll_alloys_deposits = { # 18
+	random_list = {
+		2 = {
+			add_deposit = d_alloys_1
+		} 
+		4 = {
+			add_deposit = d_alloys_2
+		}
+		6 = {
+			add_deposit = d_alloys_3
+		}
+		4 = {
+			add_deposit = d_alloys_4
+		}
+		2 = {
+			add_deposit = d_alloys_5
+		}
+	}
+}
+
+narll_planet_mining_deposits = { # total 126 (134 on gas giant)
+	random_list = {
+		24 = {
+			narll_mineral_deposits = yes
+		}
+		24 = {
+			narll_energy_deposits = yes
+		}
+		18 = {
+			narll_alloys_deposits = yes
+		}
+		24 = {
+			narll_trade_deposits = yes
+		}
+		2 = {
+			add_deposit = d_volatile_motes_1
+		}
+		4 = {
+			add_deposit = d_volatile_motes_2
+		}
+		4 = {
+			add_deposit = d_volatile_motes_3
+		}
+		2 = {
+			add_deposit = d_volatile_motes_4
+		}
+		2 = {
+			add_deposit = d_rare_crystals_1
+		}
+		4 = {
+			add_deposit = d_rare_crystals_2
+		}
+		4 = {
+			add_deposit = d_rare_crystals_3
+		}
+		2 = {
+			add_deposit = d_rare_crystals_4
+		}
+		2 = {
+			add_deposit = d_exotic_gases_1
+		}
+		4 = {
+			add_deposit = d_exotic_gases_2
+		}
+		4 = {
+			add_deposit = d_exotic_gases_3
+		}
+		2 = {
+			add_deposit = d_exotic_gases_4
+		}
+		1 = {
+			add_deposit = d_living_metal_deposit
+		}
+		0 = {
+			modifier = {
+				add = 8
+				is_planet_class = pc_gas_giant
+			}
+			add_deposit = d_food_3
+		}
+	}
+}
+
+
+narll_colonizable_deposits = { # BONUS FEATURES, to be added once everything else is actually done
+
+}
+
+narll_stars_research_deposits = { # 52 (55 with Astral Planes)
+	random_list = {
+		24 = {
+			narll_physics_deposits = yes
+		}
+		24 = {
+			narll_engineering_deposits = yes
+		}
+		1 = {
+			modifier = {
+				factor = 2
+				is_planet_class = pc_black_hole
+			}
+			add_deposit = d_dark_matter_deposit_1
+		}
+		2 = {
+			modifier = {
+				factor = 2
+				is_planet_class = pc_black_hole
+			}
+			add_deposit = d_dark_matter_deposit_2
+		}
+		1 = {
+			modifier = {
+				factor = 2
+				is_planet_class = pc_black_hole
+			}
+			add_deposit = d_dark_matter_deposit_3
+		}
+		2 = {
+			modifier = {
+				factor = 0
+				has_astral_planes_dlc = yes
+			}
+			add_deposit = d_astral_threads_deposit_1
+		}
+		1 = {
+			modifier = {
+				factor = 0
+				has_astral_planes_dlc = yes
+			}
+			add_deposit = d_astral_threads_deposit_2
+		}
+	}
+}
+
