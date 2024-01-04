@@ -1,0 +1,95 @@
+##########################################################################################################
+## viz_raff_situation_events.txt
+## BrettlesSr
+##########################################################################################################
+
+namespace = viz_raff_sit
+
+situation_event = {
+	id = viz_raff_sit.1
+	title = viz_raff_sit.1.name
+	desc = viz_raff_sit.1.desc
+	situation = this
+	picture = GFX_evt_board_meeting
+	is_triggered_only = yes
+
+	immediate = {
+		owner = {
+			remove_country_flag = viz_raff_offered_trait_for_stage
+		}		
+	}
+
+	option = {
+		name = EXCELLENT
+		custom_tooltip = viz_raff_sit.1.a.tooltip
+		owner = {
+			unlock_council_selection = yes
+			hidden_effect = {
+				set_country_flag = viz_raff_grand_vizier_position_enabled
+			}
+		}
+	}
+}
+
+situation_event = {
+	id = viz_raff_sit.2
+	title = viz_raff_sit.2.name
+	desc = viz_raff_sit.2.desc
+	situation = this
+	picture = GFX_evt_alien_propaganda
+	is_triggered_only = yes
+
+	immediate = {
+		owner = {
+			remove_country_flag = viz_raff_offered_trait_for_stage
+		}		
+	}
+
+	option = {
+		name = INTERESTING
+		custom_tooltip = viz_raff_sit.2.a.tooltip
+		owner = {
+			set_country_flag = viz_raff_faction_enabled
+			enable_faction_of_type = viz_raff_faction
+		}
+		hidden_effect = {
+			owner = {
+				while = {
+					count = 10
+					random_owned_pop = {
+						limit = {
+							NOT = { has_ethic = "ethic_materialist" }
+						}
+						pop_change_ethic = "ethic_materialist"
+						set_pop_faction = viz_raff_faction
+					}
+				}
+			}
+		}
+	}
+}
+
+situation_event = {
+	id = viz_raff_sit.3
+	title = viz_raff_sit.3.name
+	desc = viz_raff_sit.3.desc
+	situation = this
+	picture = GFX_evt_robot_assembly_plant
+	is_triggered_only = yes
+
+	immediate = {
+		owner = {
+			remove_country_flag = viz_raff_offered_trait_for_stage
+		}		
+	}
+
+	option = {
+		name = viz_raff_sit.3.a
+		custom_tooltip = viz_raff_sit.a.tooltip
+		hidden_effect = {
+			owner = {
+				set_country_flag = viz_raff_ascension_forges_enabled
+			}			
+		}
+	}
+}

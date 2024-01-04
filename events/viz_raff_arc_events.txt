@@ -1,0 +1,301 @@
+##########################################################################################################
+## viz_raff_arc_events.txt
+## BrettlesSr
+##########################################################################################################
+
+
+namespace = viz_raff_arc
+
+fleet_event = {
+	id = viz_raff_arc.1
+	title = viz_raff_arc.1.name
+	desc = viz_raff_arc.1.desc
+	picture = GFX_evt_tomb_world
+	show_sound = event_wind_ruins
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no } 
+	}
+
+	option = {
+		name = INTRIGUING
+	}
+}
+
+fleet_event = {
+	id = viz_raff_arc.2
+	title = viz_raff_arc.2.name
+	desc = viz_raff_arc.2.desc
+	picture = GFX_evt_derelict_interior
+	show_sound = event_dig_site
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no } 
+	}
+
+	option = {
+		name = FASCINATING
+		small_artifact_reward = yes
+	}
+}
+
+fleet_event = {
+	id = viz_raff_arc.3
+	title = viz_raff_arc.3.name
+	desc = viz_raff_arc.3.desc
+	picture = GFX_evt_derelict_interior
+	show_sound = event_dig_site
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no } 
+	}
+
+	option = {
+		name = INTRIGUING
+		small_artifact_reward = yes
+	}
+}
+
+fleet_event = {
+	id = viz_raff_arc.4
+	title = viz_raff_arc.4.name
+	desc = viz_raff_arc.4.desc
+	picture = GFX_evt_excavation_team #todo, consider replacing this
+	show_sound = event_big_door_opening
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no } 
+	}
+
+	option = {
+		name = viz_raff_arc.4.a
+		owner = {
+			country_event = { id = viz_raff_arc.5 days = 1 }
+		}
+	}
+
+	option = {
+		name = viz_raff_arc.4.b
+		owner = {
+			add_resource = {
+				engineering_research = 3500
+				minor_artifacts = 250
+			}
+		}
+	}
+}
+
+country_event = {
+	id = viz_raff_arc.5
+	title = viz_raff_arc.5.name
+	diplomatic_title = NAME_Vizierch_Raffar
+	desc = viz_raff_arc.5.desc
+	show_sound = event_airlock
+	location = fromfrom
+	is_triggered_only = yes
+	picture = GFX_leader_recruitment_bg_legendary_viz_raff
+	event_window_type = leader_recruit
+	
+	picture_event_data = {
+		portrait = event_target:viz_raff_leader
+		room = ethic_spaceship_room
+	}
+
+	immediate = {
+		create_country = {
+			name = "NAME_Unknown"
+			type = global_event
+			auto_delete = yes
+			flag = {
+				icon = {
+					category = "special"
+					file = "unknown.dds"
+				}
+				background = {
+					category = "backgrounds"
+					file = "00_solid.dds"
+				}
+				colors = {
+					"red"
+					"red"
+					"null"
+					"null"
+				}
+			}
+			effect = {
+				save_event_target_as = viz_raff_country
+			}
+		}
+		event_target:viz_raff_country = {
+			set_policy = {
+				policy = slavery
+				option = slavery_allowed
+			}
+			set_origin = origin_legendary_leader
+			create_species = {
+				name = "NAME_Unknown"
+				class = MACHINE
+				portrait = paragon_exakeides_artifact_1 #todo
+				namelist = "PRT1"
+				traits = {
+					
+				}
+				effect = {
+					save_event_target_as = viz_raff_species
+				}
+			}
+
+			create_leader = {
+				species = event_target:viz_raff_species
+				event_leader = yes
+				class = official
+				name = NAME_Vizierch_Raffar
+				skill = 5
+				immortal = yes
+				randomize_traits = no
+				skip_background_generation = yes
+				custom_catch_phrase = viz_raff_catch_phrase
+				custom_description = viz_raff_backstory
+				background_ethic = ethic_materialist
+				traits = {
+					trait = leader_trait_viz_raff_power_behind_the_throne
+					trait = leader_trait_viz_raff_undessicated
+				}
+				gender = male
+				set_age = 0
+				hide_age = yes
+				effect = {
+					save_global_event_target_as = viz_raff_leader
+					set_leader_flag = legendary_leader
+					set_leader_flag = immune_to_negative_traits
+					set_leader_flag = leader_death_events_blocked
+					add_trait = leader_trait_iron_fist
+					add_trait = subclass_official_economy_councilor
+					add_trait = leader_trait_legendary_great_inventor
+					set_owner = root
+					exile_leader_as = viz_raff_leader
+					set_variable = {
+						which = viz_raff_vizier_level
+						value = 1
+					}
+				}
+			}
+		}
+	}
+
+	option = { # HIRE
+		name = HIRE
+		tag = hire_leader
+		custom_tooltip = paragon_viz_raff_joins
+		sound = event_robo
+
+		hidden_effect = {
+			clone_leader = {
+				target = event_target:viz_raff_leader
+			}
+			last_created_leader = {
+				save_global_event_target_as = viz_raff_leader
+				set_leader_flag = legendary_leader
+				set_leader_flag = viz_raff
+				set_leader_flag = immune_to_negative_traits
+				set_leader_flag = leader_death_events_blocked
+				set_owner = root
+				leader_event = {
+					id = viz_raff.1
+					days = 30
+				}
+			}
+			create_message = {
+				type = MESSAGE_RECRUITED_LEADER
+				localization =  MESSAGE_RECRUITED_LEADER_DESC
+				days = @toast_message_days
+				target = event_target:viz_raff_leader
+				variable = {
+					type = name
+					localization = LEADER
+					scope = event_target:viz_raff_leader
+				}
+				variable = {
+					key = "border"
+					value = "GFX_border_legendary"
+				}
+			}
+		}
+	}
+
+	option = { # DISMISS
+		name = DISMISS
+		tag = dismiss_leader
+		sound = event_robo
+
+		hidden_effect = {
+			event_target:viz_raff_leader = {
+				kill_leader = { show_notification = no }
+			}
+		}
+	}
+
+	option = {
+		name = viz_raff_arc.5.a # What happened to the civilisation on this planet?
+		response_text = viz_raff_arc.5.a.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = viz_raff_arc.5.b # What are you?
+		response_text = viz_raff_arc.5.b.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = viz_raff_arc.5.c # How did you end up in this statis pod?
+		response_text = viz_raff_arc.5.c.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = viz_raff_arc.5.d # Souless machine
+		trigger = {
+			is_spiritualist = yes
+		}
+		response_text = viz_raff_arc.5.d.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = viz_raff_arc.5.e # Souless machine (yay)
+		trigger = {
+			is_materialist = yes
+		}
+		response_text = viz_raff_arc.5.e.response
+		is_dialog_only = yes
+	}
+}

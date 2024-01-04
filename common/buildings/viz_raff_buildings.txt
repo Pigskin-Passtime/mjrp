@@ -1,0 +1,180 @@
+##########################################################################################################
+## viz_raff_buildings.txt
+## BrettlesSr
+##########################################################################################################
+
+building_viz_raff_ascension_forge = {
+	icon = building_chamber_of_elevation_1
+	base_buildtime = @b1_time
+	base_cap_amount = 1
+	position_priority = 90
+
+	category = pop_assembly
+
+	desc = {
+		trigger = {
+			owner = {
+				is_robot_building_empire = yes
+			}
+		}
+		text = building_viz_raff_ascension_forge_desc
+	}
+	desc = {
+		trigger = {
+			owner = {
+				is_robot_building_empire = no
+			}
+		}
+		text = building_viz_raff_ascension_forge_desc_food
+	}
+
+	potential = {
+		exists = owner
+		owner = {
+			has_country_flag = viz_raff_ascension_forges_enabled
+		}
+		NOT = { has_modifier = slave_colony }
+	}
+
+	allow = {
+		hidden_trigger = {
+			OR = {
+				owner = { is_ai = no }
+				NAND = {
+					free_district_slots = 0
+					free_building_slots <= 1
+					free_housing <= 0
+					free_jobs <= 0
+				}
+			}
+		}
+		NOT = { is_planet_class = pc_machine }
+	}
+
+	destroy_trigger = {
+		exists = owner
+		OR = {
+			owner = {
+				OR = {
+					is_regular_empire = no
+					has_policy_flag = robots_outlawed
+				}
+			}
+			has_modifier = slave_colony
+			AND = {
+				owner = { is_ai = yes }
+				free_district_slots = 0
+				free_building_slots = 0
+				free_housing <= 0
+				free_jobs <= 0
+			}
+			owner = {
+				is_ai = yes
+				has_ascension_perk = ap_engineered_evolution
+				is_materialist = no
+			}
+			owner = {
+				NOT = {
+					has_country_flag = viz_raff_ascension_forges_enabled
+				}
+			}
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				is_gestalt = yes
+			}
+		}
+		job_ascension_drone_add = 2
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				is_gestalt = no
+			}
+		}
+		job_ascension_engineer_add = 2
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = @b2_minerals
+			exotic_gases = @b2_rare_cost
+		}
+		upkeep = {
+			energy = @b2_upkeep
+			exotic_gases = @b2_rare_upkeep
+		}
+	}
+
+	triggered_desc = {
+		text = job_ascension_drone_robots_effect_desc
+		trigger = {
+			exists = owner
+			owner = {
+				is_robot_building_empire = yes
+				is_gestalt = yes
+			}
+		}
+	}
+	triggered_desc = {
+		text = job_ascension_drone_hive_food_effect_desc
+		trigger = {
+			exists = owner
+			owner = {
+				is_robot_building_empire = no
+				is_gestalt = yes
+				is_lithoid_empire = no
+			}
+		}
+	}
+	triggered_desc = {
+		text = job_ascension_drone_hive_minerals_effect_desc
+		trigger = {
+			exists = owner
+			owner = {
+				is_robot_building_empire = no
+				is_gestalt = yes
+				is_lithoid_empire = yes
+			}
+		}
+	}
+	triggered_desc = {
+		text = job_ascension_engineer_effect_desc
+		trigger = {
+			exists = owner
+			owner = {
+				is_robot_building_empire = yes
+				is_gestalt = no
+			}
+		}
+	}
+	triggered_desc = {
+		text = job_ascension_engineer_food_effect_desc
+		trigger = {
+			exists = owner
+			owner = {
+				is_robot_building_empire = no
+				is_gestalt = no
+				is_lithoid_empire = no
+			}
+		}
+	}
+	triggered_desc = {
+		text = job_ascension_engineer_minerals_effect_desc
+		trigger = {
+			exists = owner
+			owner = {
+				is_robot_building_empire = no
+				is_gestalt = no
+				is_lithoid_empire = yes
+			}
+		}
+	}
+}

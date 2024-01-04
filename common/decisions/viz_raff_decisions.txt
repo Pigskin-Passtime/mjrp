@@ -1,0 +1,56 @@
+##########################################################################################################
+## viz_raff_decisions.txt
+## BrettlesSr
+##########################################################################################################
+
+decision_viz_raff_irrigation_network = {
+	owned_planets_only = yes
+	sound = event_administrative_work
+	icon = decision_resource # todo change
+
+	resources = {
+		category = decisions
+		cost = {
+			minerals = 1000
+		}
+	}
+
+	potential = {
+		NOT = {
+			has_planet_flag = viz_raff_irrigation_network_in_progress
+		}
+		NOT = {
+			has_deposit = d_viz_raff_irrigation_network
+		}
+		NOR = {
+			is_planet_class = pc_city
+			is_planet_class = pc_machine
+			is_planet_class = pc_relic
+		}
+		is_artificial = no
+		exists = leader
+		leader = {
+			has_trait = leader_trait_viz_raff_water_bringer
+		}
+	}
+
+	enactment_time = 720
+
+	allow = { }
+
+	effect = {
+		add_deposit = d_viz_raff_irrigation_network
+	}
+
+	on_queued = {
+		set_planet_flag = viz_raff_irrigation_network_in_progress
+	}
+
+	on_unqueued = {
+		remove_planet_flag = viz_raff_irrigation_network_in_progress
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}
