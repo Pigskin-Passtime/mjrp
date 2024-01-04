@@ -1,0 +1,48 @@
+soj_r_gift = {
+	activation_duration = 3600
+	portrait = "GFX_relic_dragon_trophy"
+	sound = "relic_activation_miniature_galaxy"
+
+	resources = {
+		category = relics
+		# Activation cost
+		cost = {
+			influence = 100
+		}
+	}
+
+	ai_weight = {
+		weight = 100
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			always = yes
+		}
+		country_base_volatile_motes_produces_add = 25
+	}
+
+	score = 5000
+
+	active_effect = {
+		add_modifier = {
+			modifier = "soj_mod_gift_triumph"
+			days = 3600
+		}
+		custom_tooltip = relic_triumph_cooldown
+		hidden_effect = {
+			add_modifier = {
+				modifier = "relic_activation_cooldown"
+				days = 3600
+			}
+		}
+	}
+
+	# Possible check for activation
+	possible = {
+		inline_script = {
+			script = relics/activation_checks
+			RELIC = soj_r_gift
+		}
+	}
+}

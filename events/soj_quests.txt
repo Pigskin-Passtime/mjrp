@@ -1,0 +1,651 @@
+namespace = soj_q
+
+# Start Quest: Military
+country_event = {
+  id = soj_q.1001
+  title = soj_q.1001.name
+  desc = soj_q.1001.desc
+  picture = GFX_evt_satellite_in_orbit
+	show_sound = event_sensor_ping
+  event_chain = soj_military_chain
+
+  immediate = {
+		save_event_target_as = owner_country
+		owner_species = { save_event_target_as = owner_species }
+    capital_scope = { save_event_target_as = capital }
+
+    begin_event_chain = {
+				event_chain = soj_military_chain
+				target = ROOT
+		}
+
+    hidden_effect = {
+			random_system = {
+				limit = {
+					distance = {
+						source = event_target:capital
+						use_bypasses = no
+						min_jumps = 2
+						max_jumps = 6
+					}
+					NOR = {
+						exists = space_owner
+						has_star_flag = hostile_system
+					}
+				}
+				save_event_target_as = soj_mil_system_1
+				set_star_flag = soj_mil_system_1
+			}
+		}
+
+		create_country = {
+			name = "NAME_soj_military"
+			species = event_target:owner_species
+			type = faction
+			name_list = ROOT
+			auto_delete = no
+			effect = {
+				set_country_flag = soj_military_country
+				establish_communications_no_message = root
+				establish_contact = { who = root location = root.capital_scope }
+				create_leader = {
+					class = commander
+					species = owner_main_species
+					name = random
+					skill = 2
+				}
+				create_fleet = {
+					name = "NAME_soj_fleet"
+					effect = {
+						set_owner = prev
+						create_ship_design = {
+							design = "NAME_Dagger"
+						}
+						create_ship = {
+							name = "NAME_Unyielding_Faith"
+							design = last_created_design
+						}
+						create_ship = {
+							name = "NAME_Holy_Avatar"
+							design = last_created_design
+						}
+						create_ship = {
+							name = "NAME_Divine_Fury"
+							design = last_created_design
+							effect = {
+								set_ship_flag = soj_military_ship
+								set_disable_at_health = 0.05
+								save_event_target_as = soj_military_ship
+							}
+						}
+						set_location = event_target:soj_mil_system_1
+						set_fleet_stance = aggressive
+						set_aggro_range_measure_from = return_point
+						set_aggro_range = 50
+						assign_leader = last_created_leader
+						queue_actions = {
+							repeat = {
+								wait = {
+									duration = 100
+								}
+							}
+						}
+					}
+				}
+				add_ship_design = last_created_design
+				#save_event_target_as = radical_cult
+				set_name = random
+				set_country_flag = soj_rebels_of@root
+			}
+		}
+	}
+
+  option = {
+    name = soj_q.1001.a
+    tooltip = {
+			begin_event_chain = {
+				event_chain = "soj_military_chain"
+				target = ROOT
+			}
+		}
+    hidden_effect = {
+      create_point_of_interest = {
+				id = soj_military_chain_poi.1
+				name = "soj_mil_system_1_poi"
+				desc = "soj_mil_system_1_poi_desc"
+				event_chain = "soj_military_chain"
+				location = event_target:soj_military_ship
+			}
+    }
+  }
+}
+
+# Ship Disabled (HIDDEN)
+ship_event = {
+	id = soj_q.1002
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_ship_flag = soj_military_ship
+		owner = { has_country_flag = soj_rebels_of@from.owner }
+	}
+
+	immediate = {
+		FROM = { owner = { country_event = { id = soj_q.1003 } } }
+	}
+}
+
+# Ship Disabled
+country_event = {
+	id = soj_q.1003
+	title = "soj_q.1003.name"
+	desc = "soj_q.1003.desc"
+	picture = GFX_evt_sabotaged_ship
+	show_sound = event_space_battle
+	location = FROM
+	trackable = yes
+	event_chain = soj_military_chain
+
+	is_triggered_only = yes
+
+	immediate = {
+		FROM = { save_event_target_as = disabled_soj_military_ship }
+	}
+
+	option = {
+		name = "soj_q.1003.a"
+		from = {
+			create_ambient_object = {
+				type = small_debris_object
+				scale = 0.1
+				effect = {
+					set_ambient_object_flag = soj_ship_debris
+					save_event_target_as = soj_ship_debris
+				}
+			}
+			enable_special_project = {
+				name = "BOARD_SOJ_SHIP_1"
+				location = event_target:soj_ship_debris
+				owner = root
+			}
+		}
+		hidden_effect = {
+			remove_point_of_interest = soj_military_chain_poi.1
+		}
+	}
+}
+
+# Ship Disabled By Someone Else (HIDDEN)
+ship_event = {
+	id = soj_q.1004
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_ship_flag = soj_military_ship
+		owner = {
+			NOT = { has_country_flag = soj_rebels_of@from.owner }
+		}
+	}
+
+	immediate = {
+		random_playable_country = {
+			limit = {
+				root = {
+					owner = { has_country_flag = soj_rebels_of@prevprev }
+				}
+			}
+			country_event = { id = soj_q.1005 }
+		}
+	}
+}
+
+# Ship Disabled By Someone Else
+country_event = {
+	id = soj_q.1005
+	title = "soj_q.1005.name"
+	desc = "soj_q.1005.desc"
+	picture = GFX_evt_sabotaged_ship
+	show_sound = event_space_battle
+	location = FROM
+	trackable = yes
+	event_chain = soj_military_chain
+
+	is_triggered_only = yes
+
+	immediate = {
+		FROM = { save_event_target_as = disabled_soj_ship }
+	}
+
+	option = {
+		name = "soj_q.1005.a"
+		hidden_effect = { remove_point_of_interest = soj_military_chain_poi.1 }
+		from = {
+			create_ambient_object = {
+				type = small_debris_object
+				scale = 0.2
+				effect = {
+					set_ambient_object_flag = soj_ship_debris
+					save_event_target_as = soj_ship_debris
+				}
+			}
+			enable_special_project = {
+				name = "BOARD_SOJ_SHIP_1"
+				location = event_target:soj_ship_debris
+				owner = root
+			}
+		}
+	}
+}
+
+# Ship Boarded
+ship_event = {
+	id = soj_q.1006
+	title = "soj_q.1006.name"
+	desc = "soj_q.1006.desc"
+	picture = GFX_evt_interior_battle
+	show_sound = event_ground_battle
+	event_chain = soj_military_chain
+
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			owner = {
+				remove_point_of_interest = soj_military_chain_poi.1
+			}
+		}
+	}
+
+	option = {
+		name = "soj_q.1006.a"
+		add_event_chain_counter = {
+			event_chain = "soj_military_chain"
+			counter = "quests_completed"
+			amount = 3
+		}
+	}
+}
+
+# Absorb military power
+country_event = {
+	id = soj_q.1007
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_completed_event_chain_counter = {
+			event_chain = "soj_military_chain"
+			counter = "quests_completed"
+		}
+	}
+
+	option = {
+		name = OK
+		end_event_chain = "soj_military_chain"
+		random_owned_leader = {
+            limit = {
+                has_leader_flag = soj_leader
+            }
+            add_trait = {
+                trait = soj_trait_module_military
+            }
+        }
+	}
+}
+
+####################################################################################################
+####################################################################################################
+# Start Quest: Science (Astrophysics)
+country_event = {
+  id = soj_q.2001
+  title = soj_q.2001.name
+  desc = soj_q.2001.desc
+  picture = GFX_evt_satellite_in_orbit
+  show_sound = event_sensor_ping
+  event_chain = soj_science_chain
+
+  immediate = {
+    	capital_scope = { save_event_target_as = capital }
+
+    	begin_event_chain = {
+				event_chain = soj_science_chain
+				target = ROOT
+		}
+  }
+
+  option = { #absorb stars
+    name = soj_q.2001.a
+    tooltip = {
+			begin_event_chain = {
+				event_chain = "soj_science_chain"
+				target = ROOT
+			}
+	}
+  }
+
+  option = { #absorb scientist
+	name = soj_q.2001.b
+	tooltip = {
+		begin_event_chain = {
+			event_chain = "soj_science_chain"
+			target = ROOT
+		}
+	}
+  }
+}
+
+
+# start star absorbing quest
+country_event = {
+  id = soj_q.2002
+  title = soj_q.2002.name
+  desc = soj_q.2002.desc
+  picture = GFX_evt_satellite_in_orbit
+  show_sound = event_sensor_ping
+  event_chain = soj_science_chain
+
+  immediate = {
+    	capital_scope = { save_event_target_as = capital }
+
+    	begin_event_chain = {
+				event_chain = soj_science_chain
+				target = ROOT
+		}
+
+    	hidden_effect = {
+			random_system = {
+				limit = {
+					distance = {
+						source = event_target:capital
+						use_bypasses = no
+						min_jumps = 2
+						max_jumps = 6
+					}
+					NOR = {
+						exists = space_owner
+						has_star_flag = hostile_system
+					}
+				}
+				save_event_target_as = soj_sci_system_1
+				set_star_flag = soj_sci_system_1
+			}
+			random_system = {
+				limit = {
+					distance = {
+						source = event_target:capital
+						use_bypasses = no
+						min_jumps = 2
+						max_jumps = 6
+					}
+					NOR = {
+						exists = space_owner
+						has_star_flag = hostile_system
+						has_star_flag soj_sci_system_1
+					}
+				}
+				save_event_target_as = soj_sci_system_2
+				set_star_flag = soj_sci_system_2
+			}
+			random_system = {
+				limit = {
+					distance = {
+						source = event_target:capital
+						use_bypasses = no
+						min_jumps = 2
+						max_jumps = 6
+					}
+					NOR = {
+						exists = space_owner
+						has_star_flag = hostile_system
+						has_star_flag = soj_sci_system_1
+						has_star_flag = soj_sci_system_2
+					}
+				}
+				save_event_target_as = soj_sci_system_3
+				set_star_flag = soj_sci_system_3
+			}
+		}
+	}
+
+  option = {
+    name = soj_q.2002.a
+    
+    hidden_effect = {
+        create_point_of_interest = {
+			id = soj_science_chain_poi.1
+			name = "soj_sci_system_1_poi"
+			desc = "soj_sci_system_1_poi_desc"
+			event_chain = "soj_science_chain"
+			#location = event_target:soj_military_ship
+		}
+		create_point_of_interest = {
+			id = soj_science_chain_poi.2
+			name = "soj_sci_system_2_poi"
+			desc = "soj_sci_system_2_poi_desc"
+			event_chain = "soj_science_chain"
+		}
+		create_point_of_interest = {
+			id = soj_science_chain_poi.3
+			name = "soj_sci_system_3_poi"
+			desc = "soj_sci_system_3_poi_desc"
+			event_chain = "soj_science_chain"
+		}
+    }
+  }
+}
+
+# Start absorb scientist quest
+country_event = {
+	id = soj_q.2003
+	title = soj_q.2003.name
+	desc = soj_q.2003.desc
+    event_chain = soj_science_chain
+
+	is_triggered_only = yes
+
+    immediate = {
+        hidden_effect = {
+            random_owned_leader = {
+                limit = {
+                    class = scientist
+                }
+                set_leader_flag = soj_sci_leader_1
+                save_event_target_as = soj_sci_leader_1
+            }
+            random_owned_leader = {
+                limit = {
+                    class = scientist
+                    NOT = { has_leader_flag=soj_sci_leader_1 }
+                }
+                set_leader_flag = soj_sci_leader_2
+                save_event_target_as = soj_sci_leader_2
+            }
+            random_owned_leader = {
+                limit = {
+                    class = scientist
+                    NOT = { has_leader_flag=soj_sci_leader_1 }
+                    NOT = { has_leader_flag=soj_sci_leader_2 }
+                }
+                set_leader_flag = soj_sci_leader_3
+                save_event_target_as = soj_sci_leader_3
+            }
+        }
+    }
+
+	option = {
+		name = soj_q.2003.a
+        custom_tooltip = soj_q.2003.a.tooltip
+        event_target:soj_sci_leader_1 = {
+			kill_leader = {  }
+		}
+        add_event_chain_counter = {
+            event_chain = soj_science_chain
+            counter = quests_completed
+            amount = 3
+        }
+        
+	}
+    option = {
+		name = soj_q.2003.b
+        custom_tooltip = soj_q.2003.b.tooltip
+        event_target:soj_sci_leader_2 = {
+			kill_leader = {  }
+		}
+        add_event_chain_counter = {
+            event_chain = soj_science_chain
+            counter = quests_completed
+            amount = 3
+        }
+        
+	}
+    option = {
+		name = soj_q.2003.c
+        custom_tooltip = soj_q.2003.c.tooltip
+        event_target:soj_sci_leader_3 = {
+			kill_leader = {  }
+		}        
+        add_event_chain_counter = {
+            event_chain = soj_science_chain
+            counter = quests_completed
+            amount = 3
+        }
+	}
+}
+
+# Entering Star System (HIDDEN)
+fleet_event = {
+	id = soj_q.2004
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			has_event_chain = "soj_science_chain"
+			FROM = {
+				OR = {
+					is_point_of_interest = {
+						id = soj_science_chain_poi.1
+						event_chain = soj_science_chain
+						owner = root.owner
+					}
+					is_point_of_interest = {
+						id = soj_science_chain_poi.2
+						event_chain = soj_science_chain
+						owner = root.owner
+					}
+					is_point_of_interest = {
+						id = soj_science_chain_poi.3
+						event_chain = soj_science_chain
+						owner = root.owner
+					}
+				}
+			}
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = { FROM = { has_star_flag = soj_sci_system_1 } }
+			FROM = { remove_star_flag = soj_sci_system_1 }
+			owner = { 
+                enable_special_project = {
+				    name = "ABSORB_SOJ_STAR_1"
+				    location = FROM
+				    owner = root
+			    }
+                remove_point_of_interest = soj_science_chain_poi.1 
+            }
+		}
+		if = {
+			limit = { FROM = { has_star_flag = soj_sci_system_2 } }
+			FROM = { remove_star_flag = soj_sci_system_2 }
+			owner = { 
+                enable_special_project = {
+				    name = "ABSORB_SOJ_STAR_1"
+				    location = FROM
+				    owner = root
+			    }
+                remove_point_of_interest = soj_science_chain_poi.2 
+            }
+		}
+		if = {
+			limit = { FROM = { has_star_flag = soj_sci_system_3 } }
+			FROM = { remove_star_flag = soj_sci_system_3 }
+			owner = { 
+                enable_special_project = {
+				    name = "ABSORB_SOJ_STAR_1"
+				    location = FROM
+				    owner = root
+			    }
+                remove_point_of_interest = soj_science_chain_poi.3 
+            }
+		}
+    }
+}
+
+
+# Star absorbed
+ship_event = {
+	id = soj_q.2006
+	title = "soj_q.2006.name"
+	desc = "soj_q.2006.desc"
+	picture = GFX_evt_interior_battle
+	show_sound = event_ground_battle
+	event_chain = soj_science_chain
+
+	is_triggered_only = yes
+
+	option = {
+		name = "soj_q.2006.a"
+        owner = {
+		    add_event_chain_counter = {
+			    event_chain = "soj_science_chain"
+			    counter = "quests_completed"
+			    amount = 1
+		    }
+        }
+	}
+}
+
+# Absorb science power
+country_event = {
+	id = soj_q.2007
+    title = soj_q.2007.name
+    desc = soj_q.2007.desc
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_completed_event_chain_counter = {
+			event_chain = "soj_science_chain"
+			counter = "quests_completed"
+		}
+	}
+
+	option = {
+		name = OK
+		end_event_chain = "soj_science_chain"
+        random_owned_leader = {
+            limit = {
+                has_leader_flag = soj_leader
+            }
+            add_trait = {
+                trait = soj_trait_module_science
+            }
+        }
+	}
+}
+
+
+
+# Start Quest: Engineering
+
+# Start Quest: Culture
+
+
+# Start Quest: Spirituality
