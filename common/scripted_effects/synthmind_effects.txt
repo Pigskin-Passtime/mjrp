@@ -1,0 +1,40 @@
+#scripted effects by nepnep5150 and newjerseyprpr
+
+synthmind_system_spawn = {
+
+	random_system = {
+			save_event_target_as = architects_sphere_spawn
+		}
+
+	event_target:architects_sphere_spawn = {
+		if = {
+			limit = { host_has_dlc = "Ancient Relics Story Pack" }
+			spawn_system = {
+				initializer = architects_sphere_initializer_relic
+			}
+			
+			
+		}
+		else = {
+			spawn_system = {
+				initializer = architects_sphere_initializer_gaia
+			}
+		}
+		if = {
+			limit = { last_created_system = { 
+				NOT = { has_hyperlane_to = prev } 
+			} }
+			add_hyperlane = {
+				from = this
+				to = last_created_system
+			}
+		}
+		else = {
+			add_extra_hyperlane_to_spawned_system_effect = yes
+		}
+		last_created_system = {
+			save_global_event_target_as = synthmind_system
+		}
+	}
+	
+}

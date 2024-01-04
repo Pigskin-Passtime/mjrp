@@ -1,0 +1,602 @@
+#events by nepnep5150 and newjerseyprpr
+namespace = synthmind
+
+country_event = {
+	id = synthmind.99
+	hide_window = yes
+	is_test_event = yes
+
+	fire_only_once = yes
+	trigger = {
+		days_passed = 1
+	}
+	immediate = {
+		set_global_flag = synthmind_allowed
+		synthmind_system_spawn = yes
+	}
+}
+
+
+country_event = {
+	id = synthmind.98
+	hide_window = yes
+	is_triggered_only = yes
+	is_test_event = yes
+	
+	immediate = {
+		set_global_flag = synthmind_system_spawned
+		
+		random_system = {
+			save_event_target_as = architects_sphere_spawn
+		}
+
+		event_target:architects_sphere_spawn = {
+			if = {
+				limit = { host_has_dlc = "Ancient Relics Story Pack" }
+				spawn_system = {
+					min_distance = 10
+					max_distance = 30
+					max_jumps = 0
+					initializer = architects_sphere_initializer_relic
+				}
+				
+				
+			}
+			else = {
+				spawn_system = {
+					min_distance = 10
+					max_distance = 30
+					max_jumps = 0
+					initializer = architects_sphere_initializer_gaia
+				}
+			}
+			if = {
+				limit = { last_created_system = { 
+					NOT = { has_hyperlane_to = prev } 
+				} }
+				add_hyperlane = {
+					from = this
+					to = last_created_system
+				}
+			}
+			else = {
+				add_extra_hyperlane_to_spawned_system_effect = yes
+			}
+			last_created_system = {
+				save_global_event_target_as = synthmind_system
+			}
+		}
+	}
+}
+
+country_event = {
+	id = synthmind.1
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		enable_special_project = {
+			name = synthmind_free
+		}
+	}
+}
+
+country_event = {
+	id = synthmind.2
+
+	title = synthmind_recruit_title
+	desc = synthmind_recruit_desc
+
+	hide_window = no
+	is_triggered_only = yes
+	picture = synthmind_recruit_bg #made by mem_malthus
+
+	event_window_type = leader_recruit
+	#notification_event_icon = 
+
+	picture_event_data = {
+		portrait = event_target:synthmind_sage
+		room = crisis_room
+	}
+
+	trigger = {
+		NOT = {
+			has_global_flag = synthmind_spawned
+			has_global_flag = synthmind_disabled
+		}
+		has_global_flag = synthmind_allowed
+	}
+	immediate = {
+		hidden_effect = {
+
+			create_country = {
+				name = "NAME_Unknown"
+				type = global_event
+				auto_delete = yes
+				flag = {
+					icon = {
+						category = "special"
+						file = "unknown.dds"
+					}
+					background = {
+						category = "backgrounds"
+						file = "00_solid.dds"
+					}
+					colors = {
+						"red"
+						"red"
+						"null"
+						"null"
+					}
+				}
+				effect = {
+					save_event_target_as = ren_miruu_country
+				}
+			}
+			event_target:ren_miruu_country = {
+				create_species = {
+					class = REP
+					name = "Ren Miruu"
+					plural = "Ren Miruu"
+					portrait = ren_miruu
+					
+				}
+				last_created_species = {
+					save_event_target_as = ren_miruu
+				}
+				create_leader = {
+					class = scientist
+					species = event_target:ren_miruu
+					name = "Synthmind Sage"
+					skill = 6
+					gender = male
+					
+					hide_age = yes
+					event_leader = yes
+					skip_background_generation = yes
+					background_ethic = ethic_materialist
+					custom_catch_phrase = synthmind_sage_catch_phrase
+					custom_description = synthmind_sage_leader_desc
+					can_manually_change_location = no
+					randomize_traits = no
+					traits = {
+						trait = leader_trait_the_architect
+						trait = leader_trait_expertise_computing
+						trait = leader_trait_expertise_field_manipulation
+						trait = leader_trait_expertise_particles
+						trait = leader_trait_collaborator_2
+						trait = leader_trait_expertise_biology
+					}
+					immortal = yes
+					
+					effect = {
+						set_leader_flag = legendary_leader
+					}
+				}
+				last_created_leader = {
+					set_leader_flag = immune_to_negative_traits
+					set_leader_flag = synthmind_sage
+					save_global_event_target_as = synthmind_sage
+					set_owner = root
+					exile_leader_as = synthmind_sage_exile
+				}
+			}
+		}
+	}
+
+	option = {
+		name = DISMISS
+		tag = dismiss_leader
+
+	}
+	option = {
+		name = synthmind_recruit_question_1
+		response_text = synthmind_recruit_response_1
+		is_dialog_only = yes
+	}
+	option = {
+		name = synthmind_recruit_question_2
+		response_text = synthmind_recruit_response_2
+		is_dialog_only = yes
+	}
+	option = {
+		name = synthmind_recruit_question_3
+		response_text = synthmind_recruit_response_3
+		is_dialog_only = yes
+	}
+	option = {
+		name = HIRE
+		tag = hire_leader
+
+		hidden_effect = {
+			clone_leader = {
+				target = event_target:synthmind_sage
+			}
+			last_created_leader = {
+				set_leader_flag = legendary_leader
+				save_global_event_target_as = synthmind_sage_leader
+				set_leader_flag = immune_to_negative_traits
+				set_leader_flag = azaryn
+			}
+			
+			set_country_flag = synthmind_sage
+			set_global_flag = synthmind_spawned
+		}
+		create_message = {
+			type = MESSAGE_RECRUITED_LEADER
+			localization =  synthmind_recruit_succes
+			days = @toast_message_days
+			target = event_target:synthmind_sage
+			variable = {
+				type = name
+				localization = synthmind_recruit_succes_desc
+				scope = event_target:synthmind_sage
+			}
+			variable = {
+				key = "border"
+				value = "GFX_border_legendary"
+			}
+		}
+		country_event = {
+			id = synthmind.3
+			days = 1800
+			random = 720
+		}
+	}
+
+	
+}
+
+country_event = {
+	id = synthmind.3
+	is_triggered_only = yes
+	hide_window = no
+
+	picture = GFX_evt_physics_research
+
+	title = synthmind_unlock_proto
+	desc = synthmind_unlock_proto_desc
+
+	option = {
+		name = synthmind_unlock_proto_option
+		set_country_flag = synthmind_proto_core
+		country_event = {
+			id = synthmind.4
+			days = 1800
+			random = 720
+		}
+	}
+}
+
+country_event = {
+	id = synthmind.4
+	is_triggered_only = yes
+
+	hide_window = no
+
+	picture = GFX_evt_genetic_modification
+
+	title = synthmind_species_upgrade
+	desc = synthmind_species_upgrade_desc
+
+	immediate = {
+		hidden_effect = {
+			country_event = {
+				id = synthmind.5
+				days = 720
+				random = 720
+			}
+		}
+	}
+
+	option = {
+		name = synthmind_species_upgrade_option_yes
+	
+		if = {
+			limit = { 
+				owner = {
+				 	OR = {
+						is_mechanical_empire = yes
+						is_robot_empire = yes
+				 	} 
+				}
+			}
+			hidden_effect = {
+				modify_species = {
+					species = owner_main_species
+					add_trait = trait_gestalt_individualism
+				}
+			}
+		}
+		else = {
+			hidden_effect = {
+				modify_species = {
+					species = owner_main_species
+					add_trait = trait_cybernetic_hive
+				}
+			}
+		}
+		
+	}
+	option = {
+		name = synthmind_species_upgrade_option_no
+	}
+}
+
+country_event = {
+	id = synthmind.5
+
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+
+
+		if = {
+			limit = {has_country_flag = zroni_intro }
+			country_event = {
+				id = synthmind.20
+			}
+		}
+		else_if = {
+			limit = {has_country_flag = irassian_intro }
+			country_event = {
+				id = synthmind.30
+			}
+		}
+		else_if = {
+			limit = {has_country_flag = cybrex_intro }
+			enable_special_project = {
+				name = synthmind_cybrex
+			}
+		}
+		else_if = {
+			limit = {has_country_flag = yuht_intro }
+			country_event = {
+				id = synthmind.50
+			}
+		}
+		else_if = {
+			limit = {has_country_flag = baol_intro }
+			country_event = {
+				id = synthmind.60
+			}
+		}
+		else_if = {
+			limit = {has_country_flag = first_league_intro }
+			country_event = {
+				id = synthmind.70
+			}
+		}
+		else_if = {
+			limit = {has_country_flag = vultaum_intro }
+			country_event = {
+				id = synthmind.80
+			}
+		}
+	}
+}
+
+country_event = {
+	id = synthmind.20
+	hide_window = no
+	is_triggered_only = yes
+
+	picture = GFX_evt_zro_3
+
+	title = synthmind_zroni_event
+	desc = synthmind_zroni_event_desc
+
+	immediate = {
+		hidden_effect = {
+			country_event = {
+				id = synthmind.90
+				days = 1800
+			}
+		}
+	}
+	
+	option = {
+		name = synthmind_zroni_event_accept
+		enable_special_project = {
+			name = synthmind_zroni
+		}
+	}
+
+}
+
+country_event = {
+	id = synthmind.30
+	hide_window = no
+	is_triggered_only = yes
+
+	picture = GFX_evt_alien_ruins
+
+	title = synthmind_irassian_event
+	desc = synthmind_irassian_event_desc
+
+	immediate = {
+		hidden_effect = {
+			country_event = {
+				id = synthmind.90
+				days = 1800
+			}
+		}
+	}
+
+	option = {
+		name = synthmind_irassian_event_accept
+		enable_special_project = {
+			name = synthmind_irassian
+		}
+	}
+}
+
+country_event = {
+	id = synthmind.40
+	hide_window = no
+	is_triggered_only = yes
+
+	picture = GFX_evt_engineering_research
+
+	title = synthmind_cybrex_event
+	desc = synthmind_cybrex_event_desc
+
+	immediate = {
+		hidden_effect = {
+			country_event = {
+				id = synthmind.90
+				days = 1800
+			}
+		}
+	}
+	
+	option = {
+		name = synthmind_choose_harvester
+		hidden_effect = {
+			random_owned_planet = {
+				add_building = building_dimensional_fabricator
+			}
+		}
+	}
+
+	option = {
+		name = synthmind_choose_singularity
+		hidden_effect = {
+			random_owned_planet = {
+				add_building = building_class_4_singularity
+			}
+		}
+	}
+}
+
+
+
+country_event = {
+	id = synthmind.50
+	hide_window = no
+	is_triggered_only = yes
+
+	picture = GFX_evt_society_research
+
+	title = synthmind_yuht_event
+	desc = synthmind_yuht_event_desc
+
+	immediate = {
+		hidden_effect = {
+			country_event = {
+				id = synthmind.90
+				days = 1800
+			}
+		}
+	}
+
+	option = {
+		name = synthmind_yuht_event_accept
+		enable_special_project = {
+			name = synthmind_yuht
+		}
+	}
+}
+
+country_event = {
+	id = synthmind.60
+	hide_window = no
+	is_triggered_only = yes
+
+	
+
+	picture = GFX_evt_baol_datacrystals
+
+	title = synthmind_baol_event
+	desc = synthmind_baol_event_desc
+
+	immediate = {
+		hidden_effect = {
+			country_event = {
+				id = synthmind.90
+				days = 1800
+			}
+		}
+	}
+	
+	option = {
+		name = synthmind_baol_event_accept
+		enable_special_project = {
+			name = synthmind_baol
+		}
+	}
+}
+
+country_event = {
+	id = synthmind.70
+	hide_window = no
+	is_triggered_only = yes
+
+	picture = GFX_evt_engineering_research
+
+	title = synthmind_first_league_event
+	desc = synthmind_first_league_event_desc
+
+	immediate = {
+		hidden_effect = {
+			country_event = {
+				id = synthmind.90
+				days = 1800
+			}
+		}
+	}
+
+	option = {
+		name = synthmind_first_league_event_accept
+		enable_special_project = {
+			name = synthmind_first_league
+		}
+	}
+}
+
+
+
+country_event = {
+	id = synthmind.80
+	hide_window = no
+	is_triggered_only = yes
+
+	picture = GFX_evt_physics_research
+
+	title = synthmind_vultaum_event
+	desc = synthmind_vultaum_event_desc
+
+	immediate = {
+		hidden_effect = {
+			country_event = {
+				id = synthmind.90
+				days = 1800
+			}
+		}
+	}
+	
+	option = {
+		name = synthmind_vultaum_event_accept
+		enable_special_project = {
+			name = synthmind_vultaum
+		}
+	}
+}
+
+country_event = {
+	id = synthmind.90
+	hide_window = no
+	is_triggered_only = yes
+
+	picture = GFX_evt_physics_research
+
+	title = synthmind_unlock_spectre
+	desc = synthmind_unlock_spectre_desc
+
+	option = {
+		name = synthmind_unlock_spectre_accept
+		set_country_flag = synthmind_spectre_core
+	}
+
+}
