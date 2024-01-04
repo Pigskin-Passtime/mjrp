@@ -1,0 +1,113 @@
+##########################################################################################################
+## viz_raff_situations.txt
+## BrettlesSr
+##########################################################################################################
+
+situation_viz_raff_accumulating_power = {
+	category = neutral
+	picture = GFX_evt_coronation
+	progress_direction = monodirectional
+
+	complete_icon = GFX_situation_outcome_unknown
+	complete_icon_frame = GFX_situation_outcome_frame_red
+
+	start_value = 0
+
+	on_progress_complete = {
+		owner = {
+			random_owned_leader = {
+				limit = {
+					has_leader_flag = viz_raff
+				}
+				leader_event = {
+					id = viz_raff.5
+				}
+			}
+		}
+		destroy_situation = this
+	}
+
+	on_abort = {
+		hidden_effect = {
+			destroy_situation = this
+		}
+	}
+
+	stages = {
+		stage_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_red
+			end = 200
+			custom_tooltip = stage_unknown_effects
+		}
+		stage_2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_red
+			end = 400
+			custom_tooltip = stage_unknown_effects
+			on_first_enter = {
+				situation_event = {
+					id = viz_raff_sit.1
+				}
+			}
+		}
+		stage_3 = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_red
+			end = 600
+			custom_tooltip = stage_unknown_effects
+			on_first_enter = {
+				situation_event = {
+					id = viz_raff_sit.2
+				}
+			}
+		}
+		stage_4 = {
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_red
+			end = 800
+			custom_tooltip = stage_unknown_effects
+			on_first_enter = {
+				situation_event = {
+					id = viz_raff_sit.3
+				}
+			}
+		}
+	}
+
+	monthly_progress = {
+		base = 1
+		modifier = {
+			desc = situation_viz_raff_accumulating_power_mod_is_ruler
+			add = 0.5
+		}
+		modifier = {
+			desc = situation_viz_raff_accumulating_power_mod_is_heir
+			add = 0.1
+		}
+		modifier = {
+			desc = situation_viz_raff_accumulating_power_mod_is_vizier
+			add = 0.4
+		}
+		complex_trigger_modifier = {
+			trigger = count_planet_within_border
+			trigger_scope = owner
+			parameters = {
+				limit = {
+					is_colony = yes
+					has_building = building_viz_raff_ascension_forge
+				}
+			}
+			potential = {
+				owner = {
+					any_owned_planet = {
+						has_building = building_viz_raff_ascension_forge
+					}
+				}
+			}
+			mode = add
+			mult = 0.1
+			desc = situation_viz_raff_accumulating_power_mod_is_has_buildings
+		}
+	}
+}

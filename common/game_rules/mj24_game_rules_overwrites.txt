@@ -1,0 +1,111 @@
+# this = leader
+can_leader_get_council_trait = {
+	OR = {
+		NAND = {
+			exists = owner
+			owner = { is_gestalt = yes }
+			is_councilor = no
+		}
+		has_leader_flag = restored_node
+	}
+	if = {
+		limit = {
+			exists = owner
+		}
+		owner = {
+			is_crisis_faction = no
+		}
+	}
+	NOT = {
+		has_leader_flag = no_council_traits				# mod jam overwrite
+	}
+}
+
+# this = leader
+can_leader_get_normal_trait = {
+	NOR = {
+		AND = {
+			exists = owner
+			owner = { is_gestalt = yes }
+			OR = {
+				is_councilor = yes
+				has_leader_flag = restored_node
+			}
+		}
+		AND = {
+			is_ruler = yes
+			exists = owner
+			owner = {
+				is_autocracy = yes
+			}
+		}
+		is_heir = yes
+	}
+	NOT = {
+		has_leader_flag = no_normal_traits			# mod jam overwrite
+	}
+}
+
+# this = leader
+can_leader_get_subclass_trait = {
+	NAND = {
+		exists = owner
+		owner = { is_gestalt = yes }
+		OR = {
+			is_councilor = yes
+			has_leader_flag = restored_node
+		}
+		has_leader_flag = no_subclass_traits		# mod jam overwrite
+	}
+	has_any_subclass = no
+}
+
+# this = leader
+can_leader_get_destiny_trait = {
+	NAND = {
+		exists = owner
+		owner = { is_gestalt = yes }
+	}
+	exists = owner
+	owner = {
+		is_crisis_faction = no
+	}
+	NOT = {
+		has_leader_flag = no_destiny_traits			# mod jam overwrite
+	}
+}
+
+# this = leader
+# from = country scope
+can_leader_be_ruler = {
+	NOT = { leader_class = envoy }
+	NOT = {
+		has_leader_flag = cannot_be_ruler			# mod jam overwrite
+	}
+}
+
+# this = leader
+# from = country scope
+can_leader_be_councilor = {
+	is_exploring_astral_rift = no
+	NOT = {
+		has_leader_flag = cannot_be_councilor		# mod jam overwrite
+	}
+}
+
+# THIS = leader
+# FROM = Astral Rift checked
+# Checks if the selected leader can explore the rift
+can_leader_explore_astral_rift = {
+	custom_tooltip = {
+		fail_text = "CANNOT_EXPLORE_WITH_COUNCIL_LEADER"
+		is_councilor = no
+	}
+	custom_tooltip = {
+		fail_text = "CANNOT_EXPLORE_WITH_HEIR_LEADER"
+		is_heir = no
+	}
+	NOT = {
+		has_leader_flag = cannot_explore_rift
+	}
+}
