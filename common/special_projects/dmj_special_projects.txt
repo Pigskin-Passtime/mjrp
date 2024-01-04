@@ -1,0 +1,47 @@
+# dmj_special_projects
+# By Jin2188
+
+special_project = {
+	key = "dmj_BASTION_BOMBARDMENT"
+	cost = 0
+	days_to_research = 120
+	tech_department = engineering_technology
+	picture = GFX_evt_shrouded
+
+	event_scope = ship_event
+
+	requirements = {
+		shipclass_military = 10
+	}
+
+	on_success = {
+		ship_event = { id = dmj.5 }
+	}
+}
+
+special_project = {
+	key = "dmj_SOL_SEARCH"
+	cost = 0
+	days_to_research = 3600
+	tech_department = society_technology
+	picture = GFX_evt_star_chart
+
+	event_chain = dmj_sol_reclamation_chain
+
+	event_scope = country_event
+
+	abort_trigger = {
+		has_communications = event_target:dmj_sol_country
+		any_system = {
+			has_star_flag = sol
+			OR = {
+				is_in_sensor_range_of_country = root
+				is_owned_by = root
+			}
+		}
+	}
+
+	on_success = {
+		country_event = { id = dmj_sol.2 }
+	}
+}

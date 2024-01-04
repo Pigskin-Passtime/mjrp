@@ -1,0 +1,630 @@
+# dmj_initializers
+# By Jin2188
+
+# Infernal Stronghold (Leader Recruitment Solar System)
+dmj_infernal_stronghold = {
+	name = NAME_dmj_infernal_stronghold
+	class = sc_black_hole
+
+	flags = { dmj_spawn_system }
+
+	planet = {
+		class = star
+		orbit_distance = 0
+		size = 50
+
+		init_effect = {
+			prevent_anomaly = yes
+			clear_deposits = yes
+			add_deposit = d_dark_matter_deposit_10
+			create_ambient_object = {
+				type = "psi_storm_1"
+				location = this
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 0
+					angle = random
+				}
+			}
+		}
+	}
+
+	change_orbit = 50
+
+	planet = {
+		name = "NAME_dmj_Unholy_Bastion"
+		orbit_distance = 0
+		orbit_angle = 180
+		size = 18
+		has_ring = no
+		class = "pc_shrouded"
+
+		init_effect = {
+			prevent_anomaly = yes
+			clear_deposits = yes
+			add_deposit = d_zro_deposit_3
+			save_global_event_target_as = dmj_bastion_1
+			create_ambient_object = {
+				type = "shroud_rift_object"
+				location = this
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 0
+					angle = random
+				}
+				save_global_event_target_as = dmj_bastion_effect_1
+			}
+		}
+	}
+
+	planet = {
+		name = "NAME_dmj_Unholy_Bastion"
+		orbit_distance = 0
+		orbit_angle = 180
+		size = 18
+		has_ring = no
+		class = "pc_shrouded"
+
+		init_effect = {
+			prevent_anomaly = yes
+			clear_deposits = yes
+			add_deposit = d_zro_deposit_3
+			save_global_event_target_as = dmj_bastion_2
+			create_ambient_object = {
+				type = "shroud_rift_object"
+				location = this
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 0
+					angle = random
+				}
+				save_global_event_target_as = dmj_bastion_effect_2
+			}
+		}
+	}
+
+	init_effect = {
+		set_global_flag = dmj_system_spawned
+		if = {
+			limit = { 
+				NOT = { any_system = { has_star_flag = sol } }
+			}
+			random_system = {
+				spawn_system = {
+					initializer = dmj_weird_sol
+				}
+			}
+		}
+		if = {
+			any_galaxy_species = {
+				owner = {
+					OR = {
+						has_country_flag = dmj_sol_country
+						has_country_flag = humans_early_space_age
+						has_country_flag = humans_machine_age
+						has_country_flag = humans_late_medieval_age
+					}
+				}
+				is_human_species = yes
+			}
+			random_galaxy_species = {
+				limit = {
+					owner = {
+						OR = {
+							has_country_flag = dmj_sol_country
+							has_country_flag = humans_early_space_age
+							has_country_flag = humans_machine_age
+							has_country_flag = humans_late_medieval_age
+						}
+					}
+					is_human_species = yes
+				}
+				add_trait = trait_latent_psionic
+			}
+		}
+	}
+}
+
+# Sol System (Weird)
+dmj_weird_sol = {
+	name = "NAME_Sol"
+	class = "sc_g"
+
+	asteroid_belt = {
+		type = rocky_asteroid_belt
+		radius = 145
+	}
+	asteroid_belt = {
+		type = icy_asteroid_belt
+		radius = 290
+	}
+	flags = { sol_system dmj_weird_sol sol empire_home_system }
+
+	usage = misc_system_init
+
+	init_effect = {
+		every_neighbor_system = {
+			set_star_flag = empire_cluster
+			every_neighbor_system = {
+				set_star_flag = empire_cluster
+			}
+		}
+		generate_home_system_resources = yes
+	}
+
+	planet = {
+		name = "NAME_Sol"
+		class = "pc_g_star"
+		orbit_distance = 0
+		orbit_angle = 1
+		size = 30
+		has_ring = no
+	}
+
+	planet = {
+		name = "NAME_Mercury"
+		class = "pc_molten"
+		orbit_distance = 40
+		orbit_angle = 15
+		size = 10
+		has_ring = no
+		init_effect = {
+			set_planet_entity = {
+				entity = molten_planet_mercury_entity
+				atmosphere_color = hsv { 0.8 0.1 0.2 }
+				atmosphere_intensity = 0.1
+				atmosphere_width = 1.0
+			}
+		}
+	}
+
+	planet = {
+		name = "NAME_Venus"
+		class = "pc_toxic"
+		orbit_distance = 25
+		orbit_angle = 125
+		size = 17
+		has_ring = no
+		init_effect = {
+			set_planet_entity = {
+				entity = toxic_planet_venus_entity
+				atmosphere_color = hsv { 0.854 0.072 0.7 }
+				atmosphere_intensity = 0.2
+				atmosphere_width = 1.0
+			}
+		}
+	}
+
+	planet = {
+		class = "pc_continental"
+		orbit_distance = 25
+		orbit_angle = 120
+		size = 18
+		starting_planet = yes
+		has_ring = no
+		entity = "continental_planet_earth_entity"
+		deposit_blockers = none
+		modifiers = none
+		flags = { planet_earth dmj_weird_earth }
+
+		init_effect = {
+			save_global_event_target_as = sol_system_earth
+			create_species = {
+				name = NAME_Human
+				plural = NAME_Human_plural
+				class = "HUM"
+				portrait = "human"
+				homeworld = THIS
+				namelist = "HUMAN1"
+				traits = {
+					trait = "trait_perfected_genes"
+					trait = "trait_adaptive"
+					trait = "trait_nomadic"
+					trait = "trait_wasteful"
+				}
+			}
+			last_created_species = {
+				save_event_target_as = human_species
+			}
+			prevent_anomaly = yes
+			create_country = {
+				name = "NAME_dmj_faulknerist_country"
+				adjective = "Terran"
+				ethos = {
+					ethic = "ethic_xenophile"
+					ethic = "ethic_spiritualist"
+					ethic = "ethic_pacifist"
+				}
+				authority = auth_imperial
+				civics = {
+					civic = "civic_free_haven"
+					civic = "civic_philosopher_king"
+					civic = "civic_dimensional_worship"
+					civic = "civic_psionic_sovereign"
+				}
+				species = event_target:human_species
+				name_list = "HUMAN1"
+				ship_prefix = "ISS"
+				flag = {
+					icon = {
+						category="human"
+						file="flag_human_5.dds"
+					}
+					background = {
+						category="backgrounds"
+						file="circle.dds"
+					}
+					colors = {
+						"blue"
+						"white"
+						"black"
+						"null"
+					}
+				}
+				type = default
+				origin = "origin_default"
+				effect = {
+					save_global_event_target_as = dmj_sol_country
+					give_technology = { tech = tech_galactic_administration message = no }
+					add_resource = {
+						minerals = 2400
+						energy = 2400
+						food = 2400
+						alloys = 800
+						consumer_goods = 1200
+						influence = 600
+					}
+					create_leader = {
+						class = official
+						species = event_target:human_species
+						name = "NAME_dmj_michael"
+						skill = 1
+						gender = male
+						hide_age = yes
+						event_leader = yes
+						skip_background_generation = yes
+						background_ethic = ethic_spiritualist
+						background_planet = event_target:sol_system_earth
+						custom_catch_phrase = dmj_michael_catch_phrase
+						custom_description = dmj_michael_desc
+						randomize_traits = no
+						effect = {
+							set_leader_flag = legendary_leader
+						}
+					}
+					last_created_leader = {
+						set_leader_flag = dmj_michael
+						change_leader_portrait = dmj_michael
+						save_global_event_target_as = dmj_michael
+						set_owner = prev
+						add_skill_without_trait_selection = 9
+						remove_all_traits = yes
+						add_trait = trait_imperial_heir
+						add_trait = leader_trait_legendary_leader
+						add_trait = leader_trait_chosen
+						add_trait = leader_trait_devotion_conduit
+						add_trait = leader_trait_master_diplomat
+						add_trait = leader_trait_legendary_great_teacher_2
+						add_trait = leader_trait_legendary_pious_ascet_2
+						add_trait = leader_trait_legendary_natural_ruler_2
+						add_trait = leader_trait_legendary_hoplofobia
+						add_trait = subclass_official_diplomacy_councilor
+						set_immortal = yes
+						set_variable = { which = dmj_devotion_value_leader value = 0 }
+						set_leader_flag = leader_death_events_blocked
+						set_leader_flag = paragon_origin_legendary_leader
+						set_leader_flag = immune_to_negative_traits
+						set_variable = {
+							which = paragon_origin_story_ruling
+							value = 2
+						}
+						set_variable = {
+							which = paragon_origin_delusion_tier
+							value = 1
+						}
+					}
+					set_leader = event_target:dmj_michael
+					set_country_flag = owns_faulkner
+					set_country_flag = faulknerist_empire
+					set_global_flag = dmj_michael_exists
+					set_male_ruler_title = dmj_RT_JADE_EMPEROR
+					set_male_heir_title = dmj_HT_JADE_PRINCE
+					set_female_ruler_title = dmj_RT_JADE_EMPRESS
+					set_female_heir_title = dmj_HT_JADE_PRINCESS
+					set_origin = "origin_legendary_leader_imperial"
+					country_event = {
+						id = paragon.5004 days = 180 random = 360
+					}
+				}
+			}
+			create_colony = {
+				owner = event_target:dmj_sol_country
+			}
+			generate_earth_deposits_and_blockers = yes
+			set_earth_entity = yes
+			clear_blockers = yes
+			generate_start_buildings_and_districts = yes
+			generate_start_pops = yes
+			generate_lost_colony_parent_bonus = yes
+			event_target:dmj_sol_country = {
+				create_starting_leaders = yes
+				country_event = { id = game_start.9 }
+				country_event = { id = game_start.33 days = 1 } # needs delay for system ownership to settle
+			}
+
+			create_army = {
+				name = "NAME_dmj_faulknerist_warrior_monks"
+				owner = last_created_country
+				species = last_created_species
+				type = "psionic_army"
+			}
+			create_army = {
+				name = "NAME_dmj_faulknerist_warrior_monks"
+				owner = last_created_country
+				species = last_created_species
+				type = "psionic_army"
+			}
+			create_army = {
+				name = "NAME_dmj_faulknerist_warrior_monks"
+				owner = last_created_country
+				species = last_created_species
+				type = "psionic_army"
+			}
+			create_army = {
+				name = "NAME_dmj_faulknerist_warrior_monks"
+				owner = last_created_country
+				species = last_created_species
+				type = "psionic_army"
+			}
+			create_army = {
+				name = "NAME_dmj_faulknerist_warrior_monks"
+				owner = last_created_country
+				species = last_created_species
+				type = "psionic_army"
+			}
+
+			add_building = dmj_faulknerist_temple
+
+			set_name = "NAME_Terra"
+		}
+
+		moon = {
+			name = "NAME_Luna"
+			class = "pc_barren_cold"
+			size = 5
+			orbit_distance = 12
+			orbit_angle = 40
+			has_ring = no
+			entity = "cold_barren_planet_luna_entity"
+		}
+	}
+
+	planet = {
+		name = "NAME_Mars"
+		class = "pc_barren"
+		orbit_distance = 25
+		orbit_angle = 60
+		size = 13
+		has_ring = no
+		entity = "barren_planet_mars_entity"
+		flags = { planet_mars }
+
+		init_effect = {
+			add_modifier = {
+				modifier = "terraforming_candidate"
+				days = -1
+			}
+		}
+	}
+
+	planet = {
+		name = "NAME_1_Ceres"
+		class = "pc_asteroid"
+		orbit_distance = 30
+		orbit_angle = -210
+		size = 5
+		has_ring = no
+	}
+
+	planet = {
+		name = "NAME_2_Pallas"
+		class = "pc_asteroid"
+		orbit_distance = 0
+		orbit_angle = -95
+		size = 5
+		has_ring = no
+	}
+
+	planet = {
+		name = "NAME_3_Juno"
+		class = "pc_asteroid"
+		orbit_distance = 0
+		orbit_angle = 285
+		size = 5
+		has_ring = no
+	}
+
+	planet = {
+		name = "NAME_4_Vesta"
+		class = "pc_asteroid"
+		orbit_distance = 0
+		orbit_angle = -80
+		size = 5
+		has_ring = no
+	}
+
+	planet = {
+		name = "NAME_Jupiter"
+		class = "pc_gas_giant"
+		orbit_distance = 40
+		orbit_angle = -160
+		size = 35
+		has_ring = no
+		entity = "gas_giant_jupiter_entity"
+		change_orbit = 6
+
+		moon = {
+			name = "NAME_Io"
+			class = "pc_molten"
+			size = 6
+			orbit_distance = 10
+			orbit_angle = 110
+			has_ring = no
+		}
+		moon = {
+			name = "NAME_Europa"
+			class = "pc_frozen"
+			size = 6
+			orbit_distance = 2.5
+			orbit_angle = 190
+			has_ring = no
+		}
+		moon = {
+			name = "NAME_Ganymede"
+			class = "pc_frozen"
+			size = 9
+			orbit_distance = 2.5
+			orbit_angle = 80
+			has_ring = no
+		}
+		moon = {
+			name = "NAME_Callisto"
+			class = "pc_frozen"
+			size = 7
+			orbit_distance = 2.5
+			orbit_angle = -155
+			has_ring = no
+		}
+	}
+
+	planet = {
+		name = "NAME_Saturn"
+		class = "pc_gas_giant"
+		orbit_distance = 25
+		orbit_angle = 170
+		size = 30
+		has_ring = yes
+		entity = "gas_giant_05_entity"
+		change_orbit = 7
+
+		moon = {
+			name = "NAME_Titan"
+			class = "pc_frozen"
+			size = 8
+			orbit_distance = 12
+			orbit_angle = 320
+			has_ring = no
+		}
+	}
+
+	planet = {
+		name = "NAME_Uranus"
+		class = "pc_gas_giant"
+		orbit_distance = 25
+		orbit_angle = 125
+		size = 20
+		has_ring = no
+		init_effect = {
+			set_planet_entity = {
+				entity = gas_giant_uranus_entity
+				atmosphere_color = hsv { 0.548 0.519 0.9 }
+				atmosphere_intensity = 0.1
+				atmosphere_width = 1.0
+			}
+		}
+	}
+
+	planet = {
+		name = "NAME_Neptune"
+		class = "pc_gas_giant"
+		orbit_distance = 25
+		orbit_angle = -195
+		size = 20
+		has_ring = no
+		change_orbit = 4
+
+		moon = {
+			name = "NAME_Triton"
+			class = "pc_frozen"
+			size = 6
+			orbit_distance = 7
+			orbit_angle = 115
+			has_ring = no
+		}
+
+		init_effect = {
+			set_planet_entity = {
+				entity = gas_giant_neptune_entity
+				atmosphere_color = hsv { 0.626 0.782 0.9 }
+				atmosphere_intensity = 0.1
+				atmosphere_width = 1.0
+			}
+		}
+	}
+
+	planet = {
+		name = "NAME_134340_Pluto"
+		class = "pc_asteroid"
+		orbit_distance = 30
+		orbit_angle = -210
+		size = 5
+		has_ring = no
+	}
+
+	planet = {
+		name = "NAME_136472_Makemake"
+		class = "pc_ice_asteroid"
+		orbit_distance = 0
+		orbit_angle = -95
+		size = 5
+		has_ring = no
+	}
+
+	planet = {
+		name = "NAME_136108_Haumea"
+		class = "pc_ice_asteroid"
+		orbit_distance = 0
+		orbit_angle = 285
+		size = 5
+		has_ring = no
+	}
+
+	planet = {
+		name = "NAME_20000_Varuna"
+		class = "pc_ice_asteroid"
+		orbit_distance = 0
+		orbit_angle = -80
+		size = 5
+		has_ring = no
+	}
+
+	init_effect = {
+		create_starbase = {
+			size = starbase_starport
+			module = shipyard
+			building = crew_quarters
+			owner = event_target:dmj_sol_country
+			effect = {
+				set_starbase_module = {
+					slot = 2
+					module = trading_hub
+				}
+			}
+		}
+	}
+
+	#neighbor_system = {
+	#	hyperlane_jumps = { min = 1 max = @jumps }
+	#	initializer = "com_sol_neighbor_t1"
+	#}
+	#neighbor_system = {
+	#	hyperlane_jumps = { min = 1 max = @jumps }
+	#	initializer = "com_sol_neighbor_t1_first_colony"
+	#}
+}

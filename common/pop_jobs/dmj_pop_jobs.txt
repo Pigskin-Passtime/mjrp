@@ -1,0 +1,175 @@
+reinhardist_devotee = {
+	category = specialist
+	condition_string = SPECIALIST_JOB_TRIGGER
+	building_icon = building_temple
+	clothes_texture_index = 3
+
+	possible_pre_triggers = {
+		has_owner = yes
+		is_being_purged = no
+		is_being_assimilated = no
+		is_sapient = yes
+	}
+
+	possible_precalc = can_fill_specialist_job
+
+	possible = {
+		OR = {
+			AND = {
+				exists = pop_faction
+				pop_faction = {
+					is_pop_faction_type = reinhardist
+				}
+			}
+			AND = {
+				owner = { has_country_flag = reinhardist_empire }
+				OR = {
+					pop_has_ethic = ethic_authoritarian
+					pop_has_ethic = ethic_spiritualist
+					pop_has_ethic = ethic_militarist
+				}
+			}
+		}
+	}
+
+	resources = {
+		category = planet_telepaths
+		produces = {
+			dmj_sr_devotion = 5
+		}
+		produces = {
+			trigger = {
+				OR = {
+					has_trait = trait_latent_psionic
+					has_trait = trait_psionic
+				}
+			}
+			dmj_sr_devotion = 5
+		}
+		produces = {
+			trigger = {
+				has_councilor = { COUNCILOR = "councilor_psionic_sovereign" }
+			}
+			dmj_sr_devotion = 1
+			mult = value:councilor_level|TYPE|councilor_psionic_sovereign|
+		}
+	}
+
+	weight = {
+		weight = @specialist_job_weight
+		mult = 2
+		mult = value:job_weights_modifier|JOB|reinhardist_devotee|RESOURCE|dmj_sr_devotion|
+		modifier = {
+			factor = 0.2
+			has_citizenship_rights = no
+		}
+		modifier = {
+			factor = 2
+			OR = {
+				has_trait = trait_latent_psionic
+				has_trait = trait_psionic
+			}
+		}
+		modifier = {
+			factor = 0.1
+			can_take_servant_job = yes
+		}
+		modifier = {
+			factor = 1.5
+			has_job = reinhardist_devotee
+		}
+		modifier = {
+			factor = 0.1
+			is_enslaved = yes
+			has_slavery_type = { type = slavery_indentured }
+		}
+	}
+}
+
+faulknerist_devotee = {
+	category = specialist
+	condition_string = SPECIALIST_JOB_TRIGGER
+	building_icon = building_temple
+	clothes_texture_index = 3
+
+	possible_pre_triggers = {
+		has_owner = yes
+		is_being_purged = no
+		is_being_assimilated = no
+		is_sapient = yes
+	}
+
+	possible_precalc = can_fill_specialist_job
+
+	possible = {
+		OR = {
+			AND = {
+				exists = pop_faction
+				pop_faction = {
+					is_pop_faction_type = faulknerist
+				}
+			}
+			AND = {
+				owner = { has_country_flag = faulknerist_empire }
+				OR = {
+					pop_has_ethic = ethic_xenophile
+					pop_has_ethic = ethic_spiritualist
+					pop_has_ethic = ethic_pacifist
+				}
+			}
+		}
+	}
+
+	resources = {
+		category = planet_telepaths
+		produces = {
+			dmj_sr_devotion = 5
+		}
+		produces = {
+			trigger = {
+				OR = {
+					has_trait = trait_latent_psionic
+					has_trait = trait_psionic
+				}
+			}
+			dmj_sr_devotion = 5
+		}
+		produces = {
+			trigger = {
+				has_councilor = { COUNCILOR = "councilor_psionic_sovereign" }
+			}
+			dmj_sr_devotion = 1
+			mult = value:councilor_level|TYPE|councilor_psionic_sovereign|
+		}
+	}
+
+	weight = {
+		weight = @specialist_job_weight
+		mult = 2
+		mult = value:job_weights_modifier|JOB|faulknerist_devotee|RESOURCE|dmj_sr_devotion|
+		modifier = {
+			factor = 0.2
+			has_citizenship_rights = no
+		}
+		modifier = {
+			factor = 2
+			OR = {
+				has_trait = trait_latent_psionic
+				has_trait = trait_psionic
+			}
+		}
+		modifier = {
+			factor = 0.1
+			can_take_servant_job = yes
+		}
+		modifier = {
+			factor = 1.5
+			has_job = faulknerist_devotee
+		}
+		modifier = {
+			factor = 0.1
+			is_enslaved = yes
+			has_slavery_type = { type = slavery_indentured }
+		}
+	}
+}

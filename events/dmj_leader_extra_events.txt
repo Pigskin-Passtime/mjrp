@@ -1,0 +1,662 @@
+# dmj_leader_extra_events
+# By Jin2188
+
+namespace = dmj_leader
+
+country_event = { Revive Reinhard on death, anywhere between 5 and 10 years
+	id = dmj_leader.1
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		from = { is_same_value = event_target:dmj_daniel }
+		has_global_flag = dmj_reinhard_free
+		has_country_flag = owns_reinhard
+	}
+
+	immediate = {
+		if = {
+			limit = { has_origin = "origin_legendary_leader_death" }
+			if = {
+				limit = { has_authority = auth_dictatorial }
+				set_origin = "origin_legendary_leader_dictatorial"
+			}
+			else_if = {
+				limit = { has_authority = auth_imperial }
+				set_origin = "origin_legendary_leader_imperial"
+			}
+		}
+		country_event = { id = dmj_leader.2 days = 1800 random = 1800 }
+	}
+}
+
+country_event = {
+	id = dmj_leader.2
+	title = "dmj_leader.2.name"
+	desc = "dmj_leader.2.desc"
+	is_triggered_only = yes
+
+	trigger = {
+		has_global_flag = dmj_reinhard_free
+		has_country_flag = owns_reinhard
+	}
+
+	immediate = {
+		create_country = {
+			name = "NAME_dmj_daniel"
+			type = paragon_event_country
+			flag = {
+				icon = {
+					category = "special"
+					file = "unknown.dds"
+				}
+				background = {
+					category = "backgrounds"
+					file = "00_solid.dds"
+				}
+				colors = {
+					"yellow"
+					"yellow"
+					"null"
+					"null"
+				}
+			}
+			effect = {
+				save_global_event_target_as = dmj_daniel_country
+			}
+		}
+		event_target:dmj_daniel_country = {
+			set_country_flag = dmj_daniel_country_flag
+			set_faction_hostility = {
+				target = root.owner
+				set_hostile = no
+				set_neutral = yes
+				set_friendly = no
+			}
+			create_species = {
+				name = NAME_Human
+				plural = NAME_Human_plural
+				class = "HUM"
+				portrait = dmj_daniel
+				traits = {
+					trait = "trait_adaptive"
+					trait = "trait_nomadic"
+					trait = "trait_wasteful"
+				}
+			}
+			last_created_species = {
+				save_event_target_as = dmj_daniel_species
+			}
+			create_leader = {
+				class = official
+				species = event_target:dmj_daniel_species
+				name = "NAME_dmj_daniel"
+				skill = 1
+				gender = male
+				hide_age = yes
+				event_leader = yes
+				skip_background_generation = yes
+				background_ethic = ethic_authoritarian
+				background_planet = event_target:sol_system_earth
+				custom_catch_phrase = dmj_daniel_catch_phrase
+				custom_description = dmj_daniel_desc
+				randomize_traits = no
+				effect = {
+					set_leader_flag = legendary_leader
+				}
+			}
+			last_created_leader = {
+				set_leader_flag = dmj_daniel
+				set_leader_flag = immune_to_negative_traits
+				change_leader_portrait = dmj_daniel
+				save_global_event_target_as = dmj_daniel
+				set_owner = event_target:dmj_daniel_country
+				add_skill_without_trait_selection = 9
+				remove_all_traits = yes
+				add_trait = leader_trait_chosen
+				add_trait = leader_trait_devotion_conduit
+				add_trait = leader_trait_supreme_organizer
+				add_trait = leader_trait_legendary_military_knowledge_2
+				add_trait = leader_trait_legendary_evervigilant_2
+				add_trait = leader_trait_legendary_high_king_2
+				add_trait = leader_trait_tyrannical
+				add_trait = subclass_official_economy_councilor
+				set_immortal = yes
+				set_variable = { which = dmj_devotion_value_leader value = root.dmj_devotion_value }
+				set_owner = root
+			}
+		}
+		event_target:dmj_daniel_country = {
+			destroy_country = yes
+		}
+		if = {
+			limit = { has_country_flag = reinhardist_empire }
+			set_leader = event_target:dmj_daniel
+		}
+	}
+
+	option = {
+		name = "dmj_leader.2.a"
+	}
+}
+
+country_event = { # Send Reinhard to another country when fired, anywhere between 5 and 10 years
+	id = dmj_leader.3
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		from = { is_same_value = event_target:dmj_daniel }
+		has_global_flag = dmj_reinhard_free
+		has_country_flag = owns_reinhard
+	}
+
+	immediate = {
+		remove_country_flag = owns_reinhard
+		random_playable_country = {
+			limit = {
+				NOT = { has_country_flag = owns_reinhard }
+				NOT = { has_country_flag = dmj_reimprisoned_reinhard }
+				NOT = { is_same_value = event_target:dmj_sol_country }
+			}
+			country_event = { id = dmj_leader.4 days = 1800 random = 1800 }
+		}
+	}
+}
+
+country_event = {
+	id = dmj_leader.4
+	title = "dmj.8.name"
+	desc = "dmj_leader.4.desc"
+	is_triggered_only = yes
+
+	picture = GFX_leader_recruitment_bg_legendary_beholder
+	event_window_type = leader_recruit
+	auto_opens = no
+	notification_event_icon = default
+	show_sound = dmj_daniel_greetings
+
+	trigger = {
+		has_global_flag = dmj_reinhard_free
+		NOT = { has_country_flag = owns_reinhard }
+		NOT = { has_country_flag = dmj_reimprisoned_reinhard }
+	}
+
+	immediate = {
+		create_country = {
+			name = "NAME_dmj_daniel"
+			type = paragon_event_country
+			flag = {
+				icon = {
+					category = "special"
+					file = "unknown.dds"
+				}
+				background = {
+					category = "backgrounds"
+					file = "00_solid.dds"
+				}
+				colors = {
+					"yellow"
+					"yellow"
+					"null"
+					"null"
+				}
+			}
+			effect = {
+				save_global_event_target_as = dmj_daniel_country
+			}
+		}
+		event_target:dmj_daniel_country = {
+			set_country_flag = dmj_daniel_country_flag
+			set_faction_hostility = {
+				target = root.owner
+				set_hostile = no
+				set_neutral = yes
+				set_friendly = no
+			}
+			create_species = {
+				name = NAME_Human
+				plural = NAME_Human_plural
+				class = "HUM"
+				portrait = dmj_daniel
+				traits = {
+					trait = "trait_adaptive"
+					trait = "trait_nomadic"
+					trait = "trait_wasteful"
+				}
+			}
+			last_created_species = {
+				save_event_target_as = dmj_daniel_species
+			}
+			create_leader = {
+				class = official
+				species = event_target:dmj_daniel_species
+				name = "NAME_dmj_daniel"
+				skill = 1
+				gender = male
+				hide_age = yes
+				event_leader = yes
+				skip_background_generation = yes
+				background_ethic = ethic_authoritarian
+				background_planet = event_target:sol_system_earth
+				custom_catch_phrase = dmj_daniel_catch_phrase
+				custom_description = dmj_daniel_desc
+				randomize_traits = no
+				effect = {
+					set_leader_flag = legendary_leader
+				}
+			}
+			last_created_leader = {
+				set_leader_flag = dmj_daniel
+				set_leader_flag = immune_to_negative_traits
+				change_leader_portrait = dmj_daniel
+				save_global_event_target_as = dmj_daniel
+				set_owner = event_target:dmj_daniel_country
+				add_skill_without_trait_selection = 9
+				remove_all_traits = yes
+				add_trait = leader_trait_chosen
+				add_trait = leader_trait_devotion_conduit
+				add_trait = leader_trait_supreme_organizer
+				add_trait = leader_trait_legendary_military_knowledge_2
+				add_trait = leader_trait_legendary_evervigilant_2
+				add_trait = leader_trait_legendary_high_king_2
+				add_trait = leader_trait_tyrannical
+				add_trait = subclass_official_economy_councilor
+				set_immortal = yes
+				set_variable = { which = dmj_devotion_value_leader value = root.dmj_devotion_value }
+			}
+		}
+	}
+
+	picture_event_data = {
+		portrait = event_target:dmj_daniel
+	}
+
+	option = {
+		name = DISMISS
+		tag = dismiss_leader
+		sound = "dmj_daniel_dismiss"
+
+		hidden_effect = {
+			event_target:dmj_daniel = {
+				kill_leader = {
+					fire = yes
+					show_notification = no
+				}
+			}
+			event_target:dmj_daniel_country = {
+				destroy_country = yes
+			}
+		}
+	}
+	option = {
+		name = dmj.8.a
+		response_text = dmj.8.a.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = dmj.8.b
+		response_text = dmj.8.b.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = dmj.8.c
+		response_text = dmj.8.c.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = dmj.8.commissioner
+		response_text = dmj.8.commissioner.response
+		is_dialog_only = yes
+
+		allow = {
+			hidden_trigger = {
+				NOT = {
+					event_target:dmj_daniel = { has_trait = subclass_commander_governor }
+				}
+			}
+		}
+
+		hidden_effect = {
+			event_target:dmj_daniel = {
+				remove_subclass = yes
+				remove_all_traits = yes
+				change_leader_class = commander
+				add_trait = leader_trait_chosen
+				add_trait = leader_trait_devotion_conduit
+				add_trait = leader_trait_arbiter
+				add_trait = leader_trait_iron_fist_2
+				add_trait = leader_trait_venerated_2
+				add_trait = leader_trait_bureaucrat_2
+				add_trait = leader_trait_sadistic
+				add_trait = subclass_commander_governor
+			}
+		}
+	}
+	option = {
+		name = dmj.8.delegate
+		response_text = dmj.8.delegate.response
+		is_dialog_only = yes
+
+		allow = {
+			hidden_trigger = {
+				NOT = {
+					event_target:dmj_daniel = { has_trait = subclass_official_delegate }
+				}
+			}
+		}
+
+		hidden_effect = {
+			event_target:dmj_daniel = {
+				remove_subclass = yes
+				remove_all_traits = yes
+				change_leader_class = official
+				add_trait = leader_trait_chosen
+				add_trait = leader_trait_devotion_conduit
+				add_trait = leader_trait_diplo_weight
+				add_trait = leader_trait_resolution_category_divinity_focus_2
+				add_trait = leader_trait_resolution_category_mutualdefense_focus_2
+				add_trait = leader_trait_federal_joint_navy_2
+				add_trait = leader_trait_bureaucratic
+				add_trait = subclass_official_delegate
+			}
+		}
+	}
+	option = {
+		name = dmj.8.advisor
+		response_text = dmj.8.advisor.response
+		is_dialog_only = yes
+
+		allow = {
+			hidden_trigger = {
+				NOT = {
+					event_target:dmj_daniel = { has_trait = subclass_official_economy_councilor }
+				}
+			}
+		}
+
+		hidden_effect = {
+			event_target:dmj_daniel = {
+				remove_subclass = yes
+				remove_all_traits = yes
+				change_leader_class = official
+				add_trait = leader_trait_chosen
+				add_trait = leader_trait_devotion_conduit
+				add_trait = leader_trait_supreme_organizer
+				add_trait = leader_trait_legendary_military_knowledge_2
+				add_trait = leader_trait_legendary_evervigilant_2
+				add_trait = leader_trait_legendary_high_king_2
+				add_trait = leader_trait_tyrannical
+				add_trait = subclass_official_economy_councilor
+			}
+		}
+	}
+	option = {
+		name = HIRE
+		tag = hire_leader
+		sound = "dmj_daniel_hire"
+
+		hidden_effect = {
+			event_target:dmj_daniel = {
+				set_owner = root
+			}
+			random_owned_planet = {
+				limit = {
+					is_variable_set = paragon_memory_vault
+				}
+				change_variable = {
+					which = paragon_memory_vault
+					value = 1
+				}
+			}
+			set_country_flag = owns_reinhard
+			set_country_flag = chosen_one_ruler_event
+			event_target:dmj_daniel_country = {
+				destroy_country = yes
+			}
+			country_event = { id = dmj_sol.1 days = 90 random = 270 }
+		}
+		create_message = {
+			type = MESSAGE_RECRUITED_LEADER
+			localization =  MESSAGE_RECRUITED_LEADER_DESC
+			days = @toast_message_days
+			target = event_target:dmj_daniel
+			variable = {
+				type = name
+				localization = LEADER
+				scope = event_target:dmj_daniel
+			}
+			variable = {
+				key = "border"
+				value = "GFX_border_legendary"
+			}
+		}
+	}
+}
+
+country_event = { # Revive Michael on death, anywhere between 5 and 10 years
+	id = dmj_leader.5
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		from = { is_same_value = event_target:dmj_michael }
+		has_global_flag = dmj_michael_exists
+		has_country_flag = owns_faulkner
+	}
+
+	immediate = {
+		if = {
+			limit = { has_origin = "origin_legendary_leader_death" }
+			if = {
+				limit = { has_authority = auth_dictatorial }
+				set_origin = "origin_legendary_leader_dictatorial"
+			}
+			else_if = {
+				limit = { has_authority = auth_imperial }
+				set_origin = "origin_legendary_leader_imperial"
+			}
+		}
+		country_event = { id = dmj_leader.6 days = 1800 random = 1800 }
+	}
+}
+
+country_event = {
+	id = dmj_leader.6
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_global_flag = dmj_michael_exists
+		has_country_flag = owns_faulkner
+	}
+
+	immediate = {
+		create_country = {
+			name = "NAME_dmj_michael"
+			type = paragon_event_country
+			flag = {
+				icon = {
+					category = "special"
+					file = "unknown.dds"
+				}
+				background = {
+					category = "backgrounds"
+					file = "00_solid.dds"
+				}
+				colors = {
+					"blue"
+					"blue"
+					"null"
+					"null"
+				}
+			}
+			effect = {
+				save_global_event_target_as = dmj_michael_country
+			}
+		}
+		event_target:dmj_michael_country = {
+			set_country_flag = dmj_country_flag
+			set_faction_hostility = {
+				target = root.owner
+				set_hostile = no
+				set_neutral = yes
+				set_friendly = no
+			}
+			create_species = {
+				name = NAME_Human
+				plural = NAME_Human_plural
+				class = "HUM"
+				portrait = dmj_michael
+				traits = {
+					trait = "trait_adaptive"
+					trait = "trait_nomadic"
+					trait = "trait_wasteful"
+				}
+			}
+			last_created_species = {
+				save_event_target_as = dmj_michael_species
+			}
+			create_leader = {
+				class = official
+				species = event_target:dmj_michael_species
+				name = "NAME_dmj_michael"
+				skill = 1
+				gender = male
+				hide_age = yes
+				event_leader = yes
+				skip_background_generation = yes
+				background_ethic = ethic_spiritualist
+				background_planet = event_target:dmj_earth
+				custom_catch_phrase = dmj_michael_catch_phrase
+				custom_description = dmj_michael_desc
+				randomize_traits = no
+				effect = {
+					set_leader_flag = legendary_leader
+				}
+			}
+			last_created_leader = {
+				set_leader_flag = dmj_michael
+				set_leader_flag = immune_to_negative_traits
+				change_leader_portrait = dmj_michael
+				save_global_event_target_as = dmj_michael
+				set_owner = event_target:dmj_michael_country
+				add_skill_without_trait_selection = 9
+				remove_all_traits = yes
+				add_trait = leader_trait_chosen
+				add_trait = leader_trait_devotion_conduit
+				add_trait = leader_trait_master_diplomat
+				add_trait = leader_trait_legendary_great_teacher_2
+				add_trait = leader_trait_legendary_pious_ascet_2
+				add_trait = leader_trait_legendary_natural_ruler_2
+				add_trait = leader_trait_irenic
+				add_trait = subclass_official_diplomacy_councilor
+				set_immortal = yes
+				set_variable = { which = dmj_devotion_value_leader value = root.dmj_devotion_value }
+				set_owner = root
+			}
+		}
+		event_target:dmj_michael_country = {
+			destroy_country = yes
+		}
+		if = {
+			limit = { has_country_flag = faulknerist_empire }
+			set_leader = event_target:dmj_michael
+		}
+	}
+}
+
+country_event = { # Revive Michael if dead when his country is destroyed, purely for diplomacy portrait
+	id = dmj_leader.7
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_global_flag = dmj_michael_exists
+	}
+
+	immediate = {
+		create_country = {
+			name = "NAME_dmj_michael"
+			type = paragon_event_country
+			flag = {
+				icon = {
+					category = "special"
+					file = "unknown.dds"
+				}
+				background = {
+					category = "backgrounds"
+					file = "00_solid.dds"
+				}
+				colors = {
+					"blue"
+					"blue"
+					"null"
+					"null"
+				}
+			}
+			effect = {
+				save_global_event_target_as = dmj_michael_country
+			}
+		}
+		event_target:dmj_michael_country = {
+			set_country_flag = dmj_country_flag
+			set_faction_hostility = {
+				target = root.owner
+				set_hostile = no
+				set_neutral = yes
+				set_friendly = no
+			}
+			create_species = {
+				name = NAME_Human
+				plural = NAME_Human_plural
+				class = "HUM"
+				portrait = dmj_michael
+				traits = {
+					trait = "trait_adaptive"
+					trait = "trait_nomadic"
+					trait = "trait_wasteful"
+				}
+			}
+			last_created_species = {
+				save_event_target_as = dmj_michael_species
+			}
+			create_leader = {
+				class = official
+				species = event_target:dmj_michael_species
+				name = "NAME_dmj_michael"
+				skill = 1
+				gender = male
+				hide_age = yes
+				event_leader = yes
+				skip_background_generation = yes
+				background_ethic = ethic_spiritualist
+				background_planet = event_target:dmj_earth
+				custom_catch_phrase = dmj_michael_catch_phrase
+				custom_description = dmj_michael_desc
+				randomize_traits = no
+				effect = {
+					set_leader_flag = legendary_leader
+				}
+			}
+			last_created_leader = {
+				set_leader_flag = dmj_michael
+				set_leader_flag = immune_to_negative_traits
+				change_leader_portrait = dmj_michael
+				save_global_event_target_as = dmj_michael
+				set_owner = event_target:dmj_michael_country
+				add_skill_without_trait_selection = 9
+				remove_all_traits = yes
+				add_trait = leader_trait_chosen
+				add_trait = leader_trait_devotion_conduit
+				add_trait = leader_trait_master_diplomat
+				add_trait = leader_trait_legendary_great_teacher_2
+				add_trait = leader_trait_legendary_pious_ascet_2
+				add_trait = leader_trait_legendary_natural_ruler_2
+				add_trait = leader_trait_irenic
+				add_trait = subclass_official_diplomacy_councilor
+				set_immortal = yes
+			}
+		}
+	}
+}

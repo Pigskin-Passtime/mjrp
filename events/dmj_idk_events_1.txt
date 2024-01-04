@@ -1,0 +1,109 @@
+# This is so stupid Paradox. Why do I have to keep making event files to make these events work?
+
+# dmj_idk_events_1
+# By Jin2188
+
+namespace = dmj_idk_1
+
+country_event = { # Original Empire Victory
+	id = dmj_idk_1.1
+	title = "dmj.16.name"
+	desc = "dmj.16.desc"
+	is_triggered_only = yes
+
+	picture = GFX_evt_victorious_army
+	show_sound = event_celebration
+
+	trigger = {
+		is_ai = no # Only if you are playing as your Original Empire
+	}
+
+	immediate = {
+		remove_country_flag = dmj_reinhardists_revolting
+		if = {
+			limit = { any_owned_planet = { has_building = dmj_reinhardist_temple } }
+			every_owned_planet = {
+				limit = { has_building = dmj_reinhardist_temple }
+				remove_building = dmj_reinhardist_temple
+			}
+		}
+	}
+
+	option = {
+		name = dmj.16.regular
+		hidden_effect = {
+			clear_global_event_target = dmj_rebellion_originator
+			clear_global_event_target = dmj_reinhardist_uprising
+		}
+	}
+	option = {
+		name = dmj.16.authoritarian
+		trigger = {
+			is_authoritarian = yes
+		}
+		hidden_effect = {
+			clear_global_event_target = dmj_rebellion_originator
+			clear_global_event_target = dmj_reinhardist_uprising
+		}
+	}
+}
+
+country_event = { # Reinhardists Victory
+	id = dmj_idk_1.2
+	title = "dmj.17.name"
+	desc = "dmj.17.desc"
+	is_triggered_only = yes
+
+	picture = GFX_evt_victorious_army
+	show_sound = event_celebration
+
+	trigger = {
+		is_ai = no # Only if you are playing as the Reinhardists
+	}
+
+	option = {
+		name = dmj.17.a
+		hidden_effect = {
+			clear_global_event_target = dmj_rebellion_originator
+			clear_global_event_target = dmj_reinhardist_uprising
+		}
+	}
+}
+
+country_event = { # Original Empire Victory
+	id = dmj_idk_1.3
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		from = { is_same_value = event_target:dmj_rebellion_originator }
+		root = {
+			is_same_value = event_target:dmj_reinhardist_uprising
+		}
+	}
+
+	immediate = {
+		log = "[From.GetName]"
+		log = "[Root.GetName]"
+		from = { country_event = { id = dmj_idk_1.1 }
+	}
+}
+
+country_event = { # Reinhardists Victory
+	id = dmj_idk_1.4
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		from = { is_same_value = event_target:dmj_reinhardist_uprising }
+		root = {
+			is_same_value = event_target:dmj_rebellion_originator
+		}
+	}
+
+	immediate = {
+		log = "[From.GetName]"
+		log = "[Root.GetName]"
+		from = { country_event = { id = dmj_idk_1.2 }
+	}
+}

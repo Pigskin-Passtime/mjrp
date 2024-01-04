@@ -1,0 +1,798 @@
+# dmj_maintenance_events
+# By Jin2188
+
+namespace = dmj_misc
+
+country_event = { # Change Reinhard's Leader Class
+	id = dmj_misc.1
+	title = dmj_misc.1.name
+	desc = dmj_misc.1.desc
+	is_triggered_only = yes
+
+	diplomatic = yes
+	show_sound = dmj_daniel_greetings
+
+	picture_event_data = {
+		portrait = event_target:dmj_daniel
+		planet_background = root.capital_scope
+		graphical_culture = root.owner
+		city_level = root.capital_scope
+		room = root.ruler
+	}
+
+
+	# Nevermind
+	option = {
+		name = dmj_misc.1.back
+		trigger = {
+			is_ai = no
+		}
+	}
+
+	# Commissioner
+	option = {
+		name = dmj_misc.1.a
+		trigger = { event_target:dmj_daniel = { NOT = { has_trait = subclass_commander_governor } } }
+		hidden_effect = {
+			event_target:dmj_daniel = {
+				unassign_leader = this
+				remove_subclass = yes
+				remove_all_traits = yes
+				change_leader_class = commander
+				add_trait_no_notify = leader_trait_chosen
+				add_trait_no_notify = leader_trait_devotion_conduit
+				add_trait_no_notify = leader_trait_arbiter
+				add_trait_no_notify = leader_trait_iron_fist_2
+				add_trait_no_notify = leader_trait_venerated_2
+				add_trait_no_notify = leader_trait_bureaucrat_2
+				add_trait_no_notify = leader_trait_sadistic
+				add_trait_no_notify = subclass_commander_governor
+			}
+			every_owned_fleet = {
+				limit = { has_fleet_flag = dmj_reinhard_battleform }
+				destroy_fleet = {
+					target = this
+					kill_leader = yes
+					destroy_template = no
+				}
+			}
+		}
+		ai_chance = { factor = 5 }
+	}
+
+	# Delegate
+	option = {
+		name = dmj_misc.1.b
+		trigger = { event_target:dmj_daniel = { NOT = { has_trait = subclass_offical_delegate } } }
+		hidden_effect = {
+			event_target:dmj_daniel = {
+				unassign_leader = this
+				remove_subclass = yes
+				remove_all_traits = yes
+				change_leader_class = official
+				add_trait_no_notify = leader_trait_chosen
+				add_trait_no_notify = leader_trait_devotion_conduit
+				add_trait_no_notify = leader_trait_diplo_weight
+				add_trait_no_notify = leader_trait_resolution_category_divinity_focus_2
+				add_trait_no_notify = leader_trait_resolution_category_mutualdefense_focus_2
+				add_trait_no_notify = leader_trait_federal_joint_navy_2
+				add_trait_no_notify = leader_trait_bureaucratic
+				add_trait_no_notify = subclass_official_delegate
+			}
+			every_owned_fleet = {
+				limit = { has_fleet_flag = dmj_reinhard_battleform }
+				destroy_fleet = {
+					target = this
+					kill_leader = yes
+					destroy_template = no
+				}
+			}
+		}
+		ai_chance = { factor = 5 }
+	}
+
+	# Advisor
+	option = {
+		name = dmj_misc.1.c
+		trigger = { event_target:dmj_daniel = { NOT = { has_trait = subclass_official_economy_councilor } } }
+		hidden_effect = {
+			event_target:dmj_daniel = {
+				unassign_leader = this
+				remove_subclass = yes
+				remove_all_traits = yes
+				change_leader_class = official
+				add_trait_no_notify = leader_trait_chosen
+				add_trait_no_notify = leader_trait_devotion_conduit
+				add_trait_no_notify = leader_trait_supreme_organizer
+				add_trait_no_notify = leader_trait_legendary_military_knowledge_2
+				add_trait_no_notify = leader_trait_legendary_evervigilant_2
+				add_trait_no_notify = leader_trait_legendary_high_king_2
+				add_trait_no_notify = leader_trait_legendary_harsh_ruler
+				add_trait_no_notify = subclass_official_economy_councilor
+			}
+			every_owned_fleet = {
+				limit = { has_fleet_flag = dmj_reinhard_battleform }
+				destroy_fleet = {
+					target = this
+					kill_leader = yes
+					destroy_template = no
+				}
+			}
+		}
+		ai_chance = { factor = 6 }
+	}
+
+	# Battleform
+	option = {
+		name = dmj_misc.1.d
+		trigger = {
+			event_target:dmj_daniel = { NOT = { has_trait = subclass_commander_admiral } }
+			is_at_war = yes
+		}
+		hidden_effect = {
+			create_fleet = {
+				name = "NAME_dmj_Reinhard_Battleform"
+				settings = {
+					can_change_leader = no
+					spawn_debris = no
+					is_boss = yes
+				}
+				effect = {
+					set_owner = root
+					create_ship = {
+						name = "NAME_dmj_Reinhard_Battleform"
+						design = "NAME_dmj_Psionic_Battleform"
+					}
+					set_location = root.capital_scope
+					set_fleet_flag = dmj_psionic_battleform
+					set_fleet_flag = dmj_reinhard_battleform
+					event_target:dmj_daniel = {
+						remove_subclass = yes
+						remove_all_traits = yes
+						change_leader_class = commander
+						add_trait_no_notify = leader_trait_chosen
+						add_trait_no_notify = leader_trait_devotion_conduit_milship
+						add_trait_no_notify = leader_trait_spacebender_dmj
+						add_trait_no_notify = leader_trait_trickster_2
+						add_trait_no_notify = leader_trait_scout_3
+						add_trait_no_notify = leader_trait_energy_weapon_specialist
+						add_trait_no_notify = leader_trait_micromanager
+						add_trait_no_notify = subclass_commander_admiral
+					}
+					set_leader = event_target:dmj_daniel
+					dmj_give_battleform_buffs_effect = yes
+				}
+			}
+		}
+		ai_chance = { factor = 100 }
+	}
+}
+
+situation_event = { # Select from a random list of unrest events to execute on a random planet
+	id = dmj_misc.2
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			any_owned_planet = {
+				is_under_colonization = no
+				has_ground_combat = no
+				is_occupied_flag = no
+				OR = {
+					leader = {
+						has_trait = leader_trait_dmj_reinhardist_devotee
+					}
+					sector = {
+						leader = {
+							has_trait = leader_trait_dmj_reinhardist_devotee
+						}
+					}
+					has_building = dmj_reinhardist_temple
+					pop_percentage = {
+						percentage >= 0.25
+						limit = {
+							exists = pop_faction
+							pop_faction = { is_same_value = root.target }
+						}
+						exclude = { can_think = no }
+					}
+				}
+			}
+		}
+	}
+	immediate = {
+		owner = {
+			random_owned_planet = {
+				limit = {
+					is_under_colonization = no
+					has_ground_combat = no
+					is_occupied_flag = no
+					OR = {
+						leader = {
+							has_trait = leader_trait_dmj_reinhardist_devotee
+						}
+						sector = {
+							leader = {
+								has_trait = leader_trait_dmj_reinhardist_devotee
+							}
+						}
+						has_building = dmj_reinhardist_temple
+						pop_percentage = {
+							percentage >= 0.25
+							limit = {
+								exists = pop_faction
+								pop_faction = { is_same_value = root.target }
+							}
+							exclude = { can_think = no }
+						}
+					}
+				}
+				if = {
+					limit = {
+						root = { situation_progress < 30 }
+					}
+					random_list = {
+						33 = {
+							planet_event = { id = unrest.120 }
+						}
+						33 = {
+							planet_event = { id = unrest.115 }
+						}
+						33 = {
+							planet_event = { id = unrest.150 }
+						}
+					}
+				}
+				else = {
+					random_list = {
+						75 = {
+							random_list = {
+								33 = {
+									planet_event = { id = unrest.120 }
+								}
+								33 = {
+									planet_event = { id = unrest.115 }
+								}
+								33 = {
+									planet_event = { id = unrest.150 }
+								}
+							}
+						}
+						25 = {
+							modifier = {
+								factor = 0
+								has_planet_flag = recent_unrest_event
+							}
+							modifier = {
+								factor = 5
+								planet_stability < @stabilitylevel2
+							}
+							random_list = {
+								33 = {
+									planet_event = { id = dmj_misc.21 }
+								}
+								33 = {
+									planet_event = { id = dmj_misc.22 }
+								}
+								33 = {
+									modifier = {
+										factor = 0
+										OR = {
+											leader = {
+												has_trait = leader_trait_dmj_reinhardist_devotee
+											}
+											sector = {
+												leader = {
+													has_trait = leader_trait_dmj_reinhardist_devotee
+												}
+											}
+											has_building = dmj_reinhardist_temple
+											pop_percentage = {
+												percentage > 0.4
+												limit = {
+													exists = pop_faction
+													pop_faction = { is_pop_faction_type = reinhardist }
+												}
+												exclude = { can_think = no }
+											}
+										}
+									}
+									planet_event = { id = dmj_misc.23 }
+								}
+							}
+						}
+					}
+				}
+			}			
+		}
+	}
+}
+
+planet_event = { # Literally just a copy-paste of unrest.101 with different scoping and loc
+	id = dmj_misc.21
+	title = unrest.101.name
+	desc = dmj_misc.21.desc
+	picture = GFX_evt_night_raid
+	show_sound = event_air_raid_siren
+	location = root
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			is_country_type = default
+			NOT = { has_ethic = ethic_gestalt_consciousness }
+		}
+		root = {
+			is_under_colonization = no
+			has_ground_combat = no
+			is_occupied_flag = no
+			OR = {
+				leader = {
+					has_trait = leader_trait_dmj_reinhardist_devotee
+				}
+				sector = {
+					leader = {
+						has_trait = leader_trait_dmj_reinhardist_devotee
+					}
+				}
+				has_building = dmj_reinhardist_temple
+				pop_percentage = {
+					percentage >= 0.25
+					limit = {
+						exists = pop_faction
+						pop_faction = { is_pop_faction_type = reinhardist }
+					}
+					exclude = { can_think = no }
+				}
+			}
+			NOT = { has_planet_flag = recent_unrest_event }
+		}
+	}
+
+	immediate = {
+		root = {
+			add_modifier = {
+				modifier = minor_terrorist_action
+				days = 3600 # 10 years
+			}
+			set_timed_planet_flag = {
+				flag = recent_unrest_event
+				days = @unrest_event_cooldown
+			}
+		}
+	}
+
+	option = {
+		name = UNFORTUNATE
+		tooltip = {
+			root = {
+				add_modifier = {
+					modifier = minor_terrorist_action
+					days = 3600 # 10 years
+				}
+			}
+		}
+	}
+}
+
+planet_event = { # Literally just a copy-paste of unrest.105 with different scoping and loc
+	id = dmj_misc.22
+	title = unrest.105.name
+	desc = dmj_misc.22.desc
+	picture = GFX_evt_night_raid
+	show_sound = event_air_raid_siren
+	location = root
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			is_country_type = default
+			NOT = { has_ethic = ethic_gestalt_consciousness }
+		}
+		root = {
+			is_under_colonization = no
+			has_orbital_bombardment = no
+			has_ground_combat = no
+			is_occupied_flag = no
+			OR = {
+				leader = {
+					has_trait = leader_trait_dmj_reinhardist_devotee
+				}
+				sector = {
+					leader = {
+						has_trait = leader_trait_dmj_reinhardist_devotee
+					}
+				}
+				has_building = dmj_reinhardist_temple
+				pop_percentage = {
+					percentage >= 0.25
+					limit = {
+						exists = pop_faction
+						pop_faction = { is_pop_faction_type = reinhardist }
+					}
+					exclude = { can_think = no }
+				}
+			}
+			NOT = { has_planet_flag = recent_unrest_event }
+		}
+	}
+
+	immediate = {
+		root = {
+			add_modifier = {
+				modifier = major_terrorist_action
+				days = 3600 # 10 years
+			}
+			set_timed_planet_flag = {
+				flag = recent_unrest_event
+				days = @unrest_event_cooldown
+			}
+		}
+	}
+
+	option = {
+		name = UNFORTUNATE
+		tooltip = {
+			root = {
+				add_modifier = {
+					modifier = major_terrorist_action
+					days = 3600 # 10 years
+				}
+			}
+		}
+	}
+}
+
+planet_event = { # Literally just a copy-paste of unrest.110 with different scoping and loc
+	id = dmj_misc.23
+	title = unrest.110.name
+	desc = dmj_misc.23.desc
+	picture = GFX_evt_announcement
+	show_sound = event_announcement
+	location = root
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			is_country_type = default
+			NOT = { has_ethic = ethic_gestalt_consciousness }
+		}
+		root = {
+			is_under_colonization = no
+			has_orbital_bombardment = no
+			has_ground_combat = no
+			is_occupied_flag = no
+			pop_percentage = {
+				percentage >= 0.25
+				limit = {
+					exists = pop_faction
+					pop_faction = { is_pop_faction_type = reinhardist }
+				}
+				exclude = { can_think = no }
+			}
+			pop_percentage = {
+				percentage <= 0.4
+				limit = {
+					exists = pop_faction
+					pop_faction = { is_pop_faction_type = reinhardist }
+				}
+				exclude = { can_think = no }
+			}
+			NOR = {
+				leader = {
+					has_trait = leader_trait_dmj_reinhardist_devotee
+				}
+				sector = {
+					leader = {
+						has_trait = leader_trait_dmj_reinhardist_devotee
+					}
+				}
+				has_building = dmj_reinhardist_temple
+			}
+		}
+	}
+
+	immediate = {
+		set_situation_flag = random_event_happened
+		target = {
+			add_modifier = {
+				modifier = riots_averted
+				days = 3600 # 10 years
+			}
+			set_timed_planet_flag = {
+				flag = recent_unrest_event
+				days = @unrest_event_cooldown
+			}
+		}
+	}
+
+	option = {
+		name = GOOD
+		tooltip = {
+			target = {
+				add_modifier = {
+					modifier = riots_averted
+					days = 3600 # 10 years
+				}
+			}
+		}
+	}
+}
+
+country_event = { # Deploy Reinhard if you have him as a ruler
+	id = dmj_misc.3
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		create_fleet = {
+			name = "NAME_dmj_Reinhard_Battleform"
+			settings = {
+				can_change_leader = no
+				spawn_debris = no
+				is_boss = yes
+			}
+			effect = {
+				set_owner = root
+				create_ship = {
+					name = "NAME_dmj_Reinhard_Battleform"
+					design = "NAME_dmj_Psionic_Battleform"
+				}
+				set_location = root.capital_scope
+				set_fleet_flag = dmj_psionic_battleform
+				set_fleet_flag = dmj_reinhard_battleform
+				event_target:dmj_daniel = {
+       					clone_leader = {
+						target = ruler
+						class = commander
+						effect = {
+							remove_subclass = yes
+							remove_all_traits = yes
+							add_trait_no_notify = leader_trait_chosen
+							add_trait_no_notify = leader_trait_devotion_conduit_milship
+							add_trait_no_notify = leader_trait_spacebender_dmj
+							add_trait_no_notify = leader_trait_trickster_2
+							add_trait_no_notify = leader_trait_scout_3
+							add_trait_no_notify = leader_trait_energy_weapon_specialist
+							add_trait_no_notify = leader_trait_micromanager
+							add_trait_no_notify = subclass_commander_admiral
+							save_global_event_target_as = dmj_daniel_clone
+						}
+					}
+				}
+				set_leader = event_target:dmj_daniel_clone
+			}
+		}
+	}
+}
+
+country_event = { Kill Reinhard if his battleform is destroyed
+	id = dmj_misc.4
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		fromfrom = { has_fleet_flag = dmj_reinhard_battleform }
+	}
+
+	immediate = {
+		event_target:dmj_daniel_clone = {
+			kill_leader = {
+				show_notification = no
+				fire = yes
+			}
+		}
+		event_target:dmj_daniel = {
+			kill_leader = {
+				show_notification = yes
+			}
+		}
+	}
+}
+
+country_event = { Destroy the battleform and kill the clone if Reinhard dies
+	id = dmj_misc.5
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		from = {
+			OR = {
+				is_same_value = event_target:dmj_daniel
+				is_same_value = event_target:dmj_daniel_clone
+			}
+		}
+	}
+
+	immediate = {
+		event_target:dmj_daniel_clone = {
+			kill_leader = {
+				show_notification = no
+				fire = yes
+			}
+		}
+		event_target:dmj_daniel = {
+			kill_leader = {
+				show_notification = no
+			}
+		}
+		every_owned_fleet = {
+			limit = { has_fleet_flag = dmj_reinhard_battleform }
+			destroy_fleet = {
+				target = this
+				kill_leader = yes
+				destroy_template = no
+			}
+		}
+	}
+}
+
+country_event = { Destroy the battleform and kill the clone if Reinhard is fired
+	id = dmj_misc.6
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		from = {
+			OR = {
+				is_same_value = event_target:dmj_daniel
+				is_same_value = event_target:dmj_daniel_clone
+			}
+			ruler = {
+				NOT = { is_same_value = event_target:dmj_daniel }
+			}
+		}
+	}
+
+	immediate = {
+		event_target:dmj_daniel_clone = {
+			kill_leader = {
+				show_notification = no
+				fire = yes
+			}
+		}
+		event_target:dmj_daniel = {
+			kill_leader = {
+				show_notification = no
+			}
+		}
+		every_owned_fleet = {
+			limit = { has_fleet_flag = dmj_reinhard_battleform }
+			destroy_fleet = {
+				target = this
+				kill_leader = yes
+				destroy_template = no
+			}
+		}
+	}
+}
+
+country_event = {
+	id = dmj_misc.7
+	title = "dmj_misc.7.name"
+	desc = "dmj_misc.7.desc"
+	is_triggered_only = yes
+
+	picture = GFX_evt_coronation
+	show_sound = event_coronation
+
+	option = {
+		name = "dmj_misc.7.a"
+	}
+}
+
+country_event = {
+	id = dmj_misc.8
+	title = "dmj_misc.8.name"
+	desc = "dmj_misc.8.desc"
+	is_triggered_only = yes
+
+	picture = GFX_evt_coronation
+	show_sound = event_coronation
+
+	option = {
+		name = "dmj_misc.8.a"
+	}
+}
+
+country_event = { Kill Faulkner if his battleform is destroyed
+	id = dmj_misc.9
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		fromfrom = { has_fleet_flag = dmj_faulkner_battleform }
+	}
+
+	immediate = {
+		event_target:dmj_michael_clone = {
+			kill_leader = {
+				show_notification = no
+				fire = yes
+			}
+		}
+		event_target:dmj_michael = {
+			kill_leader = {
+				show_notification = yes
+			}
+		}
+	}
+}
+
+country_event = { Destroy the battleform and kill the clone if Faulkner dies
+	id = dmj_misc.10
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		from = {
+			OR = {
+				is_same_value = event_target:dmj_michael
+				is_same_value = event_target:dmj_michael_clone
+			}
+		}
+	}
+
+	immediate = {
+		event_target:dmj_michael_clone = {
+			kill_leader = {
+				show_notification = no
+				fire = yes
+			}
+		}
+		event_target:dmj_michael = {
+			kill_leader = {
+				show_notification = no
+			}
+		}
+		every_owned_fleet = {
+			limit = { has_fleet_flag = dmj_faulkner_battleform }
+			destroy_fleet = {
+				target = this
+				kill_leader = yes
+				destroy_template = no
+			}
+		}
+	}
+}
+
+country_event = { Destroy the battleform and kill the clone if Faulkner is fired
+	id = dmj_misc.11
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		from = {
+			OR = {
+				is_same_value = event_target:dmj_michael
+				is_same_value = event_target:dmj_michael_clone
+			}
+			ruler = {
+				NOT = { is_same_value = event_target:dmj_michael }
+			}
+		}
+	}
+
+	immediate = {
+		event_target:dmj_michael_clone = {
+			kill_leader = {
+				show_notification = no
+				fire = yes
+			}
+		}
+		event_target:dmj_michael = {
+			kill_leader = {
+				show_notification = no
+			}
+		}
+		every_owned_fleet = {
+			limit = { has_fleet_flag = dmj_faulkner_battleform }
+			destroy_fleet = {
+				target = this
+				kill_leader = yes
+				destroy_template = no
+			}
+		}
+	}
+}

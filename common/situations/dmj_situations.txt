@@ -1,0 +1,194 @@
+# dmj_situations
+# By Jin2188
+
+situation_dmj_reinhardist_rebellion = {
+	picture = GFX_evt_announcement
+	category = negative
+
+	complete_icon = GFX_situation_outcome_revolt
+	complete_icon_frame = GFX_situation_outcome_frame_red
+
+	on_start = {
+		target = {
+			set_variable = { which = dmj_reb_upkeep value = 0 }
+			every_owned_pop = {
+				prev = { change_variable = { which = dmj_reb_upkeep value = 1 } }
+			}
+		}
+	}
+
+	on_progress_complete = {
+		custom_tooltip = situation_dmj_reinhardist_rebellion_end
+	}
+
+	on_fail = {
+		custom_tooltip = situation_dmj_reinhardist_rebellion_failed
+	}
+
+	on_abort = {
+		if = {
+			limit = { exists = target }
+			target = {
+				remove_pop_faction_flag = dmj_reinhardists_radicalizing
+				clear_variable = dmj_reb_upkeep
+			}
+			target.owner = { set_timed_country_flag = { flag = dmj_reinhardist_rebellion_cooldown years = 10 } }
+		}
+	}
+
+	abort_trigger = {
+		OR = {
+			situation_progress < 0
+			NOT = { exists = target }
+			target = { support < 0.1 }
+			target = { has_pop_faction_flag = dmj_reinhardists_rebelled }
+			target.owner = { has_country_flag = dmj_reinhardists_revolting }
+		}
+	}
+
+	start_value = 0
+
+	stages = {
+		dmj_reb_situation_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_blue
+			modifier = {
+				pop_ethic_authoritarian_attraction_mult = 0.5
+				pop_ethic_spiritualist_attraction_mult = 0.5
+				pop_ethic_militarist_attraction_mult = 0.5
+				pop_ethic_egalitarian_attraction_mult = -0.25
+				pop_ethic_materialist_attraction_mult = -0.25
+				pop_ethic_pacifist_attraction_mult = -0.25
+			}
+			end = 30
+		}
+		dmj_reb_situation_2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_red
+			modifier = {
+				pop_ethic_authoritarian_attraction_mult = 1
+				pop_ethic_spiritualist_attraction_mult = 1
+				pop_ethic_militarist_attraction_mult = 1
+				pop_ethic_egalitarian_attraction_mult = -0.5
+				pop_ethic_materialist_attraction_mult = -0.5
+				pop_ethic_pacifist_attraction_mult = -0.5
+			}
+			end = 90
+		}
+		dmj_reb_situation_3 = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_red
+			modifier = {
+				pop_ethic_authoritarian_attraction_mult = 2
+				pop_ethic_spiritualist_attraction_mult = 2
+				pop_ethic_militarist_attraction_mult = 2
+				pop_ethic_egalitarian_attraction_mult = -0.75
+				pop_ethic_materialist_attraction_mult = -0.75
+				pop_ethic_pacifist_attraction_mult = -0.75
+			}
+			end = 100
+		}
+	}
+
+	approach = {
+		name = dmj_approach_do_nothing
+		icon = GFX_situation_approach_this_is_fine
+		icon_background = GFX_situation_approach_bg_yellow
+		default = yes
+
+		ai_weight = {
+			base = 1
+		}
+	}
+
+	approach = {
+		name = dmj_approach_defamation_campaign
+		icon = GFX_situation_approach_influence
+		icon_background = GFX_situation_approach_bg_green
+		on_select = { custom_tooltip = dmj_slowed_radical_tooltip }
+		resources = {
+			category = situations
+			upkeep = {
+				unity = 2.5
+				energy = 1
+				multiplier = target.dmj_reb_upkeep
+			}
+		}
+		target_modifier = { pop_happiness = -0.15 } # They don't like you badmouthing their Prophet
+		ai_weight = {
+			base = 2
+		}
+		potential = {
+			situation_progress >= 30
+		}
+	}
+
+	approach = {
+		name = dmj_approach_reinhardist_repression
+		icon = GFX_situation_approach_whip
+		icon_background = GFX_situation_approach_bg_red
+		on_select = { custom_tooltip = dmj_slowed_radical_tooltip_2 }
+		resources = {
+			category = situations
+			upkeep = {
+				unity = 5
+				energy = 2.5
+
+				multiplier = target.dmj_reb_upkeep
+			}
+		}
+		target_modifier = { pop_happiness = -0.3 }
+		ai_weight = {
+			base = 1
+		}
+		potential = {
+			owner = { is_egalitarian = no }
+			situation_progress >= 30
+		}
+	}
+
+	on_monthly = {
+		events = {
+			dmj.12			# Possible Revolt/Civil War
+	  	}
+	    	random_events = {
+			90 = 0
+			10 = dmj_misc.2
+		}
+	}
+
+	monthly_progress = {
+		base = 0
+		modifier = {
+			desc = dmj_radicalisation
+			add = target.value:dmj_faction_rebellion_support
+			AND = {
+				situation_progress < 90
+				target = { faction_approval < 0.5 }
+			}
+		}
+
+		modifier = {
+			desc = dmj_approach_defamation_campaign
+			add = -1
+			current_situation_approach = dmj_approach_defamation_campaign
+			situation_progress < 90
+		}
+
+		modifier = {
+			desc = dmj_approach_reinhardist_repression
+			add = -2
+			current_situation_approach = dmj_approach_reinhardist_repression
+			situation_progress < 90
+		}
+
+		modifier = {
+			desc = dmj_derad
+			subtract = target.value:dmj_faction_derad_value
+			AND = {
+				situation_progress < 90
+				target = { faction_approval > 0.5 }
+			}
+		}
+	}
+}

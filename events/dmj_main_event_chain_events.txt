@@ -1,0 +1,1311 @@
+# dmj_main_event_chain_events
+# By Jin2188
+
+namespace = dmj
+
+fleet_event = { # Detect when fleet enters system
+	id = dmj.1
+	title = "dmj.1.name"
+	desc = "dmj.1.desc"
+	is_triggered_only = yes
+
+	picture = GFX_evt_zro_3
+	show_sound = event_red_alert
+
+	trigger = {
+		FROM = {
+			has_star_flag = dmj_spawn_system
+			NOT = { has_star_flag = dmj_michael_imprisoned }
+		}
+		owner = {
+			dmj_trigger = yes
+			NOT = { has_country_flag = entered_dmj_spawn_system }
+			NOT = { has_country_flag = dmj_spawn_system_approved }
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = { NOT = { exists = event_target:shroud_country } }
+			create_country = {
+				name = "NAME_Creatures_of_the_Shroud"
+				type = shroud_spirits
+				flag = {
+					icon = {
+						category = "special"
+						file = "the_shroud.dds"
+					}
+					background= {
+						category = "backgrounds"
+						file = "00_solid.dds"
+					}
+					colors={
+						"dark_purple"
+						"black"
+						"null"
+						"null"
+					}
+				}
+			}
+			last_created_country = {
+				establish_communications_no_message = root.owner
+				save_global_event_target_as = shroud_country
+			}
+		}
+		create_fleet = {
+			name = "NAME_dmj_Shroud_Sentinel"
+			settings = {
+				spawn_debris = no
+				is_boss = yes
+			}
+			effect = {
+				set_owner = event_target:shroud_country
+				create_ship = {
+					name = "NAME_dmj_Shroud_Sentinel"
+					design = "NAME_dmj_Shroud_Sentinel"
+				}
+				set_location = event_target:dmj_bastion_1
+				set_fleet_stance = aggressive
+				set_aggro_range_measure_from = return_point
+				set_aggro_range = 300
+				set_fleet_flag = dmj_sentinel
+			}
+		}
+		create_fleet = {
+			name = "NAME_dmj_Shroud_Sentinel"
+			settings = {
+				spawn_debris = no
+				is_boss = yes
+			}
+			effect = {
+				set_owner = event_target:shroud_country
+				create_ship = {
+					name = "NAME_dmj_Shroud_Sentinel"
+					design = "NAME_dmj_Shroud_Sentinel"
+				}
+				set_location = event_target:dmj_bastion_2
+				set_fleet_stance = aggressive
+				set_aggro_range_measure_from = return_point
+				set_aggro_range = 300
+				set_fleet_flag = dmj_sentinel
+			}
+		}
+		event_target:shroud_country = {
+			set_variable = {
+				which = dmj_alive_sentinels_count
+				value = 0
+			}
+			every_owned_fleet = {
+				limit = { has_fleet_flag = dmj_sentinel }
+				owner = {
+					change_variable = {
+						which = dmj_alive_sentinels_count
+						value = 1
+					}
+				}
+			}
+		}
+		owner = {
+			set_country_flag = entered_dmj_spawn_system
+			save_global_event_target_as = dmj_trespasser
+		}
+	}
+
+	option = {
+		name = BATTLESTATIONS
+	}
+}
+
+country_event = { # Detect when the Sentinels are defeated
+	id = dmj.2
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = event_target:shroud_country
+		is_same_value = event_target:shroud_country
+		fromfrom = { has_fleet_flag = dmj_sentinel }
+	}
+	immediate = {
+		change_variable = {
+			which = dmj_alive_sentinels_count
+			value = -1
+		}
+		if = {
+			limit = {
+				check_variable = {
+					which = dmj_alive_sentinels_count
+					value = 0
+				}
+			}
+			if = {
+				limit = {
+					from = { is_same_value = event_target:dmj_trespasser }
+				}
+				from = {
+					country_event = { id = dmj.3 }
+					clear_global_event_target = dmj_trespasser
+				}
+			}
+			country_event = { id = dmj.4 days = 180 }
+		}
+	}
+}
+
+country_event = { # Notify you that it's not over
+	id = dmj.3
+	title = "dmj.3.name"
+	desc = "dmj.3.desc"
+	is_triggered_only = yes
+
+	picture = GFX_evt_zro_2
+	show_sound = event_psionic
+
+	trigger = {
+		NOT = { has_country_flag = dmj_sentinels_defeated_once }
+	}
+
+	immediate = {
+		set_country_flag = dmj_sentinels_defeated_once
+	}
+
+	option = {
+		name = dmj.3.a
+		if = {
+			limit = { exists = event_target:dmj_bastion_1 }
+			event_target:dmj_bastion_1 = {
+				enable_special_project = {
+					name = "dmj_BASTION_BOMBARDMENT"
+					location = this
+					owner = root
+				}
+			}
+		}
+		if = {
+			limit = { exists = event_target:dmj_bastion_2 }
+			event_target:dmj_bastion_2 = {
+				enable_special_project = {
+					name = "dmj_BASTION_BOMBARDMENT"
+					location = this
+					owner = root
+				}
+			}
+		}
+		custom_tooltip = dmj_sentinels_six_months # So that you aren't caught off guard by them respawning
+	}
+}
+
+country_event = { # Respawn the Sentinels
+	id = dmj.4
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = { exists = event_target:dmj_bastion_1 }
+			create_fleet = {
+				name = "NAME_dmj_Shroud_Sentinel"
+				settings = {
+					spawn_debris = no
+					is_boss = yes
+				}
+				effect = {
+					set_owner = event_target:shroud_country
+					create_ship = {
+						name = "NAME_dmj_Shroud_Sentinel"
+						design = "NAME_dmj_Shroud_Sentinel"
+					}
+					set_location = event_target:dmj_bastion_1
+					set_fleet_stance = aggressive
+					set_aggro_range_measure_from = return_point
+					set_aggro_range = 300
+					set_fleet_flag = dmj_sentinel
+				}
+			}
+		}
+		if = {
+			limit = { exists = event_target:dmj_bastion_2 }
+			create_fleet = {
+				name = "NAME_dmj_Shroud_Sentinel"
+				settings = {
+					spawn_debris = no
+					is_boss = yes
+				}
+				effect = {
+					set_owner = event_target:shroud_country
+					create_ship = {
+						name = "NAME_dmj_Shroud_Sentinel"
+						design = "NAME_dmj_Shroud_Sentinel"
+					}
+					set_location = event_target:dmj_bastion_2
+					set_fleet_stance = aggressive
+					set_aggro_range_measure_from = return_point
+					set_aggro_range = 300
+					set_fleet_flag = dmj_sentinel
+				}
+			}
+		}
+	}
+}
+
+ship_event = { # Destroy the planet and check for remaining bastions
+	id = dmj.5
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				exists = event_target:dmj_bastion_1
+				fromfrom = { is_same_value = event_target:dmj_bastion_1 }
+			}
+			fromfrom = {
+				clear_global_event_target = dmj_bastion_1
+				change_pc = pc_shattered
+				clear_deposits = yes
+				clear_planet_modifiers = yes
+				prevent_anomaly = yes
+			}
+		}
+		else if = {
+			limit = {
+				exists = event_target:dmj_bastion_2
+				fromfrom = { is_same_value = event_target:dmj_bastion_2 }
+			}
+			fromfrom = {
+				clear_global_event_target = dmj_bastion_2
+				change_pc = pc_shattered
+				clear_deposits = yes
+				clear_planet_modifiers = yes
+				prevent_anomaly = yes
+			}
+		}
+
+		if = {
+			limit = {
+				OR = {
+					exists = event_target:dmj_bastion_1
+					exists = event_target:dmj_bastion_2
+				}
+			}
+			owner = { country_event = { id = dmj.6 } }
+		}
+		else = {
+			owner = { country_event = { id = dmj.7 } }
+		}
+	}
+}
+
+country_event = { # One bastion destroyed
+	id = dmj.6
+	title = "dmj.6.name"
+	desc = "dmj.6.desc"
+	is_triggered_only = yes
+
+	picture = GFX_evt_large_explosion
+	show_sound = event_air_raid_siren
+
+	option = {
+		name = dmj.6.a
+	}
+}
+
+country_event = { # Both bastions destroyed
+	id = dmj.7
+	title = "dmj.7.name"
+	desc = "dmj.7.desc"
+	is_triggered_only = yes
+
+	picture = GFX_evt_supernova
+	show_sound = event_air_raid_siren
+
+	immediate = {
+		every_system = {
+			limit = { has_star_flag = dmj_spawn_system }
+			set_star_class = sc_rift_star
+			every_system_ambient_object = {
+				limit = {
+					# Preserve Unbidden crisis effects
+					NOR = {
+						has_ambient_object_flag = extradimensional_system_effect
+						has_ambient_object_flag = extradimensional_system_effect_2
+					}
+				}
+				destroy_ambient_object = this
+			}
+			every_system_planet = {
+				limit = { is_star = yes }
+				create_ambient_object = {
+					type = "star_explosion"
+					play_animation_once = yes
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 0
+						angle = random
+					}
+				}
+				create_ambient_object = {
+					type = "extradimensional_2"
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 0
+						angle = random
+					}
+				}
+				set_planet_size = 10
+				change_pc = pc_rift_star
+				clear_deposits = yes
+				add_deposit = d_astral_threads_deposit_3
+			}
+		}
+		create_country = {
+			name = "NAME_dmj_daniel"
+			type = paragon_event_country
+			flag = {
+				icon = {
+					category = "special"
+					file = "unknown.dds"
+				}
+				background = {
+					category = "backgrounds"
+					file = "00_solid.dds"
+				}
+				colors = {
+					"yellow"
+					"yellow"
+					"null"
+					"null"
+				}
+			}
+			effect = {
+				save_global_event_target_as = dmj_daniel_country
+			}
+		}
+		event_target:dmj_daniel_country = {
+			set_country_flag = dmj_daniel_country_flag
+			set_faction_hostility = {
+				target = root.owner
+				set_hostile = no
+				set_neutral = yes
+				set_friendly = no
+			}
+			create_species = {
+				name = NAME_Human
+				plural = NAME_Human_plural
+				class = "HUM"
+				portrait = dmj_daniel
+				traits = {
+					trait = "trait_adaptive"
+					trait = "trait_nomadic"
+					trait = "trait_wasteful"
+				}
+			}
+			last_created_species = {
+				save_event_target_as = dmj_daniel_species
+			}
+			create_leader = {
+				class = official
+				species = event_target:dmj_daniel_species
+				name = "NAME_dmj_daniel"
+				skill = 1
+				gender = male
+				hide_age = yes
+				event_leader = yes
+				skip_background_generation = yes
+				background_ethic = ethic_authoritarian
+				background_planet = event_target:sol_system_earth
+				custom_catch_phrase = dmj_daniel_catch_phrase
+				custom_description = dmj_daniel_desc
+				randomize_traits = no
+				effect = {
+					set_leader_flag = legendary_leader
+				}
+			}
+			last_created_leader = {
+				set_leader_flag = dmj_daniel
+				set_leader_flag = immune_to_negative_traits
+				change_leader_portrait = dmj_daniel
+				save_global_event_target_as = dmj_daniel
+				set_owner = event_target:dmj_daniel_country
+				add_skill_without_trait_selection = 9
+				remove_all_traits = yes
+				add_trait = leader_trait_chosen
+				add_trait = leader_trait_devotion_conduit
+				add_trait = leader_trait_supreme_organizer
+				add_trait = leader_trait_legendary_military_knowledge_2
+				add_trait = leader_trait_legendary_evervigilant_2
+				add_trait = leader_trait_legendary_high_king_2
+				add_trait = leader_trait_legendary_harsh_ruler
+				add_trait = subclass_official_economy_councilor
+				set_immortal = yes
+				set_variable = { which = dmj_devotion_value_leader value = 0 }
+			}
+		}
+		set_country_flag = dmj_freed_reinhard
+		set_global_flag = dmj_reinhard_free
+	}
+	option = {
+		name = ONSCREEN
+		country_event = { id = dmj.8 }
+	}
+	
+}
+
+country_event = {
+	id = dmj.8
+	title = "dmj.8.name"
+	desc = "dmj.8.desc"
+	is_triggered_only = yes
+	
+	picture = GFX_leader_recruitment_bg_legendary_beholder
+	event_window_type = leader_recruit
+	notification_event_icon = default
+	show_sound = dmj_daniel_greetings
+
+	picture_event_data = {
+		portrait = event_target:dmj_daniel
+	}
+
+	option = {
+		name = DISMISS
+		tag = dismiss_leader
+		sound = "dmj_daniel_dismiss"
+
+		hidden_effect = {
+			event_target:dmj_daniel = {
+				kill_leader = {
+					fire = yes
+					show_notification = no
+				}
+			}
+			event_target:dmj_daniel_country = {
+				destroy_country = yes
+			}
+		}
+	}
+	option = {
+		name = dmj.8.a
+		response_text = dmj.8.a.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = dmj.8.b
+		response_text = dmj.8.b.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = dmj.8.c
+		response_text = dmj.8.c.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = dmj.8.commissioner
+		response_text = dmj.8.commissioner.response
+		is_dialog_only = yes
+
+		allow = {
+			hidden_trigger = {
+				NOT = {
+					event_target:dmj_daniel = { has_trait = subclass_commander_governor }
+				}
+			}
+		}
+
+		hidden_effect = {
+			event_target:dmj_daniel = {
+				remove_subclass = yes
+				remove_all_traits = yes
+				change_leader_class = commander
+				add_trait = leader_trait_chosen
+				add_trait = leader_trait_devotion_conduit
+				add_trait = leader_trait_arbiter
+				add_trait = leader_trait_iron_fist_2
+				add_trait = leader_trait_venerated_2
+				add_trait = leader_trait_bureaucrat_2
+				add_trait = leader_trait_sadistic
+				add_trait = subclass_commander_governor
+			}
+		}
+	}
+	option = {
+		name = dmj.8.delegate
+		response_text = dmj.8.delegate.response
+		is_dialog_only = yes
+
+		allow = {
+			hidden_trigger = {
+				NOT = {
+					event_target:dmj_daniel = { has_trait = subclass_official_delegate }
+				}
+			}
+		}
+
+		hidden_effect = {
+			event_target:dmj_daniel = {
+				remove_subclass = yes
+				remove_all_traits = yes
+				change_leader_class = official
+				add_trait = leader_trait_chosen
+				add_trait = leader_trait_devotion_conduit
+				add_trait = leader_trait_diplo_weight
+				add_trait = leader_trait_resolution_category_divinity_focus_2
+				add_trait = leader_trait_resolution_category_mutualdefense_focus_2
+				add_trait = leader_trait_federal_joint_navy_2
+				add_trait = leader_trait_bureaucratic
+				add_trait = subclass_official_delegate
+			}
+		}
+	}
+	option = {
+		name = dmj.8.advisor
+		response_text = dmj.8.advisor.response
+		is_dialog_only = yes
+
+		allow = {
+			hidden_trigger = {
+				NOT = {
+					event_target:dmj_daniel = { has_trait = subclass_official_economy_councilor }
+				}
+			}
+		}
+
+		hidden_effect = {
+			event_target:dmj_daniel = {
+				remove_subclass = yes
+				remove_all_traits = yes
+				change_leader_class = official
+				add_trait = leader_trait_chosen
+				add_trait = leader_trait_devotion_conduit
+				add_trait = leader_trait_supreme_organizer
+				add_trait = leader_trait_legendary_military_knowledge_2
+				add_trait = leader_trait_legendary_evervigilant_2
+				add_trait = leader_trait_legendary_high_king_2
+				add_trait = leader_trait_legendary_harsh_ruler
+				add_trait = subclass_official_economy_councilor
+			}
+		}
+	}
+	option = {
+		name = HIRE
+		tag = hire_leader
+		sound = "dmj_daniel_hire"
+
+		hidden_effect = {
+			event_target:dmj_daniel = {
+				set_owner = root
+			}
+			random_owned_planet = {
+				limit = {
+					is_variable_set = paragon_memory_vault
+				}
+				change_variable = {
+					which = paragon_memory_vault
+					value = 1
+				}
+			}
+			set_country_flag = owns_reinhard
+			set_country_flag = chosen_one_ruler_event
+			country_event = { id = dmj_sol.1 days = 90 random = 270 }
+			if = {
+				limit = {
+					has_communications = event_target:dmj_sol_country
+				}
+				country_event = { id = dmj_sol.7 days = 1 random = 9 }
+			}
+		}
+		create_message = {
+			type = MESSAGE_RECRUITED_LEADER
+			localization =  MESSAGE_RECRUITED_LEADER_DESC
+			days = @toast_message_days
+			target = event_target:dmj_daniel
+			variable = {
+				type = name
+				localization = LEADER
+				scope = event_target:dmj_daniel
+			}
+			variable = {
+				key = "border"
+				value = "GFX_border_legendary"
+			}
+		}
+	}
+}
+
+pop_faction_event = { # Setup Reinhardist faction
+	id = dmj.9
+	title = "dmj.9.name"
+	desc = "dmj.9.desc"
+	is_triggered_only = yes
+
+	picture = GFX_evt_alien_propaganda
+	show_sound = event_announcement
+
+	option = {
+		name = DISCONCERTING
+	}
+}
+
+country_event = { # Reinhardist Radicalization Initializer
+	id = dmj.10
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_pop_faction = {
+			is_pop_faction_type = reinhardist
+			support >= 0.3
+			faction_approval <= 0.5
+		}
+		NOR = {
+			has_country_flag = dmj_reinhardist_empire
+			has_country_flag = dmj_reinhardists_radicalizing
+			has_country_flag = dmj_reinhardists_revolting
+			has_country_flag = dmj_reinhardist_rebellion_cooldown
+		}
+	}
+
+	immediate = {
+		random_pop_faction = {
+			limit = {
+				is_pop_faction_type = reinhardist
+				support >= 0.3
+				faction_approval <= 0.5
+			}
+			pop_faction_event = { id = dmj.11 days = 1 random = 359 }
+		}
+	}
+}
+
+pop_faction_event = { # Reinhardist Radicalization
+	id = dmj.11
+	title = "dmj.11.name"
+	desc = "dmj.11.desc"
+	is_triggered_only = yes
+
+	picture = GFX_evt_civil_action
+	show_sound = event_assembly_fight
+
+	trigger = {
+		support >= 0.3
+		faction_approval <= 0.5
+		owner = {
+			NOR = {
+				has_country_flag = dmj_reinhardist_empire
+				has_country_flag = dmj_reinhardists_radicalizing
+				has_country_flag = dmj_reinhardists_revolting
+				has_country_flag = dmj_reinhardist_rebellion_cooldown
+			}
+		}
+	}
+
+	immediate = {
+		owner = {
+			set_country_flag = dmj_reinhardists_radicalizing
+			start_situation = {
+				type = situation_dmj_reinhardist_rebellion
+				target = root
+			}
+		}
+	}
+
+	option = {
+		name = dmj.11.a
+	}
+}
+
+situation_event = {
+	id = dmj.12
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		situation_progress >= 90
+		owner = {
+			any_owned_planet = {
+				is_under_colonization = no
+				is_capital = no
+				has_orbital_bombardment = no
+				has_ground_combat = no
+				is_occupied_flag = no
+				OR = {
+					leader = {
+						has_trait = leader_trait_dmj_reinhardist_devotee
+					}
+					sector = {
+						leader = {
+							has_trait = leader_trait_dmj_reinhardist_devotee
+						}
+					}
+					has_building = dmj_reinhardist_temple
+					pop_percentage = {
+						percentage >= 0.25
+						limit = {
+							exists = pop_faction
+							pop_faction = { is_same_value = root.target }
+						}
+						exclude = { can_think = no }
+					}
+				}
+			}
+		}
+	}
+
+	immediate = {
+		situation_event = { id = dmj.13 days = 1 random = 29 }
+	}
+}
+
+situation_event = {
+	id = dmj.13
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		situation_progress >= 90
+		owner = {
+			any_owned_planet = {
+				is_under_colonization = no
+				is_capital = no
+				has_orbital_bombardment = no
+				has_ground_combat = no
+				is_occupied_flag = no
+				OR = {
+					leader = {
+						has_trait = leader_trait_dmj_reinhardist_devotee
+					}
+					sector = {
+						leader = {
+							has_trait = leader_trait_dmj_reinhardist_devotee
+						}
+					}
+					has_building = dmj_reinhardist_temple
+					pop_percentage = {
+						percentage >= 0.25
+						limit = {
+							exists = pop_faction
+							pop_faction = { is_same_value = root.target }
+						}
+						exclude = { can_think = no }
+					}
+				}
+			}
+		}
+	}
+
+	immediate = {
+		owner = {
+			if = {
+				limit = {
+					any_owned_planet = {
+						OR = {
+							has_planet_flag = planet_earth
+							has_planet_flag = nuked_earth
+						}
+						is_under_colonization = no
+						has_orbital_bombardment = no
+						has_ground_combat = no
+						is_occupied_flag = no
+						OR = {
+							leader = {
+								has_trait = leader_trait_dmj_reinhardist_devotee
+							}
+							sector = {
+								leader = {
+									has_trait = leader_trait_dmj_reinhardist_devotee
+								}
+							}
+							has_building = dmj_reinhardist_temple
+							pop_percentage = {
+								percentage >= 0.25
+								limit = {
+									exists = pop_faction
+									pop_faction = { is_same_value = root.target }
+								}
+								exclude = { can_think = no }
+							}
+						}
+					}
+				}
+				random_owned_planet = {
+					limit = {
+						OR = {
+							has_planet_flag = planet_earth
+							has_planet_flag = nuked_earth
+						}
+						is_under_colonization = no
+						has_orbital_bombardment = no
+						has_ground_combat = no
+						is_occupied_flag = no
+						OR = {
+							leader = {
+								has_trait = leader_trait_dmj_reinhardist_devotee
+							}
+							sector = {
+								leader = {
+									has_trait = leader_trait_dmj_reinhardist_devotee
+								}
+							}
+							has_building = dmj_reinhardist_temple
+							pop_percentage = {
+								percentage >= 0.25
+								limit = {
+									exists = pop_faction
+									pop_faction = { is_same_value = root.target }
+								}
+								exclude = { can_think = no }
+							}
+						}
+					}
+					random = {
+						chance = 10
+						owner = { save_global_event_target_as = dmj_rebellion_originator }
+						owner.species = { save_event_target_as = dmj_original_species }
+						create_reinhardist_rebel_country = yes
+						event_target:dmj_reinhardist_uprising = {
+							establish_communications_no_message = root.owner
+						}
+						save_event_target_as = dmj_rebellion_source_planet
+						root.target = {
+							save_event_target_as = reinhardist_rebellion
+						}
+						root = { situation_event = { id = dmj.14 } }
+					}
+				}
+			}
+			else = {
+				random_owned_planet = {
+					limit = {
+						is_under_colonization = no
+						solar_system = {
+							NOT = { any_system_planet = { is_same_value = root.owner.capital_scope } }
+						}
+						has_orbital_bombardment = no
+						has_ground_combat = no
+						is_occupied_flag = no
+						OR = {
+							leader = {
+								has_trait = leader_trait_dmj_reinhardist_devotee
+							}
+							sector = {
+								leader = {
+									has_trait = leader_trait_dmj_reinhardist_devotee
+								}
+							}
+							has_building = dmj_reinhardist_temple
+							pop_percentage = {
+								percentage >= 0.25
+								limit = {
+									exists = pop_faction
+									pop_faction = { is_same_value = root.target }
+								}
+								exclude = { can_think = no }
+							}
+						}
+					}
+				
+					random = {
+						chance = 10
+						owner = { save_global_event_target_as = dmj_rebellion_originator }
+						owner.species = { save_event_target_as = dmj_original_species }
+						save_event_target_as = dmj_rebellion_source_planet
+						root.target = {
+							save_event_target_as = reinhardist_rebellion
+						}
+						root = { situation_event = { id = dmj.14 } }
+					}
+				}
+			}
+		}
+	}
+}
+
+situation_event = {
+	id = dmj.14
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		event_target:reinhardist_rebellion = {
+			export_trigger_value_to_variable = {
+				trigger = support
+				variable = dmj_reb_support
+			}
+		}
+		event_target:dmj_rebellion_originator = {
+			set_variable = { which = dmj_daniel_country_reb_support value = event_target:reinhardist_rebellion.dmj_reb_support }
+			effect_on_blob = {
+				center = event_target:dmj_rebellion_source_planet.solar_system
+				owned_planets_percentage = event_target:dmj_rebellion_originator.dmj_daniel_country_reb_support
+				planet_limit = {
+					solar_system = {
+						NOT = { has_star_flag = reinhardist_uprising_system_flip }
+					}
+					is_under_colonization = no
+					OR = {
+						solar_system = {
+							NOT = { any_system_planet = { is_same_value = root.owner.capital_scope } }
+						}
+						has_planet_flag = planet_earth
+						has_planet_flag = nuked_earth
+					}
+					has_orbital_bombardment = no
+					has_ground_combat = no
+					is_occupied_flag = no
+					OR = {
+						controller = { is_same_value = event_target:dmj_rebellion_originator }
+						solar_system = {
+							exists = starbase
+							starbase = { owner = { is_same_value = event_target:dmj_rebellion_originator } }
+						}
+					}
+					OR = {
+						leader = {
+							has_trait = leader_trait_dmj_reinhardist_devotee
+						}
+						sector = {
+							leader = {
+								has_trait = leader_trait_dmj_reinhardist_devotee
+							}
+						}
+						has_building = dmj_reinhardist_temple
+						pop_percentage = {
+							percentage >= 0.25
+							limit = {
+								exists = pop_faction
+								pop_faction = { is_same_value = event_target:reinhardist_rebellion }
+							}
+							exclude = { can_think = no }
+						}
+					}
+				}
+				effect = {
+					set_star_flag = reinhardist_uprising_system_flip
+				}
+			}
+			clear_variable = dmj_daniel_country_reb_support
+		}
+		event_target:reinhardist_rebellion = {
+			clear_variable = dmj_reb_support
+		}
+		create_reinhardist_rebel_country = yes
+		event_target:dmj_reinhardist_uprising = {
+			set_graphical_culture = event_target:dmj_rebellion_originator
+			every_country = {
+				limit = {
+					OR = {
+						has_communications = event_target:dmj_rebellion_originator
+						intel_level = {
+							level > low
+							system = event_target:dmj_rebellion_originator.capital_scope.solar_system
+						}
+						any_system = {
+							has_star_flag = reinhardist_uprising_system_flip
+							prev = {
+								intel_level = {
+									level > low
+									system = prev
+								}
+							}
+						}
+					}
+				}
+				establish_communications_no_message = event_target:dmj_reinhardist_uprising
+				establish_contact = { who = event_target:dmj_reinhardist_uprising location = event_target:dmj_rebellion_source_planet }
+			}
+			copy_techs_from = {
+				target = event_target:dmj_rebellion_originator
+			}
+			add_resource = {
+				energy = 20000
+				minerals = 20000
+				food = 20000
+				influence = 800
+				alloys = 10000
+				consumer_goods = 10000
+				rare_crystals = 1000
+				volatile_motes = 1000
+				exotic_gases = 1000
+				sr_dark_matter = 100
+			}
+			add_500_unity_per_year_passed = yes
+			event_target:dmj_rebellion_source_planet = {
+				# flip military stations
+				solar_system = {
+					every_fleet_in_system = {
+						limit = {
+							exists = owner
+							owner = { is_same_value = event_target:dmj_rebellion_originator }
+							any_controlled_ship = { is_ship_class = shipclass_military_station }
+						}
+						set_owner = event_target:dmj_reinhardist_uprising
+					}
+				}
+				set_owner = event_target:dmj_reinhardist_uprising
+				set_controller = event_target:dmj_reinhardist_uprising
+				set_capital = yes
+
+				solar_system = {
+					if = {
+						limit = {
+							exists = starbase
+						}
+						starbase = {
+							set_owner = event_target:dmj_reinhardist_uprising
+							if = {
+								limit = { has_starbase_size = starbase_outpost }
+								set_starbase_size = starbase_starport
+								set_starbase_module = {
+									slot = 1
+									module = shipyard
+								}
+								set_starbase_module = {
+									slot = 2
+									module = shipyard
+								}
+							}
+							else_if = {
+								limit = {
+									NOT = { has_starbase_module = shipyard }
+								}
+								set_starbase_module = {
+									slot = 1
+									module = shipyard
+								}
+								set_starbase_module = {
+									slot = 2
+									module = shipyard
+								}
+							}
+						}
+					}
+					else = {
+						create_starbase = {
+							size = starbase_starport
+							module = shipyard
+							owner = event_target:dmj_reinhardist_uprising
+						}
+					}
+				}
+
+				# flip remaining flagged planets
+				while = {
+					count = 9999
+					limit = {
+						any_system = {
+							has_star_flag = reinhardist_uprising_system_flip
+							exists = starbase
+							starbase = {
+								owner = { is_same_value = event_target:dmj_rebellion_originator }
+							}
+						}
+					}
+					random_system = {
+						limit = {
+							has_star_flag = reinhardist_uprising_system_flip
+							exists = starbase
+							starbase = {
+								owner = { is_same_value = event_target:dmj_rebellion_originator }
+							}
+						}
+						starbase = { set_owner = event_target:dmj_reinhardist_uprising }
+					}
+				}				
+			}
+			every_country = {
+				limit = {
+					OR = {
+						has_communications = event_target:dmj_rebellion_originator
+						intel_level = {
+							level > low
+							system = event_target:dmj_rebellion_originator.capital_scope.solar_system
+						}
+						any_system = {
+							has_star_flag = reinhardist_uprising_system_flip
+							prev = {
+								intel_level = {
+									level > low
+									system = prev
+								}
+							}
+						}
+					}
+				}
+				establish_communications_no_message = event_target:dmj_reinhardist_uprising
+				establish_contact = { who = event_target:dmj_reinhardist_uprising location = from }
+			}
+			every_system = {
+				limit = {
+					has_star_flag = reinhardist_uprising_system_flip
+				}
+				remove_star_flag = reinhardist_uprising_system_flip
+			}
+			add_opinion_modifier = {
+				who = event_target:dmj_rebellion_originator
+				modifier = opinion_reinhardist_uprising_originator
+			}
+
+			event_target:dmj_rebellion_originator = {
+				add_opinion_modifier = {
+					who = event_target:dmj_reinhardist_uprising
+					modifier = opinion_reinhardist_uprising
+				}
+			}
+			every_galaxy_planet = {
+				limit = {
+					is_surveyed = {
+						who = event_target:dmj_rebellion_originator
+						status = yes
+					}
+				}
+				set_surveyed = {
+					surveyed = yes
+					surveyor = event_target:dmj_reinhardist_uprising
+				}
+			}
+			declare_war = {
+				target = event_target:dmj_rebellion_originator
+				name = {
+					key = "NAME_dmj_Reinhardist_Uprising_War"
+					variable_string = "[This.MainDefender.GetAdj]"
+				}
+				attacker_war_goal = "wg_dmj_reinhardist_rebellion"
+			}
+			event_target:dmj_rebellion_originator = {
+				every_owned_leader = {
+					limit = { has_trait = leader_trait_dmj_reinhardist_devotee }
+					unassign_leader = this
+					set_owner = event_target:dmj_reinhardist_uprising
+				}
+				if = {
+					limit = {
+						any_owned_leader = { is_same_value = event_target:dmj_daniel }
+					}
+					event_target:dmj_daniel = {
+						unassign_leader = this
+						remove_subclass = yes
+						remove_all_traits = yes
+						change_leader_class = official
+						add_trait_no_notify = trait_imperial_heir
+						add_trait_no_notify = leader_trait_chosen
+						add_trait_no_notify = leader_trait_devotion_conduit
+						add_trait_no_notify = leader_trait_supreme_organizer
+						add_trait_no_notify = leader_trait_legendary_military_knowledge_2
+						add_trait_no_notify = leader_trait_legendary_evervigilant_2
+						add_trait_no_notify = leader_trait_legendary_high_king_2
+						add_trait_no_notify = leader_trait_legendary_harsh_ruler
+						add_trait_no_notify = subclass_official_economy_councilor
+						set_owner = event_target:dmj_reinhardist_uprising
+					}
+				}
+			}
+			if = {
+				limit = { exists = ruler }
+				ruler = {
+					kill_leader = this
+				}
+			}
+			if = {
+				limit = {
+					any_owned_leader = { is_same_value = event_target:dmj_daniel }
+				}
+				set_leader = event_target:dmj_daniel
+				set_country_flag = owns_reinhard
+			}
+
+			create_fleet_from_naval_cap = 0.2
+			random_owned_planet = {
+				last_created_fleet = {
+					set_location = prev
+				}
+			}
+			reroll_random = yes
+			create_fleet_from_naval_cap = 0.2
+			random_owned_planet = {
+				last_created_fleet = {
+					set_location = prev
+				}
+			}
+			reroll_random = yes
+			create_fleet_from_naval_cap = 0.2
+			random_owned_planet = {
+				last_created_fleet = {
+					set_location = prev
+				}
+			}
+			reroll_random = yes
+			create_fleet_from_naval_cap = 0.2
+			random_owned_planet = {
+				last_created_fleet = {
+					set_location = prev
+				}
+			}
+
+			create_fleet = {
+				effect = {
+					set_owner = event_target:dmj_reinhardist_uprising
+
+					create_ship = {
+						name = random
+						random_existing_design = science
+					}
+
+					set_fleet_stance = evasive
+					set_location = event_target:dmj_reinhardist_uprising.capital_scope
+
+					if = {
+						limit = {
+							event_target:dmj_reinhardist_uprising = {
+								any_owned_leader = {
+									leader_class = scientist
+								}
+							}
+						}
+						random_owned_leader = {
+							limit = {
+								leader_class = scientist
+							}
+							save_event_target_as = dmj_rebel_scientist
+						}
+					}
+					else = {
+						owner = {
+							create_leader = {
+								class = scientist
+								sub_type = survey
+								name = random
+								species = owner_main_species
+								effect = {
+									save_event_target_as = dmj_rebel_scientist
+								}
+							}
+						}
+					}
+					set_leader = event_target:dmj_rebel_scientist
+				}
+			}
+
+			create_fleet = {
+				effect = {
+					set_owner = event_target:dmj_reinhardist_uprising
+
+					create_ship = {
+						name = random
+						random_existing_design = constructor
+					}
+
+					set_fleet_stance = evasive
+					set_location = event_target:dmj_reinhardist_uprising.capital_scope
+				}
+			}
+		}
+		event_target:dmj_rebellion_originator = {
+			country_event = { id = dmj_idk_2.1 }
+		}
+	}	
+}
