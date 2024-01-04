@@ -1,0 +1,57 @@
+# MHMCL_on_actions
+# By Metallichydra
+
+# Executed when an astral rift event is about to be fired
+# THIS = Country: Explorer country
+# FROM = AstralRift: Explored astral rift
+# FROMFROM = Exploring Fleet
+on_astral_rift_pre_event_fire = {
+	events = {
+		MHMCL_rift_event.9999		# Setup event description flags
+	}
+}
+
+# Triggers event when each country first sends a ship into the system (once per country)
+# Scope = Ship
+# From = System
+# FromFrom = Country
+on_entering_system_first_time = {
+	events = {
+		MHMCL_setup_event.1 # Create Astral Rift
+	}
+}
+
+# this = country
+on_decade_pulse_country = {
+	events = {
+		MHMCL_story_event.5 # Mircorv Flavor Events
+	}
+}
+
+# A fleet has entered a system | See also: on_fleet_auto_move_arrival
+# Scope = Fleet
+# From = System
+on_entering_system_fleet = {
+	events = {
+		MHMCL_setup_event.2    # Neutron Star 50% Immunity
+	}
+}
+
+# Scope: Ship Event
+#A ship has been built
+# Root = Ship
+# From = Planet
+on_ship_built = {
+	events = {
+		MHMCL_setup_event.3 # Neutron Star 50% Immunity
+	}
+}
+
+# Scope: Country Event
+# Fires from MHMCL_story_event.5 which fires from on_decade_pulse_country
+MHMCL_mircorv_flavor_event = {
+	random_events = {
+		10 = MHMCL_story_event.6 # Code Improvements
+		10 = MHMCL_story_event.7 # Excess Radiation Situation
+	}
+}

@@ -1,0 +1,125 @@
+# MHMCL_setup_events
+# By Metallichydra
+
+# Mircorv Setup Events
+
+namespace = MHMCL_setup_event
+
+### Wow, you found an astral rift!
+ship_event = {
+	id = MHMCL_setup_event.1
+	title = MHMCL_setup_event.1.name
+	desc = MHMCL_setup_event.1.desc
+	picture = GFX_evt_shielded_planet
+	show_sound = event_default
+	location = FROM
+	trackable = yes
+	fire_only_once = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		from = {
+			has_star_flag = MHMCL_shielded_system
+			any_system_planet = {
+				is_planet_class = pc_shielded
+				has_planet_flag = MHMCL_shielded_planet
+			}
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = { has_astral_planes_dlc = yes }
+			solar_system = {
+				random_system_planet = {
+					limit = {
+						has_planet_flag = MHMCL_shielded_planet
+					}
+					save_event_target_as = mhmcl_mircorv_planet
+				}
+				spawn_astral_rift = {
+					relative_to = event_target:mhmcl_mircorv_planet
+					orbit_distance = 60
+					orbit_angle = 340
+					tolerance = 360
+					id = mhmcl_battle_for_iltrani
+					spawn_sound = no
+				}
+			}
+		}
+	}
+
+	option = {
+		name = MHMCL_setup_event.1.a
+	}
+}
+
+#######################################
+# PULSARS ARE A TYPE OF NEUTRON STAR! #
+#######################################
+
+# Neutron Relic Give 50% immunity to ships when they enter a neutron star system
+# Based on the Zroni Storm Space Storm Immunity Events
+fleet_event = {
+	id = MHMCL_setup_event.2
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			has_relic = mhmcl_r_neutron_key
+		}
+	}
+
+	immediate = {
+		# Remove Modifiers
+		remove_modifier = MHMCL_neutron_immunity
+		remove_modifier = MHMCL_pulsar_immunity
+		# Apply Modifiers
+		if = {
+			limit = {
+				solar_system = {
+					OR = {
+						is_star_class = sc_neutron_star
+						is_star_class = sc_binary_2
+					}
+				}
+			}
+			add_modifier = { modifier = MHMCL_neutron_immunity }
+		}
+		# Same deal for Pulsars
+		if = {
+			limit = {
+				solar_system = {
+					OR ={
+						is_star_class = sc_pulsar
+						is_star_class = sc_binary_1
+					}
+				}
+			}
+			add_modifier = { modifier = MHMCL_pulsar_immunity }
+		}
+	}
+}
+
+# Neutron Relic Give 50% immunity to newly created ships if created in a neutron star system
+# Based on the Zroni Storm Space Storm Partial Immunity Events
+ship_event = {
+	id = MHMCL_setup_event.3
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			has_relic = mhmcl_r_neutron_key
+		}
+	}
+
+	immediate = {
+		fleet = {
+			remove_modifier = MHMCL_neutron_immunity # Remove Modifier, then add to whole fleet again
+			remove_modifier = MHMCL_pulsar_immunity # Same deal for pulsars
+		}
+	}
+}

@@ -1,0 +1,157 @@
+# MHMCL_relics
+# By Metallichydra
+
+# Neutron Key Relic
+
+@activation_cost = 3000
+@triumph_duration_veryshort = 900
+
+mhmcl_r_neutron_key = {
+	activation_duration = @triumph_duration_veryshort
+	portrait = "GFX_relic_mhmcl_neutron_key"
+	sound = "relic_activation_generic"
+
+	resources = {
+		category = relics
+		# Activation cost
+		cost = {
+			unity = 500
+		}
+	}
+
+	ai_weight = {
+		weight = 100
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			always = yes
+		}
+		ship_speed_mult = 0.1
+	}
+	triggered_country_modifier = {
+		potential = {
+			always = yes
+		}
+		custom_tooltip = mhmcl_r_neutron_key_tooltip # Reduce penalty from neutron stars by 50% # Done in MHMCL_setup_event 2 and 3 # Pulsars are neutron stars too!
+	}
+
+	score = 1000
+
+	active_effect = {
+		if = {
+			limit = { NOT = { has_global_flag = mhmcl_iltrani_neutron_star } }
+			custom_tooltip = mhmcl_destabilize_iltrani
+			hidden_effect = {
+				random_system_within_border = {
+					limit = { has_star_flag = MHMCL_shielded_system }
+					# Change Star Class
+					set_star_class = sc_pulsar
+					set_global_flag = mhmcl_iltrani_neutron_star
+				}
+				# Story event where shield goes down
+				country_event = { id = MHMCL_story_event.3 days = 10 } # Mircorv Planet gets unshielded
+				country_event = { id = MHMCL_story_event.4 days = 25 ) # Victim planet gets irradiated
+			}
+			custom_tooltip = relic_triumph_cooldown_mhmcl_extremelyshort
+			hidden_effect = {
+				add_modifier = {
+					modifier = "relic_activation_cooldown"
+					days = 25
+				}
+			}
+		}
+		else_if = {
+			custom_tooltip = mhmcl_create_mircorv
+			limit = {
+				NOT = {
+					any_owned_leader = {
+						has_leader_flag = MHMCL_mircorv
+					}
+				}
+			}
+			hidden_effect = {
+				country_event = { id = MHMCL_story_event.1 }
+			}
+			custom_tooltip = relic_triumph_cooldown_veryshort
+			hidden_effect = {
+				add_modifier = {
+					modifier = "relic_activation_cooldown"
+					days = @triumph_duration_veryshort
+				}
+			}
+		}
+		else = {
+			custom_tooltip = mhmcl_boost_mircorv
+			custom_tooltip = relic_triumph_cooldown_short
+			hidden_effect = {
+				add_modifier = {
+					modifier = "relic_activation_cooldown"
+					days = @triumph_duration_short
+				}
+			}
+			hidden_effect = {
+				random_owned_leader = {
+					limit = { has_leader_flag = MHMCL_mircorv }
+					add_experience = 1000
+					save_event_target_as = MHMCL_mircorv_relic_leader
+					if = {
+						limit = { exists = planet }
+						planet = {
+							add_modifier = {
+								modifier = MHMCL_mircorv_planet_modifier
+								days = 1800
+								multiplier = event_target:MHMCL_mircorv_relic_leader.trigger:has_skill
+							}
+						}
+					}
+					if = {
+						limit = { exists = fleet }
+						fleet = {
+							add_modifier = {
+								modifier = MHMCL_mircorv_fleet_modifier
+								days = 1800
+								multiplier = event_target:MHMCL_mircorv_relic_leader.trigger:has_skill
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	# Possible check for activation
+	possible = {
+		custom_tooltip = {
+			fail_text = "mhmcl_mircorv_died"
+			NOT = { has_country_flag = MHMCL_mircorv_died }
+		}
+		custom_tooltip = {
+			fail_text = "mhmcl_requires_iltrani"
+			any_system_within_border = {
+				has_star_flag = MHMCL_shielded_system
+			}
+		}
+		custom_tooltip = {
+			fail_text = "mhmcl_requires_mircorv_assigned"
+			OR = {
+				NOT = {
+					any_owned_leader = {
+						has_leader_flag = MHMCL_mircorv
+					}
+				}
+				any_owned_leader = {
+					has_leader_flag = MHMCL_mircorv
+					OR = {
+						exists = planet
+						exists = fleet
+					}
+				}
+			}
+		}
+		inline_script = {
+			script = relics/activation_checks
+			RELIC = mhmcl_r_neutron_key
+		}
+	}
+}
