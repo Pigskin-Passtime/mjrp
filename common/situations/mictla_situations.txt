@@ -1,0 +1,161 @@
+situation_mictla_resonant_pulse = { #Related to paragon.3010
+	picture = GFX_evt_ongoing_disaster
+	category = positive
+	complete_icon_frame = GFX_situation_outcome_frame_green
+	complete_icon = GFX_icon_mictla
+	fail_icon = GFX_situation_outcome_meh
+	fail_icon_frame = GFX_situation_outcome_frame_red
+	start_value = 30
+
+	on_progress_complete = { 
+		custom_tooltip = "mictla sovereignty"
+		owner = {
+			country_event = {
+				id = mictla_events.5
+			}
+		}
+		hidden_effect = {
+			destroy_situation = this
+		}
+
+	}
+	on_fail = {
+		custom_tooltip = "back to status quo"
+		owner = {
+			country_event = {
+				id = mictla_events.7
+			}
+		}
+		hidden_effect = {
+			destroy_situation = this
+		}
+	}
+	abort_trigger = {
+		owner = {
+			NOT = { has_country_flag = mictla_recruited }
+		}
+	}
+	on_abort = {
+		owner = {
+			country_event = {
+				id = mictla_events.4
+			}
+		}
+		destroy_situation = this
+	}
+	
+	stages = {
+		stage_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_red
+			end = 25
+			on_first_enter = {
+				situation_event = {
+					id = mictla_situation_events.1
+				}
+			}
+			
+			custom_tooltip = mictla_situation_stage_purging
+			modifier = {
+				pop_happiness = -0.25
+				pop_government_ethic_attraction = -0.15
+				pop_ethic_spiritualist_attraction_mult = 0.15
+			}
+		}
+		stage_2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_red
+			end = 50
+			on_first_enter = {
+			}
+			custom_tooltip = mictla_situation_stage_turmoil
+			modifier = {
+				pop_happiness = -0.10
+				pop_government_ethic_attraction = -0.15
+				pop_ethic_spiritualist_attraction_mult = 0.15
+			}
+		}
+		stage_3 = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_blue
+			end = 80
+			on_first_enter = {
+				situation_event = {
+					id = mictla_situation_events.2
+				}
+			}
+			custom_tooltip = mictla_situation_stage_rising_movement
+		}
+		stage_4 = {
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_blue
+			end = 100
+			on_first_enter = {
+				situation_event = {
+					id = mictla_situation_events.3
+				}
+			}
+			modifier = {
+				pop_ethic_spiritualist_attraction_mult = 0.15
+			}
+			custom_tooltip = mictla_situation_stage_veneration
+		}
+	}
+
+	approach = {
+		name = situation_mictla_resonant_pulse_pushback
+		icon = GFX_situation_approach_fist
+		icon_background = GFX_situation_approach_bg_red
+		on_select = {
+			custom_tooltip = situation_mictla_resonant_pulse_pushback_tt
+		}
+		modifier = {
+			country_base_influence_produces_add = -1
+		}
+	}
+	approach = {
+		name = situation_mictla_resonant_pulse_allow
+		icon = GFX_situation_approach_shrug
+		icon_background = GFX_situation_approach_bg_yellow
+		on_select = {
+			custom_tooltip = situation_mictla_resonant_pulse_allow_tt
+		}
+		default = yes
+
+	}
+	approach = {
+		name = situation_mictla_resonant_pulse_pushback_promote
+		icon = GFX_situation_approach_kneel
+		icon_background = GFX_situation_approach_bg_green
+		potential = {
+			owner = { has_ethic = ethic_spiritualist }
+		}
+		on_select = {
+			custom_tooltip = situation_mictla_resonant_pulse_pushback_promote_tt
+		}
+		modifier = {
+			country_base_influence_produces_add = -1
+			pop_happiness = 0.10
+			pop_ethic_spiritualist_attraction_mult = 0.15
+		}
+	}
+
+	monthly_progress = {
+		base = 1
+		modifier = {
+			add = -2
+			desc = situation_mictla_resonant_pulse_pushback
+			current_situation_approach = situation_mictla_resonant_pulse_pushback
+		}
+		modifier = {
+			add = 0
+			desc = situation_mictla_resonant_pulse_allow
+			current_situation_approach = situation_mictla_resonant_pulse_allow
+		}
+		modifier = {
+			add = 1
+			desc = situation_mictla_resonant_pulse_pushback_promote
+			current_situation_approach = situation_mictla_resonant_pulse_pushback_promote
+		}
+	}
+}

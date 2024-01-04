@@ -1,0 +1,70 @@
+@activation_cost = 3000
+@triumph_duration = 3600
+@triumph_duration_short = 1800
+@triumph_duration_veryshort = 900
+
+r_mictla_wail = {
+	activation_duration = @triumph_duration
+	portrait = "GFX_relic_mictla_wail"
+	sound = event_ghost_town
+
+	resources = {
+		category = relics
+		# Activation cost
+		cost = {
+			food = 10000
+		}
+	}
+
+	ai_weight = {
+		weight = 100
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			always = yes
+		}
+		army_attack_damage_mult = 0.1
+		army_collateral_damage_mult = 0.1
+	}
+
+	score = 1000
+
+	active_effect = {
+		add_modifier = {
+			modifier = "mictla_wailing_resonance"
+			days = @triumph_duration
+		}
+		if = {
+			limit = {
+				NOT = {
+					owner = {
+						has_country_flag = used_mictla_relic
+					}
+				}
+			 }
+			custom_tooltip = wailing_resonance_consequences
+		}
+		custom_tooltip = relic_triumph_cooldown
+		hidden_effect = {
+			add_modifier = {
+				modifier = "relic_activation_cooldown"
+				days = @triumph_duration
+			}
+			owner = {
+				country_event = {
+					id = mictla_events.3
+					days = 360
+				}
+			}
+		}
+	}
+
+	# Possible check for activation
+	possible = {
+		inline_script = {
+			script = relics/activation_checks
+			RELIC = r_mictla_wail
+		}
+	}
+}
