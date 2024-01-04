@@ -1,0 +1,183 @@
+# common\solar_system_initializers\chronotec_solar_system_initializers.txt
+
+# Authors: Rodahtnov & Zyralynn
+
+@chronotec_distance = 50
+@chronotec_base_moon_distance = 10
+
+# Usage
+#spawn_system = {
+#	min_distance = 1
+#	max_distance = 1
+#	max_jumps = 0
+#	initializer = "chronotec_chronolord_system"
+#}
+
+# Notes:
+	#orbit_distance & orbit_angle works from the last called planet/object, so first is 40, second is 40+x, third is 40+x+y, etcc
+# /
+
+chronotec_chronolord_system = {
+	name = "NAME_chronotec_chronolord_system"
+	class = "sc_black_hole"
+	max_instances = 1
+	flags = { chronotec_system }
+
+	planet = {
+		class = "pc_gaia"
+		orbit_distance = 0.1
+		#120
+		orbit_angle = 0
+		size = 25
+		has_ring = no
+		init_effect = {
+			prevent_anomaly = yes
+			set_planet_flag = chronotec_chronolord_planet
+			save_global_event_target_as = chronolord_planet
+			
+			change_pc = {
+				class = pc_shielded
+				inherit_entity = yes
+			}
+			set_planet_entity = {
+				entity = "pc_gaia"
+			}
+			create_ambient_object = {
+				type = rare_nebula_1
+				location = this
+				scale = 1
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 0
+					angle = random
+				}
+			}
+			#create_ambient_object = {
+			#	type = nebula_4
+			#	location = this
+			#	scale = 1
+			#}
+			#last_created_ambient_object = {
+			#	set_location = {
+			#		target = prev
+			#		distance = 0
+			#		angle = random
+			#	}
+			#}
+			create_ambient_object = {
+				type = rare_nebula_2
+				location = this
+				scale = 1
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 0
+					angle = random
+				}
+			}
+		}
+	}
+	orbital_line = {
+		orbit_distance_from_parent = 450
+	}
+	planet = {
+		class = star
+		size = 30
+		#size = { min = 10 max = 10 }
+		orbit_distance = 400
+		orbit_angle = 120
+		#orbit_angle = 1
+		satellite_naming_policy = upper_case_roman_numerals
+		init_effect = {
+			change_pc = pc_black_hole
+			set_planet_flag = chronolord_blackhole_1
+		}
+
+		planet = {
+			count = { min = 1 max = 1 }
+			orbit_distance = 200
+			orbit_angle = { min = 90 max = 270 }
+			satellite_naming_policy = lower_case_latin_letters
+			change_orbit = @base_moon_distance
+			moon = {
+				count = { min = 0 max = 1 }
+				orbit_distance = 5
+				orbit_angle = { min = 90 max = 270 }
+			}
+		}
+	}
+	planet = {
+		class = star
+		size = 30
+		#size = { min = 10 max = 10 }
+		orbit_distance = 0
+		orbit_angle = 120
+		#orbit_angle = 1
+		satellite_naming_policy = upper_case_roman_numerals
+		init_effect = {
+			change_pc = pc_black_hole
+			set_planet_flag = chronolord_blackhole_2
+		}
+
+		planet = {
+			count = { min = 1 max = 1 }
+			orbit_distance = 200
+			orbit_angle = { min = 90 max = 270 }
+			satellite_naming_policy = lower_case_latin_letters
+			change_orbit = @base_moon_distance
+			moon = {
+				count = { min = 0 max = 1 }
+				orbit_distance = 5
+				orbit_angle = { min = 90 max = 270 }
+			}
+		}
+	}
+	planet = {
+		class = star
+		size = 30
+		#size = { min = 10 max = 10 }
+		orbit_distance = 0
+		orbit_angle = 120
+		#orbit_angle = 1
+		satellite_naming_policy = upper_case_roman_numerals
+		init_effect = {
+			change_pc = pc_black_hole
+			set_planet_flag = chronolord_blackhole_3
+		}
+
+		planet = {
+			count = { min = 1 max = 1 }
+			orbit_distance = 200
+			orbit_angle = { min = 90 max = 270 }
+			satellite_naming_policy = lower_case_latin_letters
+			change_orbit = @base_moon_distance
+			moon = {
+				count = { min = 0 max = 1 }
+				orbit_distance = 5
+				orbit_angle = { min = 90 max = 270 }
+			}
+		}
+	}
+	#init_effect = {
+	#	spawn_planet = {
+	#		class = "pc_gaia"
+	#		orbit_distance = -400
+	#		orbit_angle = 0
+	#		size = 25
+	#		has_ring = no
+	#		init_effect = {
+	#			prevent_anomaly = yes
+	#			set_planet_flag = chronotec_chronolord_planet
+	#			
+	#			change_pc = {
+	#				class = pc_shielded
+	#				inherit_entity = yes
+	#			}
+	#		}
+	#	}
+	#}
+
+}

@@ -1,0 +1,488 @@
+# common\situations\chronotec_situations.txt
+
+# Authors: Rodahtnov & Zyralynn
+
+# Study the scar
+situation_chronotec_study_scar = {
+	desc = {
+		text = situation_chronotec_study_scar_desc
+		trigger = {
+			hidden_trigger = {
+				always = yes
+			}
+		}
+	}
+	picture = GFX_evt_astral_rift
+	category = positive
+	complete_icon_frame = GFX_situation_outcome_frame_green
+	complete_icon = GFX_situation_outcome_unknown
+	fail_icon_frame = GFX_situation_outcome_frame_red
+	fail_icon = GFX_situation_outcome_negative
+	start_value = 50
+	progress_direction = bidirectional
+
+	on_start = {
+		set_situation_locked = yes
+		situation_event = {
+			id = chronotec_narrative.21100
+		}
+	}
+
+	on_fail = {
+		# TO DO opportunity lost
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = chronotec_narrative.2502
+				}
+			}
+			destroy_situation = this
+		}
+		custom_tooltip = situation_chronotec_study_scar_fail_tooltip
+	}
+
+	on_monthly = {
+		random_events = {
+			# Nothing
+			200 = 0
+		}
+	}
+	
+	on_progress_complete = {
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = chronotec_narrative.2501
+				}
+			}
+			destroy_situation = this
+		}
+		custom_tooltip = situation_chronotec_study_scar_end_tooltip
+		destroy_situation = this
+	}
+
+	stages = {
+		# Negative
+		situation_chronotec_study_scar_stage_10 = { #10%
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_red
+			end = 10
+			on_first_enter = {
+				hidden_effect = {
+					situation_event = {
+						id = chronotec_narrative.21110
+					}
+				}
+			}
+		}
+		situation_chronotec_study_scar_stage_20 = { #20%
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_red
+			end = 20
+			on_first_enter = {
+				hidden_effect = {
+					situation_event = {
+						id = chronotec_narrative.21120
+					}
+				}
+			}
+		}
+		situation_chronotec_study_scar_stage_40 = { #40%
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_red
+			end = 40
+			on_first_enter = {
+				hidden_effect = {
+					situation_event = {
+						id = chronotec_narrative.21140
+					}
+				}
+			}
+		}
+		# Over 0
+		situation_chronotec_study_scar_stage_0 = { #40 - 60%
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_green
+			end = 60
+		}
+		situation_chronotec_study_scar_stage_60 = { #60%
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_green
+			end = 80
+			on_first_enter = {
+				hidden_effect = {
+					situation_event = {
+						id = chronotec_narrative.21160
+					}
+				}
+			}
+		}
+		situation_chronotec_study_scar_stage_80 = { #80%
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_green
+			end = 90
+			on_first_enter = {
+				hidden_effect = {
+					situation_event = {
+						id = chronotec_narrative.21180
+					}
+				}
+			}
+		}
+		situation_chronotec_study_scar_stage_90 = { #60%
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_blue
+			end = 100
+			on_first_enter = {
+				hidden_effect = {
+					situation_event = {
+						id = chronotec_narrative.21190
+					}
+				}
+			}
+		}
+	}
+
+	# Approaches
+		approach = { # Ignore
+			name = situation_chronotec_study_scar_approach_ignore
+			icon = GFX_situation_approach_shrug
+			icon_background = GFX_situation_approach_bg_red
+			on_select = {
+				custom_tooltip = situation_chronotec_study_scar_approach_ignore_tooltip
+			}
+			resources = {
+				category = situations
+			}
+		}
+		approach = { # Basic
+			name = situation_chronotec_study_scar_approach_neutral
+			icon = GFX_situation_approach_research
+			icon_background = GFX_situation_approach_bg_yellow
+			on_select = {
+				custom_tooltip = situation_chronotec_study_scar_approach_neutral_tooltip
+			}
+			resources = {
+				category = situations
+				upkeep = {
+					physics_research = @chronotec_situation_cost_low
+				}
+			}
+		}
+		approach = { # Accelerated
+			name = situation_chronotec_study_scar_approach_fast
+			icon = GFX_situation_approach_research
+			icon_background = GFX_situation_approach_bg_green
+			on_select = {
+				custom_tooltip = situation_chronotec_study_scar_approach_fast_tooltip
+			}
+			resources = {
+				category = situations
+				upkeep = {
+					society_research = @chronotec_situation_cost_medium
+				}
+			}
+		}
+	# /
+
+	monthly_progress = {
+		base = 0
+		# Debug
+			modifier = {
+				add = 10
+				desc = EXCELLENT
+				OR = {
+					has_situation_flag = situation_chronotec_debug
+					owner = {
+						has_country_flag = situation_chronotec_debug
+					}
+				}
+			}
+			modifier = {
+				add = 5
+				desc = EXCELLENT
+				OR = {
+					has_situation_flag = situation_chronotec_debug_2
+					owner = {
+						has_country_flag = situation_chronotec_debug_2
+					}
+				}
+			}
+			modifier = {
+				add = -10
+				desc = EXCELLENT
+				OR = {
+					has_situation_flag = situation_chronotec_debug_negative
+					owner = {
+						has_country_flag = situation_chronotec_debug_negative
+					}
+				}
+			}
+			modifier = {
+				add = -5
+				desc = EXCELLENT
+				OR = {
+					has_situation_flag = situation_chronotec_debug_negative_2
+					owner = {
+						has_country_flag = situation_chronotec_debug_negative_2
+					}
+				}
+			}
+		# /
+		# Approaches
+		modifier = {
+			add = -2
+			desc = situation_chronotec_study_scar_approach_ignore
+			current_situation_approach = situation_chronotec_study_scar_approach_ignore
+		}
+		modifier = {
+			add = 1
+			desc = situation_chronotec_study_scar_approach_neutral
+			current_situation_approach = situation_chronotec_study_scar_approach_neutral
+		}
+		modifier = {
+			add = 2
+			desc = situation_chronotec_study_scar_approach_fast
+			current_situation_approach = situation_chronotec_study_scar_approach_fast
+		}
+	}
+
+	abort_trigger = {
+		NOT = { exists = owner }
+	}
+}
+
+# Unloop the planet
+situation_chronotec_unloop_planet = {
+	desc = {
+		text = situation_chronotec_unloop_planet_desc
+		trigger = {
+			hidden_trigger = {
+				always = yes
+			}
+		}
+	}
+	picture = GFX_evt_planet_beam
+	category = positive
+	complete_icon_frame = GFX_situation_outcome_frame_green
+	complete_icon = GFX_situation_outcome_unknown
+	fail_icon_frame = GFX_situation_outcome_frame_red
+	fail_icon = GFX_situation_outcome_negative
+	start_value = 25
+	progress_direction = bidirectional
+
+	on_start = {
+		set_situation_locked = yes
+	}
+
+	on_fail = {
+		# TO DO opportunity lost
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = chronotec_narrative.4001
+				}
+			}
+			destroy_situation = this
+		}
+		custom_tooltip = situation_chronotec_unloop_planet_fail_tooltip
+	}
+
+	on_monthly = {
+		random_events = {
+			# Nothing
+			200 = 0
+		}
+	}
+	
+	on_progress_complete = {
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = chronotec_narrative.40
+				}
+			}
+			destroy_situation = this
+		}
+		custom_tooltip = situation_chronotec_unloop_planet_end_tooltip
+		destroy_situation = this
+	}
+
+	stages = {
+		# Negative
+		situation_chronotec_unloop_planet_stage_5 = { #5%
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_red
+			end = 5
+			on_first_enter = {
+				hidden_effect = {
+					situation_event = {
+						id = chronotec_narrative.35005
+					}
+				}
+			}
+		}
+		situation_chronotec_unloop_planet_stage_15 = { #15%
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_red
+			end = 15
+			on_first_enter = {
+				hidden_effect = {
+					situation_event = {
+						id = chronotec_narrative.35015
+					}
+				}
+			}
+		}
+		# Over 0
+		situation_chronotec_unloop_planet_stage_0 = { #15-30%
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_green
+			end = 30
+		}
+		situation_chronotec_unloop_planet_stage_30 = { #30-50%
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_green
+			end = 50
+			on_first_enter = {
+				hidden_effect = {
+					situation_event = {
+						id = chronotec_narrative.35030
+					}
+				}
+			}
+		}
+		situation_chronotec_unloop_planet_stage_50 = { #50-75%
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_green
+			end = 75
+			on_first_enter = {
+				hidden_effect = {
+					situation_event = {
+						id = chronotec_narrative.35050
+					}
+				}
+			}
+		}
+		situation_chronotec_unloop_planet_stage_90 = { #75-100%
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_blue
+			end = 100
+			on_first_enter = {
+				hidden_effect = {
+					situation_event = {
+						id = chronotec_narrative.35075
+					}
+				}
+			}
+		}
+	}
+
+	# Approaches
+		approach = { # Ignore
+			name = situation_chronotec_unloop_planet_approach_ignore
+			icon = GFX_situation_approach_shrug
+			icon_background = GFX_situation_approach_bg_red
+			on_select = {
+				custom_tooltip = situation_chronotec_unloop_planet_approach_ignore_tooltip
+			}
+			resources = {
+				category = situations
+			}
+		}
+		approach = { # Basic
+			name = situation_chronotec_unloop_planet_approach_neutral
+			icon = GFX_situation_approach_research
+			icon_background = GFX_situation_approach_bg_yellow
+			on_select = {
+				custom_tooltip = situation_chronotec_unloop_planet_approach_neutral_tooltip
+			}
+			resources = {
+				category = situations
+				upkeep = {
+					physics_research = @chronotec_situation_cost_medium
+				}
+			}
+		}
+		approach = { # Accelerated
+			name = situation_chronotec_unloop_planet_approach_fast
+			icon = GFX_situation_approach_research
+			icon_background = GFX_situation_approach_bg_green
+			on_select = {
+				custom_tooltip = situation_chronotec_unloop_planet_approach_fast_tooltip
+			}
+			resources = {
+				category = situations
+				upkeep = {
+					society_research = @chronotec_situation_cost_very_high
+				}
+			}
+		}
+	# /
+
+	monthly_progress = {
+		base = 0
+		# Debug
+			modifier = {
+				add = 10
+				desc = EXCELLENT
+				OR = {
+					has_situation_flag = situation_chronotec_debug
+					owner = {
+						has_country_flag = situation_chronotec_debug
+					}
+				}
+			}
+			modifier = {
+				add = 5
+				desc = EXCELLENT
+				OR = {
+					has_situation_flag = situation_chronotec_debug_2
+					owner = {
+						has_country_flag = situation_chronotec_debug_2
+					}
+				}
+			}
+			modifier = {
+				add = -10
+				desc = EXCELLENT
+				OR = {
+					has_situation_flag = situation_chronotec_debug_negative
+					owner = {
+						has_country_flag = situation_chronotec_debug_negative
+					}
+				}
+			}
+			modifier = {
+				add = -5
+				desc = EXCELLENT
+				OR = {
+					has_situation_flag = situation_chronotec_debug_negative_2
+					owner = {
+						has_country_flag = situation_chronotec_debug_negative_2
+					}
+				}
+			}
+		# /
+		# Approaches
+		modifier = {
+			add = -2
+			desc = situation_chronotec_unloop_planet_approach_ignore
+			current_situation_approach = situation_chronotec_unloop_planet_approach_ignore
+		}
+		modifier = {
+			add = 1
+			desc = situation_chronotec_unloop_planet_approach_neutral
+			current_situation_approach = situation_chronotec_unloop_planet_approach_neutral
+		}
+		modifier = {
+			add = 2
+			desc = situation_chronotec_unloop_planet_approach_fast
+			current_situation_approach = situation_chronotec_unloop_planet_approach_fast
+		}
+	}
+
+	abort_trigger = {
+		NOT = { exists = owner }
+	}
+}

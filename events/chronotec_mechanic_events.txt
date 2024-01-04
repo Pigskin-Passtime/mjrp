@@ -1,0 +1,1156 @@
+# events\chronotec_mechanic_events.txt
+
+# Authors: Rodahtnov & Zyralynn
+
+namespace = chronotec_leader
+
+# Creates country and leader at game start
+	event = {
+		id = chronotec_leader.1
+		hide_window = yes
+		fire_only_once = yes
+		is_triggered_only = yes
+		
+		trigger = {
+			chronotec_trigger = yes
+		}
+		
+		immediate = {
+			# Country Created
+			create_country = {
+				name = "NAME_chronotec_chronolord"
+				type = chronotec_event_country
+				flag = {
+					icon = {
+						category = "spherical"
+						file = "flag_spherical_20.dds"
+					}
+					background= {
+						category = "backgrounds"
+						file = "00_solid.dds"
+					}
+					colors={
+						"purple"
+						"black"
+						"null"
+						"null"
+					}
+				}
+				effect = {
+					set_country_flag = suppress_first_contact_comms
+					save_global_event_target_as = chronotec_chronolord_country
+				}
+			}
+			# Leader created
+			event_target:chronotec_chronolord_country = {
+				create_species = {
+					name = "NAME_Unknown"
+					class = PARAGON
+					portrait = "chronotec_chronolord_portrait_standard"
+					namelist = "PRT1"
+					traits = random
+					effect = {
+						save_event_target_as = chronotec_chronolord_species
+					}
+				}
+				create_leader = {
+					species = event_target:chronotec_chronolord_species
+					event_leader = yes
+					class = scientist
+					name = "NAME_chronotec_chronolord"
+					skill = 10
+					immortal = yes
+					background_ethic = ethic_materialist
+					randomize_traits = no
+					skip_background_generation = yes
+					custom_catch_phrase = chronotec_chronolord_catch_phrase
+					custom_description = chronotec_chronolord_backstory
+					traits = {
+						trait = leader_trait_physics_focus_3
+						trait = leader_trait_collaborator_3
+						trait = leader_trait_chronotec_chronolord_infusion_neutral
+						trait = subclass_scientist_governor
+					}
+					gender = indeterminable
+					set_age = 0
+					hide_age = yes
+					effect = {
+						save_global_event_target_as = chronotec_chronolord_leader
+						set_leader_flag = legendary_leader
+						set_leader_flag = chronotec_chronolord_leader
+						set_leader_flag = immune_to_negative_traits
+						set_leader_flag = leader_death_events_blocked
+						set_owner = event_target:chronotec_chronolord_country
+						exile_leader_as = chronotec_chronolord_leader
+					}
+				}
+			}
+		}
+	}
+# /
+
+# Country communication  (10xxx)
+ # GATE
+	country_event = {	# GATE
+		id = chronotec_leader.10
+		hide_window = yes
+		show_sound = no
+		is_triggered_only = yes
+
+		trigger = {
+			from = { is_country_type = chronotec_event_country }
+			NOT = {
+				has_country_flag = chronotec_diplomacy_engaged
+			}
+		}
+
+		immediate = {
+			hidden_effect = {
+				set_country_flag = chronotec_diplomacy_engaged
+				if = {	# Recruited, but petition is denied
+					limit = {
+						has_country_flag = chronotec_petition_denied
+					}
+					country_event = {
+						id = chronotec_leader.1010
+					}
+				}
+				else_if = {	# Recruited, but petition is failed
+					limit = {
+						has_country_flag = chronotec_petition_failed
+					}
+					country_event = {
+						id = chronotec_leader.1020
+					}
+				}
+				else_if = {	# Recruited, but petition is completed
+					limit = {
+						has_country_flag = chronotec_petition_completed
+					}
+					country_event = {
+						id = chronotec_leader.1030
+					}
+				}
+				else_if = {	# Contact if taken by other empire (former owner)
+					limit = {
+						NOT = {
+							is_same_value = event_target:chronotec_actual_owner_country
+						}
+					}
+					country_event = {
+						id = chronotec_leader.1040
+					}
+				}
+				else = {
+					country_event = {
+						id = chronotec_leader.1030
+					}
+				}
+			}
+		}
+	}
+	country_event = {	# Recruited, but petition is denied
+		id = chronotec_leader.1010
+		title = "chronotec_leader.1010.title"
+		desc = {
+			trigger = {
+				always = yes
+			}
+			text = "chronotec_leader.1010.desc"
+		}
+		show_sound = par_event_beholder
+		location = event_target:chronolord_planet
+		is_triggered_only = yes
+
+		event_window_type = leader_recruit
+		picture_event_data = {
+			portrait = event_target:chronotec_chronolord_leader
+		}
+		picture = GFX_leader_recruitment_bg_chronolord_paragon
+
+		trigger = {
+			always = yes
+		}
+
+		option = { # HIRE replace
+			name = chronotec_leader.1010.close
+			tag = hire_leader
+			hidden_effect = {
+				remove_country_flag = chronotec_diplomacy_engaged
+			}
+		}
+
+		option = { # DISMISS
+			name = BLANK_STRING
+			tag = dismiss_leader
+			allow = {
+				always = no
+			}
+		}
+
+		option = { # Ask about what will happen with them
+			name = chronotec_leader.1010.a
+			response_text = chronotec_leader.1010.a.response
+			hidden_effect = {
+				set_country_flag = chronotec_dissapointed
+			}
+		}
+		option = { # Ask about the future of the planet
+			name = chronotec_leader.1010.b
+			response_text = chronotec_leader.1010.b.response
+		}
+		option = { # Ask if they is angry
+			name = chronotec_leader.1010.c
+			response_text = chronotec_leader.1010.c.response
+			trigger = {
+				hidden_trigger = {
+					has_country_flag = chronotec_dissapointed
+				}
+			}
+		}
+
+		immediate = {
+			hidden_effect = {
+				set_country_flag = chronotec_diplomacy_engaged
+			}
+		}
+		after = {
+			hidden_effect = {
+				remove_country_flag = chronotec_diplomacy_engaged
+			}
+		}
+	}
+	country_event = {	# Recruited, but petition is failed
+		id = chronotec_leader.1020
+		title = "chronotec_leader.1020.title"
+		desc = {
+			trigger = {
+				always = yes
+			}
+			text = "chronotec_leader.1020.desc"
+		}
+		show_sound = par_event_beholder
+		location = event_target:chronolord_planet
+		is_triggered_only = yes
+
+		event_window_type = leader_recruit
+		picture_event_data = {
+			portrait = event_target:chronotec_chronolord_leader
+		}
+		picture = GFX_leader_recruitment_bg_chronolord_paragon
+
+		trigger = {
+			always = yes
+		}
+
+		option = { # HIRE replace
+			name = chronotec_leader.1020.close
+			tag = hire_leader
+			hidden_effect = {
+				remove_country_flag = chronotec_diplomacy_engaged
+			}
+		}
+
+		option = { # DISMISS
+			name = BLANK_STRING
+			tag = dismiss_leader
+			allow = {
+				always = no
+			}
+		}
+
+		option = { # Ask about what will happen with them
+			name = chronotec_leader.1020.a
+			response_text = chronotec_leader.1020.a.response
+			hidden_effect = {
+				set_country_flag = chronotec_dissapointed
+			}
+		}
+		option = { # Ask about the future of the planet
+			name = chronotec_leader.1020.b
+			response_text = chronotec_leader.1020.b.response
+		}
+		option = { # Ask if they is angry
+			name = chronotec_leader.1020.c
+			response_text = chronotec_leader.1020.c.response
+			trigger = {
+				hidden_trigger = {
+					has_country_flag = chronotec_dissapointed
+				}
+			}
+		}
+
+		immediate = {
+			hidden_effect = {
+				set_country_flag = chronotec_diplomacy_engaged
+			}
+		}
+		after = {
+			hidden_effect = {
+				remove_country_flag = chronotec_diplomacy_engaged
+			}
+		}
+	}
+	country_event = {	# Post planet unveiled
+		id = chronotec_leader.1030
+		title = "chronotec_leader.1030.title"
+		desc = {
+			trigger = {
+				NOT = {
+					has_country_flag = chronotec_original_owner
+				}
+			}
+			text = "chronotec_leader.1030.desc"
+		}
+		desc = {
+			trigger = {
+				has_country_flag = chronotec_original_owner
+			}
+			text = "chronotec_leader.1030.nooriginal.desc"
+		}
+		show_sound = par_event_beholder
+		location = event_target:chronolord_planet
+		is_triggered_only = yes
+
+		event_window_type = leader_recruit
+		picture_event_data = {
+			portrait = event_target:chronotec_chronolord_leader
+		}
+		picture = GFX_leader_recruitment_bg_chronolord_paragon
+
+		trigger = {
+			always = yes
+		}
+
+		option = { # HIRE replace
+			name = chronotec_leader.1030.close
+			tag = hire_leader
+			hidden_effect = {
+				remove_country_flag = chronotec_diplomacy_engaged
+			}
+		}
+
+		option = { # DISMISS
+			name = BLANK_STRING
+			tag = dismiss_leader
+			allow = {
+				always = no
+			}
+		}
+
+		option = { # Ask to take control of the relic
+			name = chronotec_leader.1030.become.relic
+			response_text = chronotec_leader.1030.become.relic.response
+			trigger = {
+				NOR = {
+					has_global_flag = chronotec_corrupted
+					has_global_flag = chronotec_perfected
+					has_country_flag = chronotec_exiled_as_relic
+				}
+			}
+			hidden_effect = {
+				set_country_flag = chronotec_exiled_as_relic
+				add_relic = r_chronotec_standard
+				# Handles the leader
+				event_target:chronotec_chronolord_leader = {
+					exile_leader_as = chronotec_exiled_as_relic
+				}
+			}
+		}
+
+		option = { # Ask to become a leader again
+			name = chronotec_leader.1030.become.leader
+			response_text = chronotec_leader.1030.become.leader.response
+			trigger = {
+				has_country_flag = chronotec_exiled_as_relic
+				NOR = {
+					has_global_flag = chronotec_corrupted
+					has_global_flag = chronotec_perfected
+				}
+			}
+			hidden_effect = {
+				# As there is no way to reassign an exiled leader...
+				chronotec_convert_into_leader_effect = yes
+			}
+		}
+
+		option = { # Ask about their powers
+			name = chronotec_leader.1030.powers
+			response_text = chronotec_leader.1030.powers.response
+			trigger = {
+				NOR = {
+					has_global_flag = chronotec_corrupted
+					has_global_flag = chronotec_perfected
+				}
+			}
+		}
+		option = { # Ask about their powers - corrupted
+			name = chronotec_leader.1030.powers
+			response_text = chronotec_leader.1030.powers.response
+			trigger = {
+				has_global_flag = chronotec_corrupted
+			}
+		}
+		option = { # Ask about their powers - perfected
+			name = chronotec_leader.1030.powers
+			response_text = chronotec_leader.1030.powers.response
+			trigger = {
+				has_global_flag = chronotec_perfected
+			}
+		}
+		option = { # Ask about the relic - nointro
+			name = chronotec_leader.1030.relic
+			response_text = chronotec_leader.1030.relic.response
+			trigger = {
+				NOR = {
+					has_global_flag = chronotec_relic_intro
+					has_global_flag = chronotec_corrupted
+					has_global_flag = chronotec_perfected
+				}
+			}
+		}
+		option = { # Ask about the relic - intro done
+			name = chronotec_leader.1030.relic.intro
+			response_text = chronotec_leader.1030.relic.intro.response
+			trigger = {
+				has_global_flag = chronotec_relic_intro
+				NOR = {
+					has_global_flag = chronotec_corrupted
+					has_global_flag = chronotec_perfected
+				}
+			}
+		}
+		option = { # Ask about the relic - corrupted
+			name = chronotec_leader.1030.relic
+			response_text = chronotec_leader.1030.relic.corrupted.response
+			trigger = {
+				has_global_flag = chronotec_corrupted
+			}
+		}
+		option = { # Ask about the relic - perfected
+			name = chronotec_leader.1030.relic
+			response_text = chronotec_leader.1030.relic.perfected.response
+			trigger = {
+				has_global_flag = chronotec_perfected
+			}
+		}
+		option = { # Ask about the charges
+			name = chronotec_leader.1030.charges
+			response_text = chronotec_leader.1030.charges.response
+			trigger = {
+				NOR = {
+					has_global_flag = chronotec_corrupted
+					has_global_flag = chronotec_perfected
+				}
+			}
+		}
+		option = { # Ask about its changes - corrupted
+			name = chronotec_leader.1030.changed.corrupted
+			response_text = chronotec_leader.1030.changed.corrupted.response
+			trigger = {
+				has_global_flag = chronotec_corrupted
+			}
+		}
+		option = { # Ask about its changes - perfected
+			name = chronotec_leader.1030.changed.perfected
+			response_text = chronotec_leader.1030.changed.perfected.response
+			trigger = {
+				has_global_flag = chronotec_perfected
+			}
+		}
+
+		immediate = {
+			hidden_effect = {
+				set_country_flag = chronotec_diplomacy_engaged
+			}
+		}
+		after = {
+			hidden_effect = {
+				remove_country_flag = chronotec_diplomacy_engaged
+			}
+		}
+	}
+	country_event = {	# Leader taken by other empire but comms are maintained
+		id = chronotec_leader.1040
+		title = "chronotec_leader.1040.title"
+		desc = {
+			trigger = {
+				always = yes
+			}
+			text = "chronotec_leader.1040.desc"
+		}
+		show_sound = par_event_beholder
+		location = event_target:chronolord_planet
+		is_triggered_only = yes
+
+		event_window_type = leader_recruit
+		picture_event_data = {
+			portrait = event_target:chronotec_chronolord_leader
+		}
+		picture = GFX_leader_recruitment_bg_chronolord_paragon
+
+		trigger = {
+			always = yes
+		}
+
+		option = { # HIRE replace
+			name = chronotec_leader.1030.close
+			tag = hire_leader
+			hidden_effect = {
+				remove_country_flag = chronotec_diplomacy_engaged
+			}
+		}
+
+		option = { # DISMISS
+			name = BLANK_STRING
+			tag = dismiss_leader
+			allow = {
+				always = no
+			}
+		}
+
+		option = { # Ask why is they serving other empire
+			name = chronotec_leader.1040.why
+			response_text = chronotec_leader.1040.why.response
+		}
+		option = { # Ask about coming back
+			name = chronotec_leader.1040.come.back
+			response_text = chronotec_leader.1040.come.back.response
+		}
+
+		immediate = {
+			hidden_effect = {
+				set_country_flag = chronotec_diplomacy_engaged
+			}
+		}
+		after = {
+			hidden_effect = {
+				remove_country_flag = chronotec_diplomacy_engaged
+			}
+		}
+	}
+ # /
+# /
+
+# Leader trait handler (20xxx)
+ # on scripted effect, handled with chronotec_relic_20
+# /
+
+# Leader death things (30xxx)
+ # Leader is restored after death (also as global event target)
+	country_event = {	# Saves and Restores ruler on ruler death
+		id = chronotec_leader.3010
+		is_triggered_only = yes
+		hide_window = yes
+
+		trigger = {
+			from = {
+				has_leader_flag = chronotec_chronolord_leader
+				NOT = {	# To avoid duplicated leaders when the planet changes ownership
+					has_global_flag = chronotec_chronolord_leaves
+				}
+			}
+		}
+
+		immediate = {
+			hidden_effect = {
+				clone_leader = {
+					target = from
+				}
+			}
+			last_created_leader = {
+				copy_flags_and_variables_from = from
+				# Redundancy. just in case
+				save_global_event_target_as = chronotec_chronolord_leader
+				set_leader_flag = legendary_leader
+				set_leader_flag = chronotec_chronolord_leader
+				set_leader_flag = immune_to_negative_traits
+				set_leader_flag = leader_death_events_blocked
+			}
+			create_message = {
+				type = MESSAGE_RECRUITED_LEADER
+				localization = chronotec_chronolord_cheated_death
+				days = @toast_message_days
+				target = event_target:chronotec_chronolord_leader
+				variable = {
+					type = name
+					localization = LEADER
+					scope = event_target:chronotec_chronolord_leader
+				}
+				variable = {
+					key = "border"
+					value = "GFX_border_legendary"
+				}
+			}
+		}
+	}
+ # Leader can't be fired
+	country_event = {	# Saves and Restores ruler on ruler death
+		id = chronotec_leader.3020
+		is_triggered_only = yes
+		hide_window = yes
+
+		trigger = {
+			from = {
+				has_leader_flag = chronotec_chronolord_leader
+				NOT = {	# To avoid duplicated leaders when the planet changes ownership
+					has_global_flag = chronotec_chronolord_leaves
+				}
+			}
+		}
+
+		immediate = {
+			hidden_effect = {
+				clone_leader = {
+					target = from
+				}
+			}
+			last_created_leader = {
+				copy_flags_and_variables_from = from
+				# Redundancy. just in case
+				save_global_event_target_as = chronotec_chronolord_leader
+				set_leader_flag = legendary_leader
+				set_leader_flag = chronotec_chronolord_leader
+				set_leader_flag = immune_to_negative_traits
+				set_leader_flag = leader_death_events_blocked
+			}
+			create_message = {
+				type = MESSAGE_RECRUITED_LEADER
+				localization = chronotec_chronolord_cheated_fired
+				days = @toast_message_days
+				target = event_target:chronotec_chronolord_leader
+				variable = {
+					type = name
+					localization = LEADER
+					scope = event_target:chronotec_chronolord_leader
+				}
+				variable = {
+					key = "border"
+					value = "GFX_border_legendary"
+				}
+			}
+		}
+	}
+
+# /
+
+# Leader handlers  (40xxx)
+ # GATE
+	planet_event = {
+		id = chronotec_leader.40
+		hide_window = yes
+		is_triggered_only = yes
+
+		trigger = {
+			has_planet_flag = chronotec_chronolord_planet
+		}
+
+		immediate = {
+			# Establish comm
+			event_target:chronotec_chronolord_country = {
+				establish_communications_no_message = from
+			}
+			from = {		# Aka, they who are the New management
+				country_event = {	# Hello there!
+					id = chronotec_leader.40200
+				}
+				save_global_event_target_as = chronotec_actual_owner_country
+				establish_contact = {
+					who = THIS
+				}
+				if = {
+					limit = {
+						has_global_flag = chronotec_corrupted
+					}
+					add_relic = r_chronotec_corrupted
+				}
+				if = {
+					limit = {
+						has_global_flag = chronotec_perfected
+					}
+					add_relic = r_chronotec_perfected
+				}
+			}
+			FromFrom = {	# AKA, former owner
+				set_country_flag = chronotec_original_owner
+				country_event = {	# Farewell, for now
+					id = chronotec_leader.40100
+				}
+				chronotec_convert_into_leader_effect = yes
+				random_owned_leader = {
+					limit = {
+						has_leader_flag = chronotec_chronolord_leader
+					}
+					set_owner = event_target:chronotec_actual_owner_country
+				}
+				if = {
+					limit = {
+						has_relic = r_chronotec_standard
+					}
+					remove_relic = r_chronotec_standard
+				}
+				if = {
+					limit = {
+						has_relic = r_chronotec_corrupted
+					}
+					remove_relic = r_chronotec_corrupted
+				}
+				if = {
+					limit = {
+						has_relic = r_chronotec_perfected
+					}
+					remove_relic = r_chronotec_perfected
+				}
+			}
+		}
+	}
+	# Planet is conquered - Farewell to former owner
+	country_event = {
+		id = chronotec_leader.40100
+		title = "chronotec_leader.40100.title"
+		desc = {
+			trigger = {
+				NOT = {
+					has_country_flag = chronotec_original_owner
+				}
+			}
+			text = "chronotec_leader.40100.desc"
+		}
+		desc = {
+			trigger = {
+				has_country_flag = chronotec_original_owner
+			}
+			text = "chronotec_leader.40100.original.desc"
+		}
+		show_sound = par_event_beholder
+		location = event_target:chronolord_planet
+		is_triggered_only = yes
+
+		event_window_type = leader_recruit
+		picture_event_data = {
+			portrait = event_target:chronotec_chronolord_leader
+		}
+		picture = GFX_leader_recruitment_bg_chronolord_paragon
+
+		trigger = {
+			always = yes
+		}
+
+		option = { # HIRE replace
+			name = chronotec_leader.1030.close
+			tag = hire_leader
+			hidden_effect = {
+				remove_country_flag = chronotec_diplomacy_engaged
+			}
+		}
+
+		option = { # DISMISS
+			name = BLANK_STRING
+			tag = dismiss_leader
+			allow = {
+				always = no
+			}
+		}
+
+		option = { # Says goodbye
+			name = chronotec_leader.40100.bye
+			response_text = chronotec_leader.40100.bye.response
+			trigger = {
+				NOT = {
+					has_country_flag = chronotec_original_owner
+				}
+			}
+		}
+		option = { # Says goodbye
+			name = chronotec_leader.40100.bye.original
+			response_text = chronotec_leader.40100.bye.original.response
+			trigger = {
+				has_country_flag = chronotec_original_owner
+			}
+		}
+
+		option = { # Ask about how he can be recovered
+			name = chronotec_leader.40100.ask.recovery
+			response_text = chronotec_leader.40100.ask.recovery.response
+		}
+		option = { # Ask if they will be fine
+			name = chronotec_leader.40100.kind
+			response_text = chronotec_leader.40100.kind.response
+			trigger = {
+				values_others = yes
+			}
+		}
+
+		immediate = {
+			hidden_effect = {
+				set_country_flag = chronotec_diplomacy_engaged
+			}
+		}
+		after = {
+			hidden_effect = {
+				remove_country_flag = chronotec_diplomacy_engaged
+			}
+		}
+	}
+	# Planet is conquered - Hello to new master
+	country_event = {
+		id = chronotec_leader.40200
+		title = "chronotec_leader.40200.title"
+		desc = {
+			trigger = {
+				NOT = {
+					has_country_flag = chronotec_original_owner
+				}
+				is_homicidal = no
+			}
+			text = "chronotec_leader.40200.desc"
+		}
+		desc = {
+			trigger = {
+				has_country_flag = chronotec_original_owner
+				is_homicidal = no
+			}
+			text = "chronotec_leader.40200.original.desc"
+		}
+		desc = {
+			trigger = {
+				is_homicidal = yes
+			}
+			text = "chronotec_leader.40200.homicidal.desc"
+		}
+		show_sound = par_event_beholder
+		location = event_target:chronolord_planet
+		is_triggered_only = yes
+
+		event_window_type = leader_recruit
+		picture_event_data = {
+			portrait = event_target:chronotec_chronolord_leader
+		}
+		picture = GFX_leader_recruitment_bg_chronolord_paragon
+
+		trigger = {
+			always = yes
+		}
+
+		option = { # HIRE replace
+			name = chronotec_leader.1030.close
+			tag = hire_leader
+			hidden_effect = {
+				remove_country_flag = chronotec_diplomacy_engaged
+			}
+		}
+
+		option = { # DISMISS
+			name = BLANK_STRING
+			tag = dismiss_leader
+			allow = {
+				always = no
+			}
+		}
+
+		option = { # Says Hello
+			name = chronotec_leader.40200.hey
+			response_text = chronotec_leader.40200.hey.response
+			trigger = {
+				NOR = {
+					has_country_flag = chronotec_original_owner
+					has_valid_civic = civic_fanatic_purifiers
+					has_valid_civic = civic_hive_devouring_swarm
+				}
+			}
+		}
+		option = { # Says hey again!
+			name = chronotec_leader.40200.hey.original
+			response_text = chronotec_leader.40200.hey.original.response
+			trigger = {
+				has_country_flag = chronotec_original_owner
+				NOR = {
+					has_valid_civic = civic_fanatic_purifiers
+					has_valid_civic = civic_hive_devouring_swarm
+				}
+			}
+		}
+
+		option = { # Die xeno scum
+			name = chronotec_leader.40200.die
+			response_text = chronotec_leader.40200.die.response
+			trigger = {
+				has_valid_civic = civic_fanatic_purifiers
+			}
+		}
+		option = { # Prey...
+			name = chronotec_leader.40200.die.devouring
+			response_text = chronotec_leader.40200.die.devouring.response
+			trigger = {
+				has_valid_civic = civic_hive_devouring_swarm
+			}
+		}
+
+		option = { # Inquire about itself
+			name = chronotec_leader.40200.who
+			response_text = chronotec_leader.40200.who.response
+			trigger = {
+				NOR = {
+					has_country_flag = chronotec_original_owner
+					has_valid_civic = civic_fanatic_purifiers
+					has_valid_civic = civic_hive_devouring_swarm
+				}
+			}
+		}
+		option = { # Inquire about powers
+			name = chronotec_leader.40200.powers
+			response_text = chronotec_leader.40200.powers.response
+			trigger = {
+				NOR = {
+					has_country_flag = chronotec_original_owner
+					has_valid_civic = civic_fanatic_purifiers
+					has_valid_civic = civic_hive_devouring_swarm
+				}
+			}
+		}
+		option = { # Inquire about relic
+			name = chronotec_leader.40200.relic
+			response_text = chronotec_leader.40200.relic.response
+			trigger = {
+				NOR = {
+					has_country_flag = chronotec_original_owner
+					has_valid_civic = civic_fanatic_purifiers
+					has_valid_civic = civic_hive_devouring_swarm
+				}
+			}
+		}
+
+		#after = {	# TO DO homicidal interaction
+		#	hidden_effect = {
+		#		if = {
+		#			limit = {
+		#				is_homicidal = yes
+		#			}
+		#		}
+		#	}
+		#}
+		immediate = {
+			hidden_effect = {
+				set_country_flag = chronotec_diplomacy_engaged
+			}
+		}
+		after = {
+			hidden_effect = {
+				remove_country_flag = chronotec_diplomacy_engaged
+			}
+		}
+	}
+ # Planet is destroyed - Leader vanishes
+
+# /
+
+# Decision handlers  (50xxx)
+ # Chronoacceleration backlash 50001
+	planet_event = {
+		id = chronotec_leader.50001
+		hide_window = yes
+		show_sound = no_sound
+		is_triggered_only = yes
+
+		trigger = {
+			has_modifier = pm_chronotec_chronoacceleration
+		}
+
+		immediate = {
+			remove_modifier = pm_chronotec_chronoacceleration
+			add_modifier = {
+				modifier = pm_chronotec_chronoacceleration_backlash
+				years = 5
+			}
+		}
+	}
+ # Chronoacceleration backlash corrupted 50002
+	planet_event = {
+		id = chronotec_leader.50002
+		hide_window = yes
+		show_sound = no_sound
+		is_triggered_only = yes
+
+		trigger = {
+			has_modifier = pm_chronotec_chronoacceleration_corrupted
+		}
+
+		immediate = {
+			remove_modifier = pm_chronotec_chronoacceleration_corrupted
+			add_modifier = {
+				modifier = pm_chronotec_chronoacceleration_corrupted_backlash
+				years = 5
+			}
+		}
+	}
+ # Chronoacceleration incremental boost 50003
+	planet_event = {
+		id = chronotec_leader.50003
+		hide_window = yes
+		show_sound = no_sound
+		is_triggered_only = yes
+
+		trigger = {
+			OR = {
+				has_modifier = pm_chronotec_chronoacceleration_perfected
+			}
+		}
+
+		immediate = {
+			# TO DO incremental effect
+		}
+	}
+
+# /
+
+namespace = chronotec_relic
+# Relic events
+ # Relic activated first time (10)
+	country_event = {	# what can go wrong?
+		id = chronotec_relic.10
+		title = "chronotec_relic.10.name"
+		desc = "chronotec_relic.10.desc"
+
+		picture = GFX_evt_surreal_visions
+		show_sound = event_mystic_reveal
+		is_triggered_only = yes
+
+		trigger = {
+			NOT = {
+				has_global_flag = chronotec_relic_intro
+			}
+		}
+
+		immediate = {
+			hidden_effect = {
+				set_global_flag = chronotec_relic_intro
+			}
+		}
+
+		option = {
+			name = chronotec_relic.10.a
+			custom_tooltip = chronotec_relic.10.a.tooltip
+			icon = {
+				icon = GFX_situation_approach_shrug
+				icon_background = GFX_situation_approach_bg_yellow
+				text = chronotec_icon_text_unknown_outcome
+			}
+		}
+	}
+ # Relic booster to leader (20)
+	country_event = {	# Triggered each 10 years after obtaining the relic
+		id = chronotec_relic.20
+		hide_window = yes
+		show_sound = no_sound
+		is_triggered_only = yes
+
+		trigger = {
+			has_relic = r_chronotec_standard
+		}
+
+		immediate = {
+			chronotec_increase_charges_effect = yes
+			country_event = {
+				id = chronotec_relic.20
+				days = 3600
+			}
+			set_saved_date = {
+				key = chronotec_charge_timer
+				days_from_present = 3600
+				expires = 3600
+			}
+		}
+	}
+ # Relic change due to corruption etc (30)
+	country_event = {	# Leader gets totally changed
+		id = chronotec_relic.30
+		title = "chronotec_relic.30.title"
+		desc = {
+			trigger = {
+				has_global_flag = chronotec_corrupted
+			}
+			text = "chronotec_relic.30.desc.corrupted"
+		}
+		desc = {
+			trigger = {
+				has_global_flag = chronotec_perfected
+			}
+			text = "chronotec_relic.30.desc.perfected"
+		}
+		show_sound = par_event_beholder
+		location = event_target:chronolord_planet
+		is_triggered_only = yes
+
+		event_window_type = leader_recruit
+		picture_event_data = {
+			portrait = event_target:chronotec_chronolord_leader
+		}
+		picture = GFX_leader_recruitment_bg_chronolord_paragon
+
+		trigger = {
+			always = yes
+		}
+
+		option = { # HIRE replace
+			name = chronotec_relic.30.close
+			tag = hire_leader
+			hidden_effect = {
+				remove_country_flag = chronotec_diplomacy_engaged
+			}
+		}
+
+		option = { # DISMISS
+			name = BLANK_STRING
+			tag = dismiss_leader
+			allow = {
+				always = no
+			}
+		}
+
+		option = { # Tell he feels...different - corrupted
+			name = chronotec_relic.30.tell.corrupted
+			response_text = chronotec_relic.30.tell.corrupted.response
+			trigger = {
+				has_global_flag = chronotec_corrupted
+			}
+		}
+		option = { # Ask what will change - corrupted
+			name = chronotec_relic.30.changes.corrupted
+			response_text = chronotec_relic.30.changes.corrupted.response
+			trigger = {
+				has_global_flag = chronotec_corrupted
+			}
+		}
+
+		option = { # Tell he feels...different - perfected
+			name = chronotec_relic.30.tell.perfected
+			response_text = chronotec_relic.30.tell.perfected.response
+			trigger = {
+				has_global_flag = chronotec_perfected
+			}
+		}
+		option = { # Ask what will change - perfected
+			name = chronotec_relic.30.changes.perfected
+			response_text = chronotec_relic.30.changes.perfected.response
+			trigger = {
+				has_global_flag = chronotec_perfected
+			}
+		}
+
+		immediate = {
+			hidden_effect = {
+				set_country_flag = chronotec_diplomacy_engaged
+			}
+		}
+		after = {
+			hidden_effect = {
+				remove_country_flag = chronotec_diplomacy_engaged
+			}
+		}
+	}
+
+# /
+
+# Relic Lottery
+
+# /

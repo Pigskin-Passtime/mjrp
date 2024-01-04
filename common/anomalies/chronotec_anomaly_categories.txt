@@ -1,0 +1,141 @@
+# common\anomalies\00_anomaly_categories.txt
+
+# Authors: Rodahtnov & Zyralynn mimic
+
+# Irregular Energy Emmisions mimic (star)
+chronotec_fake_anomaly_strange_energy = {
+	desc = chronotec_fake_anomaly_strange_energy_desc
+	picture = "GFX_evt_ship_in_orbit"
+	level = @chronotec_anomaly_level
+	max_once_global = yes
+
+	spawn_chance = {
+		factor = @chronotec_anomaly_factor
+		modifier = {
+			add = 0.1
+			is_star = yes
+		}
+		modifier = {	# Avoids it appearing
+			factor = 0
+			OR = {
+				has_global_flag = chronotec_anomaly_spawned
+				has_global_flag = chronotec_allowed
+				from.owner = {
+					is_ai = yes
+				}
+			}
+		}
+	}
+
+	on_spawn = {
+		set_global_flag = chronotec_anomaly_spawned
+	}
+
+	on_success = chronotec_narrative.1001
+}
+
+# A strange resonance mimic (planet)
+chronotec_fake_anomaly_strange_resonance = {
+	desc = "chronotec_fake_anomaly_strange_resonance_desc"
+	picture = "GFX_evt_star_yellow"
+	level = @chronotec_anomaly_level
+	max_once_global = yes
+
+	spawn_chance = {
+		factor = @chronotec_anomaly_factor
+		modifier = {
+			add = 0.1
+			is_star = no
+		}
+		modifier = {
+			factor = 0
+			is_star = yes
+		}
+		modifier = {	# Avoids it appearing
+			factor = 0
+			OR = {
+				has_global_flag = chronotec_anomaly_spawned
+				has_global_flag = chronotec_allowed
+				from.owner = {
+					is_ai = yes
+				}
+			}
+		}
+	}
+
+	on_spawn = {
+		set_global_flag = chronotec_anomaly_spawned
+	}
+
+	null_spawn_chance = 0.60 # 40% chance to spawn
+
+	on_success = chronotec_narrative.1002
+}
+
+# Unusual Energy Readings mimic (planet)
+chronotec_fake_anomaly_strange_planet = {
+	desc = "chronotec_fake_anomaly_strange_planet_desc"
+	picture = GFX_evt_ship_in_orbit_3
+	level = @chronotec_anomaly_level
+	max_once_global = yes
+
+	spawn_chance = {
+		factor = @chronotec_anomaly_factor
+		modifier = {
+			add = 0.1
+			is_star = no
+		}
+		modifier = {
+			factor = 0
+			is_star = yes
+		}
+		modifier = {	# Avoids it appearing
+			factor = 0
+			OR = {
+				has_global_flag = chronotec_anomaly_spawned
+				has_global_flag = chronotec_allowed
+				from.owner = {
+					is_ai = yes
+				}
+			}
+		}
+	}
+
+	on_spawn = {
+		set_global_flag = chronotec_anomaly_spawned
+	}
+
+	on_success = chronotec_narrative.1003
+}
+
+# Interference mimic (star system)
+chronotec_fake_anomaly_strange_system = {
+	desc = "chronotec_fake_anomaly_strange_system_desc"
+	picture = "GFX_evt_ship_in_orbit_2"
+	level = @chronotec_anomaly_level
+	max_once_global = yes
+
+	spawn_chance = {
+		factor = @chronotec_anomaly_factor
+		modifier = {
+			add = 1
+			is_star = yes
+		}
+		modifier = {	# Avoids it appearing
+			factor = 0
+			OR = {
+				has_global_flag = chronotec_anomaly_spawned
+				has_global_flag = chronotec_allowed
+				from.owner = {
+					is_ai = yes
+				}
+			}
+		}
+	}
+
+	on_spawn = {
+		set_global_flag = chronotec_anomaly_spawned
+	}
+
+	on_success = chronotec_narrative.1004
+}
