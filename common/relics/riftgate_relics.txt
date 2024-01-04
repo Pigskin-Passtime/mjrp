@@ -1,0 +1,74 @@
+@activation_cost = 3000
+@triumph_duration = 3600
+@triumph_duration_short = 1800
+@triumph_duration_veryshort = 900
+
+r_riftgate_key = {
+	activation_duration = @triumph_duration
+	portrait = "GFX_relic_orb_insight"
+	sound = "relic_activation_khans_throne"
+
+	resources = {
+		category = relics
+		# Activation cost
+		cost = {
+			unity = @activation_cost
+		}
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			always = yes
+		}
+		country_claim_influence_cost_mult = -0.20
+	}
+	triggered_country_modifier = {
+		potential = {
+			always = yes
+		}
+		custom_tooltip = riftgate_key_passive_effect
+	}
+
+	score = 3000
+
+	active_effect = {
+		hidden_effect = {
+			add_modifier = {
+				modifier = "relic_activation_cooldown"
+				days = @triumph_duration_short
+			}
+		}
+		custom_tooltip = relic_triumph_cooldown
+		random_system_within_border = {
+			limit = {
+				NOT = {
+					has_megastructure = riftgate
+				}
+			}
+			if = {
+				limit = {
+					has_astral_planes_dlc = yes
+				}
+				spawn_megastructure = { 
+					type = "riftgate"
+					orbit_distance = 70
+					orbit_angle = 0
+				}
+			}
+			else = {
+				spawn_megastructure = { 
+					type = "riftgate_no_dlc"
+					orbit_distance = 70
+					orbit_angle = 0
+				}
+			}
+		}
+	}
+
+	# Possible check for activation
+	possible = { 
+		NOT = {
+			has_modifier = relic_activation_cooldown
+		}
+	}
+}

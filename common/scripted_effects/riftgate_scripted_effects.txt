@@ -1,0 +1,1062 @@
+#noscope
+create_riftspace = {
+	no_scope = {
+    	if = {
+    		limit = {
+    			has_astral_planes_dlc = yes
+    		}
+    		spawn_system = {
+				min_distance >= 700
+				max_distance <= 720
+				min_orientation_angle = 244
+				max_orientation_angle = 246
+				initializer = riftgate_space_system
+				hyperlane = no
+				effect = {
+					save_global_event_target_as = riftgate_shroud_system
+					set_star_flag = riftgate_node
+				}
+			}
+			create_species = {
+				name = "Shadows"
+				class = EXD
+				namelist = Extradimensional
+				portrait = exd1_leader
+				traits = random
+				immortal = yes
+				effect = {
+					save_global_event_target_as = main_riftgate_species
+				}
+			}
+			create_country = {
+				name = "Convergence"
+				type = "shroud_spirits"
+				species = last_created_species
+				name_list = "Extradimensional"
+				flag = {
+					icon= {
+						category = "special"
+						file = "extradimensional_01.dds"
+					}
+					background= {
+						category = "backgrounds"
+						file = "new_dawn.dds"
+					}
+					colors={
+						"red"
+						"red"
+						"null"
+						"null"
+					}
+				}
+			}
+    	}
+    	else = {
+    		spawn_system = {
+				min_distance >= 700
+				max_distance <= 720
+				min_orientation_angle = 244
+				max_orientation_angle = 246
+				initializer = riftgate_space_system_nodlc
+				hyperlane = no
+				effect = {
+					save_global_event_target_as = riftgate_shroud_system
+					set_star_flag = riftgate_node
+				}
+			}
+			create_species = {
+				name = "Shadows"
+				class = EXD
+				namelist = Extradimensional
+				portrait = exd1_leader
+				traits = random
+				immortal = yes
+				effect = {
+					save_global_event_target_as = main_riftgate_species
+				}
+			}
+			create_country = {
+				name = "Convergence"
+				type = "shroud_spirits"
+				species = last_created_species
+				name_list = "Extradimensional"
+				flag = {
+					icon= {
+						category = "special"
+						file = "extradimensional_01.dds"
+					}
+					background= {
+						category = "backgrounds"
+						file = "new_dawn.dds"
+					}
+					colors={
+						"red"
+						"red"
+						"null"
+						"null"
+					}
+				}
+			}
+    	}
+	}
+}
+#country_scope
+spawn_riftgate_starter = {
+	random_system_within_border = {
+		save_event_target_as = riftgate_spawn_system
+	}
+	event_target:riftgate_spawn_system = {
+		if = {
+			limit = {
+				has_astral_planes_dlc = yes
+			}
+			spawn_system = {
+				min_distance = 10
+				max_distance = 30
+				max_jumps = 0
+				initializer = "riftgate_starting_system"
+			}
+			if = {
+				limit = { last_created_system = { NOT = { has_hyperlane_to = prev } } }
+					add_hyperlane = {
+					from = this
+					to = last_created_system
+				}
+			}
+			else = {
+				add_extra_hyperlane_to_spawned_system_effect = yes
+			}
+		}
+		else = {
+			spawn_system = {
+				min_distance = 10
+				max_distance = 30
+				max_jumps = 0
+				initializer = "riftgate_starting_system_nodlc"
+			}
+			if = {
+				limit = { last_created_system = { NOT = { has_hyperlane_to = prev } } }
+					add_hyperlane = {
+					from = this
+					to = last_created_system
+				}
+			}
+			else = {
+				add_extra_hyperlane_to_spawned_system_effect = yes
+			}
+		}
+	}
+}
+#noscope
+create_mad_emperor = {
+	event_target:riftgate_shroud_system = {
+		system_star = {
+			save_global_event_target_as = emperor_spawnpoint
+		}
+		create_fleet = {				
+			name = "Douglas' pride"
+			settings = {
+				can_upgrade = no
+				can_change_composition = no
+				spawn_debris = no
+			}
+			effect = {
+				set_owner = event_target:main_riftgate_empire
+				if = {
+					limit = {
+						has_astral_planes_dlc = yes
+					}
+					create_ship = {
+						name = "Big Bob"
+						design = Douglas
+					}
+					set_location = {
+					target = event_target:emperor_spawnpoint
+					distance = 120
+					angle = random
+				}
+				set_fleet_flag = emperors_fleet
+				}
+				else = {
+					create_ship = {
+						name = "Big Bob"
+						design = Douglas_nodlc
+					}
+					set_location = {
+					target = event_target:emperor_spawnpoint
+					distance = 120
+					angle = random
+				}
+				set_fleet_flag = emperors_fleet
+				}
+			}
+		}
+	}
+}
+#system_scope
+riftgate_trial_end = {
+	create_fleet = {				
+		name = "The trial of the end"
+		settings = {
+			can_upgrade = no
+			can_change_composition = no
+			spawn_debris = no
+		}
+		effect = {
+			set_owner = event_target:main_riftgate_empire
+			if = {
+				limit = {
+					has_astral_planes_dlc = yes
+				}
+				create_ship = {
+					name = "???"
+					design = Douglas
+				}
+				set_location = {
+				target = event_target:riftgate_end_shrine
+				distance = 0
+				angle = 0
+			}
+			set_fleet_flag = end_trial_fleet
+			set_disable_at_health = 0.01
+			create_ambient_object = {
+				type = "psi_storm_1"
+				scale = 0.4
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 0
+					angle = 0
+				}
+			}
+			}
+			else = {
+				create_ship = {
+					name = "???"
+					design = Douglas_nodlc
+				}
+				set_location = {
+				target = event_target:riftgate_end_shrine
+				distance = 0
+				angle = 0
+			}
+			set_fleet_flag = end_trial_fleet
+			set_disable_at_health = 0.01
+			create_ambient_object = {
+				type = "psi_storm_1"
+				scale = 0.4
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 0
+					angle = 0
+				}
+			}
+			}
+		}
+	}
+	event_target:riftgate_end_shrine = {
+		remove_planet = yes
+	}
+}
+
+riftgate_trial_composer = {
+	create_fleet = {				
+		name = "The trial of the composer"
+		settings = {
+			can_upgrade = no
+			can_change_composition = no
+			spawn_debris = no
+		}
+		effect = {
+			set_owner = event_target:main_riftgate_empire
+			if = {
+				limit = {
+					has_astral_planes_dlc = yes
+				}
+				create_ship = {
+					name = "???"
+					design = Douglas
+				}
+				set_location = {
+				target = event_target:riftgate_composer_shrine
+				distance = 0
+				angle = 0
+			}
+			set_fleet_flag = composer_trial_fleet
+			set_disable_at_health = 0.01
+			create_ambient_object = {
+				type = "psi_storm_1"
+				scale = 0.4
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 0
+					angle = 0
+				}
+			}
+			}
+			else = {
+				create_ship = {
+					name = "???"
+					design = Douglas_nodlc
+				}
+				set_location = {
+				target = event_target:riftgate_composer_shrine
+				distance = 0
+				angle = 0
+			}
+			set_fleet_flag = composer_trial_fleet
+			set_disable_at_health = 0.01
+			create_ambient_object = {
+				type = "psi_storm_1"
+				scale = 0.4
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 0
+					angle = 0
+				}
+			}
+			}
+		}
+	}
+	event_target:riftgate_composer_shrine = {
+		remove_planet = yes
+	}
+}
+
+riftgate_trial_instrument = {
+	create_fleet = {				
+		name = "The trial of the instrument"
+		settings = {
+			can_upgrade = no
+			can_change_composition = no
+			spawn_debris = no
+		}
+		effect = {
+			set_owner = event_target:main_riftgate_empire
+			if = {
+				limit = {
+					has_astral_planes_dlc = yes
+				}
+				create_ship = {
+					name = "???"
+					design = Douglas
+				}
+				set_location = {
+				target = event_target:riftgate_instrument_shrine
+				distance = 0
+				angle = 0
+			}
+			set_fleet_flag = instrument_trial_fleet
+			set_disable_at_health = 0.01
+			create_ambient_object = {
+				type = "psi_storm_1"
+				scale = 0.4
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 0
+					angle = 0
+				}
+			}
+			}
+			else = {
+				create_ship = {
+					name = "???"
+					design = Douglas_nodlc
+				}
+				set_location = {
+				target = event_target:riftgate_instrument_shrine
+				distance = 0
+				angle = 0
+			}
+			set_fleet_flag = instrument_trial_fleet
+			set_disable_at_health = 0.01
+			create_ambient_object = {
+				type = "psi_storm_1"
+				scale = 0.4
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 0
+					angle = 0
+				}
+			}
+			}
+		}
+	}
+	event_target:riftgate_instrument_shrine = {
+		remove_planet = yes
+	}
+}
+
+riftgate_trial_whisperers = {
+	create_fleet = {				
+		name = "The trial of the whisperers"
+		settings = {
+			can_upgrade = no
+			can_change_composition = no
+			spawn_debris = no
+		}
+		effect = {
+			set_owner = event_target:main_riftgate_empire
+			if = {
+				limit = {
+					has_astral_planes_dlc = yes
+				}
+				create_ship = {
+					name = "???"
+					design = Douglas
+				}
+				set_location = {
+				target = event_target:riftgate_whisperer_shrine
+				distance = 0
+				angle = 0
+			}
+			set_fleet_flag = whisperers_trial_fleet
+			set_disable_at_health = 0.01
+			create_ambient_object = {
+				type = "psi_storm_1"
+				scale = 0.4
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 0
+					angle = 0
+				}
+			}
+			}
+			else = {
+				create_ship = {
+					name = "???"
+					design = Douglas_nodlc
+				}
+				set_location = {
+				target = event_target:riftgate_whisperer_shrine
+				distance = 0
+				angle = 0
+			}
+			set_fleet_flag = whisperers_trial_fleet
+			set_disable_at_health = 0.01
+			create_ambient_object = {
+				type = "psi_storm_1"
+				scale = 0.4
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 0
+					angle = 0
+				}
+			}
+			}
+		}
+	}
+	event_target:riftgate_whisperer_shrine = {
+		remove_planet = yes
+	}
+}
+
+riftgate_trial_eater = {
+	create_fleet = {				
+		name = "The trial of the eater"
+		settings = {
+			can_upgrade = no
+			can_change_composition = no
+			spawn_debris = no
+		}
+		effect = {
+			set_owner = event_target:main_riftgate_empire
+			if = {
+				limit = {
+					has_astral_planes_dlc = yes
+				}
+				create_ship = {
+					name = "???"
+					design = Douglas
+				}
+				set_location = {
+				target = event_target:riftgate_eater_shrine
+				distance = 0
+				angle = 0
+			}
+			set_fleet_flag = eater_trial_fleet
+			set_disable_at_health = 0.01
+			create_ambient_object = {
+				type = "psi_storm_1"
+				scale = 0.4
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 0
+					angle = 0
+				}
+			}
+			}
+			else = {
+				create_ship = {
+					name = "???"
+					design = Douglas_nodlc
+				}
+				set_location = {
+				target = event_target:riftgate_eater_shrine
+				distance = 0
+				angle = 0
+			}
+			set_fleet_flag = eater_trial_fleet
+			set_disable_at_health = 0.01
+			create_ambient_object = {
+				type = "psi_storm_1"
+				scale = 0.4
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 0
+					angle = 0
+				}
+			}
+			}
+		}
+	}
+	event_target:riftgate_eater_shrine = {
+		remove_planet = yes
+	}
+}
+
+rift_trial_stellarite = {
+	if = {
+		limit = {
+			host_has_dlc = "Leviathans Story Pack"
+		}
+		create_fleet = {
+			name = "Trial fleet"
+				settings = {
+					spawn_debris = no
+					is_boss = yes
+				}
+			effect = {
+				set_owner = event_target:main_riftgate_empire
+				create_ship = {
+					name = "NAME_Stellar_Devourer"
+					design = "NAME_Stellarite"
+				}
+				set_location = {
+					target = event_target:riftgate_composer_shrine
+					distance = 0
+					angle = 0
+				}
+				set_fleet_stance = aggressive
+				set_aggro_range_measure_from = self
+				set_aggro_range = 100
+				set_fleet_flag = trial_1st_wave
+			}
+		}
+	}
+	else = {
+		create_fleet = {
+			name = "Trial fleet"
+				settings = {
+					spawn_debris = no
+					is_boss = yes
+				}
+			effect = {
+				set_owner = event_target:main_riftgate_empire
+				while = {
+					count = 18
+					create_ship = {
+						name = random
+						design = "NAME_Outrider"
+						prefix = no
+						graphical_culture = "pirate_01"
+					}
+				}
+				while = {
+					count = 12
+					create_ship = {
+						name = random
+						design = "NAME_Lancer"
+						prefix = no
+						graphical_culture = "pirate_01"
+					}
+				}
+				while = {
+					count = 6
+					create_ship = {
+						name = random
+						design = "NAME_Void_Champion"
+						prefix = no
+						graphical_culture = "pirate_01"
+					}
+				}
+				while = {
+					count = 1
+					create_ship = {
+						name = random
+						design = "NAME_Ancestral_Glory"
+						prefix = no
+						graphical_culture = "pirate_01"
+					}
+				}
+			set_location = {
+				target = event_target:riftgate_instrument_shrine
+				distance = 50
+				angle = random
+			}
+				set_location = {
+					target = event_target:riftgate_composer_shrine
+					distance = 0
+					angle = 0
+				}
+				set_fleet_stance = aggressive
+				set_aggro_range_measure_from = self
+				set_aggro_range = 100
+				set_fleet_flag = trial_1st_wave
+			}
+		}
+	}
+}
+
+rift_trial_voidspawn = {
+	if = {
+		limit = {
+			host_has_dlc = "Leviathans Story Pack"
+		}
+		create_fleet = {
+			name = "Trial fleet"
+				settings = {
+					spawn_debris = no
+					is_boss = yes
+				}
+			effect = {
+				set_owner = event_target:main_riftgate_empire
+				create_ship = {
+					name = "NAME_Voidspawn"
+					design = "NAME_Voidspawn"
+				}
+				set_location = {
+					target = event_target:riftgate_composer_shrine
+					distance = 0
+					angle = 0
+				}
+				set_fleet_stance = aggressive
+				set_aggro_range_measure_from = self
+				set_aggro_range = 100
+				set_fleet_flag = trial_1st_wave
+			}
+		}
+	}
+	else = {
+		create_fleet = {
+			name = "Trial fleet"
+				settings = {
+					spawn_debris = no
+					is_boss = yes
+				}
+			effect = {
+				set_owner = event_target:main_riftgate_empire
+				while = {
+					count = 18
+					create_ship = {
+						name = random
+						design = "NAME_Outrider"
+						prefix = no
+						graphical_culture = "pirate_01"
+					}
+				}
+				while = {
+					count = 12
+					create_ship = {
+						name = random
+						design = "NAME_Lancer"
+						prefix = no
+						graphical_culture = "pirate_01"
+					}
+				}
+				while = {
+					count = 6
+					create_ship = {
+						name = random
+						design = "NAME_Void_Champion"
+						prefix = no
+						graphical_culture = "pirate_01"
+					}
+				}
+				while = {
+					count = 1
+					create_ship = {
+						name = random
+						design = "NAME_Ancestral_Glory"
+						prefix = no
+						graphical_culture = "pirate_01"
+					}
+				}
+				set_location = {
+					target = event_target:riftgate_composer_shrine
+					distance = 0
+					angle = 0
+				}
+				set_fleet_stance = aggressive
+				set_aggro_range_measure_from = self
+				set_aggro_range = 100
+				set_fleet_flag = trial_1st_wave
+			}
+		}
+	}
+}
+
+rift_trial_space_dragon = {
+	if = {
+		limit = {
+			host_has_dlc = "Leviathans Story Pack"
+		}
+		create_fleet = {
+			name = "Trial fleet"
+				settings = {
+					spawn_debris = no
+					is_boss = yes
+				}
+			effect = {
+				set_owner = event_target:main_riftgate_empire
+				create_ship = {
+					name = "NAME_Grand_Dragon"
+					design = "NAME_Shard_Dragon"
+				}
+				set_location = {
+					target = event_target:riftgate_instrument_shrine
+					distance = 0
+					angle = 0
+				}
+				set_fleet_stance = aggressive
+				set_aggro_range_measure_from = self
+				set_aggro_range = 100
+				set_fleet_flag = trial_2nd_wave
+			}
+		}
+	}
+	else = {
+		create_fleet = {
+			name = "Trial fleet"
+				settings = {
+					spawn_debris = no
+					is_boss = yes
+				}
+			effect = {
+				set_owner = event_target:main_riftgate_empire
+				while = {
+					count = 18
+					create_ship = {
+						name = random
+						design = "NAME_Outrider"
+						prefix = no
+						graphical_culture = "pirate_01"
+					}
+				}
+				while = {
+					count = 12
+					create_ship = {
+						name = random
+						design = "NAME_Lancer"
+						prefix = no
+						graphical_culture = "pirate_01"
+					}
+				}
+				while = {
+					count = 6
+					create_ship = {
+						name = random
+						design = "NAME_Void_Champion"
+						prefix = no
+						graphical_culture = "pirate_01"
+					}
+				}
+				while = {
+					count = 1
+					create_ship = {
+						name = random
+						design = "NAME_Ancestral_Glory"
+						prefix = no
+						graphical_culture = "pirate_01"
+					}
+				}
+				set_location = {
+					target = event_target:riftgate_instrument_shrine
+					distance = 0
+					angle = 0
+				}
+				set_fleet_stance = aggressive
+				set_aggro_range_measure_from = self
+				set_aggro_range = 100
+				set_fleet_flag = trial_2nd_wave
+			}
+		}
+	}
+}
+
+rift_trial_great_khan = {
+	create_fleet = {
+		name = "Trial fleet"
+			settings = {
+				spawn_debris = no
+				is_boss = yes
+				}
+		effect = {
+			set_owner = event_target:main_riftgate_empire
+			while = {
+					count = 18
+					create_ship = {
+						name = random
+						design = "NAME_Outrider"
+						prefix = no
+						graphical_culture = "pirate_01"
+					}
+				}
+				while = {
+					count = 12
+					create_ship = {
+						name = random
+						design = "NAME_Lancer"
+						prefix = no
+						graphical_culture = "pirate_01"
+					}
+				}
+				while = {
+					count = 6
+					create_ship = {
+						name = random
+						design = "NAME_Void_Champion"
+						prefix = no
+						graphical_culture = "pirate_01"
+					}
+				}
+				while = {
+					count = 1
+					create_ship = {
+						name = random
+						design = "NAME_Ancestral_Glory"
+						prefix = no
+						graphical_culture = "pirate_01"
+					}
+				}
+			set_location = {
+				target = event_target:riftgate_instrument_shrine
+				distance = 50
+				angle = random
+			}
+			set_fleet_stance = aggressive
+			set_aggro_range_measure_from = self
+			set_aggro_range = 100
+			set_fleet_flag = trial_2nd_wave
+		}
+	}
+}
+
+rift_trial_tiyanki_matriarch = {
+	if = {
+		limit = {
+			host_has_dlc = "Leviathans Story Pack"
+		}
+		create_fleet = {
+			name = "Trial fleet"
+				settings = {
+					spawn_debris = no
+					is_boss = yes
+				}
+			effect = {
+				set_owner = event_target:main_riftgate_empire
+				create_ship = {
+					name = "Trial Matriarch"
+					design = "NAME_Elderly_Tiyanki"
+				}
+				set_location = {
+					target = event_target:riftgate_whisperer_shrine
+					distance = 0
+					angle = 0
+				}
+				set_fleet_stance = aggressive
+				set_aggro_range_measure_from = self
+				set_aggro_range = 100
+				set_fleet_flag = trial_3rd_wave
+			}
+		}
+	}
+	else = {
+		create_fleet = {
+			name = "Trial fleet"
+				settings = {
+					spawn_debris = no
+					is_boss = yes
+				}
+			effect = {
+				set_owner = event_target:main_riftgate_empire
+				while = {
+					count = 18
+					create_ship = {
+						name = random
+						design = "NAME_Outrider"
+						prefix = no
+						graphical_culture = "pirate_01"
+					}
+				}
+				while = {
+					count = 12
+					create_ship = {
+						name = random
+						design = "NAME_Lancer"
+						prefix = no
+						graphical_culture = "pirate_01"
+					}
+				}
+				while = {
+					count = 6
+					create_ship = {
+						name = random
+						design = "NAME_Void_Champion"
+						prefix = no
+						graphical_culture = "pirate_01"
+					}
+				}
+				while = {
+					count = 1
+					create_ship = {
+						name = random
+						design = "NAME_Ancestral_Glory"
+						prefix = no
+						graphical_culture = "pirate_01"
+					}
+				}
+				set_location = {
+					target = event_target:riftgate_whisperer_shrine
+					distance = 0
+					angle = 0
+				}
+				set_fleet_stance = aggressive
+				set_aggro_range_measure_from = self
+				set_aggro_range = 100
+				set_fleet_flag = trial_3rd_wave
+			}
+		}
+	}
+}
+
+rift_trial_prethoryn = {
+	create_leader = {
+		class = commander
+		species = event_target:prethoryn_species
+		name = random
+		skill = 3
+		set_age = 2510
+		traits = {
+			trait = leader_trait_void_swimmer
+		}
+	}
+	create_fleet = {
+		name = "Trial fleet"
+			settings = {
+				spawn_debris = no
+				is_boss = yes
+			}
+		effect = {
+			set_owner = event_target:main_riftgate_empire
+			while = {
+				count = 60
+				create_ship = {
+					name = random
+					design = "NAME_Swarm_Small"
+					graphical_culture = "swarm_01"
+				}
+			}
+			set_location = {
+				target = event_target:riftgate_whisperer_shrine
+				distance = 50
+				angle = random
+			}
+			set_fleet_stance = aggressive
+			set_aggro_range_measure_from = self
+			set_aggro_range = 100
+			set_fleet_flag = trial_3rd_wave
+		}
+	}
+}
+
+rift_trial_unbidden = {
+	create_fleet = {
+		name = "Trial fleet"
+			settings = {
+				spawn_debris = no
+				is_boss = yes
+			}
+		effect = {
+			set_owner = event_target:main_riftgate_empire
+			while = {
+				count = 15
+					create_ship = {
+						name = random
+						design = "NAME_Revenant"
+						graphical_culture = "extra_dimensional_01"
+					}
+				}
+				while = {
+					count = 15
+					create_ship = {
+						name = random
+						design = "NAME_Phantom"
+						graphical_culture = "extra_dimensional_01"
+					}
+				}
+				while = {
+					count = 15
+					create_ship = {
+						name = random
+						design = "NAME_Wraith"
+						graphical_culture = "extra_dimensional_01"
+					}
+				}
+			set_location = {
+				target = event_target:riftgate_eater_shrine
+				distance = 50
+				angle = random
+			}
+			set_fleet_stance = aggressive
+			set_aggro_range_measure_from = self
+			set_aggro_range = 100
+			set_fleet_flag = trial_4th_wave
+		}
+	}
+}
+
+rift_trial_bubbles = {
+	create_fleet = {
+		name = "Trial fleet"
+			settings = {
+				spawn_debris = no
+				is_boss = yes
+			}
+		effect = {
+			set_owner = event_target:main_riftgate_empire
+			create_ship = {
+				name = "Bubbles"
+				design = "NAME_Adopted_Amoeba_Centenarian"
+			}
+			set_location = {
+				target = event_target:riftgate_eater_shrine
+				distance = 50
+				angle = random
+			}
+			set_fleet_stance = aggressive
+			set_aggro_range_measure_from = self
+			set_aggro_range = 100
+			set_fleet_flag = trial_4th_wave
+		}
+	}
+}

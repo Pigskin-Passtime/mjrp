@@ -1,0 +1,431 @@
+namespace = riftgate
+#spawn the rift space and the rift empire
+country_event = {
+	id = riftgate.1
+	hide_window = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_relic = r_riftgate_key
+		#has_global_flag = riftgate_Convergence_enabled
+		is_spiritualist = yes
+	}
+	immediate = {
+		create_riftspace = yes
+		last_created_country = {
+			save_global_event_target_as = main_riftgate_empire
+			set_country_flag = riftgate_empire
+			country_event = {
+				id = riftgate.2
+			}
+		}
+	}
+}
+#first trial (will fire through on_action text event first entering system)
+country_event = {
+	id = riftgate.2
+	hide_window = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	immediate = {
+		random_list = {
+			10 = {rift_trial_stellarite = yes}
+			10 = {rift_trial_voidspawn = yes}
+		}
+		#riftgate_trial_composer = yes
+	}
+}
+#second trial
+country_event = {
+	id = riftgate.3
+	hide_window = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	immediate = {
+		random_list = {
+			10 = {rift_trial_space_dragon = yes}
+			10 = {rift_trial_great_khan = yes}
+		}
+		#riftgate_trial_instrument = yes
+	}
+}
+#third trial
+country_event = {
+	id = riftgate.4
+	hide_window = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	immediate = {
+		random_list = {
+			10 = {rift_trial_tiyanki_matriarch = yes}
+			10 = {rift_trial_prethoryn = yes}
+		}
+		#riftgate_trial_whisperers = yes
+	}
+}
+#last trial
+country_event = {
+	id = riftgate.5
+	hide_window = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	immediate = {
+		random_list = {
+			90 = {rift_trial_unbidden = yes}
+			10 = {rift_trial_bubbles = yes}
+		}
+		#riftgate_trial_eater = yes
+	}
+}
+#cycle through all 4 events
+country_event = {
+	id = riftgate.6
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		fromfrom = {
+			OR = {
+				has_fleet_flag = trial_1st_wave
+				has_fleet_flag = trial_2nd_wave
+				has_fleet_flag = trial_3rd_wave
+				has_fleet_flag = trial_4th_wave
+			}
+		}
+	}
+	immediate = {
+		if = {
+			limit = {
+				FromFrom = {has_fleet_flag = trial_1st_wave}
+			}
+			from = {
+				country_event = {
+					id = riftgate.7
+				}
+			}
+		}
+
+		if = {
+			limit = {
+				FromFrom = {has_fleet_flag = trial_2nd_wave}
+			}
+			from = {
+				country_event = {
+					id = riftgate.8
+				}
+			}
+		}
+
+		if = {
+			limit = {
+				FromFrom = {has_fleet_flag = trial_3rd_wave}
+			}
+			from = {
+				country_event = {
+					id = riftgate.9
+				}
+			}
+		}
+
+		if = {
+			limit = {
+				FromFrom = {has_fleet_flag = trial_4th_wave}
+			}
+			from = {
+				country_event = {
+					id = riftgate.11
+				}
+			}
+		}
+	}
+}
+
+country_event = { #fire 2nd trial
+	id = riftgate.7
+	title = "riftgate.7.name"
+	desc = "riftgate.7.desc"
+	picture = GFX_evt_fleet_evil
+	show_sound = event_faceoff_in_space
+	is_triggered_only = yes
+
+	option = {
+		name = "riftgate.7.a"
+		custom_tooltip = riftgate.7.a.desc
+	}
+
+	after = {
+		event_target:main_riftgate_empire = {
+			country_event = {
+				id = riftgate.3
+			}
+		}
+	}
+}
+
+country_event = { #fire 3rd trial
+	id = riftgate.8
+	title = "riftgate.8.name"
+	desc = "riftgate.8.desc"
+	picture = GFX_evt_fleet_evil
+	show_sound = event_faceoff_in_space
+	is_triggered_only = yes
+
+	option = {
+		name = "riftgate.8.a"
+		custom_tooltip = riftgate.8.a.desc
+	}
+
+	after = {
+		event_target:main_riftgate_empire = {
+			country_event = {
+				id = riftgate.4
+			}
+		}
+	}
+}
+
+country_event = { #fire 4th trial
+	id = riftgate.9
+	title = "riftgate.9.name"
+	desc = "riftgate.9.desc"
+	picture = GFX_evt_fleet_evil
+	show_sound = event_faceoff_in_space
+	is_triggered_only = yes
+
+	option = {
+		name = "riftgate.9.a"
+		custom_tooltip = riftgate.9.a.desc
+	}
+
+	after = {
+		event_target:main_riftgate_empire = {
+			country_event = {
+				id = riftgate.5
+			}
+		}
+	}
+}
+
+ship_event = { #first trial begins when fleet enters system
+	id = riftgate.10
+	title = "riftgate.10.name"
+	desc = "riftgate.10.desc"
+	picture = GFX_evt_fleet_evil
+	show_sound = event_faceoff_in_space
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		from = {
+			has_star_flag = riftgate_nexus
+		}
+		fromfrom = {
+			NOT = {
+				has_country_flag = riftgate_empire
+			}
+		}
+	}
+	option = {
+		name = "riftgate.10.a"
+		custom_tooltip = riftgate.10.a.desc
+	}
+}
+
+country_event = { #All trials completed
+	id = riftgate.11
+	title = "riftgate.11.name"
+	desc = "riftgate.11.desc"
+	picture = GFX_evt_fleet_evil
+	show_sound = event_faceoff_in_space
+	is_triggered_only = yes
+
+	option = {
+		name = "riftgate.11.a"
+		custom_tooltip = riftgate.11.a.desc
+	}
+
+	after = {
+		event_target:main_riftgate_empire = {
+			country_event = {
+				id = riftgate.12
+			}
+		}
+	}
+}
+
+country_event = { #activate shard defense protocol
+	id = riftgate.12
+	hide_window = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	immediate = {
+		#destroy ambient objects
+		event_target:riftgate_shroud_system = {
+			every_system_ambient_object = {
+				limit = {
+					is_ambient_object_type = psi_storm_1
+				}
+				destroy_ambient_object = this
+			}
+		}
+		riftgate_trial_end = yes
+		riftgate_trial_composer = yes
+		riftgate_trial_instrument = yes
+		riftgate_trial_whisperers = yes
+		riftgate_trial_eater = yes
+		create_mad_emperor = yes
+	}
+}
+#create digsite for the relic(deprecated)
+country_event = {
+	id = riftgate.13
+	hide_window = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		is_ai = no
+		#has_global_flag = riftgate_Convergence_enabled
+	}
+	immediate = {
+		spawn_riftgate_starter = yes
+	}
+}
+country_event = { #emperor defeated
+	id = riftgate.14
+	hide_window = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		FromFrom = {has_fleet_flag = emperors_fleet}
+	}
+	immediate = {
+		from = {
+			country_event = {
+				id = riftgate.15
+			}
+		}
+	}
+}
+
+country_event = { #Emperor defeat notification
+	id = riftgate.15
+	title = "riftgate.15.name"
+	desc = "riftgate.15.desc"
+	picture = GFX_evt_fleet_evil
+	show_sound = event_faceoff_in_space
+	is_triggered_only = yes
+
+	option = {
+		name = "riftgate.15.a"
+		custom_tooltip = riftgate.15.a.desc
+	}
+
+	after = {
+		country_event = {
+			id = riftgate.16
+		}
+	}
+}
+
+country_event = { #Emperor lore + choice
+	id = riftgate.16
+	title = "riftgate.16.name"
+	desc = "riftgate.16.desc"
+	picture = GFX_evt_astral_rift_tower_invitation
+	show_sound = event_faceoff_in_space
+	event_window_type = leader_story
+	is_triggered_only = yes
+	picture_event_data = {
+		portrait = event_target:riftgate_gamemaster
+		room = root.owner
+	}
+
+	option = {
+		name = "riftgate.16.a"
+		response_text = riftgate.16.a.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = "riftgate.16.b"
+		response_text = riftgate.16.b.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = "riftgate.16.c"
+		response_text = riftgate.16.c.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = "riftgate.16.d"
+		custom_tooltip = riftgate.16.d.desc
+		add_relic = r_riftgate_key
+		event_target:riftgate_gamemaster = {
+			kill_leader = {
+				show_notification = yes
+				fire = no
+			}
+		}
+		country_event = {
+			id = riftgate.17 #Convergence is dead
+			days = 3
+		}
+	}
+	option = {
+		name = "riftgate.16.e" #recruit him again
+		custom_tooltip = riftgate.16.e.desc
+		add_relic = r_riftgate_key
+		event_target:riftgate_gamemaster = {
+			set_owner = root
+		}
+		event_target:main_riftgate_empire = {
+			every_owned_fleet = {
+				set_owner = root
+			}
+			destroy_country = yes
+		}
+		country_event = {
+			id = riftgate.18 #Convergence lives
+			days = 3
+		}
+	}
+}
+
+country_event = { #Emperor defeat notification
+	id = riftgate.17
+	title = "riftgate.17.name"
+	desc = "riftgate.17.desc"
+	picture = GFX_evt_astral_rift_microverse
+	show_sound = event_faceoff_in_space
+	is_triggered_only = yes
+
+	option = {
+		name = "riftgate.17.a"
+		custom_tooltip = riftgate.17.a.desc
+	}
+
+	after = {
+		country_event = {
+			id = riftgate.17
+		}
+	}
+}
+
+country_event = { #recruitment
+	id = riftgate.18
+	title = "riftgate.18.name"
+	desc = "riftgate.18.desc"
+	picture = GFX_evt_astral_rift_tower_invitation
+	is_triggered_only = yes
+
+	option = {
+		name = "riftgate.18.a"
+		custom_tooltip = riftgate.18.a.desc
+	}
+
+	after = {
+		set_country_flag = gamemaster_recaptured_country # :o
+		start_situation = {
+			type = situation_riftgate_convergence_corruption
+			target = root
+		}
+	}
+}

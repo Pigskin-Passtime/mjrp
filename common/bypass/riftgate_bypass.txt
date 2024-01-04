@@ -1,0 +1,38 @@
+riftgate = {
+	name = RIFTGATE_GALACTIC
+	is_pathfind = yes
+	uses_action = yes
+	requires_exploration = no
+	always_active = yes
+	windup_time = 40
+	winddown_time = 20
+	ftl_multiplier = 0
+	extends_sensors = no			# 0 means instant
+	remember_instances = no	# whether countries remember meeting a specific instance of that type, or if they just remember seeing the type in general
+	galactic_map_tooltip_header = RIFTGATE_GALACTIC
+	galactic_map_tooltip_desc = RIFTGATE_GALACTIC_DESC
+	connection_type = scripted_connection
+	animation_time = 10
+	ftl_ship_effect = "wormhole_ftl_ship_effect_entity"
+	ftl_bypass_effect = "wormhole_ftl_bypass_effect_entity"
+	can_bypass_be_locked = yes
+
+	country_can_use = {
+		has_country_flag = riftgate_shall_pass
+	}
+
+	scripted_connection = {
+
+		# defines endpoints that can only reach the "nexus"
+		node = {
+			# system scope
+			has_star_flag = riftgate_node
+		}
+
+		# defines endpoint(s) that can reach all "nodes" (but not other nexuses)
+		nexus = {
+			# system scope
+			has_star_flag = riftgate_nexus
+		}
+	}
+}
