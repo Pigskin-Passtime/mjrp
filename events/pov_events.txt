@@ -19,6 +19,16 @@ country_event = {
 
 	
 	immediate = {
+		event_target:vir_planet_0 = { 
+			solar_system = {
+				every_system_planet = {
+					limit = {
+						is_planet_class = pc_pov_ai_broken
+					}
+					save_event_target_as = vir_home_planet
+				}
+			}
+		}
 		create_species = {
 			name = "NAME_Unknown"
 			class = ROBOT
@@ -42,21 +52,20 @@ country_event = {
 			immortal = yes
 			randomize_traits = no
 			hide_age = yes
-			traits = {
-				trait = leader_trait_dedicated_teacher
-				trait = leader_trait_pov_short_temper
-				trait = leader_trait_scrapper_2
-				trait = leader_trait_adaptable
-				trait = leader_trait_architectural_interest_2
-			}
+			background_planet = event_target:vir_home_planet
 			effect = {
 				save_global_event_target_as = prof_vir_leader
 				set_leader_flag = legendary_leader
-				set_leader_flag = immune_to_negative_traits
-				set_leader_flag = normal_professor
 				set_owner = root
 				exile_leader_as = prof_vir_leader
 			}
+		}
+		last_created_leader = {
+			add_trait = leader_trait_dedicated_teacher
+			add_trait = leader_trait_pov_short_temper
+			add_trait = leader_trait_scrapper_2
+			set_leader_flag = immune_to_negative_traits
+			set_leader_flag = normal_professor
 		}
 		if = { limit = { has_utopia = yes } 
 			last_created_leader = { add_trait_no_notify = leader_trait_synthetic }
@@ -158,17 +167,9 @@ country_event = {
 		sound = "full_tut_advisor"
 
 		hidden_effect = {
-			clone_leader = {
-				target = event_target:prof_vir_leader
-				background_planet = event_target:vir_home_planet
-			}
-			last_created_leader = {
+			event_target:prof_vir_leader = {
 				set_leader_flag = prof_of_vir
-				set_leader_flag = legendary_leader
-				save_global_event_target_as = prof_vir_leader
-				set_leader_flag = immune_to_negative_traits
 				set_leader_flag = cannot_be_ruler
-				set_leader_flag = normal_professor
 				set_owner = root
 			}
 			owner = { 
@@ -1489,6 +1490,16 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
+		event_target:vir_planet_0 = { 
+			solar_system = {
+				every_system_planet = {
+					limit = {
+						is_planet_class = pc_pov_ai_broken
+					}
+					save_event_target_as = vir_home_planet
+				}
+			}
+		}
 		create_species = {
 			name = "NAME_Unknown"
 			class = ROBOT
@@ -1512,21 +1523,20 @@ country_event = {
 			immortal = yes
 			randomize_traits = no
 			hide_age = yes
-			traits = {
-				trait = leader_trait_dedicated_teacher
-				trait = leader_trait_pov_short_temper
-				trait = leader_trait_scrapper_2
-				trait = leader_trait_adaptable
-				trait = leader_trait_architectural_interest_2
-			}
+			background_planet = event_target:vir_home_planet
 			effect = {
 				save_global_event_target_as = prof_vir_leader
 				set_leader_flag = legendary_leader
-				set_leader_flag = immune_to_negative_traits
-				set_leader_flag = hive_professor
 				set_owner = root
 				exile_leader_as = prof_vir_leader
 			}
+		}
+		last_created_leader = {
+			add_trait = leader_trait_dedicated_teacher
+			add_trait = leader_trait_pov_short_temper
+			add_trait = leader_trait_scrapper_2
+			set_leader_flag = immune_to_negative_traits
+			set_leader_flag = hive_professor
 		}
 		if = { limit = { has_utopia = yes } 
 			last_created_leader = { add_trait_no_notify = leader_trait_synthetic }
@@ -1977,16 +1987,8 @@ country_event = { #hive hire event
 		sound = "full_tut_advisor"
 
 		hidden_effect = {
-			clone_leader = {
-				target = event_target:prof_vir_leader
-				background_planet = event_target:vir_home_planet
-			}
-			last_created_leader = {
+			event_target:prof_vir_leader = {
 				set_leader_flag = prof_of_vir
-				set_leader_flag = legendary_leader
-				save_global_event_target_as = prof_vir_leader
-				set_leader_flag = immune_to_negative_traits
-				set_leader_flag = cannot_be_ruler
 				set_owner = root
 			}
 			owner = { 
@@ -2585,6 +2587,16 @@ country_event = { # storyline is that the professor is actively avoiding machine
 	diplomatic = yes
 	
 	immediate = {
+		event_target:vir_planet_0 = { #gets home planet
+			solar_system = {
+				every_system_planet = {
+					limit = {
+						is_planet_class = pc_pov_ai_broken
+					}
+					save_event_target_as = vir_home_planet
+				}
+			}
+		}
 		create_species = {
 			name = "NAME_Unknown"
 			class = ROBOT
@@ -2608,21 +2620,22 @@ country_event = { # storyline is that the professor is actively avoiding machine
 			immortal = yes
 			randomize_traits = no
 			hide_age = yes
-				
-			traits = { #add another, feels empty with only 3
-				trait = leader_trait_pov_short_temper
-				trait = leader_trait_scrapper_2
-				trait = leader_trait_stubborn
-				trait = leader_trait_architectural_interest_2
-			}
+			background_planet = vir_home_planet
 			effect = {
 				save_global_event_target_as = prof_vir_leader
 				set_leader_flag = legendary_leader
-				set_leader_flag = immune_to_negative_traits
-				set_leader_flag = hive_professor
 				set_owner = root
 				exile_leader_as = prof_vir_leader
-			}	
+			}
+		}
+			
+		last_created_leader = {
+			add_trait = leader_trait_pov_short_temper
+			add_trait = leader_trait_scrapper_2
+			add_trait = leader_trait_stubborn
+			add_trait = leader_trait_architectural_interest_2
+			set_leader_flag = immune_to_negative_traits
+			set_leader_flag = hive_professor
 		}
 		if = { limit = { has_utopia = yes } 
 			last_created_leader = { add_trait_no_notify = leader_trait_synthetic }
@@ -2827,19 +2840,6 @@ country_event = {
 		exists = event_target:prof_vir_leader
 	}
 
-	immediate = {
-	event_target:vir_planet_0 = { #the things I do to reduce global_event_target count down and keep MrFreak happy. I'm doing my part! 
-			solar_system = {
-				every_system_planet = {
-					limit = {
-						is_planet_class = pc_pov_ai_broken
-					}
-					save_event_target_as = vir_home_planet
-				}
-			}
-		}
-	}
-
 	option = {
 		# Special tag to make mark this is the hire option
 		name = HIRE
@@ -2847,17 +2847,9 @@ country_event = {
 		sound = "full_tut_advisor"
 
 		hidden_effect = {
-			clone_leader = {
-				target = event_target:prof_vir_leader
-				background_planet = event_target:vir_home_planet
-			}
-			last_created_leader = {
+			event_target:prof_vir_leader = {
 				set_leader_flag = prof_of_vir
-				set_leader_flag = legendary_leader
-				save_global_event_target_as = prof_vir_leader
-				set_leader_flag = immune_to_negative_traits
 				set_leader_flag = cannot_be_ruler
-				set_leader_flag = hive_professor
 				set_owner = root
 			}
 		}
