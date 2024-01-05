@@ -1,6 +1,13 @@
 namespace = hskv
 #TODO - Make sure events only trigger if it is valid (i.e. Thayo is alive and in your empire. Or If his questline is active)
 #TODO - Put some comment marker next to everything you want to look into for balancing
+# Also TODO: Balance all the numbers
+# TODO Add COLORS to the loc file
+# TODO Be concerned about situation where the FE is killed off early
+# TODO Galactic Paragons utterly breaks Thayo
+# TODO Review all event picture and event show_sound
+# TODO Make sure you have the right response to each event
+# You got too many negative events with EXCELLENT
 
 # Special Project to follow up on the signal
 ship_event = {
@@ -495,7 +502,7 @@ country_event = {
 
 	immediate = {
 		create_country = {
-			name = "NAME_leader_country"
+			name = random
 			type = faction
 			auto_delete = yes
 			flag = {
@@ -560,7 +567,7 @@ country_event = {
 			set_leader_flag = cannot_be_ruler
 			set_leader_flag = hskv_thayo_everdawn_leader
 
-			add_trait_no_notify = subclass_official_diplomacy_councilor #todo flag for paragons?
+			add_trait_no_notify = subclass_official_diplomacy_councilor
 			add_trait_no_notify = hskv_leader_trait_thayo_everdawn
 			add_trait_no_notify = leader_trait_psionic
 			add_trait_no_notify = leader_trait_adaptable_2
@@ -638,7 +645,7 @@ country_event = {
 				# set_leader_flag = no_subclass_traits
 				# set_leader_flag = no_destiny_traits
 	
-				add_trait_no_notify = subclass_official_diplomacy_councilor #todo flag for paragons?
+				add_trait_no_notify = subclass_official_diplomacy_councilor
 				add_trait_no_notify = hskv_leader_trait_thayo_everdawn
 				add_trait_no_notify = leader_trait_psionic
 				add_trait_no_notify = leader_trait_adaptable_2
@@ -885,8 +892,11 @@ country_event = {
 				amount = 10
 				who = event_target:hskv_target_fe_country
 			}
-			add_resource = {
-				society_research = 1000
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+				max = @tier2researchmax
 			}
 			event_target:hskv_thayo_everdawn_leader = {
 				add_trait = leader_trait_politician
@@ -928,13 +938,13 @@ country_event = {
 			owner = {
 				resource_stockpile_compare = {
 					resource = energy
-					value >= 750
+					value >= 1000
 				}
 			}
 		}
 		owner = {
 			add_resource = {
-				energy = -750
+				energy = -1000
 			}
 			random_owned_planet = {
 				# while = {
@@ -1091,7 +1101,7 @@ country_event = {
 	}
 
 	option = {
-		name = hskv.130.response
+		name = EXCELLENT
 		owner = {
 			event_target:hskv_thayo_everdawn_leader = {
 				add_trait = hskv_leader_trait_worker_oversight
@@ -1124,7 +1134,7 @@ country_event = {
 	}
 
 	option = {
-		name = hskv.130.response
+		name = EXCELLENT
 		hidden_effect = {
 			country_event = {
 				id = hskv.132
@@ -1192,7 +1202,7 @@ country_event = {
 	}
 
 	option = {
-		name = hskv.135.response
+		name = DISCONCERTING
 		owner = {
 			random_owned_planet = {
 				add_modifier = {
@@ -1217,7 +1227,7 @@ country_event = {
 # Thayo's Governing Planet gets a real boost, but then bad event later on
 country_event = {
 	id = hskv.136
-	title = hskv.130.name
+	title = hskv.136.name
 	desc = hskv.136.desc
 	picture = GFX_evt_legendary_leader
 	show_sound = event_ship_bridge
@@ -1242,11 +1252,10 @@ country_event = {
 	}
 
 	option = {
-		name = hskv.136.response
+		name = INTRIGUING
 		event_target:hskv_thayo_governing_planet = {
-			# TODO get right modifer
 			add_modifier = {
-				modifier = crime_wave
+				modifier = hskv_productivity_boost
 				years = 10
 			}
 		}
@@ -1256,8 +1265,8 @@ country_event = {
 			event_target:hskv_thayo_governing_planet = {
 				planet_event = {
 					id = hskv.137
-					days = 700
-					random  = 500
+					days = 1000
+					random  = 2200
 				}
 			}
 		}
@@ -1267,17 +1276,24 @@ country_event = {
 # Factory Explosion
 planet_event = {
 	id = hskv.137
-	title = hskv.130.name
+	title = hskv.137.name
 	desc = hskv.137.desc
 	picture = GFX_evt_legendary_leader
 	show_sound = event_ship_bridge
 	is_triggered_only = yes
 
 	option = {
-		name = hskv.137.response
+		name = UNFORTUNATE
 		planet = {
+			remove_modifier = hskv_productivity_boost
 			add_planet_devastation = 20
+			add_blocker = {
+				type = d_failing_infrastructure
+				blocked_deposit = random
+			}
 			ruin_building = random_no_capital
+			ruin_building = random_no_capital
+			random_owned_pop = { kill_pop = yes }
 			random_owned_pop = { kill_pop = yes }
 		}
 	}
@@ -1349,7 +1365,7 @@ country_event = {
 
 	# Massive Free asset with every empire you have communication with DLC LOCKED
 	# IF you lack the DLC, gain 2x intel instead
-	# add_base_country_intel = 105
+	# add_base_country_intel = 10
 	# But also an opinion hit a -25 opinion hit (decays)
 	# Also costs resources
 	option = {
@@ -1360,13 +1376,13 @@ country_event = {
 				#TODO BALANCE ME
 				resource_stockpile_compare = {
 					resource = energy
-					value >= 750
+					value >= 1500
 				}
 			}
 		}
 		owner = {
 			add_resource = {
-				energy = -750
+				energy = -1500
 			}
 
 			if = {
@@ -1481,7 +1497,7 @@ country_event = {
 	# -10% ship/base cost
 	# +15% ship/base upkeep costs
 	option = {
-		name = AMAZING
+		name = hskv.142.response.a
 		owner = {
 			add_modifier = {
 				modifier = hskv_questionable_military_contract
@@ -1492,19 +1508,19 @@ country_event = {
 	# No. Just No
 	# Pay the breach of contract fee to get out of this
 	option = {
-		name = AMAZING
+		name = hskv.142.response.b
 		allow = {
 			owner = {
 				#TODO BALANCE ME
 				resource_stockpile_compare = {
 					resource = energy
-					value >= 750
+					value >= 2000
 				}
 			}
 		}
 		owner = {
 			add_resource = {
-				energy = -750
+				energy = -2000
 			}
 		}
 	}
@@ -1524,10 +1540,12 @@ country_event = {
 	}
 
 	option = {
-		name = AMAZING
+		name = UNFORTUNATE
 		owner = {
 			add_resource = {
 				energy = -750
+				minerals = -500
+				food = -500
 			}
 
 			random_owned_planet = {
@@ -1570,7 +1588,7 @@ country_event = {
 	}
 
 	option = {
-		name = AMAZING
+		name = UNDERSTOOD
 		owner = {
 			event_target:hskv_thayo_everdawn_leader = {
 				add_trait = hskv_leader_trait_specialist_oversight
@@ -1613,12 +1631,12 @@ country_event = {
 	}
 
 	option = {
-		name = hskv.130.response
+		name = DISAPPOINTING
 		event_target:hskv_thayo_everdawn_leader = {
 			add_trait = hskv_leader_trait_corruption
 		}
 		add_resource = {
-			energy = -750
+			energy = -1000
 		}
 		hidden_effect = {
 		}
@@ -1644,7 +1662,7 @@ country_event = {
 	}
 
 	option = {
-		name = hskv.130.response
+		name = INTERESTING
 		owner = {
 			add_modifier = {
 				modifier = hskv_new_age_of_piracy
@@ -1663,11 +1681,11 @@ country_event = {
 	}
 }
 
-# Another Crimewave
+# Another Crimewave (this one is big)
 country_event = {
 	id = hskv.153
-	title = hskv.153.name
-	desc = hskv.153.desc
+	title = hskv.143.name
+	desc = hskv.143.desc
 	picture = GFX_evt_legendary_leader
 	show_sound = event_ship_bridge
 	is_triggered_only = yes
@@ -1677,10 +1695,14 @@ country_event = {
 	}
 
 	option = {
-		name = AMAZING
+		name = UNFORTUNATE
 		owner = {
 			add_resource = {
-				energy = -1000
+				energy = -1500
+				minerals = -750
+				food = -500
+				consumer_goods = -400
+				alloys = -200
 			}
 
 			random_owned_planet = {
@@ -1765,8 +1787,7 @@ country_event = {
 		}
 	}
 }
-# Empirewide Crime, and it seems like Thayo's fault, 
-# but at least when you yell at him, he has worked to make the police more effective
+# Empirewide Crime, and it seems like Thayo's fault as his stealing becomes even more brazen and known
 country_event = {
 	id = hskv.161
 	title = hskv.161.name
@@ -1786,15 +1807,16 @@ country_event = {
 	}
 
 	option = {
-		name = hskv.130.response
+		name = WORRYING
 		event_target:hskv_thayo_everdawn_leader = {
-			add_trait = hskv_leader_trait_criminal
+			add_trait = hskv_leader_trait_insider_trading
 		}
 		hidden_effect = {
 		}
 	}
 }
-# Thayo's stealing becomes even more brazen and known
+
+# Confront Thayo about the crime problem and he has worked to make the police more effective
 country_event = {
 	id = hskv.162
 	title = hskv.162.name
@@ -1814,9 +1836,9 @@ country_event = {
 	}
 
 	option = {
-		name = hskv.130.response
+		name = hskv.162.response
 		event_target:hskv_thayo_everdawn_leader = {
-			add_trait = hskv_leader_trait_insider_trading
+			add_trait = hskv_leader_trait_asset_forfeiture
 		}
 		hidden_effect = {
 			owner = {
@@ -1861,7 +1883,7 @@ country_event = {
 	}
 
 	option = {
-		name = hskv.130.response
+		name = hskv.163.response.a
 		owner = {
 			event_target:hskv_target_country_theft = {
 				add_opinion_modifier = {
@@ -1875,33 +1897,75 @@ country_event = {
 			}
 			# Resources
 			add_resource = {
-				energy = 1000
-				minerals = 1000
-				food = 1000
-				consumer_goods = 500
+				energy = 4000
+				minerals = 2000
+				food = 2000
+				consumer_goods = 1000
 				alloys = 500
-				rare_crystals = 300
-				exotic_gases = 300
-				volatile_motes = 300
+				rare_crystals = 150
+				exotic_gases = 150
+				volatile_motes = 150
 				physics_research = 1000
 				society_research = 1000
 				engineering_research = 1000
+				influence = 100
 			}
 		}
 		hidden_effect = {
 			event_target:hskv_target_country_theft = {
 				add_resource = {
-					energy = -1000
-					minerals = -1000
-					food = -1000
-					consumer_goods = -500
-					alloys = -500
-					rare_crystals = -300
-					exotic_gases = -300
-					volatile_motes = -300
-					physics_research = -1000
-					society_research = -1000
-					engineering_research = -1000
+					energy = -6000
+					minerals = -3000
+					food = -2500
+					consumer_goods = -1500
+					alloys = -1500
+					rare_crystals = -350
+					exotic_gases = -350
+					volatile_motes = -350
+					physics_research = -2000
+					society_research = -2000
+					engineering_research = -2000
+				}
+			}
+		}
+	}
+	option = {
+		name = hskv.163.response.b
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = influence
+					value >= 200
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				energy = -5000
+				minerals = -3000
+				food = -2500
+				consumer_goods = -1500
+				alloys = -1000
+				rare_crystals = -200
+				exotic_gases = -200
+				volatile_motes = -200
+				influence = -200
+			}
+		}
+		hidden_effect = {
+			event_target:hskv_target_country_theft = {
+				add_resource = {
+					energy = 4000
+					minerals = 2000
+					food = 2000
+					consumer_goods = 1000
+					alloys = 500
+					rare_crystals = 150
+					exotic_gases = 150
+					volatile_motes = 150
+					physics_research = 1000
+					society_research = 1000
+					engineering_research = 1000
 				}
 			}
 		}
@@ -1957,57 +2021,21 @@ country_event = {
 	}
 
 	option = {
-		name = hskv.130.response
+		name = UNDERSTOOD
 		event_target:hskv_thayo_everdawn_leader = {
 			add_trait = hskv_leader_trait_unrestricted_research
 		}
 		add_resource = {
-			physics_research = -1000
-			society_research = -1000
-			engineering_research = -1000
+			physics_research = -2000
+			society_research = -2000
+			engineering_research = -2000
 		}
 		hidden_effect = {
 			owner = {
-				# Unrestricted Research, but now he is funneling some away
+				# Reuse the old big crime wave event
 				country_event = {
-					id = hskv.172
+					id = hskv.153
 					days = 1500
-				}
-			}
-		}
-	}
-}
-# Sure lets have one last big crime wave
-country_event = {
-	id = hskv.172
-	title = hskv.172.name
-	desc = hskv.172.desc
-	picture = GFX_evt_legendary_leader
-	show_sound = event_ship_bridge
-	is_triggered_only = yes
-
-	immediate = {
-		hskv_get_event_target_thayo_leader = yes
-	}
-
-	option = {
-		name = AMAZING
-		owner = {
-			add_resource = {
-				energy = -750
-			}
-			while = {
-				count = 4
-				random_owned_planet = {
-					limit = {
-						NOT = {
-							has_modifier = crime_wave
-						}
-					}
-					add_modifier = {
-						modifier = crime_wave
-						years = 10
-					}
 				}
 			}
 		}
@@ -2026,15 +2054,24 @@ country_event = {
 
 	immediate = {
 		hskv_get_event_target_thayo_leader = yes
+		random_playable_country = {
+			limit = {
+				NOT = {
+					has_country_flag = hskv_thayo_everdawn_country
+				}
+			}
+			save_event_target_as = hskv_target_country_theft
+		}
 	}
 
 	option = {
-		name = AMAZING
+		name = UNDERSTOOD
 		owner = {
 			end_event_chain = hskv_thayo_levelup_chain
 		}
 		event_target:hskv_thayo_everdawn_leader = {
 			remove_trait = hskv_leader_trait_thayo_everdawn_3
+			remove_trait = leader_trait_adaptable_2
 			add_trait = hskv_leader_trait_thayo_everdawn_4
 			add_trait = hskv_leader_trait_pinnacle
 		}
@@ -2178,7 +2215,7 @@ country_event = {
 	# Time to put a leesh on Thayo
 	# Constant Surveillance
 	option = {
-		name = WORRYING
+		name = hskv.184.option.a
 		owner = {
 			event_target:hskv_thayo_everdawn_leader = {
 				add_trait = hskv_leader_trait_constant_surveillance
@@ -2193,7 +2230,7 @@ country_event = {
 
 	# Let him off with a warning
 	option = {
-		name = WORRYING
+		name = hskv.184.option.b
 	}
 }
 
@@ -2288,6 +2325,21 @@ country_event = {
 	show_sound = event_ship_bridge
 	is_triggered_only = yes
 
+	immediate = {
+		create_species = {
+			name = UNKNOWN
+			class = AVI
+			portrait = hskv_thayo_portrait
+			namelist = random_class
+			traits = { }
+			immortal = no
+			allow_negative_traits = no
+			effect = {
+				save_event_target_as = hskv_leader_species
+			}
+		}
+	}
+
 	option = {
 		name = EXCELLENT
 		hidden_effect = {
@@ -2351,7 +2403,44 @@ country_event = {
 					event_chain = "hskv_thayo_secure_dawns_end_chain"
 					target = event_target:hskv_dawns_end_system
 				}
-				#TODO Get a level 9 Thayo back into your empire
+				# Get a level 9 Thayo back into your empire
+				# TODO This is almost certainly broken
+				create_leader = {
+					class = official
+					species = event_target:hskv_leader_species
+					name = NAME_hskv_thayo_everdawn
+					skill = 9
+					gender = male
+					event_leader = yes
+					background_ethic = ethic_authoritarian
+					skip_background_generation = yes
+					custom_description = hskv_thayo_everdawn_leader_desc
+					custom_catch_phrase = hskv_thayo_everdawn_leader_catch_phrase
+					immortal = yes
+					hide_age = yes
+		
+					randomize_traits = yes
+					effect = {
+						set_leader_flag = legendary_leader
+						set_leader_flag = immune_to_negative_traits
+						set_leader_flag = cannot_be_ruler
+						set_leader_flag = hskv_thayo_everdawn_leader
+			
+						# TODO - Need to dial back his negative traits at lvl 9
+						add_trait_no_notify = subclass_official_diplomacy_councilor
+						add_trait_no_notify = hskv_leader_trait_thayo_everdawn_4
+						add_trait_no_notify = leader_trait_psionic
+						add_trait_no_notify = trait_ruler_charismatic_2
+						add_trait_no_notify = leader_trait_politician_2
+						add_trait_no_notify = hskv_leader_trait_population_oversight
+						add_trait_no_notify = hskv_leader_trait_corruption
+						add_trait_no_notify = hskv_leader_trait_insider_trading_2
+						add_trait_no_notify = hskv_leader_trait_asset_forfeiture
+						add_trait_no_notify = hskv_leader_trait_unrestricted_research
+						set_age = 40
+						save_event_target_as = hskv_thayo_everdawn_leader
+					}
+				}
 				# Add Zro miner
 			}
 		}
