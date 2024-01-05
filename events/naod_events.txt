@@ -6,7 +6,7 @@
 namespace = naod
 
 # Recruitment Event Chain
-planet_event = {				# Naodeus watches you
+planet_event = {# Naodeus watches you
 	id = naod.0
 	is_triggered_only = yes
 	hide_window = yes
@@ -115,6 +115,10 @@ ship_event = {
 		name = naod.meetTheNatives.a
 		leader = {
 			add_experience = 100
+			add_trait = leader_trait_expertise_psionics
+			event_target:naod_talil = {
+				add_awareness = 10
+			}
 		}
 		ship_event = {
 			id = naod.202
@@ -202,7 +206,6 @@ country_event = {
 			set_owner = root
 		}
 		set_country_flag = naodeus_owned
-		
 	}
 
 	option = {#don't hire
@@ -233,6 +236,11 @@ country_event = {
 	option = {
 		name = naod_naodeus_recruitment_price_question
 		response_text = naod_naodeus_recruitment_price_answer
+		is_dialog_only = yes
+	}
+	option = {
+		name = naod_naodeus_recruitment_true_form_question
+		response_text = naod_naodeus_recruitment_true_form_answers
 		is_dialog_only = yes
 	}
 }
@@ -272,6 +280,7 @@ country_event ={# Friends from Talil
 }
 
 country_event = {# Brilliance from Diversity
+
 	id = naod.5
 	is_triggered_only = yes
 	fire_only_once = yes
@@ -305,10 +314,18 @@ country_event = {#Inverse Synthetic Evolution - Get Special project
 	fire_only_once = yes
 
 	trigger = {
+		has_country_flag = naodeus_owned
 		has_technology = tech_synthetic_workers
 		any_owned_species = {
 			is_robotic = yes
-			has_citizenship_type = { type = citizenship_full }
+			NOR = {
+				has_citizenship_type = {
+					type = citizenship_robot_servitude
+				}
+				has_citizenship_type = {
+					type = citizenship_slavery
+				}
+			}
 		}
 	}
 
@@ -318,7 +335,7 @@ country_event = {#Inverse Synthetic Evolution - Get Special project
 	option = {
 		name = naod_inverse_synthetic_evolution_proposal_approval
 		enable_special_project = {
-			name = INVERSE_SYNTHETIC_EVOLUTION_PROJECT
+			name = NAOD_INVERSE_SYNTHETIC_EVOLUTION_PROJECT
 		}
 	}
 	option = {
@@ -337,7 +354,7 @@ country_event = {#Inverse Synthetic Evolution
 	option = {
 		name = naod_inverse_synthetic_evolution_special_project_answer
 		enable_special_project = {
-			name = INVERSE_SYNTHETIC_EVOLUTION_PROJECT
+			name = NAOD_INVERSE_SYNTHETIC_EVOLUTION_PROJECT
 		}
 	}
 
@@ -388,20 +405,30 @@ ship_event = {#Building outpost on Talil
 	hide_window = yes
 
 	trigger = {
-		owner = {
-			NOT = {
-				has_country_flag = naodeus_meeting	
+		from = {
+			has_planet_flag = naodeus_planet
+		}
+	}
+		
+	immediate = {
+		if = {
+			limit = {
+				owner = {NOT = {has_country_flag = naodeus_meeting}}
+				NOT = {exists = event_target:naodeus_leader	} 
+			}
+			owner = {
+				country_event = {id = naod.9 days = 30}
 			}
 		}
-		NOT = {
-			exists = event_target:naodeus_leader	
-		} 
-	}
-
-	immediate = {
-		from = {
-			country_event = {id = naod.9 days = 30 }
+		if = {
+			limit = {
+				owner = {has_country_flag = naodeus_meeting	}
+			}
+			owner = {
+				country_event = {id = naod.14 days = 15}
+			}
 		}
+		
 	}
 }
 
@@ -410,7 +437,6 @@ country_event = {#Letter from Naodeus
 	is_triggered_only = yes
 
 	trigger = {
-		has_country_flag = naodeus_meeting
 		NOT = { exists = event_target:naodeus_leader }
 		is_ai = no
 	}
@@ -437,7 +463,6 @@ country_event = {#Opened Letter
 	is_triggered_only = yes
 
 	trigger = {
-		has_country_flag = naodeus_meeting
 		NOT = { exists = event_target:naodeus_leader }
 		is_ai = no
 	}
@@ -469,7 +494,6 @@ country_event = {#Nice welcome
 	id = naod.1101
 	is_triggered_only = yes
 	trigger = {
-		has_country_flag = naodeus_meeting
 		NOT = { exists = event_target:naodeus_leader }
 		is_ai = no
 	}
@@ -479,6 +503,7 @@ country_event = {#Nice welcome
 
 	option = {
 		name = naod.11.a.reply
+		set_country_flag = naodeus_meeting
 		country_event = {
 			id = naod.3
 		}
@@ -493,7 +518,6 @@ country_event = {#Ignored Letter
 	id = naod.1102
 	is_triggered_only = yes
 	trigger = {
-		has_country_flag = naodeus_meeting
 		NOT = { exists = event_target:naodeus_leader }
 		is_ai = no
 	}
@@ -503,6 +527,7 @@ country_event = {#Ignored Letter
 
 	option = {
 		name = naod.11.b.apology
+		set_country_flag = naodeus_meeting
 		country_event = {
 			id = naod.3
 		}
@@ -512,6 +537,7 @@ country_event = {#Ignored Letter
 	}
 	option = {
 		name = naod.11.b.hostiliy
+		set_country_flag = naodeus_meeting
 		country_event = {
 			id = naod.12
 		}
@@ -522,7 +548,6 @@ country_event = {#Hostile Welcome
 	id = naod.1103
 	is_triggered_only = yes
 	trigger = {
-		has_country_flag = naodeus_meeting
 		NOT = { exists = event_target:naodeus_leader }
 		is_ai = no
 	}
@@ -532,6 +557,7 @@ country_event = {#Hostile Welcome
 
 	option = {
 		name = naod.11.c.hostiliy
+		set_country_flag = naodeus_meeting
 		country_event = {
 			id = naod.12
 		}
@@ -542,7 +568,6 @@ country_event = {#Warning
 	id = naod.12
 	is_triggered_only = yes
 	trigger = {
-		has_country_flag = naodeus_meeting
 		NOT = { exists = event_target:naodeus_leader }
 		is_ai = no
 	}
@@ -558,27 +583,24 @@ country_event = {#Warning
 	}
 }
 
-ship_event = {#Awareness
-	id = naod.13
-	is_triggered_only = yes
-	hide_window = yes
-	trigger = {
-		owner = {
-			has_country_flag = naodeus_meeting	
-		}
-	}
-
-	title = naod.13.title
-	desc = naod.13.desc
-
-	immediate = {
-		owner = {
-			country_event = {
-				id = naod.14
-			}
-		}
-	}
-}
+#ship_event = {#Awareness
+#	id = naod.13
+#	is_triggered_only = yes
+#	hide_window = yes
+#	trigger = {
+#		owner = {
+#			has_country_flag = naodeus_meeting	
+#		}
+#
+#	}
+#	immediate = {
+#		owner = {
+#			country_event = {
+#				id = naod.14
+#			}
+#		}
+#	}
+#}
 
 country_event = {
 	id = naod.14
@@ -587,8 +609,8 @@ country_event = {
 		has_country_flag = naodeus_meeting	
 	}
 
-	title = naod.13.title
-	desc = naod.13.desc
+	title = naod.14.title
+	desc = naod.14.desc
 
 	option = {
 		name = naod.13
