@@ -148,12 +148,12 @@ country_event = {
 						effect = {
 							set_ship_flag = is_ABCReg_ship
 							save_global_event_target_as = ABCReg_ship
-							add_modifier = { modifier = bubble_conclave_modifier days= -1 }
-							add_modifier = { modifier = bubble_pirate_modifier = -1 }
-							add_modifier = { modifier = bubble_imperium_modifier = -1 }
-							add_modifier = { modifier = bubble_federation_modifier = -1 }
-							add_modifier = { modifier = bubble_angry_modifier = -1 }
-							add_modifier = { modifier = bubble_safe_belt_modifier = -1 }
+							add_modifier = { modifier = bubble_conclave_modifier days = -1 }
+							add_modifier = { modifier = bubble_pirate_modifier days = -1 }
+							add_modifier = { modifier = bubble_imperium_modifier days = -1 }
+							add_modifier = { modifier = bubble_federation_modifier days = -1 }
+							add_modifier = { modifier = bubble_angry_modifier days = -1 }
+							add_modifier = { modifier = bubble_safe_belt_modifier days = -1 }
 						}
 					}
 					if = {
@@ -420,12 +420,13 @@ country_event = {
 	}
 
 	immediate = {
-	event_target:ABCReg_Leader = {
-		remove_trait = leader_trait_ABCReg_memories_1
-		add_trait = leader_trait_ABCReg_memories_10  
+		event_target:ABCReg_Leader = {
+			remove_trait = leader_trait_ABCReg_memories_1
+			add_trait = leader_trait_ABCReg_memories_10  
 		}
-	event_target:is_ABCReg_ship = { effect = { remove_modifier = { modifier = bubble_conclave_modifier days= -1 } } }
-							
+		event_target:ABCReg_ship = {  
+			remove_modifier = bubble_conclave_modifier
+		}							
 	}
 
 	option = {
@@ -545,26 +546,28 @@ country_event = {
 	}
 
 	immediate = {
-	event_target:ABCReg_Leader = {
-	remove_trait = leader_trait_ABCReg_memories_2
-	add_trait = leader_trait_ABCReg_memories_20  
+		event_target:ABCReg_Leader = {
+			remove_trait = leader_trait_ABCReg_memories_2
+			add_trait = leader_trait_ABCReg_memories_20  
 		}
-	event_target:is_ABCReg_ship = { effect = { remove_modifier = { modifier = bubble_pirate_modifier }
-						  add_modifier = { modifier = bubble_police_modifier days= -1 } } }
-	}
+		event_target:ABCReg_ship = { 
+			remove_modifier = bubble_pirate_modifier
+			add_modifier = { modifier = bubble_police_modifier days= -1 }
+		}
 
-	hidden_effect = {
+		hidden_effect = {
 			every_owned_leader = {
 				limit = {
 					NOT = { has_trait = leader_trait_emotional_support_pet }
 				}
 				add_trait = leader_trait_emotional_support_pet
-			}	
-}
+			}
+		}
+	}
 
 	option = {
 		name = ABCReg.22.a
-		country_event = { id = ABCReg.220 }
+		country_event = { id = ABCReg.221 }
 		if = {
 			limit = {
 				has_completed_event_chain_counter = {
@@ -678,39 +681,42 @@ country_event = { #Graveyard Planet Vision
 		portrait = event_target:ABCReg_Leader
 	}
 
-immediate = {
+	immediate = {
 		event_target:ABCReg_Leader = {
-		remove_trait = leader_trait_ABCReg_memories_3
-		add_trait = leader_trait_ABCReg_memories_30
-		event_target:is_ABCReg_ship = { effect = { remove_modifier = { modifier = bubble_imperium_modifier } } }
+			remove_trait = leader_trait_ABCReg_memories_3
+			add_trait = leader_trait_ABCReg_memories_30
 		}
+		event_target:ABCReg_ship = { 
+			remove_modifier = bubble_imperium_modifier 
+		}
+
 	
 
-	create_country = {
-            name = "NAME_B_O_A_T_ABCReg"
-            type = global_event
-            auto_delete = yes
-            flag = {
-                icon = {
-                    category = "special"
-                    file = "unknown.dds"
-                }
-                background = {
-                    category = "backgrounds"
-                    file = "00_solid.dds"
-                }
-                colors = {
-                    "green"
-                    "green"
-                    "null"
-                    "null"
-                }
-            }
-            effect = {
-                save_event_target_as = ABCReg_puppet_country
-            }
-        }
-        event_target:ABCReg_puppet_country = {
+		create_country = {
+			name = "NAME_B_O_A_T_ABCReg"
+			type = global_event
+			auto_delete = yes
+			flag = {
+				icon = {
+					category = "special"
+					file = "unknown.dds"
+				}
+				background = {
+					category = "backgrounds"
+					file = "00_solid.dds"
+				}
+				colors = {
+					"green"
+					"green"
+					"null"
+					"null"
+				}
+			}
+			effect = {
+				save_event_target_as = ABCReg_puppet_country
+			}
+		}
+		event_target:ABCReg_puppet_country = {
 			create_species = {
 				name = "NAME_Unknown"
 				class = PARAGON
@@ -877,16 +883,18 @@ country_event = { #Graveyard Planet Vision
 	}
 
 	immediate = {
-	event_target:ABCReg_Leader = {
-	remove_trait = leader_trait_ABCReg_memories_4
-	add_trait = leader_trait_ABCReg_memories_40
-	event_target:is_ABCReg_ship = { effect = { remove_modifier = { modifier = bubble_federation_modifier } } }  
+		event_target:ABCReg_Leader = {
+			remove_trait = leader_trait_ABCReg_memories_4
+			add_trait = leader_trait_ABCReg_memories_40
+		}
+		event_target:ABCReg_ship = {
+			remove_modifier = bubble_federation_modifier 
 		}
 	}
 
 	option = {
 		name = ABCReg.42.a
-		country_event = { id = ABCReg.420 days = 200 random = 1600 }
+		country_event = { id = ABCReg.421 days = 200 random = 1600 }
 		if = {
 			limit = {
 				has_completed_event_chain_counter = {
@@ -995,12 +1003,17 @@ country_event = { #Graveyard Planet Vision
 	}
 
 	immediate = {
-	event_target:ABCReg_Leader = {
-	add_trait = leader_trait_ABCReg_memories_50 }
-	event_target:is_ABCReg_ship = { effect = { remove_modifier = { modifier = bubble_angry_modifier } } }
+		event_target:ABCReg_Leader = {
+		add_trait = leader_trait_ABCReg_memories_50 }
+		event_target:ABCReg_ship = {
+			remove_modifier = bubble_angry_modifier 
+		}
 	}
 
-	hidden_effect = {
+		
+	option = {
+		name = ABCReg.52.a
+		hidden_effect = {
 			event_target:ABCReg_bubbly_5th_planet = {
 				create_fleet = {
 					name = "NAME_proto_pion"
@@ -1037,12 +1050,9 @@ country_event = { #Graveyard Planet Vision
 					}
 				}
 			}
-	option = {
-		name = ABCReg.52.a
-
 		
 		
-	}
+		}
 	}
 }
 
@@ -1064,53 +1074,58 @@ country_event = { #this event fires at the end of the previous event chain and a
 
 	option = {
 		name = ABCReg.60.a
-		country_event = {
+		
 			event_target:ABCReg_Leader = { add_trait = ABCReg_trait_positive_waves }
-		}	
+			
 	}
 	
 	option = {
 		name = ABCReg.60.b
-		country_event = {
+		 
 			event_target:ABCReg_Leader = { add_trait = ABCReg_trait_bow_tie }
-		}	
+			
 	}
 	
 	option = {
 		name = ABCReg.60.c
-		country_event = {
-			event_target:ABCReg_Leader = { add_trait = ABCReg_trait_undying }}
-	hidden_effect = {	
-		event_target:is_ABCReg_ship = { effect = { add_modifier = { modifier = bubble_safe_belt_modifier days = -1 } } }   ###use "ABCReg_ship" if it doesn't work.
-			
-		}	
-	}
+		
+			event_target:ABCReg_Leader = { add_trait = ABCReg_trait_undying }
+		hidden_effect = {	
+			event_target:ABCReg_ship = { 
+				add_modifier = { 
+					modifier = bubble_safe_belt_modifier 
+					days = -1 
+				} 
+			} 
+		}   ###use "ABCReg_ship" if it doesn't work.
+				
+	}	
 
 	option = {
 		name = ABCReg.60.d
-		country_event = {
+		
 			event_target:ABCReg_Leader = { add_trait = ABCReg_trait_green_hand }
-		}	
+		
 	}
 	
 	option = {
 		name = ABCReg.60.e
-		country_event = {
+		
 			event_target:ABCReg_Leader = { add_trait = ABCReg_trait_trademarked }
-		}	
+			
 	}
 
 	option = {
 		name = ABCReg.60.f
-		country_event = {
+		
 			event_target:ABCReg_Leader = { add_trait = ABCReg_trait_bomber }
-		}	
+			
 	}
 	option = {
 		name = ABCReg.60.g
-		country_event = {
+		
 			event_target:ABCReg_Leader = { add_trait = ABCReg_trait_living_factory }
-		}	
+			
 	}		
 }
 
@@ -1126,24 +1141,26 @@ country_event = {
 	show_sound = event_space_amoeba
 	is_triggered_only = yes
 
-	trigger = {
-		has_global_flag = ABCReg_system_spawned
-		FROMFROM = {
-			any_owned_leader = { leader_trait_ABCReg_memories_20 }
-		}	
-	}
+	 trigger = {
+        has_global_flag = ABCReg_system_spawned
+        FROMFROM = {
+            any_owned_leader = { 
+                has_trait = leader_trait_ABCReg_memories_20
+            }
+        }    
+    }
+	
 	option = {
-	name = GOOD	
-	hidden_effect = {
-			every_owned_leader = {
-				limit = {
-					NOT = { has_trait = leader_trait_emotional_support_pet }
-				}
-				add_trait = leader_trait_emotional_support_pet
-			}
-		}
-			
-	}
+        name = GOOD    
+        hidden_effect = {
+            every_owned_leader = {
+                limit = {
+                    NOT = { has_trait = leader_trait_emotional_support_pet }
+                }
+                add_trait = leader_trait_emotional_support_pet
+            }
+        }
+    }
 
 }
 
@@ -1156,15 +1173,17 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		has_global_flag = ABCReg_system_spawned
-		FROMFROM = {
-			any_owned_leader = { leader_trait_ABCReg_memories_30 }
-		}	
-	}
+        has_global_flag = ABCReg_system_spawned
+        FROMFROM = {
+            any_owned_leader = { 
+                has_trait = leader_trait_ABCReg_memories_30
+            }
+        }    
+    }
 	
-	hidden_effect = {
+	immediate = {
 	
-	create_country = {
+		create_country = {
             name = "NAME_B_O_A_T_ABCReg"
             type = global_event
             auto_delete = yes
@@ -1238,11 +1257,11 @@ country_event = {
 
 	option = {
 		name = ABCReg.321.a
-		effect = {
-				set_owner = root
-				set_leader = event_target:ABCReg_puppet
-			   }
-		 }
+		hidden_effect = {
+			event_target:ABCReg_puppet = { set_owner = root }
+			set_leader = event_target:ABCReg_puppet
+		}
+	}
 }
 
 
@@ -1257,11 +1276,13 @@ country_event = {
 	is_triggered_only = yes
 	
 	trigger = {
-		has_global_flag = ABCReg_system_spawned
-		FROMFROM = {
-			any_owned_leader = { leader_trait_ABCReg_memories_40 }
-		}	
-	}
+        has_global_flag = ABCReg_system_spawned
+        FROMFROM = {
+            any_owned_leader = { 
+                has_trait = leader_trait_ABCReg_memories_40
+            }
+        }    
+    }
 	
 	option = {
 		name = GOOD
@@ -1311,14 +1332,12 @@ country_event = {
 					}
 				}
 					last_created_fleet = {
-				set_location = { event_target:ABCReg_ship }
+				set_location = { target = event_target:ABCReg_ship }
 				}
 			
+			}
 		}
 	}
-	}
-
-
 }	
 
 
@@ -1376,7 +1395,8 @@ ship_event = { #Entering gehellum alveo, has a hard time working, for testing pu
 			country_event = { id = story.8 days = 15 }
 			event_target:ABCReg_star = {
 			if = {
-			limit = { NOT = { exists = event_target:ABCReg_country_neutral } }
+			limit = { NOT = { exists = event_target:ABCReg_country_neutral } 
+			}
 					create_country = {
 						name = "NAME_unknown_bubbles"
 						type = faction
@@ -1601,11 +1621,11 @@ country_event = {
 							set_ship_flag = is_ABCReg_ship
 							save_global_event_target_as = ABCReg_ship
 							add_modifier = { modifier = bubble_conclave_modifier days= -1 }
-							add_modifier = { modifier = bubble_pirate_modifier = -1 }
-							add_modifier = { modifier = bubble_imperium_modifier = -1 }
-							add_modifier = { modifier = bubble_federation_modifier = -1 }
-							add_modifier = { modifier = bubble_angry_modifier = -1 }
-							add_modifier = { modifier = bubble_safe_belt_modifier = -1 }
+							add_modifier = { modifier = bubble_pirate_modifier days = -1 }
+							add_modifier = { modifier = bubble_imperium_modifier days = -1 }
+							add_modifier = { modifier = bubble_federation_modifier days = -1 }
+							add_modifier = { modifier = bubble_angry_modifier days = -1 }
+							add_modifier = { modifier = bubble_safe_belt_modifier days = -1 }
 						}
 					}
 					if = {
@@ -1685,7 +1705,7 @@ country_event = {
 country_event = {
     id = ABCReg.888
     #hide_window = yes
-        (picture option etc)
+        #(picture option etc)
     is_triggered_only = yes
 
     trigger = {
@@ -1696,14 +1716,12 @@ country_event = {
             has_communications = root
         }
         fromfrom = {
-                  leader = {
+            leader = {
                 has_leader_flag = ABCReg_leader
-				has_trait = leader_trait_ABCReg_memories_20
-				
+				has_trait = leader_trait_ABCReg_memories_20				
             }
-                }
+        }
         
     }
-
-### to be balanced ###
 }
+### to be balanced ###
