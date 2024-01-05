@@ -5,8 +5,7 @@
 ###############################
 
 #TODO:
-#	Improve additional final traits
-#	Jailer penal colony trait fix
+
 
 
 # FOR POLISH TIMEFRAME:
@@ -15,17 +14,12 @@
 #	Icon for Jailer alignment messages
 #	Shield GFX for megaprison megastructure
 #	Jailer event picture
-
+#	Add non-english loc
+#	Improve additional final traits
 
 
 # BUGS:
-#	Rescuing The Jailer before fixing the defence grid leaves it disabled forever
-#	Ignoring the inital comms from The Jailer transers ownership of the defences to you
 #	Check that AOL terraformed tropical worlds have deposits
-
-
-# TESTING:
-
 
 
 
@@ -440,9 +434,12 @@ fleet_event = {
 			from.solar_system = {
 				every_fleet_in_system = { 
 					limit = { has_fleet_flag = EVJ24_defence_fleet } 
-					destroy_fleet = this
+					every_owned_ship = {
+						set_disabled = yes
+					}
 				}
 			}
+			owner = { set_country_flag = EVJ24_defence_grid_scrapped }
 		}
 	}
 }
@@ -682,6 +679,14 @@ country_event = {
 				else = {
 					starbase = { set_owner = root }
 				}
+				
+				if = {
+					limit = { root = { has_country_flag = EVJ24_defence_grid_scrapped } }
+					every_fleet_in_system = { 
+						limit = { has_fleet_flag = EVJ24_defence_fleet } 
+						destroy_fleet = this
+					}
+				}
 			}
 			
 			clear_global_event_target = EVJ24_jailer_country
@@ -699,6 +704,11 @@ country_event = {
 				#country_event = { id = EVJ24.902 }
 				country_event = { id = EVJ24.903 }
 			}
+			
+			from.solar_system = {
+				
+			}
+			owner = {  }
 		}
 		end_event_chain = "EVJ24_intro_jailer_chain"
 	}
