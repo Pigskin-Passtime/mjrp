@@ -286,10 +286,16 @@ country_event = {
 	show_sound = event_ship_bridge
 	is_triggered_only = yes
 
+	immediate = {
+		random_owned_planet = {
+			save_event_target_as = hskv_target_planet
+		}
+	}
+
 	option = {
 		name = EXCELLENT
 		owner = {
-			random_owned_planet = {
+			event_target:hskv_target_planet = {
 				add_planet_devastation = 20
 				add_blocker = {
 					type = d_failing_infrastructure
@@ -381,14 +387,23 @@ country_event = {
 	show_sound = event_ship_bridge
 	is_triggered_only = yes
 
+	immediate = {
+		random_owned_planet = {
+			limit = {
+				NOT = {
+					has_modifier = hskv_resources_being_stolen
+				}
+			}
+			save_event_target_as = hskv_target_planet
+		}
+	}
+
 	option = {
 		name = EXCELLENT
-		owner = {
-			random_owned_planet = {
-				add_modifier = {
-					modifier = hskv_resources_being_stolen
-					years = 10
-				}
+		event_target:hskv_target_planet = {
+			add_modifier = {
+				modifier = hskv_resources_being_stolen
+				years = 10
 			}
 		}
 	}
@@ -815,7 +830,7 @@ country_event = {
 
 country_event = {
 	id = hskv_hunt.2103
-	title = hskv_hunt.2103.name
+	title = hskv_hunt.2102.name
 	desc = hskv_hunt.2103.desc
 	show_sound = event_ship_bridge
 	diplomatic = yes
@@ -852,7 +867,7 @@ country_event = {
 # I warned you
 country_event = {
 	id = hskv_hunt.2104
-	title = hskv_hunt.2104.name
+	title = hskv_hunt.2102.name
 	desc = hskv_hunt.2104.desc
 	show_sound = event_ship_bridge
 	diplomatic = yes

@@ -9,6 +9,8 @@ namespace = hskv
 # TODO Make sure you have the right response to each event
 # You got too many negative events with EXCELLENT
 
+# ALL Post level up flavor events need to slow down in rate
+
 # Special Project to follow up on the signal
 ship_event = {
 	id = hskv.10
@@ -570,7 +572,6 @@ country_event = {
 			add_trait_no_notify = subclass_official_diplomacy_councilor
 			add_trait_no_notify = hskv_leader_trait_thayo_everdawn
 			add_trait_no_notify = leader_trait_psionic
-			add_trait_no_notify = leader_trait_adaptable_2
 			add_trait_no_notify = trait_ruler_charismatic
 			add_trait_no_notify = hskv_leader_trait_rusty_3
 			set_age = 20
@@ -648,7 +649,6 @@ country_event = {
 				add_trait_no_notify = subclass_official_diplomacy_councilor
 				add_trait_no_notify = hskv_leader_trait_thayo_everdawn
 				add_trait_no_notify = leader_trait_psionic
-				add_trait_no_notify = leader_trait_adaptable_2
 				add_trait_no_notify = trait_ruler_charismatic
 				add_trait_no_notify = hskv_leader_trait_rusty_3
 				set_age = 20
@@ -658,11 +658,10 @@ country_event = {
 				LEADER = hskv_thayo_everdawn_leader
 			}
 			owner = {
-				# Lower Rusty pentalty every 30 years
-				# TODO is 30 years the right time period?
+				# Lower Rusty pentalty every 20 years (First one is slightly faster)
 				country_event = {
 					id = hskv.95
-					days = 10680
+					days = 7000
 				}
 
 				begin_event_chain = {
@@ -714,7 +713,7 @@ country_event = {
 		hidden_effect = {
 			country_event = {
 				id = hskv.96
-				days = 8900
+				days = 7120
 			}
 		}
 	}
@@ -746,7 +745,7 @@ country_event = {
 		hidden_effect = {
 			country_event = {
 				id = hskv.97
-				days = 8900
+				days = 7120
 			}
 		}
 	}
@@ -773,6 +772,7 @@ country_event = {
 		name = EXCELLENT
 		event_target:hskv_thayo_everdawn_leader = {
 			remove_trait = hskv_leader_trait_rusty_1
+			add_trait = hskv_leader_trait_adaptable
 		}
 	}
 }
@@ -931,6 +931,7 @@ country_event = {
 		hskv_get_event_target_thayo_leader = yes
 	}
 
+	# TODO, need to tooltip replace this to look nicer
 	option = {
 		name = hskv.121.option.a
 		# Gain 3 pops, but also costs resources and they bring significant crime with them
@@ -947,77 +948,21 @@ country_event = {
 				energy = -1000
 			}
 			random_owned_planet = {
-				# while = {
-				# 	count = 4
-				# 	create_pop = {
-				# 		species = owner_main_species
-				# 		ethos = random
-				# 	}
-				# 	last_created_pop = {
-				# 		modify_species = {
-				# 			remove_trait = trait_traditional
-				# 			remove_trait = trait_conformists
-				# 			remove_trait = trait_docile
-				# 			add_trait = trait_deviants
-				# 			add_trait = trait_unruly
-				# 			add_trait = trait_quarrelsome
-				# 		}
-				# 	}
-				# }
-				create_pop = {
-					species = owner_main_species
-					ethos = random
-				}
-				last_created_pop = {
-					modify_species = {
-						remove_trait = trait_traditional
-						remove_trait = trait_conformists
-						remove_trait = trait_docile
-						add_trait = trait_deviants
-						add_trait = trait_unruly
-						add_trait = trait_quarrelsome
+				while = {
+					count = 4
+					create_pop = {
+						species = owner_main_species
+						ethos = random
 					}
-				}
-				create_pop = {
-					species = owner_main_species
-					ethos = random
-				}
-				last_created_pop = {
-					modify_species = {
-						remove_trait = trait_traditional
-						remove_trait = trait_conformists
-						remove_trait = trait_docile
-						add_trait = trait_deviants
-						add_trait = trait_unruly
-						add_trait = trait_quarrelsome
-					}
-				}
-				create_pop = {
-					species = owner_main_species
-					ethos = random
-				}
-				last_created_pop = {
-					modify_species = {
-						remove_trait = trait_traditional
-						remove_trait = trait_conformists
-						remove_trait = trait_docile
-						add_trait = trait_deviants
-						add_trait = trait_unruly
-						add_trait = trait_quarrelsome
-					}
-				}
-				create_pop = {
-					species = owner_main_species
-					ethos = random
-				}
-				last_created_pop = {
-					modify_species = {
-						remove_trait = trait_traditional
-						remove_trait = trait_conformists
-						remove_trait = trait_docile
-						add_trait = trait_deviants
-						add_trait = trait_unruly
-						add_trait = trait_quarrelsome
+					last_created_pop = {
+						modify_species = {
+							remove_trait = trait_traditional
+							remove_trait = trait_conformists
+							remove_trait = trait_docile
+							add_trait = trait_deviants
+							add_trait = trait_unruly
+							add_trait = trait_quarrelsome
+						}
 					}
 				}
 				add_modifier = {
@@ -1039,7 +984,7 @@ country_event = {
 			}
 			add_modifier = {
 				modifier = hskv_deal_with_crime_cities
-				years = 50
+				years = 40
 			}
 		}
 	}
@@ -1059,13 +1004,7 @@ country_event = {
 				unity = -500
 			}
 			random_owned_planet = {
-				# while = {
-				# 	count = 3
-				# 	create_pop = {
-				# 		species = owner_main_species
-				# 		ethos = random
-				# 	}
-				# }
+
 				create_pop = {
 					species = owner_main_species
 					ethos = random
@@ -1177,7 +1116,7 @@ country_event = {
 	}
 
 	option = {
-		name = hskv.132.response
+		name = hskv.133.response
 		hidden_effect = {
 			country_event = {
 				id = hskv.135
@@ -1344,6 +1283,7 @@ country_event = {
 	}
 }
 # Free Assets on everyone, but at what cost?
+# TODO Might need to do a nicer tooltip for this (especially for option B)
 country_event = {
 	id = hskv.141
 	title = hskv.141.name
@@ -1666,7 +1606,7 @@ country_event = {
 		owner = {
 			add_modifier = {
 				modifier = hskv_new_age_of_piracy
-				years = 50
+				years = 40
 			}
 		}
 		hidden_effect = {
@@ -1782,6 +1722,7 @@ country_event = {
 				country_event = {
 					id = hskv.162
 					days = 1500
+					random = 600
 				}
 			}
 		}
@@ -1873,9 +1814,6 @@ country_event = {
 			limit = {
 				NOR = {
 					has_country_flag = hskv_thayo_everdawn_country
-					can_copy_random_tech_from = {
-						who = root
-					}
 				}
 			}
 			save_event_target_as = hskv_target_country_theft
@@ -1995,7 +1933,7 @@ country_event = {
 				# Unrestricted Research, but now he is funneling some away
 				country_event = {
 					id = hskv.171
-					days = 1500
+					days = 2000
 				}
 			}
 		}
@@ -2033,6 +1971,7 @@ country_event = {
 		hidden_effect = {
 			owner = {
 				# Reuse the old big crime wave event
+				# TODO this is a long time till 8, add more?
 				country_event = {
 					id = hskv.153
 					days = 1500
@@ -2071,7 +2010,7 @@ country_event = {
 		}
 		event_target:hskv_thayo_everdawn_leader = {
 			remove_trait = hskv_leader_trait_thayo_everdawn_3
-			remove_trait = leader_trait_adaptable_2
+			remove_trait = hskv_leader_trait_adaptable
 			add_trait = hskv_leader_trait_thayo_everdawn_4
 			add_trait = hskv_leader_trait_pinnacle
 		}
