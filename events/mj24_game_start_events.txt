@@ -4,14 +4,11 @@
 ##			FINAL MOD JAM SUBMISSION. This is only provided
 ##			for reference/testing purposes.
 ## 
-
 namespace = mj24
-
 event = {
 	id = mj24.1
 	is_triggered_only = yes
 	hide_window = yes
-
 	immediate = {
 		if = {
 			limit = {
@@ -20,19 +17,13 @@ event = {
 			set_global_flag = exakades_allowed
 			set_global_flag = azaryn_allowed
 			set_global_flag = skrand_allowed
-			set_global_flag = beholder_allowed			
+			set_global_flag = beholder_allowed
 		}
 		if = {
 			limit = {
 				has_distar = yes
 			}
 			set_global_flag = gray_allowed
-		}
-		if = {
-			limit = {
-				has_astral_planes_dlc = yes
-			}
-			#set_global_flag = zadigal_allowed
 		}
 	}
 }
@@ -42,12 +33,10 @@ country_event = {
 	is_triggered_only = yes
 	hide_window = yes
 	fire_only_once = yes
-
 	trigger = {
 		is_country_type = default
 		is_ai = no
 	}
-
 	immediate = {
 		log = "Set [root.GetName] as host"
 		set_country_flag = host
@@ -60,18 +49,9 @@ country_event = {
 	title = choose_legendary_leaders
 	desc = choose_legendary_leaders_desc
 	picture = GFX_evt_legendary_leader
-	#diplomatic = yes
-	#picture_event_data = {
-	#	portrait = root.owner_main_species
-	#	room = enclave_curator_room
-	#}
-	#custom_gui = ScrollbarEventWindow
-	#force_open = yes						# spawning options: fixed random spawns, random for each player, players choose one
-
 	trigger = {
 		has_country_flag = host
 	}
-
 	immediate = {
 		if = {
 			limit = {
@@ -81,10 +61,9 @@ country_event = {
 					has_global_flag = player_choice
 				}
 			}
-			set_global_flag = fixed_random
+			set_global_flag = player_choice
 		}
 	}
-
 	option = {
 		trigger = {
 			has_global_flag = fixed_random
@@ -123,7 +102,6 @@ country_event = {
 			}
 		}
 	}
-
 	option = {
 		trigger = {
 			has_global_flag = player_choice
@@ -143,8 +121,8 @@ country_event = {
 			}
 		}
 	}
-
-	option = { 								# Exakades allowed
+	option = {
+		# Exakades allowed
 		trigger = {
 			has_global_flag = exakades_allowed
 			has_paragon_dlc = yes
@@ -159,7 +137,8 @@ country_event = {
 			}
 		}
 	}
-	option = { 								# Exakades blocked
+	option = {
+		# Exakades blocked
 		trigger = {
 			NOT = {
 				has_global_flag = exakades_allowed
@@ -176,8 +155,8 @@ country_event = {
 			}
 		}
 	}
-
-	option = { 								# Azaryn allowed
+	option = {
+		# Azaryn allowed
 		trigger = {
 			has_global_flag = azaryn_allowed
 			has_paragon_dlc = yes
@@ -192,7 +171,8 @@ country_event = {
 			}
 		}
 	}
-	option = { 								# Azaryn blocked
+	option = {
+		# Azaryn blocked
 		trigger = {
 			NOT = {
 				has_global_flag = azaryn_allowed
@@ -209,8 +189,8 @@ country_event = {
 			}
 		}
 	}
-
-	option = { 								# Skrand allowed
+	option = {
+		# Skrand allowed
 		trigger = {
 			has_global_flag = skrand_allowed
 			has_paragon_dlc = yes
@@ -225,7 +205,8 @@ country_event = {
 			}
 		}
 	}
-	option = { 								# Skrand blocked
+	option = {
+		# Skrand blocked
 		trigger = {
 			NOT = {
 				has_global_flag = skrand_allowed
@@ -242,8 +223,8 @@ country_event = {
 			}
 		}
 	}
-
-	option = { 								# Beholder allowed
+	option = {
+		# Beholder allowed
 		trigger = {
 			has_global_flag = beholder_allowed
 			has_paragon_dlc = yes
@@ -258,7 +239,8 @@ country_event = {
 			}
 		}
 	}
-	option = { 								# Beholder blocked
+	option = {
+		# Beholder blocked
 		trigger = {
 			NOT = {
 				has_global_flag = beholder_allowed
@@ -275,7 +257,8 @@ country_event = {
 			}
 		}
 	}
-	option = { 								# Gray allowed
+	option = {
+		# Gray allowed
 		trigger = {
 			has_global_flag = gray_allowed
 			has_distar = yes
@@ -290,7 +273,8 @@ country_event = {
 			}
 		}
 	}
-	option = { 								# Gray Blocked
+	option = {
+		# Gray Blocked
 		trigger = {
 			NOT = {
 				has_global_flag = gray_allowed
@@ -307,62 +291,27 @@ country_event = {
 			}
 		}
 	}
-#	option = {									### Zadigal Allowed 
-#		trigger = {
-#			has_global_flag = zadigal_allowed
-#		}
-#		name = zadigal_allowed
-#		remove_global_flag = zadigal_allowed
-#		country_event = {
-#			id = mj24.3
-#			scopes = {
-#				from = from
-#				fromfrom = fromfrom
-#			}
-#		}
-#		custom_tooltip = harvester_tooltip
-#	}
-#	option = {									# Zadigal disabled
-#		trigger = {
-#			NOT = { has_global_flag = zadigal_allowed }
-#		}
-#		name = zadigal_disabled
-#		set_global_flag = zadigal_allowed
-#		country_event = {
-#			id = mj24.3
-#			scopes = {
-#				from = from
-#				fromfrom = fromfrom
-#			}
-#		}
-#	}
-
 	option = {
 		name = CONFIRM
 		set_global_flag = okay_to_spawn
 	}
-
 	after = {
 		if = {
 			limit = {
-				AND = {
-					has_global_flag = fixed_random
-					has_global_flag = okay_to_spawn
-				}
+				has_global_flag = fixed_random
+				has_global_flag = okay_to_spawn
 			}
 			country_event = {
-				id = mj24.10 # spawns 3-6 allowed leaders randomly throughout the galaxy
+				id = mj24.10				# spawns 3-6 allowed leaders randomly throughout the galaxy
 			}
 		}
 		if = {
 			limit = {
-				AND = {
-					has_global_flag = random_player
-					has_global_flag = okay_to_spawn
-				}
+				has_global_flag = random_player
+				has_global_flag = okay_to_spawn
 			}
 			country_event = {
-				id = mj24.11 # spawns a random allowed leader for each player
+				id = mj24.11				# spawns a random allowed leader for each player
 			}
 		}
 		if = {
@@ -375,34 +324,27 @@ country_event = {
 					is_ai = no
 				}
 				country_event = {
-					id = mj24.4 # players choose from allowed leaders
+					id = mj24.4					# players choose from allowed leaders
 				}
 			}
 		}
 	}
 }
 
-country_event = {								# players choose leaders
+country_event = {
+	# players choose leaders
 	id = mj24.4
 	is_triggered_only = yes
 	title = player_choose_legendary_leader
 	desc = player_choose_legendary_leader_desc
 	picture = GFX_evt_legendary_leader
-	#diplomatic = yes
-	#picture_event_data = {
-	#	portrait = root.owner_main_species
-	#	room = enclave_curator_room
-	#}
-	#custom_gui = ScrollbarEventWindow
-	#force_open = yes						
-
 	trigger = {
 		is_ai = no
 	}
-
-	immediate = {}
-
-	option = { 								# Exakades allowed
+	immediate = {
+	}
+	option = {
+		# Exakades allowed
 		trigger = {
 			has_global_flag = exakades_allowed
 			NOT = {
@@ -440,8 +382,8 @@ country_event = {								# players choose leaders
 			}
 		}
 	}
-
-	option = { 								# Azaryn allowed
+	option = {
+		# Azaryn allowed
 		trigger = {
 			has_global_flag = azaryn_allowed
 			NOT = {
@@ -479,8 +421,8 @@ country_event = {								# players choose leaders
 			}
 		}
 	}
-
-	option = { 								# Skrand allowed
+	option = {
+		# Skrand allowed
 		trigger = {
 			has_global_flag = skrand_allowed
 			NOT = {
@@ -518,8 +460,8 @@ country_event = {								# players choose leaders
 			}
 		}
 	}
-
-	option = { 								# Beholder allowed
+	option = {
+		# Beholder allowed
 		trigger = {
 			has_global_flag = beholder_allowed
 			NOT = {
@@ -557,8 +499,8 @@ country_event = {								# players choose leaders
 			}
 		}
 	}
-
-	option = { 								# Gray allowed
+	option = {
+		# Gray allowed
 		trigger = {
 			has_global_flag = gray_allowed
 			NOT = {
@@ -596,77 +538,93 @@ country_event = {								# players choose leaders
 			}
 		}
 	}
-
-#	option = { 								# Zadigal allowed
-#		trigger = {
-#			has_global_flag = zadigal_allowed
-#			NOT = {
-#				has_global_flag = zadigal_system_spawned
-#			}
-#		}
-#		name = spawn_exakades
-#		if = {
-#			limit = {
-#				NOT = {
-#					has_global_flag = zadigal_system_spawned
-#				}
-#			}
-#			capital_star = {
-#				random_neighbor_system = {
-#					limit = {
-#						distance = {
-#							min_jumps = 1
-#							max_jumps = 3
-#						}
-#					}
-#					spawn_zadigal = yes
-#				}
-#			}
-#		}
-#		else = {
-#			country_event = {
-#				id = mj24.4
-#				scopes = {
-#					from = from
-#					fromfrom = fromfrom
-#				}
-#			}
-#		}
-#	}
+	option = {
+		# Thayo Hack allowed
+		trigger = {
+			NOT = {
+				has_global_flag = hskv_system_spawned
+			}
+		}
+		name = hskv_spawn
+		custom_tooltip = hskv_tooltip
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = {
+						has_global_flag = hskv_system_spawned
+					}
+				}
+				capital_scope = {
+					solar_system = {
+						random_neighbor_system = {
+							limit = {
+								distance = {
+									min_jumps = 1
+									max_jumps = 1
+								}
+							}
+							hskv_spawn = yes
+						}
+					}
+				}
+			}
+			else = {
+				country_event = {
+					id = mj24.4
+					scopes = {
+						from = from
+						fromfrom = fromfrom
+					}
+				}
+			}
+		}
+	}
 }
 
-country_event = {			# fixed random spawning
+country_event = {
+	# fixed random spawning
 	id = mj24.10
 	is_triggered_only = yes
 	hide_window = yes
-
 	trigger = {
 		has_global_flag = okay_to_spawn
 		has_global_flag = fixed_random
 	}
-
 	immediate = {
 		event_target:global_event_country = {
 			random_list = {
 				10 = {
-					set_variable = { which = num_leader_spawns value = 3 }	
+					set_variable = {
+						which = num_leader_spawns
+						value = 3
+					}
 				}
 				10 = {
-					set_variable = { which = num_leader_spawns value = 4 }	
+					set_variable = {
+						which = num_leader_spawns
+						value = 4
+					}
 				}
 				10 = {
-					set_variable = { which = num_leader_spawns value = 5 }	
+					set_variable = {
+						which = num_leader_spawns
+						value = 5
+					}
 				}
 				10 = {
-					set_variable = { which = num_leader_spawns value = 6 }	
-				} 			
+					set_variable = {
+						which = num_leader_spawns
+						value = 6
+					}
+				}
 			}
 		}
 		while = {
 			count = event_target:global_event_country.num_leader_spawns
 			reroll_random = yes
 			random_list = {
-				10 = {				# Exakades
+				10 = {
+					# Exakades
 					modifier = {
 						factor = 0
 						NOT = {
@@ -691,8 +649,8 @@ country_event = {			# fixed random spawning
 						}
 					}
 				}
-			
-				10 = {				# Azaryn
+				10 = {
+					# Azaryn
 					modifier = {
 						factor = 0
 						NOT = {
@@ -701,7 +659,7 @@ country_event = {			# fixed random spawning
 					}
 					modifier = {
 						factor = 0
-							has_global_flag = azaryn_system_spawned
+						has_global_flag = azaryn_system_spawned
 					}
 					random_system = {
 						limit = {
@@ -717,8 +675,8 @@ country_event = {			# fixed random spawning
 						}
 					}
 				}
-
-				10 = {				# Skrand
+				10 = {
+					# Skrand
 					modifier = {
 						factor = 0
 						NOT = {
@@ -743,8 +701,8 @@ country_event = {			# fixed random spawning
 						}
 					}
 				}
-
-				10 = {				# Beholder
+				10 = {
+					# Beholder
 					modifier = {
 						factor = 0
 						NOT = {
@@ -753,7 +711,7 @@ country_event = {			# fixed random spawning
 					}
 					modifier = {
 						factor = 0
-							has_global_flag = beholder_system_spawned
+						has_global_flag = beholder_system_spawned
 					}
 					random_system = {
 						limit = {
@@ -769,7 +727,8 @@ country_event = {			# fixed random spawning
 						}
 					}
 				}
-				10 = {				# Gray
+				10 = {
+					# Gray
 					modifier = {
 						factor = 0
 						NOT = {
@@ -778,7 +737,7 @@ country_event = {			# fixed random spawning
 					}
 					modifier = {
 						factor = 0
-							has_global_flag = gray_system_spawned
+						has_global_flag = gray_system_spawned
 					}
 					random_system = {
 						limit = {
@@ -794,210 +753,164 @@ country_event = {			# fixed random spawning
 						}
 					}
 				}
-
-#				10 = {				# Zadigal
-#					modifier = {
-#						factor = 0
-#						NOT = {
-#							has_global_flag = zadigal_allowed
-#						}
-#					}
-#					modifier = {
-#						factor = 0
-#						NOT = {
-#							has_global_flag = zadigal_system_spawned
-#						}
-#					}
-#					random_system = {
-#						spawn_zadigal = yes
-#					}
-#				}
-
 			}
 		}
 	}
 }
 
-country_event = {			# fixed random player spawn
+country_event = {
+	# fixed random player spawn
 	id = mj24.11
 	is_triggered_only = yes
 	hide_window = yes
-
 	trigger = {
 		has_global_flag = okay_to_spawn
 		has_global_flag = fixed_random
 		is_ai = no
 	}
-
 	immediate = {
-			reroll_random = yes
-			random_list = {
-				10 = {				# Exakades
-					modifier = {
-						factor = 0
-						NOT = {
-							has_global_flag = exakades_allowed
-						}
+		reroll_random = yes
+		random_list = {
+			10 = {
+				# Exakades
+				modifier = {
+					factor = 0
+					NOT = {
+						has_global_flag = exakades_allowed
 					}
-					modifier = {
-						factor = 0
-						NOT = {
-							has_global_flag = exakades_system_spawned
-						}
+				}
+				modifier = {
+					factor = 0
+					NOT = {
+						has_global_flag = exakades_system_spawned
 					}
-					capital_scope = {
-						solar_system = {
-							random_neighbor_system = {
-								limit = {
-									distance = {
-										min_jumps = 1
-										max_jumps = 3
-									}
+				}
+				capital_scope = {
+					solar_system = {
+						random_neighbor_system = {
+							limit = {
+								distance = {
+									min_jumps = 1
+									max_jumps = 3
 								}
-								spawn_exakades = yes
 							}
+							spawn_exakades = yes
 						}
 					}
 				}
-			
-				10 = {				# Azaryn
-					modifier = {
-						factor = 0
-						NOT = {
-							has_global_flag = azaryn_allowed
-						}
+			}
+			10 = {
+				# Azaryn
+				modifier = {
+					factor = 0
+					NOT = {
+						has_global_flag = azaryn_allowed
 					}
-					modifier = {
-						factor = 0
-						NOT = {
-							has_global_flag = azaryn_system_spawned
-						}
+				}
+				modifier = {
+					factor = 0
+					NOT = {
+						has_global_flag = azaryn_system_spawned
 					}
-					capital_scope = {
-						solar_system = {
-							random_neighbor_system = {
-								limit = {
-									distance = {
-										min_jumps = 1
-										max_jumps = 3
-									}
+				}
+				capital_scope = {
+					solar_system = {
+						random_neighbor_system = {
+							limit = {
+								distance = {
+									min_jumps = 1
+									max_jumps = 3
 								}
-								spawn_azaryn = yes
 							}
+							spawn_azaryn = yes
 						}
 					}
 				}
-
-				10 = {				# Skrand
-					modifier = {
-						factor = 0
-						NOT = {
-							has_global_flag = skrand_allowed
-						}
+			}
+			10 = {
+				# Skrand
+				modifier = {
+					factor = 0
+					NOT = {
+						has_global_flag = skrand_allowed
 					}
-					modifier = {
-						factor = 0
-						NOT = {
-							has_global_flag = skrand_system_spawned
-						}
+				}
+				modifier = {
+					factor = 0
+					NOT = {
+						has_global_flag = skrand_system_spawned
 					}
-					capital_scope = {
-						solar_system = {
-							random_neighbor_system = {
-								limit = {
-									distance = {
-										min_jumps = 1
-										max_jumps = 3
-									}
+				}
+				capital_scope = {
+					solar_system = {
+						random_neighbor_system = {
+							limit = {
+								distance = {
+									min_jumps = 1
+									max_jumps = 3
 								}
-								spawn_skrand = yes
 							}
+							spawn_skrand = yes
 						}
 					}
 				}
-
-				10 = {				# Beholder
-					modifier = {
-						factor = 0
-						NOT = {
-							has_global_flag = beholder_allowed
-						}
+			}
+			10 = {
+				# Beholder
+				modifier = {
+					factor = 0
+					NOT = {
+						has_global_flag = beholder_allowed
 					}
-					modifier = {
-						factor = 0
-						NOT = {
-							has_global_flag = beholder_system_spawned
-						}
+				}
+				modifier = {
+					factor = 0
+					NOT = {
+						has_global_flag = beholder_system_spawned
 					}
-					capital_scope = {
-						solar_system = {
-							random_neighbor_system = {
-								limit = {
-									distance = {
-										min_jumps = 1
-										max_jumps = 3
-									}
+				}
+				capital_scope = {
+					solar_system = {
+						random_neighbor_system = {
+							limit = {
+								distance = {
+									min_jumps = 1
+									max_jumps = 3
 								}
-								spawn_beholder = yes
 							}
+							spawn_beholder = yes
 						}
 					}
 				}
-				10 = {				# Gray
-					modifier = {
-						factor = 0
-						NOT = {
-							has_global_flag = gray_allowed
-						}
+			}
+			10 = {
+				# Gray
+				modifier = {
+					factor = 0
+					NOT = {
+						has_global_flag = gray_allowed
 					}
-					modifier = {
-						factor = 0
-						NOT = {
-							has_global_flag = gray_system_spawned
-						}
+				}
+				modifier = {
+					factor = 0
+					NOT = {
+						has_global_flag = gray_system_spawned
 					}
-					capital_scope = {
-						solar_system = {
-							random_neighbor_system = {
-								limit = {
-									distance = {
-										min_jumps = 1
-										max_jumps = 3
-									}
+				}
+				capital_scope = {
+					solar_system = {
+						random_neighbor_system = {
+							limit = {
+								distance = {
+									min_jumps = 1
+									max_jumps = 3
 								}
-								spawn_gray = yes
 							}
+							spawn_gray = yes
 						}
 					}
 				}
-
-#				10 = {				# Zadigal
-#					modifier = {
-#						factor = 0
-#						NOT = {
-#							has_global_flag = zadigal_allowed
-#						}
-#					}
-#					modifier = {
-#						factor = 0
-#						NOT = {
-#							has_global_flag = zadigal_system_spawned
-#						}
-#					}
-#					capital_star = {
-#						random_neighbor_system = {
-#							limit = {
-#								distance = {
-#									min_jumps = 1
-#									max_jumps = 3
-#								}
-#							}
-#							spawn_zadigal = yes
-#						}
-#					}
-#				}
-#			}
+			}
 		}
 	}
 }
-
