@@ -1,13 +1,15 @@
 namespace = soj_h
 
+
+# HIRE/DISMISS Leader
 country_event = { 
 	id = soj_h.1
-	title = soj_h.1.name
-	desc = soj_h.1.desc
+	title = "soj_h.1.name"
+	desc = "soj_h.1.desc"
 	diplomatic = yes
 	fire_only_once = yes
 	is_triggered_only = yes
-	show_sound = par_event_keides
+	show_sound = event_space_amoeba
 
 	picture = GFX_leader_recruitment_bg_legendary_keides
 	event_window_type = leader_recruit
@@ -16,10 +18,8 @@ country_event = {
 		portrait = event_target:soj_leader
 		room = galactic_custodian_room
 	}
-	
-	trigger = { exists = event_target:soj_leader }
-	
-	immediate = {
+
+    immediate = {
         create_country = {
             name = "NAME_Unknown"
             type = global_event
@@ -47,12 +47,10 @@ country_event = {
         event_target:soj_country = {
             create_species = {
                 name = "NAME_Unknown"
-                class = PARAGON
-                portrait = paragon01
+                class = HUM
+                portrait = sojportraitselector
                 namelist = "PRT1"
-				traits = {
-                    trait = "trait_erudite"
-                }
+				traits = random
                 effect = {
                     save_event_target_as = soj_species
                 }
@@ -60,22 +58,27 @@ country_event = {
             create_leader = {
                 class = official
                 species = event_target:soj_species
-                name = "NAME_soj"
-                skill = 7
+                name = "NAME_Soj"
+                skill = 10
                 immortal = yes
                 gender = indeterminable
                 event_leader = yes
+				randomize_traits = no
                 skip_background_generation = yes
                 custom_catch_phrase = soj_leader_catch_phrase
                 custom_description = soj_leader_description
                 set_age = 2000
+				traits = {
+                    trait = soj_trait_legendary_spirit
+                }
                 effect = {
                     set_leader_flag = legendary_leader
-                    set_leader_flag = exakeides
+                    set_leader_flag = soj_leader
                     set_leader_flag = immune_to_negative_traits
                     set_leader_flag = leader_death_events_blocked
                     save_global_event_target_as = soj_leader
                     set_owner = root
+					exile_leader_as = legendary_lost_leader
                 }
             }
         }
@@ -85,21 +88,21 @@ country_event = {
 		# Special tag to make mark this is the hire option
 		name = HIRE
 		tag = hire_leader
-		sound = "par_keides_hire"
+		sound = event_space_amoeba
 
 		hidden_effect = {
 			clone_leader = {
 				target = event_target:soj_leader
 			}
 			last_created_leader = {
-				save_global_event_target_as = soj_leader
-				set_leader_flag = exakeides
+				set_leader_flag = soj_ghos_spirit
 				set_leader_flag = legendary_leader
+				save_global_event_target_as = soj_leader
 				set_leader_flag = immune_to_negative_traits
                 set_leader_flag = leader_death_events_blocked
 				set_owner = root
 			}
-			set_global_flag = soj_hired
+			set_country_flag = has_soj_leader
 		}
 
 		create_message = {
@@ -123,12 +126,18 @@ country_event = {
 		name = DISMISS
 		# Special tag to mark this as the dismiss option
 		tag = dismiss_leader
-		sound = "par_keides_dismiss"
+		sound = event_space_amoeba
 
 		hidden_effect = {
 			event_target:soj_leader = {
 				kill_leader = { show_notification = no }
 			}
 		}
+	}
+
+	option = {
+		name = soj_h.1.a
+		response_text = soj_h.1.a.response
+		is_dialog_only = yes
 	}
 }

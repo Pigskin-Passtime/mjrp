@@ -2,24 +2,26 @@ namespace = soj_q
 
 # Start Quest: Military
 country_event = {
-  id = soj_q.1001
-  title = soj_q.1001.name
-  desc = soj_q.1001.desc
-  picture = GFX_evt_satellite_in_orbit
+    id = soj_q.1001
+    title = soj_q.1001.name
+    desc = soj_q.1001.desc
+    picture = GFX_evt_satellite_in_orbit
 	show_sound = event_sensor_ping
-  event_chain = soj_military_chain
+    event_chain = soj_military_chain
 
-  immediate = {
+    is_triggered_only = yes
+
+    immediate = {
 		save_event_target_as = owner_country
 		owner_species = { save_event_target_as = owner_species }
-    capital_scope = { save_event_target_as = capital }
+        capital_scope = { save_event_target_as = capital }
 
-    begin_event_chain = {
+        begin_event_chain = {
 				event_chain = soj_military_chain
 				target = ROOT
 		}
 
-    hidden_effect = {
+        hidden_effect = {
 			random_system = {
 				limit = {
 					distance = {
@@ -100,24 +102,24 @@ country_event = {
 		}
 	}
 
-  option = {
-    name = soj_q.1001.a
-    tooltip = {
+    option = {
+        name = soj_q.1001.a
+        tooltip = {
 			begin_event_chain = {
 				event_chain = "soj_military_chain"
 				target = ROOT
 			}
 		}
-    hidden_effect = {
-      create_point_of_interest = {
+        hidden_effect = {
+            create_point_of_interest = {
 				id = soj_military_chain_poi.1
 				name = "soj_mil_system_1_poi"
 				desc = "soj_mil_system_1_poi_desc"
 				event_chain = "soj_military_chain"
 				location = event_target:soj_military_ship
 			}
+        }
     }
-  }
 }
 
 # Ship Disabled (HIDDEN)
@@ -273,6 +275,8 @@ ship_event = {
 # Absorb military power
 country_event = {
 	id = soj_q.1007
+	title = soj_q.1007.name
+	desc = soj_q.1007.desc
 
 	is_triggered_only = yes
 
@@ -290,9 +294,9 @@ country_event = {
             limit = {
                 has_leader_flag = soj_leader
             }
-            add_trait = {
-                trait = soj_trait_module_military
-            }
+            #add_trait = {
+            #    trait = soj_trait_module_military
+            #}
         }
 	}
 }
@@ -301,54 +305,56 @@ country_event = {
 ####################################################################################################
 # Start Quest: Science (Astrophysics)
 country_event = {
-  id = soj_q.2001
-  title = soj_q.2001.name
-  desc = soj_q.2001.desc
-  picture = GFX_evt_satellite_in_orbit
-  show_sound = event_sensor_ping
-  event_chain = soj_science_chain
+    id = soj_q.2001
+    title = soj_q.2001.name
+    desc = soj_q.2001.desc
+    picture = GFX_evt_satellite_in_orbit
+    show_sound = event_sensor_ping
+    event_chain = soj_science_chain
 
-  immediate = {
-    	capital_scope = { save_event_target_as = capital }
+    is_triggered_only = yes
 
+    immediate = {
     	begin_event_chain = {
 				event_chain = soj_science_chain
 				target = ROOT
 		}
-  }
+    }
 
-  option = { #absorb stars
-    name = soj_q.2001.a
-    tooltip = {
+    option = { #absorb stars
+        name = soj_q.2001.a
+    	tooltip = {
 			begin_event_chain = {
 				event_chain = "soj_science_chain"
 				target = ROOT
 			}
-	}
-  }
-
-  option = { #absorb scientist
-	name = soj_q.2001.b
-	tooltip = {
-		begin_event_chain = {
-			event_chain = "soj_science_chain"
-			target = ROOT
 		}
-	}
-  }
+  	}
+
+  	option = { #absorb scientist
+		name = soj_q.2001.b
+		tooltip = {
+			begin_event_chain = {
+				event_chain = "soj_science_chain"
+				target = ROOT
+			}
+		}
+  	}
 }
 
 
 # start star absorbing quest
 country_event = {
-  id = soj_q.2002
-  title = soj_q.2002.name
-  desc = soj_q.2002.desc
-  picture = GFX_evt_satellite_in_orbit
-  show_sound = event_sensor_ping
-  event_chain = soj_science_chain
+    id = soj_q.2002
+    title = soj_q.2002.name
+    desc = soj_q.2002.desc
+    picture = GFX_evt_satellite_in_orbit
+    show_sound = event_sensor_ping
+    event_chain = soj_science_chain
 
-  immediate = {
+    is_triggered_only = yes
+
+    immediate = {
     	capital_scope = { save_event_target_as = capital }
 
     	begin_event_chain = {
@@ -411,31 +417,31 @@ country_event = {
 		}
 	}
 
-  option = {
-    name = soj_q.2002.a
+    option = {
+        name = soj_q.2002.a
     
-    hidden_effect = {
-        create_point_of_interest = {
-			id = soj_science_chain_poi.1
-			name = "soj_sci_system_1_poi"
-			desc = "soj_sci_system_1_poi_desc"
-			event_chain = "soj_science_chain"
-			#location = event_target:soj_military_ship
-		}
-		create_point_of_interest = {
-			id = soj_science_chain_poi.2
-			name = "soj_sci_system_2_poi"
-			desc = "soj_sci_system_2_poi_desc"
-			event_chain = "soj_science_chain"
-		}
-		create_point_of_interest = {
-			id = soj_science_chain_poi.3
-			name = "soj_sci_system_3_poi"
-			desc = "soj_sci_system_3_poi_desc"
-			event_chain = "soj_science_chain"
-		}
+        hidden_effect = {
+            create_point_of_interest = {
+			    id = soj_science_chain_poi.1
+			    name = "soj_sci_system_1_poi"
+			    desc = "soj_sci_system_1_poi_desc"
+			    event_chain = "soj_science_chain"
+			    #location = event_target:soj_military_ship
+		    }
+            create_point_of_interest = {
+                id = soj_science_chain_poi.2
+                name = "soj_sci_system_2_poi"
+                desc = "soj_sci_system_2_poi_desc"
+                event_chain = "soj_science_chain"
+            }
+            create_point_of_interest = {
+                id = soj_science_chain_poi.3
+                name = "soj_sci_system_3_poi"
+                desc = "soj_sci_system_3_poi_desc"
+                event_chain = "soj_science_chain"
+            }
+        }
     }
-  }
 }
 
 # Start absorb scientist quest
@@ -634,9 +640,9 @@ country_event = {
             limit = {
                 has_leader_flag = soj_leader
             }
-            add_trait = {
-                trait = soj_trait_module_science
-            }
+            #add_trait = {
+            #    trait = soj_trait_module_science
+            #}
         }
 	}
 }
