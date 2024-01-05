@@ -14,6 +14,80 @@ country_event = {
 	}
 }
 
+### Stage 1
+fleet_event = {
+	id = zob_stage.1
+	title = "zob_stage.1.name"
+	desc = "zob_stage.1.desc"
+	picture = GFX_evt_crusher_droid
+	show_sound = event_metal_fatigue
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no }
+	}
+
+	option = {
+		name = ONSCREEN
+	}
+}
+
+### Stage 2
+fleet_event = {
+	id = zob_stage.2
+	title = "zob_stage.2.name"
+	desc = "zob_stage.2.desc"
+	picture = GFX_evt_crusher_droid
+	show_sound = event_metal_fatigue
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no }
+	}
+
+	option = {
+		name = ONSCREEN
+	}
+}
+
+### Stage 3
+fleet_event = {
+	id = zob_stage.3
+	title = "zob_stage.3.name"
+	desc = "zob_stage.3.desc"
+	picture = GFX_evt_crusher_droid
+	show_sound = event_metal_fatigue
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no }
+	}
+
+	option = {
+		name = ONSCREEN
+	}
+}
 
 ### Zob Abducts Scientist
 fleet_event = {
@@ -68,6 +142,7 @@ country_event = {
 					is_gestalt_node = no
 					is_ruler = no
 				}
+				add_trait = leader_trait_adaptable
 				save_event_target_as = collected_scientist
 				exile_leader_as = collected_scientist
 			}
@@ -197,12 +272,13 @@ country_event = {
 					randomize_traits = no
 					skip_background_generation = yes
 					background_ethic = ethic_gestalt_consciousness
-					# custom_catch_phrase = sadtoid_catch_phrase
+					# custom_catch_phrase = sadtoid_catch_phrase 			#TODO Catchphrases are a thing
 					# custom_description = astrocreator_azaryn_backstory
 					# can_manually_change_location = no
 					# homeworld = this
 					traits = {
-						trait = trait_mind_collector
+						trait = leader_trait_zob_mind_collector
+						trait = leader_trait_adaptable
 					}
 					gender = indeterminable
 					set_age = 758
@@ -236,6 +312,8 @@ country_event = {
 		sound = par_azaryn_hire
 
 		hidden_effect = {
+			set_country_flag = zob_hired
+			track_zob_variables = yes
 			clone_leader = {
 				target = event_target:zob_leader
 			}
@@ -245,15 +323,26 @@ country_event = {
 				set_leader_flag = immune_to_negative_traits
 				set_leader_flag = zob
 				set_owner = root
-				set_zob_variables = yes
+				track_zob_variables = yes
+				set_zob_variables = yes	
 			}
 			if = {
 				limit = { 
 					has_country_flag = collected_scientist
 				}
 				event_target:collected_scientist = {
-					set_zob_variables = yes
+					set_owner = root
+					track_zob_variables = yes
+					set_zob_variables = yes			
 				}
+			}
+		}
+		if = {
+			limit = { 
+				has_country_flag = collected_scientist
+			}
+			event_target:collected_scientist = {
+				add_trait = leader_trait_zob_collected
 			}
 		}
 	}
@@ -262,6 +351,14 @@ country_event = {
 		sound = par_azaryn_dismiss
 		name = DISMISS
 		tag = dismiss_leader
+		if = {
+			limit = { 
+				has_country_flag = collected_scientist
+			}
+			event_target:collected_scientist = {
+				add_trait = leader_trait_traumatized
+			}
+		}
 		hidden_effect = {
 			event_target:zob_leader = {
 				kill_leader = { show_notification = no }
@@ -271,17 +368,46 @@ country_event = {
 }
 
 
-###Trait Variable Tracker on Leader Level up
+###Trait Variable Tracker on Leader Level up, (Delayed so you can pick a trait)
 country_event = {
 	id = zob.20
 	hide_window = yes
 	is_triggered_only = yes
 
 	trigger = {
-		has_trait = leader_zob_collected
+		from = {
+			has_trait = leader_trait_zob_collected
+		}
 	}
 
 	immediate = {
+		country_event = {
+			id = zob.20
+			days = 30
+		}
 		update_zob_variables = yes
+	}
+}
+
+###Trait Variable Tracker refresh, triggered above and by yearly backup event in case you time out the trait selection
+country_event = {
+	id = zob.21
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_flag = zob_hired
+	}
+
+	immediate = {
+		every_owned_leader = {
+			limit = {
+				OR = {
+					has_trait = leader_trait_zob_mind_collector
+					has_trait = leader_trait_zob_collected
+				}
+			}
+			update_zob_variables = yes
+		}		
 	}
 }

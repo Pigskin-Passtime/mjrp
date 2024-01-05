@@ -29,19 +29,101 @@ spawn_zob = {
 			}
 	  	}
 	}
+	set_global_flag = zob_system_spawned
 	###TODO figure out nebula object on galaxy map
 }
 
+#Creates Variable Tracker (sets all to 0)
+track_zob_variables = {
+	optimize_memory
+	track_zob_variable = { trait = leader_trait_adaptable }
+	track_zob_variable = { trait = leader_trait_adventurous_spirit }
+	track_zob_variable = { trait = leader_trait_eager }
+	track_zob_variable = { trait = leader_trait_resilient }
+	track_zob_variable = { trait = leader_trait_politician }
+	track_zob_variable = { trait = leader_trait_capitalist }
+	track_zob_variable = { trait = leader_trait_private_mines }
+	track_zob_variable = { trait = leader_trait_homesteader }
+	track_zob_variable = { trait = trait_ruler_champion_of_the_people }
+	track_zob_variable = { trait = leader_trait_gifted }
+	track_zob_variable = { trait = leader_trait_scrapper }
+	track_zob_variable = { trait = leader_trait_entrepreneur }
+	track_zob_variable = { trait = leader_trait_venerated }
+	track_zob_variable = { trait = leader_trait_emotional_support_pet }
+}
+
+#Sets Initial Values for Existing Traits, incremental effects for multilevel traits
 set_zob_variables = {
 	optimize_memory
 	set_zob_variable = { trait = leader_trait_adaptable }
-	set_zob_variable = { trait = leader_trait_adaptable_2 }
+	set_zob_variable_2 = { trait = leader_trait_adaptable } 
+	set_zob_variable = { trait = leader_trait_adventurous_spirit }
+	set_zob_variable_2 = { trait = leader_trait_adventurous_spirit }
+	set_zob_variable_3 = { trait = leader_trait_adventurous_spirit }
+	set_zob_variable = { trait = leader_trait_eager }
+	set_zob_variable_2 = { trait = leader_trait_eager }
+	set_zob_variable = { trait = leader_trait_resilient }
+	set_zob_variable_2 = { trait = leader_trait_resilient }
+	set_zob_variable = { trait = leader_trait_politician }
+	set_zob_variable_2 = { trait = leader_trait_politician }
+	set_zob_variable = { trait = leader_trait_capitalist }
+	set_zob_variable_2 = { trait = leader_trait_capitalist }
+	set_zob_variable = { trait = leader_trait_private_mines }
+	set_zob_variable_2 = { trait = leader_trait_private_mines }
+	set_zob_variable = { trait = leader_trait_homesteader }
+	set_zob_variable_2 = { trait = leader_trait_homesteader }
+	set_zob_variable = { trait = trait_ruler_champion_of_the_people }
+	set_zob_variable_2 = { trait = trait_ruler_champion_of_the_people }
+	set_zob_variable = { trait = leader_trait_gifted }
+	set_zob_variable_2 = { trait = leader_trait_gifted }
+	set_zob_variable = { trait = leader_trait_scrapper }
+	set_zob_variable_2 = { trait = leader_trait_scrapper }
+	set_zob_variable = { trait = leader_trait_entrepreneur }
+	set_zob_variable_2 = { trait = leader_trait_entrepreneur }
+	set_zob_variable = { trait = leader_trait_venerated }
+	set_zob_variable_2 = { trait = leader_trait_venerated }
+	set_zob_variable = { trait = leader_trait_emotional_support_pet }
 }
 
+#Updates Tracker for any New Traits, incremental effects for multilevel traits
 update_zob_variables = {
 	optimize_memory
 	update_zob_variable = { trait = leader_trait_adaptable }
-	update_zob_variable = { trait = leader_trait_adaptable_2 }
+	update_zob_variable_2 = { trait = leader_trait_adaptable }
+	update_zob_variable = { trait = leader_trait_adventurous_spirit }
+	update_zob_variable_2 = { trait = leader_trait_adventurous_spirit }
+	update_zob_variable_3 = { trait = leader_trait_adventurous_spirit }
+	update_zob_variable = { trait = leader_trait_eager }
+	update_zob_variable_2 = { trait = leader_trait_eager }
+	update_zob_variable = { trait = leader_trait_resilient }
+	update_zob_variable_2 = { trait = leader_trait_resilient }
+	update_zob_variable = { trait = leader_trait_politician }
+	update_zob_variable_2 = { trait = leader_trait_politician }
+	update_zob_variable = { trait = leader_trait_capitalist }
+	update_zob_variable_2 = { trait = leader_trait_capitalist }
+	update_zob_variable = { trait = leader_trait_private_mines }
+	update_zob_variable_2 = { trait = leader_trait_private_mines }
+	update_zob_variable = { trait = leader_trait_homesteader }
+	update_zob_variable_2 = { trait = leader_trait_homesteader }
+	update_zob_variable = { trait = trait_ruler_champion_of_the_people }
+	update_zob_variable_2 = { trait = trait_ruler_champion_of_the_people }
+	update_zob_variable = { trait = leader_trait_gifted }
+	update_zob_variable_2 = { trait = leader_trait_gifted }
+	update_zob_variable = { trait = leader_trait_scrapper }
+	update_zob_variable_2 = { trait = leader_trait_scrapper }
+	update_zob_variable = { trait = leader_trait_entrepreneur }
+	update_zob_variable_2 = { trait = leader_trait_entrepreneur }
+	update_zob_variable = { trait = leader_trait_venerated }
+	update_zob_variable_2 = { trait = leader_trait_venerated }
+	update_zob_variable = { trait = leader_trait_emotional_support_pet }
+}
+
+track_zob_variable = {
+	optimize_memory
+	set_variable = {
+		which = zob_$trait$
+		value = 0	
+	}
 }
 
 #Gives a 1 or 0 for having each tracked trait
@@ -51,37 +133,125 @@ set_zob_variable = {
 		limit = {
 			has_trait = $trait$
 		}
-		set_variable = {
-			which = zob_$trait$_variable
+		change_variable = {
+			which = zob_$trait$
 			value = 1	
 		}
-	}
-	else = {
-		set_variable = {
-			which = zob_$trait$_variable
-			value = 0	
+		owner = {
+			change_variable = {
+				which = zob_$trait$
+				value = 1
+			}
 		}
 	}
 }
 
-#If the leaders local variable is 0 but they have the trait, then they recently gained it. Saves variable, and increments the country level tracker for collected traits
+#Gives a 2 or 0 for having second level traits
+set_zob_variable_2 = {
+	optimize_memory
+	if = {
+		limit = {
+			has_trait = $trait$_2
+		}
+		change_variable = {
+			which = zob_$trait$
+			value = 2	
+		}
+		owner = {
+			change_variable = {
+				which = zob_$trait$
+				value = 2
+			}
+		}
+	}
+}
+
+#Gives a 3 or 0 for having third level traits
+set_zob_variable_3 = {
+	optimize_memory
+	if = {
+		limit = {
+			has_trait = $trait$_3
+		}
+		change_variable = {
+			which = zob_$trait$
+			value = 3	
+		}
+		owner = {
+			change_variable = {
+				which = zob_$trait$
+				value = 3
+			}
+		}
+	}
+}
+
+#If the leaders local variable is 0 but they have the trait, they recently gained it. Saves variable, and increments the country level tracker for collected traits
 update_zob_variable = {
     optimize_memory
 	if = {
 		limit = {
 			check_variable = {
-				which = zob_$trait$_variable
+				which = zob_$trait$
 				value = 0
 			}
 			has_trait = $trait$
 		}
 		change_variable = {
-			which = zob_$trait$_variable
+			which = zob_$trait$
 			value = 1
 		}
 		owner = {
 			change_variable = {
-				which = zob_$trait$_variable
+				which = zob_$trait$
+				value = 1
+			}
+		}
+	}
+}
+
+#2nd Tier Traits
+update_zob_variable_2 = {
+    optimize_memory
+	if = {
+		limit = {
+			check_variable = {
+				which = zob_$trait$
+				value = 1
+			}
+			has_trait = $trait$_2
+		}
+		change_variable = {
+			which = zob_$trait$
+			value = 1
+		}
+		owner = {
+			change_variable = {
+				which = zob_$trait$
+				value = 1
+			}
+		}
+	}
+}
+
+#3rd Tier Traits
+update_zob_variable_3 = {
+    optimize_memory
+	if = {
+		limit = {
+			check_variable = {
+				which = zob_$trait$
+				value = 2
+			}
+			has_trait = $trait$_3
+		}
+		change_variable = {
+			which = zob_$trait$
+			value = 1
+		}
+		owner = {
+			change_variable = {
+				which = zob_$trait$
 				value = 1
 			}
 		}
