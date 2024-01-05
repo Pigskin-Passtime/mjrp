@@ -1,0 +1,1682 @@
+###########
+# trime_early_events
+# made by:
+# tr33
+#
+###########
+namespace = trime
+event = {
+	id = trime.0
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = {
+				always = yes
+			}
+			set_global_flag = trime_allowed
+		}
+	}
+}
+
+# this = ship | from = tplanet
+ship_event = {
+	id = trime.1
+	title = trime.1.name
+	desc = trime.1.desc
+	#desc = {
+	#	trigger = { has_country_flag = flag_azaryn_option_hesitate }
+	#	text = paragon.226.desc_no # switched places with desc_yes below, as they are mixed up in loc
+	#}
+	#
+	show_sound = event_conversation
+	location = event_target:trime_primitive_rewind_world
+	is_triggered_only = yes
+	diplomatic_title = BLANK_STRING
+	trigger = {
+		from = {
+			has_planet_flag = trime_first_timer
+			has_planet_flag = trime_primitive_rewind_world
+		}
+		
+	}
+	immediate = {
+		from = {
+			remove_planet_flag = trime_first_timer
+		}
+	}
+	diplomatic = yes
+	picture_event_data = {
+		portrait = GFX_trime_time_lord
+		room = pre_ftl_victorian_room
+		planet_background = pc_continental
+	}
+	option = {
+		# who are you		
+		name = trime.1.a
+		is_dialog_only = yes
+		response_text = trime.1.a.response
+	}
+	option = {
+		# why did you send @eventtarget back in time
+		trigger = {
+			this.owner = {
+				has_country_flag = trime_send_scienctist
+			}
+		}
+		name = trime.1.b
+		is_dialog_only = yes
+		response_text = trime.1.b.reponse
+	}
+	option = {
+		# What is this system
+		name = trime.1.c
+		response_text = trime.1.c.response
+		is_dialog_only = yes
+	}
+	option = {
+		# do his bidding make a light show in orbit
+		name = trime.1.d
+		#response_text = trime.1.d.response
+		#is_dialog_only = yes
+		#hidden_effect = {
+		enable_special_project = {
+			name = trime_make_lightshow
+			owner = this.owner
+			location = from
+		}
+		hidden_effect = {
+			this.owner = {
+				country_event = {
+					id = trime.3
+					days = 30
+				}
+			}
+		}
+		#}
+	}
+	option = {
+		# hell nah invade him
+		name = trime.1.e
+		allow = {
+			this.owner = {
+				has_policy_flag = interference_aggressive
+			}
+		}
+		#response_text = trime.1.d.response
+		#is_dialog_only = yes
+		#hidden_effect = {
+		this.owner = {
+			begin_event_chain = {
+				event_chain = trime_invade_thisguy
+				target = event_target:trime_primitive_rewind_world
+			}
+		}
+		#}
+	}
+	after = {
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = trime.21
+					days = 30
+				}
+			}
+		}
+	}
+	#found weird signal
+}
+
+# Scope = Ship
+# From = System
+# FromFrom = Country
+ship_event = {
+	id = trime.2
+	title = trime.2.name
+	desc = trime.2.desc
+	#desc = {
+	#	trigger = { has_country_flag = flag_azaryn_option_hesitate }
+	#	text = paragon.226.desc_no # switched places with desc_yes below, as they are mixed up in loc
+	#}
+	#
+	#show_sound = evn_inhabited_solar_system_03
+	location = event_target:trime_primitive_rewind_world
+	is_triggered_only = yes
+	#diplomatic_title = BLANK_STRING
+	trigger = {
+		from = {
+			any_system_planet = {
+				has_planet_flag = trime_primitive_rewind_world
+			}
+		}
+	}
+	immediate = {
+		if = {
+			limit = {
+				this.owner = {
+					has_event_chain = trime_findsystem
+				}
+			}
+			this.owner = {
+				end_event_chain = trime_findsystem
+			}
+		}
+	}
+	#diplomatic = yes
+	picture = GFX_evt_clocks
+	option = {
+		name = STRANGE
+		this.owner = {
+			add_monthly_resource_mult = {
+				resource = unity
+				value = 2
+			}
+		}
+	}
+}
+
+# this = country | from = tplanet
+country_event = {
+	id = trime.5
+	title = trime.5.name
+	desc = trime.5.desc
+	#desc = {
+	#	trigger = { has_country_flag = flag_azaryn_option_hesitate }
+	#	text = paragon.226.desc_no # switched places with desc_yes below, as they are mixed up in loc
+	#}
+	#
+	show_sound = event_conversation
+	location = event_target:trime_primitive_rewind_world
+	is_triggered_only = yes
+	diplomatic_title = BLANK_STRING
+	diplomatic = yes
+	picture_event_data = {
+		portrait = GFX_trime_time_lord
+		room = pre_ftl_victorian_room
+		planet_background = pc_continental
+	}
+	option = {
+		# give us reward
+		name = trime.5.a
+		is_dialog_only = yes
+		response_text = trime.5.a.response		# all in time
+	}
+	option = {
+		# why do u live among primitives
+		name = trime.5.b
+		is_dialog_only = yes
+		response_text = trime.5.b.response		# chosen of god idk
+	}
+	option = {
+		# whats next
+		name = trime.5.d
+		#response_text = trime.1.d.response
+		#is_dialog_only = yes
+		hidden_effect = {
+			country_event = {
+				id = trime.4
+			}
+		}
+	}
+}
+
+# this = country | from = tplanet
+country_event = {
+	id = trime.4
+	title = trime.4.name
+	desc = trime.4.desc
+	#desc = {
+	#	trigger = { has_country_flag = flag_azaryn_option_hesitate }
+	#	text = paragon.226.desc_no # switched places with desc_yes below, as they are mixed up in loc
+	#}
+	#
+	show_sound = event_conversation
+	location = event_target:trime_primitive_rewind_world
+	is_triggered_only = yes
+	diplomatic_title = BLANK_STRING
+	diplomatic = yes
+	picture_event_data = {
+		portrait = GFX_trime_time_lord
+		room = pre_ftl_victorian_room
+		planet_background = pc_continental
+	}
+	option = {
+		# why u have hair
+		name = trime.4.b
+		is_dialog_only = yes
+		response_text = trime.4.b.response		# why not?
+	}
+	option = {
+		# ok lets wait
+		name = trime.4.a
+		#hidden_effect = {
+		start_situation = {
+			type = trime_sit_wait_20years			#wait 20 years
+		}
+		random_situation = {
+			limit = {
+				is_situation_type = trime_sit_wait_20years
+			}
+			set_situation_approach = trime_letswait_approach
+		}
+		#}
+	}
+	option = {
+		# hell nah invade him
+		name = trime.4.d
+		allow = {
+			has_policy_flag = interference_aggressive
+		}
+		#response_text = trime.1.d.response
+		#is_dialog_only = yes
+		#hidden_effect = {
+		begin_event_chain = {
+			event_chain = trime_invade_thisguy
+			target = event_target:trime_primitive_rewind_world
+		}
+		#}
+	}
+}
+
+# This = country, lead attacker
+# From = country, planet owner
+# FromFrom = planet
+country_event = {
+	id = trime.6
+	hide_window = yes
+	#desc = {
+	#	trigger = { has_country_flag = flag_azaryn_option_hesitate }
+	#	text = paragon.226.desc_no # switched places with desc_yes below, as they are mixed up in loc
+	#}
+	#
+	is_triggered_only = yes
+	trigger = {
+		fromfrom = {
+			has_planet_flag = trime_time_lordishere
+		}
+	}
+	immediate = {
+		fromfrom = {
+			remove_planet_flag = trime_time_lordishere
+		}
+		this = {
+			country_event = {
+				id = trime.7
+			}
+		}
+	}
+}
+
+# this = country 
+country_event = {
+	id = trime.7
+	title = trime.7.name
+	desc = trime.7.desc
+	#desc = {
+	#	trigger = { has_country_flag = flag_azaryn_option_hesitate }
+	#	text = paragon.226.desc_no # switched places with desc_yes below, as they are mixed up in loc
+	#}
+	#
+	show_sound = event_conversation
+	location = event_target:trime_primitive_rewind_world
+	is_triggered_only = yes
+	diplomatic_title = BLANK_STRING
+	diplomatic = yes
+	picture_event_data = {
+		portrait = GFX_trime_time_lord
+		room = pre_ftl_victorian_room
+		planet_background = pc_continental
+		#graphical_culture = prim
+	}
+	option = {
+		# oh no
+		name = trime.7.a
+		#response_text = trime.1.d.response
+		#is_dialog_only = yes
+		this = {
+			add_relic = r_trime_houglass
+			capital_scope = {
+				add_modifier = {
+					modifier = trime_cursedworld
+					days = 1800
+				}
+			}
+			if = {
+				limit = {
+					has_event_chain = trime_invade_thisguy
+				}
+				end_event_chain = trime_invade_thisguy
+			}
+			trime_endallevents = yes
+		}
+		hidden_effect = {
+			set_variable = {
+				which = trime_death_age
+				value = 137
+			}
+			set_global_flag = trime_time_lorddied
+		}
+	}
+}
+
+# this = situation 
+situation_event = {
+	id = trime.9
+	title = trime.9.name
+	desc = trime.9.desc
+	#desc = {
+	#	trigger = { has_country_flag = flag_azaryn_option_hesitate }
+	#	text = paragon.226.desc_no # switched places with desc_yes below, as they are mixed up in loc
+	#}
+	#
+	show_sound = event_conversation
+	location = this.target
+	is_triggered_only = yes
+	diplomatic_title = BLANK_STRING
+	diplomatic = yes
+	picture_event_data = {
+		portrait = GFX_trime_time_lord
+		room = pre_ftl_victorian_room
+		planet_background = pc_continental
+	}
+	option = {
+		# oh no
+		name = trime.9.a
+		#response_text = trime.1.d.response
+		#is_dialog_only = yes
+		this = {
+			add_situation_progress = -60
+		}
+		hidden_effect = {
+		}
+	}
+	option = {
+		# ah hell no
+		name = trime.9.b
+		#response_text = trime.1.d.response
+		#is_dialog_only = yes
+		allow = {
+			owner = {
+				has_policy_flag = interference_aggressive
+			}
+		}
+		abort_situation = this
+		#hidden_effect = {
+		owner = {
+			begin_event_chain = {
+				event_chain = trime_invade_thisguy
+				target = event_target:trime_primitive_rewind_world
+			}
+		}
+		#}
+	}
+}
+
+# this = situation 
+situation_event = {
+	id = trime.10
+	title = trime.10.name
+	desc = trime.10.desc
+	#desc = {
+	#	trigger = { has_country_flag = flag_azaryn_option_hesitate }
+	#	text = paragon.226.desc_no # switched places with desc_yes below, as they are mixed up in loc
+	#}
+	#
+	show_sound = event_conversation
+	location = event_target:trime_primitive_rewind_world
+	is_triggered_only = yes
+	diplomatic_title = BLANK_STRING
+	diplomatic = yes
+	picture_event_data = {
+		portrait = GFX_trime_time_lord
+		room = pre_ftl_victorian_room
+		planet_background = pc_continental
+	}
+	option = {
+		# oh no
+		name = trime.10.a
+		#custom_tooltip = trime_unlock_temple
+		#response_text = trime.1.d.response
+		#is_dialog_only = yes
+		abort_situation = this
+		begin_event_chain = {
+			event_chain = trime_buildtemple
+		}
+		hidden_effect = {
+			this.owner = {
+				set_country_flag = trime_buildgianttemple
+			}
+		}
+	}
+	option = {
+		# ah hell no
+		name = trime.9.b
+		#response_text = trime.1.d.response
+		#is_dialog_only = yes
+		abort_situation = this
+		#hidden_effect = {
+		owner = {
+			begin_event_chain = {
+				event_chain = trime_invade_thisguy
+				target = event_target:trime_primitive_rewind_world
+			}
+		}
+		#}
+	}
+}
+
+# this = country 
+country_event = {
+	id = trime.11
+	title = trime.11.name
+	desc = trime.11.desc
+	#desc = {
+	#	trigger = { has_country_flag = flag_azaryn_option_hesitate }
+	#	text = paragon.226.desc_no # switched places with desc_yes below, as they are mixed up in loc
+	#}
+	#
+	show_sound = event_celebration
+	#location = event_target:trime_primitive_rewind_world
+	trigger = {
+		has_event_chain = trime_buildtemple
+	}
+	is_triggered_only = yes
+	event_window_type = leader_recruit
+	picture_event_data = {
+		portrait = event_target:trime_time_lord
+		room = pre_ftl_victorian_room
+	}
+	picture = GFX_leader_recruitment_bg_trime_timelord
+	immediate = {
+		hidden_effect = {
+			#trime_endallevents = yes
+			create_country = {
+				name = "NAME_Unknown"
+				type = global_event
+				auto_delete = yes
+				flag = {
+					icon = {
+						category = "special"
+						file = "unknown.dds"
+					}
+					background = {
+						category = "backgrounds"
+						file = "00_solid.dds"
+					}
+					colors = {
+						"red"
+						"red"
+						"null"
+						"null"
+					}
+				}
+				effect = {
+					save_event_target_as = trime_country
+				}
+			}
+			event_target:trime_country = {
+				create_species = {
+					name = "NAME_Unknown"
+					class = PARAGON
+					portrait = GFX_trime_time_lord
+					namelist = "PRT1"
+					traits = {
+						trait = trait_decadent
+						trait = trait_talented
+						trait = trait_thrifty
+						#trait = trait_weak
+						#trait = trait_plantoid_budding
+					}
+					effect = {
+						save_event_target_as = trime_species
+					}
+				}
+				create_leader = {
+					species = event_target:trime_species
+					event_leader = yes
+					class = scientist
+					name = "NAME_trime_time_lord"
+					skill = 1
+					randomize_traits = no
+					skip_background_generation = yes
+					background_ethic = ethic_authoritarian
+					custom_catch_phrase = trime_time_lord_catchphrase
+					custom_description = trime_time_lord_backstory
+					can_manually_change_location = yes
+					#traits = {
+					#	trait = trime_leader_trait_legendary_timeskipper
+					#trait = leader_trait_xeno_cataloger
+					#trait = leader_trait_educator
+					#	trait = leader_trait_lavish_lifestyle_2
+					#	trait = leader_trait_adaptable_2
+					#	trait = subclass_scientist_councilor
+					#}
+					gender = male
+					set_age = 137
+					immortal = yes
+					effect = {
+						save_global_event_target_as = trime_time_lord
+						set_leader_flag = legendary_leader
+						set_leader_flag = trime_time_lord
+						set_owner = root
+						exile_leader_as = trime_time_lord
+					}
+				}
+				last_created_leader = {
+					#add_skill_without_trait_selection = 7
+					set_variable = {
+						which = trime_leader_lifespan
+						value = 137
+					}
+					remove_all_traits = yes
+					add_trait = trime_leader_trait_legendary_timeskipper
+					add_trait = trime_leader_trait_legendary_houtglasskeeper
+					add_trait = leader_trait_lavish_lifestyle_2
+					add_trait = leader_trait_adaptable_2
+					add_trait = subclass_scientist_governor
+					add_trait = leader_trait_great_researcher
+					#add_trait = leader_trait_exp
+				}
+			}
+		}
+	}
+	option = {
+		# What exactly is astrocreation?
+		#trigger = {
+		#	NOT = { has_country_flag = flag_azaryn_what_is_astrocreation }
+		#}
+		name = trime.11.a
+		is_dialog_only = yes
+		response_text = trime.11.a.response
+	}
+	option = {
+		# What exactly is astrocreation?
+		allow = {
+			has_completed_event_chain_counter = {
+				event_chain = trime_decoded_messages_chain
+				counter = trime_decoded_messages2
+			}
+		}
+		name = trime.11.b
+		is_dialog_only = yes
+		if = {
+			limit = {
+				NOT = {
+					has_country_flag = trime_claimed1
+				}
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = 5
+			}
+			set_country_flag = trime_claimed1
+		}
+		response_text = trime.11.b.response
+	}
+	option = {
+		# What are those things on your back?
+		allow = {
+			has_completed_event_chain_counter = {
+				event_chain = trime_decoded_messages_chain
+				counter = trime_decoded_messages3
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_country_flag = trime_claimed2
+				}
+			}
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = 5
+			}
+			set_country_flag = trime_claimed2
+		}
+		name = trime.11.c
+		response_text = trime.11.c.response
+		is_dialog_only = yes
+	}
+	option = {
+		# What is that buzzing, tiny drone of yours?
+		allow = {
+			has_completed_event_chain_counter = {
+				event_chain = trime_decoded_messages_chain
+				counter = trime_decoded_messages4
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_country_flag = trime_claimed3
+				}
+				
+			}add_monthly_resource_mult = {
+					resource = unity
+					value = 12
+				}
+				set_country_flag = trime_claimed3
+		}
+		name = trime.11.d
+		response_text = trime.11.d.response
+		is_dialog_only = yes
+	}
+	option = {
+		# HIRE
+		name = HIRE
+		tag = hire_leader
+		#custom_tooltip = trime.11.b.custom_tooltip		# Azaryn joins
+		sound = event_announcement
+		this.owner = {
+			add_relic = r_trime_houglass
+			if = {
+				limit = {
+					has_event_chain = trime_buildtemple
+				}
+				end_event_chain = trime_buildtemple
+			}
+		}
+		hidden_effect = {
+			#this.owner = {
+			event_target:trime_country = {
+				create_species = {
+					name = "NAME_Unknown"
+					class = PARAGON
+					portrait = GFX_trime_time_lord
+					namelist = "PRT1"
+					traits = {
+						trait = trait_decadent
+						trait = trait_talented
+						trait = trait_thrifty
+						#trait = trait_weak
+						#trait = trait_plantoid_budding
+					}
+					effect = {
+						save_event_target_as = trime_species
+					}
+				}
+				create_leader = {
+					species = event_target:trime_species
+					event_leader = yes
+					class = scientist
+					name = "NAME_trime_time_lord"
+					skill = 1
+					randomize_traits = no
+					skip_background_generation = yes
+					background_ethic = ethic_authoritarian
+					custom_catch_phrase = trime_time_lord_catchphrase
+					custom_description = trime_time_lord_backstory
+					can_manually_change_location = yes
+					#traits = {
+					#	trait = trime_leader_trait_legendary_timeskipper
+					#trait = leader_trait_xeno_cataloger
+					#trait = leader_trait_educator
+					#	trait = leader_trait_lavish_lifestyle_2
+					#	trait = leader_trait_adaptable_2
+					#	trait = subclass_scientist_councilor
+					#}
+					gender = male
+					set_age = 137
+					immortal = yes
+					effect = {
+						save_global_event_target_as = trime_time_lord
+						set_leader_flag = legendary_leader
+						set_leader_flag = trime_time_lord
+						set_owner = root
+						exile_leader_as = trime_time_lord
+					}
+				}
+				last_created_leader = {
+					add_skill_without_trait_selection = 6
+					#set_variable = {
+					#	which = trime_leader_lifespan
+					##	value = 137
+					#}
+					remove_all_traits = yes
+					add_trait = trime_leader_trait_legendary_timeskipper
+					add_trait = trime_leader_trait_legendary_houtglasskeeper
+					add_trait = leader_trait_lavish_lifestyle_2
+					add_trait = leader_trait_adaptable_2
+					add_trait = subclass_scientist_governor
+					add_trait = leader_trait_great_researcher
+					set_owner = root
+				}
+			}
+			#clone_leader = {
+			#	target = event_target:trime_time_lord
+			#}
+			#	last_created_leader = {
+			#		set_leader_flag = legendary_leader
+			# save_global_event_target_as = trime_time_lord
+			#		#set_leader_flag = immune_to_negative_traits
+			#	set_leader_flag = trime_time_lord
+			#		add_skill = 7
+			#	set_variable = {
+			#		which = trime_leader_lifespan
+			#		value = 137
+			#	}
+			#	set_owner = root
+			#
+			#}
+			#}
+		}
+	}
+	option = {
+		# DISMISS
+		sound = event_airlock
+		name = DISMISS
+		tag = dismiss_leader
+		#add_relic = r_trime_houglass
+		hidden_effect = {
+			event_target:trime_time_lord = {
+				save_global_event_target_as = trime_time_lord
+				kill_leader = {
+					show_notification = no
+				}
+			}
+		}
+		this.owner = {
+			if = {
+				limit = {
+					has_event_chain = trime_buildtemple
+				}
+				end_event_chain = trime_buildtemple
+			}
+		}
+	}
+	after = {
+		trime_endallevents = yes
+		remove_country_flag = trime_claimed1
+		remove_country_flag = trime_claimed2
+		remove_country_flag = trime_claimed3
+	}
+}
+
+# This = country
+# logic for new messages
+country_event = {
+	id = trime.3
+	hide_window = yes
+	#desc = {
+	#	trigger = { has_country_flag = flag_azaryn_option_hesitate }
+	#	text = paragon.226.desc_no # switched places with desc_yes below, as they are mixed up in loc
+	#}
+	#
+	is_triggered_only = yes
+	trigger = {
+		NOT = {
+			has_completed_event_chain = trime_decoded_messages_chain
+		}
+	}
+	immediate = {
+		if = {
+			limit = {
+				NOT = {
+					has_event_chain = trime_decoded_messages_chain
+				}
+			}
+			country_event = {
+				id = trime.17
+			}
+		}
+	}
+}
+
+# This = country
+# logic for messages
+country_event = {
+	id = trime.12
+	hide_window = yes
+	#desc = {
+	#	trigger = { has_country_flag = flag_azaryn_option_hesitate }
+	#	text = paragon.226.desc_no # switched places with desc_yes below, as they are mixed up in loc
+	#}
+	#
+	is_triggered_only = yes
+	trigger = {
+		NOT = {
+			has_completed_event_chain = trime_decoded_messages_chain
+		}
+	}
+	immediate = {
+		if = {
+			limit = {
+				NOT = {
+					has_completed_event_chain_counter = {
+						event_chain = trime_decoded_messages_chain
+						counter = trime_decoded_messages
+					}
+				}
+			}
+			country_event = {
+				id = trime.13
+			}
+			add_event_chain_counter = {
+				event_chain = trime_decoded_messages_chain
+				counter = trime_decoded_messages
+				amount = 1
+			}
+		}
+		else_if = {
+			limit = {
+				NOT = {
+					has_completed_event_chain_counter = {
+						event_chain = trime_decoded_messages_chain
+						counter = trime_decoded_messages2
+					}
+				}
+			}
+			country_event = {
+				id = trime.14
+			}
+			add_event_chain_counter = {
+				event_chain = trime_decoded_messages_chain
+				counter = trime_decoded_messages2
+				amount = 1
+			}
+		}
+		else_if = {
+			limit = {
+				NOT = {
+					has_completed_event_chain_counter = {
+						event_chain = trime_decoded_messages_chain
+						counter = trime_decoded_messages3
+					}
+				}
+			}
+			country_event = {
+				id = trime.15
+			}
+			add_event_chain_counter = {
+				event_chain = trime_decoded_messages_chain
+				counter = trime_decoded_messages3
+				amount = 1
+			}
+		}
+		else_if = {
+			limit = {
+				NOT = {
+					has_completed_event_chain_counter = {
+						event_chain = trime_decoded_messages_chain
+						counter = trime_decoded_messages4
+					}
+				}
+			}
+			country_event = {
+				id = trime.16
+			}
+			add_event_chain_counter = {
+				event_chain = trime_decoded_messages_chain
+				counter = trime_decoded_messages4
+				amount = 1
+			}
+			#end_event_chain = trime_decoded_messages_chain
+		}
+	}
+}
+
+country_event = {
+	id = trime.16
+	title = "trime.16.name"
+	desc = "trime.16.desc"
+	picture = GFX_evt_enlightenment_failure
+	show_sound = event_coronation
+	location = event_target:trime_primitive_rewind_world
+	#trackable = yes
+	is_triggered_only = yes
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_renowned"
+	picture_event_data = {
+		portrait = event_target:trime_killhim
+	}
+	immediate = {
+		hidden_effect = {
+			create_country = {
+				name = "NAME_Unknown"
+				type = global_event
+				auto_delete = yes
+				flag = {
+					icon = {
+						category = "special"
+						file = "unknown.dds"
+					}
+					background = {
+						category = "backgrounds"
+						file = "00_solid.dds"
+					}
+					colors = {
+						"red"
+						"red"
+						"null"
+						"null"
+					}
+				}
+				effect = {
+					save_event_target_as = trime_country
+				}
+			}
+			event_target:trime_country = {
+				create_species = {
+					name = "NAME_Unknown"
+					class = PARAGON
+					portrait = GFX_trime_time_lord_hologram
+					namelist = "PRT1"
+					traits = {
+						trait = trait_decadent
+						trait = trait_talented
+						trait = trait_thrifty
+						#trait = trait_weak
+						#trait = trait_plantoid_budding
+					}
+					effect = {
+						save_event_target_as = trime_species
+					}
+				}
+				create_leader = {
+					species = event_target:trime_species
+					event_leader = yes
+					class = scientist
+					name = "NAME_trime_time_lord"
+					skill = 1
+					randomize_traits = no
+					skip_background_generation = yes
+					background_ethic = ethic_authoritarian
+					custom_catch_phrase = trime_time_lord_catchphrase
+					custom_description = trime_time_lord_backstory
+					can_manually_change_location = yes
+					traits = {
+					}
+					gender = male
+					set_age = 137
+					immortal = yes
+					effect = {
+						save_event_target_as = trime_killhim
+						#set_leader_flag = trime_killhim
+						#set_leader_flag = trime_time_lord
+						set_owner = root
+						#exile_leader_as = trime_time_lord
+					}
+				}
+				last_created_leader = {
+					add_skill_without_trait_selection = 7
+				}
+			}
+		}
+	}
+	option = {
+		name = trime.16.a
+		add_monthly_resource_mult = {
+			resource = physics_research
+			value = 4
+		}
+		end_event_chain = trime_decoded_messages_chain
+		hidden_effect = {
+			event_target:trime_killhim = {
+				kill_leader = {
+					show_notification = no
+				}
+			}
+		}
+	}
+	option = {
+		#lets call him
+		name = trime.16.b
+		hidden_effect = {
+			country_event = {
+				id = trime.18
+			}
+			event_target:trime_killhim = {
+				kill_leader = {
+					show_notification = no
+				}
+			}
+		}
+		end_event_chain = trime_decoded_messages_chain
+	}
+}
+
+country_event = {
+	id = trime.13
+	title = "trime.13.name"
+	desc = "trime.13.desc"
+	picture = GFX_evt_alien_hieroglyphics
+	show_sound = event_conversation
+	location = event_target:trime_primitive_rewind_world
+	#trackable = yes
+	is_triggered_only = yes
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_renowned"
+	picture_event_data = {
+		portrait = event_target:trime_killhim
+	}
+	immediate = {
+		hidden_effect = {
+			create_country = {
+				name = "NAME_Unknown"
+				type = global_event
+				auto_delete = yes
+				flag = {
+					icon = {
+						category = "special"
+						file = "unknown.dds"
+					}
+					background = {
+						category = "backgrounds"
+						file = "00_solid.dds"
+					}
+					colors = {
+						"red"
+						"red"
+						"null"
+						"null"
+					}
+				}
+				effect = {
+					save_event_target_as = trime_country
+				}
+			}
+			event_target:trime_country = {
+				create_species = {
+					name = "NAME_Unknown"
+					class = PARAGON
+					portrait = GFX_trime_time_lord_hologram
+					namelist = "PRT1"
+					traits = {
+						trait = trait_decadent
+						trait = trait_talented
+						trait = trait_thrifty
+						#trait = trait_weak
+						#trait = trait_plantoid_budding
+					}
+					effect = {
+						save_event_target_as = trime_species
+					}
+				}
+				create_leader = {
+					species = event_target:trime_species
+					event_leader = yes
+					class = scientist
+					name = "NAME_trime_time_lord"
+					skill = 1
+					randomize_traits = no
+					skip_background_generation = yes
+					background_ethic = ethic_authoritarian
+					custom_catch_phrase = trime_time_lord_catchphrase
+					custom_description = trime_time_lord_backstory
+					can_manually_change_location = yes
+					traits = {
+					}
+					gender = male
+					set_age = 137
+					immortal = yes
+					effect = {
+						save_event_target_as = trime_killhim
+						#set_leader_flag = trime_killhim
+						#set_leader_flag = trime_time_lord
+						set_owner = root
+						#exile_leader_as = trime_time_lord
+					}
+				}
+				last_created_leader = {
+					add_skill_without_trait_selection = 7
+				}
+			}
+		}
+	}
+	option = {
+		name = trime.13.a
+		event_target:trime_primitive_rewind_world = {
+			this.solar_system = {
+				random_system_planet = {
+					enable_special_project = {
+						name = trime_decode_message
+						location = this
+					}
+				}
+			}
+		}
+		add_monthly_resource_mult = {
+			resource = physics_research
+			value = 4
+		}
+		hidden_effect = {
+			event_target:trime_killhim = {
+				kill_leader = {
+					show_notification = no
+				}
+			}
+		}
+	}
+	#option = {
+	#	name = trime.16.b
+	#}
+}
+
+country_event = {
+	id = trime.14
+	title = "trime.14.name"
+	desc = "trime.14.desc"
+	picture = GFX_evt_unidentified_monster
+	show_sound = event_air_raid_siren
+	location = event_target:trime_primitive_rewind_world
+	#trackable = yes
+	is_triggered_only = yes
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_renowned"
+	picture_event_data = {
+		portrait = event_target:trime_killhim
+	}
+	immediate = {
+		hidden_effect = {
+			create_country = {
+				name = "NAME_Unknown"
+				type = global_event
+				auto_delete = yes
+				flag = {
+					icon = {
+						category = "special"
+						file = "unknown.dds"
+					}
+					background = {
+						category = "backgrounds"
+						file = "00_solid.dds"
+					}
+					colors = {
+						"red"
+						"red"
+						"null"
+						"null"
+					}
+				}
+				effect = {
+					save_event_target_as = trime_country
+				}
+			}
+			event_target:trime_country = {
+				create_species = {
+					name = "NAME_Unknown"
+					class = PARAGON
+					portrait = GFX_trime_time_lord_hologram
+					namelist = "PRT1"
+					traits = {
+						trait = trait_decadent
+						trait = trait_talented
+						trait = trait_thrifty
+						#trait = trait_weak
+						#trait = trait_plantoid_budding
+					}
+					effect = {
+						save_event_target_as = trime_species
+					}
+				}
+				create_leader = {
+					species = event_target:trime_species
+					event_leader = yes
+					class = scientist
+					name = "NAME_trime_time_lord"
+					skill = 1
+					randomize_traits = no
+					skip_background_generation = yes
+					background_ethic = ethic_authoritarian
+					custom_catch_phrase = trime_time_lord_catchphrase
+					custom_description = trime_time_lord_backstory
+					can_manually_change_location = yes
+					traits = {
+					}
+					gender = male
+					set_age = 137
+					immortal = yes
+					effect = {
+						save_event_target_as = trime_killhim
+						#set_leader_flag = trime_killhim
+						#set_leader_flag = trime_time_lord
+						set_owner = root
+						#exile_leader_as = trime_time_lord
+					}
+				}
+				last_created_leader = {
+					add_skill_without_trait_selection = 7
+				}
+			}
+		}
+	}
+	option = {
+		name = trime.14.a
+		event_target:trime_primitive_rewind_world = {
+			this.solar_system = {
+				random_system_planet = {
+					enable_special_project = {
+						name = trime_decode_message
+						location = this
+					}
+				}
+			}
+		}
+		add_monthly_resource_mult = {
+			resource = physics_research
+			value = 4
+		}
+		hidden_effect = {
+			event_target:trime_killhim = {
+				kill_leader = {
+					show_notification = no
+				}
+			}
+		}
+	}
+	#option = {
+	#	name = trime.16.b
+	#}
+}
+
+country_event = {
+	id = trime.15
+	title = "trime.15.name"
+	desc = "trime.15.desc"
+	picture = GFX_evt_exploding_ship
+	show_sound = event_airlock
+	location = event_target:trime_primitive_rewind_world
+	#trackable = yes
+	is_triggered_only = yes
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_renowned"
+	picture_event_data = {
+		portrait = event_target:trime_killhim
+	}
+	immediate = {
+		hidden_effect = {
+			create_country = {
+				name = "NAME_Unknown"
+				type = global_event
+				auto_delete = yes
+				flag = {
+					icon = {
+						category = "special"
+						file = "unknown.dds"
+					}
+					background = {
+						category = "backgrounds"
+						file = "00_solid.dds"
+					}
+					colors = {
+						"red"
+						"red"
+						"null"
+						"null"
+					}
+				}
+				effect = {
+					save_event_target_as = trime_country
+				}
+			}
+			event_target:trime_country = {
+				create_species = {
+					name = "NAME_Unknown"
+					class = PARAGON
+					portrait = GFX_trime_time_lord_hologram
+					namelist = "PRT1"
+					traits = {
+						trait = trait_decadent
+						trait = trait_talented
+						trait = trait_thrifty
+						#trait = trait_weak
+						#trait = trait_plantoid_budding
+					}
+					effect = {
+						save_event_target_as = trime_species
+					}
+				}
+				create_leader = {
+					species = event_target:trime_species
+					event_leader = yes
+					class = scientist
+					name = "NAME_trime_time_lord"
+					skill = 1
+					randomize_traits = no
+					skip_background_generation = yes
+					background_ethic = ethic_authoritarian
+					custom_catch_phrase = trime_time_lord_catchphrase
+					custom_description = trime_time_lord_backstory
+					can_manually_change_location = yes
+					traits = {
+					}
+					gender = male
+					set_age = 137
+					immortal = yes
+					effect = {
+						save_event_target_as = trime_killhim
+						#set_leader_flag = trime_killhim
+						#set_leader_flag = trime_time_lord
+						set_owner = root
+						#exile_leader_as = trime_time_lord
+					}
+				}
+				last_created_leader = {
+					add_skill_without_trait_selection = 7
+				}
+			}
+		}
+	}
+	option = {
+		name = trime.15.a
+		event_target:trime_primitive_rewind_world = {
+			this.solar_system = {
+				random_system_planet = {
+					enable_special_project = {
+						name = trime_decode_message
+						location = this
+					}
+				}
+			}
+		}
+		add_monthly_resource_mult = {
+			resource = physics_research
+			value = 4
+		}
+		hidden_effect = {
+			event_target:trime_killhim = {
+				kill_leader = {
+					show_notification = no
+				}
+			}
+		}
+	}
+}
+
+#found weird signal
+country_event = {
+	id = trime.17
+	title = "trime.17.name"
+	desc = "trime.17.desc"
+	picture = GFX_evt_clocks
+	show_sound = event_encrypted_comms
+	location = event_target:trime_primitive_rewind_world
+	#trackable = yes
+	is_triggered_only = yes
+	immediate = {
+	}
+	option = {
+		name = trime.17.a
+		begin_event_chain = {
+			event_chain = trime_decoded_messages_chain
+		}
+		#hidden_effect = {
+		event_target:trime_primitive_rewind_world = {
+			this.solar_system = {
+				random_system_planet = {
+					enable_special_project = {
+						name = trime_decode_message
+						location = this
+					}
+				}
+			}
+		}
+		#}
+		add_monthly_resource_mult = {
+			resource = physics_research
+			value = 10
+		}
+	}
+	option = {
+		name = trime.17.b
+		add_resource = {
+			influence = 100
+		}
+	}
+}
+
+# this = country 
+country_event = {
+	id = trime.18
+	title = trime.18.name
+	desc = trime.18.desc
+	#desc = {
+	#	trigger = { has_country_flag = flag_azaryn_option_hesitate }
+	#	text = paragon.226.desc_no # switched places with desc_yes below, as they are mixed up in loc
+	#}
+	#
+	show_sound = event_conversation
+	location = event_target:trime_primitive_rewind_world
+	is_triggered_only = yes
+	diplomatic_title = BLANK_STRING
+	diplomatic = yes
+	picture_event_data = {
+		portrait = GFX_trime_time_lord
+		room = pre_ftl_victorian_room
+		planet_background = pc_continental
+	}
+	option = {
+		# alhright
+		name = trime.18.a
+		#response_text = trime.1.d.response
+		#is_dialog_only = yes
+		add_monthly_resource_mult = {
+			resource = unity
+			value = 10
+		}
+	}
+	option = {
+		# chosen by god, skip everything else
+		name = trime.18.c
+		#response_text = trime.1.d.response
+		#is_dialog_only = yes
+		allow = {
+			OR = {
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_spiritualist
+			}
+		}
+		add_resource = {
+			influence = 100
+		}
+		add_monthly_resource_mult = {
+			resource = unity
+			value = 10
+		}
+	}
+}
+
+# this = country 
+country_event = {
+	id = trime.19
+	title = trime.19.name
+	desc = trime.19.desc
+	#desc = {
+	#	trigger = { has_country_flag = flag_azaryn_option_hesitate }
+	#	text = paragon.226.desc_no # switched places with desc_yes below, as they are mixed up in loc
+	#}
+	#
+	trigger = {
+		this = {
+			any_owned_leader = {
+				is_ruler = no
+				leader_class = scientist
+				#exists = yes
+			}
+		}
+	}
+	show_sound = event_encrypted_comms
+	#location = event_target:trime_primitive_rewind_world
+	is_triggered_only = yes
+	event_window_type = leader_recruit
+	picture_event_data = {
+		portrait = event_target:trime_future_leader
+		#room = pre_ftl_victorian_room
+	}
+	picture = GFX_leader_recruitment_bg_renowned
+	immediate = {
+		hidden_effect = {
+			this = {
+				random_owned_leader = {
+					limit = {
+						is_ruler = no
+						leader_class = scientist
+					}
+					save_event_target_as = trime_future_leader
+					#save_global_event_target_as = trime_leader_hastoreturn
+				}
+			}
+			clone_leader = {
+				target = event_target:trime_future_leader
+			}
+			last_created_leader = {
+				add_age = 10
+				save_event_target_as = trime_future_leader
+				exile_leader_as = trime_future_leader
+			}
+			country_event = {
+				id = trime.20
+				days = 3600
+			}
+		}
+	}
+	option = {
+		# who are you, really?
+		#trigger = {
+		#	NOT = { has_country_flag = flag_azaryn_what_is_astrocreation }
+		#}
+		name = trime.19.a
+		is_dialog_only = yes
+		response_text = trime.19.a.response
+	}
+	option = {
+		# what was your mission
+		name = trime.19.b
+		is_dialog_only = yes
+		response_text = trime.19.b.response
+	}
+	option = {
+		# this.leader already in our empire
+		name = trime.19.c
+		response_text = trime.19.c.response
+		is_dialog_only = yes
+	}
+	option = {
+		# is this a mistake?
+		name = trime.19.d
+		response_text = trime.19.d.response
+		is_dialog_only = yes
+	}
+	option = {
+		# HIRE
+		name = trime.19.welcomeback
+		tag = hire_leader
+		#custom_tooltip = trime.11.b.custom_tooltip		# Azaryn joins
+		sound = event_announcement
+		#hidden_effect = {
+		this = {
+			#set_leader = trime_future_leader
+			clone_leader = {
+				target = event_target:trime_future_leader
+			}
+			last_created_leader = {
+				set_owner = root
+				save_event_target_as = trime_future_leader
+			}
+		}
+		#}
+		#begin_event_chain = {
+		#	event_chain = trime_findsystem
+		#}
+	}
+	option = {
+		# DISMISS
+		sound = event_airlock
+		name = DISMISS
+		tag = dismiss_leader
+		#add_relic = r_trime_houglass
+		hidden_effect = {
+			event_target:trime_future_leader = {
+				#save_global_event_target_as = trime_time_lord
+				kill_leader = {
+					show_notification = no
+				}
+			}
+		}
+		#begin_event_chain = {
+		#	event_chain = trime_findsystem
+		#}
+	}
+}
+
+# leader has to go
+country_event = {
+	id = trime.20
+	title = trime.20.name
+	desc = trime.20.desc
+	picture = GFX_evt_astral_rift_tower_invitation
+	show_sound = event_default
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		any_owned_leader = {
+			AND = {
+				is_ruler = no
+				leader_class = scientist
+			}
+		}
+	}
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_renowned"
+	picture_event_data = {
+		portrait = event_target:trime_future_leader2
+	}
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				is_ruler = no
+				#is_councilor = no
+				leader_class = scientist
+			}
+			save_event_target_as = trime_future_leader2
+		}
+	}
+	option = {
+		name = trime.20.a
+		custom_tooltip = trime.20.tt
+		hidden_effect = {
+			event_target:trime_future_leader2 = {
+				kill_leader = {
+					show_notification = no
+				}
+			}
+		}
+	}
+	option = {
+		name = trime.20.b
+		capital_scope = {
+			add_modifier = {
+				modifier = trime_cursedworld
+				days = 360
+			}
+		}
+	}
+}
+
+country_event = {
+	id = trime.21
+	title = "trime.21.name"
+	desc = "trime.21.desc"
+	picture = GFX_evt_ship_under_attack
+	show_sound = event_alien_signal
+	#location = event_target:trime_primitive_rewind_world
+	#trackable = yes
+	is_triggered_only = yes
+	immediate = {
+	}
+	option = {
+		name = trime.21.a
+		hidden_effect = {
+			country_event = {
+				id = trime.19
+			}
+		}
+	}
+	option = {
+		name = trime.21.b
+		add_monthly_resource_mult = {
+			resource = unity
+			value = 2
+		}
+	}
+}

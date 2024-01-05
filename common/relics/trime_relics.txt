@@ -1,0 +1,142 @@
+###########
+# trime_relics
+# made by:
+# tr33
+#
+###########
+
+
+
+
+@activation_cost = 3000
+@triumph_duration = 3600
+@triumph_duration_short = 1800
+@triumph_duration_veryshort = 900
+r_trime_houglass = {
+	activation_duration = 0
+	portrait = "GFX_trime_hourglass"
+	sound = "relic_activation_miniature_galaxy"
+	resources = {
+		category = relics
+		# Activation cost
+		cost = {
+			influence = 100
+		}
+	}
+	ai_weight = {
+		weight = 0
+	}
+	triggered_country_modifier = {
+		potential = {
+			has_global_flag = trime_stage1
+		}
+		custom_tooltip = trime_stage1_AnteCogitationem
+	}
+	triggered_country_modifier = {
+		potential = {
+			has_global_flag = trime_stage1
+		}
+		pop_happiness = 0.05
+	}
+	triggered_country_modifier = {
+		potential = {
+			has_global_flag = trime_stage2
+		}
+		custom_tooltip = trime_stage2_Cogitatio
+	}
+	triggered_country_modifier = {
+		potential = {
+			has_global_flag = trime_stage2
+		}
+		country_unity_produces_mult = -0.1
+	}
+	triggered_country_modifier = {
+		potential = {
+			has_global_flag = trime_stage3
+		}
+		custom_tooltip = trime_stage3_Paratio
+	}
+	triggered_country_modifier = {
+		potential = {
+			has_global_flag = trime_stage3
+		}
+		country_produces_mult = 0.1
+	}
+	triggered_country_modifier = {
+		potential = {
+			has_global_flag = trime_stage4
+		}
+		custom_tooltip = trime_stage4_Actio
+	}
+	triggered_country_modifier = {
+		potential = {
+			has_global_flag = trime_stage4
+		}
+		ship_weapon_damage = 0.1
+	}
+	triggered_country_modifier = {
+		potential = {
+			has_global_flag = trime_stage5
+		}
+		custom_tooltip = trime_stage5_Manutentio
+	}
+	triggered_country_modifier = {
+		potential = {
+			has_global_flag = trime_stage5
+		}
+		ships_upkeep_mult = -0.1
+	}
+	score = 500
+	active_effect = {
+		#add_modifier = {
+		#	modifier = "ether_drake_triumph"
+		#	days = @triumph_duration
+		#}
+		#custom_tooltip = relic_triumph_cooldown
+		if = {
+			limit = {
+				has_global_flag = trime_time_lorddied
+			}
+			#remove_country_flag = trime_killedtimelord
+			custom_tooltip = trime_revivetimelord
+			hidden_effect = {
+				country_event = {
+					id = trime.108
+				}
+			}
+		}
+		else = {
+			custom_tooltip = trime_opencastmenu
+			hidden_effect = {
+				country_event = {
+					id = trime.109
+				}
+				#add_modifier = {
+				#	modifier = "relic_activation_cooldown"
+				#	days = @triumph_duration
+				#}
+			}
+		}
+	}
+	# Possible check for activation
+	possible = {
+		#custom_tooltip = {
+		#	fail_text = "requires_relic_no_cooldown"
+		#	NOT = {
+		#		has_modifier = relic_activation_cooldown
+		#	}
+		#}
+		custom_tooltip = {
+			fail_text = "trime_deadfr_tt"
+			NOT = {
+				has_global_flag = trime_time_lorddiedfr
+			}
+		}
+		custom_tooltip = {
+			fail_text = "trime_chronomancer_on_cooldown_tt"
+			NOT = {
+				has_modifier = trime_chronomancer_on_cooldown
+			}
+		}
+	}
+}
