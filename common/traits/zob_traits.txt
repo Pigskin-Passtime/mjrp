@@ -1,4 +1,5 @@
-leader_zob_collected = {
+###Applies a modifier for each non councilor trait in the collective
+leader_trait_zob_collected = {
 	cost = 0
 	inline_script = {
 		script = trait/icon
@@ -8,19 +9,181 @@ leader_zob_collected = {
 		COUNCIL = no
 		TIER = none
 	}
-	leader_class = { official }
+	leader_class = { commander scientist official }
 	initial = no
 	randomized = no
-	###Applies a modifier for each trait in the collective
 
-	#Adaptable
 	triggered_self_modifier = {
 		potential = {
+			exists = owner
 			owner = {
-				check_variable = { which = zob_adaptable value > 0 }
+				check_variable = { which = zob_leader_trait_adaptable value > 0 }
 			}
 		}
 		species_leader_exp_gain = 0.05
-		mult = this.zob_adaptable
+		mult = this.owner.zob_leader_trait_adaptable
+	}
+	triggered_self_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				check_variable = { which = zob_leader_trait_adventurous_spirit value > 0 }
+			}
+		}
+		leaders_upkeep_mult = -0.05
+		mult = this.owner.zob_leader_trait_adventurous_spirit
+	}
+	triggered_self_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				check_variable = { which = zob_leader_trait_eager value > 0 }
+			}
+		}
+		species_leader_exp_gain = 0.025
+		mult = this.owner.zob_leader_trait_eager
+	}
+	triggered_self_modifier = {
+		potential = {
+			is_immortal = no
+			exists = owner
+			owner = {
+				check_variable = { which = zob_leader_trait_resilient value > 0 }
+			}
+		}
+		leader_lifespan_add = 2
+		mult = this.owner.zob_leader_trait_resilient
+	}
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				check_variable = { which = zob_leader_trait_capitalist value > 0 }
+			}
+		}
+		planet_technician_energy_produces_mult = 0.025
+		mult = this.owner.zob_leader_trait_capitalist
+	}
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				check_variable = { which = zob_leader_trait_private_mines value > 0 }
+			}
+		}
+		planet_miners_minerals_produces_mult = 0.025
+		mult = this.owner.zob_leader_trait_private_mines
+	}
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				check_variable = { which = zob_leader_trait_homesteader value > 0 }
+			}
+		}
+		planet_farmers_food_produces_mult = 0.025
+		mult = this.owner.zob_leader_trait_homesteader
+	}
+	triggered_self_modifier = {
+		potential = {
+			NOR = {
+				has_trait = leader_trait_gifted
+				has_trait = leader_trait_gifted_2
+			}
+			exists = owner
+			owner = {
+				check_variable = { which = zob_leader_trait_gifted value > 0 }
+			}
+		}
+		leader_trait_selection_options_add = 1
+		# mult = this.owner.zob_leader_trait_gifted ##Does not mult
+	}
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				check_variable = { which = zob_leader_trait_scrapper value > 0 }
+			}
+		}
+		planet_metallurgists_alloys_produces_mult = 0.025
+		mult = this.owner.zob_leader_trait_scrapper
+	}	
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				check_variable = { which = zob_leader_trait_scrapper value > 0 }
+			}
+		}
+		planet_metallurgists_alloys_produces_mult = 0.025
+		mult = this.owner.zob_leader_trait_scrapper
+	}
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				check_variable = { which = zob_leader_trait_entrepreneur value > 0 }
+			}
+		}
+		planet_artisans_consumer_goods_produces_mult = 0.025
+		mult = this.owner.zob_leader_trait_entrepreneur
+	}
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				check_variable = { which = zob_leader_trait_venerated value > 0 }
+			}
+		}
+		planet_amenities_add = 2
+		mult = this.owner.zob_leader_trait_venerated
+	}
+	triggered_self_modifier = {
+		potential = {
+			NOT = { has_trait = leader_trait_emotional_support_pet }
+			exists = owner
+			owner = {
+				check_variable = { which = zob_leader_trait_emotional_support_pet value > 0 }
+			}
+		}
+		negative_traits_leader = -1
+		# mult = this.owner.zob_leader_trait_emotional_support_pet ##Does not mult
+	}
+}
+
+
+###Applies a modifier for each council trait in the collective to Zob
+leader_trait_zob_mind_collector = {
+	cost = 0
+	inline_script = {
+		script = trait/icon
+		CLASS = leader
+		ICON = "GFX_leader_trait_gorky" #REPLACE
+		RARITY = paragon
+		COUNCIL = yes
+		TIER = none
+	}
+	leader_class = { commander scientist official }
+
+
+	triggered_councilor_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				check_variable = { which = zob_leader_trait_politician value > 0 }
+			}
+		}
+		council_agenda_progress_speed = 0.05
+		mult = this.owner.zob_leader_trait_politician
+	}
+	triggered_councilor_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				check_variable = { which = zob_trait_ruler_champion_of_the_people value > 0 }
+			}
+		}
+		pop_happiness = 0.01
+		mult = this.owner.zob_trait_ruler_champion_of_the_people
 	}
 }
