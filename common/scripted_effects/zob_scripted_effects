@@ -1,0 +1,89 @@
+spawn_zob = {
+	spawn_system = { 
+		min_distance = 20
+		max_distance = 50
+		initializer = "zob_system"
+		hyperlane = yes
+	}
+	last_created_system = {
+		ordered_neighbor_system_euclidean = {
+			limit = {
+				not = {
+					has_hyperlane_to = prev 
+				}
+			}
+			add_hyperlane = {
+				from = this
+				to = prev
+			}
+	  	}
+		ordered_neighbor_system_euclidean = {
+			limit = {
+				not = {
+					has_hyperlane_to = prev 
+				}
+			}
+			add_hyperlane = {
+				from = this
+				to = prev
+			}
+	  	}
+	}
+	###TODO figure out nebula object on galaxy map
+}
+
+set_zob_variables = {
+	optimize_memory
+	set_zob_variable = { trait = leader_trait_adaptable }
+	set_zob_variable = { trait = leader_trait_adaptable_2 }
+}
+
+update_zob_variables = {
+	optimize_memory
+	update_zob_variable = { trait = leader_trait_adaptable }
+	update_zob_variable = { trait = leader_trait_adaptable_2 }
+}
+
+#Gives a 1 or 0 for having each tracked trait
+set_zob_variable = {
+	optimize_memory
+	if = {
+		limit = {
+			has_trait = $trait$
+		}
+		set_variable = {
+			which = zob_$trait$_variable
+			value = 1	
+		}
+	}
+	else = {
+		set_variable = {
+			which = zob_$trait$_variable
+			value = 0	
+		}
+	}
+}
+
+#If the leaders local variable is 0 but they have the trait, then they recently gained it. Saves variable, and increments the country level tracker for collected traits
+update_zob_variable = {
+    optimize_memory
+	if = {
+		limit = {
+			check_variable = {
+				which = zob_$trait$_variable
+				value = 0
+			}
+			has_trait = $trait$
+		}
+		change_variable = {
+			which = zob_$trait$_variable
+			value = 1
+		}
+		owner = {
+			change_variable = {
+				which = zob_$trait$_variable
+				value = 1
+			}
+		}
+	}
+}
