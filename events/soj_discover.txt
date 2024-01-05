@@ -1,0 +1,127 @@
+namespace = soj_d
+
+# Spawn Project
+planet_event = {
+	id = soj_d.1
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		has_global_flag = soj_system_spawned
+		this = {
+			has_planet_flag = soj_planet
+		}
+	}
+	
+	immediate = {
+		enable_special_project = {
+			name = "SOJ_SHIP_PROJECT"
+			location = this
+			owner = from
+		}
+	}
+}
+
+# Eventchain Start
+country_event = {
+	id = soj_d.2
+	title = soj_d.2.name
+	desc = soj_d.2.desc
+	picture = GFX_evt_soj_ship
+
+	is_triggered_only = yes
+
+	show_sound = event_mystic_reveal
+
+	option = {
+		name = INTERESTING
+		hidden_effect = {
+			if = {
+				limit = { NOT = { has_global_flag = soj_hired } }
+				country_event = { id = soj_d.3 }
+			} else = {
+				country_event = { id = soj_d.1001 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = soj_d.3
+	title = soj_d.3.name
+	desc = soj_d.3.desc
+	picture = GFX_evt_soj_ship
+
+	is_triggered_only = yes
+
+	show_sound = event_space_amoeba
+
+	option = {
+		name = MAKE_IT_SO
+		hidden_effect = { start_situation = { type = soj_xeno_council target = this } }
+	}
+}
+
+# Eventchain Situation
+country_event = {
+	id = soj_d.100
+	title = soj_d.100.name
+	desc = soj_d.100.desc
+	picture = GFX_evt_board_meeting
+
+	is_triggered_only = yes
+
+	show_sound = event_announcement
+
+	option = {
+		name = CONTINUE
+		add_resource = { society_research = 500 }
+	}
+}
+
+# Eventchain Finale
+country_event = {
+	id = soj_d.1000
+	title = soj_d.1000.name
+	desc = soj_d.1000.desc
+	picture = GFX_evt_board_meeting
+
+	is_triggered_only = yes
+
+	show_sound = event_announcement
+
+	option = {
+		name = CONTINUE
+		add_resource = { society_research = 2000 }
+		add_resource = { engineering_research = 500 }
+		add_resource = { unity = 500 }
+		hidden_effect = {
+			if = {
+				limit = { NOT = { has_global_flag = soj_hired } }
+				country_event = { id = soj_h.1 }
+			} else = {
+				country_event = { id = soj_d.1001 }
+			}
+		}
+	}
+}
+
+# Eventchain Finale
+
+country_event = {
+	id = soj_d.1001
+	title = soj_d.1001.name
+	desc = soj_d.1001.desc
+
+	diplomatic = yes
+	picture_event_data = {
+		room = soj_room
+	}
+
+	is_triggered_only = yes
+
+	show_sound = blackhole_hum_idle
+
+	option = {
+		name = distar.5059.b
+	}
+}

@@ -1,0 +1,376 @@
+namespace = soj_f
+
+###################################
+## Flavor Event: Absorb new energy
+###################################
+
+# Main Pulse Event
+country_event = {
+	id = soj_f.1000
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = { 
+		NOT = { 
+			has_country_flag = soj_flag_transcending 
+		}
+		has_country_flag = has_soj_leader
+	}
+	
+	immediate = {
+		country_event = { id = soj_f.100 }
+	}
+}
+
+country_event = {
+	id = soj_f.100
+	title = "soj_f.100.name"
+	desc = "soj_f.100.desc"
+	picture = GFX_evt_soj_ship
+
+	event_window_type = leader_story
+	picture_event_data = {
+		portrait = event_target:soj_leader
+		room = owner
+	}
+	
+	is_triggered_only = yes
+
+    option = { # Military Quest Path
+		trigger = {
+			NOT = { has_country_flag = soj_military }
+		}
+        name = soj_f.100.a
+        custom_tooltip = soj_f.100.a.tooltip
+        hidden_effect = {
+			set_country_flag = soj_military
+			country_event = { id = soj_q.1001 }
+		}
+    }
+    option = { # Scientific Quest Path
+		trigger = {
+			NOT = { has_country_flag = soj_science }
+		}
+        name = soj_f.100.b
+        custom_tooltip = soj_f.100.b.tooltip
+        hidden_effect = {
+			set_country_flag = soj_science
+			country_event = { id = soj_q.2001 }
+		}
+    }
+	option = { # Engineering Quest Path
+		trigger = {
+			NOT = { has_country_flag = soj_engineering }
+		}
+        name = soj_f.100.c
+        custom_tooltip = soj_f.100.c.tooltip
+        hidden_effect = {
+			set_country_flag = soj_engineering
+			country_event = { id = soj_q.3001 }
+		}
+    }
+    option = { # Cultural Quest Path
+		trigger = {
+			NOT = { has_country_flag = soj_culture }
+		}
+        name = soj_f.100.d
+        custom_tooltip = soj_f.100.d.tooltip
+        hidden_effect = {
+			set_country_flag = soj_culture
+			country_event = { id = soj_q.4001 }
+		}
+    }
+    option = { # Spiritual Quest Path
+		trigger = {
+			NOT = { has_country_flag = soj_spiritual }
+		}
+        name = soj_f.100.e
+        custom_tooltip = soj_f.100.e.tooltip
+        hidden_effect = {
+			set_country_flag = soj_spiritual
+			country_event = { id = soj_q.5001 }
+		}
+    }
+    option = { # Deny absorbing
+        name = soj_f.100.f
+        hidden_effect = {
+			#TODO maybe trigger some bad event
+		}
+    }
+}
+
+###################################
+## Flavor Event: Thirsty
+###################################
+
+# Main Pulse Event
+country_event = {
+	id = soj_f.2000
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = { 
+		NOT = { 
+			has_country_flag = soj_flag_transcending 
+		}
+		has_country_flag = has_soj_leader
+	}
+	
+	immediate = {
+		set_variable = { which = soj_f_var_thirst_decision value = 0 }
+		random_list = {
+			100 = { set_variable = { which = soj_f_var_thirst_decision value = 1 } }
+			100 = { set_variable = { which = soj_f_var_thirst_decision value = 2 } }
+			90 = { set_variable = { which = soj_f_var_thirst_decision value = 3 } }
+			90 = { set_variable = { which = soj_f_var_thirst_decision value = 4 } }
+			80 = { set_variable = { which = soj_f_var_thirst_decision value = 5 } }
+		}
+		country_event = { id = soj_f.200 }
+	}
+}
+
+country_event = {
+	id = soj_f.200
+	title = soj_f.200.name
+	desc = soj_f.200.desc
+	picture = GFX_evt_clocks
+
+	event_window_type = leader_story
+	picture_event_data = {
+		portrait = event_target:soj_leader
+		room = owner
+	}
+
+	is_triggered_only = yes
+
+	show_sound = event_criminal_activity
+
+	option = {
+		name = DISCONCERTING
+		hidden_effect = { country_event = { id = soj_f.201 } }
+	}
+}
+
+country_event = {
+	id = soj_f.201
+	title = soj_f.201.name
+	desc = soj_f.201.desc
+	picture = GFX_evt_mysterious_signal
+
+	is_triggered_only = yes
+
+	show_sound = event_air_raid_siren
+
+	# Random Pop
+	option = {
+		name = WORRYING
+		exclusive_trigger = {
+			check_variable = { which = soj_f_var_thirst_decision value = 1 }
+		}
+		while = {
+			count = 3
+			random_owned_pop = {
+				kill_pop = yes
+			}
+		}
+	}
+
+	# Random Building
+	option = {
+		name = WORRYING
+		exclusive_trigger = {
+			check_variable = { which = soj_f_var_thirst_decision value = 2 }
+		}
+		while = {
+			count = 3
+			random_owned_planet = {
+				remove_last_built_district = yes
+			}
+		}
+	}
+
+	# Random Ship
+	option = {
+		name = WORRYING
+		custom_tooltip = SOJ_SHIP_DESTROYED
+		exclusive_trigger = {
+			check_variable = { which = soj_f_var_thirst_decision value = 3 }
+		}
+		random_owned_fleet = {
+			destroy_fleet = this
+		}
+	}
+	
+	# Random Leader
+	option = {
+		name = WORRYING
+		exclusive_trigger = {
+			check_variable = { which = soj_f_var_thirst_decision value = 4 }
+		}
+		random_owned_leader = {
+			limit = { leader_class = scientist }
+			kill_leader = { show_notification = no }
+		}
+	}
+
+	# Random Planet
+	option = {
+		name = WORRYING
+		exclusive_trigger = {
+			check_variable = { which = soj_f_var_thirst_decision value = 5 }
+		}
+		random_owned_planet = {
+			if = {
+				limit = { NOT = { is_planet_class = pc_nuked } }
+				change_pc = pc_nuked
+				add_planet_devastation = 20
+			} else = {
+				add_planet_devastation = 50
+			}
+		}
+	}
+
+	after = {
+		hidden_effect = { country_event = { id = soj_f.202 } }
+	}
+}
+
+country_event = {
+	id = soj_f.202
+	title = soj_f.202.name
+	desc = soj_f.202.desc
+	picture = GFX_evt_worrying_signal
+
+	is_triggered_only = yes
+
+	show_sound = event_administrative_work
+
+	option = {
+		name = TERRIBLE
+	}
+}
+
+###################################
+## Flavor Event: Transcending
+###################################
+
+# Main Pulse Event
+country_event = {
+	id = soj_f.3000
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = { 
+		NOT = { 
+			has_country_flag = soj_flag_transcending 
+		}
+		has_country_flag = has_soj_leader
+	}
+	
+	immediate = {
+		country_event = { id = soj_f.300 }
+	}
+}
+
+country_event = {
+	id = soj_f.300
+	title = soj_f.300.name
+	desc = soj_f.300.desc
+	picture = GFX_evt_a_rift_in_space
+
+	event_window_type = leader_story
+	picture_event_data = {
+		portrait = event_target:soj_leader
+		room = owner
+	}
+
+	is_triggered_only = yes
+
+	show_sound = event_mystic_reveal
+
+	option = {
+		name = INTERESTING
+		hidden_effect = { 
+			country_event = { id = soj_f.301 } 
+		}
+	}
+
+	option = {
+		name = NOTIME
+		hidden_effect = {
+			country_event = { id = soj_f.2000 days = 30 random = 3600 } 
+		}
+	}
+}
+
+country_event = {
+	id = soj_f.301
+	title = soj_f.301.name
+	desc = soj_f.301.desc
+	picture = GFX_evt_ai_planet
+
+	is_triggered_only = yes
+
+	show_sound = event_mystic_reveal
+	
+	immediate = {
+		set_country_flag = soj_flag_transcending
+	}
+
+	option = {
+		name = UNDERSTOOD
+	}
+}
+
+country_event = {
+	id = soj_f.302
+	title = soj_f.302.name
+	desc = soj_f.302.desc
+	picture = GFX_evt_planet_beam
+
+	is_triggered_only = yes
+
+	show_sound = event_mystic_reveal
+
+	option = {
+		name = MAKE_IT_SO
+		hidden_effect = { 
+			start_situation = { type = soj_transcend target = this }
+		}
+	}
+}
+
+country_event = {
+	id = soj_f.303
+	title = soj_f.303.name
+	desc = soj_f.303.desc
+	picture = GFX_evt_vortex
+
+	is_triggered_only = yes
+
+	show_sound = event_celebration
+	
+	immediate = {
+		country_event = { id = soj_f.9999 }
+	}
+
+	option = {
+		name = FASCINATING
+	}
+	after = {
+		# Remove Leader
+		add_relic = soj_r_gift
+	}
+}
+
+country_event = {
+	id = soj_f.9999
+	hide_window = yes
+	is_triggered_only = yes
+	
+	#trigger = { has_global_flag = soj_system_spawned }
+	
+	immediate = {
+		set_global_flag = soj_finished
+	}
+}

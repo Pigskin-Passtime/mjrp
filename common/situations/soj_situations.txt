@@ -1,0 +1,169 @@
+soj_xeno_council = {
+	picture = GFX_evt_board_meeting
+	category = neutral
+	complete_icon_frame = GFX_situation_outcome_frame_blue
+	complete_icon = GFX_situation_outcome_unknown
+	on_progress_complete = {
+		custom_tooltip = situation_unknown_outcome_approach
+		hidden_effect = {
+			owner = { country_event = { id = soj_d.1000 } }
+			destroy_situation = this
+		}
+	}
+	stages = {
+		stage_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_blue
+			end = 30
+			custom_tooltip = stage_unknown_effects
+		}
+		stage_2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_blue
+			end = 100
+			on_first_enter = {
+				owner = { country_event = { id = soj_d.100 } }
+			}
+			custom_tooltip = stage_unknown_effects
+		}
+	}
+	approach = {
+		name = situation_xeno_council_base
+		icon = GFX_situation_approach_pop
+		icon_background = GFX_situation_approach_bg_green
+		on_select = {
+			custom_tooltip = approach_outcome_tooltip
+		}
+		default = yes
+	}
+	approach = {
+		name = situation_xeno_council_help
+		icon = GFX_situation_approach_handshake
+		icon_background = GFX_situation_approach_bg_yellow
+		on_select = {
+			custom_tooltip = approach_outcome_tooltip
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				energy = 10
+				consumer_goods = 25
+			}
+		}
+	}
+	approach = {
+		name = situation_xeno_council_full
+		icon = GFX_situation_approach_this_is_fine
+		icon_background = GFX_situation_approach_bg_red
+		on_select = {
+			custom_tooltip = approach_outcome_tooltip
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				energy = 10
+				consumer_goods = 50
+			}
+		}
+		modifier = { 
+			country_society_research_produces_mult = -0.5
+			country_engineering_research_produces_mult = -0.3
+		}
+	}
+	approach = {
+		name = situation_xeno_council_no
+		icon = GFX_situation_approach_fist
+		icon_background = GFX_situation_approach_bg_red
+		potential = {
+			NOT = { current_stage = stage_1 }
+		}
+		on_select = {
+			custom_tooltip = approach_outcome_tooltip
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				energy = 10
+			}
+		}
+		modifier = { country_society_research_produces_mult = 0.2 }
+	}
+	monthly_progress = {
+		base = 0.5
+		modifier = {
+			desc = string_current_approach
+			current_situation_approach = situation_xeno_council_base
+			add = 0.5
+		}
+		modifier = {
+			desc = string_current_approach
+			current_situation_approach = situation_xeno_council_help
+			add = 1.5
+		}
+		modifier = {
+			desc = string_current_approach
+			current_situation_approach = situation_xeno_council_full
+			add = 4
+		}
+	}
+}
+
+soj_transcend = {
+	picture = GFX_evt_board_meeting
+	category = neutral
+	complete_icon_frame = GFX_situation_outcome_frame_blue
+	complete_icon = GFX_situation_outcome_unknown
+	on_progress_complete = {
+		custom_tooltip = situation_unknown_outcome_approach
+		hidden_effect = {
+			owner = { country_event = { id = soj_f.303 } }
+			destroy_situation = this
+		}
+	}
+	stages = {
+		stage_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_blue
+			end = 100
+			custom_tooltip = stage_unknown_effects
+		}
+	}
+	approach = {
+		name = situation_transcend_proceed
+		icon = GFX_situation_approach_pop
+		icon_background = GFX_situation_approach_bg_green
+		on_select = {
+			custom_tooltip = approach_outcome_tooltip
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				energy = 100
+				exotic_gases = 20
+			}
+		}
+		default = yes
+	}
+	approach = {
+		name = situation_transcend_pause
+		icon = GFX_situation_approach_handshake
+		icon_background = GFX_situation_approach_bg_yellow
+		on_select = {
+			custom_tooltip = approach_outcome_tooltip
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				energy = 80
+			}
+		}
+	}
+	monthly_progress = {
+		base = 0.0
+		modifier = {
+			desc = string_current_approach
+			current_situation_approach = situation_transcend_proceed
+			add = 1.0
+		}
+	}
+}
