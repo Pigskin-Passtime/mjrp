@@ -12,14 +12,19 @@ ship_event = {
 
 	option = {
 		name = "vg.1.a"
-		enable_special_project = {
-			name = "void_governor_special_project"
-			location = from
-			owner = root.owner
+		if = { limit = { owner = { NOT = { has_civic = civic_fanatic_purifiers }}}
+			enable_special_project = {
+				name = "void_governor_special_project"
+				location = from
+				owner = root.owner
+			}
+		else = {
+			custom_tooltip = "You cannot progress Inanis of the Voids story as a fanatical purifer."
+		}			
 		}
 	}
-	
 }
+
 
 # Special Project Complete
 ship_event = {
@@ -189,14 +194,13 @@ country_event = {
 	show_sound = event_radio_chatter
 	location = event_target:void_governor_black_hole
 	fire_only_once = yes
+	hide_window = yes
 
 	is_triggered_only = yes
 
-	option = {
-		name = {
-			trigger = { is_gestalt = no }
-			text = "vg.100.a"
-		}
+	trigger = { is_gestalt = no }
+
+	immediate = {
 		hidden_effect = {
 			create_country = {
 				name = "NAME_inanis"
@@ -285,8 +289,8 @@ country_event = {
 			country_event = {
 				id = vg.101 days = 2 
 			}
-		}	
-	}
+	}	
+}
 
 
 
@@ -295,7 +299,7 @@ country_event = {
 	id = vg.101
 	title = "vg.101.name"
 	desc = "vg.101.desc"
-	show_sound = par_event_azaryn
+	#show_sound = par_event_azaryn
 	location = fromfrom
 	is_triggered_only = yes
 
@@ -320,7 +324,7 @@ country_event = {
 		set_country_flag = inanis_lore_dialog_step_1
 		response_text = "I am Inanis, a high official in the Ishdan Empire. I was in charge of our Ark project, a mission to ensure the safety of our race after we were played for fools.
 		
-		My ship was the last remaining group of our species untouched by its corruption. But even that was for naught now." 
+		My ship was the last remaining group of our species untouched by its corruption. We were trying to find a habitable planet far away from our empire, but as you can see, that was all for naught." 
 	}
 	option = { #played for fools?
 		name = vg.101.b
@@ -379,9 +383,8 @@ country_event = {
 		}
 		set_country_flag = inanis_lore_dialog_step_6
 		hide_option_if_not_allowed = yes
-		response_text = "You have freed me from an impossible prison, offered me refuge when I have nothing. I would be honoured to serve your empire to the best of my abilities."
+		response_text = "I was stuck in that black hole for years. The universe I knew has left me behind. You were kind enough to free me, and offer me refuge when I have nothing. I would be honoured to serve your empire to the best of my abilities."
 	}
-
 
 	option = { # HIRE
 		name = HIRE
@@ -399,7 +402,7 @@ country_event = {
 					value = 1
 				}
 			}
-			set_country_flag = inanis_owned
+			owner = { set_country_flag = inanis_owned }
 			clone_leader = {
 				target = event_target:inanis_leader
 			}
@@ -410,6 +413,8 @@ country_event = {
 				set_leader_flag = inanis
 				set_leader_flag = inanis_clone
 			}
+			clear_global_event_target = void_governor_black_hole
+			clear_global_event_target = void_governor_crash_site
 		}
 	}
 
@@ -426,9 +431,6 @@ country_event = {
 	}
 
 	after = {
-		hidden_effect = {
-			#remove_country_flag = flag_azaryn_what_is_astrocreation
-		}
 	}
 }
 
@@ -445,9 +447,15 @@ country_event = {
 
 	trigger = {
 		has_country_flag = inanis_owned
+		any_owned_leader = { NOT = { has_leader_flag = inanis_clone } }
+		from = {
+			exists = event_target:inanis_leader_clone
+			is_same_value = event_target:inanis_leader_clone
+		}
 	}
 
 	immediate = {
+		log = "inanis death event"
 		event_target:inanis_leader = {
 			kill_leader = { show_notification = no }
 		}
@@ -459,5 +467,4 @@ country_event = {
 		remove_country_flag = inanis_lore_dialog_step_5
 		remove_country_flag = inanis_lore_dialog_step_6
 	}
-
 }
