@@ -9,32 +9,6 @@ namespace = narll
 
 #debug events
 
-#country_event = {
-#	id = narll.0
-#	is_triggered_only = yes 
-#	hide_window = yes
-#
-#	immediate = {
-#		country_event = {
-#			id = narll.1
-#		}
-#	}
-#}
-#
-#country_event = {
-#	id = narll.700
-#	title = narll.700.title
-#	desc = narll.700.desc
-#	is_triggered_only = yes
-#
-#	option = {
-#		name = narll.700.a
-#		event_target:narll_leader = {
-#			kill_leader = { }
-#		}
-#	}
-#}
-
 country_event = {
 	id = narll.1
 	title = narll.1.name
@@ -45,7 +19,7 @@ country_event = {
 	event_window_type = leader_recruit
 	picture_event_data = {
 		portrait = event_target:narll_leader
-		room = ethic_spaceship_room
+		room = root
 	}
 	picture = GFX_leader_recruitment_bg_renowned
 
@@ -157,6 +131,10 @@ country_event = {
 				set_leader_flag = immune_to_negative_traits
 				set_leader_flag = narll
 				set_leader_flag = cannot_be_ruler
+				leader_event = {
+					id = narll.300
+					days = 5
+				}	
 			}
 			create_message = {
 				type = MESSAGE_RECRUITED_LEADER
@@ -176,20 +154,9 @@ country_event = {
 			set_country_flag = has_narll
 			country_event = {
 				id = narll.200
-				days = 1800
-				random = 1800
+				days = 360 # 1800
+				random = 360 # 1800
 			}
-			event_target:narll_leader = {
-				leader_event = {
-					id = narll.300
-					days = 5
-				}
-			}
-			#country_event = {
-			#	id = narll.700
-			#	days = 1080
-			#}
-
 		}
 	}
 
@@ -433,7 +400,7 @@ ship_event = { # on project fail
 	}
 }
 
-ship_event = { # on project cancel
+country_event = { # on project cancel
 	id = narll.22
 	picture = GFX_evt_astral_rift_research_lab # TODO: AND GET ANOTHER GOOD SUN IMAGE
 	is_triggered_only = yes
@@ -441,9 +408,7 @@ ship_event = { # on project cancel
 	hide_window = yes
 
 	immediate = {
-		owner = {
-			end_event_chain = narll_chain
-		}
+		end_event_chain = narll_chain
 		remove_global_flag = narll_alive
 	}
 }
@@ -981,31 +946,38 @@ leader_event = { # add random deposits
 	}
 
 	immediate = {
-		log = "Called narll300"
-		random_list = {
-			80 = {
-				log = "Did not trigger prospection"
-			} # 80 normally
-			20 = {
-				modifier = {
-					factor = 0
-					OR = {
-						has_leader_flag = narll_recuperating
-						owner = {
-							has_country_flag = narll_disembodied
+		if = {
+			limit = {
+				exists = root.fleet
+			}
+			random_list = {
+				80 = {}
+				20 = {
+					modifier = {
+						factor = 0
+						OR = {
+							has_leader_flag = narll_recuperating
+							owner = {
+								has_country_flag = narll_disembodied
+							}
+						}
+					}
+					leader_event = {
+						id = narll.310
+						scopes = {
+							from = from
 						}
 					}
 				}
-				log = "Triggered prospection"
-				leader_event = {
-					id = narll.310
-				}
 			}
 		}
-
+		
 		leader_event = {
 			id = narll.300
 			days = 30
+			scopes = {
+				from = from
+			}
 		}
 	}
 }
@@ -1021,13 +993,7 @@ leader_event = {
 				limit = {
 					is_colonizable = no
 				}
-				log = "In [This.getName]"
 				if = {
-					limit = {
-						is_colonizable = yes
-					}
-					narll_colonizable_deposits = yes
-				} else_if = {
 					limit = {
 						is_star = yes
 					}
@@ -1105,7 +1071,7 @@ country_event = { # on-death
 	hide_window = yes
 
 	trigger = {
-		from = {
+		From = {
 			has_leader_flag = narll
 		}
 	}
@@ -1122,6 +1088,13 @@ country_event = { # on-death
 					}
 				}
 				
+			}
+			clone_leader = {
+				target = From
+			}
+			last_created_leader = {
+				exile_leader_as = narll_leader
+				save_global_event_target_as = narll_leader
 			}
 			enable_special_project = {
 				name = narll_revive_machine
@@ -1171,6 +1144,10 @@ country_event = { # on revive
 			set_leader_flag = immune_to_negative_traits
 			set_leader_flag = narll
 			set_leader_flag = cannot_be_ruler
+			leader_event = {
+				id = narll.300
+				days = 360
+			}
 		}
 		
 	}
