@@ -63,7 +63,7 @@ r_celestial_compass_broken = {
 	active_effect = {
 	}
 
-	score = 1000
+	score = 500
 
 	# Possible check for activation
 	possible = {
@@ -74,6 +74,52 @@ r_celestial_compass_broken = {
 		custom_tooltip = {
 			fail_text = "celestial_relic_timer"
 			always = no
+		}
+	}
+}
+
+r_celestial_compass_final = {
+	activation_duration = @triumph_duration
+	portrait = "GFX_celestial_compass_alive"
+	sound = "relic_activation_extradimensional_warlock"
+
+	resources = {
+		category = relics
+		cost = {
+			energy = 5000
+		}
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			always = yes
+		}
+		country_physics_tech_research_speed = 0.10
+		ship_base_speed_mult = 0.15
+	}
+
+	score = 2500
+
+	active_effect = {
+		add_modifier = {
+			modifier = celestial_r_celestial_compass_final_modifier
+			days = @triumph_duration
+		}
+		custom_tooltip = relic_triumph_cooldown
+		hidden_effect = {
+			set_timed_country_flag = { flag = r_celestial_aetherial_codex days = @triumph_duration }	
+			add_modifier = {
+				modifier = "relic_activation_cooldown"
+				days = @triumph_duration
+			}
+		}
+	}
+
+	# Possible check for activation
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_relic_no_cooldown"
+			NOT = { has_modifier = relic_activation_cooldown }
 		}
 	}
 }

@@ -151,9 +151,139 @@ country_event = {
 	}
 }
 
-# 5
+# Harmonic Pacification
+system_event = {
+	id = celestial.5
+	hide_window = yes
+	is_triggered_only = yes
 
-# 6
+	trigger = {
+	}
+	
+	immediate = {
+		random_system_megastructure = {
+			limit = {
+				is_megastructure_type = celestial_harmonic_resonator
+			}
+			owner = {
+				save_event_target_as = celestial_resonator_owner
+			}
+		}
+		every_fleet_in_system = {
+			limit = {
+				OR = {
+					celestial_is_spaceborne_fauna = yes
+					celestial_is_leviathan = yes
+				}
+				owner = {
+					is_hostile = event_target:celestial_resonator_owner
+				}
+			}
+			owner = {
+				set_faction_hostility = {
+					target = event_target:celestial_resonator_owner
+					set_hostile = no
+					set_neutral = yes
+					set_friendly = no
+				}
+			}
+			if = {
+				limit = {
+					celestial_is_leviathan = yes
+				}
+				owner = {
+					set_timed_country_flag = {
+						flag = celestial_recently_pacified
+						days = 3600
+					}
+					country_event = {
+						id = celestial.6
+						days = 3600
+						scopes = {
+							from = event_target:celestial_resonator_owner
+						}
+					}
+				}
+			}
+		}
+		every_neighbor_system = {
+			every_fleet_in_system = {
+				limit = {
+					OR = {
+						celestial_is_spaceborne_fauna = yes
+						celestial_is_leviathan = yes
+					}
+					owner = {
+						NOT = {
+							has_country_flag = celestial_recently_pacified
+						}
+						is_hostile = event_target:celestial_resonator_owner
+					}
+				}
+				fleet.owner = {
+					set_faction_hostility = {
+						target = event_target:celestial_resonator_owner
+						set_hostile = no
+						set_neutral = yes
+						set_friendly = no
+					}
+				}
+				if = {
+					limit = {
+						celestial_is_leviathan = yes
+					}
+					owner = {
+						set_timed_country_flag = {
+							flag = celestial_recently_pacified
+							days = 3600
+						}
+						country_event = {
+							id = celestial.6
+							days = 3600
+							scopes = {
+								from = event_target:celestial_resonator_owner
+							}
+						}
+					}
+				}
+			}
+		}
+		event_target:celestial_resonator_owner = {
+			create_message = {
+				type = MESSAGE_HARMONIC_PACIFIER
+				localization = MESSAGE_HARMONIC_PACIFIER
+				days = 30
+				target = root
+				variable = {
+					type = name
+					localization = SYSTEM
+					scope = root
+				}
+			}
+		}
+	}
+}
+
+# Leviathan Pacification Over
+country_event = {
+	id = celestial.6
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+		root = {
+			set_faction_hostility = {
+				target = from
+				set_hostile = yes
+				set_neutral = no
+				set_friendly = no
+			}
+		}
+	}
+}
 
 # On built Temporal Spire
 planet_event = {
@@ -286,6 +416,91 @@ planet_event = {
 					days = 1440 # 4 years
 				}
 			}
+		}
+	}
+}
+
+# Triggers Flavour Events and Event Chains
+# Fired on on_decade_pulse_country
+country_event = {
+	id = celestial.10
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		# exists = event_target:celestial_leader
+		any_owned_leader = {
+			has_leader_flag = celestial
+		}
+	}
+	
+	immediate = {
+		random_list = {
+			# Flavour Events
+			10 = {
+				modifier = {
+					factor = 0
+					has_country_flag = celestial_flavour_1
+				}
+				country_event = {
+					id = celestial_flavour.1
+					days = 1
+					random = 1800
+				}
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					has_country_flag = celestial_flavour_2
+				}
+				country_event = {
+					id = celestial_flavour.2
+					days = 1
+					random = 1800
+				}
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					has_country_flag = celestial_flavour_3
+				}
+				country_event = {
+					id = celestial_flavour.5
+					days = 1
+					random = 1800
+				}
+			}
+			# Event Chains
+			10 = {
+				modifier = {
+					factor = 0
+					has_country_flag = celestial_eventchain_2_begun
+				}
+				country_event = {
+					id = celestial_chain.101
+					days = 1
+					random = 1800
+				}
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					has_country_flag = celestial_eventchain_2_begun
+				}
+				modifier = {
+					factor = 0
+					event_target:celestial_leader = {
+						leader_age < 250
+					}
+				}
+				country_event = {
+					id = celestial_chain.201
+					days = 1
+					random = 1800
+				}
+			}
+			# Nothing
+			40 = {}
 		}
 	}
 }

@@ -28,7 +28,6 @@ reset_cosmic_emporium_flags = {
 close_cosmic_emporium_effect = {
 }
 
-# todo: fire this periodically, like 10 years?
 shuffle_cosmic_emporium_items = {
 	reset_cosmic_emporium_slots = yes
 	select_emporium_slot_1 = yes
@@ -52,6 +51,8 @@ reset_cosmic_emporium_slots = {
 	remove_country_flag = cosmic_emporium_ship_1
 	remove_country_flag = cosmic_emporium_ship_2
 	remove_country_flag = cosmic_emporium_ship_3
+	remove_country_flag = cosmic_emporium_ship_4
+	remove_country_flag = cosmic_emporium_ship_5
 	remove_country_flag = cosmic_emporium_tech_1
 	remove_country_flag = cosmic_emporium_tech_2
 	remove_country_flag = cosmic_emporium_tech_3
@@ -96,6 +97,10 @@ select_emporium_slot_2 = {
 		}
 		10 = {
 			set_country_flag = cosmic_emporium_leader_3
+			modifier = {
+				factor = 0
+				has_paragon_dlc = no
+			}
 		}
 	}
 }
@@ -124,6 +129,28 @@ select_emporium_slot_3 = {
 			}
 		}
 		10 = {
+			set_country_flag = cosmic_emporium_ship_4
+			modifier = {
+				factor = 0
+				has_country_flag = cosmic_emporium_ship_4_gotten
+			}
+			modifier = {
+				factor = 0
+				NOT = { has_country_flag = cosmic_emporium_ship_3_gotten }
+			}
+		}
+		10 = {
+			set_country_flag = cosmic_emporium_ship_5
+			modifier = {
+				factor = 0
+				has_country_flag = cosmic_emporium_ship_5_gotten
+			}
+			modifier = {
+				factor = 0
+				NOT = { has_country_flag = cosmic_emporium_ship_4_gotten }
+			}
+		}
+		10 = {
 			set_country_flag = cosmic_emporium_tech_5
 			modifier = {
 				factor = 0
@@ -136,137 +163,467 @@ select_emporium_slot_3 = {
 	}
 }
 
-# TODO - Button Effects for Emporium
-# todo: add prices/costs to items AND RELICS
 cosmic_emporium_tech_1_effect = {
-	add_random_research_option = {
-		tier = 3
-		add_progress = 0.50
-		ignore_prereqs = yes
-		only_rare = yes
+	hidden_effect = {
+		add_random_research_option = {
+			tier = 3
+			add_progress = 0.50
+			ignore_prereqs = yes
+			only_rare = yes
+		}
+	}
+	add_monthly_resource_mult = {
+		resource = energy
+		value = -10
 	}
 }
 cosmic_emporium_tech_2_effect = {
-	add_random_research_option = {
-		tier = 4
-		add_progress = 0.25
-		ignore_prereqs = yes
-		ignore_rare = yes
+	hidden_effect = {
+		add_random_research_option = {
+			tier = 4
+			add_progress = 0.25
+			ignore_prereqs = yes
+			ignore_rare = yes
+		}
+	}
+	add_monthly_resource_mult = {
+		resource = energy
+		value = -15
 	}
 }
 cosmic_emporium_tech_3_effect = {
-	add_random_research_option = {
-		tier = 4
-		add_progress = 0.01
-		ignore_prereqs = yes
-		only_rare = yes
+	hidden_effect = {
+		add_random_research_option = {
+			tier = 4
+			add_progress = 0.01
+			ignore_prereqs = yes
+			only_rare = yes
+		}
+	}
+	add_monthly_resource_mult = {
+		resource = energy
+		value = -20
 	}
 }
 cosmic_emporium_tech_4_effect = {
-	add_random_research_option = {
-		tier = 5
-		add_progress = 0.01
-		ignore_prereqs = yes
-		ignore_rare = yes
+	hidden_effect = {
+		add_random_research_option = {
+			tier = 5
+			add_progress = 0.01
+			ignore_prereqs = yes
+			ignore_rare = yes
+		}
+	}
+	add_monthly_resource_mult = {
+		resource = energy
+		value = -25
 	}
 }
 cosmic_emporium_tech_5_effect = {
 	set_country_flag = celestial_resonator_given
-	give_technology = { tech = tech_celestial_harmonic_resonator message = yes }
+	hidden_effect = {
+		give_technology = { tech = tech_celestial_harmonic_resonator message = yes }
+	}
+	add_monthly_resource_mult = {
+		resource = energy
+		value = -10
+	}
 }
 cosmic_emporium_tech_6_effect = {
-	if = {
-		limit = {
-			NOT = {
-				has_country_flag = celestial_temporal_spire_bought
+	hidden_effect = {
+		if = {
+			limit = {
+				NOT = {
+					has_country_flag = celestial_temporal_spire_bought
+				}
+			}
+			set_country_flag = celestial_temporal_spire_bought
+			set_variable = {
+				which = celestial_temporal_spire_build_count
+				value = 1
 			}
 		}
-		set_country_flag = celestial_temporal_spire_bought
-		set_variable = {
-			which = celestial_temporal_spire_build_count
-			value = 1
+		else = {
+			change_variable = {
+				which = celestial_temporal_spire_build_count
+				value = 1
+			}
 		}
 	}
-	else = {
-		change_variable = {
-			which = celestial_temporal_spire_build_count
-			value = 1
-		}
+	add_monthly_resource_mult = {
+		resource = energy
+		value = -20
 	}
 }
 cosmic_emporium_ship_1_effect = {
 	set_country_flag = celestial_solar_lightning_given
-	give_technology = { tech = tech_celestial_solar_lightning message = yes }
+	hidden_effect = {
+		give_technology = { tech = tech_celestial_solar_lightning message = yes }
+	}
+	add_monthly_resource_mult = {
+		resource = energy
+		value = -20
+	}
 }
 cosmic_emporium_ship_2_effect = {
 	set_country_flag = celestial_void_laser_given
-	give_technology = { tech = tech_celestial_void_laser message = yes }
+	hidden_effect = {
+		give_technology = { tech = tech_celestial_void_laser message = yes }
+	}
+	add_monthly_resource_mult = {
+		resource = energy
+		value = -20
+	}
 }
 cosmic_emporium_ship_3_effect = {
 	set_country_flag = celestial_warp1_given
-	give_technology = { tech = tech_celestial_warp_drive_1 message = yes }
+	hidden_effect = {
+		give_technology = { tech = tech_celestial_warp_drive_1 message = yes }
+	}
+	add_monthly_resource_mult = {
+		resource = energy
+		value = -10
+	}
 }
 cosmic_emporium_ship_4_effect = {
 	set_country_flag = celestial_warp2_given
-	give_technology = { tech = tech_celestial_warp_drive_2 message = yes }
+	hidden_effect = {
+		give_technology = { tech = tech_celestial_warp_drive_2 message = yes }
+	}
+	add_monthly_resource_mult = {
+		resource = energy
+		value = -25
+	}
 }
 cosmic_emporium_ship_5_effect = {
 	set_country_flag = celestial_warp3_given
-	give_technology = { tech = tech_celestial_warp_drive_3 message = yes }
+	hidden_effect = {
+		give_technology = { tech = tech_celestial_warp_drive_3 message = yes }
+	}
+	add_monthly_resource_mult = {
+		resource = energy
+		value = -30
+	}
 }
 cosmic_emporium_pop_1_effect = {
-	random_galaxy_species = {
-		save_event_target_as = celestial_emporium_pop1_species
-	}
-	capital_scope = {
-		while = {
-			count = 3
-			create_pop = {
-				species = celestial_emporium_pop1_species
-				ethos = random
+	hidden_effect = {
+		random_galaxy_species = {
+			save_event_target_as = celestial_emporium_pop1_species
+		}
+		capital_scope = {
+			while = {
+				count = 3
+				create_pop = {
+					species = celestial_emporium_pop1_species
+					ethos = random
+				}
 			}
 		}
+	}
+	add_monthly_resource_mult = {
+		resource = energy
+		value = -15
 	}
 }
-# todo: lvl 2 and 3 warp core
-cosmic_emporium_pop_2_effect = { #todo: traits
-	random_galaxy_species = {
-		save_event_target_as = celestial_emporium_pop2_species
-	}
-	# modify_species = {
-	# 	species = event_target:celestial_emporium_pop2_species
-	# 	# add_trait = random # random advanced/good trait
-	# }
-	# todo: choose advanced trait though another scripted effect
-	capital_scope = {
-		while = {
-			count = 3
-			create_pop = {
-				species = celestial_emporium_pop2_species
-				ethos = random
+
+cosmic_emporium_pop_2_effect = {
+	hidden_effect = {
+		random_galaxy_species = {
+			save_event_target_as = celestial_emporium_pop2_species
+		}
+		# modify_species = {
+		# 	species = event_target:celestial_emporium_pop2_species
+		# 	# add_trait = random # random advanced/good trait
+		# }
+		# todo: choose advanced trait though another scripted effect
+		capital_scope = {
+			while = {
+				count = 3
+				create_pop = {
+					species = celestial_emporium_pop2_species
+					ethos = random
+				}
 			}
 		}
+	}
+	add_monthly_resource_mult = {
+		resource = energy
+		value = -20
 	}
 }
 cosmic_emporium_pop_3_effect = {
-	celestial_create_extradimensional_species = {
-		extradimensional_portrait = exd3_leader
-	}
-	capital_scope = {
-		while = {
-			count = 3
-			create_pop = {
-				species = last_created_species
-				ethos = random
+	hidden_effect = {
+		celestial_create_extradimensional_species = {
+			extradimensional_portrait = exd3_leader
+		}
+		capital_scope = {
+			while = {
+				count = 3
+				create_pop = {
+					species = last_created_species
+					ethos = random
+				}
 			}
 		}
 	}
+	add_monthly_resource_mult = {
+		resource = energy
+		value = -20
+	}
 }
-cosmic_emporium_leader_1_effect = {		# todo: clone leader
+cosmic_emporium_leader_1_effect = {	
+	hidden_effect = {
+		random_owned_leader = {
+			limit = {
+				NOT = { has_leader_flag = legendary_leader }
+			}
+			save_event_target_as = celestial_cloned_leader
+		}
+		clone_leader = {
+			target = event_target:celestial_cloned_leader
+		}
+		last_created_leader = {
+			set_leader_flag = celestial_clone
+			set_skill = 4
+			add_trait = leader_trait_celestial_clone
+		}
+	}
+	add_monthly_resource_mult = {
+		resource = energy
+		value = -25
+	}
 }
-cosmic_emporium_leader_2_effect = {		# todo: create random lvl3 leader
+cosmic_emporium_leader_2_effect = {
+	hidden_effect = {
+		random_galaxy_species = {
+			save_event_target_as = celestial_store_species
+		}
+		random_list = {
+			10 = {
+				celestial_lvl4_leader = {
+					species = root.owner_species
+					class = scientist
+				}
+			}
+			10 = {
+				celestial_lvl4_leader = {
+					species = root.owner_species
+					class = commander
+				}
+			}
+			10 = {
+				celestial_lvl4_leader = {
+					species = root.owner_species
+					class = official
+				}
+			}
+			10 = {
+				celestial_lvl4_leader = {
+					species = event_target:celestial_store_species
+					class = scientist
+				}
+			}
+			10 = {
+				celestial_lvl4_leader = {
+					species = event_target:celestial_store_species
+					class = commander
+				}
+			}
+			10 = {
+				celestial_lvl4_leader = {
+					species = event_target:celestial_store_species
+					class = official
+				}
+			}
+		}
+	}
+	add_monthly_resource_mult = {
+		resource = energy
+		value = -15
+	}
 }
-cosmic_emporium_leader_3_effect = {		# todo: summon a renowned paragon (must have Paragons dlc!)
+cosmic_emporium_leader_3_effect = {
+	hidden_effect = {
+		random_list = {
+			10 = {
+				country_event = {
+					id = paragon.40100
+					days = 1
+				}
+				modifier = {
+					factor = 0
+					has_global_flag = xenophile_leader_1
+				}
+			}
+			10 = {
+				country_event = {
+					id = paragon.40200
+					days = 1
+				}
+				modifier = {
+					factor = 0
+					has_global_flag = xenophile_leader_2
+				}
+			}
+			10 = {
+				country_event = {
+					id = paragon.40300
+					days = 1
+				}
+				modifier = {
+					factor = 0
+					has_global_flag = militarist_leader_1
+				}
+			}
+			10 = {
+				country_event = {
+					id = paragon.40400
+					days = 1
+				}
+				modifier = {
+					factor = 0
+					has_global_flag = militarist_leader_2
+				}
+			}
+			10 = {
+				country_event = {
+					id = paragon.40500
+					days = 1
+				}
+				modifier = {
+					factor = 0
+					has_global_flag = xenophobe_leader_1
+				}
+			}
+			10 = {
+				country_event = {
+					id = paragon.40600
+					days = 1
+				}
+				modifier = {
+					factor = 0
+					has_global_flag = xenophobe_leader_2
+				}
+			}
+			10 = {
+				country_event = {
+					id = paragon.40700
+					days = 1
+				}
+				modifier = {
+					factor = 0
+					has_global_flag = egalitarian_leader_1
+				}
+			}
+			10 = {
+				country_event = {
+					id = paragon.40800
+					days = 1
+				}
+				modifier = {
+					factor = 0
+					has_global_flag = egalitarian_leader_2
+				}
+			}
+			10 = {
+				country_event = {
+					id = paragon.40900
+					days = 1
+				}
+				modifier = {
+					factor = 0
+					has_global_flag = materialist_leader_1
+				}
+			}
+			10 = {
+				country_event = {
+					id = paragon.41000
+					days = 1
+				}
+				modifier = {
+					factor = 0
+					has_global_flag = materialist_leader_2
+				}
+			}
+			10 = {
+				country_event = {
+					id = paragon.41100
+					days = 1
+				}
+				modifier = {
+					factor = 0
+					has_global_flag = pacifist_leader_1
+				}
+			}
+			10 = {
+				country_event = {
+					id = paragon.41200
+					days = 1
+				}
+				modifier = {
+					factor = 0
+					has_global_flag = pacifist_leader_2
+				}
+			}
+			10 = {
+				country_event = {
+					id = paragon.41300
+					days = 1
+				}
+				modifier = {
+					factor = 0
+					has_global_flag = authoritarian_leader_1
+				}
+			}
+			10 = {
+				country_event = {
+					id = paragon.41400
+					days = 1
+				}
+				modifier = {
+					factor = 0
+					has_global_flag = authoritarian_leader_2
+				}
+			}
+			10 = {
+				country_event = {
+					id = paragon.41500
+					days = 1
+				}
+				modifier = {
+					factor = 0
+					has_global_flag = spiritualist_leader_1
+				}
+			}
+			10 = {
+				country_event = {
+					id = paragon.41600
+					days = 1
+				}
+				modifier = {
+					factor = 0
+					has_global_flag = spiritualist_leader_2
+				}
+			}
+		}
+	}
+	add_monthly_resource_mult = {
+		resource = energy
+		value = -40
+	}
+}
+
+celestial_lvl4_leader = {
+	create_leader = {
+		name = random
+		species = $species$
+		class = $class$
+		skill = 4
+
+		randomize_traits = yes
+		leader_age_min = 10
+		leader_age_max = 40
+	}
 }
 
 create_celestial_wayfarer = {
@@ -349,7 +706,7 @@ create_celestial_wayfarer = {
 					effect = {
 						set_leader_flag = legendary_leader
 						set_leader_flag = celestial
-						set_leader_flag = immune_to_negative_traits # todo: check if it should be removed
+						set_leader_flag = immune_to_negative_traits
 						save_global_event_target_as = celestial_leader
 						set_owner = root
 						exile_leader_as = celestial_leader
@@ -385,7 +742,7 @@ create_celestial_wayfarer = {
 					effect = {
 						set_leader_flag = legendary_leader
 						set_leader_flag = celestial
-						set_leader_flag = immune_to_negative_traits # todo: check if it should be removed
+						set_leader_flag = immune_to_negative_traits
 						save_global_event_target_as = celestial_leader
 						set_owner = root
 						exile_leader_as = celestial_leader
@@ -771,7 +1128,7 @@ r_celestial_aetherial_codex_boon = {
 }
 
 # Spectral Beacon
-#	- Allows 1 more use of the [todo] decision
+#	- Allows 1 more use of the decision
 #	- The decision adds a special modifier to the planet
 #	- Upon finishing it, 3-5 special Extradimensional Pops are spawned with powerful traits
 #	- But other Pops can randomly gain the Not of This World/Portal Sickness traits
