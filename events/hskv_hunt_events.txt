@@ -1,3 +1,8 @@
+#########################################################################################
+# Thayo Everdawn - The Everdawn Heist
+# Author: TheRingBearer
+#########################################################################################
+
 namespace = hskv_hunt
 
 # Eve Online time
@@ -6,11 +11,12 @@ country_event = {
 	title = hskv_hunt.1000.name
 	desc = hskv_hunt.1000.desc
 	picture = GFX_evt_deficit
-	show_sound = event_ship_bridge
+	show_sound = event_default
 	is_triggered_only = yes
 
 	immediate = {
 		set_country_flag = hskv_ignore_dismiss_effect
+		end_event_chain = hskv_thayo_waiting_chain
 		set_variable = {
 			which = hskv_total_num_valid_ships
 			value = 0
@@ -79,9 +85,11 @@ country_event = {
 				}
 				kill_leader = {
 					show_notification = no
+					fire = yes
 				}
 			}
 			
+			# TODO Any other consderations? < lvl 7?
 			random_owned_leader = {
 				limit = {
 					is_ruler = no
@@ -92,6 +100,7 @@ country_event = {
 				}
 				kill_leader = {
 					show_notification = no
+					fire = yes
 				}
 			} 
 			if = {
@@ -108,6 +117,7 @@ country_event = {
 					}
 					kill_leader = {
 						show_notification = no
+						fire = yes
 					}
 				} 
 			}
@@ -137,7 +147,7 @@ country_event = {
 	title = hskv_hunt.1001.name
 	desc = hskv_hunt.1001.desc
 	picture = GFX_evt_board_meeting
-	show_sound = event_ship_bridge
+	show_sound = event_default
 	is_triggered_only = yes
 
 	immediate = {
@@ -175,7 +185,7 @@ country_event = {
 	title = hskv_hunt.1002.name
 	desc = hskv_hunt.1002.desc
 	picture = GFX_evt_board_meeting
-	show_sound = event_ship_bridge
+	show_sound = event_default
 	is_triggered_only = yes
 
 	trigger = {
@@ -187,7 +197,7 @@ country_event = {
 	}
 
 	option = {
-		name = EXCELLENT
+		name = ACKNOWLEDGED
 		owner = {
 			event_target:hskv_situation_thayo_manhunt = {
 				add_situation_progress = 10
@@ -204,6 +214,14 @@ situation_event = {
 	id = hskv_hunt.1010
 	hide_window = yes
 	is_triggered_only = yes
+
+	trigger = {
+		OR = {
+			current_situation_approach = hskv_situation_thayo_manhunt_frugal
+			current_situation_approach = hskv_situation_thayo_manhunt_regular
+		}
+	}
+
 	immediate = {
 		owner = {
 			random_list = {
@@ -212,7 +230,6 @@ situation_event = {
 				1 = { country_event = { id = hskv_hunt.1021 } }
 				1 = { country_event = { id = hskv_hunt.1022 } }
 				1 = { country_event = { id = hskv_hunt.1023 } }
-				1 = { country_event = { id = hskv_hunt.1024 } }
 				1 = { country_event = { id = hskv_hunt.1025 } }
 				1 = { country_event = { id = hskv_hunt.1026 } }
 				1 = { country_event = { id = hskv_hunt.1027 } }
@@ -230,6 +247,11 @@ situation_event = {
 	id = hskv_hunt.1011
 	hide_window = yes
 	is_triggered_only = yes
+	
+	trigger = {
+		current_situation_approach = hskv_situation_thayo_manhunt_careful
+	}
+
 	immediate = {
 		owner = {
 			random_list = {
@@ -252,6 +274,11 @@ situation_event = {
 	id = hskv_hunt.1012
 	hide_window = yes
 	is_triggered_only = yes
+
+	trigger = {
+		current_situation_approach = hskv_situation_thayo_manhunt_aggressive
+	}
+
 	immediate = {
 		owner = {
 			random_list = {
@@ -260,7 +287,6 @@ situation_event = {
 				3 = { country_event = { id = hskv_hunt.1021 } }
 				3 = { country_event = { id = hskv_hunt.1022 } }
 				3 = { country_event = { id = hskv_hunt.1023 } }
-				3 = { country_event = { id = hskv_hunt.1024 } }
 				3 = { country_event = { id = hskv_hunt.1025 } }
 				3 = { country_event = { id = hskv_hunt.1026 } }
 				3 = { country_event = { id = hskv_hunt.1027 } }
@@ -282,18 +308,27 @@ country_event = {
 	id = hskv_hunt.1020
 	title = hskv_hunt.1020.name
 	desc = hskv_hunt.1020.desc
-	picture = GFX_evt_space_station
-	show_sound = event_ship_bridge
+	picture = GFX_evt_night_raid
+	show_sound = event_ship_explosion
 	is_triggered_only = yes
 
+	trigger = {
+		NOT = {
+			has_country_flag = hskv_factory_bombing
+		}
+	}
+
 	immediate = {
+		owner = {
+			set_country_flag = hskv_factory_bombing
+		}
 		random_owned_planet = {
 			save_event_target_as = hskv_target_planet
 		}
 	}
 
 	option = {
-		name = EXCELLENT
+		name = TERRIBLE
 		owner = {
 			event_target:hskv_target_planet = {
 				add_planet_devastation = 20
@@ -305,6 +340,10 @@ country_event = {
 				random_owned_pop = { kill_pop = yes }
 				random_owned_pop = { kill_pop = yes }
 			}
+			add_resource = {
+				influence = -25
+				unity = -500
+			}
 		}
 	}
 }
@@ -315,7 +354,7 @@ country_event = {
 	title = hskv_hunt.1021.name
 	desc = hskv_hunt.1021.desc
 	picture = GFX_evt_space_station
-	show_sound = event_ship_bridge
+	show_sound = event_default
 	is_triggered_only = yes
 
 	# TODO I guess if no valid targets, cancel the event?
@@ -334,7 +373,7 @@ country_event = {
 	}
 
 	option = {
-		name = EXCELLENT
+		name = DISCONCERTING
 		owner = {
 		}
 	}
@@ -345,12 +384,12 @@ country_event = {
 	id = hskv_hunt.1022
 	title = hskv_hunt.1022.name
 	desc = hskv_hunt.1022.desc
-	picture = GFX_evt_space_station
-	show_sound = event_ship_bridge
+	picture = GFX_evt_dark_alley
+	show_sound = event_whispering
 	is_triggered_only = yes
 
 	option = {
-		name = EXCELLENT
+		name = UNFORTUNATE
 		owner = {
 			random_owned_planet = {
 				limit = {
@@ -383,8 +422,8 @@ country_event = {
 	id = hskv_hunt.1023
 	title = hskv_hunt.1023.name
 	desc = hskv_hunt.1023.desc
-	picture = GFX_evt_space_station
-	show_sound = event_ship_bridge
+	picture = GFX_evt_black_market
+	show_sound = event_whispering
 	is_triggered_only = yes
 
 	immediate = {
@@ -399,7 +438,7 @@ country_event = {
 	}
 
 	option = {
-		name = EXCELLENT
+		name = WORRYING
 		event_target:hskv_target_planet = {
 			add_modifier = {
 				modifier = hskv_resources_being_stolen
@@ -407,39 +446,42 @@ country_event = {
 			}
 		}
 	}
-}
-# Resources stolen
-country_event = {
-	id = hskv_hunt.1024
-	title = hskv_hunt.1024.name
-	desc = hskv_hunt.1024.desc
-	picture = GFX_evt_space_station
-	show_sound = event_ship_bridge
-	is_triggered_only = yes
-
 	option = {
-		name = EXCELLENT
+		name = hskv_hunt.1023.option.b
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 3000
+				}
+				resource_stockpile_compare = {
+					resource = unity
+					value >= 750
+				}
+			}
+		}
 		owner = {
 			add_resource = {
-				energy = -1000
-				minerals = -1000
-				food = -1000
-				consumer_goods = -500
-				alloys = -500
-				rare_crystals = -100
-				exotic_gases = -100
-				volatile_motes = -100
+				energy = -3000
+				unity = -750
+			}
+		}
+		event_target:hskv_target_planet = {
+			add_modifier = {
+				modifier = hskv_resources_being_stolen
+				years = 1
 			}
 		}
 	}
 }
+
 # Mining Stations vulnerable - lower production for X years
 country_event = {
 	id = hskv_hunt.1025
 	title = hskv_hunt.1025.name
 	desc = hskv_hunt.1025.desc
 	picture = GFX_evt_space_station
-	show_sound = event_ship_bridge
+	show_sound = event_default
 	is_triggered_only = yes
 
 	trigger = {
@@ -449,7 +491,7 @@ country_event = {
 	}
 
 	option = {
-		name = EXCELLENT
+		name = WORRYING
 		owner = {
 			add_modifier = {
 				modifier = hskv_mining_stations_vulnerable
@@ -463,8 +505,8 @@ country_event = {
 	id = hskv_hunt.1026
 	title = hskv_hunt.1026.name
 	desc = hskv_hunt.1026.desc
-	picture = GFX_evt_space_station
-	show_sound = event_ship_bridge
+	picture = GFX_evt_smear_campaign
+	show_sound = event_planetary_riot
 	is_triggered_only = yes
 
 	trigger = {
@@ -485,7 +527,7 @@ country_event = {
 	}
 
 	option = {
-		name = EXCELLENT
+		name = DISAPPOINTING
 		owner = {
 			event_target:hskv_false_leader_sympathizer = {
 				add_timed_trait = {
@@ -501,8 +543,8 @@ country_event = {
 	id = hskv_hunt.1027
 	title = hskv_hunt.1027.name
 	desc = hskv_hunt.1027.desc
-	picture = GFX_evt_space_station
-	show_sound = event_ship_bridge
+	picture = GFX_evt_infiltration_neutral
+	show_sound = event_default
 	is_triggered_only = yes
 	immediate = {
 		hskv_get_thayo_manhunt_situation = yes
@@ -526,8 +568,8 @@ country_event = {
 	id = hskv_hunt.1030
 	title = hskv_hunt.1030.name
 	desc = hskv_hunt.1030.desc
-	picture = GFX_evt_space_station
-	show_sound = event_ship_bridge
+	picture = GFX_evt_bribery
+	show_sound = event_default
 	is_triggered_only = yes
 
 	immediate = {
@@ -568,8 +610,8 @@ country_event = {
 	id = hskv_hunt.1031
 	title = hskv_hunt.1031.name
 	desc = hskv_hunt.1031.desc
-	picture = GFX_evt_space_station
-	show_sound = event_ship_bridge
+	picture = GFX_evt_operative_chase
+	show_sound = event_ship_thrusters
 	is_triggered_only = yes
 
 	immediate = {
@@ -578,7 +620,7 @@ country_event = {
 
 
 	option = {
-		name = EXCELLENT
+		name = UNDERSTOOD
 		owner = {
 			add_resource = {
 				energy = -1000
@@ -603,12 +645,12 @@ country_event = {
 	id = hskv_hunt.1040
 	title = hskv_hunt.1040.name
 	desc = hskv_hunt.1040.desc
-	picture = GFX_evt_space_station
-	show_sound = event_ship_bridge
+	picture = GFX_evt_resource_cache
+	show_sound = event_default
 	is_triggered_only = yes
 
 	option = {
-		name = EXCELLENT
+		name = GOOD
 		owner = {
 			add_resource = {
 				energy = 750
@@ -628,8 +670,8 @@ country_event = {
 	id = hskv_hunt.1041
 	title = hskv_hunt.1041.name
 	desc = hskv_hunt.1041.desc
-	picture = GFX_evt_space_station
-	show_sound = event_ship_bridge
+	picture = GFX_evt_resource_cache
+	show_sound = event_default
 	is_triggered_only = yes
 
 	immediate = {
@@ -677,8 +719,8 @@ country_event = {
 	id = hskv_hunt.1042
 	title = hskv_hunt.1042.name
 	desc = hskv_hunt.1042.desc
-	picture = GFX_evt_space_station
-	show_sound = event_ship_bridge
+	picture = GFX_evt_spymaster
+	show_sound = event_default
 	is_triggered_only = yes
 
 	immediate = {
@@ -686,7 +728,7 @@ country_event = {
 	}
 
 	option = {
-		name = EXCELLENT
+		name = GOOD
 		owner = {
 			event_target:hskv_situation_thayo_manhunt = {
 				add_situation_progress = 12
@@ -701,8 +743,8 @@ situation_event = {
 	id = hskv_hunt.1050
 	title = hskv_hunt.1050.name
 	desc = hskv_hunt.1050.desc
-	picture = GFX_evt_space_station
-	show_sound = event_ship_bridge
+	picture = GFX_evt_pirate_armada
+	show_sound = event_space_battle
 	is_triggered_only = yes
 
 	immediate = {
@@ -740,7 +782,7 @@ situation_event = {
 	}
 
 	option = {
-		name = EXCELLENT
+		name = WORRYING
 		owner = {
 			add_modifier = {
 				modifier = hskv_piracy_on_the_rise
@@ -752,19 +794,19 @@ situation_event = {
 
 # --------------------------------------------------------------------------------------------
 situation_event = {
-	id = hskv_hunt.2100
-	title = hskv_hunt.2100.name
-	desc = hskv_hunt.2100.desc
+	id = hskv_hunt.2099
+	title = hskv_hunt.2099.name
+	desc = hskv_hunt.2099.desc
 	picture = GFX_evt_spymaster
-	show_sound = event_ship_bridge
+	show_sound = event_default
 	is_triggered_only = yes
 
 	option = {
-		name =  hskv_hunt.2100.response
+		name =  hskv_hunt.2099.response
 		hidden_effect = {
 			owner = {
 				country_event = {
-					id = hskv_hunt.2101
+					id = hskv_hunt.2100
 				}
 			}
 		}
@@ -775,18 +817,44 @@ situation_event = {
 ##########################################################################################################
 ##########################################################################################################
 country_event = {
-	id = hskv_hunt.2101
-	title = hskv_hunt.2101.name
-	desc = hskv_hunt.2101.desc
+	id = hskv_hunt.2100
+	title = hskv_hunt.2100.name
+	desc = hskv_hunt.2100.desc
 	picture = GFX_evt_space_station
-	show_sound = event_ship_bridge
+	show_sound = event_default
 	is_triggered_only = yes
 
 	option = {
-		name = EXCELLENT
+		name = ONSCREEN
 		owner = {
 			country_event = {
-				id = hskv_hunt.2102
+				id = hskv_hunt.2101
+				days = 1
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv_hunt.2101
+	title = hskv_hunt.2101.name
+	desc = hskv_hunt.2101.desc
+	show_sound = event_default
+	diplomatic = yes
+	is_triggered_only = yes
+	picture_event_data = {
+		portrait = hskv_thayo_portrait
+		room = ethic_spaceship_room
+	}
+
+	option = {
+		name =  hskv_hunt.2101.response
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_hunt.2102
+					days = 1
+				}
 			}
 		}
 	}
@@ -794,9 +862,9 @@ country_event = {
 
 country_event = {
 	id = hskv_hunt.2102
-	title = hskv_hunt.2102.name
+	title = hskv_hunt.2101.name
 	desc = hskv_hunt.2102.desc
-	show_sound = event_ship_bridge
+	show_sound = event_default
 	diplomatic = yes
 	is_triggered_only = yes
 	picture_event_data = {
@@ -822,17 +890,19 @@ country_event = {
 			owner = {
 				country_event = {
 					id = hskv_hunt.2103
+					days = 1
 				}
 			}
 		}
 	}
 }
 
+# TODO need tooltips
 country_event = {
 	id = hskv_hunt.2103
-	title = hskv_hunt.2102.name
+	title = hskv_hunt.2101.name
 	desc = hskv_hunt.2103.desc
-	show_sound = event_ship_bridge
+	show_sound = event_default
 	diplomatic = yes
 	is_triggered_only = yes
 	picture_event_data = {
@@ -847,6 +917,7 @@ country_event = {
 			owner = {
 				country_event = {
 					id = hskv_hunt.2110
+					days = 1
 				}
 			}
 		}
@@ -858,6 +929,7 @@ country_event = {
 			owner = {
 				country_event = {
 					id = hskv_hunt.2104
+					days = 1
 				}
 			}
 		}
@@ -867,9 +939,9 @@ country_event = {
 # I warned you
 country_event = {
 	id = hskv_hunt.2104
-	title = hskv_hunt.2102.name
+	title = hskv_hunt.2101.name
 	desc = hskv_hunt.2104.desc
-	show_sound = event_ship_bridge
+	show_sound = event_default
 	diplomatic = yes
 	is_triggered_only = yes
 	picture_event_data = {
@@ -883,6 +955,7 @@ country_event = {
 			owner = {
 				country_event = {
 					id = hskv_hunt.2105
+					days = 1
 				}
 			}
 		}
@@ -904,12 +977,12 @@ country_event = {
 			owner = {
 				country_event = {
 					id = hskv_hunt.2106
+					days = 1
 				}
 			}
 		}
 	}
 }
-# TODO Recover a large % of the resources stolen from before
 country_event = {
 	id = hskv_hunt.2106
 	title = hskv_hunt.2105.name
@@ -920,8 +993,17 @@ country_event = {
 
 	option = {
 		name =  CURSES
-		hidden_effect = {
-			owner = {
+
+		owner = {
+			add_resource = {
+				energy = 8000
+				minerals = 4000
+				food = 1000
+				consumer_goods = 2000
+				alloys = 2000
+				rare_crystals = 500
+				exotic_gases = 500
+				volatile_motes = 500
 			}
 		}
 	}
@@ -932,7 +1014,7 @@ country_event = {
 	id = hskv_hunt.2110
 	title = hskv_hunt.2102.name
 	desc = hskv_hunt.2110.desc
-	show_sound = event_ship_bridge
+	show_sound = event_default
 	diplomatic = yes
 	is_triggered_only = yes
 	picture_event_data = {
@@ -946,6 +1028,7 @@ country_event = {
 			owner = {
 				country_event = {
 					id = hskv_hunt.2111
+					days = 1
 				}
 			}
 		}
@@ -955,7 +1038,7 @@ country_event = {
 	id = hskv_hunt.2111
 	title = hskv_hunt.2102.name
 	desc = hskv_hunt.2111.desc
-	show_sound = event_ship_bridge
+	show_sound = event_default
 	diplomatic = yes
 	is_triggered_only = yes
 	picture_event_data = {
@@ -963,7 +1046,6 @@ country_event = {
 		room = ethic_spaceship_room
 	}
 
-	# TODO Recover a small % of the resources stolen from before
 	option = {
 		name =  UNDERSTOOD
 		hidden_effect = {
@@ -977,6 +1059,17 @@ country_event = {
 				}
 				begin_event_chain = {
 					event_chain = "hskv_thayo_create_wormhole_chain"
+				}
+
+				add_resource = {
+					energy = 2000
+					minerals = 1000
+					food = 1000
+					consumer_goods = 750
+					alloys = 500
+					rare_crystals = 200
+					exotic_gases = 200
+					volatile_motes = 200
 				}
 
 
@@ -1024,10 +1117,12 @@ country_event = {
 						add_trait_no_notify = hskv_leader_trait_thayo_everdawn_4
 						add_trait_no_notify = leader_trait_psionic
 						add_trait_no_notify = trait_ruler_charismatic_2
+						add_trait_no_notify = leader_trait_politician_2
 						
 						add_trait_no_notify = hskv_leader_trait_population_oversight
 						add_trait_no_notify = hskv_leader_trait_zro_dealer_contact
 						add_trait_no_notify = hskv_leader_trait_pinnacle
+						add_trait_no_notify = hskv_leader_trait_asset_forfeiture
 
 						#TODO plus any event ones he used to have (perhaps with less negative effects)
 						
