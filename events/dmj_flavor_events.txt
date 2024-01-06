@@ -23,11 +23,13 @@ country_event = { # Flavor events intializer
 					modifier = {
 						factor = 0
 						owner = {
-							has_modifier = dmj_reinhard_infiltration_buff
-							NOT = {
-								any_owned_system = { # I don't know if this works, if there's a better way then tell me
-									any_system_planet = {
-										owner = { is_country_type = primitive }
+							OR = {
+								has_modifier = dmj_reinhard_infiltration_buff
+								NOT = {
+									any_owned_system = { # I don't know if this works, if there's a better way then tell me
+										any_system_planet = {
+											owner = { is_country_type = primitive }
+										}
 									}
 								}
 							}
@@ -253,7 +255,7 @@ leader_event = { # Gives psionic techs
 				}
 				50 = {
 					if = {
-						limit = { NOT = { has_technology = tech_precognition_interface } }
+						limit = { NOT = { has_technology = tech_psionic_barrier } }
 						if = {
 							limit = { NOT = { has_research_option = tech_psionic_barrier } }
 							add_research_option = tech_psionic_barrier
@@ -314,7 +316,7 @@ leader_event = { # Gives buffs to primitive infiltration, only if you have First
 	desc = "dmj_flavor.3.desc"
 
 	picture = GFX_evt_infiltration_neutral
-	show_sound = event_inhabited_solar_system
+	show_sound = event_spymaster
 
 	event_window_type = leader_story
 	event_picture_background = "GFX_leader_recruitment_bg_renowned"
@@ -396,6 +398,7 @@ leader_event = { # Random leader becomes a Reinhardist Devotee
 	id = dmj_flavor.5
 	name = "dmj_flavor.5.name"
 	desc = "dmj_flavor.5.desc"
+	is_triggered_only = yes
 
 	picture = GFX_evt_knights
 	show_sound = event_hand_shake

@@ -91,6 +91,7 @@ dmj_infernal_stronghold = {
 
 	init_effect = {
 		set_global_flag = dmj_system_spawned
+		save_global_event_target_as = dmj_spawn_system
 		if = {
 			limit = { 
 				NOT = { any_system = { has_star_flag = sol } }
@@ -102,16 +103,18 @@ dmj_infernal_stronghold = {
 			}
 		}
 		if = {
-			any_galaxy_species = {
-				owner = {
-					OR = {
-						has_country_flag = dmj_sol_country
-						has_country_flag = humans_early_space_age
-						has_country_flag = humans_machine_age
-						has_country_flag = humans_late_medieval_age
+			limit = {
+				any_galaxy_species = {
+					owner = {
+						OR = {
+							has_country_flag = dmj_sol_country
+							has_country_flag = humans_early_space_age
+							has_country_flag = humans_machine_age
+							has_country_flag = humans_late_medieval_age
+						}
 					}
+					is_human_species = yes
 				}
-				is_human_species = yes
 			}
 			random_galaxy_species = {
 				limit = {
@@ -144,7 +147,7 @@ dmj_weird_sol = {
 		type = icy_asteroid_belt
 		radius = 290
 	}
-	flags = { sol_system dmj_weird_sol sol empire_home_system }
+	flags = { dmj_weird_sol sol empire_home_system }
 
 	usage = misc_system_init
 
