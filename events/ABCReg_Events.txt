@@ -19,7 +19,7 @@ country_event = {
 
 	trigger = {
 		has_global_flag = ABCReg_system_spawned
-		has_country_flag = ABCReg_owner
+		is_ai = no
 		exists = event_target:ABCReg_star
 	}
 
@@ -193,6 +193,10 @@ country_event = {
 				}
 			}
 			country_event = { id = ABCReg.5 days = 1 random = 1 }
+			hidden_effect = {
+				event_target:ABCReg_cyto = {
+						delete_ship = this
+			}				}
 		}
 	}
 
@@ -236,7 +240,7 @@ country_event = { # Visions of the future
 	is_triggered_only = yes
 	show_sound = event_space_amoeba
 	picture = GFX_evt_friendly_amoeba
-
+	is_triggered_only = yes
 	event_window_type = leader_story
 	event_picture_background = "GFX_leader_recruitment_bg_ABCReg_Bubbles"       ## make green variant in  gfx\interface\leaders\recruitment_bgs
 
@@ -567,7 +571,7 @@ country_event = {
 
 	option = {
 		name = ABCReg.22.a
-		country_event = { id = ABCReg.221 }
+		country_event = { id = ABCReg.221 days = 30 random = 30 }
 		if = {
 			limit = {
 				has_completed_event_chain_counter = {
@@ -759,14 +763,13 @@ country_event = { #Graveyard Planet Vision
 				}
 			}
 		}
+
 	}
+
 
 	option = {
 		name = ABCReg.32.a
-		effect = {
-				set_owner = root
-				set_leader = event_target:ABCReg_puppet
-			   }
+		country_event = { id = ABCReg.321 days = 30 random = 30 }
 		if = {
 			limit = {
 				has_completed_event_chain_counter = {
@@ -779,6 +782,10 @@ country_event = { #Graveyard Planet Vision
 		}
 	}
 }
+
+
+
+
 
 ship_event = { #Entering the system of the federation
 	id = ABCReg.40
@@ -1132,6 +1139,7 @@ country_event = { #this event fires at the end of the previous event chain and a
 
 
 ### These events fire continuously every 5 year and are permanent iterations of the boons obtained through ABCReg.2x,3x and 4x. ABCReg.1x doesn't have such event because restoring psi drive is quite enough.
+### ABCRegX20 are required as "tutorial" in order to not flood people with pop ups.
 
 country_event = { 
 	id = ABCReg.221
@@ -1163,6 +1171,8 @@ country_event = {
     }
 
 }
+
+###TODO BOAT Shouldn't replace ruler.
 
 country_event = { 
 	id = ABCReg.321
@@ -1370,93 +1380,54 @@ country_event = { #death of bubbles, tragic innit?
 	}
 }
 
+#fired from on_entering_system_fleet
+# A fleet has entered a system | See also: on_fleet_auto_move_arrival
+# Scope = Fleet
+# From = System
 ship_event = { #Entering gehellum alveo, has a hard time working, for testing purposes use ABCReg.1 instead.
-	id = ABCReg.0
-	title = "ABCReg.0.name"
-	desc = "ABCReg.0.desc"
-	picture = GFX_evt_friendly_amoeba
-	show_sound = event_space_amoeba
-	fire_only_once = yes
-	location = from
-	is_triggered_only = yes
+    id = ABCReg.0
+    title = "ABCReg.0.name"
+    desc = "ABCReg.0.desc"
+    picture = GFX_evt_friendly_amoeba
+    show_sound = event_space_amoeba
+    fire_only_once = yes
+    location = from
+    is_triggered_only = yes
 
-	trigger = {
-		has_global_flag = ABCReg_system_spawned
-		FROMFROM = {
-				  {	has_country_flag = ABCReg_allowed }
-			
-		}
+    trigger = {
+        from = {
+            has_star_flag = ABCReg_Gehellum_Alveo
+        }
+        controller = {
+            is_ai = no            
+        }
+    }
 
-	}
+    
+    option = {
+        name = ABCReg.0.a
+        hidden_effect = {
+            random_list = {
+                10 = {
+                    controller = {
+                        country_event = { 
+                            id = ABCReg.1
+                        }
+                    } 
+                }
+                1 = {
+                    controller = {
+                        country_event = {
+                            id = ABCReg.1000
+                        }
+                    }
+                }    
+                
+            }
+        }
+    }
+} 
 
-	
-	hidden_effect = {
-			set_country_flag = ABCReg_wild_bubbles_met
-			country_event = { id = story.8 days = 15 }
-			event_target:ABCReg_star = {
-			if = {
-			limit = { NOT = { exists = event_target:ABCReg_country_neutral } 
-			}
-					create_country = {
-						name = "NAME_unknown_bubbles"
-						type = faction
-						flag = {
-							icon = {
-								category = "zoological"
-								file = "flag_zoological_1.dds"
-							}
-							background= {
-								category = "backgrounds"
-								file = "00_solid.dds"
-							}
-							colors={
-								"black"
-								"black"
-								"null"
-								"null"
-							}
-						}
-					}
-					last_created_country = {
-						save_global_event_target_as = ABCReg_country_neutral
-						set_country_flag = ABCReg_wild_bubbles
-						create_fleet = {
-							name = "NAME_Gargantuan_Amoeba_Life-form"
-							settings = {
-								spawn_debris = no
-								is_boss = yes
-							}
-							effect = {
-								set_owner = event_target:ABCReg_wild_bubbles
-								create_ship = {
-									name = "NAME_Gargantuan_Amoeba_Life-form"
-									design = "ABCReg_Gargantuan_Amoeba_Life-form"
-									effect = {
-										set_ship_flag = ABCReg_wild_bubbles_ship
-										save_global_event_target_as = ABCReg_cyto
-									}
-								}
-								set_location = PREVPREV
-								set_fleet_stance = aggressive
-								set_aggro_range_measure_from = self
-								set_aggro_range = 100
-							}
-						}
-					}
-				
-			}
-			
-		}
-	}
-
-	option = {
-		name = ABCReg.0.a
-		random_list = {
-			10 = { country_event = { id = ABCReg.1 } }
-			1 = { country_event = { id = ABCReg.1000 } }
-			}
-	}
-}
 
 event = {
     id = ABCReg.900
@@ -1491,8 +1462,8 @@ country_event = {
 
 	trigger = {
 		has_global_flag = ABCReg_system_spawned
-		has_country_flag = ABCReg_owner
 		exists = event_target:ABCReg_star
+		is_ai = no
 	}
 
 	immediate = {
@@ -1545,7 +1516,7 @@ country_event = {
 			create_species = {
 				name = "NAME_Unknown"
 				class = PARAGON
-				portrait = art2
+				portrait = art1
 				namelist = "PRT1"
 				traits = random
 				effect = {
@@ -1610,7 +1581,7 @@ country_event = {
 				effect = {
 					set_owner = root
 					create_ship_design = {
-						design = "ABCReg_Gargantuan_Amoeba_Life-form"                      ##TODO NAME_Bubbles  NAME_Large_Space_Organism_Blue
+						design = "ABCReg_Gargantuan_Amoeba_Life-form_shiny"                      ##TODO NAME_Bubbles  NAME_Large_Space_Organism_Blue
 					}
 					create_ship = {
 						design = last_created_design
@@ -1665,8 +1636,15 @@ country_event = {
 				}
 			}
 			country_event = { id = ABCReg.5 days = 1 random = 1 }
+			hidden_effect = {
+				event_target:ABCReg_cyto = {
+						delete_ship = this
+							}
+			
+			}
 		}
 	}
+
 
 	option = { # DISMISS
 		name = DISMISS

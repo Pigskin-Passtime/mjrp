@@ -58,6 +58,58 @@ ABCReg_limbo = {
 				is_discovered = yes
 			}
 		}
+		
+		create_country = {
+						name = "NAME_unknown_bubbles"
+						type = bubbles_neutral_ship
+						ignore_initial_colony_error = yes
+						flag = {
+							icon = {
+								category = "zoological"
+								file = "flag_zoological_1.dds"
+							}
+							background= {
+								category = "backgrounds"
+								file = "00_solid.dds"
+							}
+							colors={
+								"black"
+								"black"
+								"null"
+								"null"
+							}
+						}
+					}
+		last_created_country = {
+						save_global_event_target_as = ABCReg_country_neutral
+						set_country_flag = ABCReg_wild_bubbles
+		}
+		create_fleet = {
+							name = "NAME_Gargantuan_Amoeba_Life-form"
+							settings = {
+								spawn_debris = no
+								is_boss = yes
+							}
+							effect = {
+								set_owner = event_target:ABCReg_country_neutral
+								create_ship = {
+									name = "NAME_Gargantuan_Amoeba_Life-form"
+									design = "ABCReg_Gargantuan_Amoeba_Life-form"
+									effect = {
+										set_ship_flag = ABCReg_wild_bubbles_ship
+										set_disable_at_health = 0.05
+										save_global_event_target_as = ABCReg_cyto
+									}
+								}
+								
+								set_location = {
+											target = event_target:ABCReg_star
+								}
+								set_aggro_range_measure_from = self
+								set_aggro_range = 100
+							}
+		
+		}
 	}
 
 
