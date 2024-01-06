@@ -74,8 +74,80 @@ wg_dmj_reinhard_reimprisonment = {
 	}
 
 	on_accept = {
+		if = {
+			limit = { from = { has_been_declared_crisis = no } }
+			from = {
+				if = {
+					limit = {
+						tech_unlocked_ratio = {
+							who = ROOT
+							ratio < @protectorate_tech_threshold
+						}
+					}
+					set_subject_of = {
+						who = ROOT
+						preset = preset_protectorate
+					}
+				}
+				else = {
+					ROOT = {
+						switch = {
+							trigger = has_policy_flag
+							oppressive_terms = {
+								if = {
+									limit = {
+										ROOT = { is_ai = yes }
+									}
+									FROM = {
+										set_subject_of = {
+											who = ROOT
+											preset = preset_vassal_oppressive_ai
+										}
+									}
+								}
+								else = {
+									FROM = {
+										set_subject_of = {
+											who = ROOT
+											preset = preset_vassal_oppressive
+										}
+									}
+								}
+							}
+							balanced_terms = {
+								FROM = {
+									set_subject_of = {
+										who = ROOT
+										preset = preset_vassal_balanced
+									}
+								}
+							}
+							benevolent_terms = {
+								FROM = {
+									set_subject_of = {
+										who = ROOT
+										preset = preset_vassal_benevolent
+									}
+								}
+							}
+						}
+					}
+				}
+				add_modifier = {
+					modifier = newly_subjugated_loyalty
+					years = 5
+				}
+			}
+		}
+		event_target:dmj_daniel = {
+			kill_leader = {
+				show_notification = no
+				fire = yes
+			}
+		}
 		from = {
-			country_event = { id = dmj_sol.16 }
+			remove_country_flag = owns_reinhard
+			country_event = { id = dmj_sol.16 days = 5 random = 5 }
 		}
 	}
 

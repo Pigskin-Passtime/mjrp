@@ -11,7 +11,18 @@ country_event = { # Search for Sol
 		trigger = {
 			any_system = {
 				has_star_flag = sol
-				is_in_sensor_range_of_country = root
+				OR = {
+					is_in_sensor_range_of_country = root
+					any_country = {
+						has_communications = root
+						any_owned_planet = {
+							OR = {
+								has_planet_flag = planet_earth
+								has_planet_flag = nuked_earth
+							}
+						}
+					}
+				}
 				NOT = { is_owned_by = root }
 			}
 		}
@@ -22,6 +33,17 @@ country_event = { # Search for Sol
 			any_system = {
 				has_star_flag = sol
 				NOT = { is_in_sensor_range_of_country = root }
+				NOT = {
+					any_country = {
+						has_communications = root
+						any_owned_planet = {
+							OR = {
+								has_planet_flag = planet_earth
+								has_planet_flag = nuked_earth
+							}
+						}
+					}
+				}
 				NOT = { is_owned_by = root } # Just in case
 			}
 		}
@@ -44,6 +66,46 @@ country_event = { # Search for Sol
 		}
 	}
 
+	immediate = {
+		if = {
+			limit = {
+				any_system = {
+					has_star_flag = sol
+					OR = {
+						is_in_sensor_range_of_country = root
+						any_country = {
+							has_communications = root
+							any_owned_planet = {
+								OR = {
+									has_planet_flag = planet_earth
+									has_planet_flag = nuked_earth
+								}
+							}
+						}
+					}
+					NOT = { is_owned_by = root }
+				}
+			}
+			root.capital_scope = {
+				spawn_natural_wormhole = {
+					bypass_type = dmj_shroud_tunnel
+					random_pos = no
+					orbit_angle = 360
+					orbit_distance = 15
+				}
+			}
+			event_target:dmj_terra = {
+				spawn_natural_wormhole = {
+					bypass_type = dmj_shroud_tunnel
+					random_pos = no
+					orbit_angle = 360
+				}
+				link_wormholes = root.capital_scope
+				set_surveyed = { surveyed = yes surveyor = root }
+			}
+		}
+	}
+
 	option = {
 		name = dmj_sol.1.a
 		begin_event_chain = { event_chain = dmj_sol_reclamation_chain target = root }
@@ -52,6 +114,17 @@ country_event = { # Search for Sol
 				any_system = {
 					has_star_flag = sol
 					NOT = { is_in_sensor_range_of_country = root }
+					NOT = {
+						any_country = {
+							has_communications = root
+							any_owned_planet = {
+								OR = {
+									has_planet_flag = planet_earth
+									has_planet_flag = nuked_earth
+								}
+							}
+						}
+					}
 				}
 			}
 			enable_special_project = {
@@ -63,14 +136,40 @@ country_event = { # Search for Sol
 			limit = {
 				any_system = {
 					has_star_flag = sol
-					is_in_sensor_range_of_country = root
+					OR = {
+						is_in_sensor_range_of_country = root
+						any_country = {
+							has_communications = root
+							any_owned_planet = {
+								OR = {
+									has_planet_flag = planet_earth
+									has_planet_flag = nuked_earth
+								}
+							}
+						}
+					}
 				}
 			}
-			country_event = { id = dmj_sol.3 days = 3600 }
+			if = {
+				limit = { NOT = { has_country_flag = reinhardist_empire }
+				country_event = { id = dmj_sol.3 days = 3600 }
+			}
+			
 			random_system = {
 				limit = {
 					has_star_flag = sol
-					is_in_sensor_range_of_country = root
+					OR = {
+						is_in_sensor_range_of_country = root
+						any_country = {
+							has_communications = root
+							any_owned_planet = {
+								OR = {
+									has_planet_flag = planet_earth
+									has_planet_flag = nuked_earth
+								}
+							}
+						}
+					}
 				}
 				random_system_planet = {
 					limit = {
@@ -94,6 +193,18 @@ country_event = { # Search for Sol Completed
 
 	immediate = {
 		set_country_flag = dmj_sol_discovered
+		random_system = {
+			limit = { has_star_flag = sol }
+			random_system_planet = {
+				limit = {
+					OR = {
+						has_planet_flag = planet_earth
+						has_planet_flag = nuked_earth
+					}
+				}
+				save_event_target_as = dmj_terra
+			}
+		}
 		if = {
 			limit = {
 				any_system = {
@@ -105,7 +216,6 @@ country_event = { # Search for Sol Completed
 				}
 			}
 			country_event = { id = dmj_sol.4 }
-			create_point_of_interest = { id = dmj_terra name = "dmj_terra_poi" desc = "dmj_terra_poi_desc" event_chain = dmj_sol_reclamation_chain location = event_target:dmj_terra }
 		}
 		else_if = {
 			limit = {
@@ -122,6 +232,7 @@ country_event = { # Search for Sol Completed
 		else_if = {
 			limit = { exists = event_target:dmj_sol_country }
 			establish_communications_no_message = event_target:dmj_sol_country
+			establish_contact = { who = event_target:dmj_sol_country location = event_target:dmj_terra.solar_system }
 			country_event = { id = dmj_sol.6 }
 		}
 	}
@@ -155,7 +266,7 @@ country_event = { # Reinhard leaves after failed Sol Reclamation
 	}
 
 	option = {
-		name = "dmj_sol.3.a"
+		name = "UNFORTUNATE"
 	}
 }
 
@@ -163,13 +274,54 @@ country_event = { # Discover Primitive Sol
 	id = dmj_sol.4
 	title = "dmj_sol.4.name"
 	desc = "dmj_sol.4.desc"
+	desc = {
+		trigger = {
+			event_target:dmj_terra = {
+				owner = {
+					has_country_flag = humans_late_medieval_age
+				}
+			}
+		}
+		text = "dmj_sol.4.medieval_desc"
+	}
+	desc = {
+		trigger = {
+			event_target:dmj_terra = {
+				owner = {
+					has_country_flag = humans_machine_age
+				}
+			}
+		}
+		text = "dmj_sol.4.machine_age_desc"
+	}
+	desc = {
+		trigger = {
+			event_target:dmj_terra = {
+				owner = {
+					has_country_flag = humans_early_space_age
+				}
+			}
+		}
+		text = "dmj_sol.4.early_space_desc"
+	}
+	desc = {
+		trigger = {
+			event_target:dmj_terra = {
+				owner = {
+					is_country_type = default
+					species = { is_human_species = no }
+				}
+			}
+		}
+		text = "dmj_sol.4.other_empire_owned_desc"
+	}
 	is_triggered_only = yes
 
-	picture = GFX_evt_ship_travel
-	show_sound = event_default
+	picture = GFX_evt_medieval_alien_civilization
+	show_sound = event_inhabited_solar_system
 
 	immediate = {
-		root.capital_scope = {
+		event_target:dmj_spawn_system = {
 			spawn_natural_wormhole = {
 				bypass_type = dmj_shroud_tunnel
 				random_pos = no
@@ -177,25 +329,28 @@ country_event = { # Discover Primitive Sol
 				orbit_distance = 15
 			}
 		}
-		random_system = {
-			limit = {
-				has_star_flag = sol
-				any_system_planet = {
-					has_planet_flag = planet_earth
-				}
-			}
+		event_target:dmj_terra = {
 			spawn_natural_wormhole = {
 				bypass_type = dmj_shroud_tunnel
 				random_pos = no
 				orbit_angle = 360
 			}
-			link_wormholes = root.capital_scope
+			link_wormholes = event_target:dmj_spawn_system
 			set_surveyed = { surveyed = yes surveyor = root }
+		}
+		if = {
+			limit = { NOT = { has_country_flag = reinhardist_empire }
+			country_event = { id = dmj_sol.3 days = 3600 }
 		}
 	}
 
 	option = {
-		name = "dmj_sol.4.a"
+		name = "INTRIGUING"
+		create_point_of_interest = { id = dmj_terra name = "dmj_terra_poi" desc = "dmj_terra_poi_desc" event_chain = dmj_sol_reclamation_chain location = event_target:dmj_terra }
+		if = {
+			limit = { NOT = { has_technology = tech_psionic_theory } }
+			give_technology = { tech = tech_psionic_theory message = no }
+		}
 	}
 }
 
@@ -205,7 +360,7 @@ country_event = { # Discover Nuked Sol
 	desc = "dmj_sol.5.desc"
 	is_triggered_only = yes
 
-	picture = GFX_evt_ship_travel
+	picture = GFX_evt_tomb_world
 	show_sound = event_default
 
 	immediate = {
@@ -217,13 +372,7 @@ country_event = { # Discover Nuked Sol
 				orbit_distance = 15
 			}
 		}
-		random_system = {
-			limit = {
-				has_star_flag = sol
-				any_system_planet = {
-					has_planet_flag = nuked_earth
-				}
-			}
+		event_target:dmj_terra = {
 			spawn_natural_wormhole = {
 				bypass_type = dmj_shroud_tunnel
 				random_pos = no
@@ -232,10 +381,19 @@ country_event = { # Discover Nuked Sol
 			link_wormholes = root.capital_scope
 			set_surveyed = { surveyed = yes surveyor = root }
 		}
+		if = {
+			limit = { NOT = { has_country_flag = reinhardist_empire }
+			country_event = { id = dmj_sol.3 days = 3600 }
+		}
 	}
 
 	option = {
-		name = "dmj_sol.5.a"
+		name = "DISTURBING"
+		create_point_of_interest = { id = dmj_terra name = "dmj_terra_poi" desc = "dmj_terra_poi_desc" event_chain = dmj_sol_reclamation_chain location = event_target:dmj_terra }
+		if = {
+			limit = { NOT = { has_technology = tech_psionic_theory } }
+			give_technology = { tech = tech_psionic_theory message = no }
+		}
 	}
 }
 
@@ -248,8 +406,33 @@ country_event = { # Open Communications with Faulkner's empire
 	picture = GFX_evt_star_chart
 	show_sound = event_alien_signal
 
+	immediate = {
+		root.capital_scope = {
+			spawn_natural_wormhole = {
+				bypass_type = dmj_shroud_tunnel
+				random_pos = no
+				orbit_angle = 360
+				orbit_distance = 15
+			}
+		}
+		event_target:dmj_terra = {
+			spawn_natural_wormhole = {
+				bypass_type = dmj_shroud_tunnel
+				random_pos = no
+				orbit_angle = 360
+			}
+			link_wormholes = root.capital_scope
+			set_surveyed = { surveyed = yes surveyor = root }
+		}
+	}
+
 	option = {
-		name = "dmj_sol.6.a"
+		name = "ONSCREEN"
+		create_point_of_interest = { id = dmj_terra name = "dmj_terra_poi" desc = "dmj_terra_poi_desc" event_chain = dmj_sol_reclamation_chain location = event_target:dmj_terra }
+		if = {
+			limit = { NOT = { has_technology = tech_psionic_theory } }
+			give_technology = { tech = tech_psionic_theory message = no }
+		}
 		country_event = { id = dmj_sol.7 }
 	}
 }
@@ -559,6 +742,9 @@ country_event = { # Reinhard ded
 
 	option = {
 		name = "dmj_sol.11.authoritarian"
+		trigger = {
+			is_authoritarian = yes
+		}
 	}
 }
 
@@ -751,7 +937,33 @@ country_event = { # Faulkner Imprisoned
 	}
 
 	option = {
-		name = "dmj_sol.15.a"
+		name = "dmj_sol.15.evil"
+		exclusive_trigger = {
+			OR = {
+				is_authoritarian = yes
+				is_xenophobe = yes
+			}
+			NOR = {
+				is_egalitarian = yes
+				is_pacifist = yes
+				is_xenophile = yes
+			}
+		}
+	}
+
+	option = {
+		name = "dmj_sol.15.good"
+		exclusive_trigger = {
+			OR = {
+				is_egalitarian = yes
+				is_pacifist = yes
+				is_xenophile = yes
+			}
+			NOR = {
+				is_authoritarian = yes
+				is_xenophobe = yes
+			}
+		}
 	}
 }
 
@@ -765,12 +977,6 @@ country_event = { # Reinhard Reimprisoned
 	show_sound = event_energy_field
 
 	immediate = {
-		event_target:dmj_daniel = {
-			kill_leader = {
-				show_notification = no
-				fire = yes
-			}
-		}
 		every_system = {
 			limit = { has_star_flag = dmj_spawn_system }
 			set_star_class = sc_black_hole
@@ -846,11 +1052,10 @@ country_event = { # Reinhard Reimprisoned
 				}
 			}
 		}
-		remove_country_flag = owns_reinhard
 		remove_global_flag = dmj_reinhard_free
 	}
 
 	option = {
-		name = "dmj_sol.16.a"
+		name = "UNFORTUNATE"
 	}
 }
