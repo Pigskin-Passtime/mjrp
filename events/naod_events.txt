@@ -411,6 +411,7 @@ ship_event = {#Building outpost on Talil
 	}
 		
 	immediate = {
+		set_country_flag = naodeus_chain_started
 		if = {
 			limit = {
 				owner = {NOT = {has_country_flag = naodeus_meeting}}
@@ -428,7 +429,7 @@ ship_event = {#Building outpost on Talil
 				country_event = {id = naod.14 days = 15}
 			}
 		}
-		
+			
 	}
 }
 
@@ -602,7 +603,7 @@ country_event = {#Warning
 #	}
 #}
 
-country_event = {
+country_event = {# Naodeus tells his guys that you are here
 	id = naod.14
 	is_triggered_only = yes
 	trigger = {
@@ -620,33 +621,41 @@ country_event = {
 	}
 }
 
-ship_event = {#Building outpost on Talil without taking a closer look at the pops
-	id = naod.15
-	is_triggered_only = yes
-
-	trigger = {
-		owner = {
-			NOT = {
-				has_country_flag= naod_talil_closer_inspected
-			} 
-		}	
-	}
-
-	title = naod.15.title
-	desc = naod.15.desc
-
-	option = {
-		name = naod.15.option
-	}
-	
-}
+#ship_event = {#Building outpost on Talil without taking a closer look at the pops
+#	id = naod.15
+#	is_triggered_only = yes
+#
+#	trigger = {
+#		
+#		owner = {
+#			NOT = {
+#				has_country_flag= naod_talil_closer_inspected
+#			} 
+#		}	
+#	}
+#
+#	title = naod.15.title
+#	desc = naod.15.desc
+#
+#	option = {
+#		name = naod.15.option
+#	}
+#	
+#}
 
 ### Revenge events 
-planet_event = {
+planet_event = {#planet cracker
 	id = naod.20
 	hide_window = yes
 	is_triggered_only = yes
 	fire_only_once = yes
+
+	trigger = {
+		has_planet_flag = naodeus_planet
+		from.owner = {
+			has_country_flag = naodeus_chain_started
+		}
+	}
 
 	immediate = {
 		from.owner = {
@@ -657,11 +666,18 @@ planet_event = {
 	}
 }
 
-planet_event = {
+planet_event = {#invasion
 	id = naod.21
 	hide_window = yes
 	is_triggered_only = yes
 	fire_only_once = yes
+
+	trigger = {
+		has_planet_flag = naodeus_planet
+		from.owner = {
+			has_country_flag = naodeus_chain_started
+		}
+	}
 
 	immediate = {
 		from = {
@@ -672,11 +688,19 @@ planet_event = {
 	}
 }
 
-planet_event = {
+planet_event = {#bombardment
 	id = naod.22
 	hide_window = yes
 	is_triggered_only = yes
 	fire_only_once = yes
+
+	trigger = {
+		has_planet_flag = naodeus_planet
+		from.owner = {
+			has_country_flag = naodeus_chain_started
+		}
+	}
+
 
 	immediate = {
 		from.owner = {
