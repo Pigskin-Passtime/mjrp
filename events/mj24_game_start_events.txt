@@ -50,7 +50,9 @@ event = {
 		set_global_flag = 	void_governor_allowed
 		set_global_flag = 	wp02_allowed
 		set_global_flag = 	zob_allowed
-		set_global_flag = 	trime_allowed		
+		set_global_flag = 	trime_allowed	
+		set_global_flag = 	ABCReg_allowed
+		set_global_flag = 	soj_allowed	
 	}
 }
 
@@ -1234,6 +1236,75 @@ country_event = {
 		}
 	}
 
+	option = {
+		# Soj by bluecommander
+		trigger = {
+			has_global_flag = soj_allowed
+			# TODO trigger
+		}
+		name = soj_allowed
+		remove_global_flag = soj_allowed
+		country_event = {
+			id = mj24.3
+			scopes = {
+				from = from
+				fromfrom = fromfrom
+			}
+		}
+	}
+	option = {
+		# Soj Blocked
+		trigger = {
+			NOT = {
+				has_global_flag = soj_allowed
+			}
+			# TODO trigger
+		}
+		name = soj_disabled
+		set_global_flag = soj_allowed
+		country_event = {
+			id = mj24.3
+			scopes = {
+				from = from
+				fromfrom = fromfrom
+			}
+		}
+	}
+	
+	option = {
+		# ABCReg by Regunes
+		trigger = {
+			has_global_flag = ABCReg_allowed
+			ABCReg_trigger = yes
+		}
+		name = ABCReg_allowed
+		remove_global_flag = ABCReg_allowed
+		country_event = {
+			id = mj24.3
+			scopes = {
+				from = from
+				fromfrom = fromfrom
+			}
+		}
+	}
+	option = {
+		# ABCReg Blocked
+		trigger = {
+			NOT = {
+				has_global_flag = ABCReg_allowed
+			}
+			ABCReg_trigger = yes
+		}
+		name = ABCReg_disabled
+		set_global_flag = ABCReg_allowed
+		country_event = {
+			id = mj24.3
+			scopes = {
+				from = from
+				fromfrom = fromfrom
+			}
+		}
+	}
 	option = {
 		name = CONFIRM
 		set_global_flag = okay_to_spawn
@@ -2528,6 +2599,86 @@ country_event = {
 			}
 		}
 	}
+	
+	option = {
+		# soj
+		trigger = {
+			has_global_flag = soj_allowed
+			NOT = {
+				has_global_flag = soj_system_spawned
+			}
+		}
+		name = spawn_soj_system
+		if = {
+			limit = {
+				NOT = {
+					has_global_flag = soj_system_spawned
+				}
+			}
+			capital_scope = {
+				solar_system = {
+					random_neighbor_system = {
+						limit = {
+							distance = {
+								min_jumps = 1
+								max_jumps = 3
+							}
+						}
+						spawn_soj_system = yes
+					}
+				}
+			}
+		}
+		else = {
+			country_event = {
+				id = mj24.4
+				scopes = {
+					from = from
+					fromfrom = fromfrom
+				}
+			}
+		}
+	}
+	
+	option = {
+		# ABCReg
+		trigger = {
+			has_global_flag = ABCReg_allowed
+			NOT = {
+				has_global_flag = ABCReg_system_spawned
+			}
+		}
+		name = ABCReg_spawn_bubbles_leader
+		if = {
+			limit = {
+				NOT = {
+					has_global_flag = ABCReg_system_spawned
+				}
+			}
+			capital_scope = {
+				solar_system = {
+					random_neighbor_system = {
+						limit = {
+							distance = {
+								min_jumps = 1
+								max_jumps = 3
+							}
+						}
+						ABCReg_spawn_bubbles_leader = yes
+					}
+				}
+			}
+		}
+		else = {
+			country_event = {
+				id = mj24.4
+				scopes = {
+					from = from
+					fromfrom = fromfrom
+				}
+			}
+		}
+	}
 }
 
 country_event = {
@@ -3380,6 +3531,59 @@ country_event = {
 						}
 					}
 				}
+				10 = {
+					# soj
+					modifier = {
+						factor = 0
+						NOT = {
+							has_global_flag = soj_allowed
+						}
+					}
+					modifier = {
+						factor = 0
+						has_global_flag = soj_system_spawned
+					}
+					random_system = {
+						limit = {
+							NOT = {
+								is_in_cluster = leader_spawn
+							}
+						}
+						spawn_soj_system = yes
+						create_cluster = {
+							id = leader_spawn
+							radius = 150
+							center = THIS
+						}
+					}
+				}
+				10 = {
+					# ABCReg
+					modifier = {
+						factor = 0
+						NOT = {
+							has_global_flag = ABCReg_allowed
+						}
+					}
+					modifier = {
+						factor = 0
+						has_global_flag = ABCReg_system_spawned
+					}
+					random_system = {
+						limit = {
+							NOT = {
+								is_in_cluster = leader_spawn
+							}
+						}
+						ABCReg_spawn_bubbles_leader = yes
+						create_cluster = {
+							id = leader_spawn
+							radius = 150
+							center = THIS
+						}
+					}
+				}
+
 
 			}
 		}
@@ -4371,6 +4575,73 @@ country_event = {
 								}
 							}
 							spawn_celestial = yes
+						}
+					}
+				}
+			}
+		
+			10 = {
+				# spawn_soj_system
+				modifier = {
+					factor = 0
+					NOT = {
+						has_global_flag = soj_allowed
+					}
+				}
+				modifier = {
+					factor = 0
+					has_global_flag = soj_system_spawned
+				}
+
+				modifier = {
+					factor = 0
+					always = no
+					# TODO trigger
+				}
+				capital_scope = {
+					solar_system = {
+						random_neighbor_system = {
+							limit = {
+								distance = {
+									min_jumps = 1
+									max_jumps = 3
+								}
+							}
+							spawn_soj_system = yes
+						}
+					}
+				}
+			}
+			
+			10 = {
+				# ABCReg_spawn_bubbles_leader
+				modifier = {
+					factor = 0
+					NOT = {
+						has_global_flag = ABCReg_allowed
+					}
+				}
+				modifier = {
+					factor = 0
+					has_global_flag = ABCReg_system_spawned
+				}
+
+				modifier = {
+					factor = 0
+					NOT = {
+						ABCReg_trigger = yes
+					}
+				}
+				capital_scope = {
+					solar_system = {
+						random_neighbor_system = {
+							limit = {
+								distance = {
+									min_jumps = 1
+									max_jumps = 3
+								}
+							}
+							ABCReg_spawn_bubbles_leader = yes
 						}
 					}
 				}
