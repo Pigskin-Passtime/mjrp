@@ -34,11 +34,13 @@ ship_event = {
 	is_triggered_only = yes
 	diplomatic_title = BLANK_STRING
 	trigger = {
+		this.owner = {
+			is_ai = no
+		}
 		from = {
 			has_planet_flag = trime_first_timer
 			has_planet_flag = trime_primitive_rewind_world
 		}
-		
 	}
 	immediate = {
 		from = {
@@ -119,7 +121,7 @@ ship_event = {
 			owner = {
 				country_event = {
 					id = trime.21
-					days = 30
+					days = 90
 				}
 			}
 		}
@@ -355,6 +357,7 @@ country_event = {
 				value = 137
 			}
 			set_global_flag = trime_time_lorddied
+			set_global_flag = trime_stage1
 		}
 	}
 }
@@ -453,6 +456,11 @@ situation_event = {
 		name = trime.9.b
 		#response_text = trime.1.d.response
 		#is_dialog_only = yes
+		allow = {
+			owner = {
+				has_policy_flag = interference_aggressive
+			}
+		}
 		abort_situation = this
 		#hidden_effect = {
 		owner = {
@@ -478,7 +486,7 @@ country_event = {
 	show_sound = event_celebration
 	#location = event_target:trime_primitive_rewind_world
 	trigger = {
-		has_event_chain = trime_buildtemple
+		#has_event_chain = trime_buildtemple
 	}
 	is_triggered_only = yes
 	event_window_type = leader_recruit
@@ -493,7 +501,7 @@ country_event = {
 			create_country = {
 				name = "NAME_Unknown"
 				type = global_event
-				auto_delete = yes
+				#auto_delete = yes
 				flag = {
 					icon = {
 						category = "special"
@@ -558,16 +566,16 @@ country_event = {
 						save_global_event_target_as = trime_time_lord
 						set_leader_flag = legendary_leader
 						set_leader_flag = trime_time_lord
-						set_owner = root
-						exile_leader_as = trime_time_lord
+						#set_owner = root
+						#exile_leader_as = trime_time_lord
 					}
 				}
-				last_created_leader = {
-					#add_skill_without_trait_selection = 7
-					set_variable = {
-						which = trime_leader_lifespan
-						value = 137
-					}
+				event_target:trime_time_lord = {
+					add_skill = 6
+					#set_variable = {
+					#	which = trime_leader_lifespan
+					##	value = 137
+					#}
 					remove_all_traits = yes
 					add_trait = trime_leader_trait_legendary_timeskipper
 					add_trait = trime_leader_trait_legendary_houtglasskeeper
@@ -650,12 +658,12 @@ country_event = {
 				NOT = {
 					has_country_flag = trime_claimed3
 				}
-				
-			}add_monthly_resource_mult = {
-					resource = unity
-					value = 12
-				}
-				set_country_flag = trime_claimed3
+			}
+			add_monthly_resource_mult = {
+				resource = unity
+				value = 12
+			}
+			set_country_flag = trime_claimed3
 		}
 		name = trime.11.d
 		response_text = trime.11.d.response
@@ -667,99 +675,26 @@ country_event = {
 		tag = hire_leader
 		#custom_tooltip = trime.11.b.custom_tooltip		# Azaryn joins
 		sound = event_announcement
-		this.owner = {
+		#this.owner = {
+		#	add_relic = r_trime_houglass
+		#	if = {
+		#		limit = {
+		#			has_event_chain = trime_buildtemple
+		#		}
+		#		end_event_chain = trime_buildtemple
+		#	}
+		#}
+		trime_endallevents = yes
+		remove_country_flag = trime_claimed1
+		remove_country_flag = trime_claimed2
+		remove_country_flag = trime_claimed3
+		#hidden_effect = {
+			event_target:trime_time_lord = {
+				set_owner = root
+			}
+			
 			add_relic = r_trime_houglass
-			if = {
-				limit = {
-					has_event_chain = trime_buildtemple
-				}
-				end_event_chain = trime_buildtemple
-			}
-		}
-		hidden_effect = {
-			#this.owner = {
-			event_target:trime_country = {
-				create_species = {
-					name = "NAME_Unknown"
-					class = PARAGON
-					portrait = GFX_trime_time_lord
-					namelist = "PRT1"
-					traits = {
-						trait = trait_decadent
-						trait = trait_talented
-						trait = trait_thrifty
-						#trait = trait_weak
-						#trait = trait_plantoid_budding
-					}
-					effect = {
-						save_event_target_as = trime_species
-					}
-				}
-				create_leader = {
-					species = event_target:trime_species
-					event_leader = yes
-					class = scientist
-					name = "NAME_trime_time_lord"
-					skill = 1
-					randomize_traits = no
-					skip_background_generation = yes
-					background_ethic = ethic_authoritarian
-					custom_catch_phrase = trime_time_lord_catchphrase
-					custom_description = trime_time_lord_backstory
-					can_manually_change_location = yes
-					#traits = {
-					#	trait = trime_leader_trait_legendary_timeskipper
-					#trait = leader_trait_xeno_cataloger
-					#trait = leader_trait_educator
-					#	trait = leader_trait_lavish_lifestyle_2
-					#	trait = leader_trait_adaptable_2
-					#	trait = subclass_scientist_councilor
-					#}
-					gender = male
-					set_age = 137
-					immortal = yes
-					effect = {
-						save_global_event_target_as = trime_time_lord
-						set_leader_flag = legendary_leader
-						set_leader_flag = trime_time_lord
-						set_owner = root
-						exile_leader_as = trime_time_lord
-					}
-				}
-				last_created_leader = {
-					add_skill_without_trait_selection = 6
-					#set_variable = {
-					#	which = trime_leader_lifespan
-					##	value = 137
-					#}
-					remove_all_traits = yes
-					add_trait = trime_leader_trait_legendary_timeskipper
-					add_trait = trime_leader_trait_legendary_houtglasskeeper
-					add_trait = leader_trait_lavish_lifestyle_2
-					add_trait = leader_trait_adaptable_2
-					add_trait = subclass_scientist_governor
-					add_trait = leader_trait_great_researcher
-					set_owner = root
-				}
-			}
-			#clone_leader = {
-			#	target = event_target:trime_time_lord
-			#}
-			#	last_created_leader = {
-			#		set_leader_flag = legendary_leader
-			# save_global_event_target_as = trime_time_lord
-			#		#set_leader_flag = immune_to_negative_traits
-			#	set_leader_flag = trime_time_lord
-			#		add_skill = 7
-			#	set_variable = {
-			#		which = trime_leader_lifespan
-			#		value = 137
-			#	}
-			#	set_owner = root
-			#
-			#}
-			#}
-		}
+		#}
 	}
 	option = {
 		# DISMISS
@@ -775,20 +710,32 @@ country_event = {
 				}
 			}
 		}
-		this.owner = {
-			if = {
-				limit = {
-					has_event_chain = trime_buildtemple
-				}
-				end_event_chain = trime_buildtemple
-			}
-		}
-	}
-	after = {
 		trime_endallevents = yes
 		remove_country_flag = trime_claimed1
 		remove_country_flag = trime_claimed2
 		remove_country_flag = trime_claimed3
+		#this.owner = {
+		#	if = {
+		#		limit = {
+		#			has_event_chain = trime_buildtemple
+		#		}
+		#		end_event_chain = trime_buildtemple
+		#	}
+		#}
+	}
+	after = {
+	#	trime_endallevents = yes
+	#	remove_country_flag = trime_claimed1
+	#	remove_country_flag = trime_claimed2
+	#	remove_country_flag = trime_claimed3
+	hidden_effect = {
+		event_target:trime_country = {
+		destroy_country = yes
+		set_global_flag =  trime_stage1
+	}
+	}
+	
+	
 	}
 }
 
@@ -1009,7 +956,7 @@ country_event = {
 			resource = physics_research
 			value = 4
 		}
-		end_event_chain = trime_decoded_messages_chain
+		#end_event_chain = trime_decoded_messages_chain
 		hidden_effect = {
 			event_target:trime_killhim = {
 				kill_leader = {
@@ -1031,7 +978,7 @@ country_event = {
 				}
 			}
 		}
-		end_event_chain = trime_decoded_messages_chain
+		#end_event_chain = trime_decoded_messages_chain
 	}
 }
 
