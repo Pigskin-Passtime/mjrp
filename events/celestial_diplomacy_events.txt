@@ -23,11 +23,17 @@ country_event = {
 			limit = { has_country_flag = celestial_wayfarer_awol }
 			country_event = {
 				id = celestial_diplo.3
+				scopes = {
+					from = root
+				}
 			}
 		}
 		else = {
 			country_event = {
 				id = celestial_diplo.1
+				scopes = {
+					from = root
+				}
 			}
 		}
 	}
@@ -80,8 +86,6 @@ country_event = {
 
 	after = {
 		remove_country_flag = celestial_diplo_opened
-		hidden_effect = {
-        }
 	}
 
 	option = {
@@ -90,6 +94,9 @@ country_event = {
 		hidden_effect = {
 			country_event = {
 				id = celestial_diplo.2
+				scopes = {
+					from = from
+				}
 			}
 		}
 		allow = {
@@ -180,32 +187,82 @@ country_event = {
 					has_country_flag = celestial_relic_quest6_selected
 				}
 			}
+			if = {
+				limit = {
+					OR = {
+						has_country_flag = celestial_emporium_relic_1
+						has_country_flag = celestial_emporium_relic_2
+						has_country_flag = celestial_emporium_relic_4
+						has_country_flag = celestial_emporium_relic_6
+					}
+				}
+				has_resource = {
+					type = energy
+					amount >= 5000
+				}
+			}
+			else_if = {
+				limit = {
+					has_country_flag = celestial_relic_button3
+				}
+				has_resource = {
+					type = alloys
+					amount >= 2000
+				}
+			}
+			else_if = {
+				limit = {
+					has_country_flag = celestial_relic_button5
+				}
+				has_resource = {
+					type = minerals
+					amount >= 4000
+				}
+			}
 		}
 		hidden_effect = {
 			# set country flag to make slot closed and add effect
 			if = {
 				limit = { has_country_flag = celestial_emporium_relic_1 }
 				set_country_flag = celestial_relic_quest1_selected
+				add_resource = {
+					energy = -5000
+				}
 			}
 			else_if = {
 				limit = { has_country_flag = celestial_emporium_relic_2 }
 				set_country_flag = celestial_relic_quest2_selected
+				add_resource = {
+					energy = -5000
+				}
 			}
 			else_if = {
 				limit = { has_country_flag = celestial_emporium_relic_3 }
 				set_country_flag = celestial_relic_quest3_selected
+				add_resource = {
+					alloys = -2000
+				}
 			}
 			else_if = {
 				limit = { has_country_flag = celestial_emporium_relic_4 }
 				set_country_flag = celestial_relic_quest4_selected
+				add_resource = {
+					energy = -5000
+				}
 			}
 			else_if = {
 				limit = { has_country_flag = celestial_emporium_relic_5 }
 				set_country_flag = celestial_relic_quest5_selected
+				add_resource = {
+					minerals = -4000
+				}
 			}
 			else_if = {
 				limit = { has_country_flag = celestial_emporium_relic_6 }
 				set_country_flag = celestial_relic_quest6_selected
+				add_resource = {
+					energy = -5000
+				}
 			}
 		}
 		random_system_within_border = {

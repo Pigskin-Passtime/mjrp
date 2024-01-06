@@ -613,8 +613,21 @@ country_event = {
 
 	immediate = {
 		set_country_flag = celestial_cosmic_emporium_established
+		set_country_flag = celestial_cosmic_emporium_active
 		create_cosmic_emporium = yes
 		shuffle_cosmic_emporium_items = yes
+
+		country_event = {
+			id = celestial_setup.21
+			days = 3601
+		}
+
+		# Set flags for the timer in the custom menu
+		set_country_flag = celestial_emporium_years_10
+		country_event = {
+			id = celestial_setup.22
+			days = 360
+		}
 	}
 
 	option = {
@@ -632,5 +645,202 @@ country_event = {
 		name = "celestial_setup.20.b"
 		custom_gui = "enclave_caravaneer_option"
 		custom_tooltip = celestial_cosmic_emporium_available
+	}
+}
+
+# Cosmic Emporium Reshuffle
+country_event = {
+	id = celestial_setup.21
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	trigger = {
+		has_country_flag = celestial_cosmic_emporium_active
+	}
+
+	immediate = {
+		shuffle_cosmic_emporium_items = yes
+		country_event = {
+			id = celestial_setup.21
+			days = 3601
+		}
+
+		# Set flags for the timer in the custom menu
+		set_country_flag = celestial_emporium_years_10
+		country_event = {
+			id = celestial_setup.22
+			days = 360
+		}
+
+		create_message = {
+			type = MESSAGE_EMPORIUM_SHUFFLED
+			localization = MESSAGE_EMPORIUM_SHUFFLED
+			days = 30
+			target = root
+		}
+	}
+}
+
+# Update Yearly Flag for Timer
+country_event = {
+	id = celestial_setup.22
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	trigger = {
+		has_country_flag = celestial_cosmic_emporium_active
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				has_country_flag = celestial_emporium_years_10
+			}
+			remove_country_flag = celestial_emporium_years_10
+			set_country_flag = celestial_emporium_years_9
+			country_event = {
+				id = celestial_setup.22
+				days = 360
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = celestial_emporium_years_9
+			}
+			remove_country_flag = celestial_emporium_years_9
+			set_country_flag = celestial_emporium_years_8
+			country_event = {
+				id = celestial_setup.22
+				days = 360
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = celestial_emporium_years_8
+			}
+			remove_country_flag = celestial_emporium_years_8
+			set_country_flag = celestial_emporium_years_7
+			country_event = {
+				id = celestial_setup.22
+				days = 360
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = celestial_emporium_years_7
+			}
+			remove_country_flag = celestial_emporium_years_7
+			set_country_flag = celestial_emporium_years_6
+			country_event = {
+				id = celestial_setup.22
+				days = 360
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = celestial_emporium_years_6
+			}
+			remove_country_flag = celestial_emporium_years_6
+			set_country_flag = celestial_emporium_years_5
+			country_event = {
+				id = celestial_setup.22
+				days = 360
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = celestial_emporium_years_5
+			}
+			remove_country_flag = celestial_emporium_years_5
+			set_country_flag = celestial_emporium_years_4
+			country_event = {
+				id = celestial_setup.22
+				days = 360
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = celestial_emporium_years_4
+			}
+			remove_country_flag = celestial_emporium_years_4
+			set_country_flag = celestial_emporium_years_3
+			country_event = {
+				id = celestial_setup.22
+				days = 360
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = celestial_emporium_years_3
+			}
+			remove_country_flag = celestial_emporium_years_3
+			set_country_flag = celestial_emporium_years_2
+			country_event = {
+				id = celestial_setup.22
+				days = 360
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = celestial_emporium_years_2
+			}
+			remove_country_flag = celestial_emporium_years_2
+			set_country_flag = celestial_emporium_years_1
+			country_event = {
+				id = celestial_setup.22
+				days = 360
+			}
+		}
+		else = {
+			remove_country_flag = celestial_emporium_years_1
+		}
+	}
+}
+
+# Update Yearly Flag for Store Cooldown
+country_event = {
+	id = celestial_setup.23
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	trigger = {
+		has_country_flag = celestial_cosmic_emporium_active
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				has_country_flag = cosmic_emporium_cooldown_years_3
+			}
+			remove_country_flag = cosmic_emporium_cooldown_years_3
+			set_country_flag = cosmic_emporium_cooldown_years_2
+			country_event = {
+				id = celestial_setup.23
+				days = 360
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = cosmic_emporium_cooldown_years_2
+			}
+			remove_country_flag = cosmic_emporium_cooldown_years_2
+			set_country_flag = cosmic_emporium_cooldown_years_1
+			country_event = {
+				id = celestial_setup.23
+				days = 360
+			}
+		}
+		else = {
+			remove_country_flag = cosmic_emporium_cooldown_years_1
+			create_message = {
+				type = MESSAGE_EMPORIUM_COOLDOWN
+				localization = MESSAGE_EMPORIUM_COOLDOWN
+				days = 30
+				target = root
+			}
+		}
 	}
 }

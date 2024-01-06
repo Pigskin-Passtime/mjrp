@@ -31,8 +31,8 @@ celestial_crystal_gate = {
 }
 
 celestial_harmonic_resonator = {
-	entity = "plantoid_01_military_station_large_entity"
-	construction_entity = "plantoid_01_military_station_large_construction_entity"
+	entity = celestial_resonator_entity
+	construction_entity = celestial_resonator_entity
 	portrait = "GFX_megastructure_resonator_background"
 	place_entity_on_planet_plane = no
 	build_outside_gravity_well = yes
@@ -57,31 +57,11 @@ celestial_harmonic_resonator = {
 	}
 
 	possible = {
-		exists = starbase
-		# custom_tooltip = {
-		# 	fail_text = "requires_inside_border_or_subject"
-		# 	OR = {
-		# 		is_inside_border = from
-		# 		AND = {
-		# 			exists = owner
-		# 			owner = {
-		# 				is_subject = yes
-		# 				overlord = { is_same_value = from }
-		# 			}
-		# 		}
-		# 	}
-		# }
+		# exists = starbase
 		custom_tooltip = {
-			fail_text = "requires_surveyed_system" # or is in my subject's territory
+			fail_text = "requires_inside_border_or_subject"
 			OR = {
-				NOT = {
-					any_system_planet = {
-						is_surveyed = {
-							who = prev.from
-							status = no
-						}
-					}
-				}
+				is_inside_border = from
 				AND = {
 					exists = owner
 					owner = {
@@ -91,6 +71,26 @@ celestial_harmonic_resonator = {
 				}
 			}
 		}
+		# custom_tooltip = {
+		# 	fail_text = "requires_surveyed_system" # or is in my subject's territory
+		# 	OR = {
+		# 		NOT = {
+		# 			any_system_planet = {
+		# 				is_surveyed = {
+		# 					who = prev.from
+		# 					status = no
+		# 				}
+		# 			}
+		# 		}
+		# 		AND = {
+		# 			exists = owner
+		# 			owner = {
+		# 				is_subject = yes
+		# 				overlord = { is_same_value = from }
+		# 			}
+		# 		}
+		# 	}
+		# }
 		custom_tooltip = {
 			fail_text = "requires_no_existing_resonator"
 			NOR = {
@@ -117,11 +117,8 @@ celestial_harmonic_resonator = {
 	on_build_unqueued = {
 	}
 	on_build_complete = {
-		from = {
-			country_event = { id = celestial.5 }
-		}
 		root = {
-			system_event = { id = celestial.6 }
+			system_event = { id = celestial.5 } # Pacification
 		}
 	}
 }

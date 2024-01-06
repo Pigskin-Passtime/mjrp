@@ -13,8 +13,6 @@ namespace = celestial_chain
 # 7 - Remnants of the End
 # 8 - The Otherworldly Crystal
 
-# todo: add trigger to event chain 1 and 2
-
 ## Recurring Events
 
 # Create Archaeological Site for Mission
@@ -492,6 +490,7 @@ country_event = {
 	}
 	
 	immediate = {
+		remove_country_flag = celestial_cosmic_emporium_active
 		event_target:celestial_awol_leader = {
 			kill_leader = {
 				show_notification = no
@@ -809,11 +808,12 @@ country_event = {
 
 	trigger = {
 		event_target:celestial_leader = {
-			leader_age > 320	# Change to alter how long the Wayfarer remains
+			leader_age >= 250
 		}
 	}
 
 	immediate = {
+		set_country_flag = celestial_eventchain_2_begun
 		country_event = {
 			id = celestial_chain.202
 		}
@@ -1084,6 +1084,7 @@ ship_event = {
 		name = "celestial_chain.208.a" # Leave.
 		owner = {
 			set_country_flag = celestial_invaders_left
+			abort_special_project = { type = celestial_unbidden_rift_sp location = event_target:celestial_unbidden_rift }
 		}
 		hidden_effect = {
 			ship_event = {
@@ -1135,6 +1136,20 @@ ship_event = {
 				remove_hyperlane = {
 					from = this
 					to = prev
+				}
+			}
+			star = {
+				create_ambient_object = {
+					type = "extradimensional_2"
+					location = this
+				}
+				last_created_ambient_object = {
+					set_ambient_object_flag = celestial_extradimensional_system_effect
+					set_location = {
+						target = prev
+						distance = 0
+						angle = random
+					}
 				}
 			}
 		}
@@ -1290,6 +1305,7 @@ country_event = {
 				target = this
 			}
 		}
+		abort_special_project = { type = celestial_unbidden_rift_sp location = event_target:celestial_unbidden_rift }
 	}
 
 	option = {
@@ -1429,7 +1445,7 @@ country_event = {
 # sp event 2 - construction ship
 country_event = {
 	id = celestial_chain.214
-	title = "celestial_chain.213.name"
+	title = "celestial_chain.214.name"
 	desc = "celestial_chain.214.desc"
 	picture = GFX_evt_wormhole
 	is_triggered_only = yes
@@ -1461,7 +1477,7 @@ country_event = {
 # sp event 3 - fleet
 country_event = {
 	id = celestial_chain.215
-	title = "celestial_chain.213.name"
+	title = "celestial_chain.215.name"
 	desc = "celestial_chain.215.desc"
 	picture = GFX_evt_astral_rift_ancient_battlegrounds
 	is_triggered_only = yes
@@ -1517,7 +1533,7 @@ country_event = {
 # sp event 2 - construction ship [completed]
 country_event = {
 	id = celestial_chain.217
-	title = "celestial_chain.213.name"
+	title = "celestial_chain.214.name"
 	desc = "celestial_chain.217.desc"
 	picture = GFX_evt_wormhole
 	is_triggered_only = yes
@@ -1541,7 +1557,7 @@ country_event = {
 # sp event 3 - fleet [completed]
 country_event = {
 	id = celestial_chain.218
-	title = "celestial_chain.213.name"
+	title = "celestial_chain.215.name"
 	desc = "celestial_chain.218.desc"
 	picture = GFX_evt_astral_rift_ancient_battlegrounds
 	is_triggered_only = yes
@@ -1630,6 +1646,17 @@ country_event = {
 	
 	#todo: alter outcome by counting ships
 	immediate = {
+		random_system = {
+			limit = {
+				has_star_flag = celestial_invader_system
+			}
+			every_system_ambient_object = {
+				limit = {
+					has_ambient_object_flag = celestial_extradimensional_system_effect
+				}
+				destroy_ambient_object = this
+			}
+		}
 		random_list = {
 			85 = {
 				country_event = {
@@ -1705,9 +1732,33 @@ country_event = {
 		response_text = "celestial_chain.223.b.reply"
 	}
 	option = {
-		name = "celestial_chain.223.c"
+		name = "celestial_chain.223.c" # Keep them working.
 		custom_gui = "enclave_caravaneer_option"
 		response_text = "celestial_chain.223.c.reply"
+		end_event_chain = celestial_the_invaders
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier4unityreward
+		}
+		if = {
+			limit = { is_gestalt = yes }
+			add_modifier = {
+				modifier = celestial_wayfarer_victory_gestalt
+			}
+		}
+		else= {
+			add_modifier = {
+				modifier = celestial_wayfarer_victory
+			}
+		}
+		set_country_flag = celestial_completed
+		set_country_flag = celestial_outcome_1
+		set_country_flag = celestial_outcome_1_kept_leader
+	}
+	option = {
+		name = "celestial_chain.223.d" # Let them go.
+		custom_gui = "enclave_caravaneer_option"
+		response_text = "celestial_chain.223.d.reply"
 		end_event_chain = celestial_the_invaders
 		event_target:celestial_fleet = {
 			set_fleet_settings = {
@@ -1719,9 +1770,17 @@ country_event = {
 			resource = unity
 			value = @tier4unityreward
 		}
-		add_relic = r_celestial_compass_alive # todo: another variant?
-		add_modifier = {
-			modifier = celestial_wayfarer_victory
+		add_relic = r_celestial_compass_final
+		if = {
+			limit = { is_gestalt = yes }
+			add_modifier = {
+				modifier = celestial_wayfarer_victory_gestalt
+			}
+		}
+		else= {
+			add_modifier = {
+				modifier = celestial_wayfarer_victory
+			}
 		}
 		hidden_effect = {
 			event_target:celestial_leader = {
@@ -1800,7 +1859,15 @@ country_event = {
 			resource = energy
 			value = @tier4materialreward
 		}
-		add_relic = r_celestial_compass_alive # todo: another variant?
+		add_monthly_resource_mult = {
+			resource = minerals
+			value = @tier4materialreward
+		}
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier2unityreward
+		}
+		add_relic = r_celestial_compass_final
 		add_modifier = {
 			modifier = celestial_wayfarer_sacrifice
 		}
@@ -1811,6 +1878,7 @@ country_event = {
 				}
 			}
 		}
+		remove_country_flag = celestial_cosmic_emporium_active
 		set_country_flag = celestial_completed
 		set_country_flag = celestial_outcome_2
 	}
@@ -2169,7 +2237,7 @@ fleet_event = {
 	id = celestial_chain.602
 	title = "celestial_chain.602.name"
 	desc = celestial_chain.602.desc
-	picture = GFX_evt_todo # todo
+	picture = GFX_evt_shrouded_planet
 	show_sound = event_default
 	location = from
 
@@ -2189,7 +2257,7 @@ fleet_event = {
 	id = celestial_chain.603
 	title = "celestial_chain.603.name"
 	desc = celestial_chain.603.desc
-	picture = GFX_evt_todo # todo
+	picture = GFX_evt_society_cache
 	show_sound = event_default
 	location = from
 
@@ -2209,7 +2277,7 @@ fleet_event = {
 	id = celestial_chain.604
 	title = "celestial_chain.604.name"
 	desc = celestial_chain.604.desc
-	picture = GFX_evt_todo # todo
+	picture = GFX_evt_situation_the_seal
 	show_sound = event_default
 	location = from
 
@@ -2229,7 +2297,7 @@ fleet_event = {
 	id = celestial_chain.605
 	title = "celestial_chain.605.name"
 	desc = celestial_chain.605.desc
-	picture = GFX_evt_todo # todo
+	picture = GFX_evt_shroudwalker_enclave
 	show_sound = event_default
 	location = from
 
@@ -2249,7 +2317,7 @@ fleet_event = {
 	id = celestial_chain.606
 	title = "celestial_chain.606.name"
 	desc = celestial_chain.606.desc
-	picture = GFX_evt_todo # todo
+	picture = GFX_evt_formless_system
 	show_sound = event_default
 	location = from
 
@@ -2283,7 +2351,7 @@ fleet_event = {
 	id = celestial_chain.702
 	title = "celestial_chain.702.name"
 	desc = celestial_chain.702.desc
-	picture = GFX_evt_todo # todo
+	picture = GFX_evt_astral_rift_ancient_battlegrounds
 	show_sound = event_default
 	location = from
 
@@ -2303,12 +2371,13 @@ fleet_event = {
 	id = celestial_chain.703
 	title = "celestial_chain.703.name"
 	desc = celestial_chain.703.desc
-	picture = GFX_evt_todo # todo
+	picture = GFX_evt_technosphere
 	show_sound = event_default
 	location = from
 
 	archaeology = yes
 
+	# todo: alt text for if technosphere has been found, perhaps another option
 	is_triggered_only = yes
 
 	option = {
@@ -2323,7 +2392,7 @@ fleet_event = {
 	id = celestial_chain.704
 	title = "celestial_chain.704.name"
 	desc = celestial_chain.704.desc
-	picture = GFX_evt_todo # todo
+	picture = GFX_evt_binary_stars
 	show_sound = event_default
 	location = from
 
@@ -2343,7 +2412,7 @@ fleet_event = {
 	id = celestial_chain.705
 	title = "celestial_chain.705.name"
 	desc = celestial_chain.705.desc
-	picture = GFX_evt_todo # todo
+	picture = GFX_evt_astral_rift_subnautical_1
 	show_sound = event_default
 	location = from
 
@@ -2363,7 +2432,7 @@ fleet_event = {
 	id = celestial_chain.706
 	title = "celestial_chain.706.name"
 	desc = celestial_chain.706.desc
-	picture = GFX_evt_todo # todo
+	picture = GFX_evt_astral_rift_entangled_dark_matter_2
 	show_sound = event_default
 	location = from
 
@@ -2375,11 +2444,6 @@ fleet_event = {
 		name = celestial_chain.706.a
 		owner = {
 			add_relic = r_celestial_star_core
-			set_variable = {
-				which = celestial_core_module_uses
-				value = 5
-				# todo: change value depending on choices
-			}
 		}
 		hidden_effect = {
 			fleet_event = {
@@ -2390,19 +2454,23 @@ fleet_event = {
 				remove_country_flag = celestial_emporium_relic_3
 				remove_country_flag = celestial_relic_quest3_selected
 				set_country_flag = celestial_relic_quest3_completed
+				set_variable = {
+					which = celestial_core_module_uses
+					value = 6
+				}
 			}
 		}
 	}
 }
 
-## 8 - The Otherwordly Crystal
+## 8 - The Otherworldly Crystal
 
 # Part I
 fleet_event = { 
 	id = celestial_chain.802
 	title = "celestial_chain.802.name"
 	desc = celestial_chain.802.desc
-	picture = GFX_evt_todo # todo
+	picture = GFX_evt_crystal_sphere
 	show_sound = event_default
 	location = from
 
@@ -2422,7 +2490,7 @@ fleet_event = {
 	id = celestial_chain.803
 	title = "celestial_chain.803.name"
 	desc = celestial_chain.803.desc
-	picture = GFX_evt_todo # todo
+	picture = GFX_evt_crystal_mining
 	show_sound = event_default
 	location = from
 
@@ -2442,7 +2510,7 @@ fleet_event = {
 	id = celestial_chain.804
 	title = "celestial_chain.804.name"
 	desc = celestial_chain.804.desc
-	picture = GFX_evt_todo # todo
+	picture = GFX_evt_crystal_asteroids
 	show_sound = event_default
 	location = from
 
@@ -2462,7 +2530,7 @@ fleet_event = {
 	id = celestial_chain.805
 	title = "celestial_chain.805.name"
 	desc = celestial_chain.805.desc
-	picture = GFX_evt_todo # todo
+	picture = GFX_evt_space_crystals
 	show_sound = event_default
 	location = from
 
@@ -2482,7 +2550,7 @@ fleet_event = {
 	id = celestial_chain.806
 	title = "celestial_chain.806.name"
 	desc = celestial_chain.806.desc
-	picture = GFX_evt_todo # todo
+	picture = GFX_evt_space_monster
 	show_sound = event_default
 	location = from
 
