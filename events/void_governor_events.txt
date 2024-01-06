@@ -1,3 +1,9 @@
+
+#####################################
+# void_governor_events.txt          #
+# Contributor: DaGinger.			#
+#####################################
+
 namespace = vg
 
 ship_event = {
@@ -11,19 +17,34 @@ ship_event = {
 	is_triggered_only = yes
 
 	option = {
-		name = "vg.1.a"
-		if = { limit = { owner = { NOT = { has_civic = civic_fanatic_purifiers }}}
-			enable_special_project = {
-				name = "void_governor_special_project"
-				location = from
-				owner = root.owner
+		trigger = {
+			owner = { 
+				NOR = {
+					has_civic = civic_fanatic_purifiers
+					is_gestalt = yes
+				}
 			}
-		else = {
-			custom_tooltip = "You cannot progress Inanis of the Voids story as a fanatical purifer."
-		}			
 		}
+		name = "vg.1.a"
+		enable_special_project = {
+			name = "void_governor_special_project"
+			location = from
+			owner = root.owner
+		}			
+	}
+	option = {
+		trigger = {
+			owner = { 
+				OR = {
+					has_civic = civic_fanatic_purifiers
+					is_gestalt = yes
+				}
+			}
+		}
+		name = "vg.1.fail"
 	}
 }
+
 
 
 # Special Project Complete
@@ -114,6 +135,7 @@ fleet_event = {
 #			}
 #			create_archaeological_site = void_governor_black_hole 
 #		}
+
 		event_target:void_governor_crash_site = {
 			hidden_effect = {
 				set_surveyed = {
@@ -179,10 +201,9 @@ fleet_event = {
 
 	option = {
 		name = vg.3.a
-	}
-
+		owner = { end_event_chain = "void_governor_chain" }
+	}	
 }
-
 
 # Void Governor Spawn Event
 
@@ -389,8 +410,8 @@ country_event = {
 	option = { # HIRE
 		name = HIRE
 		tag = hire_leader
-		custom_tooltip = "§HInanis of the Void§! joins our Empire as a Official!"
-		#sound = par_azaryn_hire
+		#custom_tooltip = "§HInanis of the Void§! joins our Empire as a Official!"
+		custom_tooltip = vg.101.HIRE.custom_tooltip
 
 		hidden_effect = {
 			random_owned_planet = {
@@ -455,7 +476,6 @@ country_event = {
 	}
 
 	immediate = {
-		log = "inanis death event"
 		event_target:inanis_leader = {
 			kill_leader = { show_notification = no }
 		}
@@ -466,5 +486,64 @@ country_event = {
 		remove_country_flag = inanis_lore_dialog_step_4
 		remove_country_flag = inanis_lore_dialog_step_5
 		remove_country_flag = inanis_lore_dialog_step_6
+		every_owned_planet = {
+			remove_building = building_void_governor_research	
+		}	
 	}
+}
+
+country_event = {
+	id = vg.103
+	#title = "vg.103.name"
+	#desc = vg.103.desc
+	#picture = GFX_evt_sabotaged_ship
+	#show_sound = event_finding_loot
+	location = ROOT
+	hide_window = yes
+	fire_only_once = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_flag = inanis_owned
+		has_technology = tech_mega_engineering
+		NOT = { 
+			has_technology = tech_matter_decompressor
+			has_tech_option = tech_matter_decompressor
+			}
+		}
+
+	immediate = {
+		country_event = {
+			id = vg.104 days = 30
+		}
+	}
+}
+
+country_event = {
+	id = vg.104
+	title = "vg.104.name"
+	desc = vg.104.desc
+	picture = GFX_evt_matter_decompressor
+	show_sound = event_finding_loot
+	location = ROOT
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_flag = inanis_owned
+		has_technology = tech_mega_engineering
+		NOT = { 
+			has_technology = tech_matter_decompressor
+			has_tech_option = tech_matter_decompressor
+			}
+		}
+
+	option = { 
+		name = vg.104.a
+		add_tech_progress = {
+			tech = tech_mega_engineering
+			progress = 0.25
+		}
+	}	
 }
