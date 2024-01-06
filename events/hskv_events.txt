@@ -1,3 +1,8 @@
+#########################################################################################
+# Thayo Everdawn - The Everdawn Heist
+# Author: TheRingBearer
+#########################################################################################
+
 namespace = hskv
 #TODO - Make sure events only trigger if it is valid (i.e. Thayo is alive and in your empire. Or If his questline is active)
 #TODO - Put some comment marker next to everything you want to look into for balancing
@@ -5,11 +10,11 @@ namespace = hskv
 # TODO Add COLORS to the loc file
 # TODO Be concerned about situation where the FE is killed off early
 # TODO Galactic Paragons utterly breaks Thayo
-# TODO Review all event picture and event show_sound
-# TODO Make sure you have the right response to each event
-# You got too many negative events with EXCELLENT
+# TODO Need to break up a lot of wall of text into multiple events
 
-# ALL Post level up flavor events need to slow down in rate
+# TODO LOW -  Thayo garnts psionic theory as a resarch option for fre
+
+# TODO ALL Post level up flavor events need to slow down in rate
 
 # Special Project to follow up on the signal
 ship_event = {
@@ -43,7 +48,7 @@ country_event = {
 	title = hskv.11.name
 	desc = hskv.11.desc
 	picture = GFX_evt_mysterious_signal
-	show_sound = event_ship_bridge
+	show_sound = event_default
 
 	is_triggered_only = yes
 
@@ -208,17 +213,17 @@ country_event = {
 }
 
 # Enable Special Project to do the thing
-# Yeah if you decide to drop the starbase you can still do it, but whatever.
+# Yeah if you decide to drop the starbase or module you can still do it, but whatever.
 country_event = {
 	id = hskv.21
 	title = hskv.21.name
 	desc = hskv.21.desc
 	picture = GFX_evt_mysterious_signal
-	show_sound = event_ship_bridge
+	show_sound = event_default
 	is_triggered_only = yes
 
 	option = {
-		name = EXCELLENT
+		name = UNDERSTOOD
 		hidden_effect = {
 			owner = {
 				end_event_chain = "hskv_thayo_crack_the_shield_chain"
@@ -238,7 +243,7 @@ country_event = {
 	title = hskv.22.name
 	desc = hskv.22.desc
 	picture = GFX_evt_machine_space_battle
-	show_sound = event_ship_explosion
+	show_sound = event_energy_field
 	is_triggered_only = yes
 
 	option = {
@@ -271,6 +276,7 @@ country_event = {
 	hide_window = yes
 	fire_only_once = yes
 	is_triggered_only = yes
+
 	trigger = {
 		FromFromFrom = {
 			has_fleet_flag = hskv_shield_defense_force_fleet
@@ -283,6 +289,7 @@ country_event = {
 			}
 			country_event = {
 				id = hskv.24
+				days = 1
 			}
 		}
 	}
@@ -292,13 +299,8 @@ country_event = {
 	title = hskv.24.name
 	desc = hskv.24.desc
 	picture = GFX_evt_astral_rift_riftworld_visit
-	show_sound = event_ship_bridge
-	fire_only_once = yes
+	show_sound = event_default
 	is_triggered_only = yes
-
-	immediate = {
-		hskv_get_event_target_fe_country = yes
-	}
 
 	option = {
 		name = AMAZING
@@ -306,6 +308,7 @@ country_event = {
 			owner = {
 				country_event = {
 					id = hskv.26
+					days = 1
 				}
 				hskv_get_event_target_azure_prison_planet = yes
 				event_target:hskv_azure_prison_planet = {
@@ -430,6 +433,7 @@ country_event = {
 }
 
 ## (on_colonized)
+#TODO What if this was an invasion instead? AND/OR What if you got a free super bot caretaker?
 planet_event = {
 	id = hskv.25
 	hide_window = yes
@@ -451,7 +455,6 @@ country_event = {
 	desc = hskv.26.desc
 	picture = GFX_evt_astral_rift_research_lab
 	show_sound = event_ship_bridge
-	fire_only_once = yes
 	is_triggered_only = yes
 
 	
@@ -461,6 +464,7 @@ country_event = {
 			owner = {
 				country_event = {
 					id = hskv.27
+					days = 1
 				}
 			}
 		}
@@ -471,8 +475,7 @@ country_event = {
 	title = hskv.27.name
 	desc = hskv.27.desc
 	picture = GFX_evt_resource_cache
-	show_sound = event_ship_bridge
-	fire_only_once = yes
+	show_sound = event_think_tank_build_upgrade
 	is_triggered_only = yes
 
 	option = {
@@ -496,7 +499,7 @@ country_event = {
 	title = hskv.30.name
 	desc = hskv.30.desc
 	picture = GFX_leader_recruitment_bg_renowned
-	show_sound = event_ship_bridge
+	show_sound = event_default
 	diplomatic_title = NAME_hskv_thayo_everdawn
 	event_window_type = leader_recruit
 
@@ -611,6 +614,7 @@ country_event = {
 				}
 				country_event = { 
 					id = hskv.31
+					days = 1
 				}
 			}
 		}
@@ -676,12 +680,12 @@ country_event = {
 	id = hskv.31
 	title = hskv.31.name
 	desc = hskv.31.desc
-	picture = GFX_evt_legendary_leader
-	show_sound = event_ship_bridge
+	picture = GFX_evt_ship_travel
+	show_sound = event_ship_thrusters
 	is_triggered_only = yes
 
 	option = {
-		name = CURSES
+		name = hskv.4000.response
 	}
 }
 
@@ -691,7 +695,7 @@ country_event = {
 	title = hskv.95.name
 	desc = hskv.95.desc
 	picture = GFX_evt_legendary_leader
-	show_sound = event_ship_bridge
+	show_sound = event_default
 	is_triggered_only = yes
 
 	trigger = {
@@ -723,7 +727,7 @@ country_event = {
 	title = hskv.96.name
 	desc = hskv.96.desc
 	picture = GFX_evt_legendary_leader
-	show_sound = event_ship_bridge
+	show_sound = event_default
 	is_triggered_only = yes
 
 	trigger = {
@@ -755,7 +759,7 @@ country_event = {
 	title = hskv.97.name
 	desc = hskv.97.desc
 	picture = GFX_evt_legendary_leader
-	show_sound = event_ship_bridge
+	show_sound = event_default
 	is_triggered_only = yes
 
 	trigger = {
@@ -877,7 +881,7 @@ country_event = {
 	title = hskv.120.name
 	desc = hskv.120.desc
 	picture = GFX_evt_synth_sabotage
-	show_sound = event_ship_bridge
+	show_sound = event_default
 	is_triggered_only = yes
 
 	immediate = {
@@ -918,7 +922,7 @@ country_event = {
 	title = hskv.121.name
 	desc = hskv.121.desc
 	picture = GFX_evt_spy_network
-	show_sound = event_ship_bridge
+	show_sound = event_default
 	is_triggered_only = yes
 
 	trigger = {
@@ -1032,7 +1036,7 @@ country_event = {
 	title = hskv.120.name
 	desc = hskv.130.desc
 	picture = GFX_evt_legendary_leader
-	show_sound = event_ship_bridge
+	show_sound = event_default
 	is_triggered_only = yes
 
 	immediate = {
@@ -1040,7 +1044,7 @@ country_event = {
 	}
 
 	option = {
-		name = EXCELLENT
+		name = UNDERSTOOD
 		owner = {
 			event_target:hskv_thayo_everdawn_leader = {
 				add_trait = hskv_leader_trait_worker_oversight
@@ -1062,8 +1066,8 @@ country_event = {
 	id = hskv.131
 	title = hskv.130.name
 	desc = hskv.131.desc
-	picture = GFX_evt_legendary_leader
-	show_sound = event_ship_bridge
+	picture = GFX_evt_spymaster
+	show_sound = event_default
 	is_triggered_only = yes
 
 	trigger = {
@@ -1073,7 +1077,7 @@ country_event = {
 	}
 
 	option = {
-		name = EXCELLENT
+		name = PECULIAR
 		hidden_effect = {
 			country_event = {
 				id = hskv.132
@@ -1088,10 +1092,24 @@ country_event = {
 	show_sound = event_ship_bridge
 	diplomatic = yes
 	is_triggered_only = yes
-	# TODO BUG - Wrong clothes
 	picture_event_data = {
 		portrait = hskv_thayo_portrait
 		room = ethic_spaceship_room
+	}
+
+	immediate = {
+		create_species = {
+			name = UNKNOWN
+			class = AVI
+			portrait = hskv_thayo_portrait
+			namelist = random_class
+			traits = { }
+			immortal = no
+			allow_negative_traits = no
+			effect = {
+				save_event_target_as = foobarbaz
+			}
+		}
 	}
 
 	option = {
@@ -1132,8 +1150,8 @@ country_event = {
 	id = hskv.135
 	title = hskv.130.name
 	desc = hskv.135.desc
-	picture = GFX_evt_legendary_leader
-	show_sound = event_ship_bridge
+	picture = GFX_evt_smugglers_in_bar
+	show_sound = event_default
 	is_triggered_only = yes
 
 	immediate = {
@@ -1168,25 +1186,30 @@ country_event = {
 	id = hskv.136
 	title = hskv.136.name
 	desc = hskv.136.desc
-	picture = GFX_evt_legendary_leader
-	show_sound = event_ship_bridge
+	picture = GFX_evt_civil_action
+	show_sound = event_default
 	is_triggered_only = yes
 
-	# TODO Test this
-	# This event only triggers if Thayo is governing a planet (not sector or if is idle)
 	trigger = {
-		any_owned_leader = {
-			has_leader_flag = hskv_thayo_everdawn_leader
-			exists = planet
+		any_owned_planet = {
+			exists = leader
+			leader = {
+				has_leader_flag = hskv_thayo_everdawn_leader
+			}
 		}
 	}
 
 	immediate = {
 		hskv_get_event_target_thayo_leader = yes
-		event_target:hskv_thayo_everdawn_leader = {
-			planet = {
-				save_event_target_as = hskv_thayo_governing_planet
+
+		random_owned_planet = {
+			limit = {
+				exists = leader
+				leader = {
+					has_leader_flag = hskv_thayo_everdawn_leader
+				}
 			}
+			save_event_target_as = hskv_thayo_governing_planet
 		}
 	}
 
@@ -1199,7 +1222,6 @@ country_event = {
 			}
 		}
 
-		# TODO Test Am I being too cute with this planet_event?
 		hidden_effect = {
 			event_target:hskv_thayo_governing_planet = {
 				planet_event = {
@@ -1217,8 +1239,8 @@ planet_event = {
 	id = hskv.137
 	title = hskv.137.name
 	desc = hskv.137.desc
-	picture = GFX_evt_legendary_leader
-	show_sound = event_ship_bridge
+	picture = GFX_evt_night_raid
+	show_sound = event_air_raid_siren
 	is_triggered_only = yes
 
 	option = {
@@ -1245,7 +1267,7 @@ country_event = {
 	title = hskv.120.name
 	desc = hskv.140.desc
 	picture = GFX_evt_legendary_leader
-	show_sound = event_ship_bridge
+	show_sound = event_default
 	is_triggered_only = yes
 	immediate = {
 		hskv_get_event_target_thayo_leader = yes
@@ -1288,8 +1310,8 @@ country_event = {
 	id = hskv.141
 	title = hskv.141.name
 	desc = hskv.141.desc
-	picture = GFX_evt_legendary_leader
-	show_sound = event_ship_bridge
+	picture = GFX_evt_spymaster
+	show_sound = event_espionage_concluded
 	is_triggered_only = yes
 
 	trigger = {
@@ -1425,8 +1447,8 @@ country_event = {
 	id = hskv.142
 	title = hskv.142.name
 	desc = hskv.142.desc
-	picture = GFX_evt_legendary_leader
-	show_sound = event_ship_bridge
+	picture = GFX_evt_striking_a_deal
+	show_sound = event_default
 	is_triggered_only = yes
 
 	immediate = {
@@ -1471,8 +1493,8 @@ country_event = {
 	id = hskv.143
 	title = hskv.143.name
 	desc = hskv.143.desc
-	picture = GFX_evt_legendary_leader
-	show_sound = event_ship_bridge
+	picture = GFX_evt_dark_alley
+	show_sound = event_whispering
 	is_triggered_only = yes
 
 	immediate = {
@@ -1520,7 +1542,7 @@ country_event = {
 	title = hskv.120.name
 	desc = hskv.150.desc
 	picture = GFX_evt_legendary_leader
-	show_sound = event_ship_bridge
+	show_sound = event_default
 	is_triggered_only = yes
 
 	immediate = {
@@ -1556,8 +1578,8 @@ country_event = {
 	id = hskv.151
 	title = hskv.151.name
 	desc = hskv.151.desc
-	picture = GFX_evt_legendary_leader
-	show_sound = event_ship_bridge
+	picture = GFX_evt_bribery
+	show_sound = event_default
 	is_triggered_only = yes
 
 	trigger = {
@@ -1587,8 +1609,8 @@ country_event = {
 	id = hskv.152
 	title = hskv.152.name
 	desc = hskv.152.desc
-	picture = GFX_evt_legendary_leader
-	show_sound = event_ship_bridge
+	picture = GFX_evt_pirates_attacking_cargo
+	show_sound = event_default
 	is_triggered_only = yes
 
 	trigger = {
@@ -1626,8 +1648,8 @@ country_event = {
 	id = hskv.153
 	title = hskv.143.name
 	desc = hskv.143.desc
-	picture = GFX_evt_legendary_leader
-	show_sound = event_ship_bridge
+	picture = GFX_evt_dark_alley
+	show_sound = event_whispering
 	is_triggered_only = yes
 
 	immediate = {
@@ -1698,7 +1720,7 @@ country_event = {
 	title = hskv.120.name
 	desc = hskv.160.desc
 	picture = GFX_evt_legendary_leader
-	show_sound = event_ship_bridge
+	show_sound = event_default
 	is_triggered_only = yes
 	immediate = {
 		hskv_get_event_target_thayo_leader = yes
@@ -1733,8 +1755,8 @@ country_event = {
 	id = hskv.161
 	title = hskv.161.name
 	desc = hskv.161.desc
-	picture = GFX_evt_legendary_leader
-	show_sound = event_ship_bridge
+	picture = GFX_evt_worrying_signal
+	show_sound = event_default
 	is_triggered_only = yes
 
 	trigger = {
@@ -1762,8 +1784,8 @@ country_event = {
 	id = hskv.162
 	title = hskv.162.name
 	desc = hskv.162.desc
-	picture = GFX_evt_legendary_leader
-	show_sound = event_ship_bridge
+	picture = GFX_evt_salute
+	show_sound = event_salute
 	is_triggered_only = yes
 
 	trigger = {
@@ -1798,8 +1820,8 @@ country_event = {
 	id = hskv.163
 	title = hskv.163.name
 	desc = hskv.163.desc
-	picture = GFX_evt_legendary_leader
-	show_sound = event_ship_bridge
+	picture = GFX_evt_spymaster
+	show_sound = event_default
 	is_triggered_only = yes
 
 	trigger = {
@@ -1915,7 +1937,7 @@ country_event = {
 	title = hskv.120.name
 	desc = hskv.170.desc
 	picture = GFX_evt_legendary_leader
-	show_sound = event_ship_bridge
+	show_sound = event_default
 	is_triggered_only = yes
 	immediate = {
 		hskv_get_event_target_thayo_leader = yes
@@ -1944,8 +1966,8 @@ country_event = {
 	id = hskv.171
 	title = hskv.171.name
 	desc = hskv.171.desc
-	picture = GFX_evt_legendary_leader
-	show_sound = event_ship_bridge
+	picture = GFX_evt_physics_research
+	show_sound = event_psionic
 	is_triggered_only = yes
 
 	trigger = {
@@ -1988,7 +2010,7 @@ country_event = {
 	title = hskv.120.name
 	desc = hskv.180.desc
 	picture = GFX_evt_legendary_leader
-	show_sound = event_ship_bridge
+	show_sound = event_default
 	is_triggered_only = yes
 
 	immediate = {
@@ -2007,6 +2029,9 @@ country_event = {
 		name = UNDERSTOOD
 		owner = {
 			end_event_chain = hskv_thayo_levelup_chain
+			begin_event_chain = {
+				event_chain = hskv_thayo_waiting_chain
+			}
 		}
 		event_target:hskv_thayo_everdawn_leader = {
 			remove_trait = hskv_leader_trait_thayo_everdawn_3
@@ -2032,14 +2057,14 @@ country_event = {
 	title = hskv.181.name
 	desc = hskv.181.desc
 	picture = GFX_evt_legendary_leader
-	show_sound = event_ship_bridge
+	show_sound = event_default
 	is_triggered_only = yes
 	immediate = {
 		hskv_get_event_target_thayo_leader = yes
 	}
 
 	option = {
-		name = AMAZING
+		name = ON_SCREEN
 		event_target:hskv_thayo_everdawn_leader = {
 			remove_trait = hskv_leader_trait_insider_trading
 			add_trait = hskv_leader_trait_insider_trading_2
@@ -2064,35 +2089,6 @@ country_event = {
 	id = hskv.182
 	title = hskv.182.name
 	desc = hskv.182.desc
-	picture = GFX_evt_legendary_leader
-	show_sound = event_ship_bridge
-	is_triggered_only = yes
-
-	trigger = {
-		any_owned_leader = {
-			has_leader_flag = hskv_thayo_everdawn_leader
-		}
-	}
-
-	immediate = {
-		hskv_get_event_target_thayo_leader = yes
-	}
-
-	option = {
-		name = WORRYING
-		hidden_effect = {
-			owner = {
-				country_event = {
-					id = hskv.183
-				}
-			}
-		}
-	}
-}
-country_event = {
-	id = hskv.183
-	title = hskv.183.name
-	desc = hskv.183.desc
 	show_sound = event_ship_bridge
 	diplomatic = yes
 	is_triggered_only = yes
@@ -2122,6 +2118,7 @@ country_event = {
 		}
 	}
 }
+
 country_event = {
 	id = hskv.184
 	title = hskv.184.name
@@ -2155,6 +2152,7 @@ country_event = {
 	# Constant Surveillance
 	option = {
 		name = hskv.184.option.a
+		custom_tooltip = hskv.184.option.a.tooltip
 		owner = {
 			event_target:hskv_thayo_everdawn_leader = {
 				add_trait = hskv_leader_trait_constant_surveillance
@@ -2240,11 +2238,11 @@ country_event = {
 	title = hskv.1113.name
 	desc = hskv.1113.desc
 	picture = GFX_evt_shroud_tunnel
-	show_sound = event_ship_bridge
+	show_sound = event_default
 	is_triggered_only = yes
 
 	option = {
-		name = EXCELLENT
+		name = UNDERSTOOD
 		hidden_effect = {
 			end_event_chain = "hskv_thayo_create_wormhole_chain"
 		}
@@ -2261,7 +2259,7 @@ country_event = {
 	title = hskv.1114.name
 	desc = hskv.1114.desc
 	picture = GFX_evt_shroud_tunnel
-	show_sound = event_ship_bridge
+	show_sound = evn_ove_shroud_tunnel
 	is_triggered_only = yes
 
 	immediate = {
@@ -2396,6 +2394,7 @@ fleet_event = {
 	show_sound = event_default
 	hide_window = no
 	is_triggered_only = yes
+	fire_only_once = yes
 
 	trigger = {
 		From = {
@@ -2524,7 +2523,7 @@ country_event = {
 	}
 
 	option ={
-		name = EXCELLENT
+		name = MARVELOUS
 		owner = {
 			start_situation = {
 				type = hskv_situation_vault
@@ -2545,12 +2544,12 @@ country_event = {
 
 # The final reward from Thayo
 # If he is still alive and the FE falls to your hand
-# TODO, what if it was by someone else's hand?
-# TODO I worry that this whole questline will fall apart if the FE dies before or during it
+# TODO I worry that this whole questline will fall apart if the FE dies before or during it. But it does work afterward
 country_event = {
 	id = hskv.3100
 	hide_window = yes
 	is_triggered_only = yes
+	fire_only_once = yes
 
 	trigger = {
 		has_country_flag = hskv_target_fe_country
@@ -2651,6 +2650,7 @@ country_event = {
 	show_sound = event_ship_bridge
 	diplomatic = yes
 	is_triggered_only = yes
+	fire_only_once = yes
 	picture_event_data = {
 		portrait = hskv_thayo_portrait
 		room = ethic_spaceship_room
@@ -2791,7 +2791,7 @@ country_event = {
 	id = hskv.4022
 	title = hskv.4022.name
 	desc = hskv.4022.desc
-
+	show_sound = event_ship_bridge
 	is_triggered_only = yes
 	diplomatic = yes
 
@@ -2821,14 +2821,15 @@ country_event = {
 }
 
 # Fail State 3, Thayo Dies (luckily nothing happens to you because they never notice)
-# TODO: Can make the fail state have them turn hostile against you
+# TODO: Can make the fail state have them turn hostile against you... But this is low priority
 country_event = {
 	id = hskv.4030
 	title = hskv.4030.name
 	desc = hskv.4030.desc
 	picture = GFX_evt_space_funeral
-	show_sound = event_default
+	show_sound = event_life_support_fail
 	is_triggered_only = yes
+	fire_only_once = yes
 
 	trigger = {
 		has_country_flag = hskv_thayo_everdawn_country
@@ -2848,10 +2849,20 @@ situation_event = {
 	hide_window = yes
 	is_triggered_only = yes
 	fire_only_once = yes
+
+	trigger = {
+		owner = {
+			NOT = {
+				has_country_flag = hskv_vault_secure
+			}
+		}
+	}
+
 	immediate = {
 		owner = {
 			country_event = {
 				id = hskv.4041
+				days = 1
 			}
 		}
 	}
@@ -2871,6 +2882,7 @@ country_event = {
 			owner = {
 				country_event = {
 					id = hskv.4042
+					days = 1
 				}
 			}
 		}
@@ -2891,6 +2903,7 @@ country_event = {
 			owner = {
 				country_event = {
 					id = hskv.4043
+					days = 1
 				}
 			}
 		}
@@ -2924,6 +2937,7 @@ country_event = {
 			owner = {
 				country_event = {
 					id = hskv.4044
+					days = 90
 				}
 			}
 		}
@@ -2934,6 +2948,7 @@ country_event = {
 			owner = {
 				country_event = {
 					id = hskv.4044
+					days = 90
 				}
 			}
 		}
@@ -2945,13 +2960,17 @@ country_event = {
 	id = hskv.4044
 	title = hskv.4044.name
 	desc = hskv.4044.desc
-	picture = GFX_evt_astral_rift_advisor_exploding
-	show_sound = event_default
-	hide_window = no
+	diplomatic = yes
 	is_triggered_only = yes
+	picture_event_data = {
+		portrait = event_target:hskv_target_fe_country
+		planet_background = event_target:hskv_target_fe_country
+		graphical_culture = event_target:hskv_target_fe_country
+		city_level = event_target:hskv_target_fe_country
+		room = event_target:hskv_target_fe_country.ruler
+	}
 
 	immediate = {
-		hskv_get_event_target_fe_country = yes
 		event_target:hskv_target_fe_country = {
 			add_opinion_modifier = {
 				who = prev
