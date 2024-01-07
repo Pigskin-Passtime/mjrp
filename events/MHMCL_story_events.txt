@@ -9,8 +9,8 @@ country_event = { # Create Mircorv
 	id = MHMCL_story_event.1
 	title = MHMCL_story_event.1.name
 	desc = MHMCL_story_event.1.desc
-	picture = GFX_evt_board_meeting
-	show_sound = par_event_keides # Change to other
+	picture = GFX_evt_robot_assembly_plant
+	show_sound = robot_molluscoid_greetings
 	fire_only_once = yes
 	is_triggered_only = yes
 	event_window_type = leader_story
@@ -63,7 +63,7 @@ country_event = { # Create Mircorv
 				species = event_target:MHMCL_species
 				name = "NAME_mircorv"
 				skill = 4
-				gender = female
+				gender = indeterminable
 				event_leader = yes
 				skip_background_generation = yes
 				custom_catch_phrase = MHMCL_mircorv_catch_phrase
@@ -111,7 +111,9 @@ country_event = { # HIRE/DISMISS Mircorv
 	diplomatic = yes
 	fire_only_once = yes
 	is_triggered_only = yes
-
+	
+	show_sound = robot_molluscoid_greetings
+	
 	picture = GFX_leader_recruitment_bg_MHMCL_mircorv
 	event_window_type = leader_recruit
 
@@ -134,15 +136,21 @@ country_event = { # HIRE/DISMISS Mircorv
 		response_text = MHMCL_story_event.2.b.response
 		is_dialog_only = yes
 	}
-	option = {
-		name = MHMCL_story_event.2.c
-		response_text = MHMCL_story_event.2.c.response
-		is_dialog_only = yes
-	}
 
 	option = {
 		# Special tag to make mark this is the hire option
-		name = MHMCL_story_event.2.hire
+		name = {
+			trigger = { is_gestalt = no }
+			text = MHMCL_story_event.2.hire
+		}
+		name = {
+			trigger = { is_machine_empire = yes }
+			text = MHMCL_story_event.2.hire.machine
+		}
+		name = {
+			trigger = { is_hive_empire = yes }
+			text = MHMCL_story_event.2.hire.hive
+		}
 		tag = hire_leader
 		sound = "robot_molluscoid_greetings"
 
@@ -280,7 +288,7 @@ country_event = { # Deshield Mircorv Homeworld
 	id = MHMCL_story_event.3
 	title = MHMCL_story_event.3.name
 	desc = MHMCL_story_event.3.desc
-	picture = GFX_evt_shielded_planet
+	picture = GFX_evt_contingency_planet
 	show_sound = event_default
 	fire_only_once = yes
 
@@ -330,6 +338,7 @@ country_event = { # Victim planet dies
 				limit = {
 					has_planet_flag = MHMCL_victim_planet
 				}
+				save_event_target_as = MHMCL_victim_planet
 				add_modifier = {
 					modifier = irradiated_planet
 					days = -1
@@ -365,7 +374,7 @@ country_event = { # Code Improvements
 	id = MHMCL_story_event.6
 	title = MHMCL_story_event.6.name
 	desc = MHMCL_story_event.6.desc
-	picture = GFX_evt_tomb_world
+	picture = GFX_evt_synth_sabotage
 	show_sound = event_default
 	fire_only_once = yes
 
@@ -374,7 +383,17 @@ country_event = { # Code Improvements
 	trigger = {
 		OR = {
 			is_machine_empire = yes
-			is_gestalt = no
+			AND = {
+				is_gestalt = no
+				has_technology = tech_robotic_workers
+			}
+		}
+	}
+	
+	immediate = {
+		random_owned_leader = {
+			limit = { has_leader_flag = MHMCL_mircorv }
+			save_event_target_as = MHMCL_mircorv_event_leader
 		}
 	}
 
@@ -408,7 +427,7 @@ country_event = { # Start Radiation Situation
 	id = MHMCL_story_event.7
 	title = MHMCL_story_event.7.name
 	desc = MHMCL_story_event.7.desc
-	picture = GFX_evt_tomb_world
+	picture = GFX_evt_star_pulsar
 	show_sound = event_default
 	fire_only_once = yes
 
@@ -426,7 +445,7 @@ country_event = { # Start Radiation Situation
 		name = MHMCL_story_event.7.a
 		# Start situation
 		start_situation = { type = situation_mhmcl_excess_radiation target = this }
-		country_event = { MHMCL_story_event.11 days = 1800 }
+		country_event = { id = MHMCL_story_event.11 days = 1800 }
 	}
 	# Situaation kills mircorv of not fixed
 }
@@ -435,8 +454,8 @@ country_event = { # Create small Mircorv
 	id = MHMCL_story_event.8
 	title = MHMCL_story_event.8.name
 	desc = MHMCL_story_event.8.desc
-	picture = GFX_evt_board_meeting
-	show_sound = par_event_keides # Change to other
+	picture = GFX_evt_synth_organic_relations
+	show_sound = robot_molluscoid_greetings
 	fire_only_once = yes
 	is_triggered_only = yes
 	event_window_type = leader_story
@@ -477,7 +496,7 @@ country_event = { # Create small Mircorv
 				name = "NAME_mircorv_race"
 				class = "ROBOT"
 				namelist = "AI"
-				portrait = "ai_crisis_2"
+				portrait = "sd_mol_robot"
 				immortal = yes
 				traits = {
 					trait = "trait_mechanical"
@@ -487,14 +506,14 @@ country_event = { # Create small Mircorv
 			create_leader = {
 				class = commander
 				species = event_target:MHMCL_species
-				name = "NAME_mircorv"
+				name = "NAME_small_mircorv"
 				skill = 4
 				gender = female
 				event_leader = yes
 				skip_background_generation = yes
-				custom_catch_phrase = MHMCL_mircorv_catch_phrase
-				custom_description = MHMCL_mircorv_desc
-				set_age = 89127
+				custom_catch_phrase = MHMCL_small_mircorv_catch_phrase
+				custom_description = MHMCL_small_mircorv_desc
+				set_age = 1
 				effect = {
 					set_leader_flag = legendary_leader
 					set_leader_flag = MHMCL_mircorv
@@ -522,9 +541,6 @@ country_event = { # Create small Mircorv
 	option = {
 		name = MHMCL_story_event.8.a
 		hidden_effect = {
-			event_target:MHMCL_mircorv_leader = {
-				change_leader_portrait = sd_mol_robot
-			}
 			country_event = { id = MHMCL_story_event.9 }
 		}
 	}
@@ -537,6 +553,7 @@ country_event = { # HIRE/DISMISS small Mircorv
 	diplomatic = yes
 	fire_only_once = yes
 	is_triggered_only = yes
+	show_sound = robot_molluscoid_greetings
 
 	picture = GFX_leader_recruitment_bg_MHMCL_mircorv
 	event_window_type = leader_recruit
@@ -558,11 +575,6 @@ country_event = { # HIRE/DISMISS small Mircorv
 	option = {
 		name = MHMCL_story_event.9.b
 		response_text = MHMCL_story_event.9.b.response
-		is_dialog_only = yes
-	}
-	option = {
-		name = MHMCL_story_event.9.c
-		response_text = MHMCL_story_event.9.c.response
 		is_dialog_only = yes
 	}
 
@@ -707,7 +719,7 @@ situation_event = {
 	id = MHMCL_story_event.10
 	title = MHMCL_story_event.10.name
 	desc = MHMCL_story_event.10.desc
-	picture = GFX_evt_clocks
+	picture = GFX_evt_sapient_AI
 	is_triggered_only = yes
 	location = target
 	situation = this
@@ -735,7 +747,7 @@ country_event = { # Radiation Situation Kills Mircorv
 	id = MHMCL_story_event.11
 	title = MHMCL_story_event.11.name
 	desc = MHMCL_story_event.11.desc
-	picture = GFX_evt_tomb_world
+	picture = GFX_evt_star_pulsar
 	show_sound = event_default
 	fire_only_once = yes
 
@@ -765,16 +777,12 @@ country_event = { # Radiation Situation Kills Mircorv
 			limit = {
 				has_leader_flag = MHMCL_mircorv
 			}
-			kill_leader = yes
+			kill_leader = { show_notification = no }
 		}
 	}
 
 	# Oh no!
 	option = {
-		name = MHMCL_story_event.7.a
-		# Start situation
-		start_situation = { type = situation_mhmcl_excess_radiation target = this }
-		country_event = { MHMCL_story_event.11 days = 1800 }
+		name = MHMCL_story_event.11.a
 	}
-	# Situaation kills mircorv of not fixed
 }
