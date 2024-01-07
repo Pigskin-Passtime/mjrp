@@ -479,7 +479,7 @@ country_event = {
 	is_triggered_only = yes
 
 	option = {
-		name = AMAZING
+		name = ONSCREEN
 		hidden_effect = {
 			owner = {
 				country_event = {
@@ -619,43 +619,41 @@ country_event = {
 			}
 		}
 	}
+	# TODO: Warning about the odd pending trait bug
 	option = {
+		name = hskv.30.option.hire
+		custom_tooltip = hskv.30.option.hire.tooltip
 		allow = {
 			NOR = {
 				is_gestalt = yes
 				is_homicidal = yes
 			}
 		}
-		name = hskv.30.option.hire
-
-		custom_tooltip = hskv.30.option.hire.tooltip
 		tag = hire_leader
 		hidden_effect = {
 			clone_leader = {
 				target = event_target:hskv_thayo_everdawn_leader
 				skip_background_generation = yes
-			}
-			#TODO BUG - This hack does not work with Galactic Paragons enabled
-			last_created_leader = {
-				add_skill_without_trait_selection = 10
-				remove_all_traits = yes
-				set_skill = 1
-				set_leader_flag = legendary_leader
-				set_leader_flag = immune_to_negative_traits
-				set_leader_flag = cannot_be_ruler
-				set_leader_flag = cannot_explore_rift
-				set_leader_flag = hskv_thayo_everdawn_leader
-				# set_leader_flag = no_council_traits
-				# set_leader_flag = no_normal_traits
-				# set_leader_flag = no_subclass_traits
-				# set_leader_flag = no_destiny_traits
-	
-				add_trait_no_notify = subclass_official_diplomacy_councilor
-				add_trait_no_notify = hskv_leader_trait_thayo_everdawn
-				add_trait_no_notify = leader_trait_psionic
-				add_trait_no_notify = trait_ruler_charismatic
-				add_trait_no_notify = hskv_leader_trait_rusty_3
+				randomize_traits = no
 				set_age = 20
+				effect = {
+					set_leader_flag = legendary_leader
+					set_leader_flag = immune_to_negative_traits
+					set_leader_flag = cannot_be_ruler
+					set_leader_flag = cannot_explore_rift
+	
+					add_trait_no_notify = subclass_official_diplomacy_councilor
+					add_trait_no_notify = hskv_leader_trait_thayo_everdawn
+					add_trait_no_notify = leader_trait_psionic
+					add_trait_no_notify = trait_ruler_charismatic
+					add_trait_no_notify = hskv_leader_trait_rusty_3
+
+					set_leader_flag = no_council_traits
+					set_leader_flag = no_normal_traits
+					set_leader_flag = no_subclass_traits
+					set_leader_flag = no_destiny_traits
+					set_leader_flag = hskv_thayo_everdawn_leader
+				}
 			}
 		
 			hire_event_leader_message = {
@@ -675,6 +673,7 @@ country_event = {
 		}
 	}
 }
+
 # Escapes into the sunset... for now
 country_event = {
 	id = hskv.31
@@ -715,6 +714,19 @@ country_event = {
 			add_trait = hskv_leader_trait_rusty_2
 		}
 		hidden_effect = {
+			event_target:hskv_thayo_everdawn_leader = {
+				remove_leader_flag = no_council_traits
+				remove_leader_flag = no_normal_traits
+				remove_leader_flag = no_destiny_traits
+
+				remove_trait = hskv_leader_trait_rusty_3
+				add_trait = hskv_leader_trait_rusty_2
+
+				set_leader_flag = no_council_traits
+				set_leader_flag = no_normal_traits
+				set_leader_flag = no_destiny_traits
+			}
+
 			country_event = {
 				id = hskv.96
 				days = 7120
@@ -747,6 +759,18 @@ country_event = {
 			add_trait = hskv_leader_trait_rusty_1
 		}
 		hidden_effect = {
+			event_target:hskv_thayo_everdawn_leader = {
+				remove_leader_flag = no_council_traits
+				remove_leader_flag = no_normal_traits
+				remove_leader_flag = no_destiny_traits
+
+				remove_trait = hskv_leader_trait_rusty_2
+				add_trait = hskv_leader_trait_rusty_1
+
+				set_leader_flag = no_council_traits
+				set_leader_flag = no_normal_traits
+				set_leader_flag = no_destiny_traits
+			}
 			country_event = {
 				id = hskv.97
 				days = 7120
@@ -777,6 +801,20 @@ country_event = {
 		event_target:hskv_thayo_everdawn_leader = {
 			remove_trait = hskv_leader_trait_rusty_1
 			add_trait = hskv_leader_trait_adaptable
+		}
+		hidden_effect = {
+			event_target:hskv_thayo_everdawn_leader = {
+				remove_leader_flag = no_council_traits
+				remove_leader_flag = no_normal_traits
+				remove_leader_flag = no_destiny_traits
+
+				remove_trait = hskv_leader_trait_rusty_1
+				add_trait = hskv_leader_trait_adaptable
+
+				set_leader_flag = no_council_traits
+				set_leader_flag = no_normal_traits
+				set_leader_flag = no_destiny_traits
+			}
 		}
 	}
 }
@@ -907,6 +945,17 @@ country_event = {
 			}
 		}
 		hidden_effect = {
+			event_target:hskv_thayo_everdawn_leader = {
+				remove_leader_flag = no_council_traits
+				remove_leader_flag = no_normal_traits
+				remove_leader_flag = no_destiny_traits
+
+				add_trait = leader_trait_politician
+
+				set_leader_flag = no_council_traits
+				set_leader_flag = no_normal_traits
+				set_leader_flag = no_destiny_traits
+			}
 			owner = {
 				country_event = {
 					id =  hskv.121
@@ -1051,6 +1100,20 @@ country_event = {
 			}
 		}
 		hidden_effect = {
+			event_target:hskv_thayo_everdawn_leader = {
+				remove_leader_flag = no_council_traits
+				remove_leader_flag = no_normal_traits
+				remove_leader_flag = no_destiny_traits
+				remove_leader_flag = no_subclass_traits
+
+				add_trait = hskv_leader_trait_worker_oversight
+
+				set_leader_flag = no_council_traits
+				set_leader_flag = no_normal_traits
+				set_leader_flag = no_destiny_traits
+				set_leader_flag = no_subclass_traits
+			}
+
 			owner = {
 				country_event = {
 					id = hskv.131
@@ -1282,6 +1345,19 @@ country_event = {
 			}
 		}
 		hidden_effect = {
+			event_target:hskv_thayo_everdawn_leader = {
+				remove_leader_flag = no_council_traits
+				remove_leader_flag = no_normal_traits
+				remove_leader_flag = no_destiny_traits
+
+				remove_trait = hskv_leader_trait_thayo_everdawn
+				add_trait = hskv_leader_trait_thayo_everdawn_2
+
+				set_leader_flag = no_council_traits
+				set_leader_flag = no_normal_traits
+				set_leader_flag = no_destiny_traits
+			}
+
 			owner = {
 				# Free Assets
 				country_event = {
@@ -1557,6 +1633,18 @@ country_event = {
 			}
 		}
 		hidden_effect = {
+			event_target:hskv_thayo_everdawn_leader = {
+				remove_leader_flag = no_council_traits
+				remove_leader_flag = no_normal_traits
+				remove_leader_flag = no_destiny_traits
+
+				add_trait = hskv_leader_trait_specialist_oversight
+
+				set_leader_flag = no_council_traits
+				set_leader_flag = no_normal_traits
+				set_leader_flag = no_destiny_traits
+			}
+
 			owner = {
 				# Actual Evidence of Corruption
 				country_event = {
@@ -1601,6 +1689,17 @@ country_event = {
 			energy = -1000
 		}
 		hidden_effect = {
+			event_target:hskv_thayo_everdawn_leader = {
+				remove_leader_flag = no_council_traits
+				remove_leader_flag = no_normal_traits
+				remove_leader_flag = no_destiny_traits
+				
+				add_trait = hskv_leader_trait_corruption
+
+				set_leader_flag = no_council_traits
+				set_leader_flag = no_normal_traits
+				set_leader_flag = no_destiny_traits
+			}
 		}
 	}
 }
@@ -1734,6 +1833,19 @@ country_event = {
 			}
 		}
 		hidden_effect = {
+			event_target:hskv_thayo_everdawn_leader = {
+				remove_leader_flag = no_council_traits
+				remove_leader_flag = no_normal_traits
+				remove_leader_flag = no_destiny_traits
+				
+				remove_trait = hskv_leader_trait_thayo_everdawn_2
+				add_trait = hskv_leader_trait_thayo_everdawn_3
+
+				set_leader_flag = no_council_traits
+				set_leader_flag = no_normal_traits
+				set_leader_flag = no_destiny_traits
+			}
+
 			owner = {
 				# Empirewide Crime, but police are more effective
 				country_event = {
@@ -1775,6 +1887,17 @@ country_event = {
 			add_trait = hskv_leader_trait_insider_trading
 		}
 		hidden_effect = {
+			event_target:hskv_thayo_everdawn_leader = {
+				remove_leader_flag = no_council_traits
+				remove_leader_flag = no_normal_traits
+				remove_leader_flag = no_destiny_traits
+				
+				add_trait = hskv_leader_trait_insider_trading
+
+				set_leader_flag = no_council_traits
+				set_leader_flag = no_normal_traits
+				set_leader_flag = no_destiny_traits
+			}
 		}
 	}
 }
@@ -1804,6 +1927,17 @@ country_event = {
 			add_trait = hskv_leader_trait_asset_forfeiture
 		}
 		hidden_effect = {
+			event_target:hskv_thayo_everdawn_leader = {
+				remove_leader_flag = no_council_traits
+				remove_leader_flag = no_normal_traits
+				remove_leader_flag = no_destiny_traits
+				
+				add_trait = hskv_leader_trait_asset_forfeiture
+
+				set_leader_flag = no_council_traits
+				set_leader_flag = no_normal_traits
+				set_leader_flag = no_destiny_traits
+			}
 			owner = {
 				# Steals from another empire
 				country_event = {
@@ -1951,6 +2085,18 @@ country_event = {
 			}
 		}
 		hidden_effect = {
+			event_target:hskv_thayo_everdawn_leader = {
+				remove_leader_flag = no_council_traits
+				remove_leader_flag = no_normal_traits
+				remove_leader_flag = no_destiny_traits
+
+				add_trait = trait_ruler_charismatic_2
+				add_trait = leader_trait_politician_2
+
+				set_leader_flag = no_council_traits
+				set_leader_flag = no_normal_traits
+				set_leader_flag = no_destiny_traits
+			}
 			owner = {
 				# Unrestricted Research, but now he is funneling some away
 				country_event = {
@@ -1991,6 +2137,17 @@ country_event = {
 			engineering_research = -2000
 		}
 		hidden_effect = {
+			event_target:hskv_thayo_everdawn_leader = {
+				remove_leader_flag = no_council_traits
+				remove_leader_flag = no_normal_traits
+				remove_leader_flag = no_destiny_traits
+				
+				add_trait = hskv_leader_trait_unrestricted_research
+
+				set_leader_flag = no_council_traits
+				set_leader_flag = no_normal_traits
+				set_leader_flag = no_destiny_traits
+			}
 			owner = {
 				# Reuse the old big crime wave event
 				# TODO this is a long time till 8, add more?
@@ -2040,6 +2197,20 @@ country_event = {
 			add_trait = hskv_leader_trait_pinnacle
 		}
 		hidden_effect = {
+			event_target:hskv_thayo_everdawn_leader = {
+				remove_leader_flag = no_council_traits
+				remove_leader_flag = no_normal_traits
+				remove_leader_flag = no_destiny_traits
+				
+				remove_trait = hskv_leader_trait_thayo_everdawn_3
+				remove_trait = hskv_leader_trait_adaptable
+				add_trait = hskv_leader_trait_thayo_everdawn_4
+				add_trait = hskv_leader_trait_pinnacle
+
+				set_leader_flag = no_council_traits
+				set_leader_flag = no_normal_traits
+				set_leader_flag = no_destiny_traits
+			}
 			owner = {
 				country_event = {
 					id = hskv.181
@@ -2071,6 +2242,18 @@ country_event = {
 		}
 
 		hidden_effect = {
+			event_target:hskv_thayo_everdawn_leader = {
+				remove_leader_flag = no_council_traits
+				remove_leader_flag = no_normal_traits
+				remove_leader_flag = no_destiny_traits
+				
+				remove_trait = hskv_leader_trait_insider_trading
+				add_trait = hskv_leader_trait_insider_trading_2
+
+				set_leader_flag = no_council_traits
+				set_leader_flag = no_normal_traits
+				set_leader_flag = no_destiny_traits
+			}
 			owner = {
 				# Enough is enough!
 				country_event = {
@@ -2159,6 +2342,17 @@ country_event = {
 			}
 		}
 		hidden_effect = {
+			event_target:hskv_thayo_everdawn_leader = {
+				remove_leader_flag = no_council_traits
+				remove_leader_flag = no_normal_traits
+				remove_leader_flag = no_destiny_traits
+				
+				add_trait = hskv_leader_trait_constant_surveillance
+
+				set_leader_flag = no_council_traits
+				set_leader_flag = no_normal_traits
+				set_leader_flag = no_destiny_traits
+			}
 			owner = {
 				set_country_flag = hskv_thayo_under_constant_surveillance
 			}
@@ -2340,45 +2534,6 @@ country_event = {
 					event_chain = "hskv_thayo_secure_dawns_end_chain"
 					target = event_target:hskv_dawns_end_system
 				}
-				# Get a level 9 Thayo back into your empire
-				# TODO This is almost certainly broken
-				create_leader = {
-					class = official
-					species = event_target:hskv_leader_species
-					name = NAME_hskv_thayo_everdawn
-					skill = 9
-					gender = male
-					event_leader = yes
-					background_ethic = ethic_authoritarian
-					skip_background_generation = yes
-					custom_description = hskv_thayo_everdawn_leader_desc
-					custom_catch_phrase = hskv_thayo_everdawn_leader_catch_phrase
-					immortal = yes
-					hide_age = yes
-		
-					randomize_traits = yes
-					effect = {
-						set_leader_flag = legendary_leader
-						set_leader_flag = immune_to_negative_traits
-						set_leader_flag = cannot_be_ruler
-						set_leader_flag = hskv_thayo_everdawn_leader
-			
-						# TODO - Need to dial back his negative traits at lvl 9
-						add_trait_no_notify = subclass_official_diplomacy_councilor
-						add_trait_no_notify = hskv_leader_trait_thayo_everdawn_4
-						add_trait_no_notify = leader_trait_psionic
-						add_trait_no_notify = trait_ruler_charismatic_2
-						add_trait_no_notify = leader_trait_politician_2
-						add_trait_no_notify = hskv_leader_trait_population_oversight
-						add_trait_no_notify = hskv_leader_trait_corruption
-						add_trait_no_notify = hskv_leader_trait_insider_trading_2
-						add_trait_no_notify = hskv_leader_trait_asset_forfeiture
-						add_trait_no_notify = hskv_leader_trait_unrestricted_research
-						set_age = 40
-						save_event_target_as = hskv_thayo_everdawn_leader
-					}
-				}
-				# Add Zro miner
 			}
 		}
 	}
