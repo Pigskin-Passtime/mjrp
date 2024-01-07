@@ -68,7 +68,11 @@ country_event = { # Destroy Reinhard battleform when not at war
 		every_owned_fleet = {
 			limit = { has_fleet_flag = dmj_reinhard_battleform }
 			if = {
-				limit = { leader = event_target:dmj_daniel }
+				limit = {
+					leader = {
+						is_same_value = event_target:dmj_daniel
+					}
+				}
 				event_target:dmj_daniel = {
 					unassign_leader = this
 					remove_subclass = yes
@@ -120,6 +124,13 @@ country_event = { # If Reinhardist Faction does not exist within a year, force c
 	}
 
 	immediate = {
+		owner = {
+			enable_faction_of_type = reinhardist
+			random_pop_faction = {
+				limit = { is_pop_faction_type = reinhardist }
+				save_event_target_as = dmj_reinhardist_faction
+			}
+		}
 		while = {
 			count < 5
 			random_owned_pop = {
@@ -133,11 +144,6 @@ country_event = { # If Reinhardist Faction does not exist within a year, force c
 					33 = {
 						pop_change_ethic = ethic_militarist
 					}					
-				}
-				enable_faction_of_type = reinhardist
-				random_pop_faction = {
-					limit = { is_pop_faction_type = reinhardist }
-					save_event_target_as = dmj_reinhardist_faction
 				}
 				set_pop_faction = event_target:dmj_reinhardist_faction
 			}
@@ -171,7 +177,7 @@ country_event = { # Create Michael's Battleform if he is at war
 		is_at_war = yes
 		NOT = {
 			any_owned_fleet = {
-				is_fleet_flag = dmj_faulkner_battleform
+				has_fleet_flag = dmj_faulkner_battleform
 			}
 		}
 	}

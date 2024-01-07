@@ -104,31 +104,41 @@ dmj_infernal_stronghold = {
 		}
 		if = {
 			limit = {
-				any_galaxy_species = {
-					owner = {
-						OR = {
-							has_country_flag = dmj_sol_country
-							has_country_flag = humans_early_space_age
-							has_country_flag = humans_machine_age
-							has_country_flag = humans_late_medieval_age
+				any_playable_country = {
+					OR = {
+						AND = {
+							exists = event_target:dmj_sol_country
+							is_same_value = event_target:dmj_sol_country
 						}
+						has_country_flag = humans_early_space_age
+						has_country_flag = humans_machine_age
+						has_country_flag = humans_late_medieval_age
 					}
-					is_human_species = yes
+					species = {
+						is_human_species = yes
+					}
 				}
 			}
-			random_galaxy_species = {
+			random_playable_country = {
 				limit = {
-					owner = {
-						OR = {
-							has_country_flag = dmj_sol_country
-							has_country_flag = humans_early_space_age
-							has_country_flag = humans_machine_age
-							has_country_flag = humans_late_medieval_age
+					OR = {
+						AND = {
+							exists = event_target:dmj_sol_country
+							is_same_value = event_target:dmj_sol_country
 						}
+						has_country_flag = humans_early_space_age
+						has_country_flag = humans_machine_age
+						has_country_flag = humans_late_medieval_age
 					}
-					is_human_species = yes
+					species = {
+						is_human_species = yes
+					}
 				}
-				add_trait = trait_latent_psionic
+				species = {
+					change_species_characteristics = {
+						add_trait = trait_latent_psionic
+					}
+				}
 			}
 		}
 	}

@@ -26,12 +26,15 @@ country_event = { # Flavor events intializer
 							OR = {
 								has_modifier = dmj_reinhard_infiltration_buff
 								NOT = {
-									any_owned_system = { # I don't know if this works, if there's a better way then tell me
-										any_system_planet = {
-											owner = { is_country_type = primitive }
+									owner = {
+										any_owned_system = { # I don't know if this works, if there's a better way then tell me
+											any_system_planet = {
+												owner = { is_country_type = primitive }
+											}
 										}
 									}
 								}
+								has_first_contact_dlc = no
 							}
 						}
 					}
@@ -41,10 +44,14 @@ country_event = { # Flavor events intializer
 					modifier = {
 						factor = 0
 						owner = {
-							NOT = {
-								any_owned_planet = { has_building = dmj_reinhardist_temple }
+							OR = {
+								has_country_flag = dmj_reinhardist_empire # Can build temples manually if this is true
+								count_owned_planet = {
+									count = all
+									limit = { has_building = dmj_reinhardist_temple }
+								}
+								has_country_resource = { type = minerals amount < 1000 }
 							}
-							has_resource = { type = minerals amount < 1000 }
 						}
 					}
 				}
@@ -53,16 +60,25 @@ country_event = { # Flavor events intializer
 					modifier = {
 						factor = 0
 						owner = {
-							NOT = {
-								any_owned_leader = {
-									OR = {
-										has_ethic = ethic_authoritarian
-										has_ethic = ethic_spiritualist
-										has_ethic = ethic_militarist
-										num_leader_traits = {
-											value > 0
-											negative = yes
+							OR = {
+								has_country_flag = dmj_reinhardist_empire # Leaders spawn with the Devotee trait if true
+								NOT = {
+									any_owned_leader = {
+										OR = {
+											has_ethic = ethic_authoritarian
+											has_ethic = ethic_spiritualist
+											has_ethic = ethic_militarist
+											num_leader_traits = {
+												value > 0
+												negative = yes
+											}
 										}
+									}
+								}
+								NOT = {
+									count_owned_leader = {
+										count = all
+										limit = { has_trait = leader_trait_dmj_reinhardist_devotee }
 									}
 								}
 							}
@@ -78,13 +94,15 @@ country_event = { # Flavor events intializer
 								any_pop_faction = {
 									is_pop_faction_type = reinhardist
 								}
-								count_owned_pop = {
-									limit = {
-										pop_faction = {
-											is_pop_faction_type = reinhardist
+								any_owned_planet = {
+									count_owned_pop = {
+										count >= 5
+										limit = {
+											pop_faction = {
+												is_pop_faction_type = reinhardist
+											}
 										}
 									}
-									count >= 5
 								}
 							}
 						}
@@ -113,6 +131,7 @@ leader_event = { # Gives psionic techs
 	id = dmj_flavor.2
 	name = "dmj_flavor.2.name"
 	desc = "dmj_flavor.2.desc"
+	is_triggered_only = yes
 
 	picture = GFX_evt_zro_2
 	show_sound = event_psionic
@@ -122,10 +141,18 @@ leader_event = { # Gives psionic techs
 
 	trigger = {
 		exists = owner
+		owner = {
+			any_owned_leader = {
+				is_same_value = event_target:dmj_daniel
+			}
+		}
 	}
 
 	option = {
-		name = "dmj_flavor.2.a"
+		name = "FASCINATING"
+	}
+
+	after = {
 		owner = {
 			if = { # This is an extremely long if statement, I am so very sorry
 				limit = {
@@ -314,6 +341,7 @@ leader_event = { # Gives buffs to primitive infiltration, only if you have First
 	id = dmj_flavor.3
 	name = "dmj_flavor.3.name"
 	desc = "dmj_flavor.3.desc"
+	is_triggered_only = yes
 
 	picture = GFX_evt_infiltration_neutral
 	show_sound = event_spymaster
@@ -324,10 +352,18 @@ leader_event = { # Gives buffs to primitive infiltration, only if you have First
 	trigger = {
 		exists = owner
 		has_first_contact_dlc = yes
+		owner = {
+			any_owned_leader = {
+				is_same_value = event_target:dmj_daniel
+			}
+		}
 	}
 
 	option = {
-		name = "dmj_flavor.3.a"
+		name = "CURIOUS"
+	}
+
+	after = {
 		owner = {
 			add_modifier = {
 				modifier = dmj_reinhard_infiltration_buff
@@ -341,16 +377,25 @@ leader_event = { # Reinhard "borrows" some resources, what could he be doing wit
 	id = dmj_flavor.4
 	name = "dmj_flavor.4.name"
 	desc = "dmj_flavor.4.desc"
+	is_triggered_only = yes
 
 	picture = GFX_evt_gunrunning
 	show_sound = event_administrative_work
 
 	trigger = {
 		exists = owner
+		owner = {
+			any_owned_leader = {
+				is_same_value = event_target:dmj_daniel
+			}
+		}
 	}
 
 	option = {
-		name = "dmj_flavor.4.a"
+		name = "WORRYING"
+	}
+
+	after = {
 		owner = {
 			add_resource = {
 				minerals = -1000
@@ -366,6 +411,7 @@ leader_event = { # Builds a Reinhardist Cathedral on a random planet
 	id = dmj_flavor.40
 	name = "dmj_flavor.40.name"
 	desc = "dmj_flavor.40.desc"
+	is_triggered_only = yes
 
 	picture = GFX_evt_busy_spaceport
 	show_sound = event_construction
@@ -375,17 +421,27 @@ leader_event = { # Builds a Reinhardist Cathedral on a random planet
 
 	trigger = {
 		exists = owner
+		owner = {
+			any_owned_leader = {
+				is_same_value = event_target:dmj_daniel
+			}
+		}
 	}
 
 	immediate = {
-		random_owned_planet = {
-			limit = { NOT = { has_building = dmj_reinhardist_temple } }
-			save_event_target_as = dmj_event_temple_planet # used in loc... when I get around to writing it that is
+		owner = {
+			random_owned_planet = {
+				limit = { NOT = { has_building = dmj_reinhardist_temple } }
+				save_event_target_as = dmj_event_temple_planet # used in loc
+			}
 		}
 	}
 
 	option = {
-		name = "dmj_flavor.40.a"
+		name = "ACKNOWLEDGED"
+	}
+
+	after = {
 		owner = {
 			event_target:dmj_event_temple_planet = {
 				add_building = dmj_reinhardist_temple
@@ -408,27 +464,37 @@ leader_event = { # Random leader becomes a Reinhardist Devotee
 
 	trigger = {
 		exists = owner
+		owner = {
+			any_owned_leader = {
+				is_same_value = event_target:dmj_daniel
+			}
+		}
 	}
 
 	immediate = {
-		random_owned_leader = {
-			limit = {
-				OR = {
-					has_ethic = ethic_authoritarian
-					has_ethic = ethic_spiritualist
-					has_ethic = ethic_militarist
-					num_leader_traits = {
-						value > 0
-						negative = yes
+		owner = {
+			random_owned_leader = {
+				limit = {
+					OR = {
+						has_ethic = ethic_authoritarian
+						has_ethic = ethic_spiritualist
+						has_ethic = ethic_militarist
+						num_leader_traits = {
+							value > 0
+							negative = yes
+						}
 					}
 				}
+				save_event_target_as = dmj_event_devotee # used in loc
 			}
-			save_event_target_as = dmj_event_devotee # used in loc... when I get around to writing it that is
 		}
 	}
 
 	option = {
-		name = "dmj_flavor.5.a"
+		name = "ACKNOWLEDGED"
+	}
+
+	after = {
 		event_target:dmj_event_devotee = {
 			add_trait = leader_trait_dmj_reinhardist_devotee
 			add_trait = "random_negative"
@@ -460,6 +526,7 @@ leader_event = { # A group of pops sacrifice their souls to Reinhard
 	id = dmj_flavor.6
 	name = "dmj_flavor.6.name"
 	desc = "dmj_flavor.6.desc"
+	is_triggered_only = yes
 
 	picture = GFX_evt_necrophage
 	show_sound = event_death_cult
@@ -469,6 +536,11 @@ leader_event = { # A group of pops sacrifice their souls to Reinhard
 
 	trigger = {
 		exists = owner
+		owner = {
+			any_owned_leader = {
+				is_same_value = event_target:dmj_daniel
+			}
+		}
 	}
 
 	immediate = {
@@ -486,30 +558,41 @@ leader_event = { # A group of pops sacrifice their souls to Reinhard
 					}
 				}
 			}
-			planet = { save_event_target_as = dmj_event_sacrifice_planet } # used in loc... when I get around to writing it that is
+			planet = { save_event_target_as = dmj_event_sacrifice_planet } # used in loc
 		}
 		else = {
-			random_owned_planet = {
-				limit = {
-					count_owned_pop = {
-						limit = {
-							pop_faction = {
-								is_pop_faction_type = reinhardist
+			owner = {
+				random_owned_planet = {
+					limit = {
+						count_owned_pop = {
+							limit = {
+								pop_faction = {
+									is_pop_faction_type = reinhardist
+								}
 							}
+							count >= 5
 						}
-						count >= 5
 					}
+					save_event_target_as = dmj_event_sacrifice_planet
 				}
-				save_event_target_as = dmj_event_sacrifice_planet
 			}
 		}
-		dmj_event_sacrifice_planet = {
+		event_target:dmj_event_sacrifice_planet = {
 			set_variable_to_random_value = { which = dmj_sacrifice_pops min = 2 max = 5 rounded = yes }
+		}
+		owner = {
+			random_pop_faction = {
+				limit = { is_pop_faction_type = reinhardist }
+				save_event_target_as = dmj_event_sacrifice_faction # used in loc
+			}
 		}
 	}
 
 	option = {
 		name = "dmj_flavor.6.a"
+	}
+
+	after = {
 		event_target:dmj_event_sacrifice_planet = {
 			while = {
 				count < dmj_sacrifice_pops
@@ -535,6 +618,7 @@ leader_event = { # Reinhardist Agitation, reduces Reinhardist Faction approval
 	id = dmj_flavor.7
 	name = "dmj_flavor.7.name"
 	desc = "dmj_flavor.7.desc"
+	is_triggered_only = yes
 
 	picture = GFX_evt_civil_action
 	show_sound = event_assembly_fight
@@ -544,20 +628,32 @@ leader_event = { # Reinhardist Agitation, reduces Reinhardist Faction approval
 
 	trigger = {
 		exists = owner
+		owner = {
+			any_owned_leader = {
+				is_same_value = event_target:dmj_daniel
+			}
+		}
 	}
 
 	immediate = {
-		random_pop_faction = {
-			limit = { is_pop_faction_type = reinhardist }
-			save_event_target_as = dmj_event_agitation_faction
+		owner = {
+			random_pop_faction = {
+				limit = { is_pop_faction_type = reinhardist }
+				save_event_target_as = dmj_event_agitation_faction # used in loc
+			}
 		}
 	}
 
 	option = {
-		name = "dmj_flavor.7.a"
+		name = "WORRYING"
 		custom_tooltip = "dmj_flavor.7.effects"
+	}
+
+	after = {
 		hidden_effect = {
-			set_timed_country_flag = { flag = dmj_agitation days = 3600 }
+			owner = {
+				set_timed_country_flag = { flag = dmj_agitation days = 3600 }
+			}
 		}
 	}
 }

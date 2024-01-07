@@ -711,8 +711,12 @@ reinhardist = {
 
 		council_demand = yes
 		trigger = {
-			event_target:dmj_daniel = ruler
-			is_autocracy = yes # Democracy/Oligarchy won't satisfy them because they know it's temporary
+			ruler = {
+				is_same_value = event_target:dmj_daniel
+			}
+			owner = {
+				is_autocracy = yes # Democracy/Oligarchy won't satisfy them because they know it's temporary
+			}
 		}
 	}
 
@@ -787,6 +791,24 @@ reinhardist = {
 	}
 
 	demand = {
+		title = REINHARDIST_FIRED_DEVOTEE
+		unfulfilled_title = REINHARDIST_FIRED_DEVOTEE
+		desc = REINHARDIST_FIRED_DEVOTEE_DESC
+
+		fulfilled_effect = 0.01
+		unfulfilled_effect = -30
+
+		potential = {
+			exists = owner
+			owner = { has_country_flag = dmj_recently_fired_reinhardist_devotee }
+		}
+
+		trigger = {
+			NOT = { owner = { has_country_flag = dmj_recently_fired_reinhardist_devotee } }
+		}
+	}
+
+	demand = {
 		title = REINHARDIST_AGITATION
 		unfulfilled_title = REINHARDIST_AGITATION
 		desc = REINHARDIST_AGITATION_DESC
@@ -800,7 +822,7 @@ reinhardist = {
 		}
 
 		trigger = {
-			NOT = { has_country_flag = dmj_agitation }
+			NOT = { owner = { has_country_flag = dmj_agitation } }
 		}
 	}
 
@@ -900,6 +922,7 @@ reinhardist = {
 							add_modifier = { modifier = embraced_another_faction days = 3600 }
 						}
 						set_country_flag = reinhardist_empire
+						root = { save_event_target_as = TargetFaction }
 						country_event = { id = dmj_misc.7 }
 					}
 				}
