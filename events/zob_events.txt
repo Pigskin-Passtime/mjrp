@@ -117,9 +117,11 @@ fleet_event = {
 
 	option = {
 		name = ONSCREEN
-		country_event = {
-			id = zob.10
-			days = 3
+		owner = {
+			country_event = {
+				id = zob.10
+				days = 3
+			}
 		}
 	}
 }
@@ -141,11 +143,18 @@ country_event = {
 					leader_class = scientist
 					is_gestalt_node = no
 					is_ruler = no
+					is_heir = no
 				}
-				add_trait = leader_trait_adaptable
+				add_trait = trait_ruler_charismatic
 				save_event_target_as = collected_scientist
 				exile_leader_as = collected_scientist
 			}
+		}
+		random_galaxy_planet = {
+			limit = { 
+				has_planet_flag = zob_planet
+			}
+			save_global_event_target_as = zob_planet
 		}
 		country_event = {
 			id = zob.10
@@ -161,7 +170,7 @@ country_event = {
 	desc = {
 		text = zob.10.desc
 	}
-	location = fromfrom
+	location = event_target:zob_planet
 	is_triggered_only = yes
 
 	diplomatic = yes
@@ -174,7 +183,6 @@ country_event = {
 	picture = GFX_leader_recruitment_bg_renowned
 
 	immediate = {
-
 	}
 
 	option = {
@@ -208,7 +216,7 @@ country_event = {
 		text = zob.11.desc
 	}
 	show_sound = par_event_azaryn
-	location = fromfrom
+	location = event_target:zob_planet
 	is_triggered_only = yes
 
 	trigger = {
@@ -224,74 +232,118 @@ country_event = {
 
 	immediate = {
 		hidden_effect = {
-			create_country = {
-				name = "NAME_Unknown"
-				type = global_event
-				auto_delete = yes
-				flag = {
-					icon = {
-						category = "special"
-						file = "unknown.dds"
-					}
-					background = {
-						category = "backgrounds"
-						file = "00_solid.dds"
-					}
-					colors = {
-						"red"
-						"red"
-						"null"
-						"null"
-					}
+			random_galaxy_planet = {
+				limit = { 
+					has_planet_flag = zob_planet
 				}
+				save_event_target_as = zob_planet
+			}
+			random_galaxy_species = {
+				limit = {
+					has_species_flag = zob_species
+				}
+				save_event_target_as = zob_species
+			}
+			create_leader = {
+				species = event_target:zob_species
+				event_leader = yes
+				class = official
+				name = "name_zob"
+				skill = 5
+				randomize_traits = no
+				skip_background_generation = yes
+				background_ethic = ethic_gestalt_consciousness
+				custom_catch_phrase = zob_catch_phrase 			#TODO Catchphrases are a thing
+				custom_description = zob_back_story
+				background_planet = event_target:zob_planet
+				traits = {
+					trait = subclass_official_governor
+					trait = leader_trait_zob_mind_collector
+					trait = leader_trait_adaptable
+					trait = leader_trait_pop_focused_2
+					trait = leader_trait_gifted
+					trait = leader_trait_zob_severed
+				}
+				gender = indeterminable
+				set_age = 758
+				immortal = yes
 				effect = {
-					save_event_target_as = zob_country
+					save_global_event_target_as = zob_leader
+					set_leader_flag = legendary_leader
+					set_leader_flag = zob
+					set_owner = root
+					exile_leader_as = zob_leader
 				}
 			}
-			event_target:zob_country = {
-				create_species = {
-					name = "name_zob_species"
-					class = PARAGON
-					portrait = pla12
-					namelist = "PRT1"
-					traits = {
-						trait = trait_quick_learners
-						trait = trait_talented
-						trait = trait_hive_mind
-					}
-					effect = {
-						save_event_target_as = zob_species
-					}
-				}
-				create_leader = {
-					species = event_target:zob_species
-					event_leader = yes
-					class = official
-					name = "name_zob"
-					skill = 5
-					randomize_traits = no
-					skip_background_generation = yes
-					background_ethic = ethic_gestalt_consciousness
-					# custom_catch_phrase = sadtoid_catch_phrase 			#TODO Catchphrases are a thing
-					# custom_description = astrocreator_azaryn_backstory
-					# can_manually_change_location = no
-					# homeworld = this
-					traits = {
-						trait = leader_trait_zob_mind_collector
-						trait = leader_trait_adaptable
-					}
-					gender = indeterminable
-					set_age = 758
-					immortal = yes
-					effect = {
-						save_global_event_target_as = zob_leader
-						set_leader_flag = legendary_leader
-						set_leader_flag = zob
-						set_owner = root
-						exile_leader_as = zob_leader
-					}
-				}
-			}
+			### Do not need to create a fake country since Zobs Species already exists. Keeping around incase this breaks
+			# create_country = {
+			# 	name = "name_zob_planet"
+			# 	type = global_event
+			# 	auto_delete = yes
+			# 	flag = {
+			# 		icon = {
+			# 			category = "special"
+			# 			file = "unknown.dds"
+			# 		}
+			# 		background = {
+			# 			category = "backgrounds"
+			# 			file = "00_solid.dds"
+			# 		}
+			# 		colors = {
+			# 			"red"
+			# 			"red"
+			# 			"null"
+			# 			"null"
+			# 		}
+			# 	}
+			# 	effect = {
+			# 		save_event_target_as = zob_country
+			# 	}
+			# }
+			# event_target:zob_country = {
+			# 	create_species = {
+			# 		name = "name_zob_species"
+			# 		class = PARAGON
+			# 		portrait = pla12
+			# 		namelist = "PRT1"
+			# 		traits = {
+			# 			trait = trait_hive_mind
+			# 		}
+			# 		effect = {
+			# 			save_event_target_as = zob_species
+			# 		}
+			# 	}
+			# 	create_leader = {
+			# 		species = event_target:zob_species
+			# 		event_leader = yes
+			# 		class = official
+			# 		name = "name_zob"
+			# 		skill = 5
+			# 		randomize_traits = no
+			# 		skip_background_generation = yes
+			# 		background_ethic = ethic_gestalt_consciousness
+			# 		custom_catch_phrase = zob_catch_phrase
+			# 		custom_description = zob_back_story
+			# 		background_planet = event_target:zob_planet
+			# 		traits = {
+			# 			trait = subclass_official_governor
+			# 			trait = leader_trait_zob_mind_collector
+			# 			trait = leader_trait_adaptable
+			# 			trait = leader_trait_pop_focused_2
+			# 			trait = leader_trait_gifted
+			# 		}
+			# 		gender = indeterminable
+			# 		set_age = 758
+			# 		immortal = yes
+			# 		effect = {
+			# 			save_global_event_target_as = zob_leader
+			# 			set_leader_flag = legendary_leader
+			# 			set_leader_flag = zob
+			# 			set_owner = root
+			# 			exile_leader_as = zob_leader
+			# 		}
+			# 	}
+			# }
 		}
 	}
 
@@ -314,17 +366,24 @@ country_event = {
 		hidden_effect = {
 			set_country_flag = zob_hired
 			track_zob_variables = yes
-			clone_leader = {
-				target = event_target:zob_leader
-			}
-			last_created_leader = {
-				set_leader_flag = legendary_leader
-				save_global_event_target_as = zob_leader
-				set_leader_flag = immune_to_negative_traits
-				set_leader_flag = zob
+			event_target:zob_leader = {
 				set_owner = root
-				track_zob_variables = yes
-				set_zob_variables = yes	
+				set_zob_variables = yes					
+			}
+			create_message = {
+				type = MESSAGE_RECRUITED_LEADER
+				localization =  MESSAGE_RECRUITED_LEADER_DESC
+				days = @toast_message_days
+				target = event_target:zob_leader
+				variable = {
+					type = name
+					localization = LEADER
+					scope = event_target:zob_leader
+				}
+				variable = {
+					key = "border"
+					value = "GFX_border_legendary"
+				}
 			}
 			if = {
 				limit = { 
@@ -332,9 +391,16 @@ country_event = {
 				}
 				event_target:collected_scientist = {
 					set_owner = root
-					track_zob_variables = yes
-					set_zob_variables = yes			
+					set_zob_variables = yes
+					update_zob_variables = yes		
 				}
+				event_target:zob_leader = {
+					set_owner = root
+					update_zob_variables = yes					
+				}
+			}
+			country_event = {
+				id = zob.21
 			}
 		}
 		if = {
@@ -367,29 +433,31 @@ country_event = {
 	}
 }
 
-
-###Trait Variable Tracker on Leader Level up, (Delayed so you can pick a trait)
+###Trait Variable Tracker refresh, this is on level up, adds a delay so you can pick a new trait.
 country_event = {
 	id = zob.20
 	hide_window = yes
 	is_triggered_only = yes
 
 	trigger = {
+		has_country_flag = zob_hired
 		from = {
-			has_trait = leader_trait_zob_collected
+			OR = {
+				has_trait = leader_trait_zob_mind_collector
+				has_trait = leader_trait_zob_collected
+			}
 		}
 	}
 
 	immediate = {
 		country_event = {
-			id = zob.20
+			id = zob.21
 			days = 30
-		}
-		update_zob_variables = yes
+		}		
 	}
 }
 
-###Trait Variable Tracker refresh, triggered above and by yearly backup event in case you time out the trait selection
+###Trait Variable Tracker refresh, this is on yearly pulse, and from zob.20, but only applied if you have Zob.
 country_event = {
 	id = zob.21
 	hide_window = yes
