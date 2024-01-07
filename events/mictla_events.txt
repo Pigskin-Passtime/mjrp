@@ -355,7 +355,7 @@ fleet_event = {
 	title = "mictla_arc_events.11.name"
 	desc = "mictla_arc_events.11.desc"
 	picture = GFX_evt_disease_outbreak
-	show_sound = event_bad_omen
+	show_sound = event_yellow_alert
 
 	immediate = {
 		from = { set_site_progress_locked = yes }
@@ -366,7 +366,7 @@ fleet_event = {
 	}
 
 	option = {
-		name = "mictla_arc_events.11.a"
+		name = CURIOUS
 	}
 }
 
@@ -376,8 +376,8 @@ fleet_event = {
 	archaeology = yes
 	title = "mictla_arc_events.12.name"
 	desc = "mictla_arc_events.12.desc"
-	picture = GFX_evt_infested
-	show_sound = event_bad_omen
+	picture = GFX_evt_ship_in_orbit_3
+	show_sound = event_alien_signal
 
 	immediate = {
 		from = { set_site_progress_locked = yes }
@@ -388,7 +388,7 @@ fleet_event = {
 	}
 
 	option = {
-		name = "mictla_arc_events.12.a"
+		name = CURIOUS
 	}
 }
 
@@ -398,8 +398,8 @@ fleet_event = {
 	archaeology = yes
 	title = "mictla_arc_events.13.name"
 	desc = "mictla_arc_events.13.desc"
-	picture = GFX_evt_surreal_visions
-	show_sound = event_bad_omen
+	picture = GFX_evt_analyzing_mictla_relic
+	show_sound = event_alien_signal
 
 	immediate = {
 		from = { set_site_progress_locked = yes }
@@ -424,7 +424,7 @@ fleet_event = {
 	}
 
 	option = {
-		name = "mictla_arc_events.14.b" #If only Mictla was still around, we could understand how to use this.
+		name = "mictla_arc_events.13.b" #If only Mictla was still around, we could understand how to use this.
 		trigger = {
 			owner = {
 				NOT = {
@@ -513,7 +513,7 @@ country_event = { #Hiring Mictla
 			skill = 2
 			immortal = yes
 			randomize_traits = no
-			can_manually_change_location = no
+			can_manually_change_location = yes
 			can_assign_to_council = yes
 			skip_background_generation = yes
 			custom_catch_phrase = mictla_catchphrase
@@ -594,15 +594,6 @@ country_event = { #Hiring Mictla
 			country_event = {
 				id = mictla_events.99 days = 3600 #Pulse event?
 			}
-			random_owned_planet = {
-				limit = {
-					is_variable_set = paragon_memory_vault
-				}
-				change_variable = {
-					which = paragon_memory_vault
-					value = 1
-				}
-			}
 		}
 	}
 	option = {
@@ -623,21 +614,12 @@ country_event = { # Setup for mictla sovereignty, triggered after activating the
 	title = "mictla_events.3.name"
 	desc = "mictla_events.3.desc"
 	show_sound = event_necrophage
-	picture = GFX_evt_necrophage
+	picture = GFX_evt_civil_action
 	fire_only_once = yes
 	is_triggered_only = yes
 
 	immediate = {
 		set_country_flag = used_mictla_relic
-	}
-
-	after = {
-		owner = {
-			start_situation = {
-				type = situation_mictla_resonant_pulse
-			}
-		}
-
 	}
 
 	option = {
@@ -647,6 +629,12 @@ country_event = { # Setup for mictla sovereignty, triggered after activating the
 		}
 
 		name = "mictla_events.3.a"
+
+		owner = {
+			start_situation = {
+				type = situation_mictla_resonant_pulse
+			}
+		}
 	}
 
 	option = {
@@ -654,11 +642,17 @@ country_event = { # Setup for mictla sovereignty, triggered after activating the
 			has_country_flag = mictla_recruited
 		}
 
-		name = "mictla_events.3.a"
+		name = "mictla_events.3.b"
+
+		owner = {
+			start_situation = {
+				type = situation_mictla_resonant_pulse
+			}
+		}
 	}
 
 	option = {
-		name = "mictla_events.3.b"
+		name = "mictla_events.3.c"
 
 		trigger = {
 			NOT = {
@@ -676,8 +670,8 @@ country_event = { # Setup for mictla sovereignty, triggered after activating the
 
 country_event = { # If dismissed Mictla during situation
 	id = mictla_events.4
-	title = "mictla_events.3.name"
-	desc = "mictla_events.3.desc"
+	title = "mictla_events.4.name"
+	desc = "mictla_events.4.desc"
 	show_sound = event_necrophage
 	picture = GFX_evt_necrophage
 	fire_only_once = yes
@@ -703,8 +697,8 @@ country_event = { # If finished situation submitting, Mictla Becomes Ruler
 	id = mictla_events.5
 	title = "mictla_events.5.name"
 	desc = "mictla_events.5.desc"
-	picture = GFX_evt_psionics
-	show_sound = event_mystic_reveal
+	picture = GFX_evt_grand_speech
+	show_sound = event_celebration
 	is_triggered_only = yes
 
 	trigger = {
@@ -735,7 +729,7 @@ country_event = { # If finished situation submitting, Mictla Becomes Ruler
 	}
 
 	option = {
-		name = "mictla_events.5.b"
+		name = "mictla_events.5.a"
 		if = {
 			limit = {
 				has_origin = origin_legendary_leader_imperial
@@ -781,9 +775,15 @@ country_event = { # Assimilate Mictla onto government and pops, triggered by fin
 	id = mictla_events.6
 	title = "mictla_events.6.name"
 	desc = "mictla_events.6.desc"
-	picture = GFX_evt_psionics
+	picture = GFX_evt_genetic_modification
 	show_sound = event_mystic_reveal
 	is_triggered_only = yes
+	diplomatic_title = BLANK_STRING
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:mictla_leader
+		room = enclave_curator_room
+	}	
 
 	immediate = {
 		every_owned_pop = {
@@ -809,7 +809,7 @@ country_event = { # Assimilate Mictla onto government and pops, triggered by fin
 	}
 
 	option = {
-		name = GOOD
+		name = "mictla_events.6.a"
 		force_add_civic = mictla_sovereign
 		custom_tooltip = mictla_mutualism_project_success
 	}
@@ -820,16 +820,10 @@ country_event = { # If finished situation Resisting
 	id = mictla_events.7
 	title = "mictla_events.7.name"
 	desc = "mictla_events.7.desc"
-	show_sound = event_necrophage
-	picture = GFX_evt_necrophage
+	show_sound = event_celebration
+	picture = GFX_evt_grand_speech
 	fire_only_once = yes
 	is_triggered_only = yes
-	diplomatic_title = BLANK_STRING
-	diplomatic = yes
-	picture_event_data = {
-		portrait = event_target:mictla_leader
-		room = enclave_curator_room
-	}	
 
 	after = {
 		add_modifier = {
@@ -868,8 +862,8 @@ situation_event = { # The Mictla Cult Purge
 	id = mictla_situation_events.1
 	title = "mictla_situation_events.1.name"
 	desc = "mictla_situation_events.1.desc"
-	show_sound = event_necrophage
-	picture = GFX_evt_necrophage
+	show_sound = event_burning_city
+	picture = GFX_evt_interior_battle
 	is_triggered_only = yes
 
 	after = {
@@ -907,14 +901,23 @@ situation_event = { # The Mictla Cult Purge
 	option = {
 		name = "mictla_situation_events.1.a"
 	}
+
+	option = {
+		trigger = {
+			owner = {
+				has_ethic = ethic_pacifist
+			}
+		}
+		name = "mictla_situation_events.1.b"
+	}
 }
 
 situation_event = { # The Mictla veneration growing
 	id = mictla_situation_events.2
 	title = "mictla_situation_events.2.name"
 	desc = "mictla_situation_events.2.desc"
-	show_sound = event_necrophage
-	picture = GFX_evt_necrophage
+	show_sound = event_bad_omen
+	picture = GFX_evt_conclave
 	is_triggered_only = yes
 
 	after = {
@@ -953,8 +956,8 @@ situation_event = { # The Mictla veneration growing
 	id = mictla_situation_events.3
 	title = "mictla_situation_events.3.name"
 	desc = "mictla_situation_events.3.desc"
-	show_sound = event_necrophage
-	picture = GFX_evt_necrophage
+	show_sound = event_celebration
+	picture = GFX_evt_conclave
 	is_triggered_only = yes
 
 	after = {
@@ -1023,6 +1026,13 @@ country_event = { #Get Unique Technology - Formless Flesh
 			progress = 0.15
 		}
 	}
+
+	option = {
+		trigger = {
+			has_ethic = ethic_pacifist
+		}
+		name = "mictla_pulse_events.1.b"
+	}
 }
 
 country_event = { #Get Unique Technology - Tuned Cells
@@ -1048,24 +1058,28 @@ country_event = { #Get Unique Technology - Tuned Cells
 	immediate = {
 	}
 
+	option = {
+		name = "mictla_pulse_events.2.question.a"
+		response_text = "mictla_pulse_events.2.question.a.desc"
+		is_dialog_only = yes
+	}
+
 	option = { #Get Mictla leader tech, unhappiness
 		name = "mictla_pulse_events.2.a"
+		trigger = {
+			NOT = {
+				has_country_flag = mictla_leading
+			}
+		}
 		add_research_option = tech_mictla_leader_communalism
 		add_tech_progress = {
 			tech = tech_mictla_leader_communalism
 			progress = 0.10
 		}
-		if = {
-			limit = { 
-				NOT = {
-					has_country_flag = mictla_leading 
-				}
-			}
 			add_modifier = {
 				modifier = pop_mictla_unhappiness_modifier
 				days = 3600
 			}
-		}
 	}
 
 	option = {
@@ -1115,10 +1129,6 @@ country_event = { #Price to pay
 		country_event = {
 			id = mictla_pulse_events.3 days = 1800 random = 1600
 		}
-	}
-
-	option = { 
-		name = "mictla_pulse_events.3.a"
 
 		random_owned_leader = {
 			limit = { 
@@ -1127,6 +1137,14 @@ country_event = { #Price to pay
 				}
 				is_ruler = no
 				}
+			save_event_target_as = mictla_sacrifice
+		}
+	}
+
+	option = { 
+		name = "mictla_pulse_events.3.a"
+
+		event_target:mictla_sacrifice = {
 			kill_leader = {
 				show_notification = yes
 			}
@@ -1164,20 +1182,24 @@ country_event = { #Mictla Relic
 		room = enclave_curator_room
 	}	
 
+	option = {
+		name = "mictla_pulse_events.4.question.a"
+		response_text = "mictla_pulse_events.4.question.a.desc"
+		is_dialog_only = yes
+	}
+
 	option = { 								# Mictla allowed
 		name = CURIOUS
-		if = {
-			capital_scope = {
-				solar_system = {
-					random_neighbor_system = {
-						limit = {
-							distance = {
-								min_jumps = 1
-								max_jumps = 1
+		capital_scope = {
+			solar_system = {
+				random_neighbor_system = {
+					limit = {
+						distance = {
+							min_jumps = 1
+							max_jumps = 3
 							}
 						}
-						spawn_mictla_relic = yes
-					}
+					spawn_mictla_relic = yes
 				}
 			}
 		}
