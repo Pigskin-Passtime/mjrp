@@ -8,25 +8,26 @@
 
 namespace = twll_events
 
-# country_event = {
-# 	id = twll_events.1111
-# 	hide_window = yes
-# 	is_triggered_only = yes
-# 	trigger = {
-# 		is_ai = no
-# 	}
+country_event = {
+	id = twll_events.1111
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		is_ai = no
+	}
 
-# 	immediate = {
-# 		capital_scope = {
-# 			solar_system = {
-# 				spawn_system = {
-# 					initializer = legendary_leader_warpeo_puzzle
-# 					max_jumps = 1
-# 				}
-# 			}
-# 		}
-# 	}
-# }
+	immediate = {
+		capital_scope = {
+			solar_system = {
+				spawn_system = {
+					initializer = legendary_leader_warpeo_puzzle
+					max_jumps = 1
+				}
+				set_global_flag = warpeo_system_spawned
+			}
+		}
+	}
+}
 
 ship_event = {
 	id = twll_events.1
@@ -77,6 +78,9 @@ country_event = {
 
 	trigger = {
 		has_global_flag = warpeo_system_spawned
+		NOT = {
+			has_global_flag = warpeo_released_flag
+		}
 	}
 
 	immediate = {
@@ -130,7 +134,7 @@ country_event = {
 				randomize_traits = no
 				can_assign_to_council = no
 				skip_background_generation = yes
-				custom_catch_phrase = keides_catch_phrase
+				# custom_catch_phrase = x_catch_phrase
 				custom_description = "twll_events.2.desc"
 				immortal = yes
 				set_age = 0
@@ -146,9 +150,9 @@ country_event = {
 					set_leader_flag = legendary_leader
 					set_leader_flag = warpeo
 					set_leader_flag = immune_to_negative_traits
-					exile_leader_as = warpeo_leader
 					set_leader_flag = leader_death_events_blocked
 					set_owner = root
+					exile_leader_as = warpeo_leader
 				}
 			}
 		}
@@ -156,7 +160,6 @@ country_event = {
 
 	picture_event_data = {
 		portrait = event_target:warpeo_leader
-		room = galactic_custodian
 	}
 
 	option = {
@@ -165,21 +168,20 @@ country_event = {
 	}
 }
 
-country_event = { # HIRE/DISMISS Exakeides
+country_event = {
 	id = twll_events.3
 	title = "twll_events.3.name"
 	desc = "twll_events.3.desc"
 	diplomatic = yes
 	fire_only_once = yes
 	is_triggered_only = yes
-	# show_sound = par_event_keides
+	# show_sound = par_event_x
 
 	picture = GFX_leader_recruitment_bg_legendary_warpeo
 	event_window_type = leader_recruit
 
 	picture_event_data = {
-		portrait = event_target:legendary_lost_leader
-		room = galactic_custodian_room
+		portrait = event_target:warpeo_leader
 	}
 
 	trigger = {
@@ -203,10 +205,9 @@ country_event = { # HIRE/DISMISS Exakeides
 				save_global_event_target_as = warpeo_leader
 				set_leader_flag = immune_to_negative_traits
 				set_leader_flag = leader_death_events_blocked
-				set_owner = root
 			}
 
-			# country_event = { id = twll_events.3117 days = 60 }
+			country_event = { id = twll_events.8 days = 60 }
 		}
 
 		create_message = {
@@ -472,7 +473,7 @@ country_event = {
 	}
 
 	option = {
-		name = a
+		name = "twll_events.5.d"
 		allow = {
 			resource_stockpile_compare = {
 				resource = energy
@@ -481,8 +482,37 @@ country_event = {
 		}
 		trigger = {
 			NOR = {
-				has_global_flag = warpeo_puzzle_key_1_activated_flag
-				has_global_flag = warpeo_puzzle_key_2_activated_flag
+				has_global_flag = warpeo_puzzle_key_4_activated_flag
+				has_global_flag = warpeo_puzzle_key_5_activated_flag
+			}
+		}
+		hidden_effect = {
+			random_system = {
+				limit = {
+					has_star_flag = legendary_leader_warpeo_puzzle_system
+				}
+				random_ship_in_system = {
+					limit = {
+						has_ship_flag = warpeo_puzzle_key_4_flag
+					}
+					set_disabled = yes
+				}
+			}
+		}
+		add_resource = {
+			energy = -1000
+		}
+	}
+	option = {
+		name = "twll_events.5.c"
+		allow = {
+			resource_stockpile_compare = {
+				resource = energy
+				value >= 1000
+			}
+		}
+		trigger = {
+			NOR = {
 				has_global_flag = warpeo_puzzle_key_3_activated_flag
 				has_global_flag = warpeo_puzzle_key_4_activated_flag
 				has_global_flag = warpeo_puzzle_key_5_activated_flag
@@ -495,7 +525,7 @@ country_event = {
 				}
 				random_ship_in_system = {
 					limit = {
-						has_ship_flag = warpeo_puzzle_key_1_flag
+						has_ship_flag = warpeo_puzzle_key_3_flag
 					}
 					set_disabled = yes
 				}
@@ -506,7 +536,7 @@ country_event = {
 		}
 	}
 	option = {
-		name = b
+		name = "twll_events.5.b"
 		allow = {
 			resource_stockpile_compare = {
 				resource = energy
@@ -539,70 +569,7 @@ country_event = {
 		}
 	}
 	option = {
-		name = c
-		allow = {
-			resource_stockpile_compare = {
-				resource = energy
-				value >= 1000
-			}
-		}
-		trigger = {
-			NOR = {
-				has_global_flag = warpeo_puzzle_key_3_activated_flag
-				has_global_flag = warpeo_puzzle_key_4_activated_flag
-				has_global_flag = warpeo_puzzle_key_5_activated_flag
-			}
-		}
-		hidden_effect = {
-			random_system = {
-				limit = {
-					has_star_flag = legendary_leader_warpeo_puzzle_system
-				}
-				random_ship_in_system = {
-					limit = {
-						has_ship_flag = warpeo_puzzle_key_3_flag
-					}
-					set_disabled = yes
-				}
-			}
-		}
-		add_resource = {
-			energy = -1000
-		}
-	}
-	option = {
-		name = d
-		allow = {
-			resource_stockpile_compare = {
-				resource = energy
-				value >= 1000
-			}
-		}
-		trigger = {
-			NOR = {
-				has_global_flag = warpeo_puzzle_key_4_activated_flag
-				has_global_flag = warpeo_puzzle_key_5_activated_flag
-			}
-		}
-		hidden_effect = {
-			random_system = {
-				limit = {
-					has_star_flag = legendary_leader_warpeo_puzzle_system
-				}
-				random_ship_in_system = {
-					limit = {
-						has_ship_flag = warpeo_puzzle_key_4_flag
-					}
-					set_disabled = yes
-				}
-			}
-		}
-		add_resource = {
-			energy = -1000
-		}
-	}
-	option = {
-		name = e
+		name = "twll_events.5.e"
 		allow = {
 			resource_stockpile_compare = {
 				resource = energy
@@ -631,88 +598,42 @@ country_event = {
 			energy = -1000
 		}
 	}
+
+	option = {
+		name = "twll_events.5.a"
+		allow = {
+			resource_stockpile_compare = {
+				resource = energy
+				value >= 1000
+			}
+		}
+		trigger = {
+			NOR = {
+				has_global_flag = warpeo_puzzle_key_1_activated_flag
+				has_global_flag = warpeo_puzzle_key_2_activated_flag
+				has_global_flag = warpeo_puzzle_key_3_activated_flag
+				has_global_flag = warpeo_puzzle_key_4_activated_flag
+				has_global_flag = warpeo_puzzle_key_5_activated_flag
+			}
+		}
+		hidden_effect = {
+			random_system = {
+				limit = {
+					has_star_flag = legendary_leader_warpeo_puzzle_system
+				}
+				random_ship_in_system = {
+					limit = {
+						has_ship_flag = warpeo_puzzle_key_1_flag
+					}
+					set_disabled = yes
+				}
+			}
+		}
+		add_resource = {
+			energy = -1000
+		}
+	}
 	after = {
-		# if = {
-		# 	limit = {
-		# 		has_global_flag = warpeo_puzzle_key_1_activated_flag
-		# 		NOR = {
-		# 			has_global_flag = warpeo_puzzle_key_2_activated_flag
-		# 			has_global_flag = warpeo_puzzle_key_3_activated_flag
-		# 			has_global_flag = warpeo_puzzle_key_4_activated_flag
-		# 			has_global_flag = warpeo_puzzle_key_5_activated_flag
-		# 		}
-		# 	}
-		# 	country_event = {
-		# 		id = twll_events.5
-		# 	}
-		# }
-		# else_if = {
-		# 	limit = {
-		# 		has_global_flag = warpeo_puzzle_key_1_activated_flag
-		# 		has_global_flag = warpeo_puzzle_key_2_activated_flag
-		# 		NOR = {
-		# 			has_global_flag = warpeo_puzzle_key_3_activated_flag
-		# 			has_global_flag = warpeo_puzzle_key_4_activated_flag
-		# 			has_global_flag = warpeo_puzzle_key_5_activated_flag
-		# 		}
-		# 	}
-		# 	country_event = {
-		# 		id = twll_events.5
-		# 	}
-		# }
-		# else_if = {
-		# 	limit = {
-		# 		has_global_flag = warpeo_puzzle_key_1_activated_flag
-		# 		has_global_flag = warpeo_puzzle_key_2_activated_flag
-		# 		has_global_flag = warpeo_puzzle_key_3_activated_flag
-		# 		NOR = {
-		# 			has_global_flag = warpeo_puzzle_key_4_activated_flag
-		# 			has_global_flag = warpeo_puzzle_key_5_activated_flag
-		# 		}
-		# 	}
-		# 	country_event = {
-		# 		id = twll_events.5
-		# 	}
-		# }
-		# else_if = {
-		# 	limit = {
-		# 		has_global_flag = warpeo_puzzle_key_1_activated_flag
-		# 		has_global_flag = warpeo_puzzle_key_2_activated_flag
-		# 		has_global_flag = warpeo_puzzle_key_3_activated_flag
-		# 		has_global_flag = warpeo_puzzle_key_4_activated_flag
-		# 		NOT = {
-		# 			has_global_flag = warpeo_puzzle_key_5_activated_flag
-		# 		}
-		# 	}
-		# 	country_event = {
-		# 		id = twll_events.5
-		# 	}
-		# }
-		# else_if = {
-		# 	limit = {
-		# 		has_global_flag = warpeo_puzzle_key_1_activated_flag
-		# 		has_global_flag = warpeo_puzzle_key_2_activated_flag
-		# 		has_global_flag = warpeo_puzzle_key_3_activated_flag
-		# 		has_global_flag = warpeo_puzzle_key_4_activated_flag
-		# 		has_global_flag = warpeo_puzzle_key_5_activated_flag
-		# 	}
-		# 	country_event = {
-		# 		id = twll_events.2
-		# 	}
-		# }
-		# else = {
-		# 	random_ambient_object = {
-		# 		limit = {
-		# 			has_ambient_object_flag = wapreo_abandoned_wormhole_station_flag
-		# 		}
-		# 		root = {
-		# 			enable_special_project = {
-		# 				name = WARPEO_GUARDIANS_RESET_PROJECT
-		# 				location = prev
-		# 			}
-		# 		}
-		# 	}
-		# }
 		if = {
 			limit = {
 				NOT = {
@@ -740,8 +661,8 @@ country_event = {
 			}
 			country_event = {
 				id = twll_events.2
+				days = 30
 			}
-			add_relic = r_warpeo_artifice
 		}
 		else = {
 			random_ambient_object = {
@@ -763,73 +684,114 @@ country_event = {
 	id = twll_events.6
 	title = "twll_events.6.name"
 	desc = "twll_events.6.desc"
+	diplomatic = yes
 	is_triggered_only = yes
+	picture = GFX_leader_recruitment_bg_legendary_warpeo
+
+	picture_event_data = {
+		portrait = event_target:warpeo_leader
+		# room = galactic_custodian_room
+	}
 
 	trigger = {
 		has_global_flag = warpeo_system_spawned
 	}
 
-	immediate = {
-		random_bypass = {
-			limit = {
-				is_bypass_type = wormhole
+	option = {
+		name = "twll_events.6.a"
+		allow = {
+			custom_tooltip = {
+				fail_text = "warpeo_system_no_lock_fail"
+				any_owned_fleet = {
+					exists = leader
+					leader = {
+						has_leader_flag = warpeo
+					}
+					solar_system = {
+						any_bypass = {
+							has_lock = yes
+						}
+					}
+				}
 			}
-			save_event_target_as = wormhole_system_location
-			# prev = {
-			# 	random_owned_leader = {
-			# 		limit = {
-			# 			has_leader_flag = warpeo
-			# 		}
-			# 		leader.fleet = {
-			# 			delete_fleet = this
-			# 		}
-			# 	}
-			# }
+		}
+		hidden_effect = {
+			random_owned_fleet = {
+				limit = {
+					exists = leader
+					leader = {
+						has_leader_flag = warpeo
+					}
+				}
+				solar_system = {
+					every_bypass = {
+						limit = {
+							has_lock = yes
+						}
+						lock_bypass = {
+							country = owner
+							duration = 1
+						}
+					}
+				}
+			}
 		}
 	}
 
 	option = {
-		name = "Open transient wormhole to another"
-		hidden_effect = {
-			random_bypass = {
-				limit = {
-					is_bypass_type = wormhole
+		name = "twll_events.6.b"
+		allow = {
+			custom_tooltip = {
+				fail_text = "warpeo_system_no_bypass_or_locked_fail"
+				any_owned_fleet = {
+					exists = leader
+					leader = {
+						has_leader_flag = warpeo
+					}
+					solar_system = {
+						any_bypass = {
+							has_lock = no
+						}
+					}
 				}
-				solar_system = {
-					prevprev = {
-						random_owned_leader = {
+			}
+		}
+		hidden_effect = {
+			hidden_effect = {
+				random_owned_fleet = {
+					limit = {
+						exists = leader
+						leader = {
+							has_leader_flag = warpeo
+						}
+					}
+					solar_system = {
+						every_bypass = {
 							limit = {
-								has_leader_flag = warpeo
+								has_lock = no
 							}
-							# leader.fleet = {
-							# 	delete_fleet = this
-							# }
-							leader.solar_system = {
-								spawn_natural_wormhole = {
-									bypass_type = wormhole
-									
-								}
-								link_wormholes = prevprevprev
+							lock_bypass = {
+								country = owner
+								duration = 1800
 							}
 						}
 					}
 				}
 			}
 		}
-		add_seen_bypass_type = wormhole
 	}
 
 	option = {
-		name = "Open a transient wormhole on top of the enemy and make them go MIA (when comabt starts)"
+		name = "twll_events.6.c"
 		hidden_effect = {
 			set_country_flag = warpeo_spawn_mia_wormhole
 		}
 	}
 
 	option = {
-		name = "Open a transient wormhole on top of the enemy and make them go MIA (when comabt starts)"
+		name = "twll_events.6.d"
 		hidden_effect = {
-			set_country_flag = warpeo_spawn_mia_wormhole
+			
 		}
 	}
 }
@@ -839,6 +801,7 @@ country_event = {
 	title = "twll_events.7.name"
 	desc = "twll_events.7.desc"
 	is_triggered_only = yes
+	location = fromfromfrom
 
 	trigger = {
 		has_global_flag = warpeo_system_spawned
@@ -848,16 +811,26 @@ country_event = {
 				has_leader_flag = warpeo
 			}
 		}
+		fromfromfrom = {
+			fleet_power > 1000
+			any_owned_ship = {
+				is_ship_class = shipclass_military
+			}
+			NOT = {
+				is_ship_class = shipclass_starbase
+				is_ship_class = shipclass_military_station
+			}
+		}
 	}
 
 	immediate = {
 		fromfromfrom = {
-		# 	solar_system = {
-		# 		spawn_natural_wormhole = {
-		# 			bypass_type = wormhole
-					
-		# 		}
-		# 	}
+			create_ambient_object = {
+				type = extradimensional_2
+				location = this
+				scale = 0.05
+				duration = 5
+			}
 			add_modifier = {
 				modifier = warpeo_enemy_fleet_mia_time
 				days = 360
@@ -867,7 +840,35 @@ country_event = {
 	}
 
 	option = {
-		name = OK
+		name = "twll_events.7.a"
 	}
 }
 
+country_event = {
+	id = twll_events.8
+	title = "twll_events.8.name"
+	desc = "twll_events.8.desc"
+	diplomatic = yes
+	is_triggered_only = yes
+	picture = GFX_leader_recruitment_bg_legendary_warpeo
+
+	picture_event_data = {
+		portrait = event_target:warpeo_leader
+		# room = galactic_custodian_room
+	}
+	
+	option = {
+		name = twll_events.8.a
+		add_relic = r_warpeo_artifice
+	}
+	option = {
+		name = twll_events.8.b
+		response_text = twll_events.8.b.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = twll_events.8.c
+		response_text = twll_events.8.c.response
+		is_dialog_only = yes
+	}
+}
