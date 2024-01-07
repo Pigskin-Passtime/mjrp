@@ -353,11 +353,17 @@ country_event = {
 	id = hskv_hunt.1021
 	title = hskv_hunt.1021.name
 	desc = hskv_hunt.1021.desc
-	picture = GFX_evt_space_station
+	picture = GFX_evt_pirates_attacking_cargo
 	show_sound = event_default
 	is_triggered_only = yes
 
-	# TODO I guess if no valid targets, cancel the event?
+	trigger = {
+		any_system_within_border = {
+			has_trade_route = yes
+			trade_intercepted_value > 0
+		}
+	}
+
 	immediate = {
 		save_event_target_as = pirate_target
 		owner_species = { save_event_target_as = owner_species }
@@ -571,11 +577,10 @@ country_event = {
 	picture = GFX_evt_bribery
 	show_sound = event_default
 	is_triggered_only = yes
-
+	
 	immediate = {
 		hskv_get_thayo_manhunt_situation = yes
 	}
-
 
 	option = {
 		name = hskv_hunt.1030.option.a
@@ -598,9 +603,10 @@ country_event = {
 	}
 	option = {
 		name = hskv_hunt.1030.option.b
+		custom_tooltip = hskv_hunt.1030.option.b.tooltip
 		owner = {
 			event_target:hskv_situation_thayo_manhunt = {
-				add_situation_progress = -6
+				add_situation_progress = -2
 			}
 		}
 	}
@@ -618,16 +624,13 @@ country_event = {
 		hskv_get_thayo_manhunt_situation = yes
 	}
 
-
 	option = {
 		name = UNDERSTOOD
 		owner = {
 			add_resource = {
-				energy = -1000
-				minerals = -500
-				food = -500
-				consumer_goods = -300
-				alloys = -250
+				energy = -500
+				consumer_goods = -200
+				alloys = -100
 			}
 			event_target:hskv_situation_thayo_manhunt = {
 				add_situation_progress = 6
@@ -882,10 +885,20 @@ country_event = {
 		response_text = hskv_hunt.2102.option.b.response
 		is_dialog_only = yes
 	}
+	option = {
+		name = hskv_hunt.2102.option.c
+		response_text = hskv_hunt.2102.option.c.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = hskv_hunt.2102.option.d
+		response_text = hskv_hunt.2102.option.d.response
+		is_dialog_only = yes
+	}
 
 
 	option = {
-		name =  hskv_hunt.2102.option.c
+		name =  hskv_hunt.2102.option.e
 		hidden_effect = {
 			owner = {
 				country_event = {
@@ -916,7 +929,7 @@ country_event = {
 		hidden_effect = {
 			owner = {
 				country_event = {
-					id = hskv_hunt.2110
+					id = hskv_hunt.2111
 					days = 1
 				}
 			}
@@ -1011,32 +1024,8 @@ country_event = {
 
 # Lets get back to work
 country_event = {
-	id = hskv_hunt.2110
-	title = hskv_hunt.2102.name
-	desc = hskv_hunt.2110.desc
-	show_sound = event_default
-	diplomatic = yes
-	is_triggered_only = yes
-	picture_event_data = {
-		portrait = hskv_thayo_portrait
-		room = ethic_spaceship_room
-	}
-
-	option = {
-		name =  hskv_hunt.2104.response
-		hidden_effect = {
-			owner = {
-				country_event = {
-					id = hskv_hunt.2111
-					days = 1
-				}
-			}
-		}
-	}
-}
-country_event = {
 	id = hskv_hunt.2111
-	title = hskv_hunt.2102.name
+	title = hskv_hunt.2101.name
 	desc = hskv_hunt.2111.desc
 	show_sound = event_default
 	diplomatic = yes
@@ -1102,9 +1091,9 @@ country_event = {
 					randomize_traits = yes
 					effect = {
 						set_age = 20
-						add_skill_without_trait_selection = 10
-						remove_all_traits = yes
+
 						set_skill = 1
+						set_leader_flag = is_in_recruit_window
 						remove_all_traits = yes
 
 						set_leader_flag = legendary_leader
@@ -1113,13 +1102,14 @@ country_event = {
 						set_leader_flag = cannot_explore_rift
 						set_leader_flag = hskv_thayo_everdawn_leader
 			
-						add_trait_no_notify = subclass_official_diplomacy_councilor #todo flag for paragons?
+						add_trait_no_notify = subclass_official_diplomacy_councilor
 						add_trait_no_notify = hskv_leader_trait_thayo_everdawn_4
 						add_trait_no_notify = leader_trait_psionic
 						add_trait_no_notify = trait_ruler_charismatic_2
 						add_trait_no_notify = leader_trait_politician_2
 						
 						add_trait_no_notify = hskv_leader_trait_population_oversight
+						add_trait_no_notify = hskv_leader_trait_unrestricted_research_2
 						add_trait_no_notify = hskv_leader_trait_zro_dealer_contact
 						add_trait_no_notify = hskv_leader_trait_pinnacle
 						add_trait_no_notify = hskv_leader_trait_asset_forfeiture
