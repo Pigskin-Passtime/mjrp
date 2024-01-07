@@ -10,8 +10,8 @@
 
 r_warpeo_artifice = {
 	activation_duration = @triumph_duration_veryshort
-	portrait = "GFX_relic_galaxy"
-	sound = "relic_activation_continuum"
+	portrait = "GFX_relic_warpeo_artifice"
+	# sound = "relic_activation_x"
 
 	resources = {
 		category = relics
@@ -36,10 +36,15 @@ r_warpeo_artifice = {
 	score = 1000
 
 	active_effect = {
-		custom_tooltip = relic_triumph_cooldown
+		custom_tooltip = relic_triumph_cooldown_veryshort
+		custom_tooltip = r_warpeo_artifice_regular_effect
 		hidden_effect = {
 			country_event = {
 				id = twll_events.6
+			}
+			add_modifier = {
+				modifier = "relic_activation_cooldown"
+				days = @triumph_duration_veryshort
 			}
 		}
 	}
@@ -49,6 +54,15 @@ r_warpeo_artifice = {
 		inline_script = {
 			script = relics/activation_checks
 			RELIC = r_warpeo_artifice
+		}
+		custom_tooltip = {
+			fail_text = "warpeo_not_assigned_fail"
+			any_owned_fleet = {
+				exists = leader
+				leader = {
+					has_leader_flag = warpeo
+				}
+			}
 		}
 	}
 }
