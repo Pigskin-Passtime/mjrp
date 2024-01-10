@@ -4,6 +4,7 @@
 
 # Mandatory leader debug/spawn system
 spawn_chronotec = {
+	set_global_flag = chronotec_system_spawned
 	# As this effect would be spawned either by menu or manual
 	# at system level in theory...
 	root = {
@@ -12,6 +13,93 @@ spawn_chronotec = {
 	# Redundancy in case its forcespawned
 	set_global_flag = chronotec_anomaly_spawned
 
+	# Redundancy - creates the country/leader if they dont exist
+		# Country Created
+		if = {
+			limit = {
+				NOT = {
+					exists = event_target:chronotec_chronolord_country
+				}
+			}
+			create_country = {
+				name = "NAME_chronotec_chronolord"
+				type = chronotec_event_country
+				flag = {
+					icon = {
+						category = "spherical"
+						file = "flag_spherical_20.dds"
+					}
+					background= {
+						category = "backgrounds"
+						file = "00_solid.dds"
+					}
+					colors={
+						"purple"
+						"black"
+						"null"
+						"null"
+					}
+				}
+				effect = {
+					set_country_flag = suppress_first_contact_comms
+					save_global_event_target_as = chronotec_chronolord_country
+				}
+			}
+		}
+		# Leader created
+		if = {
+			limit = {
+				NOT = {
+					exists = event_target:chronotec_chronolord_leader
+				}
+			}
+			event_target:chronotec_chronolord_country = {
+				create_species = {
+					name = "NAME_Unknown"
+					class = PARAGON
+					portrait = "chronotec_chronolord_portrait_standard"
+					namelist = "PRT1"
+					traits = random
+					effect = {
+						save_event_target_as = chronotec_chronolord_species
+					}
+				}
+				create_leader = {
+					species = event_target:chronotec_chronolord_species
+					event_leader = yes
+					class = scientist
+					name = "NAME_chronotec_chronolord"
+					skill = 10
+					immortal = yes
+					background_ethic = ethic_materialist
+					randomize_traits = no
+					skip_background_generation = yes
+					custom_catch_phrase = chronotec_chronolord_catch_phrase
+					custom_description = chronotec_chronolord_backstory
+					traits = {
+						trait = leader_trait_physics_focus_3
+						trait = leader_trait_collaborator_3
+						trait = leader_trait_chronotec_chronolord_infusion_neutral
+						trait = subclass_scientist_governor
+					}
+					gender = indeterminable
+					set_age = 0
+					hide_age = yes
+					effect = {
+						save_global_event_target_as = chronotec_chronolord_leader
+						set_leader_flag = legendary_leader
+						set_leader_flag = chronotec_chronolord_leader
+						set_leader_flag = immune_to_negative_traits
+						set_leader_flag = leader_death_events_blocked
+						set_owner = event_target:chronotec_chronolord_country
+						exile_leader_as = chronotec_chronolord_leader
+					}
+				}
+			}
+		}
+		# /
+	# /
+	
 	# Dynamic scope
 	[[SCOPE]
 		$SCOPE$ = {
@@ -53,7 +141,7 @@ spawn_chronotec = {
 	[[DIGSITE_DEBUG]
 		every_archaeological_site = {
 			limit = {
-				is_site_type = digsite_chronotec_world
+				is_site_type = site_chronotec_world
 			}
 			set_archaeology_flag = chronotec_digsite_debug
 		}
@@ -119,6 +207,32 @@ spawn_chronotec = {
 	# /
 # /
 
+chronotec_convert_into_relic_effect = {
+	remove_country_flag = chronotec_chronolord_is_leader
+	set_country_flag = chronotec_chronolord_is_relic
+	# Adds the relic
+	add_relic = r_chronotec_standard
+	set_saved_date = {	# Charge timer
+		key = chronotec_charge_timer
+		days_from_present = @chronotec_charge_timer
+		expires = @chronotec_charge_timer
+	}
+	# Repeatable event
+	country_event = {
+		id = chronotec_relic.20
+		days = @chronotec_charge_timer
+	}
+	# Handles the leader
+	event_target:chronotec_chronolord_leader = {
+		exile_leader_as = chronotec_chronolord_is_relic
+	}
+	#set_saved_date = {	# Transformation timer
+	#	key = chronotec_transformation_timer
+	#	days_from_present = @chronotec_charge_timer
+	#	expires = 3180060
+	#}
+}
+
 chronotec_convert_into_leader_effect = {
 	create_fleet = {
 		name = "NAME_Other_Science_Ship"
@@ -128,14 +242,21 @@ chronotec_convert_into_leader_effect = {
 				name = random
 				random_existing_design = science
 			}
-			set_leader = chronotec_exiled_as_relic
+			set_leader = chronotec_chronolord_is_relic
 			unassign_leader = this
 			destroy_fleet = this
 		}
 	}
-	# Reduncancy
-	remove_country_flag = chronotec_exiled_as_relic
+	# Redundancy
+	remove_country_flag = chronotec_chronolord_is_relic
+	set_country_flag = chronotec_chronolord_is_leader
+	# Removes the relic
 	remove_relic = r_chronotec_standard
+	#set_saved_date = {	# Transformation timer
+	#	key = chronotec_transformation_timer
+	#	days_from_present = @chronotec_charge_timer
+	#	expires = 3180060
+	#}
 }
 
 chronotec_increase_charges_effect = {
@@ -151,7 +272,7 @@ chronotec_increase_charges_effect = {
 				country_event = {
 					id = chronotec_relic.30
 				}
-				remove_country_flag = chronotec_exiled_as_relic
+				remove_country_flag = chronotec_chronolord_is_relic
 				if = {
 					limit = {
 						has_relic = r_chronotec_standard
@@ -254,7 +375,7 @@ chronotec_decrease_charges_effect = {
 				country_event = {
 					id = chronotec_relic.30
 				}
-				remove_country_flag = chronotec_exiled_as_relic
+				remove_country_flag = chronotec_chronolord_is_relic
 				if = {
 					limit = {
 						has_relic = r_chronotec_standard
@@ -344,7 +465,6 @@ chronotec_decrease_charges_effect = {
 		}
 	}
 }
-
 
 # Archaeology site
 site_chronotec_world_random_events = {

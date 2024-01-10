@@ -27,6 +27,8 @@ namespace = chronotec_narrative
 			hidden_effect = {
 				solar_system = {
 					set_star_flag = chronotec_gate_system
+					# Redundancy
+					save_global_event_target_as = chronotec_gate_system
 				}
 			}
 		}
@@ -58,6 +60,8 @@ namespace = chronotec_narrative
 			hidden_effect = {
 				solar_system = {
 					set_star_flag = chronotec_gate_system
+					# Redundancy
+					save_global_event_target_as = chronotec_gate_system
 				}
 			}
 		}
@@ -89,6 +93,8 @@ namespace = chronotec_narrative
 			hidden_effect = {
 				solar_system = {
 					set_star_flag = chronotec_gate_system
+					# Redundancy
+					save_global_event_target_as = chronotec_gate_system
 				}
 			}
 		}
@@ -120,6 +126,8 @@ namespace = chronotec_narrative
 			hidden_effect = {
 				solar_system = {
 					set_star_flag = chronotec_gate_system
+					# Redundancy
+					save_global_event_target_as = chronotec_gate_system
 				}
 			}
 		}
@@ -162,6 +170,13 @@ namespace = chronotec_narrative
 				}
 				save_global_event_target_as = chronotec_astral_location
 				spawn_astral_scar = yes
+				random_system_planet = {
+					limit = {
+						is_astral_scar = yes
+					}
+					set_planet_flag = chronotec_rift
+					save_global_event_target_as = chronotec_rift
+				}
 			}
 		}
 
@@ -170,6 +185,7 @@ namespace = chronotec_narrative
 			custom_tooltip = chronotec_narrative.20.a.tooltip
 			start_situation = {
 				type = situation_chronotec_study_scar
+				target = event_target:chronotec_astral_location
 			}
 		}
 		option = {
@@ -177,8 +193,23 @@ namespace = chronotec_narrative
 			custom_tooltip = chronotec_narrative.20.b.tooltip
 			trigger = {
 				has_astral_planes_dlc = yes
+				
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 250
+				}
 			}
-			# TO DO ASTRAL SCAR CHECK
+
+			add_resource = {
+				energy = -250
+			}
+			hidden_effect = {
+				event_target:chronotec_rift = {
+					split_astral_scar = {
+						ID = astral_rift_chronotec_unseal
+					}
+				}
+			}
 		}
 	}
  # /
@@ -189,8 +220,7 @@ namespace = chronotec_narrative
 		title = "chronotec_narrative.21100.name"
 		desc = "chronotec_narrative.21100.desc"
 
-		# TO DO art
-		picture = GFX_evt_tradedeal
+		picture = GFX_evt_astral_rift
 		is_triggered_only = yes
 		situation = this
 		location = target
@@ -213,7 +243,7 @@ namespace = chronotec_narrative
 			icon = {
 				icon = GFX_situation_approach_astral
 				icon_background = GFX_situation_approach_bg_yellow
-				text = chronotec_icon_text_bad_outcome
+				text = chronotec_icon_text_good_outcome
 			}
 			set_situation_approach = situation_chronotec_study_scar_approach_neutral
 		}
@@ -224,7 +254,7 @@ namespace = chronotec_narrative
 			icon = {
 				icon = GFX_situation_approach_astral
 				icon_background = GFX_situation_approach_bg_green
-				text = chronotec_icon_text_bad_outcome
+				text = chronotec_icon_text_good_outcome
 			}
 			set_situation_approach = situation_chronotec_study_scar_approach_fast
 		}
@@ -247,8 +277,7 @@ namespace = chronotec_narrative
 		title = "chronotec_narrative.21110.name"
 		desc = "chronotec_narrative.21110.desc"
 
-		# TO DO art
-		picture = GFX_evt_tradedeal
+		picture = GFX_evt_surreal_visions
 		is_triggered_only = yes
 		situation = this
 		location = target
@@ -281,8 +310,7 @@ namespace = chronotec_narrative
 		title = "chronotec_narrative.21120.name"
 		desc = "chronotec_narrative.21120.desc"
 
-		# TO DO art
-		picture = GFX_evt_tradedeal
+		picture = GFX_evt_binary_stars
 		is_triggered_only = yes
 		situation = this
 		location = target
@@ -315,8 +343,7 @@ namespace = chronotec_narrative
 		title = "chronotec_narrative.21140.name"
 		desc = "chronotec_narrative.21140.desc"
 
-		# TO DO art
-		picture = GFX_evt_tradedeal
+		picture = GFX_evt_wormhole
 		is_triggered_only = yes
 		situation = this
 		location = target
@@ -349,8 +376,7 @@ namespace = chronotec_narrative
 		title = "chronotec_narrative.21160.name"
 		desc = "chronotec_narrative.21160.desc"
 
-		# TO DO art
-		picture = GFX_evt_tradedeal
+		picture = GFX_evt_physics_research
 		is_triggered_only = yes
 		situation = this
 		location = target
@@ -383,8 +409,7 @@ namespace = chronotec_narrative
 		title = "chronotec_narrative.21180.name"
 		desc = "chronotec_narrative.21180.desc"
 
-		# TO DO art
-		picture = GFX_evt_tradedeal
+		picture = GFX_evt_clocks
 		is_triggered_only = yes
 		situation = this
 		location = target
@@ -417,8 +442,7 @@ namespace = chronotec_narrative
 		title = "chronotec_narrative.21190.name"
 		desc = "chronotec_narrative.21190.desc"
 
-		# TO DO art
-		picture = GFX_evt_tradedeal
+		picture = GFX_evt_clocks
 		is_triggered_only = yes
 		situation = this
 		location = target
@@ -448,86 +472,376 @@ namespace = chronotec_narrative
  # /
 
  # Option B Astral Rift
-	#chronotec_narrative.22000	# TO DO
-	# Route 0
-	# Route 1 - The loop is Made
-	#chronotec_narrative.22010	# TO DO
-	#chronotec_narrative.22020	# TO DO
-	#chronotec_narrative.22030	# TO DO
-	#chronotec_narrative.22040	# TO DO
-	#chronotec_narrative.22040	# TO DO
-
-	# Route 2 - A glimpse on Perfection
-	#chronotec_narrative.22010	# TO DO
-	#chronotec_narrative.22020	# TO DO
-	#chronotec_narrative.22030	# TO DO
-	#chronotec_narrative.22040	# TO DO
-	#chronotec_narrative.22040	# TO DO
-
-	# Route 3 - Timeless Power
-	#chronotec_narrative.22010	# TO DO
-	#chronotec_narrative.22020	# TO DO
-	#chronotec_narrative.22030	# TO DO
-	#chronotec_narrative.22040	# TO DO
-	#chronotec_narrative.22040	# TO DO
-
-	# Route 4 - Creation of Time
-	#chronotec_narrative.22010	# TO DO
-	#chronotec_narrative.22020	# TO DO
-	#chronotec_narrative.22030	# TO DO
-	#chronotec_narrative.22040	# TO DO
-	#chronotec_narrative.22050	# TO DO
-
- # /
-
- # Situation failed - Lost in Time
-	#chronotec_narrative.2502
-	country_event = { # Situation finished
-		id = chronotec_narrative.2502
-		title = "chronotec_narrative.2502.name"
-		desc = "chronotec_narrative.2502.desc"
-
-		# TO DO art
-		picture = GFX_evt_tradedeal
-		show_sound = event_synthetic_evolution
+	#							> 22210	>	22220 (key)	> 22230	> END
+	#								^
+	#	22000 > 22110 	> 22120	> 22130	> 
+	#						v		v
+	#						> 22310		> 22320	> 22330 > 22340 > END
+	#									> 22210	
+	
+	#chronotec_narrative.22000	# Home
+	astral_rift_event = {
+		id = chronotec_narrative.22000
+		title = chronotec_narrative.22000.name
+		desc = {
+			trigger = {
+				switch = {
+					trigger = has_astral_rift_flag
+					description_gestalt = {
+						text = chronotec_narrative.22000.desc
+					}
+					default = {
+						text = chronotec_narrative.22000.desc
+					}
+				}
+			}
+		}
+		picture = GFX_evt_astral_rift
+		show_sound = ap_rift_event_0_astral_wonder
+		difficulty = @chronotec_rift_difficulty_0
+		astral_rift = yes
 		is_triggered_only = yes
 
 		option = {
-			name = chronotec_narrative.2502.a
-			custom_tooltip = chronotec_narrative.2502.a.tooltip
-			icon = {
-				icon = GFX_situation_approach_this_is_fine
-				icon_background = GFX_situation_approach_bg_red
-				text = chronotec_icon_text_bad_outcome
+			name = chronotec_narrative.22000.proceed
+			set_next_astral_rift_event = { id = chronotec_narrative.22110 }
+		}
+
+		after = {
+			explorer = {
+				astral_thread_small_reward = yes
 			}
+		}
+	}
+	# Route 0
+	# Route 1 - The loop is Made
+	#chronotec_narrative.22110	# Turbulent time inside the rift
+	astral_rift_event = {
+		id = chronotec_narrative.22110
+		title = chronotec_narrative.22110.name
+		desc = {
+			text = chronotec_narrative.22110.desc
+		}
+		picture = GFX_evt_vortex
+		show_sound = ap_rift_event_0_astral_wonder
+		difficulty = @chronotec_rift_difficulty_0
+		astral_rift = yes
+		is_triggered_only = yes
+
+		option = {	# Keep exploring
+			name = chronotec_narrative.22110.explore
+			explorer = {
+				astral_thread_medium_reward = yes
+			}
+			set_next_astral_rift_event = { id = chronotec_narrative.22120 }
+		}
+		option = {	# Deviates to creation of time
+			name = chronotec_narrative.22110.observe
+			explorer = {
+				astral_thread_small_reward = yes
+			}
+			set_next_astral_rift_event = { id = chronotec_narrative.22310 }
+		}
+	}
+	#chronotec_narrative.22120	# A loop within a loop
+	astral_rift_event = {
+		id = chronotec_narrative.22120
+		title = chronotec_narrative.22120.name
+		desc = {
+			text = chronotec_narrative.22120.desc
+		}
+		picture = GFX_evt_vortex
+		show_sound = ap_rift_event_3_dimensional_bending
+		difficulty = @chronotec_rift_difficulty_1
+		astral_rift = yes
+		is_triggered_only = yes
+
+		option = {	# What can have caused this? - deviates
+			name = chronotec_narrative.22120.wonder
+			explorer = {
+				astral_thread_small_reward = yes
+			}
+			set_next_astral_rift_event = { id = chronotec_narrative.22210 }
+		}
+		option = {	# Monitor the formation of the loop
+			name = chronotec_narrative.22120.monitor
+			explorer = {
+				astral_thread_medium_reward = yes
+			}
+			set_next_astral_rift_event = { id = chronotec_narrative.22130 }
+		}
+	}
+	#chronotec_narrative.22130	# All that starts...
+	astral_rift_event = {
+		id = chronotec_narrative.22130
+		title = chronotec_narrative.22130.name
+		desc = {
+			text = chronotec_narrative.22130.desc
+		}
+		picture = GFX_evt_rift_sphere
+		show_sound = ap_rift_event_9_cosmic_calm
+		difficulty = @chronotec_rift_difficulty_2
+		astral_rift = yes
+		is_triggered_only = yes
+
+		option = {	# Take notes and continue - deviates
+			name = chronotec_narrative.22130.continue
+			explorer = {
+				astral_thread_small_reward = yes
+			}
+			set_next_astral_rift_event = { id = chronotec_narrative.22210 }
+		}
+	}
+
+	# Route 2 - A glimpse on Perfection
+	#chronotec_narrative.22210	# A Glimpse of Perfection
+	astral_rift_event = {
+		id = chronotec_narrative.22210
+		title = chronotec_narrative.22210.name
+		desc = {
+			text = chronotec_narrative.22210.desc
+		}
+		picture = GFX_evt_astral_rift_subnautical_1
+		show_sound = ap_rift_event_0_astral_wonder
+		difficulty = @chronotec_rift_difficulty_3
+		astral_rift = yes
+		is_triggered_only = yes
+
+		option = {	# Continues route
+			name = chronotec_narrative.22210.continue
+			explorer = {
+				astral_thread_medium_reward = yes
+			}
+			set_next_astral_rift_event = { id = chronotec_narrative.22220 }
+		}
+		option = {	# Deviates to creation of time
+			name = chronotec_narrative.22210.observe
+			explorer = {
+				astral_thread_small_reward = yes
+			}
+			set_next_astral_rift_event = { id = chronotec_narrative.22310 }
+		}
+	}
+	#chronotec_narrative.22220	# Those Outside Time
+	astral_rift_event = {
+		id = chronotec_narrative.22220
+		title = chronotec_narrative.22220.name
+		desc = {
+			text = chronotec_narrative.22220.desc
+		}
+		picture = GFX_evt_astral_rift_tower
+		show_sound = ap_rift_event_0_meditating_voices
+		difficulty = @chronotec_rift_difficulty_4
+		astral_rift = yes
+		is_triggered_only = yes
+
+		immediate = {
 			hidden_effect = {
-				# TO DO
+				owner = {
+					set_country_flag = chronotec_knows_chronomancy
+				}
+			}
+		}
+
+		option = {	# Continues route
+			name = chronotec_narrative.22220.continue
+			explorer = {
+				astral_thread_medium_reward = yes
+			}
+			set_next_astral_rift_event = { id = chronotec_narrative.22230 }
+		}
+	}
+	#chronotec_narrative.22230	# Unstable Experiment
+	astral_rift_event = {
+		id = chronotec_narrative.22230
+		title = chronotec_narrative.22230.name
+		desc = {
+			text = chronotec_narrative.22230.desc
+		}
+		picture = GFX_evt_vortex
+		show_sound = ap_rift_event_0_astral_wonder
+		difficulty = @chronotec_rift_difficulty_5
+		astral_rift = yes
+		is_triggered_only = yes
+
+		option = {	# Final
+			name = chronotec_narrative.22230.end
+			explorer = {
+				astral_thread_large_reward = yes
+				add_monthly_resource_mult = {
+					resource = unity
+					value = @tier1unityreward
+					min = @tier1unitymin
+					max = @tier1unitymax
+				}
+			}
+			finish_astral_rift = yes
+			hidden_effect = {
+				explorer = {
+					country_event = {
+						id = chronotec_narrative.2500
+						days = 1
+					}
+				}
 			}
 		}
 	}
 
- # System is created - 
- # TODO diff between situation and rift
-	#chronotec_narrative.2501
-	country_event = { # Situation finished
-		id = chronotec_narrative.2501
-		title = "chronotec_narrative.2501.name"
-		desc = "chronotec_narrative.2501.desc"
+	# Route 3 - Creation of Time
+	#chronotec_narrative.22310	# Creation of Time
+	astral_rift_event = {
+		id = chronotec_narrative.22310
+		title = chronotec_narrative.22310.name
+		desc = {
+			text = chronotec_narrative.22310.desc
+		}
+		picture = GFX_evt_vortex
+		show_sound = ap_rift_event_0_astral_wonder
+		difficulty = @chronotec_rift_difficulty_3
+		astral_rift = yes
+		is_triggered_only = yes
 
-		# TO DO art
-		picture = GFX_evt_tradedeal
-		show_sound = event_synthetic_evolution
+		option = {	# Continues
+			name = chronotec_narrative.22310.end
+			explorer = {
+				astral_thread_small_reward = yes
+			}
+			set_next_astral_rift_event = { id = chronotec_narrative.22320 }
+		}
+	}
+	#chronotec_narrative.22320	# Guiding Compass
+	astral_rift_event = {
+		id = chronotec_narrative.22320
+		title = chronotec_narrative.22320.name
+		desc = {
+			text = chronotec_narrative.22320.desc
+		}
+		picture = GFX_evt_clocks
+		show_sound = ap_rift_event_0_astral_wonder
+		difficulty = @chronotec_rift_difficulty_0
+		astral_rift = yes
+		is_triggered_only = yes
+
+		immediate = {
+			hidden_effect = {
+				explorer = {
+					set_country_flag = chronotec_knows_relic
+				}
+			}
+		}
+
+		option = {	# Second Hint - deviation
+			name = chronotec_narrative.22320.monitor
+			explorer = {
+				astral_thread_small_reward = yes
+			}
+			set_next_astral_rift_event = { id = chronotec_narrative.22330 }
+		}
+		option = {	# Final
+			name = chronotec_narrative.22320.end
+			explorer = {
+				astral_thread_medium_reward = yes
+			}
+			set_next_astral_rift_event = { id = chronotec_narrative.22320 }
+		}
+	}
+	#chronotec_narrative.22330	# Impossible Forces, Impossible Outcomes
+	astral_rift_event = {
+		id = chronotec_narrative.22330
+		title = chronotec_narrative.22330.name
+		desc = {
+			text = chronotec_narrative.22330.desc
+		}
+		picture = GFX_evt_crystal_sphere
+		show_sound = ap_rift_event_19_black_obelisk
+		difficulty = @chronotec_rift_difficulty_5
+		astral_rift = yes
+		is_triggered_only = yes
+
+		option = {	# Final
+			name = chronotec_narrative.22330.end
+			explorer = {
+				astral_thread_large_reward = yes
+				add_monthly_resource_mult = {
+					resource = unity
+					value = @tier1unityreward
+					min = @tier1unitymin
+					max = @tier1unitymax
+				}
+			}
+			finish_astral_rift = yes
+			hidden_effect = {
+				explorer = {
+					country_event = {
+						id = chronotec_narrative.2500
+						days = 1
+					}
+				}
+			}
+		}
+	}
+ # /
+ # Astral rift finished - System is created
+	country_event = { # Situation finished
+		id = chronotec_narrative.2500
+		title = "chronotec_narrative.2500.name"
+		desc = {
+			trigger = {
+				owner = {
+					NOR = {
+						has_country_flag = chronotec_knows_chronomancy
+						has_country_flag = chronotec_knows_relic
+					}
+				}
+			}
+			text = "chronotec_narrative.2500.desc.clueless"
+		}
+		desc = {
+			trigger = {
+				owner = {
+					NOT = {
+						has_country_flag = chronotec_knows_relic
+					}
+					has_country_flag = chronotec_knows_chronomancy
+				}
+			}
+			text = "chronotec_narrative.2500.desc.knows.chronomancy"
+		}
+		desc = {
+			trigger = {
+				owner = {
+					NOT = {
+						has_country_flag = chronotec_knows_chronomancy
+					}
+					has_country_flag = chronotec_knows_relic
+				}
+			}
+			text = "chronotec_narrative.2500.desc.knows.relic"
+		}
+		desc = {
+			trigger = {
+				owner = {
+					has_country_flag = chronotec_knows_chronomancy
+					has_country_flag = chronotec_knows_relic
+				}
+			}
+			text = "chronotec_narrative.2500.desc.knows.all"
+		}
+
+		picture = GFX_evt_situation_the_seal
+		show_sound = ap_rift_event_19_black_obelisk
 		is_triggered_only = yes
 
 		option = {
-			name = chronotec_narrative.2501.a
-			custom_tooltip = chronotec_narrative.2501.a.tooltip
+			name = chronotec_narrative.2500.a
+			custom_tooltip = chronotec_narrative.2500.a.tooltip
 			icon = {
 				icon = GFX_situation_approach_this_is_fine
-				icon_background = GFX_situation_approach_bg_red
-				text = chronotec_icon_text_bad_outcome
+				icon_background = GFX_situation_approach_bg_yellow
+				text = chronotec_icon_text_unknown_outcome
 			}
 			hidden_effect = {
+				set_country_flag = chronotec_spawned_system
 				# Spawns the system
 				spawn_chronotec = {
 					SCOPE = event_target:chronotec_astral_location
@@ -539,9 +853,137 @@ namespace = chronotec_narrative
 			}
 		}
 	}
+ # /
+
+ # Situation finished - System is created - 
+	#chronotec_narrative.2501
+	country_event = { # Situation finished
+		id = chronotec_narrative.2501
+		title = "chronotec_narrative.2501.name"
+		desc = "chronotec_narrative.2501.desc"
+
+		picture = GFX_evt_black_hole
+		show_sound = ap_rift_event_19_black_obelisk
+		is_triggered_only = yes
+
+		option = {
+			name = chronotec_narrative.2501.a
+			custom_tooltip = chronotec_narrative.2501.a.tooltip
+			icon = {
+				icon = GFX_situation_approach_this_is_fine
+				icon_background = GFX_situation_approach_bg_yellow
+				text = chronotec_icon_text_unknown_outcome
+			}
+		}
+
+		after = {
+			hidden_effect = {
+				set_country_flag = chronotec_spawned_system
+				# Spawns the system
+				spawn_chronotec = {
+					SCOPE = event_target:chronotec_astral_location
+					SURVEY = no
+					DIGSITE_DEBUG = no
+					LEADER_DEBUG = no
+					EXTRA_EFFECT = ""
+				}
+			}
+		}
+	}
+ # Situation failed - Lost in Time
+	#chronotec_narrative.2502
+	country_event = { # Situation finished
+		id = chronotec_narrative.2502
+		title = "chronotec_narrative.2502.name"
+		desc = "chronotec_narrative.2502.desc"
+
+		picture = GFX_evt_wormhole
+		show_sound = event_mystic_reveal_light
+		is_triggered_only = yes
+
+		option = {
+			name = chronotec_narrative.2502.a
+			custom_tooltip = chronotec_narrative.2502.a.tooltip
+			icon = {
+				icon = GFX_situation_approach_this_is_fine
+				icon_background = GFX_situation_approach_bg_red
+				text = chronotec_icon_text_bad_outcome
+			}
+			hidden_effect = {
+				set_global_flag = chronotec_chronolord_disabled
+			}
+		}
+	}
 # /
 
 # ----------------- phase 2 ---------------
+ # System is visited
+	ship_event = {
+		id = chronotec_narrative.2601
+		title = "chronotec_narrative.2601.name"
+		desc = {
+			trigger = {
+				owner = {
+					NOT = {
+						has_country_flag = chronotec_spawned_system
+					}
+				}
+			}
+			text = chronotec_narrative.2601.desc.no.original
+		}
+		desc = {
+			trigger = {
+				owner = {
+					has_country_flag = chronotec_spawned_system
+				}
+			}
+			text = chronotec_narrative.2601.desc.original
+		}
+		picture = GFX_evt_binary_stars
+		show_sound = event_radio_chatter
+		location = FROM
+
+		is_triggered_only = yes
+
+		trigger = {
+			owner = {
+				NOT = {
+					has_country_flag = chronotec_visited_system
+				}
+			}
+			FROM = {
+				has_star_flag = chronotec_system
+			}
+		}
+
+		immediate = {
+			owner = {
+				set_country_flag = chronotec_visited_system
+			}
+		}
+
+		option = {
+			name = "chronotec_narrative.2601.a.no.original"
+			custom_tooltip = chronotec_narrative.2601.a.no.original.tooltip
+			trigger = {
+				owner = {
+					NOT = {
+						has_country_flag = chronotec_spawned_system
+					}
+				}
+			}
+		}
+		option = {
+			name = "chronotec_narrative.2601.a.original"
+			custom_tooltip = chronotec_narrative.2601.a.original.tooltip
+			trigger = {
+				owner = {
+					has_country_flag = chronotec_spawned_system
+				}
+			}
+		}
+	}
+ # /
  # Planet is surveyed - adds digsite
 	#chronotec_narrative.26
 	# on_survey
@@ -567,9 +1009,33 @@ namespace = chronotec_narrative
 			hidden_effect = {
 				from = {
 					create_archaeological_site = site_chronotec_world
-					owner = {
+					root.owner = {
 						set_country_flag = chronotec_digisite_@prev
 					}
+				}
+			}
+		}
+	}
+	ship_event = {
+		id = chronotec_narrative.2605
+		hide_window = yes
+		show_sound = no_sound
+		is_triggered_only = yes
+	
+		trigger = {
+			owner = {
+				has_country_flag = chronotec_spawned_system
+			}
+			solar_system = {
+				has_star_flag = chronotec_system
+			}
+		}
+		
+		immediate = {
+			solar_system = {
+				create_starbase = {
+					size = starbase_outpost
+					owner = root.owner
 				}
 			}
 		}
@@ -651,7 +1117,22 @@ namespace = chronotec_narrative
 	fleet_event = {
 		id = chronotec_narrative.27040
 		title = "chronotec_narrative.27040.name"
-		desc = "chronotec_narrative.27040.desc"
+		desc = {
+			trigger = {
+				owner = {
+					is_homicidal = no
+				}
+			}
+			text = "chronotec_narrative.27040.desc"
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_homicidal = yes
+				}
+			}
+			text = "chronotec_narrative.27040.desc.homicidal"
+		}
 		picture = GFX_evt_rare_tech_cache
 		show_sound = event_finding_loot
 		location = from
@@ -668,11 +1149,54 @@ namespace = chronotec_narrative
 		}
 
 		option = {
-			name = "chronotec_narrative.27040.a"
-			owner = {
-				country_event = {
-					id = chronotec_narrative.30
+			name = "chronotec_narrative.27040.reanimate.chronolord"
+			trigger = {
+				hidden_trigger = {
+					owner = {
+						is_homicidal = no
+					}
 				}
+			}
+			hidden_effect = {
+				owner = {
+					country_event = {
+						id = chronotec_narrative.30
+					}
+				}
+			}
+		}
+
+		option = {
+			name = "chronotec_narrative.27040.take.relic"
+			trigger = {
+				hidden_trigger = {
+					owner = {
+						is_homicidal = no
+					}
+				}
+			}
+			owner = {
+				add_relic = r_chronotec_standard
+			}
+			hidden_effect = {
+				set_global_flag = chronotec_chronolord_disabled
+			}
+		}
+
+		option = {
+			name = "chronotec_narrative.27040.take.relic.homicidal"
+			trigger = {
+				hidden_trigger = {
+					owner = {
+						is_homicidal = yes
+					}
+				}
+			}
+			owner = {
+				add_relic = r_chronotec_standard
+			}
+			hidden_effect = {
+				set_global_flag = chronotec_chronolord_disabled
 			}
 		}
 	}
@@ -701,21 +1225,26 @@ namespace = chronotec_narrative
 			name = HIRE
 			tag = hire_leader
 			custom_tooltip = chronotec_chronolord_joins
-			sound = par_beholder_hire
+			sound = chronotec_hire
 			hidden_effect = {
 				set_country_flag = chronotec_recruited
 				set_country_flag = chronotec_original_owner
+				set_country_flag = chronotec_actual_owner_country
 				save_global_event_target_as = chronotec_actual_owner_country
-				clone_leader = {
-					target = event_target:chronotec_chronolord_leader
+				#clone_leader = {
+				#	target = event_target:chronotec_chronolord_leader
+				#}
+				# Note : This is done so it displays the country on the leader, useful!
+				event_target:chronotec_chronolord_leader = {
+					set_owner = event_target:chronotec_actual_owner_country
 				}
-				last_created_leader = {
-					save_global_event_target_as = chronotec_chronolord_leader
-					set_leader_flag = legendary_leader
-					set_leader_flag = chronotec_chronolord_leader
-					set_leader_flag = immune_to_negative_traits
-					set_leader_flag = leader_death_events_blocked
-				}
+				#last_created_leader = {	# Redundancy
+				#	save_global_event_target_as = chronotec_chronolord_leader
+				#	set_leader_flag = legendary_leader
+				#	set_leader_flag = chronotec_chronolord_leader
+				#	set_leader_flag = immune_to_negative_traits
+				#	set_leader_flag = leader_death_events_blocked
+				#}
 				create_message = {
 					type = MESSAGE_RECRUITED_LEADER
 					localization =  MESSAGE_RECRUITED_LEADER_DESC
@@ -737,8 +1266,9 @@ namespace = chronotec_narrative
 		option = { # DISMISS
 			name = DISMISS
 			tag = dismiss_leader
-			sound = par_beholder_dismiss
+			sound = chronotec_dismiss
 			hidden_effect = {
+				set_global_flag = chronotec_chronolord_leaves
 				event_target:chronotec_chronolord_leader = {
 					kill_leader = { show_notification = no }
 				}
@@ -749,21 +1279,41 @@ namespace = chronotec_narrative
 			name = chronotec_narrative.30.a # What are you
 			response_text = chronotec_narrative.30.a.response
 			is_dialog_only = yes
+			icon = {
+				icon = GFX_situation_approach_suspicious
+				icon_background = GFX_situation_approach_bg_yellow
+				text = chronotec_icon_text_neutral_outcome
+			}
 		}
 		option = {
 			name = chronotec_narrative.30.b # What can you do?
 			response_text = chronotec_narrative.30.b.response
 			is_dialog_only = yes
+			icon = {
+				icon = GFX_situation_approach_suspicious
+				icon_background = GFX_situation_approach_bg_yellow
+				text = chronotec_icon_text_neutral_outcome
+			}
 		}
 		option = {
 			name = chronotec_narrative.30.c # Why the planet was looped
 			response_text = chronotec_narrative.30.c.response
 			is_dialog_only = yes
+			icon = {
+				icon = GFX_situation_approach_suspicious
+				icon_background = GFX_situation_approach_bg_yellow
+				text = chronotec_icon_text_neutral_outcome
+			}
 		}
 		option = {
 			name = chronotec_narrative.30.d # Gestalts
 			response_text = chronotec_narrative.30.d.response
 			is_dialog_only = yes
+			icon = {
+				icon = GFX_situation_approach_suspicious
+				icon_background = GFX_situation_approach_bg_yellow
+				text = chronotec_icon_text_neutral_outcome
+			}
 			trigger = {
 				is_gestalt = yes
 			}
@@ -772,6 +1322,11 @@ namespace = chronotec_narrative
 			name = chronotec_narrative.30.e # Empire knows powers
 			response_text = chronotec_narrative.30.e.response
 			is_dialog_only = yes
+			icon = {
+				icon = GFX_situation_approach_suspicious
+				icon_background = GFX_situation_approach_bg_yellow
+				text = chronotec_icon_text_neutral_outcome
+			}
 			trigger = {
 				has_country_flag = chronotec_knows_chronomancy
 			}
@@ -780,6 +1335,11 @@ namespace = chronotec_narrative
 			name = chronotec_narrative.30.f # Empire knows relic
 			response_text = chronotec_narrative.30.f.response
 			is_dialog_only = yes
+			icon = {
+				icon = GFX_situation_approach_suspicious
+				icon_background = GFX_situation_approach_bg_yellow
+				text = chronotec_icon_text_neutral_outcome
+			}
 			trigger = {
 				has_country_flag = chronotec_knows_relic
 			}
@@ -800,32 +1360,151 @@ namespace = chronotec_narrative
 	country_event = { # 
 		id = chronotec_narrative.35
 		title = "chronotec_narrative.35.name"
-		desc = "chronotec_narrative.35.desc"
-
-		# TO DO art
-		picture = GFX_evt_tradedeal
-		show_sound = event_synthetic_evolution
+		desc = {
+			trigger = {
+				owner = {
+					NOT = {
+						has_country_flag = chronotec_petition_listened
+					}
+				}
+			}
+			text = chronotec_narrative.35.desc
+		}
+		desc = {
+			trigger = {
+				owner = {
+					has_country_flag = chronotec_petition_listened
+				}
+			}
+			text = chronotec_narrative.35.ask.response
+		}
+		show_sound = par_event_beholder
+		location = event_target:chronolord_planet
 		is_triggered_only = yes
 
-		option = {	# Accept the proposal
-			name = chronotec_narrative.35.a
-			custom_tooltip = chronotec_narrative.35.a.tooltip
+		event_window_type = leader_recruit
+		picture_event_data = {
+			portrait = event_target:chronotec_chronolord_leader
+		}
+		picture = GFX_leader_recruitment_bg_chronolord_paragon
+
+		trigger = {
+			OR = {
+				has_country_flag = chronotec_actual_owner_country
+				is_same_value = event_target:chronotec_actual_owner_country
+			}
+			NOT = {
+				has_global_flag = chronotec_petition_trigger
+			}
+		}
+
+		immediate = {
+			set_global_flag = chronotec_petition_trigger
+		}
+
+		option = { # HIRE
+			name = BLANK_STRING
+			tag = hire_leader
+			allow = {
+				hidden_trigger = {
+					always = no
+				}
+			}
+		}
+
+		option = { # DISMISS
+			name = BLANK_STRING
+			tag = dismiss_leader
+			allow = {
+				hidden_trigger = {
+					always = no
+				}
+			}
+		}
+
+		option = {	# Ask
+			name = chronotec_narrative.35.ask
+			response_text = chronotec_narrative.35.ask.response
 			icon = {
-				icon = GFX_situation_approach_research
+				icon = GFX_situation_approach_suspicious
 				icon_background = GFX_situation_approach_bg_yellow
-				text = chronotec_icon_text_unknown_outcome
+				text = chronotec_icon_text_neutral_outcome
+			}
+			trigger = {
+				hidden_trigger = {
+					NOT = {
+						has_country_flag = chronotec_petition_listened
+					}
+				}
 			}
 			hidden_effect = {
-				# TO DO
+				remove_global_flag = chronotec_petition_trigger
+				# ^ To avoid it not triggering, will be reapplied when reopened
+				set_country_flag = chronotec_petition_listened
+				country_event = {
+					id = chronotec_narrative.35
+				}
+			}
+		}
+		option = {	# Remind
+			name = chronotec_narrative.35.remind
+			response_text = chronotec_narrative.35.remind.response
+			is_dialog_only = yes
+			icon = {
+				icon = GFX_situation_approach_suspicious
+				icon_background = GFX_situation_approach_bg_yellow
+				text = chronotec_icon_text_neutral_outcome
+			}
+			trigger = {
+				hidden_trigger = {
+					has_country_flag = chronotec_petition_listened
+				}
+			}
+		}
+		option = {	# Relic question
+			name = chronotec_narrative.35.knows.relic
+			response_text = chronotec_narrative.35.knows.relic.response
+			is_dialog_only = yes
+			icon = {
+				icon = GFX_situation_approach_suspicious
+				icon_background = GFX_situation_approach_bg_yellow
+				text = chronotec_icon_text_neutral_outcome
+			}
+			trigger = {
+				hidden_trigger = {
+					has_country_flag = chronotec_petition_listened
+					has_country_flag = chronotec_knows_relic
+				}
+			}
+		}
+		option = {	# Accept the proposal
+			name = chronotec_narrative.35.ask.yes
+			custom_tooltip = chronotec_narrative.35.ask.yes.tooltip
+			icon = {
+				icon = GFX_situation_approach_research
+				icon_background = GFX_situation_approach_bg_green
+				text = chronotec_icon_text_good_outcome
+			}
+			trigger = {
+				has_country_flag = chronotec_petition_listened
+			}
+			hidden_effect = {
+				set_country_flag = chronotec_petition_accepted
+				start_situation = {
+					type = situation_chronotec_unloop_planet
+				}
 			}
 		}
 		option = {	# Reject the proposal
-			name = chronotec_narrative.35.b
-			custom_tooltip = chronotec_narrative.35.b.tooltip
+			name = chronotec_narrative.35.ask.no
+			custom_tooltip = chronotec_narrative.35.ask.no.tooltip
 			icon = {
 				icon = GFX_situation_approach_this_is_fine
-				icon_background = GFX_situation_approach_bg_yellow
-				text = chronotec_icon_text_unknown_outcome
+				icon_background = GFX_situation_approach_bg_red
+				text = chronotec_icon_text_bad_outcome
+			}
+			trigger = {
+				has_country_flag = chronotec_petition_listened
 			}
 			hidden_effect = {
 				country_event = {
@@ -835,91 +1514,202 @@ namespace = chronotec_narrative
 		}
 	}
 
- # Request rejected - starts withering
+ # Request rejected
 	#chronotec_narrative.3501
 	country_event = { # First gate
 		id = chronotec_narrative.3501
 		title = "chronotec_narrative.3501.name"
 		desc = "chronotec_narrative.3501.desc"
 
-		# TO DO art
-		picture = GFX_evt_tradedeal
-		show_sound = event_synthetic_evolution
+		show_sound = par_event_beholder
+		location = event_target:chronolord_planet
 		is_triggered_only = yes
 
-		option = { # Nope
-			name = chronotec_narrative.3501.a
-			custom_tooltip = chronotec_narrative.3501.a.tooltip
-			icon = {
-				icon = GFX_situation_approach_this_is_fine
-				icon_background = GFX_situation_approach_bg_red
-				text = chronotec_icon_text_bad_outcome
+		event_window_type = leader_recruit
+		picture_event_data = {
+			portrait = event_target:chronotec_chronolord_leader
+		}
+		picture = GFX_leader_recruitment_bg_chronolord_paragon
+
+		option = { # HIRE
+			name = BLANK_STRING
+			tag = hire_leader
+			allow = {
+				hidden_trigger = {
+					always = no
+				}
 			}
-			hidden_effect = {
-				# TO DO
-				set_country_flag = chronotec_petition_denied
+		}
+
+		option = { # DISMISS
+			name = BLANK_STRING
+			tag = dismiss_leader
+			allow = {
+				hidden_trigger = {
+					always = no
+				}
+			}
+		}
+
+		option = {	# remind
+			name = chronotec_narrative.3501.remind
+			response_text = chronotec_narrative.3501.remind.response
+			is_dialog_only = yes
+			icon = {
+				icon = GFX_situation_approach_suspicious
+				icon_background = GFX_situation_approach_bg_yellow
+				text = chronotec_icon_text_neutral_outcome
+			}
+			trigger = {
+				hidden_trigger = {
+					has_country_flag = chronotec_petition_listened
+					has_country_flag = chronotec_knows_relic
+				}
 			}
 		}
 		option = {	# Reconsider
-			name = chronotec_narrative.3501.b
-			custom_tooltip = chronotec_narrative.3501.b.tooltip
+			name = chronotec_narrative.3501.reconsider
+			custom_tooltip = chronotec_narrative.3501.reconsider.tooltip
+			icon = {
+				icon = GFX_situation_approach_research
+				icon_background = GFX_situation_approach_bg_green
+				text = chronotec_icon_text_good_outcome
+			}
+			hidden_effect = {
+				set_country_flag = chronotec_petition_accepted
+				start_situation = {
+					type = situation_chronotec_unloop_planet
+				}
+			}
+		}
+		option = { # Nope
+			name = chronotec_narrative.3501.deny
+			custom_tooltip = chronotec_narrative.3501.deny.tooltip
 			icon = {
 				icon = GFX_situation_approach_this_is_fine
 				icon_background = GFX_situation_approach_bg_red
 				text = chronotec_icon_text_bad_outcome
 			}
 			hidden_effect = {
-				# TO DO
+				set_country_flag = chronotec_petition_denied
+				country_event = {
+					id = chronotec_narrative.3502
+					days = @chronotec_leader_wither_timer
+				}
 			}
 		}
 	}
-	country_event = { # Continuation
+	country_event = { # Continuation - leader dies
 		id = chronotec_narrative.3502
 		title = "chronotec_narrative.3502.name"
 		desc = "chronotec_narrative.3502.desc"
 
-		# TO DO art
-		picture = GFX_evt_tradedeal
-		show_sound = event_synthetic_evolution
+		show_sound = par_event_beholder
+		location = event_target:chronolord_planet
 		is_triggered_only = yes
 
+		event_window_type = leader_recruit
+		picture_event_data = {
+			portrait = event_target:chronotec_chronolord_leader
+		}
+		picture = GFX_leader_recruitment_bg_chronolord_paragon
+
+		option = { # HIRE
+			name = BLANK_STRING
+			tag = hire_leader
+			allow = {
+				hidden_trigger = {
+					always = no
+				}
+			}
+		}
+
+		option = { # DISMISS
+			name = BLANK_STRING
+			tag = dismiss_leader
+			allow = {
+				hidden_trigger = {
+					always = no
+				}
+			}
+		}
+		option = {	# Can we help?
+			name = chronotec_narrative.3502.something.we.can.do
+			response_text = chronotec_narrative.3502.something.we.can.do.response
+			is_dialog_only = yes
+		}
+
 		option = {
-			name = chronotec_narrative.3502.a
-			custom_tooltip = chronotec_narrative.3502.a.tooltip
+			name = chronotec_narrative.3502.farewell
+			custom_tooltip = chronotec_narrative.3502.farewell.tooltip
 			icon = {
-				icon = GFX_situation_approach_this_is_fine
+				icon = GFX_situation_approach_suspicious
 				icon_background = GFX_situation_approach_bg_red
 				text = chronotec_icon_text_bad_outcome
 			}
+		}
+
+		after = {
 			hidden_effect = {
-				# TO DO
+				set_global_flag = chronotec_chronolord_leaves
+				event_target:chronotec_chronolord_leader = {
+					kill_leader = { show_notification = no }
+				}
 			}
 		}
 	}
 
  # Request accepted - Situation starts
 	#chronotec_narrative.3502
-	country_event = { # Situation finished
+	situation_event = { # Situation starts
 		id = chronotec_narrative.3505
 		title = "chronotec_narrative.3505.name"
 		desc = "chronotec_narrative.3505.desc"
 
-		# TO DO art
-		picture = GFX_evt_tradedeal
-		show_sound = event_synthetic_evolution
+		picture = GFX_evt_clocks
+		show_sound = event_mystic_reveal
 		is_triggered_only = yes
 
-		option = {
-			name = chronotec_narrative.3505.a
-			custom_tooltip = chronotec_narrative.3505.a.tooltip
+		immediate = {
+			hidden_effect = {
+				set_situation_locked = yes
+			}
+		}
+		after = {
+			hidden_effect = {
+				set_situation_locked = no
+			}
+		}
+
+		option = {	# neutral approach
+			name = chronotec_narrative.3505.neutral
+			custom_tooltip = chronotec_narrative.3505.neutral.tooltip
 			icon = {
 				icon = GFX_situation_approach_influence
+				icon_background = GFX_situation_approach_bg_yellow
+				text = chronotec_icon_text_good_outcome
+			}
+			set_situation_approach = situation_chronotec_unloop_planet_approach_neutral
+		}
+		option = {	# Fast approach
+			name = chronotec_narrative.3505.fast
+			custom_tooltip = chronotec_narrative.3505.fast.tooltip
+			icon = {
+				icon = GFX_situation_approach_this_is_fine
 				icon_background = GFX_situation_approach_bg_green
 				text = chronotec_icon_text_good_outcome
 			}
-			hidden_effect = {
-				# TO DO
+			set_situation_approach = situation_chronotec_unloop_planet_approach_fast
+		}
+		option = {	# ignore approach
+			name = chronotec_narrative.3505.ignore
+			custom_tooltip = chronotec_narrative.3505.ignore.tooltip
+			icon = {
+				icon = GFX_situation_approach_shrug
+				icon_background = GFX_situation_approach_bg_red
+				text = chronotec_icon_text_bad_outcome
 			}
+			set_situation_approach = situation_chronotec_unloop_planet_approach_ignore
 		}
 	}
 
@@ -930,8 +1720,8 @@ namespace = chronotec_narrative
 		title = "chronotec_narrative.35005.name"
 		desc = "chronotec_narrative.35005.desc"
 
-		# TO DO art
-		picture = GFX_evt_tradedeal
+		picture = GFX_evt_wormhole
+		show_sound = ap_rift_event_0_astral_wonder
 		is_triggered_only = yes
 		situation = this
 		location = target
@@ -964,8 +1754,8 @@ namespace = chronotec_narrative
 		title = "chronotec_narrative.35015.name"
 		desc = "chronotec_narrative.35015.desc"
 
-		# TO DO art
-		picture = GFX_evt_tradedeal
+		picture = GFX_evt_black_hole
+		show_sound = event_mystic_reveal
 		is_triggered_only = yes
 		situation = this
 		location = target
@@ -998,8 +1788,8 @@ namespace = chronotec_narrative
 		title = "chronotec_narrative.35030.name"
 		desc = "chronotec_narrative.35030.desc"
 
-		# TO DO art
-		picture = GFX_evt_tradedeal
+		picture = GFX_evt_rare_tech_cache
+		show_sound = event_mystic_reveal
 		is_triggered_only = yes
 		situation = this
 		location = target
@@ -1032,8 +1822,8 @@ namespace = chronotec_narrative
 		title = "chronotec_narrative.35050.name"
 		desc = "chronotec_narrative.35050.desc"
 
-		# TO DO art
-		picture = GFX_evt_tradedeal
+		picture = GFX_evt_gaia
+		show_sound = event_mystic_reveal
 		is_triggered_only = yes
 		situation = this
 		location = target
@@ -1066,8 +1856,8 @@ namespace = chronotec_narrative
 		title = "chronotec_narrative.35075.name"
 		desc = "chronotec_narrative.35075.desc"
 
-		# TO DO art
-		picture = GFX_evt_tradedeal
+		picture = GFX_evt_clocks
+		show_sound = event_mystic_reveal
 		is_triggered_only = yes
 		situation = this
 		location = target
@@ -1102,22 +1892,50 @@ namespace = chronotec_narrative
 		title = "chronotec_narrative.4001.name"
 		desc = "chronotec_narrative.4001.desc"
 
-		# TO DO art
-		picture = GFX_evt_tradedeal
-		show_sound = event_synthetic_evolution
+		show_sound = par_event_beholder
+		location = event_target:chronolord_planet
 		is_triggered_only = yes
+
+		event_window_type = leader_recruit
+		picture_event_data = {
+			portrait = event_target:chronotec_chronolord_leader
+		}
+		picture = GFX_leader_recruitment_bg_chronolord_paragon
+
+		option = { # HIRE
+			name = BLANK_STRING
+			tag = hire_leader
+			allow = {
+				hidden_trigger = {
+					always = no
+				}
+			}
+		}
+
+		option = { # DISMISS
+			name = BLANK_STRING
+			tag = dismiss_leader
+			allow = {
+				hidden_trigger = {
+					always = no
+				}
+			}
+		}
 
 		option = {
 			name = chronotec_narrative.4001.a
 			custom_tooltip = chronotec_narrative.4001.a.tooltip
 			icon = {
-				icon = GFX_situation_approach_shrug
+				icon = GFX_situation_approach_suspicious
 				icon_background = GFX_situation_approach_bg_red
 				text = chronotec_icon_text_bad_outcome
 			}
 			hidden_effect = {
-				# TO DO
 				set_country_flag = chronotec_petition_failed
+				country_event = {
+					id = chronotec_narrative.4002
+					days = @chronotec_leader_wither_timer
+				}
 			}
 		}
 	}
@@ -1129,236 +1947,196 @@ namespace = chronotec_narrative
 		title = "chronotec_narrative.4002.name"
 		desc = "chronotec_narrative.4002.desc"
 
-		# TO DO art
-		picture = GFX_evt_tradedeal
-		show_sound = event_synthetic_evolution
+		show_sound = par_event_beholder
+		location = event_target:chronolord_planet
 		is_triggered_only = yes
 
-		option = {
-			name = chronotec_narrative.4002.a
-			custom_tooltip = chronotec_narrative.4002.a.tooltip
+		event_window_type = leader_recruit
+		picture_event_data = {
+			portrait = event_target:chronotec_chronolord_leader
+		}
+		picture = GFX_leader_recruitment_bg_chronolord_paragon
+
+		option = { # HIRE
+			name = BLANK_STRING
+			tag = hire_leader
+			allow = {
+				hidden_trigger = {
+					always = no
+				}
+			}
+		}
+
+		option = { # DISMISS
+			name = BLANK_STRING
+			tag = dismiss_leader
+			allow = {
+				hidden_trigger = {
+					always = no
+				}
+			}
+		}
+
+		option = {	# Can we help?
+			name = chronotec_narrative.4002.something.we.can.do
+			response_text = chronotec_narrative.4002.something.we.can.do
+			is_dialog_only = yes
 			icon = {
-				icon = GFX_situation_approach_influence
+				icon = GFX_situation_approach_suspicious
+				icon_background = GFX_situation_approach_bg_yellow
+				text = chronotec_icon_text_neutral_outcome
+			}
+		}
+		option = {
+			name = chronotec_narrative.4002.farewell
+			custom_tooltip = chronotec_narrative.4002.farewell.tooltip
+			icon = {
+				icon = GFX_situation_approach_suspicious
 				icon_background = GFX_situation_approach_bg_red
 				text = chronotec_icon_text_bad_outcome
 			}
+		}
+
+		after = {
 			hidden_effect = {
-				# TO DO
+				set_global_flag = chronotec_chronolord_leaves
+				event_target:chronotec_chronolord_leader = {
+					kill_leader = { show_notification = no }
+				}
 			}
 		}
 	}
 
- # Planet unshielded - gives relic
+ # Planet unshielded - gives planet, contact and intro
 	#chronotec_narrative.40
 	country_event = { # Situation finished
 		id = chronotec_narrative.40
 		title = "chronotec_narrative.40.name"
 		desc = "chronotec_narrative.40.desc"
 
-		# TO DO art
-		picture = GFX_evt_tradedeal
-		show_sound = event_synthetic_evolution
+		show_sound = par_event_beholder
+		location = event_target:chronolord_planet
 		is_triggered_only = yes
 
+		event_window_type = leader_recruit
+		picture_event_data = {
+			portrait = event_target:chronotec_chronolord_leader
+		}
+		picture = GFX_leader_recruitment_bg_chronolord_paragon
+
+		option = { # HIRE
+			name = BLANK_STRING
+			tag = hire_leader
+			allow = {
+				hidden_trigger = {
+					always = no
+				}
+			}
+		}
+
+		option = { # DISMISS
+			name = BLANK_STRING
+			tag = dismiss_leader
+			allow = {
+				hidden_trigger = {
+					always = no
+				}
+			}
+		}
+
+		option = { # Ask about planet
+			name = chronotec_narrative.40.ask.planet
+			response_text = chronotec_narrative.40.ask.planet.response
+			is_dialog_only = yes
+			icon = {
+				icon = GFX_situation_approach_suspicious
+				icon_background = GFX_situation_approach_bg_yellow
+				text = chronotec_icon_text_neutral_outcome
+			}
+		}
+		option = { # Ask about powers
+			name = chronotec_narrative.40.ask.powers
+			response_text = chronotec_narrative.40.ask.planet.response
+			is_dialog_only = yes
+			icon = {
+				icon = GFX_situation_approach_suspicious
+				icon_background = GFX_situation_approach_bg_yellow
+				text = chronotec_icon_text_neutral_outcome
+			}
+		}
+		option = { # Ask about the relic
+			name = chronotec_narrative.40.ask.relic
+			response_text = chronotec_narrative.40.ask.relic.response
+			is_dialog_only = yes
+			icon = {
+				icon = GFX_situation_approach_suspicious
+				icon_background = GFX_situation_approach_bg_yellow
+				text = chronotec_icon_text_neutral_outcome
+			}
+		}
+		option = { # Ask about their people
+			name = chronotec_narrative.40.ask.people
+			response_text = chronotec_narrative.40.ask.people.response
+			is_dialog_only = yes
+			icon = {
+				icon = GFX_situation_approach_suspicious
+				icon_background = GFX_situation_approach_bg_yellow
+				text = chronotec_icon_text_neutral_outcome
+			}
+		}
+		option = { # Ask about what comes next
+			name = chronotec_narrative.40.ask.next
+			response_text = chronotec_narrative.40.ask.next.response
+			is_dialog_only = yes
+			icon = {
+				icon = GFX_situation_approach_suspicious
+				icon_background = GFX_situation_approach_bg_yellow
+				text = chronotec_icon_text_neutral_outcome
+			}
+		}
 		option = {
 			name = chronotec_narrative.40.a
 			custom_tooltip = chronotec_narrative.40.a.tooltip
 			icon = {
-				icon = GFX_situation_approach_influence
-				icon_background = GFX_situation_approach_bg_red
-				text = chronotec_icon_text_bad_outcome
+				icon = GFX_situation_approach_this_is_fine
+				icon_background = GFX_situation_approach_bg_green
+				text = chronotec_icon_text_good_outcome
 			}
+		}
+
+		after = {
+			event_target:chronolord_planet = {
+				change_pc = pc_gaia
+				hidden_effect = {
+					change_planet_size = 25
+					reroll_deposits = yes
+					add_modifier = {
+						modifier = pm_chronotec_planet
+					}
+					set_timed_planet_flag = {
+						flag = chronotec_chronolord_planet_antierror
+						days = 10
+					}
+					create_colony = {
+						owner = root
+					}
+					set_name = NAME_chronotec_chronolord_planet
+				}
+			}
+			event_target:chronotec_chronolord_country = {
+				establish_communications_no_message = root
+			}
+			# TO DO TOAST/ICON
 			hidden_effect = {
-				# TO DO
 				set_country_flag = chronotec_petition_completed
+				set_country_flag = chronotec_chronolord_is_leader
+				set_global_flag = chronotec_advanced
+				#set_saved_date = {	# Transformation timer
+				#	key = chronotec_transformation_timer
+				#	days_from_present = 0
+				#	expires = 3180060
+				#}
 			}
 		}
 	}
 # /
-
-
-
-
-
-
-# Backup
-country_event = {
-	id = chronotec_narrative.9930
-	title = chronotec_narrative.30.name
-	desc = chronotec_narrative.30.desc
-	show_sound = par_event_beholder
-	location = event_target:chronolord_planet
-	is_triggered_only = yes
-
-	event_window_type = leader_recruit
-	picture_event_data = {
-		portrait = event_target:chronotec_chronolord_leader
-	}
-	picture = GFX_leader_recruitment_bg_chronolord_paragon
-
-	trigger = {
-		always = yes
-	}
-
-	immediate = {
-		#chronotec_create_chronolord
-		create_country = {
-			name = "NAME_chronotec_chronolord"
-			type = global_event
-			auto_delete = yes
-			flag = {
-				icon = {
-					category = "special"
-					file = "unknown.dds"
-				}
-				background = {
-					category = "backgrounds"
-					file = "00_solid.dds"
-				}
-				colors = {
-					"red"
-					"red"
-					"null"
-					"null"
-				}
-			}
-			effect = {
-				save_event_target_as = chronotec_chronolord_country
-			}
-		}
-		event_target:chronotec_chronolord_country = {
-			create_species = {
-				name = "NAME_Unknown"
-				class = PARAGON
-				portrait = "chronotec_chronolord_portrait_standard"
-				namelist = "PRT1"
-				traits = random
-				effect = {
-					save_event_target_as = chronotec_chronolord_species
-				}
-			}
-			create_leader = {
-				species = event_target:chronotec_chronolord_species
-				event_leader = yes
-				class = scientist
-				name = "NAME_chronotec_chronolord"
-				skill = 10
-				immortal = yes
-				background_ethic = ethic_materialist
-				randomize_traits = no
-				skip_background_generation = yes
-				custom_catch_phrase = chronotec_chronolord_catch_phrase
-				custom_description = chronotec_chronolord_backstory
-				traits = {
-					trait = leader_trait_physics_focus_3
-					trait = leader_trait_collaborator_3
-					trait = leader_trait_chronotec_chronolord_infusion_neutral
-					trait = subclass_scientist_governor
-				}
-				gender = indeterminable
-				set_age = 0
-				hide_age = yes
-				effect = {
-					save_global_event_target_as = chronotec_chronolord_leader
-					set_leader_flag = legendary_leader
-					set_leader_flag = chronotec_chronolord_leader
-					set_leader_flag = immune_to_negative_traits
-					set_leader_flag = leader_death_events_blocked
-					set_owner = root
-					exile_leader_as = chronotec_chronolord_leader
-				}
-			}
-		}
-	}
-
-	option = { # HIRE
-		name = HIRE
-		tag = hire_leader
-		custom_tooltip = chronotec_chronolord_joins
-		sound = par_beholder_hire
-		hidden_effect = {
-			clone_leader = {
-				target = event_target:chronotec_chronolord_leader
-			}
-			last_created_leader = {
-				save_global_event_target_as = chronotec_chronolord_leader
-				set_leader_flag = legendary_leader
-				set_leader_flag = chronotec_chronolord_leader
-				set_leader_flag = immune_to_negative_traits
-				set_leader_flag = leader_death_events_blocked
-			}
-			create_message = {
-				type = MESSAGE_RECRUITED_LEADER
-				localization =  MESSAGE_RECRUITED_LEADER_DESC
-				days = @toast_message_days
-				target = event_target:chronotec_chronolord_leader
-				variable = {
-					type = name
-					localization = LEADER
-					scope = event_target:chronotec_chronolord_leader
-				}
-				variable = {
-					key = "border"
-					value = "GFX_border_legendary"
-				}
-			}
-		}
-	}
-
-	option = { # DISMISS
-		name = DISMISS
-		tag = dismiss_leader
-		sound = par_beholder_dismiss
-		hidden_effect = {
-			event_target:chronotec_chronolord_leader = {
-				kill_leader = { show_notification = no }
-			}
-		}
-	}
-
-	option = {
-		name = chronotec_narrative.30.a # What are you
-		response_text = chronotec_narrative.30.a.response
-		is_dialog_only = yes
-	}
-	option = {
-		name = chronotec_narrative.30.b # What can you do?
-		response_text = chronotec_narrative.30.b.response
-		is_dialog_only = yes
-	}
-	option = {
-		name = chronotec_narrative.30.c # Why the planet was looped
-		response_text = chronotec_narrative.30.c.response
-		is_dialog_only = yes
-	}
-	option = {
-		name = chronotec_narrative.30.d # Gestalts
-		response_text = chronotec_narrative.30.d.response
-		is_dialog_only = yes
-		trigger = {
-			is_gestalt = yes
-		}
-	}
-	option = {
-		name = chronotec_narrative.30.e # Empire knows powers
-		response_text = chronotec_narrative.30.e.response
-		is_dialog_only = yes
-		trigger = {
-			has_country_flag = chronotec_knows_chronomancy
-		}
-	}
-	option = {
-		name = chronotec_narrative.30.f # Empire knows relic
-		response_text = chronotec_narrative.30.f.response
-		is_dialog_only = yes
-		trigger = {
-			has_country_flag = chronotec_knows_relic
-		}
-	}
-
-
-	after = {
-		hidden_effect = {
-		}
-	}
-}
