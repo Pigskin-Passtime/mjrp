@@ -10,7 +10,7 @@ fleet_event = {
 	id = viz_raff_arc.1
 	title = viz_raff_arc.1.name
 	desc = viz_raff_arc.1.desc
-	picture = GFX_evt_tomb_world
+	picture = GFX_evt_city_ruins
 	show_sound = event_wind_ruins
 
 	archaeology = yes
@@ -84,7 +84,7 @@ fleet_event = {
 	id = viz_raff_arc.4
 	title = viz_raff_arc.4.name
 	desc = viz_raff_arc.4.desc
-	picture = GFX_evt_excavation_team #todo, consider replacing this
+	picture = GFX_evt_excavation_team
 	show_sound = event_big_door_opening
 
 	archaeology = yes
@@ -101,6 +101,11 @@ fleet_event = {
 
 	option = {
 		name = viz_raff_arc.4.a
+		trigger = {
+			owner = {
+				is_homicidal = no
+			}			
+		}
 		owner = {
 			country_event = { id = viz_raff_arc.5 days = 1 }
 		}
@@ -130,7 +135,7 @@ country_event = {
 	
 	picture_event_data = {
 		portrait = event_target:viz_raff_leader
-		room = ethic_spaceship_room
+		room = personality_fallen_empire_room
 	}
 
 	immediate = {
@@ -159,19 +164,18 @@ country_event = {
 			}
 		}
 		event_target:viz_raff_country = {
-			set_policy = {
-				policy = slavery
-				option = slavery_allowed
-			}
 			set_origin = origin_legendary_leader
 			create_species = {
 				name = "NAME_Unknown"
 				class = MACHINE
-				portrait = paragon_exakeides_artifact_1 #todo
-				namelist = "PRT1"
+				portrait = vizz_raff_portrait
+				namelist = "NECROID2"
 				traits = {
-					
+					trait = trait_robot_learning_algorithms
+					trait = trait_robot_luxurious
+					trait = trait_robot_efficient_processors
 				}
+				allow_negative_traits = no
 				effect = {
 					save_event_target_as = viz_raff_species
 				}
@@ -179,10 +183,10 @@ country_event = {
 
 			create_leader = {
 				species = event_target:viz_raff_species
-				event_leader = yes
+				event_leader = no # wants to win elections
 				class = official
 				name = NAME_Vizierch_Raffar
-				skill = 5
+				skill = 4
 				immortal = yes
 				randomize_traits = no
 				skip_background_generation = yes
@@ -201,15 +205,16 @@ country_event = {
 					set_leader_flag = legendary_leader
 					set_leader_flag = immune_to_negative_traits
 					set_leader_flag = leader_death_events_blocked
-					add_trait = leader_trait_iron_fist
+
 					add_trait = subclass_official_economy_councilor
 					add_trait = leader_trait_legendary_great_inventor
-					set_owner = root
-					exile_leader_as = viz_raff_leader
+					add_trait = trait_ruler_deep_connections
 					set_variable = {
 						which = viz_raff_vizier_level
 						value = 1
 					}
+					set_owner = root
+					exile_leader_as = viz_raff_leader
 				}
 			}
 		}
@@ -224,6 +229,8 @@ country_event = {
 		hidden_effect = {
 			clone_leader = {
 				target = event_target:viz_raff_leader
+				background_planet = event_target:viz_raff_nuked_ruins
+				background_job = politician
 			}
 			last_created_leader = {
 				save_global_event_target_as = viz_raff_leader
@@ -231,7 +238,11 @@ country_event = {
 				set_leader_flag = viz_raff
 				set_leader_flag = immune_to_negative_traits
 				set_leader_flag = leader_death_events_blocked
-				set_owner = root
+				set_owner = root				
+				set_variable = {
+					which = viz_raff_vizier_level
+					value = 1
+				}
 				leader_event = {
 					id = viz_raff.1
 					days = 30

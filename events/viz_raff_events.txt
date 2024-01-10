@@ -9,7 +9,7 @@ leader_event = {
 	id = viz_raff.1
 	title = viz_raff.1.name
 	desc = viz_raff.1.desc
-	picture = GFX_evt_alien_hieroglyphics
+	picture = GFX_evt_throne_room
 	show_sound = event_default
 	is_triggered_only = yes
 
@@ -20,6 +20,10 @@ leader_event = {
 	immediate = {
 		save_event_target_as = leader_event_target
 		owner = {
+			set_timed_country_flag = {
+				flag = viz_raff_early_days
+				days = 720
+			}
 			start_situation = {
 				type = situation_viz_raff_accumulating_power
 			}
@@ -35,84 +39,85 @@ leader_event = {
 
 	option = {
 		name = viz_raff.1.a # SIRE
-		hidden_effect = { owner = {	set_country_flag = viz_raff_name_sire }	}
-		hidden_effect = { set_leader_flag = viz_raff_name_sire }
+		hidden_effect = { owner = { set_country_flag = viz_raff_name_sire }  }
 	}
 
 	option = {
 		name = viz_raff.1.b # MAAM
-		hidden_effect = { owner = {	set_country_flag = viz_raff_name_maam }	}
-		hidden_effect = { set_leader_flag = viz_raff_name_maam }
+		hidden_effect = { owner = { set_country_flag = viz_raff_name_maam }}
 	}
 
 	option = {
 		name = viz_raff.1.c # EMPIRE
-		hidden_effect = { owner = {	set_country_flag = viz_raff_name_empire }	}
-		hidden_effect = { set_leader_flag = viz_raff_name_empire }
+		hidden_effect = { owner = { set_country_flag = viz_raff_name_empire }}
 	}
 
 	option = {
 		name = viz_raff.1.d # SUPREME ONE
 		trigger = {
-			OR = {
-				has_ethic = ethic_authoritarian
-				has_ethic = ethic_fanatic_authoritarian
-			}
+			owner = {
+				OR = {
+					has_ethic = ethic_authoritarian
+					has_ethic = ethic_fanatic_authoritarian
+				}
+			}			
 		}
 		icon = {
 			icon = GFX_ethics_authoritarian
 			text = viz_raff_icon.is_authoritarian
 		}
-		hidden_effect = { owner = {	set_country_flag = viz_raff_name_supreme }	}
-		hidden_effect = { set_leader_flag = viz_raff_name_supreme }
+		hidden_effect = { owner = { set_country_flag = viz_raff_name_supreme }}
 	}
 
 	option = {
 		name = viz_raff.1.e # YOUR HOLINESS
 		trigger = {
-			OR = {
+			owner = {
+				OR = {
 				has_ethic = ethic_spiritualist
 				has_ethic = ethic_fanatic_spiritualist
-			}
+				}
+			}			
 		}
 		icon = {
 			icon = GFX_ethics_spiritualist
 			text = viz_raff_icon.is_spiritualist
 		}
-		hidden_effect = { owner = {	set_country_flag = viz_raff_name_holiness }	}
-		hidden_effect = { set_leader_flag = viz_raff_name_holiness }
+		hidden_effect = { owner = { set_country_flag = viz_raff_name_holiness }}
 	}
 
 	option = {
 		name = viz_raff.1.f # NO TITLE
 		trigger = {
-			OR = {
-				has_ethic = ethic_egalitarian
-				has_ethic = ethic_fanatic_egalitarian
-			}
+			owner = {
+				OR = {
+					has_ethic = ethic_egalitarian
+					has_ethic = ethic_fanatic_egalitarian
+				}
+			}			
 		}
 		icon = {
 			icon = GFX_ethics_egalitarian
 			text = viz_raff_icon.is_egalitarian
 		}
-		hidden_effect = { owner = {	set_country_flag = viz_raff_name_none }	}
-		hidden_effect = { set_leader_flag = viz_raff_name_none }
+		hidden_effect = { owner = { set_country_flag = viz_raff_name_none }}
 	}
 
 	option = {
 		name = viz_raff.1.g # COMMANDER
 		trigger = {
-			OR = {
-				has_ethic = ethic_militarist
-				has_ethic = ethic_fanatic_militarist
-			}
+			owner = {
+				OR = {
+					has_ethic = ethic_militarist
+					has_ethic = ethic_fanatic_militarist
+				}
+			}			
 		}
 		icon = {
 			icon = GFX_ethics_militarist
 			text = viz_raff_icon.is_militarist
 		}
-		hidden_effect = { owner = {	set_country_flag = viz_raff_name_commander }	}
-		hidden_effect = { set_leader_flag = viz_raff_name_commander }
+		hidden_effect = { owner = { set_country_flag = viz_raff_name_commander }}
 	}
 }
 
@@ -184,15 +189,9 @@ leader_event = {
 	id = viz_raff.3
 	title = viz_raff.3.name
 	desc = viz_raff.3.desc
-	picture = GFX_evt_announcement
+	picture = GFX_evt_legendary_leader
 	show_sound = event_default
 	is_triggered_only = yes
-
-	immediate = {
-		owner = {
-			set_country_flag = viz_raff_offered_trait_for_stage
-		}		
-	}
 
 	event_window_type = leader_story
 	event_picture_background = GFX_leader_recruitment_bg_legendary_viz_raff
@@ -204,11 +203,49 @@ leader_event = {
 	option = {
 		name = viz_raff.3.a
 		custom_tooltip = viz_raff.3.a.tooltip
-		set_leader_flag = viz_raff_allowed_vizier_trait
 		hidden_effect = {
 			change_variable = {
 				which = viz_raff_vizier_level
 				value = 1
+			}
+			random_list = {
+				1 = { add_trait = leader_trait_viz_raff_master_of_ceremonies }
+				1 = { add_trait = leader_trait_viz_raff_staff_bearer }
+				1 = { add_trait = leader_trait_viz_raff_truth_dweller }
+				1 = { add_trait = leader_trait_viz_raff_water_bringer }
+				1 = { add_trait = leader_trait_viz_raff_supreme_hierophant }
+				1 = { add_trait = leader_trait_viz_raff_seal_keeper }
+				1 = { 
+					modifier = {
+						factor = 0
+						owner = {
+							NOT = {
+								has_technology = tech_mega_engineering
+							}
+						}
+					}
+					add_trait = leader_trait_viz_raff_monument_builder
+				}
+				1 = {
+					modifier = {
+						factor = 0
+						owner = {
+							NOT = {
+								has_technology = tech_titans
+							}
+						}
+					}
+					add_trait = leader_trait_viz_raff_constellation_hammer
+				}
+				1 = {
+					modifier = {
+						factor = 0
+						owner = {
+							is_spiritualist = no
+						}
+					}
+					add_trait = leader_trait_viz_raff_divine_oracle
+				}
 			}
 			owner = {
 				increment_viz_raff_hidden_power = yes
@@ -222,26 +259,39 @@ leader_event = {
 	}
 }
 
-leader_event = {
+country_event = {
 	id = viz_raff.4
-	hide_window = yes
 	is_triggered_only = yes
+	hide_window = yes
+
 	trigger = {
-		has_leader_flag = viz_raff
-		has_leader_flag = viz_raff_allowed_vizier_trait
+		any_owned_leader = {
+			is_councilor = yes
+			has_trait = leader_trait_viz_raff_monument_builder
+		}
+		any_owned_megastructure = {
+			NOR = {
+				is_megastructure_type = gateway_ruined
+				is_megastructure_type = gateway_restored
+				is_megastructure_type = gateway_final
+				is_megastructure_type = hyper_relay
+				is_megastructure_type = hyper_relay_restored
+				is_megastructure_type = orbital_ring
+				is_megastructure_type = orbital_ring_ruined
+				is_megastructure_type = orbital_ring_restored
+			}
+			is_upgrading = yes
+		}
 	}
 
 	immediate = {
-		if = {
+		random_owned_leader = {
 			limit = {
-				viz_raff_has_vizier_traits_equal_to_legendary_trait_level = yes
+				has_trait = leader_trait_viz_raff_monument_builder
 			}
-			remove_leader_flag = viz_raff_allowed_vizier_trait
-		}
-		else = {
 			leader_event = {
-				id = viz_raff.4
-				days = 30
+				id = viz_raff.14
+				days = 100
 			}
 		}
 	}
@@ -250,8 +300,19 @@ leader_event = {
 leader_event = {
 	id = viz_raff.5
 	title = viz_raff.5.name
-	desc = viz_raff.5.desc
-	picture = GFX_evt_announcement
+	desc = {
+		trigger = {
+			is_ruler = yes
+		}
+		text = viz_raff.5.ruler.desc
+	}
+	desc = {
+		trigger = {
+			is_ruler = no
+		}
+		text = viz_raff.5.desc
+	}
+	picture = GFX_evt_coronation
 	show_sound = event_default
 	is_triggered_only = yes
 
@@ -263,8 +324,8 @@ leader_event = {
 		owner = {
 			save_event_target_as = viz_raff_coup_target
 		}	
-		save_global_event_target_as = viz_raff_couping
-		exile_leader_as = viz_raff_couping	
+		save_global_event_target_as = viz_raff_off_to_coup
+		exile_leader_as = viz_raff_off_to_coup	
 	}
 
 	event_window_type = leader_story
@@ -278,17 +339,27 @@ leader_event = {
 		name = viz_raff.5.a #accept
 		custom_tooltip = viz_raff.5.a.tooltip
 		
-		owner = {
+		event_target:viz_raff_coup_target = {
+			ruler = {
+				save_event_target_as = former_ruler
+			}
 			shift_ethic = ethic_fanatic_materialist
 			shift_ethic = ethic_authoritarian
-			change_government = auth_imperial
+			change_government = {
+				authority = auth_dictatorial
+				remove_invalid_civics = yes
+			}
+			set_leader = root
 		}
-		set_council_position = councilor_ruler_imperial
+		set_council_position = councilor_ruler_dictatorial
 		hidden_effect = {
 			leader_event = {
 				id = viz_raff.9
-				days = 360
+				days = 7200
 			}
+		}
+		event_target:former_ruler = {
+			exile_leader_as = banished_ruler
 		}
 	}
 
@@ -297,24 +368,24 @@ leader_event = {
 		random_list = {
 			100 = {
 				modifier = {
-					subtract = owner.viz_raff_power_gained_hidden
+					subtract = event_target:viz_raff_coup_target.viz_raff_power_gained_hidden
 					always = yes
 				}
 				hidden_effect = {
 					custom_tooltip = viz_raff_resistance_successful
-					owner = {
+					event_target:viz_raff_coup_target = {
 						country_event = { id = viz_raff.6 days = 7 }
 					}
 				}
 			}
-			0 = { #todo fine tune values
+			0 = {
 				modifier = {
-					add = owner.viz_raff_power_gained_hidden
+					add = event_target:viz_raff_coup_target.viz_raff_power_gained_hidden
 					always = yes
 				}
 				hidden_effect = {
 					custom_tooltip = viz_raff_resistance_failed
-					owner = {
+					event_target:viz_raff_coup_target = {
 						set_country_flag = viz_raff_resistance_failed
 						country_event = { id = viz_raff.7 }
 					}
@@ -376,16 +447,22 @@ country_event = {
 		name = viz_raff.7.a
 		shift_ethic = ethic_fanatic_materialist
 		shift_ethic = ethic_authoritarian
-		change_government = auth_imperial
+		change_government = {
+			authority = auth_dictatorial
+			remove_invalid_civics = yes
+		}
 		ruler = {
 			save_event_target_as = former_ruler
 		}
-		event_target:viz_raff_couping = {
+		event_target:viz_raff_off_to_coup = {
 			set_owner = root
-			set_council_position = councilor_ruler_imperial
+			root = {
+				set_leader = event_target:viz_raff_off_to_coup
+			}
+			set_council_position = councilor_ruler_dictatorial
 			leader_event = {
 				id = viz_raff.9
-				days = 360
+				days = 7200
 			}
 		}
 		event_target:former_ruler = {
@@ -405,6 +482,20 @@ country_event = {
 
 	is_triggered_only = yes
 
+	trigger = {
+		any_neighbor_country = {
+			is_country_type = default
+			is_homicidal = no
+			has_communications = root
+			NOR = {
+				is_at_war_with = root
+				is_country = root
+				has_defensive_pact = root
+				is_in_federation_with = root
+			}
+		}
+	}
+
 	immediate = {
 		random_neighbor_country = {
 			limit = {
@@ -422,6 +513,13 @@ country_event = {
 			add_opinion_modifier = {
 				who = root
 				modifier = opinion_viz_raff_lies
+			}
+		}
+		event_target:viz_raff_off_to_coup = {
+			set_owner = event_target:new_viz_raffar_host
+			leader_event = {
+				id = viz_raff.1
+				days = 30
 			}
 		}
 	}
@@ -450,7 +548,7 @@ leader_event = {
 	id = viz_raff.9
 	title = viz_raff.9.name
 	desc = viz_raff.9.desc
-	picture = GFX_evt_robot_assembly_plant
+	picture = GFX_evt_announcement
 	show_sound = event_default
 	is_triggered_only = yes
 
@@ -471,6 +569,8 @@ leader_event = {
 			hidden_effect = { save_event_target_as = viz_raff_great_transformation_owner }
 			enable_special_project = {
 				name = VIZ_RAFF_GREAT_TRANSFORMATION
+				owner = owner
+				location = owner.capital_scope
 			}
 		}
 	}
@@ -488,6 +588,12 @@ country_event = {
 
 	immediate = {
 		set_country_flag = synthetic_empire
+
+		give_technology = { tech = tech_bio_reactor message = no }
+		give_technology = { tech = tech_synthetic_leaders message = no }
+		give_technology = { tech = tech_synthetic_workers message = no }
+		give_technology = { tech = tech_droid_workers message = no }
+
 		if = {
 			limit = {
 				has_policy_flag = robots_outlawed
@@ -522,43 +628,22 @@ country_event = {
 				set_timed_country_flag = { flag = resolution_breached_synthetic_evolution days = 3600 }
 			}
 		}
-		give_technology = { tech = tech_bio_reactor message = no }
 
 		create_species = {
-			is_mod = yes
+			is_mod = no
 			name = this
 			namelist = this
 			plural = this
 			class = "ROBOT"
 			homeworld = root.species
-			portrait = "default_robot"
-			sapient = no
+			portrait = "lith_machine"
 			traits = {
-				trait = "trait_mechanical"
+				trait = trait_mechanical
+				trait = trait_robot_repurposed_hardware
+				trait = trait_robot_power_drills
 			}
 
 			effect = {
-				if = {
-					limit = { host_has_dlc = "Synthetic Dawn Story Pack" }
-					prev = {
-						switch = {
-							trigger = is_species_class
-							HUM = { prev = { change_species_characteristics = { portrait = "sd_hum_robot" } } }
-							MAM = { prev = { change_species_characteristics = { portrait = "sd_mam_robot" } } }
-							REP = { prev = { change_species_characteristics = { portrait = "sd_rep_robot" } } }
-							AVI = { prev = { change_species_characteristics = { portrait = "sd_avi_robot" } } }
-							ART = { prev = { change_species_characteristics = { portrait = "sd_art_robot" } } }
-							MOL = { prev = { change_species_characteristics = { portrait = "sd_mol_robot" } } }
-							FUN = { prev = { change_species_characteristics = { portrait = "sd_fun_robot" } } }
-							PLANT = { prev = { change_species_characteristics = { portrait = "sd_pla_robot" } } }
-							LITHOID = { prev = { change_species_characteristics = { portrait = "lith_machine" } } }
-							NECROID = { prev = { change_species_characteristics = { portrait = "nec_machine" } } }
-							AQUATIC = { prev = { change_species_characteristics = { portrait = "aqu_machine" } } }
-							TOX = { prev = { change_species_characteristics = { portrait = "tox_machine" } } }
-						}
-					}
-				}
-
 				save_event_target_as = new_robotic_species_viz_raff_slaves
 			}
 		}
@@ -569,33 +654,15 @@ country_event = {
 			plural = this
 			class = "ROBOT"
 			homeworld = root.species
-			portrait = "default_robot"
+			portrait = "sd_hum_robot"
 			traits = {
-				trait = "trait_mechanical"
+				trait = trait_mechanical
+				trait = trait_robot_enhanced_memory
+				trait = trait_robot_learning_algorithms
+				trait = trait_robot_luxurious
 			}
 
 			effect = {
-				if = {
-					limit = { host_has_dlc = "Synthetic Dawn Story Pack" }
-					prev = {
-						switch = {
-							trigger = is_species_class
-							HUM = { prev = { change_species_characteristics = { portrait = "sd_hum_robot" } } }
-							MAM = { prev = { change_species_characteristics = { portrait = "sd_mam_robot" } } }
-							REP = { prev = { change_species_characteristics = { portrait = "sd_rep_robot" } } }
-							AVI = { prev = { change_species_characteristics = { portrait = "sd_avi_robot" } } }
-							ART = { prev = { change_species_characteristics = { portrait = "sd_art_robot" } } }
-							MOL = { prev = { change_species_characteristics = { portrait = "sd_mol_robot" } } }
-							FUN = { prev = { change_species_characteristics = { portrait = "sd_fun_robot" } } }
-							PLANT = { prev = { change_species_characteristics = { portrait = "sd_pla_robot" } } }
-							LITHOID = { prev = { change_species_characteristics = { portrait = "lith_machine" } } }
-							NECROID = { prev = { change_species_characteristics = { portrait = "nec_machine" } } }
-							AQUATIC = { prev = { change_species_characteristics = { portrait = "aqu_machine" } } }
-							TOX = { prev = { change_species_characteristics = { portrait = "tox_machine" } } }
-						}
-					}
-				}
-
 				rename_species = {
 					prompt_country = root #If targeted country is a player they will get a popup asking for a name/plural/adjective combo. Otherwise the species will get a random name from the specified name_list
 					name_list = ascension_list
@@ -603,6 +670,17 @@ country_event = {
 
 				save_event_target_as = new_robotic_species_viz_raff_rulers
 			}
+		}
+		every_owned_pop = {
+			limit = {
+				is_being_purged = no
+				has_job_category = ruler
+				species = {
+					is_robotic = no
+					is_livestock = no
+				}
+			}
+			change_species = event_target:new_robotic_species_viz_raff_rulers
 		}
 		every_owned_pop = {
 			limit = {
@@ -621,7 +699,6 @@ country_event = {
 			else = {
 				change_species = event_target:new_robotic_species_viz_raff_rulers
 			}
-			
 		}
 
 		every_controlled_ship = {
@@ -698,7 +775,18 @@ country_event = {
 			change_species = event_target:new_robotic_species_viz_raff_rulers
 			change_leader_portrait = species
 		}
+
 		change_dominant_species = { species = event_target:new_robotic_species_viz_raff_rulers }
+		event_target:new_robotic_species_viz_raff_slaves = {
+			set_citizenship_type = {
+				type = citizenship_limited
+				country = root
+			}
+			set_military_service_type = {
+				type = military_service_limited
+				country = root
+			}
+		}
 
 		every_owned_leader = {
 			limit = {
@@ -836,26 +924,14 @@ country_event = {
 	is_triggered_only = yes
 	trigger = {
 		any_owned_leader = {
-			has_leader_flag = viz_raff
-			OR = {
-				#has_trait = leader_trait_viz_raff_master_of_ceremonies
-				has_trait = leader_trait_viz_raff_truth_dweller
-			}
+			has_trait = leader_trait_viz_raff_truth_dweller
 		}
 	}
 
 	immediate = {
-		country_event = {
-			id = viz_raff.11
-			days = 30
-		}
 		random_owned_leader = {
 			limit = {
-				has_leader_flag = viz_raff
-				OR = {
-					#has_trait = leader_trait_viz_raff_master_of_ceremonies
-					has_trait = leader_trait_viz_raff_truth_dweller
-				}
+				has_trait = leader_trait_viz_raff_truth_dweller
 			}
 			owner = {
 				save_event_target_as = viz_raff_country
@@ -980,7 +1056,7 @@ country_event = {
 	hide_window = yes
 	is_triggered_only = no
 	mean_time_to_happen = {
-		years = 2
+		years = 5
 	}
 
 	trigger = {
@@ -997,9 +1073,13 @@ country_event = {
 		NOT = {
 			has_country_flag = viz_raff_offered_trait_for_stage
 		}
+		NOT = {
+			has_country_flag = viz_raff_early_days
+		}
 	}
 
 	immediate = {
+		set_country_flag = viz_raff_offered_trait_for_stage
 		random_owned_leader = {
 			limit = {
 				has_leader_flag = viz_raff
@@ -1011,28 +1091,99 @@ country_event = {
 	}
 }
 
-country_event = {
+leader_event = {
 	id = viz_raff.14
-	hide_window = yes
 	is_triggered_only = yes
-	trigger = {
-		any_owned_leader = {
-			has_leader_flag = viz_raff
-			has_leader_flag = viz_raff_allowed_vizier_trait
-		}
-		
+	title = viz_raff.14.name
+	desc = viz_raff.14.desc
+	picture = GFX_evt_megastructure_construction
+
+	event_window_type = leader_story
+	event_picture_background = GFX_leader_recruitment_bg_legendary_viz_raff
+
+	picture_event_data = {
+		portrait = root
 	}
 
 	immediate = {
-		random_owned_leader = {
-			limit = {
-				has_leader_flag = viz_raff
-				has_leader_flag = viz_raff_allowed_vizier_trait
-			}
-			leader_event = {
-				id = viz_raff.4
+		owner = {
+			random_owned_megastructure = {
+				limit = {
+					NOR = {
+						is_megastructure_type = gateway_ruined
+						is_megastructure_type = gateway_restored
+						is_megastructure_type = gateway_final
+						is_megastructure_type = hyper_relay
+						is_megastructure_type = hyper_relay_restored
+						is_megastructure_type = orbital_ring
+						is_megastructure_type = orbital_ring_ruined
+						is_megastructure_type = orbital_ring_restored
+					}
+					is_upgrading = yes
+				}
+				save_event_target_as = megastructure_upgrading
 			}
 		}
+	}
+
+	option = {
+		name = viz_raff.14.a
+		trigger = {
+			owner = {
+				any_owned_pop = {
+					is_enslaved = yes
+				}
+			}
+		}
+		while = {
+			count = 3
+			owner = {
+				random_owned_pop = {
+					limit = {
+						is_enslaved = yes
+					}
+					kill_pop = yes
+				}
+			}
+		}
+		owner = {
+			add_modifier = {
+				modifier = viz_raff_rush_job
+				days = 200
+			}	
+		}
+	}
+
+	option = {
+		name = viz_raff.14.b
+		owner = {
+			enable_special_project = {
+				name = VIZ_RAFF_SCIENCE_RUSH_JOB
+				owner = owner
+				location = event_target:megastructure_upgrading
+			}
+		}
+	}
+
+	option = {
+		name = viz_raff.14.c
+		trigger = {
+			owner = {
+				NOT = {
+					has_modifier = viz_raff_exhausted_military
+				}
+			}
+		}
+		owner = {
+			add_modifier = {
+				modifier = viz_raff_rush_job
+				days = 400
+			}	
+			add_modifier = {
+				modifier = viz_raff_exhausted_military
+				days = 800
+			}	
+		}		
 	}
 }
 
@@ -1054,11 +1205,17 @@ country_event = {
 	is_triggered_only = no
 
 	mean_time_to_happen = {
-		months = 12
+		months = 9
 	}
 
 	trigger = {
 		has_country_flag = viz_raff_grand_vizier_position_enabled
+		any_owned_leader = {
+			has_leader_flag = viz_raff
+			NOT = {
+				is_ruler = yes
+			}
+		}
 		any_owned_leader = {
 			is_councilor_type = councilor_viz_raff_grand_vizier
 			NOT = {
@@ -1075,6 +1232,7 @@ country_event = {
 					has_leader_flag = viz_raff
 				}
 			}
+			save_event_target_as = ill_leader
 			if = {
 				limit = {
 					OR = {
@@ -1092,7 +1250,7 @@ country_event = {
 }
 
 country_event = {
-	id = viz_raff.16
+	id = viz_raff.17
 	hide_window = yes
 	is_triggered_only = no
 
@@ -1103,9 +1261,24 @@ country_event = {
 	trigger = {
 		has_country_flag = viz_raff_grand_vizier_position_enabled
 		any_owned_leader = {
-			NOT = {
-				is_councilor_type = councilor_viz_raff_grand_vizier
-			}
+			OR = {
+				NOT = {
+					is_councilor_type = councilor_viz_raff_grand_vizier
+				}
+				owner = {
+					NOT = {
+						any_owned_leader = {
+							has_leader_flag = viz_raff
+						}
+					}
+				}
+				owner = {
+					any_owned_leader = {
+						has_leader_flag = viz_raff
+						is_ruler = yes
+					}
+				}
+			}			
 			OR = {
 				has_trait = leader_trait_viz_raff_mysterious_illness
 				has_trait = leader_trait_viz_raff_mysterious_illness_robot
@@ -1116,9 +1289,11 @@ country_event = {
 	immediate = {
 		random_owned_leader = {
 			limit = {
-				NOT = {
-					is_councilor_type = councilor_viz_raff_grand_vizier
-				}
+				OR = {
+					NOT = {
+						is_councilor_type = councilor_viz_raff_grand_vizier
+					}
+				}			
 				OR = {
 					has_trait = leader_trait_viz_raff_mysterious_illness
 					has_trait = leader_trait_viz_raff_mysterious_illness_robot
@@ -1135,6 +1310,186 @@ country_event = {
 					has_trait = leader_trait_viz_raff_mysterious_illness_robot
 				}
 				remove_trait = leader_trait_viz_raff_mysterious_illness_robot
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = viz_raff.18
+	title = viz_raff.18.name
+	desc = viz_raff.18.desc
+	picture = GFX_evt_megastructure_construction
+	is_triggered_only = yes
+
+	option = {
+		name = EXCELLENT
+		owner = {
+			add_modifier = {
+				modifier = viz_raff_rush_job
+				days = 200
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = viz_raff.19
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		owner = {
+			has_policy_flag = viz_raff_ceremonies_inaugration
+		} 		
+	}
+	immediate = {
+		owner = {
+			add_resource = {
+				unity = 5
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = viz_raff.20
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		owner = {
+			has_policy_flag = viz_raff_ceremonies_inaugration
+		} 		
+	}
+	immediate = {
+		owner = {
+			add_resource = {
+				unity = 5
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = viz_raff.21
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		owner = {
+			has_policy_flag = viz_raff_ceremonies_inaugration
+		} 		
+	}
+	immediate = {
+		owner = {
+			add_resource = {
+				unity = 500
+			}
+		}
+	}
+}
+
+country_event = {
+	id = viz_raff.22
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_policy_flag = viz_raff_ceremonies_remembrance	
+	}
+	immediate = {
+		add_resource = {
+			unity = 500
+		}
+	}
+}
+
+country_event = {
+	id = viz_raff.23
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_policy_flag = viz_raff_ceremonies_remembrance	
+	}
+	immediate = {
+		add_resource = {
+			unity = 50
+		}
+	}
+}
+
+country_event = {
+	id = viz_raff.24
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_policy_flag = viz_raff_ceremonies_remembrance	
+	}
+	immediate = {
+		add_resource = {
+			unity = 1
+		}
+	}
+}
+
+country_event = {
+	id = viz_raff.25
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_policy_flag = viz_raff_ceremonies_advancement
+	}
+	immediate = {
+		add_resource = {
+			unity = 50
+		}
+	}
+}
+
+country_event = {
+	id = viz_raff.26
+	is_triggered_only = yes
+	hide_window = yes
+	immediate = {
+		from = {
+			save_global_event_target_as = viz_raff_off_to_coup
+			exile_leader_as = viz_raff_off_to_coup
+		}
+		country_event = {
+			id = viz_raff.8
+			days = 360
+		}
+	}
+}
+
+country_event = {
+	id = viz_raff.27
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		random_situation = {
+			limit = {
+				is_situation_type = situation_viz_raff_accumulating_power
+			}
+			add_situation_progress = 50
+		}
+	}
+}
+
+country_event = {
+	id = viz_raff.28
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				has_leader_flag = viz_raff
+			}
+			add_trait = leader_trait_viz_raff_master_of_ceremonies
+			add_trait = leader_trait_viz_raff_staff_bearer
+		}
+		capital_scope = {
+			create_army = {
+				owner = root.owner
+				type = viz_raff_hierophant_guard
 			}
 		}
 	}

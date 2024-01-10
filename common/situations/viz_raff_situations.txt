@@ -27,6 +27,16 @@ situation_viz_raff_accumulating_power = {
 		destroy_situation = this
 	}
 
+	abort_trigger = {
+		owner = {
+			NOT = {
+				any_owned_leader = {
+					has_leader_flag = viz_raff
+				}
+			}
+		}
+	}
+
 	on_abort = {
 		hidden_effect = {
 			destroy_situation = this
@@ -38,7 +48,9 @@ situation_viz_raff_accumulating_power = {
 			icon = GFX_situation_stage_1
 			icon_background = GFX_situation_stage_frame_red
 			end = 200
-			custom_tooltip = stage_unknown_effects
+			modifier = {
+				pop_ethic_materialist_attraction_mult = 0.10
+			}
 		}
 		stage_2 = {
 			icon = GFX_situation_stage_2
@@ -49,6 +61,9 @@ situation_viz_raff_accumulating_power = {
 				situation_event = {
 					id = viz_raff_sit.1
 				}
+			}
+			modifier = {
+				pop_ethic_materialist_attraction_mult = 0.20
 			}
 		}
 		stage_3 = {
@@ -61,33 +76,46 @@ situation_viz_raff_accumulating_power = {
 					id = viz_raff_sit.2
 				}
 			}
+			modifier = {
+				pop_ethic_materialist_attraction_mult = 0.30
+			}
 		}
 		stage_4 = {
 			icon = GFX_situation_stage_4
 			icon_background = GFX_situation_stage_frame_red
-			end = 800
+			end = 1000
 			custom_tooltip = stage_unknown_effects
 			on_first_enter = {
 				situation_event = {
 					id = viz_raff_sit.3
 				}
 			}
+			modifier = {
+				pop_ethic_materialist_attraction_mult = 0.40
+			}
 		}
 	}
 
 	monthly_progress = {
-		base = 1
+		base = 0.5
 		modifier = {
 			desc = situation_viz_raff_accumulating_power_mod_is_ruler
-			add = 0.5
-		}
-		modifier = {
-			desc = situation_viz_raff_accumulating_power_mod_is_heir
-			add = 0.1
+			owner = {
+				ruler = {
+					has_leader_flag = viz_raff
+				}
+			}
+			add = 0.4
 		}
 		modifier = {
 			desc = situation_viz_raff_accumulating_power_mod_is_vizier
-			add = 0.4
+			owner = {
+				any_owned_leader = {
+					has_leader_flag = viz_raff
+					is_councilor_type = councilor_viz_raff_grand_vizier
+				}
+			}
+			add = 0.3
 		}
 		complex_trigger_modifier = {
 			trigger = count_planet_within_border

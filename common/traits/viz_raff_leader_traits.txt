@@ -4,11 +4,10 @@
 ##########################################################################################################
 
 leader_trait_viz_raff_power_behind_the_throne = {
-	cost = 0
 	inline_script = {
 		script = trait/icon
 		CLASS = official
-		ICON = "GFX_leader_trait_legendary_leader" #todo
+		ICON = "GFX_leader_trait_viz_raff_throne"
 		RARITY = paragon
 		COUNCIL = yes
 		TIER = none
@@ -18,34 +17,28 @@ leader_trait_viz_raff_power_behind_the_throne = {
 	initial = no
 	randomized = no
 	destiny_trait = yes
+	force_councilor_trait = yes
 
 	triggered_councilor_modifier = {
 		potential = {
 			is_variable_set = viz_raff_vizier_level
 		}
 		ruler_skill_add = 1
+		pop_factions_produces_mult = 0.05
 		mult = this.viz_raff_vizier_level
 	}
 
-	triggered_councilor_modifier = {
-		potential = {
-			is_variable_set = viz_raff_vizier_level
-		}
-		country_influence_produces_mult = 0.02
-		mult = this.viz_raff_vizier_level
-	}
 	background_icon = "GFX_leader_background_destiny_1"
 }
 
 leader_trait_viz_raff_undessicated = {
-	cost = 0
 	immortal_leaders = yes
 	inline_script = {
 		script = trait/icon
 		CLASS = leader
-		ICON = "GFX_leader_trait_synthetic"
+		ICON = "GFX_leader_trait_viz_raff_scarab"
 		RARITY = common
-		COUNCIL = triggered
+		COUNCIL = no
 		TIER = none
 	}
 
@@ -60,212 +53,246 @@ leader_trait_viz_raff_undessicated = {
 }
 
 #Vizier Traits - new ones should be added to the script value counter
-# leader_trait_viz_raff_master_of_ceremonies = {
-# 	cost = 1
-# 	inline_script = { #todo
-# 		script = trait/icon
-# 		CLASS = leader
-# 		ICON = "GFX_leader_trait_synthetic"
-# 		RARITY = common
-# 		COUNCIL = triggered
-# 		TIER = none
-# 	}
-
-# 	leader_class = { official }
-# 	initial = no
-
-# 	leader_potential_add = {
-# 		has_leader_flag = viz_raff_allowed_vizier_trait
-# 	}
-# 	selectable_weight = 10000
-
-# 	councilor_modifier = {
-# 		#todo
-# 	}
-# }
-
-leader_trait_viz_raff_staff_bearer = {
+leader_trait_viz_raff_master_of_ceremonies = {
 	cost = 1
-	inline_script = { #todo
-		script = trait/icon
-		CLASS = leader
-		ICON = "GFX_leader_trait_synthetic"
+	inline_script = {
+		script = trait/icon_vizier
+		CLASS = official
+		ICON = "GFX_leader_trait_viz_raff_candle"
 		RARITY = common
-		COUNCIL = triggered
+		COUNCIL = yes
 		TIER = none
 	}
 
 	leader_class = { official }
 	initial = no
 
+	veteran_class_locked_trait = yes
 	leader_potential_add = {
-		has_leader_flag = viz_raff_allowed_vizier_trait
+		viz_raff_allowed_new_vizier_trait = yes
 	}
-	selectable_weight = 10000
+	selectable_weight = 100000
+
+	councilor_modifier = {
+		planet_jobs_unity_produces_mult = 0.01
+	}
+
+	custom_tooltip_with_modifiers = leader_trait_viz_raff_master_of_ceremonies.tooltip
+}
+
+leader_trait_viz_raff_staff_bearer = {
+	inline_script = {
+		script = trait/icon_vizier
+		CLASS = official
+		ICON = "GFX_leader_trait_viz_raff_staff"
+		RARITY = common
+		COUNCIL = yes
+		TIER = none
+	}
+
+	leader_class = { official }
+	initial = no
+
+	veteran_class_locked_trait = yes
+	leader_potential_add = {
+		viz_raff_allowed_new_vizier_trait = yes
+	}
+	selectable_weight = 100000
 
 	councilor_modifier = {
 		diplo_action_acceptance_add = 10
-		diplo_weight_mult = 0.10
+		diplo_weight_mult = 0.15
 	}
 }
 
 leader_trait_viz_raff_truth_dweller = {
-	cost = 1
-	inline_script = { #todo
-		script = trait/icon
-		CLASS = leader
-		ICON = "GFX_leader_trait_synthetic"
+	inline_script = {
+		script = trait/icon_vizier
+		CLASS = official
+		ICON = "GFX_leader_trait_truth_seeker"
 		RARITY = common
-		COUNCIL = triggered
+		COUNCIL = yes
 		TIER = none
 	}
 
 	leader_class = { official }
 	initial = no
 
+	veteran_class_locked_trait = yes
 	leader_potential_add = {
-		has_leader_flag = viz_raff_allowed_vizier_trait
+		viz_raff_allowed_new_vizier_trait = yes
 	}
-	selectable_weight = 10000
+	selectable_weight = 100000
 
+	custom_tooltip_with_modifiers = leader_trait_viz_raff_truth_dweller.tooltip
 	councilor_modifier = {
 		intel_decryption_add = 2
 		add_base_country_intel = 10
-	}
-
-	custom_tooltip = leader_trait_viz_raff_truth_dweller.tooltip
+	}	
 }
 
 leader_trait_viz_raff_water_bringer = {
-	cost = 1
-	inline_script = { #todo
-		script = trait/icon
-		CLASS = leader
-		ICON = "GFX_leader_trait_synthetic"
+	inline_script = {
+		script = trait/icon_vizier
+		CLASS = official
+		ICON = "GFX_leader_trait_civil_engineer"
 		RARITY = common
-		COUNCIL = triggered
+		COUNCIL = yes
 		TIER = none
 	}
 
 	leader_class = { official }
 	initial = no
 
+	veteran_class_locked_trait = yes
 	leader_potential_add = {
-		has_leader_flag = viz_raff_allowed_vizier_trait
+		viz_raff_allowed_new_vizier_trait = yes
 	}
-	selectable_weight = 10000
+	selectable_weight = 100000
 
+	custom_tooltip_with_modifiers = leader_trait_viz_raff_water_bringer.tooltip
 	councilor_modifier = {
 		pc_ocean_habitability = 0.1
 		pc_continental_habitability = 0.1
 		pc_tropical_habitability = 0.1
-	}
-
-	custom_tooltip = leader_trait_viz_raff_water_bringer.tooltip
+	}	
 }
 
-# leader_trait_viz_raff_supreme_hierophant = {
-# 	cost = 1
-# 	inline_script = { #todo
-# 		script = trait/icon
-# 		CLASS = leader
-# 		ICON = "GFX_leader_trait_synthetic"
-# 		RARITY = common
-# 		COUNCIL = triggered
-# 		TIER = none
-# 	}
-
-# 	leader_class = { official }
-# 	initial = no
-
-# 	leader_potential_add = {
-# 		has_leader_flag = viz_raff_allowed_vizier_trait
-# 	}
-# 	selectable_weight = 10000
-
-# 	councilor_modifier = {
-# 		#todo
-# 	}
-# }
-
-leader_trait_viz_raff_seal_keeper = {
-	cost = 1
-	inline_script = { #todo
-		script = trait/icon
-		CLASS = leader
-		ICON = "GFX_leader_trait_synthetic"
+leader_trait_viz_raff_supreme_hierophant = {
+	inline_script = {
+		script = trait/icon_vizier
+		CLASS = official
+		ICON = "GFX_leader_trait_academic_minor_artifacts_expert"
 		RARITY = common
-		COUNCIL = triggered
+		COUNCIL = yes
 		TIER = none
 	}
 
 	leader_class = { official }
 	initial = no
 
+	veteran_class_locked_trait = yes
 	leader_potential_add = {
-		has_leader_flag = viz_raff_allowed_vizier_trait
+		viz_raff_allowed_new_vizier_trait = yes
 	}
-	selectable_weight = 10000
+	selectable_weight = 100000
+
+	triggered_self_modifier = {
+		leader_officials_minor_artifacts_produces_add = 10
+	} 
+
+	custom_tooltip_with_modifiers = leader_trait_viz_raff_supreme_hierophant.tooltip
+	triggered_self_modifier = {
+		potential = {
+			is_councilor = yes
+			owner = {
+				num_owned_relics > 0
+			}
+		}
+		leader_officials_unity_produces_add = 50
+		mult = owner.trigger:num_owned_relics
+	}
+
+	triggered_councilor_modifier = {
+		potential = {
+			is_councilor = yes
+			owner = {
+				num_owned_relics > 0
+			}
+		}
+		pop_citizen_happiness = 0.01
+		mult = owner.trigger:num_owned_relics
+	}	
+}
+
+leader_trait_viz_raff_seal_keeper = {
+	inline_script = {
+		script = trait/icon_vizier
+		CLASS = official
+		ICON = "GFX_leader_trait_viz_raff_lock"
+		RARITY = common
+		COUNCIL = yes
+		TIER = none
+	}
+
+	leader_class = { official }
+	initial = no
+
+	veteran_class_locked_trait = yes
+	leader_potential_add = {
+		viz_raff_allowed_new_vizier_trait = yes
+	}
+	selectable_weight = 100000
 
 	councilor_modifier = {
 		intel_encryption_add = 2
-		empire_size_penalty_mult = -0.2
-		leaders_upkeep_mult = -0.2
+		category_computing_research_speed_mult = 0.25
+		category_computing_draw_chance_mult = 0.25
+	}
+	triggered_councilor_modifier = {
+		potential = {
+			has_first_contact_dlc = yes
+			NOT = {
+				owner = {
+					has_ascension_perk = ap_enigmatic_engineering
+				}
+			}
+		}
+		ship_cloaking_strength_add = 1
 	}
 }
 
 leader_trait_viz_raff_monument_builder = {
-	cost = 1
-	inline_script = { #todo
-		script = trait/icon
-		CLASS = leader
-		ICON = "GFX_leader_trait_synthetic"
+	inline_script = {
+		script = trait/icon_vizier
+		CLASS = official
+		ICON = "GFX_leader_trait_obelisk_curse"
 		RARITY = common
-		COUNCIL = triggered
+		COUNCIL = yes
 		TIER = none
 	}
 
 	leader_class = { official }
 	initial = no
-
+	
+	veteran_class_locked_trait = yes
 	leader_potential_add = {
-		has_leader_flag = viz_raff_allowed_vizier_trait
+		viz_raff_allowed_new_vizier_trait = yes
 		owner = {
-			check_variable_arithmetic = {
-				which = value:viz_raff_num_slaves
-				value > 0
-			}
+			has_technology = tech_mega_engineering
 		}
 	}
-	selectable_weight = 10000
+	selectable_weight = 100000
 	
 	triggered_councilor_modifier = {
-		megastructure_build_speed_mult = -0.0025
-		megastructures_alloys_cost_mult = -0.0025
-		mult = owner.value:viz_raff_num_slaves
+		megastructure_build_speed_mult = 0.2
+		planet_building_build_speed_mult = 0.2
 	}
 
-	custom_tooltip = leader_trait_viz_raff_monument_builder.tooltip
+	custom_tooltip_with_modifiers = leader_trait_viz_raff_monument_builder.tooltip
 }
 
 leader_trait_viz_raff_constellation_hammer = {
-	cost = 1
-	inline_script = { #todo
-		script = trait/icon
-		CLASS = leader
-		ICON = "GFX_leader_trait_synthetic"
+	inline_script = {
+		script = trait/icon_vizier
+		CLASS = official
+		ICON = "GFX_leader_trait_legendary_militarist_one"
 		RARITY = common
-		COUNCIL = triggered
+		COUNCIL = yes
 		TIER = none
 	}
 
 	leader_class = { official }
 	initial = no
 
+	veteran_class_locked_trait = yes
 	leader_potential_add = {
-		has_leader_flag = viz_raff_allowed_vizier_trait
+		viz_raff_allowed_new_vizier_trait = yes
+		owner = {
+			has_technology = tech_titans
+		}
 	}
-	selectable_weight = 10000
+	selectable_weight = 100000
 
 	councilor_modifier = {
 		shipsize_titan_hull_mult = 0.25
@@ -276,26 +303,26 @@ leader_trait_viz_raff_constellation_hammer = {
 }
 
 leader_trait_viz_raff_divine_oracle = {
-	cost = 1
-	inline_script = { #todo
-		script = trait/icon
-		CLASS = leader
-		ICON = "GFX_leader_trait_synthetic"
+	inline_script = {
+		script = trait/icon_vizier
+		CLASS = official
+		ICON = "GFX_leader_trait_oracle"
 		RARITY = common
-		COUNCIL = triggered
+		COUNCIL = yes
 		TIER = none
 	}
 
 	leader_class = { official }
 	initial = no
 
+	veteran_class_locked_trait = yes
 	leader_potential_add = {
-		has_leader_flag = viz_raff_allowed_vizier_trait
 		owner = {
 			is_spiritualist = yes
 		}
+		viz_raff_allowed_new_vizier_trait = yes
 	}
-	selectable_weight = 10000
+	selectable_weight = 100000
 
 	councilor_modifier = {
 		planet_priests_consumer_goods_upkeep_mult = 0.5
@@ -309,7 +336,7 @@ leader_trait_viz_raff_mysterious_illness = {
 	negative = yes
 	inline_script = {
 		script = trait/icon_negative_no_tiers
-		ICON = "GFX_leader_trait_maimed"
+		ICON = GFX_leader_trait_corsair
 		COUNCIL = no
 	}
 	self_modifier = {
@@ -327,7 +354,7 @@ leader_trait_viz_raff_mysterious_illness_robot = {
 	negative = yes
 	inline_script = {
 		script = trait/icon_negative_no_tiers
-		ICON = "GFX_leader_trait_maimed"
+		ICON = GFX_leader_trait_viz_raff_blue_screen
 		COUNCIL = no
 	}
 	self_modifier = {
