@@ -18,12 +18,30 @@ on_custom_diplomacy = {	# country_event
 }
 
 # Scope = Ship
+# From = System
+# FromFrom = Country
+on_entering_system_first_time = {
+	events = {
+		chronotec_narrative.2601	# Indicator of the system
+	}
+}
+
+# Scope = Ship
 # From = Planet
 on_survey_planet = {
 	events = {
 		chronotec_narrative.26		# Chronolord planet surveyed - adds digsite
 	}
 }
+
+# A ship is done surveying the last unsurveyed planet in a system
+# Scope = ship
+# From = system
+#on_system_survey_ship = {
+#	events = {
+#		chronotec_narrative.2605	# Chronolord system surveyed - adds starbase
+#	}
+#}
 
 
 # Leader death effects
@@ -40,8 +58,9 @@ on_leader_fired = {	# country_event
 	}
 }
 
-# scopeless
-on_bi_yearly_pulse = {	# country_event
+# this = country
+#on_bi_yearly_pulse_country
+on_five_year_pulse_country = {	# country_event
 	events = {
 		chronotec_narrative.35
 	}
@@ -53,5 +72,29 @@ on_bi_yearly_pulse = {	# country_event
 on_planet_transfer = {	# planet_event
 	events = {
 		chronotec_leader.40			# Planet owner change handler
+	}
+}
+
+
+# When the planet is destroyed...
+# Scope:
+# this/root = planet that have been fired upon
+# from = fleet that fired
+
+on_destroy_planet_with_PLANET_KILLER_CRACKER = {
+	events = {
+		chronotec_leader.40500
+	}
+}
+
+on_destroy_planet_with_PLANET_KILLER_SHIELDER = {
+	events = {
+		chronotec_leader.40500
+	}
+}
+
+on_destroy_planet_with_PLANET_KILLER_STAR_CRACKER = {
+	events = {
+		chronotec_leader.40500
 	}
 }

@@ -1,12 +1,11 @@
-@chronotec_activation_cost = 3000
-@chronotec_triumph_duration = 3600
-@chronotec_triumph_duration_short = 1800
-@chronotec_triumph_duration_veryshort = 900
+# common\relics\chronotec_relics.txt
+
+# Authors: Rodahtnov & Zyralynn
 
 r_chronotec_standard = {
 	activation_duration = @chronotec_triumph_duration
 	portrait = "GFX_chronotec_relic_standard"
-	sound = "relic_activation_ether_drake_trophy"
+	sound = "relic_activation_extradimensional_warlock"
 
 	resources = {
 		category = relics
@@ -24,38 +23,64 @@ r_chronotec_standard = {
 		potential = {
 			always = yes
 		}
-		country_unity_produces_mult = 0.10
+		country_unity_produces_mult = 0.05
+		all_technology_research_speed = 0.05
 	}
 
 	score = 1000
 
 	active_effect = {
-		add_modifier = {
-			modifier = "ether_drake_triumph"
-			days = @chronotec_triumph_duration
+		# Standard wibbly wobbly timey stuff
+		custom_tooltip = r_chronotec_standard_effect_tooltip
+		if = {	# Leader is active - Chronocharges
+			limit = {
+				hidden_trigger = {
+					is_same_value = event_target:chronotec_actual_owner_country
+				}
+			}
+			custom_tooltip = r_chronotec_standard_leader_effect_tooltip
 		}
 		custom_tooltip = relic_triumph_cooldown
-		#hidden_effect = {
-		#	add_modifier = {
-		#		modifier = "relic_activation_cooldown"
-		#		days = @chronotec_triumph_duration
-		#	}
-		#}
+		hidden_effect = {
+			add_modifier = {
+				modifier = "relic_activation_cooldown"
+				days = @chronotec_triumph_duration
+			}
+			if = {
+				limit = {
+					NOT = {
+						has_country_flag = chronotec_activated_relic
+					}
+				}
+				set_country_flag = chronotec_activated_relic
+				country_event = {
+					id = chronotec_relic.10
+					days = 0
+				}
+			}
+			else = {
+				country_event = {
+					id = chronotec_relic.50
+					days = 0
+				}
+			}
+		}
 	}
 
 	# Possible check for activation
 	possible = {
 		always = yes
-		#inline_script = {
-		#	script = relics/activation_checks
-		#	RELIC = r_dragon_trophy
-		#}
+		inline_script = {
+			script = relics/activation_checks
+			RELIC = r_chronotec_standard
+		}
 	}
 }
+
 r_chronotec_corrupted = {
 	activation_duration = @chronotec_triumph_duration
 	portrait = "GFX_chronotec_relic_corrupted"
-	sound = "relic_activation_ether_drake_trophy"
+	sound = "relic_activation_extradimensional_warlock"
 
 	resources = {
 		category = relics
@@ -73,38 +98,62 @@ r_chronotec_corrupted = {
 		potential = {
 			always = yes
 		}
-		country_unity_produces_mult = 0.10
+		country_unity_produces_mult = 0.1
+		all_technology_research_speed = 0.1
 	}
 
-	score = 1000
+	score = 2500
 
 	active_effect = {
-		add_modifier = {
-			modifier = "ether_drake_triumph"
-			days = @chronotec_triumph_duration
+		custom_tooltip = r_chronotec_corrupted_effect_tooltip
+		if = {	# Leader is active - Chronocorruption
+			limit = {
+				hidden_trigger = {
+					is_same_value = event_target:chronotec_actual_owner_country
+				}
+			}
+			custom_tooltip = r_chronotec_corrupted_leader_effect_tooltip
 		}
 		custom_tooltip = relic_triumph_cooldown
-		#hidden_effect = {
-		#	add_modifier = {
-		#		modifier = "relic_activation_cooldown"
-		#		days = @chronotec_triumph_duration
-		#	}
-		#}
+		hidden_effect = {
+			add_modifier = {
+				modifier = "relic_activation_cooldown"
+				days = @chronotec_triumph_duration
+			}
+			if = {
+				limit = {
+					NOT = {
+						has_country_flag = chronotec_activated_relic
+					}
+				}
+				set_country_flag = chronotec_activated_relic
+				country_event = {
+					id = chronotec_relic.10
+					days = 0
+				}
+			}
+			else = {
+				country_event = {
+					id = chronotec_relic.50
+					days = 0
+				}
+			}
+		}
 	}
 
 	# Possible check for activation
 	possible = {
 		always = yes
-		#inline_script = {
-		#	script = relics/activation_checks
-		#	RELIC = r_dragon_trophy
-		#}
+		inline_script = {
+			script = relics/activation_checks
+			RELIC = r_chronotec_corrupted
+		}
 	}
 }
 r_chronotec_perfected = {
 	activation_duration = @chronotec_triumph_duration
 	portrait = "GFX_chronotec_relic_perfected"
-	sound = "relic_activation_ether_drake_trophy"
+	sound = "relic_activation_extradimensional_warlock"
 
 	resources = {
 		category = relics
@@ -122,31 +171,55 @@ r_chronotec_perfected = {
 		potential = {
 			always = yes
 		}
-		country_unity_produces_mult = 0.10
+		country_unity_produces_mult = 0.1
+		all_technology_research_speed = 0.1
 	}
 
-	score = 1000
+	score = 2500
 
 	active_effect = {
-		add_modifier = {
-			modifier = "ether_drake_triumph"
-			days = @chronotec_triumph_duration
+		custom_tooltip = r_chronotec_perfected_effect_tooltip
+		if = {	# Leader is active - Chronoperfection
+			limit = {
+				hidden_trigger = {
+					is_same_value = event_target:chronotec_actual_owner_country
+				}
+			}
+			custom_tooltip = r_chronotec_perfected_leader_effect_tooltip
 		}
 		custom_tooltip = relic_triumph_cooldown
-		#hidden_effect = {
-		#	add_modifier = {
-		#		modifier = "relic_activation_cooldown"
-		#		days = @chronotec_triumph_duration
-		#	}
-		#}
+		hidden_effect = {
+			add_modifier = {
+				modifier = "relic_activation_cooldown"
+				days = @chronotec_triumph_duration
+			}
+			if = {
+				limit = {
+					NOT = {
+						has_country_flag = chronotec_activated_relic
+					}
+				}
+				set_country_flag = chronotec_activated_relic
+				country_event = {
+					id = chronotec_relic.10
+					days = 0
+				}
+			}
+			else = {
+				country_event = {
+					id = chronotec_relic.50
+					days = 0
+				}
+			}
+		}
 	}
 
 	# Possible check for activation
 	possible = {
 		always = yes
-		#inline_script = {
-		#	script = relics/activation_checks
-		#	RELIC = r_dragon_trophy
-		#}
+		inline_script = {
+			script = relics/activation_checks
+			RELIC = r_chronotec_perfected
+		}
 	}
 }

@@ -14,17 +14,20 @@ decision_chronotec_chronoacceleration = {
 		leader = {
 			chronotec_has_normal_infusion = yes	
 		}
+		hidden_trigger = {
+			has_global_flag = chronotec_advanced
+		}
 	}
 
 	allow = {
-		NOR = {
-			has_modifier = pm_chronotec_chronoacceleration
-			has_modifier = pm_chronotec_chronoacceleration_corrupted
-			has_modifier = pm_chronotec_chronoacceleration_perfected
+		custom_tooltip = {
+			fail_text = decision_chronotec_cd
 			hidden_trigger = {	# Lets avoid cheesing the leader
 				exists = owner
 				owner = {
-					has_country_flag = chronotec_chronoacceleration_locked
+					NOT = {
+						has_country_flag = chronotec_chronoacceleration_locked
+					}
 				}
 			}
 		}
@@ -40,16 +43,22 @@ decision_chronotec_chronoacceleration = {
 	effect = {
 		# Normal effects, normal backlash
 		custom_tooltip = decision_chronotec_chronoacceleration_tooltip
-
+		add_modifier = {
+			modifier = pm_chronotec_chronoacceleration
+			years = 5
+		}
 		hidden_effect = {
-			add_modifier = {
-				modifier = pm_chronotec_chronoacceleration_corrupted
-			}
+			
 			planet_event = {	# Triggers the negative
 				id = chronotec_leader.50001
-				days = 1800
+				days = @chronotec_charge_timer
 			}
 			owner = {
+				set_saved_date = {	# Decision timer
+					key = chronotec_decision_timer
+					days_from_present = @chronotec_decision_cd_timer
+					expires = @chronotec_decision_cd_timer
+				}
 				set_timed_country_flag = {
 					flag = chronotec_chronoacceleration_locked
 					years = 10
@@ -78,17 +87,20 @@ decision_chronotec_chronoacceleration_corrupted = {
 		leader = {
 			has_trait = leader_trait_chronotec_chronolord_corruption_total
 		}
+		hidden_trigger = {
+			has_global_flag = chronotec_advanced
+		}
 	}
 
 	allow = {
-		NOR = {
-			has_modifier = pm_chronotec_chronoacceleration
-			has_modifier = pm_chronotec_chronoacceleration_corrupted
-			has_modifier = pm_chronotec_chronoacceleration_perfected
+		custom_tooltip = {
+			fail_text = decision_chronotec_cd
 			hidden_trigger = {	# Lets avoid cheesing the leader
 				exists = owner
 				owner = {
-					has_country_flag = chronotec_chronoacceleration_locked
+					NOT = {
+						has_country_flag = chronotec_chronoacceleration_locked
+					}
 				}
 			}
 		}
@@ -105,12 +117,17 @@ decision_chronotec_chronoacceleration_corrupted = {
 	effect = {
 		# Higher effect, volatile backlash
 		custom_tooltip = decision_chronotec_chronoacceleration_corrupted_tooltip
-
+		add_modifier = {
+			modifier = pm_chronotec_chronoacceleration_corrupted
+			years = 5
+		}
 		hidden_effect = {
-			add_modifier = {
-				modifier = pm_chronotec_chronoacceleration_corrupted
-			}
 			owner = {
+				set_saved_date = {	# Decision timer
+					key = chronotec_decision_timer
+					days_from_present = @chronotec_decision_cd_timer
+					expires = @chronotec_decision_cd_timer
+				}
 				set_timed_country_flag = {
 					flag = chronotec_chronoacceleration_locked
 					years = 10
@@ -139,17 +156,20 @@ decision_chronotec_chronoacceleration_perfected = {
 		leader = {
 			has_trait = leader_trait_chronotec_chronolord_infusion_perfect
 		}
+		hidden_trigger = {
+			has_global_flag = chronotec_advanced
+		}
 	}
 
 	allow = {
-		NOR = {
-			has_modifier = pm_chronotec_chronoacceleration
-			has_modifier = pm_chronotec_chronoacceleration_corrupted
-			has_modifier = pm_chronotec_chronoacceleration_perfected
+		custom_tooltip = {
+			fail_text = decision_chronotec_cd
 			hidden_trigger = {	# Lets avoid cheesing the leader
 				exists = owner
 				owner = {
-					has_country_flag = chronotec_chronoacceleration_locked
+					NOT = {
+						has_country_flag = chronotec_chronoacceleration_locked
+					}
 				}
 			}
 		}
@@ -166,16 +186,24 @@ decision_chronotec_chronoacceleration_perfected = {
 	effect = {
 		# Higher effect, volatile backlash
 		custom_tooltip = decision_chronotec_chronoacceleration_perfected_tooltip
-
+		add_modifier = {
+			modifier = pm_chronotec_chronoacceleration_perfected
+		}
 		hidden_effect = {
-			add_modifier = {
-				modifier = pm_chronotec_chronoacceleration_perfected
-			}
 			owner = {
+				set_saved_date = {	# Decision timer
+					key = chronotec_decision_timer
+					days_from_present = @chronotec_decision_cd_timer
+					expires = @chronotec_decision_cd_timer
+				}
 				set_timed_country_flag = {
 					flag = chronotec_chronoacceleration_locked
 					years = 10
 				}
+			}
+			set_variable = {
+				which = chronotec_chronoacceleration
+				value = 0
 			}
 			planet_event = {	# Incremental
 				id = chronotec_leader.50003
