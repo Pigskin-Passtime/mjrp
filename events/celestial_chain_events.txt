@@ -318,6 +318,12 @@ country_event = {
 				fire = yes
 			}
 		}
+		event_target:celestial_fleet = {
+			delete_fleet = {
+				target = this
+				kill_leader = no
+			}
+		}
 		set_country_flag = celestial_wayfarer_awol
 	}
 
@@ -592,8 +598,47 @@ country_event = {
 			set_leader_flag = immune_to_negative_traits
 			set_owner = root
 		}
-		event_target:celestial_fleet = {
-			assign_leader = event_target:celestial_leader
+		if = {
+			limit = {
+				exists = event_target:celestial_fleet
+			}
+			event_target:celestial_fleet = {
+				assign_leader = event_target:celestial_leader
+			}
+		}
+		else = {
+			create_fleet = {
+				name = "NAME_TheWayfarer"
+				effect = {
+					set_owner = root
+					create_ship = {
+						name = "NAME_NomadsPillage"
+						design = "NAME_NomadsShip"
+						graphical_culture = "extra_dimensional_01"
+						prefix = no
+						upgradable = no
+					}
+					last_created_ship = {
+						set_ship_flag = iss_wayfarer
+						save_global_event_target_as = iss_wayfarer
+						set_disable_at_health = 0.05
+					}
+					set_location = {
+						target = root.capital_scope
+						distance = 10
+						angle = random
+					}
+					set_fleet_stance = passive
+					assign_leader = event_target:celestial_leader
+					save_global_event_target_as = celestial_fleet
+				}
+				settings = {
+					can_upgrade = yes
+					can_change_composition = no
+					can_change_leader = no
+					spawn_debris = no
+				}
+			}
 		}
 		event_target:celestial_awol_leader = {
 			kill_leader = {
@@ -611,6 +656,7 @@ country_event = {
 	option = {
 		name = "celestial_chain.111.b"
 		custom_gui = "enclave_caravaneer_option"
+		set_country_flag = celestial_eventchain_1_completed
 		end_event_chain = celestial_interdimensional_pursuit
 		custom_tooltip = celestial_wayfarer_returns
 		event_target:celestial_leader = {
@@ -770,8 +816,47 @@ country_event = {
 			set_leader_flag = immune_to_negative_traits
 			set_owner = root
 		}
-		event_target:celestial_fleet = {
-			assign_leader = event_target:celestial_leader
+		if = {
+			limit = {
+				exists = event_target:celestial_fleet
+			}
+			event_target:celestial_fleet = {
+				assign_leader = event_target:celestial_leader
+			}
+		}
+		else = {
+			create_fleet = {
+				name = "NAME_TheWayfarer"
+				effect = {
+					set_owner = root
+					create_ship = {
+						name = "NAME_NomadsPillage"
+						design = "NAME_NomadsShip"
+						graphical_culture = "extra_dimensional_01"
+						prefix = no
+						upgradable = no
+					}
+					last_created_ship = {
+						set_ship_flag = iss_wayfarer
+						save_global_event_target_as = iss_wayfarer
+						set_disable_at_health = 0.05
+					}
+					set_location = {
+						target = root.capital_scope
+						distance = 10
+						angle = random
+					}
+					set_fleet_stance = passive
+					assign_leader = event_target:celestial_leader
+					save_global_event_target_as = celestial_fleet
+				}
+				settings = {
+					can_upgrade = yes
+					can_change_composition = no
+					can_change_leader = no
+					spawn_debris = no
+				}
+			}
 		}
 		event_target:celestial_awol_leader = {
 			kill_leader = {
@@ -782,6 +867,7 @@ country_event = {
 
 	option = {
 		name = celestial_chain.114.a
+		set_country_flag = celestial_eventchain_1_completed
 		custom_tooltip = celestial_wayfarer_returns
 		end_event_chain = celestial_interdimensional_pursuit
 		event_target:celestial_leader = {
@@ -808,7 +894,7 @@ country_event = {
 
 	trigger = {
 		event_target:celestial_leader = {
-			leader_age >= 250
+			leader_age >= 240
 		}
 	}
 
@@ -939,8 +1025,6 @@ country_event = {
 	}
 }
 
-# TODO for whole event chain: alternate text and stuff for if the unbidden IS CURRENTLY a crisis or WAS a crisis
-
 # Hidden - Create Unbidden Country
 country_event = { 
 	id = celestial_chain.205
@@ -1022,10 +1106,39 @@ country_event = {
 		name = "celestial_chain.206.b"
 		is_dialog_only = yes
 		response_text = celestial_chain.206.b.reply
+		trigger = {
+			# Unbidden not yet crisis
+			NOR = {
+				has_global_flag = extradimensional_first_portal_destroyed
+				has_global_flag = extradimensional_invasion_happened
+			}
+		}
 	}
 
 	option = {
 		name = "celestial_chain.206.c"
+		is_dialog_only = yes
+		response_text = celestial_chain.206.c.reply
+		trigger = {
+			# Unbidden currently crisis
+			has_global_flag = extradimensional_invasion_happened
+			NOT = { has_global_flag = extradimensional_first_portal_destroyed }
+		}
+	}
+
+	option = {
+		name = "celestial_chain.206.d"
+		is_dialog_only = yes
+		response_text = celestial_chain.206.d.reply
+		trigger = {
+			# Unbidden were crisis
+			has_global_flag = extradimensional_invasion_happened
+			has_global_flag = extradimensional_first_portal_destroyed
+		}
+	}
+
+	option = {
+		name = "celestial_chain.206.e"
 		hidden_effect = {
 			country_event = {
 				id = celestial_chain.207
@@ -1085,11 +1198,22 @@ ship_event = {
 		owner = {
 			set_country_flag = celestial_invaders_left
 			abort_special_project = { type = celestial_unbidden_rift_sp location = event_target:celestial_unbidden_rift }
+			# random_planet_within_border = {
+			# 	save_event_target_as = celestial_escape_target
+			# }
+		}
+		fleet = {
+			auto_move_to_planet = {
+				target = owner.capital_scope
+				clear_auto_move_on_arrival = yes
+			}
 		}
 		hidden_effect = {
-			ship_event = {
-				id = celestial_chain.209
-				days = 90
+			owner = {
+				country_event = {
+					id = celestial_chain.209
+					days = 90
+				}
 			}
 		}
 	}
@@ -1106,9 +1230,11 @@ ship_event = {
 			}
 		}
 		hidden_effect = {
-			ship_event = {
-				id = celestial_chain.209
-				days = 60
+			owner = {
+				country_event = {
+					id = celestial_chain.209
+					days = 60
+				}
 			}
 		}
 	}
@@ -1117,7 +1243,7 @@ ship_event = {
 # Either way, the system is cut off
 # A large portal with an largish unbidden fleet appears in the system
 # If the wayfarer remains in the system and cant jump out for whatever reason, their ship will remain at 1% health
-ship_event = {
+country_event = {
 	id = celestial_chain.209
 	title = "celestial_chain.209.name"
 	desc = "celestial_chain.209.desc"
@@ -1130,25 +1256,28 @@ ship_event = {
 	}
 
 	immediate = {
-		fleet.solar_system = {
-			every_neighbor_system = {
-				set_star_flag = celestial_invader_neighbour_system
-				remove_hyperlane = {
-					from = this
-					to = prev
+		establish_communications = event_target:celestial_unbidden_country
+		event_target:celestial_unbidden_rift = {
+			solar_system = {
+				every_neighbor_system = {
+					set_star_flag = celestial_invader_neighbour_system
+					remove_hyperlane = {
+						from = this
+						to = prev
+					}
 				}
-			}
-			star = {
-				create_ambient_object = {
-					type = "extradimensional_2"
-					location = this
-				}
-				last_created_ambient_object = {
-					set_ambient_object_flag = celestial_extradimensional_system_effect
-					set_location = {
-						target = prev
-						distance = 0
-						angle = random
+				star = {
+					create_ambient_object = {
+						type = "extradimensional_2"
+						location = this
+					}
+					last_created_ambient_object = {
+						set_ambient_object_flag = celestial_extradimensional_system_effect
+						set_location = {
+							target = prev
+							distance = 0
+							angle = random
+						}
 					}
 				}
 			}
@@ -1159,78 +1288,78 @@ ship_event = {
 		name = "celestial_chain.209.a"
 		custom_tooltip = celestial_chain.209.tt
 		hidden_effect = {
-			fleet.solar_system = {
-				event_target:celestial_unbidden_rift = {
-					create_ambient_object = {
-						type = "celestial_unbidden_portal"
-						location = this
-						entity_offset_height = { min = -15 max = -15 }
-						entity_scale_to_size = yes
-						scale = 1.25
-					}
-				}
-				last_created_ambient_object = {	
-					set_ambient_object_flag = celestial_unbidden_portal
-					save_global_event_target_as = celestial_unbidden_portal
-					set_location = {
-						target = prev
-						distance = -120
-						angle = 80
-					}
-				}
-				every_system_ambient_object = {
-					limit = {
-						has_ambient_object_flag = celestial_unbidden_rift
-					}
-					destroy_ambient_object = this
-				}
-				# Spawn unbidden fleet
-				if = { # Unbidden are currently the crisis
-					limit = {
-						has_global_flag = extradimensional_invasion_happened
-						NOT = { has_global_flag = extradimensional_first_portal_destroyed }
-					}
-					# Spawn mediumish fleet
-					# 8, 12, 20 is the usual fleet composition
-					event_target:celestial_unbidden_country = {
-						celestial_spawn_unbidden_fleet = {
-							revenant_num = 2
-							phantom_num = 8
-							wraith_num = 12
+			event_target:celestial_unbidden_rift = {
+				solar_system = {
+					event_target:celestial_unbidden_rift = {
+						create_ambient_object = {
+							type = "celestial_unbidden_portal"
+							location = this
+							entity_offset_height = { min = -15 max = -15 }
+							entity_scale_to_size = yes
+							scale = 1.25
 						}
 					}
-				}
-				else_if = { # Unbidden WERE previously the crisis
-					limit = {
-						has_global_flag = extradimensional_invasion_happened
-						has_global_flag = extradimensional_first_portal_destroyed
-					}
-					# Spawn average fleet
-					event_target:celestial_unbidden_country = {
-						celestial_spawn_unbidden_fleet = {
-							revenant_num = 6
-							phantom_num = 10
-							wraith_num = 20
+					last_created_ambient_object = {	
+						set_ambient_object_flag = celestial_unbidden_portal
+						save_global_event_target_as = celestial_unbidden_portal
+						set_location = {
+							target = prev
+							distance = -120
+							angle = 80
 						}
 					}
-				}
-				else = { # Unbidden have not arrived at all
-					# Spawn small fleet
-					event_target:celestial_unbidden_country = {
-						celestial_spawn_unbidden_fleet = {
-							revenant_num = 1
-							phantom_num = 3
-							wraith_num = 10
+					every_system_ambient_object = {
+						limit = {
+							has_ambient_object_flag = celestial_unbidden_rift
+						}
+						destroy_ambient_object = this
+					}
+					# Spawn unbidden fleet
+					if = { # Unbidden are currently the crisis
+						limit = {
+							has_global_flag = extradimensional_invasion_happened
+							NOT = { has_global_flag = extradimensional_first_portal_destroyed }
+						}
+						# Spawn mediumish fleet
+						# 8, 12, 20 is the usual fleet composition
+						event_target:celestial_unbidden_country = {
+							celestial_spawn_unbidden_fleet = {
+								revenant_num = 2
+								phantom_num = 8
+								wraith_num = 12
+							}
+						}
+					}
+					else_if = { # Unbidden WERE previously the crisis
+						limit = {
+							has_global_flag = extradimensional_invasion_happened
+							has_global_flag = extradimensional_first_portal_destroyed
+						}
+						# Spawn average fleet
+						event_target:celestial_unbidden_country = {
+							celestial_spawn_unbidden_fleet = {
+								revenant_num = 6
+								phantom_num = 10
+								wraith_num = 20
+							}
+						}
+					}
+					else = { # Unbidden have not arrived at all
+						# Spawn small fleet
+						event_target:celestial_unbidden_country = {
+							celestial_spawn_unbidden_fleet = {
+								revenant_num = 1
+								phantom_num = 3
+								wraith_num = 10
+							}
 						}
 					}
 				}
 			}
-			owner = {
-				country_event = {
-					id = celestial_chain.210
-					days = 15
-					random = 15
-				}
+			country_event = {
+				id = celestial_chain.210
+				days = 15
+				random = 15
 			}
 		}
 	}
@@ -1247,7 +1376,7 @@ country_event = {
 	event_chain = celestial_the_invaders
 
 	picture_event_data = {
-		portrait = event_target:celestial_astral_corps_country
+		portrait = event_target:celestial_astral_leader
 	}
 	
 	is_triggered_only = yes
@@ -1285,7 +1414,6 @@ country_event = {
 country_event = {
 	id = celestial_chain.211
 	title = "celestial_setup.8.name"
-	desc = "celestial_chain.211.desc"
 	diplomatic = yes
 	custom_gui = "enclave_curator_window"
 	custom_gui_option = "enclave_curator_option"
@@ -1294,6 +1422,33 @@ country_event = {
 		room = celestial_astral_keeper_room
     }
 	event_chain = celestial_the_invaders
+
+	desc = {
+		text = "celestial_chain.211.desc_current"
+		trigger = {
+			# Unbidden currently crisis
+			has_global_flag = extradimensional_invasion_happened
+			NOT = { has_global_flag = extradimensional_first_portal_destroyed }
+		}
+	}
+	desc = {
+		text = "celestial_chain.211.desc_prev"
+		trigger = {
+			# Unbidden were crisis
+			has_global_flag = extradimensional_invasion_happened
+			has_global_flag = extradimensional_first_portal_destroyed
+		}
+	}
+	desc = {
+		text = "celestial_chain.211.desc"
+		trigger = {
+			# Unbidden are not yet crisis
+			NOR = {
+				has_global_flag = extradimensional_invasion_happened
+				has_global_flag = extradimensional_first_portal_destroyed
+			}
+		}
+	}
 	
 	is_triggered_only = yes
 	trigger = {
@@ -1336,7 +1491,7 @@ country_event = {
 			last_created_leader = {
 				set_leader_flag = legendary_leader
 				set_leader_flag = celestial
-				save_global_event_target_as = celestial_astralcorps_leader
+				save_global_event_target_as = celestial_awol_leader_2
 				set_leader_flag = immune_to_negative_traits
 				set_owner = event_target:celestial_astral_corps_country
 			}
@@ -1344,6 +1499,12 @@ country_event = {
 				kill_leader = {
 					show_notification = no
 					fire = yes
+				}
+			}
+			event_target:celestial_fleet = {
+				delete_fleet = {
+					target = this
+					kill_leader = no
 				}
 			}
 			country_event = {
@@ -1520,13 +1681,26 @@ country_event = {
 	}
 
 	immediate = {
+		random_situation = {
+			limit = {
+				is_situation_type = celestial_invaders
+			}
+			save_event_target_as = celestial_situation
+		}
 	}
-	# todo: progress the situation a certain way depending on choices, which also have boons
+
 	option = {
 		name = "celestial_chain.216.a"
+		event_target:celestial_situation = {
+			add_situation_progress = 2
+		}
 	}
 	option = {
 		name = "celestial_chain.216.b"
+		add_random_research_option = {
+			area = physics
+			add_progress = 0.5
+		}
 	}
 }
 
@@ -1544,13 +1718,31 @@ country_event = {
 	}
 
 	immediate = {
+		random_situation = {
+			limit = {
+				is_situation_type = celestial_invaders
+			}
+			save_event_target_as = celestial_situation
+		}
 	}
-	# todo: progress the situation a certain way depending on choices, which also have boons
+
 	option = {
 		name = "celestial_chain.217.a"
+		event_target:celestial_situation = {
+			add_situation_progress = 4
+		}
+		add_resource = {
+			influence = 100
+		}
 	}
 	option = {
 		name = "celestial_chain.217.b"
+		add_resource = {
+			influence = 250
+		}
+		add_resource = {
+			alloys = 5000
+		}
 	}
 }
 
@@ -1568,17 +1760,38 @@ country_event = {
 	}
 
 	immediate = {
+		random_situation = {
+			limit = {
+				is_situation_type = celestial_invaders
+			}
+			save_event_target_as = celestial_situation
+		}
 	}
-	# todo: progress the situation a certain way depending on choices, which also have boons
+
 	option = {
 		name = "celestial_chain.218.a"
+		event_target:celestial_situation = {
+			add_situation_progress = 6
+		}
 	}
 	option = {
 		name = "celestial_chain.218.b"
+		event_target:celestial_situation = {
+			add_situation_progress = -8
+		}
+		add_monthly_resource_mult = {
+			resource = energy
+			value = 15
+			min = 5000
+		}
+		add_modifier = {
+			modifier = celestial_situation_modifier
+			days = 3600
+		}
 	}
 }
 
-# todo:
+# potential future idea:
 # random unbidden fleet appear in system
 # if the above fleet is not defeated in 6 months, an astral corps fleet appears in the same system (but reduces the situation)
 
@@ -1586,14 +1799,39 @@ country_event = {
 country_event = {
 	id = celestial_chain.220
 	title = "celestial_chain.220.name"
-	desc = "celestial_chain.220.desc"
+	desc = {
+		text = "celestial_chain.220.desc_current"
+		trigger = {
+			# Unbidden currently crisis
+			has_global_flag = extradimensional_invasion_happened
+			NOT = { has_global_flag = extradimensional_first_portal_destroyed }
+		}
+	}
+	desc = {
+		text = "celestial_chain.220.desc_prev"
+		trigger = {
+			# Unbidden were crisis
+			has_global_flag = extradimensional_invasion_happened
+			has_global_flag = extradimensional_first_portal_destroyed
+		}
+	}
+	desc = {
+		text = "celestial_chain.220.desc"
+		trigger = {
+			# Unbidden are not yet crisis
+			NOR = {
+				has_global_flag = extradimensional_invasion_happened
+				has_global_flag = extradimensional_first_portal_destroyed
+			}
+		}
+	}
 	event_window_type = leader_story
 	event_picture_background = "GFX_leader_recruitment_bg_legendary"
 	picture = GFX_evt_federation_fleet
 	event_chain = celestial_the_invaders
 
 	picture_event_data = {
-		portrait = event_target:celestial_astral_corps_country
+		portrait = event_target:celestial_leader
 	}
 	
 	is_triggered_only = yes
@@ -1601,9 +1839,10 @@ country_event = {
 	}
 	
 	immediate = {
+		remove_country_flag = celestial_wayfarer_awol
 		remove_country_flag = celestial_invader_situation_ongoing
 		clone_leader = {
-			target = event_target:celestial_astral_leader
+			target = event_target:celestial_awol_leader_2
 		}
 		last_created_leader = {
 			set_leader_flag = legendary_leader
@@ -1612,10 +1851,49 @@ country_event = {
 			set_leader_flag = immune_to_negative_traits
 			set_owner = root
 		}
-		event_target:celestial_fleet = {
-			assign_leader = event_target:celestial_leader
+		if = {
+			limit = {
+				exists = event_target:celestial_fleet
+			}
+			event_target:celestial_fleet = {
+				assign_leader = event_target:celestial_leader
+			}
 		}
-		event_target:celestial_astral_leader = {
+		else = {
+			create_fleet = {
+				name = "NAME_TheWayfarer"
+				effect = {
+					set_owner = root
+					create_ship = {
+						name = "NAME_NomadsPillage"
+						design = "NAME_NomadsShip"
+						graphical_culture = "extra_dimensional_01"
+						prefix = no
+						upgradable = no
+					}
+					last_created_ship = {
+						set_ship_flag = iss_wayfarer
+						save_global_event_target_as = iss_wayfarer
+						set_disable_at_health = 0.05
+					}
+					set_location = {
+						target = root.capital_scope
+						distance = 10
+						angle = random
+					}
+					set_fleet_stance = passive
+					assign_leader = event_target:celestial_leader
+					save_global_event_target_as = celestial_fleet
+				}
+				settings = {
+					can_upgrade = yes
+					can_change_composition = no
+					can_change_leader = no
+					spawn_debris = no
+				}
+			}
+		}
+		event_target:celestial_awol_leader_2 = {
 			kill_leader = {
 				show_notification = no
 			}
@@ -1625,7 +1903,6 @@ country_event = {
 	option = {
 		name = "celestial_chain.220.a"
 		custom_tooltip = celestial_leader_back
-		# todo: incase fleet is disbanded, remake the wayfarer ship
 		event_target:celestial_unbidden_portal = {
 			enable_special_project = {
 				name = celestial_invaders_finale
@@ -1644,8 +1921,20 @@ country_event = {
 	trigger = {
 	}
 	
-	#todo: alter outcome by counting ships
 	immediate = {
+		# Remove stuff
+		event_target:celestial_astral_corps_country = {
+			every_owned_fleet = {
+				delete_fleet = {
+					target = this
+				}
+			}
+		}
+		event_target:celestial_unbidden_portal = {
+			destroy_ambient_object = this
+		}
+
+		# Decide Outcome
 		random_system = {
 			limit = {
 				has_star_flag = celestial_invader_system
@@ -1658,16 +1947,26 @@ country_event = {
 			}
 		}
 		random_list = {
-			85 = {
+			80 = {
 				country_event = {
 					id = celestial_chain.222
-					days = 3
 				}
 			}
-			15 = {
+			20 = {
+				modifier = {
+					factor = 0.5
+					event_target:celestial_leader = {
+						leader_age < 280
+					}
+				}
+				modifier = {
+					factor = 0
+					event_target:celestial_leader = {
+						leader_age < 265
+					}
+				}
 				country_event = {
 					id = celestial_chain.224
-					days = 3
 				}
 			}
 		}
@@ -1678,10 +1977,36 @@ country_event = {
 country_event = {
 	id = celestial_chain.222
 	title = "celestial_chain.222.name"
-	desc = "celestial_chain.222.desc"
 	picture = GFX_evt_crisis_defeated
 	is_triggered_only = yes
 	event_chain = celestial_the_invaders
+
+	desc = {
+		text = "celestial_chain.222.desc_current"
+		trigger = {
+			# Unbidden currently crisis
+			has_global_flag = extradimensional_invasion_happened
+			NOT = { has_global_flag = extradimensional_first_portal_destroyed }
+		}
+	}
+	desc = {
+		text = "celestial_chain.222.desc_prev"
+		trigger = {
+			# Unbidden were crisis
+			has_global_flag = extradimensional_invasion_happened
+			has_global_flag = extradimensional_first_portal_destroyed
+		}
+	}
+	desc = {
+		text = "celestial_chain.222.desc"
+		trigger = {
+			# Unbidden are not yet crisis
+			NOR = {
+				has_global_flag = extradimensional_invasion_happened
+				has_global_flag = extradimensional_first_portal_destroyed
+			}
+		}
+	}
 	
 	trigger = {
 	}
@@ -1690,7 +2015,7 @@ country_event = {
 	}
 
 	option = {
-		name = "celestial_chain.223.a"
+		name = "celestial_chain.222.a"
 		hidden_effect = {
 			country_event = {
 				id = celestial_chain.223
@@ -1739,6 +2064,7 @@ country_event = {
 		add_monthly_resource_mult = {
 			resource = unity
 			value = @tier4unityreward
+			min = 2500
 		}
 		if = {
 			limit = { is_gestalt = yes }
@@ -1769,6 +2095,7 @@ country_event = {
 		add_monthly_resource_mult = {
 			resource = unity
 			value = @tier4unityreward
+			min = 7500
 		}
 		add_relic = r_celestial_compass_final
 		if = {
@@ -1788,6 +2115,21 @@ country_event = {
 					show_notification = no
 				}
 			}
+			if = {
+				limit = {
+					NOR = {
+						has_country_flag = celestial_relic_quest1_completed
+						has_country_flag = celestial_relic_quest2_completed
+						has_country_flag = celestial_relic_quest3_completed
+						has_country_flag = celestial_relic_quest4_completed
+						has_country_flag = celestial_relic_quest5_completed
+						has_country_flag = celestial_relic_quest6_completed
+					}
+				}
+				country_event = {
+					id = celestial_chain.228
+				}
+			}
 		}
 		set_country_flag = celestial_completed
 		set_country_flag = celestial_outcome_1
@@ -1798,10 +2140,36 @@ country_event = {
 country_event = {
 	id = celestial_chain.224
 	title = "celestial_chain.222.name"
-	desc = "celestial_chain.224.desc"
 	picture = GFX_evt_crisis_defeated
 	is_triggered_only = yes
 	event_chain = celestial_the_invaders
+
+	desc = {
+		text = "celestial_chain.224.desc_current"
+		trigger = {
+			# Unbidden currently crisis
+			has_global_flag = extradimensional_invasion_happened
+			NOT = { has_global_flag = extradimensional_first_portal_destroyed }
+		}
+	}
+	desc = {
+		text = "celestial_chain.224.desc_prev"
+		trigger = {
+			# Unbidden were crisis
+			has_global_flag = extradimensional_invasion_happened
+			has_global_flag = extradimensional_first_portal_destroyed
+		}
+	}
+	desc = {
+		text = "celestial_chain.224.desc"
+		trigger = {
+			# Unbidden are not yet crisis
+			NOR = {
+				has_global_flag = extradimensional_invasion_happened
+				has_global_flag = extradimensional_first_portal_destroyed
+			}
+		}
+	}
 	
 	trigger = {
 	}
@@ -1858,14 +2226,17 @@ country_event = {
 		add_monthly_resource_mult = {
 			resource = energy
 			value = @tier4materialreward
+			min = 7500
 		}
 		add_monthly_resource_mult = {
 			resource = minerals
 			value = @tier4materialreward
+			min = 7500
 		}
 		add_monthly_resource_mult = {
 			resource = unity
 			value = @tier2unityreward
+			min = 5000
 		}
 		add_relic = r_celestial_compass_final
 		add_modifier = {
@@ -1877,6 +2248,21 @@ country_event = {
 					show_notification = no
 				}
 			}
+			if = {
+				limit = {
+					NOR = {
+						has_country_flag = celestial_relic_quest1_completed
+						has_country_flag = celestial_relic_quest2_completed
+						has_country_flag = celestial_relic_quest3_completed
+						has_country_flag = celestial_relic_quest4_completed
+						has_country_flag = celestial_relic_quest5_completed
+						has_country_flag = celestial_relic_quest6_completed
+					}
+				}
+				country_event = {
+					id = celestial_chain.228
+				}
+			}
 		}
 		remove_country_flag = celestial_cosmic_emporium_active
 		set_country_flag = celestial_completed
@@ -1884,9 +2270,182 @@ country_event = {
 	}
 }
 
-# celestial_chain.226
+# Situation: Entering Stage II
+country_event = {
+	id = celestial_chain.226
+	title = "celestial_chain.226.name"
+	desc = "celestial_chain.226.desc"
+	picture = GFX_evt_astral_rift_crystal_3
+	is_triggered_only = yes
+	event_chain = celestial_the_invaders
+	
+	trigger = {
+	}
 
-# celestial_chain.227
+	immediate = {
+		random_situation = {
+			limit = {
+				is_situation_type = celestial_invaders
+			}
+			save_event_target_as = celestial_situation
+		}
+	}
+	option = {
+		name = "celestial_chain.226.a"
+		allow = {
+			has_resource = {
+				type = energy
+				amount >= 4000
+			}
+		}
+		event_target:celestial_situation = {
+			add_situation_progress = 6
+		}
+		add_resource = {
+			energy = -4000
+		}
+	}
+	option = {
+		name = "celestial_chain.226.b"
+		add_resource = {
+			energy = 2000
+		}
+	}
+}
+
+# Situation: Entering Stage III
+country_event = {
+	id = celestial_chain.227
+	title = "celestial_chain.226.name"
+	picture = GFX_evt_astral_rift_crystal_3
+	is_triggered_only = yes
+	event_chain = celestial_the_invaders
+	
+	desc = {
+		text = "celestial_chain.227.desc"
+		trigger = {
+			is_gestalt = no
+		}
+	}
+	desc = {
+		text = "celestial_chain.227.desc.g"
+		trigger = {
+			is_gestalt = yes
+		}
+	}
+
+	trigger = {
+	}
+
+	immediate = {
+		random_situation = {
+			limit = {
+				is_situation_type = celestial_invaders
+			}
+			save_event_target_as = celestial_situation
+		}
+	}
+
+	option = {
+		allow = {
+			has_resource = {
+				type = alloys
+				amount >= 2000
+			}
+		}
+		name = "celestial_chain.227.a"
+		event_target:celestial_situation = {
+			add_situation_progress = 5
+		}
+		add_resource = {
+			alloys = -2000
+		}
+	}
+	option = {
+		name = "celestial_chain.227.b"
+		event_target:celestial_situation = {
+			add_situation_progress = 2
+		}
+	}
+	option = {
+		name = "celestial_chain.227.c"
+		event_target:celestial_situation = {
+			add_situation_progress = -8
+		}
+		add_resource = {
+			alloys = 8000
+		}
+	}
+}
+
+# Chain completed, Wayfarer gone but no relics ever gained, so some given
+country_event = {
+	id = celestial_chain.228
+	title = "celestial_chain.228.name"
+	desc = "celestial_chain.228.desc"
+	picture = GFX_evt_analyzing_artifacts
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = "celestial_chain.228.a"
+		hidden_effect = {
+			while = {
+				count = 2
+				random_list = {
+					10 = {
+						modifier = {
+							factor = 0
+							has_relic = r_celestial_aetherial_codex
+						}
+						add_relic = r_celestial_aetherial_codex
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							has_relic = r_celestial_profane_arca
+						}
+						add_relic = r_celestial_profane_arca
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							has_relic = r_celestial_spectral_beacon
+						}
+						add_relic = r_celestial_spectral_beacon
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							has_relic = r_celestial_quantum_gem
+						}
+						add_relic = r_celestial_quantum_gem
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							has_relic = r_celestial_tainted_gem
+						}
+						add_relic = r_celestial_tainted_gem
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							has_relic = r_celestial_star_core
+						}
+						add_relic = r_celestial_star_core
+					}
+				}
+			}
+		}
+		custom_tooltip = celestial_eventchain2_over_relics_gained
+	}
+}
 
 ## 3 - The Aetherial Codex
 
@@ -2377,7 +2936,6 @@ fleet_event = {
 
 	archaeology = yes
 
-	# todo: alt text for if technosphere has been found, perhaps another option
 	is_triggered_only = yes
 
 	option = {
@@ -2402,6 +2960,23 @@ fleet_event = {
 
 	option = {
 		name = celestial_chain.704.a
+		trigger = {
+			owner = {
+				NOT = {
+					has_country_flag = guardians_technosphere_encountered
+				}
+			}
+		}
+		owner = {
+		}
+	}
+	option = {
+		name = celestial_chain.704.b
+		trigger = {
+			owner = {
+				has_country_flag = guardians_technosphere_encountered
+			}
+		}
 		owner = {
 		}
 	}
@@ -2411,10 +2986,51 @@ fleet_event = {
 fleet_event = { 
 	id = celestial_chain.705
 	title = "celestial_chain.705.name"
-	desc = celestial_chain.705.desc
 	picture = GFX_evt_astral_rift_subnautical_1
 	show_sound = event_default
 	location = from
+
+	desc = {
+		trigger = {
+			owner = {
+				NOR = {
+					has_country_flag = technosphere_studied
+					has_country_flag = technosphere_sabotaged
+					has_country_flag = guardians_technosphere_encountered
+				}
+			}
+		}
+		text = "celestial_chain.705.desc"
+	}
+	desc = {
+		trigger = {
+			owner = {
+				has_country_flag = technosphere_studied
+			}
+			NOT = { exists = event_target:technosphere_ship }
+		}
+		text = "celestial_chain.705.desc_b"
+	}
+	desc = {
+		trigger = {
+			owner = {
+				has_country_flag = technosphere_sabotaged
+			}
+		}
+		text = "celestial_chain.705.desc_c"
+	}
+	desc = {
+		trigger = {
+			owner = {
+				NOR = {
+					has_country_flag = technosphere_studied
+					has_country_flag = technosphere_sabotaged
+				}
+				has_country_flag = guardians_technosphere_encountered
+			}
+		}
+		text = "celestial_chain.705.desc_d"
+	}
 
 	archaeology = yes
 
