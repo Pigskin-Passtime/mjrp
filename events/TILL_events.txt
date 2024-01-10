@@ -43,12 +43,14 @@ namespace = TILLDebug
 country_event = {
 	id = TILLDebug.1
 	hide_window = no
+	picture = GFX_evt_dark_alley
 	is_triggered_only = yes
+	title = "TILL.DEBUG"
+	desc = "TILL.DEBUG.DESC"
 
 	immediate = {
 		create_leader = {
 			SPECIES = event_target:FRAGMENTSPECIES
-			#LEADER_PORTRAIT = sd_avi_robot
 			name = "NAME_Fragment"
 			skill = 8
 			class = scientist
@@ -87,7 +89,7 @@ namespace = TILLA
 ship_event = {
 	id = TILLA.1
 	is_triggered_only = yes
-	
+	picture = GFX_evt_TILLA_breachpoint_system
 	title = "Tilla.1"
 	desc = "TILLA.1.desc"
 
@@ -133,7 +135,7 @@ trigger = {
 country_event = {
 	id = TILLA.2
 	diplomatic = yes
-
+	title = "TRANSMISSION"
 	diplomatic_title = "TRANSMISSION"
 	picture_event_data = {
 		portrait = ai_crisis_1
@@ -186,7 +188,7 @@ country_event = {
 	#WE WILL HELP#
 	option = {
 		trigger = {
-			NOT = {
+			NOR = {
 				has_ethic = ethic_fanatic_spiritualist
 				has_valid_civic = civic_fanatic_purifiers
 				has_valid_civic = civic_machine_terminator
@@ -194,26 +196,23 @@ country_event = {
 				has_country_flag = BLOCK_YGATE_SECOND_TIME
 				
 			}
-			AND = {
-				OR = {
-					has_technology = tech_exotic_gases
-					has_technology = tech_mine_exotic_gases
-				}
-				
+			OR = {
+				has_technology = tech_exotic_gases
+				has_technology = tech_mine_exotic_gases
 			}
+				
 		}
 		allow = {
 			root = {
-				AND	= {
-					has_resource = {
-						type = exotic_gases
-						amount > 250
-					}
-					has_resource = {
-						type = alloys
-						amount > 50
-					}
+			has_resource = {
+					type = exotic_gases
+					amount > 250
 				}
+				has_resource = {
+					type = alloys
+					amount > 50
+				}
+
 			}
 		}
 		name = TILLA.2.option.e
@@ -339,7 +338,7 @@ country_event = {
 country_event = {
 	id = TILLA.3
 	diplomatic = yes
-
+	title = "TRANSMISSION"
 	diplomatic_title = "TRANSMISSION"
 	picture_event_data = {
 		portrait = ai_crisis_1
@@ -363,7 +362,7 @@ country_event = {
 country_event = {
 	id = TILLA.4
 	title = "TILLA.4.name"
-
+	show_sound = "Intelegence_communications_line_01"
 	desc = {
 		trigger = {
 			has_country_flag = PEACEFULL_INTELEGENCE
@@ -391,7 +390,7 @@ country_event = {
 			immortal = yes
 			effect = {
 				set_leader_flag = legendary_leader
-				set_leader_flag = cannot_be_councilor
+				
 				set_leader_flag = cannot_be_ruler
 				set_leader_flag = no_destiny_traits
 				set_leader_flag = no_council_traits
@@ -452,6 +451,7 @@ country_event = {
 			ethic_leader_hire_effect = {
 				GLOBAL_EVENT_TARGET = THEFRAGMENT
 			}
+			play_sound = Fragment_voice_hired
 			set_country_flag = hired_THEFRAGMENT
 			event_target:THEFRAGMENT = {
 				set_leader_flag = Is_Fragment
@@ -479,6 +479,7 @@ country_event = {
 	option = {
 		name = DISMISS
 		tag = dismiss_leader
+		play_sound = Fragment_voice_dismissed
 		hidden_effect = {
 			ethic_leader_kill_effect = yes
 			set_country_flag = dismissed_THEFRAGMENT
@@ -515,7 +516,7 @@ country_event = {
 	id = TILLA.5
 	title = "TILLA.5.name"
 	is_triggered_only = yes
-
+	picture = GFX_evt_TILLA_breachpoint_system
 	desc = {
 		trigger = {
 			has_country_flag = hired_THEFRAGMENT
@@ -676,7 +677,7 @@ country_event = {
 	id = TILLA.10
 	title = "TILLA.10.name"
 	is_triggered_only = yes
-
+	picture = GFX_evt_TILLA_breachpoint_system
 	desc = {
 		trigger = {
 			has_country_flag = hired_THEFRAGMENT
@@ -733,7 +734,7 @@ country_event = {
 	diplomatic = yes
 	title = "TILLB.1"
 	force_open = yes
-
+	show_sound = "Intelegence_communications_line_01"
 	picture_event_data = {
 		portrait = ai_crisis_1
 	}
@@ -744,10 +745,30 @@ country_event = {
 		}
 	}
 
-	desc = "TILLB.1.desc"
+	desc = {
+		trigger = {
+			NOT = {
+				has_country_flag = HOSTILE_INTELEGENCE
+			}
+		}
+		text = "TILLB.1.desc.a"
+
+	}
+
+	desc = {
+		trigger = {
+				has_country_flag = HOSTILE_INTELEGENCE
+			}
+
+		text = "TILLB.1.desc.b"
+
+	}
 
 	option = {
 		trigger = {
+			NOT = {
+				has_country_flag = HOSTILE_INTELEGENCE
+			}
 			OR = {
 				has_technology = tech_exotic_gases
 				has_technology = tech_mine_exotic_gases
@@ -783,23 +804,43 @@ country_event = {
 	}
 
 	option = {
+		trigger = {
+			NOT = {
+				has_country_flag = HOSTILE_INTELEGENCE
+			}
+		}
 		name = "TILLB.1.b"
 		response_text = "TILLB.1.b.response"
 	}
+		
 	option = {
+		trigger = {
+			NOT = {
+				has_country_flag = HOSTILE_INTELEGENCE
+			}
+		}
 		name = "TILLB.1.option.c"
 		is_dialog_only = yes
 		response_text = "TILLA.b.option.c.response"
 	}
+
 	option = {
+		trigger = {
+			NOT = {
+				has_country_flag = HOSTILE_INTELEGENCE
+			}
+		}
 		name = "TILLB.1.c"
 		response_text = "TILLB.1.c.response"
 	}
 
+	
 	option = {
-		name = "TILLb.1.option.d"
-		is_dialog_only = yes
-		response_text = "TILLA.b.option.d.response"
+		trigger = {
+			has_country_flag = HOSTILE_INTELEGENCE
+		}
+		name = "TILLB.1.option.e"
+		response_text = "TILLB.1.option.e.response"
 	}
 }
 
@@ -848,9 +889,9 @@ country_event = {
 country_event = {
 	id = TILLC.2
 	is_triggered_only = yes
-
+	picture = "GFX_evt_TILLA_tech_options"
 	desc = "TILLC.2.desc"
-
+	title = "Fragment Technologies"
 	trigger = {
 		NOT = {
 			has_country_flag = FRAGMENT_GIFT_1
@@ -899,7 +940,7 @@ country_event = {
 	is_triggered_only = yes
 	picture = "GFX_evt_TILLA_singularity_drive"
 	desc = "TILLC.3.desc"
-
+	title = "Singularity Drive Info"
 	trigger = {
 		NOT = {
 			has_country_flag = FRAGMENT_GIFT_1
@@ -937,7 +978,7 @@ country_event = {
 	is_triggered_only = yes
 	picture = "GFX_evt_TILLA_dark_flare_cannon"
 	desc = "TILLC.4.desc"
-
+	title = "Dark Flare Cannon Info"
 	trigger = {
 		NOT = {
 			has_country_flag = FRAGMENT_GIFT_1
@@ -975,7 +1016,7 @@ country_event = {
 	is_triggered_only = yes
 	picture = "GFX_evt_TILLA_fractal_armies"
 	desc = "TILLC.5.desc"
-
+	title = "Fractal Armies Info"
 	trigger = {
 		NOT = {
 			has_country_flag = FRAGMENT_GIFT_1
@@ -1014,7 +1055,7 @@ country_event = {
 	is_triggered_only = yes
 	picture = "GFX_evt_TILLA_quantum_entanglement"
 	desc = "TILLC.6.desc"
-
+	title = "Quantum Entanglement Info"
 	trigger = {
 		NOT = {
 			has_country_flag = FRAGMENT_GIFT_1
@@ -1053,6 +1094,7 @@ country_event = {
 	id = TILLE.1
 	hide_window = yes
 	is_triggered_only = yes
+	
 	trigger = {
 		exists = event_target:THEFRAGMENT
 		has_country_flag = hired_THEFRAGMENT
@@ -1112,7 +1154,7 @@ country_event = {
 	id = TILLE.2
 	is_triggered_only = yes
 	event_window_type = leader_story
-
+	picture = GFX_evt_crisis_declared
 	title = "TILLE.2.title"
 
 	desc = "TILLE.2.desc.a"
@@ -1148,7 +1190,7 @@ country_event = {
 	id = TILLE.3
 	is_triggered_only = yes
 	event_window_type = leader_story
-
+	picture = GFX_evt_crisis_declared
 	title = "TILLE.3.title"
 
 	desc = "TILLE.3.desc.a"
@@ -1187,7 +1229,7 @@ country_event = {
 	id = TILLE.4
 	is_triggered_only = yes
 	event_window_type = leader_story
-
+	picture = GFX_evt_crisis_declared
 	title = "TILLE.4.title"
 
 	desc = "TILLE.4.desc.a"
@@ -1225,7 +1267,7 @@ country_event = {
 	id = TILLE.5
 	is_triggered_only = yes
 	event_window_type = leader_story
-
+	picture = GFX_evt_crisis_declared
 	title = "TILLE.5.title"
 
 	desc = "TILLE.5.desc.a"
@@ -1359,7 +1401,7 @@ country_event = {
 	id = TILLF.3
 	is_triggered_only = yes
 	event_window_type = leader_story
-
+	picture = GFX_evt_fallen_empire
 	title = "TILLF.3.title"
 
 	#If Peacefull recruitment
@@ -1441,6 +1483,7 @@ country_event = {
 
 country_event = {
 	id = TILLF.4
+	picture = GFX_evt_fallen_empire
 	is_triggered_only = yes
 	event_window_type = leader_story
 
@@ -1518,7 +1561,7 @@ country_event = {
 	id = TILLF.5
 	is_triggered_only = yes
 	event_window_type = leader_story
-
+	picture = GFX_evt_fallen_empire
 	title = "TILLF.5.title"
 
 	#If Peacefull recruitment
@@ -1646,6 +1689,9 @@ country_event = {
 	event_window_type = leader_recruit
 	title = "TILLF.7"
 	desc = "TILLF.7.desc"
+	show_sound = Fragment_voice_02
+
+	picture = GFX_evt_fallen_empire
 	picture_event_data = {
 		portrait = event_target:THEFRAGMENT
 	}
@@ -1757,7 +1803,7 @@ country_event = {
 country_event = {
 	id = TILLG.1
 	is_triggered_only = yes
-
+	picture = "GFX_evt_TILLA_star_chart_last_light"
 	title = "TILLG.1"
 	desc = "TILLG.1.desc"
 	trigger = {
@@ -1794,7 +1840,7 @@ country_event = {
 	is_triggered_only = yes
 	title = "TILLG.2"
 	desc = "TILLG.2.desc"
-
+	picture = "GFX_evt_TILLA_last_light_system"
 	option = {
 		name = "TILLG.2.a"
 	}
@@ -1816,7 +1862,7 @@ ship_event = {
 	id = TILLG.3
 	is_triggered_only = yes
 	picture = GFX_evt_cold_barren
-	show_sound = pc_barren_cold
+	show_sound = event_mysterious_signal
 	title = "TILLG.3.name"
 	desc = "TILLG.3.desc"
 
@@ -1830,12 +1876,6 @@ ship_event = {
 			enable_special_project = {
 				name = "TILL_Weird_signals"
 			}
-			create_point_of_interest = {
-				id = TILL_Final_story_point
-				name = TILL_Final_Story
-				event_chain = TILL_Final_Story
-				location = THIS
-			}
 		}
 
 	}
@@ -1848,7 +1888,7 @@ ship_event = {
 planet_event = {
 	id = TILLG.4
 	is_triggered_only = yes
-
+	hide_window = yes
 	immediate = {
 
 		change_pc = pc_gaia
@@ -1858,7 +1898,7 @@ planet_event = {
 		add_deposit = d_hot_springs
 		add_deposit = d_hot_springs
 		create_country = {
-			name = HIDEAWAYS
+			name = "HIDEAWAYS"
 			authority = auth_machine_intelligence
 			type = default
 			species = event_target:FRAGMENTSPECIES
@@ -1900,17 +1940,17 @@ planet_event = {
 			add_district = district_mining
 		}
 		while = {
-			count = 2
+			count = 1
 			add_district = district_farming
 		}
 		while = {
-			count = 2
+			count = 1
 			add_district = district_industrial
 		}
 
 
 		while = {
-			count = 15
+			count = 10
 			create_pop = {
 				species = event_target:FRAGMENTSPECIES
 			}
@@ -2001,7 +2041,7 @@ country_event = {
 	diplomatic = yes
 	is_triggered_only = yes
 	title = "The Fragment"
-
+	show_sound = "fragment_voice_hideaways_found"
 	picture_event_data = {
 		city_level = this
 		portrait = event_target:THEFRAGMENT
@@ -2042,12 +2082,6 @@ country_event = {
 		name = "TILLG.6.d"
 		is_dialog_only = yes
 		response_text = "TILLG.6.d.response"
-	}
-
-	option = {
-		name = "TILLG.6.E"
-		is_dialog_only = yes
-		response_text = "TILLG.6.E.response"
 	}
 
 	option = {
@@ -2124,7 +2158,7 @@ country_event = {
 				every_owned_pop = {
 					kill_pop = yes
 				}
-				change_pc = pc_barren_cold
+				change_pc = pc_shielded
 			}
 		}
 	}
@@ -2140,7 +2174,8 @@ country_event = {
 country_event = {
 	id = TILLG.8
 	is_triggered_only = yes
-
+	title = "Last Light"
+	picture = "GFX_evt_TILLA_last_light_system"
 	desc = {
 		trigger = {
 			has_country_flag = ANNEXTED_FRAGMENT
