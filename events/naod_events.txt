@@ -2,19 +2,16 @@
 # naod_events.txt					#
 # Contributor: dredaich				#
 #####################################
-
 namespace = naod
-
 # Recruitment Event Chain
-planet_event = {# Naodeus watches you
+planet_event = {
+	# Naodeus watches you
 	id = naod.0
 	is_triggered_only = yes
 	hide_window = yes
-
 	trigger = {
 		has_planet_flag = naodeus_planet
 	}
-
 	immediate = {
 		from = {
 			country_event = {
@@ -26,53 +23,54 @@ planet_event = {# Naodeus watches you
 
 country_event = {#Being watched
 	id = naod.1
+	picture = "GFX_evt_alien_nature"
 	title = naod.beingWatched.title
 	desc = naod.beingWatched.desc
 	show_sound = event_conversation
 	is_triggered_only = yes
 	fire_only_once = yes
-
 	trigger = {
-		NOT = { exists = event_target:naodeus_leader }
+		NOT = {
+			exists = event_target:naodeus_leader
+		}
 		is_ai = no
 	}
-
 	immediate = {
 		set_country_flag = naodeus_chain_started
 	}
-
-	option = {#Further investigate
+	option = {
+		#Further investigate
 		name = naod.beingWatched.a
 		from = {
 			add_anomaly = {
 				category = naodeus_category
 				target = root
 			}
-		}		
+		}
 	}
-	option = {#Ignore
+	option = {
+		#Ignore
 		name = naod.beingWatched.b
 	}
 }
 
-ship_event = {
+ship_event = {#After further investigation
 	id = naod.2
+	picture = "GFX_evt_medieval_alien_civilization"
 	is_triggered_only = yes
 	fire_only_once = yes
-
 	trigger = {
-		NOT = { exists = event_target:naodeus_leader }
+		NOT = {
+			exists = event_target:naodeus_leader
+		}
 	}
-
 	title = naod.studiesOfTalil.title
 	desc = naod.studiesOfTalil.desc
-
 	immediate = {
 		owner = {
 			set_country_flag = naod_talil_closer_inspected
 		}
 	}
-
 	option = {
 		name = naod.studiesOfTalil.a
 		allow = {
@@ -80,15 +78,13 @@ ship_event = {
 				resource_stockpile_compare = {
 					resource = consumer_goods
 					value >= 200
-				}	
+				}
 			}
-			
 		}
 		owner = {
 			add_resource = {
 				consumer_goods = -200
 			}
-			
 		}
 		ship_event = {
 			id = naod.201
@@ -101,16 +97,16 @@ ship_event = {
 
 ship_event = {
 	id = naod.201
+	picture = "GFX_evt_medieval_alien_civilization"
 	is_triggered_only = yes
 	fire_only_once = yes
-
 	trigger = {
-		NOT = { exists = event_target:naodeus_leader }
+		NOT = {
+			exists = event_target:naodeus_leader
+		}
 	}
-
 	title = naod.meetTheNatives.title
 	desc = naod.meetTheNatives.desc
-
 	option = {
 		name = naod.meetTheNatives.a
 		leader = {
@@ -128,16 +124,16 @@ ship_event = {
 
 ship_event = {
 	id = naod.202
+	picture = GFX_evt_ship_in_orbit
 	is_triggered_only = yes
 	fire_only_once = yes
-
 	trigger = {
-		NOT = { exists = event_target:naodeus_leader }
+		NOT = {
+			exists = event_target:naodeus_leader
+		}
 	}
-
 	title = naod.naodeusOnBoard.title
 	desc = naod.naodeusOnBoard.desc
-
 	option = {
 		name = naod.naodeusOnBoard.a
 		owner = {
@@ -151,24 +147,24 @@ ship_event = {
 
 country_event = {
 	id = naod.3
+	show_sound = event_first_contact_avian
 	is_triggered_only = yes
 	fire_only_once = yes
-
 	trigger = {
-		NOT = { exists = event_target:naodeus_leader }
+		NOT = {
+			exists = event_target:naodeus_leader
+		}
 		is_ai = no
 	}
-
 	title = naod_naodeus_recruitment_initial_title
 	desc = naod_naodeus_recruitment_initial_desc
-
 	location = event_target:naod_talil
-
 	event_window_type = leader_recruit
+	picture = GFX_leader_recruitment_bg_renowned
 	picture_event_data = {
 		portrait = event_target:naodeus_leader
+		room = ethic_spaceship_room
 	}
-
 	immediate = {
 		create_leader = {
 			class = official
@@ -179,6 +175,7 @@ country_event = {
 			skill = 3
 			skip_background_generation = yes
 			custom_description = naod_naodeus_backstory
+			custom_catch_phrase = naod_catch_phrase
 			background_ethic = ethic_xenophile
 			gender = indeterminable
 			hide_age = yes
@@ -186,7 +183,7 @@ country_event = {
 				trait = leader_trait_xeno_integrator
 				trait = leader_trait_bringer_of_unrest
 				trait = trait_ruler_eye_for_talent_2
-				trait = leader_trait_manifested_change 
+				trait = leader_trait_manifested_change
 			}
 			effect = {
 				set_owner = event_target:naod_talil
@@ -198,8 +195,8 @@ country_event = {
 			}
 		}
 	}
-
-	option = {#hire
+	option = {
+		#hire
 		name = HIRE
 		tag = hire_leader
 		event_target:naodeus_leader = {
@@ -207,12 +204,11 @@ country_event = {
 		}
 		set_country_flag = naodeus_owned
 	}
-
-	option = {#don't hire
+	option = {
+		#don't hire
 		name = DISMISS
 		tag = dismiss_leader
 	}
-
 	option = {
 		name = naod_naodeus_recruitment_species_question
 		response_text = naod_naodeus_recruitment_species_answer
@@ -245,20 +241,18 @@ country_event = {
 	}
 }
 
-country_event ={# Friends from Talil
+country_event = {# Friends from Talil
 	id = naod.4
+	picture = GFX_evt_unity_symbol
 	is_triggered_only = yes
 	fire_only_once = yes
-
 	trigger = {
 		has_country_flag = naodeus_owned
 		is_authoritarian = no
 		is_xenophobe = no
 	}
-
 	title = naod_friends_from_talil_title
 	desc = naod_friends_from_talil_desc
-
 	option = {
 		name = naod_friends_from_talil_yes
 		capital_scope = {
@@ -275,16 +269,18 @@ country_event ={# Friends from Talil
 	}
 	option = {
 		name = naod_friends_from_talil_no
-		add_resource = { influence = 40 }
+		add_resource = {
+			influence = 40
+		}
 	}
 }
 
-country_event = {# Brilliance from Diversity
-
+country_event = {
+	# Brilliance from Diversity
 	id = naod.5
+	picture = GFX_evt_unity_symbol
 	is_triggered_only = yes
 	fire_only_once = yes
-
 	trigger = {
 		has_country_flag = naodeus_owned
 		is_authoritarian = no
@@ -296,10 +292,8 @@ country_event = {# Brilliance from Diversity
 			count > 4
 		}
 	}
-
 	title = naod_brilliance_from_diversity_title
 	desc = naod_brilliance_from_diversity_desc
-
 	option = {
 		name = naod_brilliance_from_diversity_answer
 		add_modifier = {
@@ -308,11 +302,12 @@ country_event = {# Brilliance from Diversity
 	}
 }
 
-country_event = {#Inverse Synthetic Evolution - Get Special project
+country_event = {
+	#Inverse Synthetic Evolution - Get Special project
 	id = naod.6
+	picture = GFX_evt_unity_symbol
 	is_triggered_only = yes
 	fire_only_once = yes
-
 	trigger = {
 		has_country_flag = naodeus_owned
 		has_technology = tech_synthetic_workers
@@ -328,10 +323,8 @@ country_event = {#Inverse Synthetic Evolution - Get Special project
 			}
 		}
 	}
-
 	title = naod_inverse_synthetic_evolution_proposal_title
 	desc = naod_inverse_synthetic_evolution_proposal_desc
-
 	option = {
 		name = naod_inverse_synthetic_evolution_proposal_approval
 		enable_special_project = {
@@ -343,21 +336,20 @@ country_event = {#Inverse Synthetic Evolution - Get Special project
 	}
 }
 
-country_event = {#Inverse Synthetic Evolution
+country_event = {
+	#Inverse Synthetic Evolution
 	id = naod.7
+	picture = GFX_evt_unity_symbol
 	is_triggered_only = yes
 	fire_only_once = yes
-
-	title = naod_inverse_synthetic_evolution_special_project_title
-	desc = naod_inverse_synthetic_evolution_special_project_desc
-
+	title = naod_inverse_synthetic_evolution_special_project_finished_title
+	desc = naod_inverse_synthetic_evolution_special_project_finished_desc
 	option = {
-		name = naod_inverse_synthetic_evolution_special_project_answer
+		name = naod_inverse_synthetic_evolution_special_project_finished_answer
 		enable_special_project = {
 			name = NAOD_INVERSE_SYNTHETIC_EVOLUTION_PROJECT
 		}
 	}
-
 	immediate = {
 		every_owned_pop = {
 			limit = {
@@ -365,7 +357,6 @@ country_event = {#Inverse Synthetic Evolution
 					is_robotic = yes
 				}
 			}
-			
 			random_list = {
 				5 = {
 					change_species = event_target:naod_feder
@@ -389,62 +380,74 @@ country_event = {#Inverse Synthetic Evolution
 							add_trait = trait_latent_psionic
 						}
 					}
-					
 				}
-
 			}
-			
 		}
-		
 	}
 }
 
-ship_event = {#Building outpost on Talil
+ship_event = {
+	#Building outpost on Talil
 	id = naod.8
+	picture = GFX_evt_ship_in_orbit
 	is_triggered_only = yes
 	hide_window = yes
-
 	trigger = {
 		from = {
 			has_planet_flag = naodeus_planet
 		}
 	}
-		
 	immediate = {
-		owner = { set_country_flag = naodeus_chain_started }
+		owner = {
+			set_country_flag = naodeus_chain_started
+		}
 		if = {
 			limit = {
-				owner = {NOT = {has_country_flag = naodeus_meeting}}
-				NOT = {exists = event_target:naodeus_leader	} 
+				owner = {
+					NOT = {
+						has_country_flag = naodeus_meeting
+					}
+				}
+				NOT = {
+					exists = event_target:naodeus_leader
+				}
 			}
 			owner = {
-				country_event = {id = naod.9 days = 30}
+				country_event = {
+					id = naod.9
+					days = 30
+				}
 			}
 		}
 		if = {
 			limit = {
-				owner = {has_country_flag = naodeus_meeting	}
+				owner = {
+					has_country_flag = naodeus_meeting
+				}
 			}
 			owner = {
-				country_event = {id = naod.14 days = 15}
+				country_event = {
+					id = naod.14
+					days = 15
+				}
 			}
 		}
-			
 	}
 }
 
-country_event = {#Letter from Naodeus
+country_event = {
+	#Letter from Naodeus
 	id = naod.9
+	picture = "GFX_evt_ship_in_orbit"
 	is_triggered_only = yes
-
 	trigger = {
-		NOT = { exists = event_target:naodeus_leader }
+		NOT = {
+			exists = event_target:naodeus_leader
+		}
 		is_ai = no
 	}
-
 	title = naod_event_observation_post_opener_title
 	desc = naod_event_observation_post_opener_desc
-
 	option = {
 		name = naod_event_observation_post_opener_open
 		country_event = {
@@ -454,54 +457,61 @@ country_event = {#Letter from Naodeus
 	option = {
 		name = naod_event_observation_post_opener_ignore
 		country_event = {
-			id = naod.1102 days = 180
+			id = naod.1102
+			days = 180
 		}
 	}
 }
 
-country_event = {#Opened Letter
+country_event = {
+	#Opened Letter
 	id = naod.10
+	picture = "GFX_evt_ship_in_orbit"
 	is_triggered_only = yes
-
 	trigger = {
-		NOT = { exists = event_target:naodeus_leader }
+		NOT = {
+			exists = event_target:naodeus_leader
+		}
 		is_ai = no
 	}
-
 	title = naod_open_letter_title
 	desc = naod_open_letter_desc
-
 	option = {
-		name = naod.10.nice
+		name = naod_open_letter_nice
 		country_event = {
-			id = naod.1101 days=180
+			id = naod.1101
+			days = 180
 		}
 	}
 	option = {
-		name = naod.10.ignore
+		name = naod_open_letter_ignore
 		country_event = {
-			id = naod.1102 days=180
+			id = naod.1102
+			days = 180
 		}
 	}
 	option = {
-		name = naod.10.ignore
+		name = naod_open_letter_aggressive
 		country_event = {
-			id = naod.1103 days=180
+			id = naod.1103
+			days = 180
 		}
 	}
 }
 
-country_event = {#Nice welcome
+country_event = {
+	#Nice welcome
 	id = naod.1101
+	picture = "GFX_evt_ship_in_orbit"
 	is_triggered_only = yes
 	trigger = {
-		NOT = { exists = event_target:naodeus_leader }
+		NOT = {
+			exists = event_target:naodeus_leader
+		}
 		is_ai = no
 	}
-
 	title = naod.11.a.title
 	desc = naod.11.a.desc
-
 	option = {
 		name = naod.11.a.reply
 		set_country_flag = naodeus_meeting
@@ -512,20 +522,21 @@ country_event = {#Nice welcome
 			id = naod.14
 		}
 	}
-	
 }
 
-country_event = {#Ignored Letter
+country_event = {
+	#Ignored Letter
 	id = naod.1102
+	picture = "GFX_evt_ship_in_orbit"
 	is_triggered_only = yes
 	trigger = {
-		NOT = { exists = event_target:naodeus_leader }
+		NOT = {
+			exists = event_target:naodeus_leader
+		}
 		is_ai = no
 	}
-
 	title = naod.11.b.title
 	desc = naod.11.b.desc
-
 	option = {
 		name = naod.11.b.apology
 		set_country_flag = naodeus_meeting
@@ -545,17 +556,19 @@ country_event = {#Ignored Letter
 	}
 }
 
-country_event = {#Hostile Welcome
+country_event = {
+	#Hostile Welcome
 	id = naod.1103
+	picture = GFX_evt_hostile_infiltration
 	is_triggered_only = yes
 	trigger = {
-		NOT = { exists = event_target:naodeus_leader }
+		NOT = {
+			exists = event_target:naodeus_leader
+		}
 		is_ai = no
 	}
-
 	title = naod.11.c.title
 	desc = naod.11.c.desc
-
 	option = {
 		name = naod.11.c.hostiliy
 		set_country_flag = naodeus_meeting
@@ -565,19 +578,21 @@ country_event = {#Hostile Welcome
 	}
 }
 
-country_event = {#Warning
+country_event = {
+	#Warning
 	id = naod.12
+	picture = GFX_evt_unspeakable_horror
 	is_triggered_only = yes
 	trigger = {
-		NOT = { exists = event_target:naodeus_leader }
+		NOT = {
+			exists = event_target:naodeus_leader
+		}
 		is_ai = no
 	}
-
 	title = naod.12.title
 	desc = naod.12.desc
-
 	option = {
-		name = naod.12.hostiliy
+		name = naod.12.hostility
 		event_target:naod_talil = {
 			add_awareness = 100
 		}
@@ -602,19 +617,18 @@ country_event = {#Warning
 #		}
 #	}
 #}
-
-country_event = {# Naodeus tells his guys that you are here
+country_event = {
+	# Naodeus tells his guys that you are here
 	id = naod.14
+	picture = "GFX_evt_medieval_alien_civilization"
 	is_triggered_only = yes
 	trigger = {
-		has_country_flag = naodeus_meeting	
+		has_country_flag = naodeus_meeting
 	}
-
 	title = naod.14.title
 	desc = naod.14.desc
-
 	option = {
-		name = naod.13
+		name = naod.14.a
 		event_target:naod_talil = {
 			add_awareness = 100
 		}
@@ -642,25 +656,35 @@ country_event = {# Naodeus tells his guys that you are here
 #	}
 #	
 #}
-
 ### Revenge events 
-planet_event = {#planet cracker
+planet_event = {
+	#planet cracker
 	id = naod.20
 	hide_window = yes
 	is_triggered_only = yes
 	fire_only_once = yes
-
 	trigger = {
 		has_planet_flag = naodeus_planet
 		from.owner = {
 			has_country_flag = naodeus_chain_started
 		}
 	}
-
 	immediate = {
 		from.owner = {
-			country_event = {
-				id = naod.23
+			if = {
+				limit = {
+					event_target:naodeus_leader = {
+						is_ruler = no
+					}
+				}
+				country_event = {
+					id = naod.23
+				}
+			}
+			else = {
+				country_event = {
+					id = naod.26
+				}
 			}
 		}
 	}
@@ -671,18 +695,28 @@ planet_event = {#invasion
 	hide_window = yes
 	is_triggered_only = yes
 	fire_only_once = yes
-
 	trigger = {
 		has_planet_flag = naodeus_planet
 		from.owner = {
 			has_country_flag = naodeus_chain_started
 		}
 	}
-
 	immediate = {
-		from = {
-			country_event = {
-				id = naod.24
+		from.owner = {
+			if = {
+				limit = {
+					event_target:naodeus_leader = {
+						is_ruler = no
+					}
+				}
+				country_event = {
+					id = naod.24
+				}
+			}
+			else = {
+				country_event = {
+					id = naod.25
+				}
 			}
 		}
 	}
@@ -693,39 +727,46 @@ planet_event = {#bombardment
 	hide_window = yes
 	is_triggered_only = yes
 	fire_only_once = yes
-
 	trigger = {
 		has_planet_flag = naodeus_planet
 		from.owner = {
 			has_country_flag = naodeus_chain_started
 		}
 	}
-
-
 	immediate = {
 		from.owner = {
-			country_event = {
-				id = naod.24
+			if = {
+				limit = {
+					event_target:naodeus_leader = {
+						is_ruler = no
+					}
+				}
+				country_event = {
+					id = naod.24
+				}
+			}
+			else = {
+				country_event = {
+					id = naod.25
+				}
 			}
 		}
 	}
 }
 
-country_event = {
+country_event = {# World Cracker against Talil
 	id = naod.23
+	picture = GFX_evt_unspeakable_horror
 	is_triggered_only = yes
 	fire_only_once = yes
-
 	title = naod.23.title
 	desc = naod.23.desc
-
-	option = {
-		name = naod.23.battlecry
-		every_owned_leader ={
+	immediate = {
+		every_owned_leader = {
 			limit = {
 				is_councilor = yes
 			}
-			this.leader={
+			this.leader = {
 				kill_leader = {
 					show_notification = yes
 				}
@@ -735,28 +776,105 @@ country_event = {
 			every_owned_pop = {
 				limit = {
 					has_job_category = ruler
-	
 				}
 				kill_pop = yes
 			}
 		}
 	}
-}
-
-country_event = {
-	id = naod.24
-	is_triggered_only = yes
-	fire_only_once = yes
-
-	title = naod.24.title
-	desc = naod.24.desc
 
 	option = {
-		name = naod.24.battlecry
-		root.leader= {
+		name = naod.23.battlecry
+	}
+}
+
+country_event = {#Attacking Talil
+	id = naod.24
+	picture = GFX_evt_unspeakable_horror
+	is_triggered_only = yes
+	fire_only_once = yes
+	title = naod.24.title
+	desc = naod_attack_on_talil
+	immediate = {
+		root.leader = {
 			kill_leader = {
 				show_notification = yes
 			}
 		}
+		if = {
+			limit = {
+				event_target:naodeus_leader = {
+					is_owned_by = this
+				}
+			}
+			event_target:naodeus_leader = {
+				set_owner = event_target:naod_talil
+			}
+		}
+	}
+	option = {
+		name = naod.24.answer
+	}
+}
+
+country_event = {#Naodeus ruler while attacking Talil
+	id = naod.25
+	picture = GFX_evt_unspeakable_horror
+	is_triggered_only = yes
+	fire_only_once = yes
+	title = naod.25.title
+	desc = naod_attack_on_talil_naodeus_ruler
+
+	immediate = {
+		event_target:naodeus_leader = {
+			set_owner = event_target:naod_talil
+		}
+		every_owned_leader = {
+			limit = {
+				is_councilor = yes
+			}
+			this.leader = {
+				kill_leader = {
+					show_notification = yes
+				}
+			}
+		}
+	}
+	option = {
+		name = naod.25.answer
+	}
+}
+
+country_event = {# World Cracker against Talil while Naodeus ruler
+	id = naod.26
+	picture = GFX_evt_unspeakable_horror
+	is_triggered_only = yes
+	fire_only_once = yes
+	title = naod.26.title
+	desc = naod.26.desc
+	immediate = {
+		event_target:naodeus_leader = {
+			set_owner = event_target:naod_talil
+		}
+		every_owned_leader = {
+			limit = {
+				is_councilor = yes
+			}
+			this.leader = {
+				kill_leader = {
+					show_notification = yes
+				}
+			}
+		}
+		capital_scope = {
+			every_owned_pop = {
+				limit = {
+					has_job_category = ruler
+				}
+				kill_pop = yes
+			}
+		}
+	}
+	option = {
+		name = naod.26.battlecry
 	}
 }
