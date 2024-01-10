@@ -54,7 +54,18 @@ country_event = { # Search for Sol
 	picture = GFX_evt_ancient_databank
 	show_sound = event_scanner
 
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_legendary_beholder"
+
+	picture_event_data = {
+		portrait = event_target:dmj_daniel
+	}
+
 	trigger = {
+		exists = event_target:dmj_daniel
+		any_owned_leader = {
+			is_same_value = event_target:dmj_daniel
+		}
 		NOR = {
 			has_communications = event_target:dmj_sol_country
 			any_system = {
@@ -150,7 +161,7 @@ country_event = { # Search for Sol
 				}
 			}
 			if = {
-				limit = { NOT = { has_country_flag = reinhardist_empire }
+				limit = { NOT = { has_country_flag = reinhardist_empire } }
 				country_event = { id = dmj_sol.3 days = 3600 }
 			}
 			
@@ -328,7 +339,7 @@ country_event = { # Discover Primitive Sol
 				orbit_distance = 15
 			}
 		}
-		event_target:dmj_terra = {
+		event_target:dmj_terra.solar_system = {
 			spawn_natural_wormhole = {
 				bypass_type = dmj_shroud_tunnel
 				random_pos = no
@@ -338,7 +349,7 @@ country_event = { # Discover Primitive Sol
 			set_surveyed = { surveyed = yes surveyor = root }
 		}
 		if = {
-			limit = { NOT = { has_country_flag = reinhardist_empire }
+			limit = { NOT = { has_country_flag = reinhardist_empire } }
 			country_event = { id = dmj_sol.3 days = 3600 }
 		}
 	}
@@ -363,7 +374,7 @@ country_event = { # Discover Nuked Sol
 	show_sound = event_default
 
 	immediate = {
-		root.capital_scope = {
+		event_target:dmj_spawn_system = {
 			spawn_natural_wormhole = {
 				bypass_type = dmj_shroud_tunnel
 				random_pos = no
@@ -371,7 +382,7 @@ country_event = { # Discover Nuked Sol
 				orbit_distance = 15
 			}
 		}
-		event_target:dmj_terra = {
+		event_target:dmj_terra.solar_system = {
 			spawn_natural_wormhole = {
 				bypass_type = dmj_shroud_tunnel
 				random_pos = no
@@ -381,7 +392,7 @@ country_event = { # Discover Nuked Sol
 			set_surveyed = { surveyed = yes surveyor = root }
 		}
 		if = {
-			limit = { NOT = { has_country_flag = reinhardist_empire }
+			limit = { NOT = { has_country_flag = reinhardist_empire } }
 			country_event = { id = dmj_sol.3 days = 3600 }
 		}
 	}
@@ -406,7 +417,7 @@ country_event = { # Open Communications with Faulkner's empire
 	show_sound = event_alien_signal
 
 	immediate = {
-		root.capital_scope = {
+		event_target:dmj_spawn_system = {
 			spawn_natural_wormhole = {
 				bypass_type = dmj_shroud_tunnel
 				random_pos = no
@@ -414,7 +425,7 @@ country_event = { # Open Communications with Faulkner's empire
 				orbit_distance = 15
 			}
 		}
-		event_target:dmj_terra = {
+		event_target:dmj_terra.solar_system = {
 			spawn_natural_wormhole = {
 				bypass_type = dmj_shroud_tunnel
 				random_pos = no
@@ -514,7 +525,7 @@ country_event = { # Receive ultimatum, reimprison Reinhard or war
 	option = { # Accept
 		name = "dmj_sol.8.b"
 		response_text = "dmj_sol.8.b.response"
-		country_event = { id = dmj.9 days = 1 random = 9 }
+		country_event = { id = dmj_sol.9 days = 1 random = 9 }
 	}
 }
 
@@ -655,7 +666,9 @@ country_event = { # Reinhard ded
 				fire = yes
 			}
 		}
-		destroy_country = event_target:dmj_daniel_country_shroud
+		event_target:dmj_daniel_country_shroud = {
+			destroy_country = yes
+		}
 		every_system = {
 			limit = { has_star_flag = dmj_spawn_system }
 			set_star_class = sc_black_hole
