@@ -17,26 +17,29 @@ country_event = {
 	immediate = {
 		set_country_flag = hskv_ignore_dismiss_effect
 		end_event_chain = hskv_thayo_waiting_chain
+
 		set_variable = {
 			which = hskv_total_num_valid_ships
 			value = 0
 		}
+		save_event_target_as = hskv_thayo_country
 		every_owned_ship = {
 			limit = {
 				is_designable = yes
 				is_in_combat = no
 				is_owned_by = PREV
 				OR = {
-					is_ship_size = constructor
 					is_ship_size = corvette
 					is_ship_size = frigate
 					is_ship_size = destroyer
 					is_ship_size = cruiser
 				}
 			}
-			change_variable = {
-				which = hskv_total_num_valid_ships
-				value = 1
+			event_target:hskv_thayo_country = {
+				change_variable = {
+					which = hskv_total_num_valid_ships
+					value = 1
+				}
 			}
 		}
 		set_variable = {
@@ -58,7 +61,6 @@ country_event = {
 		}
 	}
 
-
 	option = {
 		name = hskv_hunt.1000.response
 		custom_tooltip = hskv_hunt.1000.response.tooltip
@@ -70,14 +72,14 @@ country_event = {
 		}
 		owner = {
 			add_resource = {
-				energy = -10000
-				minerals = -10000
-				food = -10000
+				energy = -30000
+				minerals = -20000
+				food = -20000
 				consumer_goods = -5000
 				alloys = -5000
-				rare_crystals = -1000
-				exotic_gases = -1000
-				volatile_motes = -1000
+				rare_crystals = -1500
+				exotic_gases = -1500
+				volatile_motes = -1500
 			}
 			random_owned_leader = {
 				limit = {
@@ -89,17 +91,23 @@ country_event = {
 				}
 			}
 			
-			# TODO Any other consderations? < lvl 7?
 			random_owned_leader = {
 				limit = {
 					is_ruler = no
 					NOR = {
 						has_leader_flag = renowned_leader
 						has_leader_flag = legendary_leader
+						has_trait = trait_imperial_heir
+						has_trait = leader_trait_chosen
+						has_trait = leader_trait_eater_chosen
+						has_trait = leader_trait_composer_chosen
+						has_trait = leader_trait_instrument_chosen
+						has_trait = leader_trait_whisperers_chosen
+						has_skill > 6
 					}
 				}
 				kill_leader = {
-					show_notification = no
+					show_notification = yes
 					fire = yes
 				}
 			} 
@@ -113,10 +121,17 @@ country_event = {
 						NOR = {
 							has_leader_flag = renowned_leader
 							has_leader_flag = legendary_leader
+							has_trait = trait_imperial_heir
+							has_trait = leader_trait_chosen
+							has_trait = leader_trait_eater_chosen
+							has_trait = leader_trait_composer_chosen
+							has_trait = leader_trait_instrument_chosen
+							has_trait = leader_trait_whisperers_chosen
+							has_skill > 6
 						}
 					}
 					kill_leader = {
-						show_notification = no
+						show_notification = yes
 						fire = yes
 					}
 				} 
@@ -129,7 +144,6 @@ country_event = {
 						is_in_combat = no
 						is_owned_by = PREV
 						OR = {
-							is_ship_size = constructor
 							is_ship_size = corvette
 							is_ship_size = frigate
 							is_ship_size = destroyer
@@ -156,7 +170,7 @@ country_event = {
 			limit = {
 				check_variable = {
 					which = hskv_codebreaking
-					value > 5
+					value > 6
 				}
 			}
 			set_country_flag = hskv_manhunt_high_crypto
@@ -341,8 +355,8 @@ country_event = {
 				random_owned_pop = { kill_pop = yes }
 			}
 			add_resource = {
-				influence = -25
-				unity = -500
+				influence = -50
+				unity = -1500
 			}
 		}
 	}
@@ -462,14 +476,14 @@ country_event = {
 				}
 				resource_stockpile_compare = {
 					resource = unity
-					value >= 750
+					value >= 1000
 				}
 			}
 		}
 		owner = {
 			add_resource = {
 				energy = -3000
-				unity = -750
+				unity = -1000
 			}
 		}
 		event_target:hskv_target_planet = {
@@ -588,13 +602,13 @@ country_event = {
 			owner = {
 				resource_stockpile_compare = {
 					resource = energy
-					value >= 1000
+					value >= 4000
 				}
 			}
 		}
 		owner = {
 			add_resource = {
-				energy = -1000
+				energy = -4000
 			}
 			event_target:hskv_situation_thayo_manhunt = {
 				add_situation_progress = 12
@@ -606,7 +620,7 @@ country_event = {
 		custom_tooltip = hskv_hunt.1030.option.b.tooltip
 		owner = {
 			event_target:hskv_situation_thayo_manhunt = {
-				add_situation_progress = -2
+				add_situation_progress = -3
 			}
 		}
 	}
@@ -628,9 +642,9 @@ country_event = {
 		name = UNDERSTOOD
 		owner = {
 			add_resource = {
-				energy = -500
-				consumer_goods = -200
-				alloys = -100
+				energy = -1000
+				consumer_goods = -500
+				alloys = -250
 			}
 			event_target:hskv_situation_thayo_manhunt = {
 				add_situation_progress = 6
@@ -656,7 +670,7 @@ country_event = {
 		name = GOOD
 		owner = {
 			add_resource = {
-				energy = 750
+				energy = 1000
 				minerals = 750
 				food = 500
 				consumer_goods = 400
@@ -707,12 +721,12 @@ country_event = {
 		name =  hskv_hunt.1041.option.b
 		owner = {
 			add_resource = {
-				energy = 2000
-				consumer_goods = 500
-				alloys = 750
-				rare_crystals = 200
-				exotic_gases = 200
-				volatile_motes = 200
+				energy = 5000
+				consumer_goods = 1000
+				alloys = 1000
+				rare_crystals = 250
+				exotic_gases = 250
+				volatile_motes = 250
 			}
 		}
 	}
@@ -810,6 +824,7 @@ situation_event = {
 			owner = {
 				country_event = {
 					id = hskv_hunt.2100
+					days = 1
 				}
 			}
 		}
@@ -840,7 +855,7 @@ country_event = {
 
 country_event = {
 	id = hskv_hunt.2101
-	title = hskv_hunt.2101.name
+	title = hskv_event_thayo_coms_title
 	desc = hskv_hunt.2101.desc
 	show_sound = event_default
 	diplomatic = yes
@@ -865,7 +880,7 @@ country_event = {
 
 country_event = {
 	id = hskv_hunt.2102
-	title = hskv_hunt.2101.name
+	title = hskv_event_thayo_coms_title
 	desc = hskv_hunt.2102.desc
 	show_sound = event_default
 	diplomatic = yes
@@ -910,10 +925,9 @@ country_event = {
 	}
 }
 
-# TODO need tooltips
 country_event = {
 	id = hskv_hunt.2103
-	title = hskv_hunt.2101.name
+	title = hskv_event_thayo_coms_title
 	desc = hskv_hunt.2103.desc
 	show_sound = event_default
 	diplomatic = yes
@@ -952,7 +966,7 @@ country_event = {
 # I warned you
 country_event = {
 	id = hskv_hunt.2104
-	title = hskv_hunt.2101.name
+	title = hskv_event_thayo_coms_title
 	desc = hskv_hunt.2104.desc
 	show_sound = event_default
 	diplomatic = yes
@@ -1005,14 +1019,14 @@ country_event = {
 	is_triggered_only = yes
 
 	option = {
-		name =  CURSES
+		name =  DEVASTATING
 
 		owner = {
 			add_resource = {
-				energy = 8000
-				minerals = 4000
+				energy = 10000
+				minerals = 5000
 				food = 1000
-				consumer_goods = 2000
+				consumer_goods = 2500
 				alloys = 2000
 				rare_crystals = 500
 				exotic_gases = 500
@@ -1025,7 +1039,7 @@ country_event = {
 # Lets get back to work
 country_event = {
 	id = hskv_hunt.2111
-	title = hskv_hunt.2101.name
+	title = hskv_event_thayo_coms_title
 	desc = hskv_hunt.2111.desc
 	show_sound = event_default
 	diplomatic = yes
@@ -1051,14 +1065,14 @@ country_event = {
 				}
 
 				add_resource = {
-					energy = 2000
+					energy = 5000
 					minerals = 1000
 					food = 1000
 					consumer_goods = 750
 					alloys = 500
-					rare_crystals = 200
-					exotic_gases = 200
-					volatile_motes = 200
+					rare_crystals = 250
+					exotic_gases = 250
+					volatile_motes = 250
 				}
 
 
@@ -1114,8 +1128,6 @@ country_event = {
 						add_trait_no_notify = hskv_leader_trait_pinnacle
 						add_trait_no_notify = hskv_leader_trait_asset_forfeiture
 
-						#TODO plus any event ones he used to have (perhaps with less negative effects)
-						
 						save_event_target_as = hskv_thayo_everdawn_leader
 					}
 				}
