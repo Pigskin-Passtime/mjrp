@@ -2,13 +2,6 @@
 # By Lithrandil2
 namespace = narll
 
-# TODO: sounds for 10, 11, 12, 13
-# TODO: picture data for 210, 230, 231, 232, 233, 240, 241, 402, 403, 404, 700
-# TODO: change test values
-# TODO: fix bugs ^^
-
-#debug events
-
 country_event = {
 	id = narll.1
 	title = narll.1.name
@@ -77,7 +70,7 @@ country_event = {
 				event_leader = yes
 				class = scientist
 				name = "NAME_Nar"
-				skill = 7
+				skill = 1
 				immortal = yes
 				randomize_traits = no
 				can_manually_change_location = no
@@ -85,27 +78,32 @@ country_event = {
 				skip_background_generation = yes
 				custom_catch_phrase = narll_catch_phrase
 				custom_description = narll_backstory
-				traits = {
-					trait = subclass_scientist_explorer
-					trait = narll_leader_trait_energy_being
-					trait = leader_trait_meticulous_2
-					trait = leader_trait_tuner_2
-					trait = narll_leader_trait_legendary_energy_manipulation
-				}
 				gender = indeterminable
 				set_age = 0
 				hide_age = yes
 				effect = {
+					add_skill = 10
+					remove_all_traits = yes
+					set_skill = 10
+					add_trait_no_notify = leader_trait_prospector_3
+					add_trait_no_notify = narll_leader_trait_legendary_energy_manipulation
+					add_trait_no_notify = leader_trait_meticulous_2
+					add_trait_no_notify = subclass_scientist_explorer
+					add_trait_no_notify = leader_trait_tuner_2
+					add_trait_no_notify = leader_trait_archaeologist
+					add_trait_no_notify = narll_leader_trait_energy_being
+
 					save_global_event_target_as = narll_leader
 					set_leader_flag = legendary_leader
 					set_leader_flag = immune_to_negative_traits
 					set_owner = root
 					exile_leader_as = narll_leader
 					set_leader_flag = narll
+					set_leader_flag = cannot_be_ruler
+
 				}
 			}
 			last_created_leader = {
-				add_trait_no_notify = leader_trait_prospector_2
 			}
 		}
 	}
@@ -122,15 +120,28 @@ country_event = {
 		}
 
 		hidden_effect = {
+			
 			clone_leader = {
 				target = event_target:narll_leader
 			}
 			last_created_leader = {
-				save_global_event_target_as = narll_leader
+				set_skill = 1
+				add_skill = 10
+				remove_all_traits = yes
+				set_skill = 10
+				add_trait_no_notify = leader_trait_prospector_3
+				add_trait_no_notify = narll_leader_trait_legendary_energy_manipulation
+				add_trait_no_notify = leader_trait_meticulous_2
+				add_trait_no_notify = subclass_scientist_explorer
+				add_trait_no_notify = leader_trait_tuner_2
+				add_trait_no_notify = leader_trait_archaeologist
+				add_trait_no_notify = narll_leader_trait_energy_being
+
 				set_leader_flag = legendary_leader
 				set_leader_flag = immune_to_negative_traits
 				set_leader_flag = narll
 				set_leader_flag = cannot_be_ruler
+				save_global_event_target_as = narll_leader
 				leader_event = {
 					id = narll.300
 					days = 5
@@ -154,9 +165,10 @@ country_event = {
 			set_country_flag = has_narll
 			country_event = {
 				id = narll.200
-				days = 360 # 1800
-				random = 360 # 1800
+				days = 1800
+				random = 1800
 			}
+			export_modifier_to_variable = { modifier = intel_encryption_add variable = empire_encryption }
 		}
 	}
 
@@ -222,6 +234,7 @@ fleet_event = { # entrances
 	id = narll.10
 	title = narll.10.title
 	desc = narll.10.desc
+	show_sound = event_drilling
 	picture = GFX_evt_astral_rift_research_lab # TODO better images
 	location = from
 
@@ -253,6 +266,7 @@ fleet_event = { # energy stores
 	title = narll.11.title
 	desc = narll.11.desc
 	picture = GFX_evt_astral_rift_research_lab # TODO better images
+	show_sound = event_finding_loot
 	location = from
 
 	archaeology = yes
@@ -299,6 +313,7 @@ fleet_event = { # data server
 	desc = narll.12.desc
 	picture = GFX_evt_astral_rift_research_lab # TODO better images
 	location = from
+	show_sound = event_laboratory_sound
 
 	archaeology = yes
 
@@ -332,6 +347,7 @@ fleet_event = { # surviving sensory computer
 	desc = narll.13.desc
 	picture = GFX_evt_astral_rift_research_lab # TODO better images
 	location = from
+	show_sound = event_laboratory_sound
 
 	archaeology = yes
 
@@ -544,8 +560,9 @@ country_event = { # choice of positive modifier
 
 	picture_event_data = {
 		portrait = event_target:narll_leader
-		room = ethic_spaceship_room
+		room = root
 	}
+	picture = GFX_evt_board_meeting
 
 	option = {
 		name = narll.210.a
@@ -621,36 +638,54 @@ country_event = { # FE demands you delete the data you found
 		custom_tooltip = narll.220.b.tt
 		hidden_effect = {
 			random_list = {
-				50 = {
+				90 = {
 					country_event = {
 						id = narll.221
 						days = 15
 					}
 				}
-				0 = {
+				10 = {
 					modifier = {
-						add = 10
-						is_counter_espionage > 5
-					}
-					modifier = {
-						add = 10
-						is_counter_espionage > 6
-					}
-					modifier = {
-						add = 10
-						is_counter_espionage > 7
+						add = 20
+						check_variable = {
+							which = empire_encryption
+							value > 5
+						}
 					}
 					modifier = {
 						add = 20
-						is_counter_espionage > 8
+						check_variable = {
+							which = empire_encryption
+							value > 6
+						}
 					}
 					modifier = {
 						add = 20
-						is_counter_espionage > 9
+						check_variable = {
+							which = empire_encryption
+							value > 7
+						}
 					}
 					modifier = {
-						add = 30
-						is_counter_espionage > 10
+						add = 40
+						check_variable = {
+							which = empire_encryption
+							value > 8
+						}
+					}
+					modifier = {
+						add = 40
+						check_variable = {
+							which = empire_encryption
+							value > 9
+						}
+					}
+					modifier = {
+						add = 60
+						check_variable = {
+							which = empire_encryption
+							value > 10
+						}
 					}
 					event_target:narll_creator = {
 						add_opinion_modifier = {
@@ -714,16 +749,17 @@ country_event = {
 
 }
 
-country_event = { # you can turn the your pops
+country_event = { # you can turn  your pops
 	id = narll.230
 	title = narll.230.title
 	desc = narll.230.desc
 	is_triggered_only = yes
 	event_window_type = leader_story
+	picture = GFX_evt_star_yellow
 
 	picture_event_data = {
 		portrait = event_target:narll_leader
-		room = ethic_spaceship_room
+		room = root
 	}
 
 	option = { # yes, prepare
@@ -742,26 +778,27 @@ country_event = { # you can turn the your pops
 	}
 }
 
-country_event = { # you can turn the your pops
+country_event = {
 	id = narll.231
 	title = narll.231.title
 	desc = narll.231.desc
 	is_triggered_only = yes
+	picture = GFX_evt_overtuned
 
 	option = { # yes, prepare
 		name = narll.231.a
-		set_country_flag = narll_started_turning
 		enable_special_project = {
 			name = narll_turning_society
 		}
 	}
 }
 
-country_event = { # you can turn the your pops
+country_event = { 
 	id = narll.232
 	title = narll.232.title
 	desc = narll.232.desc
 	is_triggered_only = yes
+	picture = GFX_evt_scientific_experiments
 
 	option = { # yes, prepare
 		name = narll.232.a
@@ -771,11 +808,12 @@ country_event = { # you can turn the your pops
 	}
 }
 
-country_event = { # you can turn the your pops
+country_event = { 
 	id = narll.233
 	title = narll.233.title
 	desc = narll.233.desc
 	is_triggered_only = yes
+	picture = GFX_evt_psionics
 
 	option = { # yes, prepare
 		name = narll.233.a
@@ -812,6 +850,7 @@ country_event = { # Dark Energy (need build machine)
 	desc = narll.240.desc
 	is_triggered_only = yes
 	event_window_type = leader_story
+	picture = GFX_evt_rare_tech_cache
 
 	picture_event_data = {
 		portrait = event_target:narll_leader
@@ -846,6 +885,7 @@ country_event = {
 		portrait = event_target:narll_leader
 		room = ethic_spaceship_room
 	}
+	picture = GFX_evt_surreal_visions
 
 	option = {
 		name = narll.241.a
@@ -943,31 +983,101 @@ leader_event = { # add random deposits
 
 	trigger = {
 		has_global_flag =  narll_alive
+		NOT = {
+			owner = {
+				has_country_flag = narll_perma_dead
+			}
+		}
 	}
 
 	immediate = {
+		log = "Triggered Prospection"
 		if = {
 			limit = {
 				exists = root.fleet
+				NOT = {
+					owner = {
+						has_country_flag = narll_disembodied
+					}
+				}
 			}
 			random_list = {
-				80 = {}
+				80 = {
+				}
 				20 = {
-					modifier = {
-						factor = 0
-						OR = {
-							has_leader_flag = narll_recuperating
-							owner = {
-								has_country_flag = narll_disembodied
+					solar_system = {
+						random_system_planet = {
+							limit = {
+								is_colonizable = no
 							}
+							if = {
+								limit = {
+									is_star = yes
+								}
+								if = {
+									limit = {
+										has_deposit_for = shipclass_mining_station
+									}
+									random_list = {
+										24 = {
+											narll_energy_deposits = yes
+										}
+									}
+								} else_if = {
+									limit = {
+										has_deposit_for = shipclass_research_station
+									}
+									narll_stars_research_deposits = yes
+								} else = {
+									random_list = {
+										51 = {
+											modifier = {
+												add = 4
+												has_astral_planes_dlc = yes
+											}
+											narll_stars_research_deposits = yes
+										}
+										24 = {
+											narll_energy_deposits = yes
+										}
+									}
+								}
+							} else_if = {
+								limit = {
+									is_a_planet = yes
+								}
+								if = {
+									limit = {
+										has_deposit_for = shipclass_mining_station
+									}
+									narll_planet_mining_deposits = yes
+								} else_if = {
+									limit = {
+										has_deposit_for = shipclass_research_station
+									}
+									narll_planet_research_deposits = yes
+								} else = {
+									random_list = {
+										96 = {
+											modifier = {
+												add = 3
+												has_astral_planes_dlc = yes
+											}
+											narll_planet_research_deposits = yes
+										}
+										126 = {
+											modifier = {
+												add = 8
+												is_planet_class = pc_gas_giant
+											}
+											narll_planet_mining_deposits = yes
+										}
+									}
+								}
+							} 
 						}
 					}
-					leader_event = {
-						id = narll.310
-						scopes = {
-							from = from
-						}
-					}
+					reroll_random = yes
 				}
 			}
 		}
@@ -988,83 +1098,10 @@ leader_event = {
 	hide_window = yes
 	
 	immediate = {
-		solar_system = {
-			random_system_planet = {
-				limit = {
-					is_colonizable = no
-				}
-				if = {
-					limit = {
-						is_star = yes
-					}
-					if = {
-						limit = {
-							has_deposit_for = shipclass_mining_station
-						}
-						random_list = {
-							24 = {
-								narll_energy_deposits = yes
-							}
-						}
-					} else_if = {
-						limit = {
-							has_deposit_for = shipclass_research_station
-						}
-						narll_stars_research_deposits = yes
-					} else = {
-						random_list = {
-							51 = {
-								modifier = {
-									add = 4
-									has_astral_planes_dlc = yes
-								}
-								narll_stars_research_deposits = yes
-							}
-							24 = {
-								narll_energy_deposits = yes
-							}
-						}
-					}
-				} else_if = {
-					limit = {
-						is_a_planet = yes
-					}
-					if = {
-						limit = {
-							has_deposit_for = shipclass_mining_station
-						}
-						narll_planet_mining_deposits = yes
-					} else_if = {
-						limit = {
-							has_deposit_for = shipclass_research_station
-						}
-						narll_planet_research_deposits = yes
-					} else = {
-						random_list = {
-							96 = {
-								modifier = {
-									add = 3
-									has_astral_planes_dlc = yes
-								}
-								narll_planet_research_deposits = yes
-							}
-							126 = {
-								modifier = {
-									add = 8
-									is_planet_class = pc_gas_giant
-								}
-								narll_planet_mining_deposits = yes
-							}
-						}
-					}
-				} 
-			}
-		}
-		reroll_random = yes
+		
 	}
 }
 
-# TODO: doesn't spawn at death location, only capital
 country_event = { # on-death
 	id = narll.400
 	is_triggered_only = yes
@@ -1093,6 +1130,22 @@ country_event = { # on-death
 				target = From
 			}
 			last_created_leader = {
+				set_skill = 1
+				add_skill = 10
+				remove_all_traits = yes
+				set_skill = 10
+				add_trait_no_notify = leader_trait_prospector_3
+				add_trait_no_notify = narll_leader_trait_legendary_energy_manipulation
+				add_trait_no_notify = leader_trait_meticulous_2
+				add_trait_no_notify = subclass_scientist_explorer
+				add_trait_no_notify = leader_trait_tuner_2
+				add_trait_no_notify = leader_trait_archaeologist
+				add_trait_no_notify = narll_leader_trait_energy_being
+
+				set_leader_flag = legendary_leader
+				set_leader_flag = immune_to_negative_traits
+				set_leader_flag = narll
+				set_leader_flag = cannot_be_ruler	
 				exile_leader_as = narll_leader
 				save_global_event_target_as = narll_leader
 			}
@@ -1100,20 +1153,6 @@ country_event = { # on-death
 				name = narll_revive_machine
 				location = this.capital_scope
 			}
-			#if = {
-			#	limit = {
-			#		has_country_flag = narll_reanimator_constructed
-			#	}
-			#	enable_special_project = {
-			#		name = narll_revive_machine
-			#		location = this.capital_scope
-			#	}
-			#} else = {
-			#	enable_special_project = {
-			#		name = narll_revive
-			#		location = from
-			#	}
-			#}
 		}
 	}
 }
@@ -1130,85 +1169,25 @@ country_event = { # on revive
 
 	picture_event_data = {
 		portrait = event_target:narll_leader
-		room = ethic_spaceship_room
+		room = root
 	}
+
+	picture = GFX_evt_shroudwalker_enclave
 	
 	immediate = {
 		remove_country_flag = narll_disembodied
-		clone_leader = {
-			target = event_target:narll_leader
-		}
-		last_created_leader = {
-			save_global_event_target_as = narll_leader
-			set_leader_flag = legendary_leader
-			set_leader_flag = immune_to_negative_traits
-			set_leader_flag = narll
-			set_leader_flag = cannot_be_ruler
+
+		event_target:narll_leader = {
+			set_owner = root
 			leader_event = {
 				id = narll.300
 				days = 360
 			}
+
 		}
-		
 	}
 
 	option = {
 		name = narll.402.a
 	}
-
-	#after = {
-	#	if = {
-	#		limit = {
-	#			owner = {
-	#				NOT = {
-	#					OR = {
-	#						has_country_flag = narll_reanimator_constructed
-	#						has_special_project = narll_build_revive_machine
-	#					}
-	#				}
-	#			}
-	#		}
-	#		owner = {
-	#			country_event = {
-	#				id = narll.404
-	#			}
-	#		}
-	#	}
-	#}
-
-}
-
-country_event = { # constructed reanimator
-	id = narll.403
-	is_triggered_only = yes
-	title = narll.403.title
-	desc = narll.403.desc
-
-	immediate = {
-		set_country_flag = narll_reanimator_constructed
-	}
-
-	option = {
-		name = narll.403.a
-	}
-	
-}
-
-country_event = { # machine building proposal
-	id = narll.404
-	is_triggered_only = yes
-	title = narll.404.title
-	desc = narll.404.desc
-
-	option = {
-		name = narll.404.a
-		enable_special_project = {
-			name = narll_build_revive_machine
-		}
-	}
-
-	option = {
-		name = narll.404.b
-	}
-	
 }
