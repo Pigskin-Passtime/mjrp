@@ -1,7 +1,7 @@
 #Author : Starchitect
 
-@asteroid_distance = 120
-@orbit_distance = 30
+@asteroid_distance = 100
+@orbit_distance = 20
 
 # Zob Home Star
 zob_system = {
@@ -11,15 +11,16 @@ zob_system = {
 
 	# Nebula and Effects- Probably would be better to just limit this to starting in an existing nebula, but unsure how to tie that in with the mod wrapper.
 	init_effect = {
-		if = {
-			limit = {
-				is_inside_nebula = no
-			}
-			create_nebula = {
-				radius = 30
-				effect = { nebula_cloaking_effect = yes }
-			}
-		}
+		#Removing the galaxy map nebula since, its not needed and might spawn in weird places.
+		# if = {
+		# 	limit = {
+		# 		is_inside_nebula = no
+		# 	}
+		# 	create_nebula = {
+		# 		radius = 30
+		# 		effect = { nebula_cloaking_effect = yes }
+		# 	}
+		# }
 		create_ambient_object = {
 			type = "nebula_L4_entity"
 			entity_offset_height = -5
@@ -49,14 +50,14 @@ zob_system = {
 		class = pc_hive
 		name = "name_zob_planet"
 		size = 16
-		orbit_distance = 80
+		orbit_distance = 60
 		has_ring = yes
 		orbit_angle = { min = 50 max = 110 }
 		moon = {
 			name = "name_zob_moon"
 			class = "pc_frozen"
 			size = 10
-			orbit_distance = 20
+			orbit_distance = 15
 			orbit_angle = 100
 		}
 		init_effect = {
@@ -65,18 +66,18 @@ zob_system = {
 			add_deposit = d_wetware_computer
 			add_deposit = d_savage_wildlands
 			###Districts Generate errors
-			# while = {
-			# 	count = 3
-			# 	add_deposit = d_city_ruins
-			# }
-			# while = {
-			# 	count = 2
-			# 	add_deposit = d_forgotten_civilization
-			# }
-			# while = {
-			# 	count = 2
-			# 	add_deposit = d_assimilators_ruins
-			# }			
+			while = {
+				count = 5
+				add_deposit = d_city_ruins
+			}
+			while = {
+				count = 3
+				add_deposit = d_forgotten_civilization
+			}
+			while = {
+				count = 3
+				add_deposit = d_assimilators_ruins
+			}			
 			# while = {
 			# 	count = 1
 			# 	add_district = district_hive
@@ -123,7 +124,7 @@ zob_system = {
 		type = debris_asteroid_belt
 		radius = @asteroid_distance
 	}	
-	change_orbit = 40
+	change_orbit = 20
 	planet = {
 		count = 3
 		class = pc_asteroid
