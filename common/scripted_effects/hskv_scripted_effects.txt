@@ -115,7 +115,6 @@ hskv_get_vault_situation = {
 
 hskv_get_codebreaking_score = {
 	export_modifier_to_variable = { modifier = intel_encryption_add variable = hskv_codebreaking }
-	log = "Codebreaking Score - \\[This.hskv_codebreaking\\]" # TODO Remove this and other Logs
 }
 
 
@@ -153,7 +152,6 @@ hskv_give_random_fe_building = {
 		}
 	}
 }
-
 
 
 hskv_create_fe_aux_defense_country = {
@@ -252,7 +250,7 @@ hskv_create_vault_defense_force ={
 				set_owner = event_target:hskv_fe_aux_defense_country
 				
 				while = {
-					count = 2
+					count = 20
 					create_ship = {
 						name = random
 						design = "NAME_Gamma"
@@ -260,7 +258,7 @@ hskv_create_vault_defense_force ={
 					}
 				}
 				while = {
-					count = 1
+					count = 5
 					create_ship = {
 						name = random
 						design = "NAME_Beta"
@@ -279,12 +277,23 @@ hskv_create_vault_defense_force ={
 }
 
 hskv_create_vault_defense_force_2 ={
+	if = {
+		limit = {
+			any_country = {
+				has_country_flag = hskv_fe_aux_defense_country
+			}
+		}
+	}
+	else = {
+		hskv_create_fe_aux_defense_country = yes
+	}
 	random_country = {
 		limit = {
 			has_country_flag = hskv_fe_aux_defense_country
 		}
 		save_event_target_as = hskv_fe_aux_defense_country
 	}
+
 
 	event_target:hskv_fe_aux_defense_country = {
 		every_system = {
@@ -319,7 +328,7 @@ hskv_create_vault_defense_force_2 ={
 				set_owner = event_target:hskv_fe_aux_defense_country
 				
 				while = {
-					count = 1
+					count = 13
 					create_ship = {
 						name = random
 						design = "NAME_Devastator"

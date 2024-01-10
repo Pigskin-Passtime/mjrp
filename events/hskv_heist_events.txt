@@ -5,6 +5,33 @@
 
 namespace = hskv_heist
 
+# Too Slow warning
+country_event = {
+	id = hskv_heist.1130
+	title = hskv_heist.1130.name
+	desc = hskv_heist.1130.desc
+	picture = GFX_evt_enigmatic_fortress
+	show_sound = event_default
+	hide_window = no
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_flag = hskv_secure_vault_slow
+	}
+
+	immediate = {
+		hskv_get_vault_situation = yes
+	}
+
+	option = {
+		name = UNFORTUNATE
+		owner = {
+			event_target:hskv_vault_situation = {
+				add_situation_progress = 10
+			} 
+		}
+	}
+}
 
 # Time to Heist!
 # Phase 1 - The Outside Defenses
@@ -120,6 +147,13 @@ country_event = {
 	show_sound = event_default
 	hide_window = no
 	is_triggered_only = yes
+	trigger = {
+		any_situation = {
+			is_situation_type = hskv_situation_vault
+			situation_progress < 60
+		}
+	}
+
 	immediate = {
 		hskv_get_vault_situation = yes
 	}
@@ -217,7 +251,7 @@ country_event = {
 		hskv_get_codebreaking_score = yes
 		set_variable = {
 			which = hskv_codebreaking_duration
-			value = 8
+			value = 10
 		}
 		subtract_variable = {
 			which = hskv_codebreaking_duration
@@ -287,6 +321,12 @@ country_event = {
 	show_sound = event_ground_battle
 	hide_window = no
 	is_triggered_only = yes
+	trigger = {
+		any_situation = {
+			is_situation_type = hskv_situation_vault
+			situation_progress < 60
+		}
+	}
 
 	option = {
 		name = hskv_heist.2300.option.a
@@ -330,8 +370,24 @@ country_event = {
 	option = {
 		name = hskv_heist.2300.option.d
 		custom_tooltip = hskv_heist.2300.option.d.tooltip
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = volatile_motes
+					value >= 2000
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				volatile_motes = -2000
+			}
+		}
 		hidden_effect = {
 			owner = {
+				add_resource = {
+					volatile_motes = 2000
+				}
 				country_event = {
 					id = hskv_heist.2301
 					days = 1
@@ -469,7 +525,7 @@ country_event = {
 		name = DISAPPOINTING
 		owner = {
 			event_target:hskv_vault_situation = {
-				add_situation_progress = 3
+				add_situation_progress = 5
 			} 
 		}
 		hidden_effect = {
@@ -496,7 +552,7 @@ country_event = {
 		hskv_get_codebreaking_score = yes
 		set_variable = {
 			which = hskv_codebreaking_duration
-			value = 12
+			value = 15
 		}
 		subtract_variable = {
 			which = hskv_codebreaking_duration
@@ -518,9 +574,16 @@ country_event = {
 
 	option = {
 		name = ASTOUNDING
+		custom_tooltip = hskv_heist.2320.response.tooltip
 		owner = {
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+				max = @tier3researchmax
+			}
 			event_target:hskv_vault_situation = {
-				add_situation_progress = hskv_codebreaking_duration
+				add_situation_progress = Prev.hskv_codebreaking_duration
 			} 
 			capital_scope = {
 				create_army = {
@@ -578,6 +641,12 @@ country_event = {
 	show_sound = event_default
 	hide_window = no
 	is_triggered_only = yes
+	trigger = {
+		any_situation = {
+			is_situation_type = hskv_situation_vault
+			situation_progress < 60
+		}
+	}
 	immediate = {
 		hskv_get_vault_situation = yes
 	}
@@ -628,6 +697,12 @@ country_event = {
 	show_sound = event_default
 	hide_window = no
 	is_triggered_only = yes
+	trigger = {
+		any_situation = {
+			is_situation_type = hskv_situation_vault
+			situation_progress < 60
+		}
+	}
 	immediate = {
 		hskv_get_vault_situation = yes
 	}
@@ -638,13 +713,13 @@ country_event = {
 			owner = {
 				resource_stockpile_compare = {
 					resource = energy
-					value >= 3000
+					value >= 5000
 				}
 			}
 		}
 		owner = {
 			add_resource = {
-				energy = -3000
+				energy = -5000
 			}
 		}
 		hidden_effect = {
@@ -663,13 +738,13 @@ country_event = {
 			owner = {
 				resource_stockpile_compare = {
 					resource = exotic_gases
-					value >= 750
+					value >= 1000
 				}
 			}
 		}
 		owner = {
 			add_resource = {
-				exotic_gases = -750
+				exotic_gases = -1000
 			}
 		}
 		hidden_effect = {
@@ -705,13 +780,13 @@ country_event = {
 			owner = {
 				resource_stockpile_compare = {
 					resource = volatile_motes
-					value >= 750
+					value >= 1000
 				}
 			}
 		}
 		owner = {
 			add_resource = {
-				volatile_motes = -750
+				volatile_motes = -1000
 			}
 		}
 		hidden_effect = {
@@ -772,12 +847,6 @@ country_event = {
 			event_target:hskv_vault_situation = {
 				add_situation_progress = 1
 			}
-			event_target:hskv_vault_situation = {
-				add_situation_progress = -5
-			}
-			event_target:hskv_vault_situation = {
-				add_situation_progress = 4
-			}
 		}
 		hidden_effect = {
 			owner = {
@@ -806,13 +875,7 @@ country_event = {
 		name = EXCELLENT
 		owner = {
 			event_target:hskv_vault_situation = {
-				add_situation_progress = 1
-			} 
-			event_target:hskv_vault_situation = {
-				add_situation_progress = -5
-			} 
-			event_target:hskv_vault_situation = {
-				add_situation_progress = 2
+				add_situation_progress = -2
 			} 
 		}
 		hidden_effect = {
@@ -842,13 +905,7 @@ country_event = {
 		name = EXCELLENT
 		owner = {
 			event_target:hskv_vault_situation = {
-				add_situation_progress = 1
-			} 
-			event_target:hskv_vault_situation = {
-				add_situation_progress = -5
-			} 
-			event_target:hskv_vault_situation = {
-				add_situation_progress = 2
+				add_situation_progress = -3
 			} 
 		}
 		hidden_effect = {
@@ -877,13 +934,7 @@ country_event = {
 		name = UNFORTUNATE
 		owner = {
 			event_target:hskv_vault_situation = {
-				add_situation_progress = 1
-			} 
-			event_target:hskv_vault_situation = {
-				add_situation_progress = -5
-			} 
-			event_target:hskv_vault_situation = {
-				add_situation_progress = 6
+				add_situation_progress = 5
 			} 
 		}
 		hidden_effect = {
@@ -961,6 +1012,12 @@ country_event = {
 	show_sound = event_trap_laser
 	hide_window = no
 	is_triggered_only = yes
+	trigger = {
+		any_situation = {
+			is_situation_type = hskv_situation_vault
+			situation_progress < 60
+		}
+	}
 	immediate = {
 		hskv_get_vault_situation = yes
 	}
@@ -971,7 +1028,7 @@ country_event = {
 			owner = {
 				resource_stockpile_compare = {
 					resource = energy
-					value >= 3000
+					value >= 5000
 				}
 			}
 		}
@@ -987,9 +1044,11 @@ country_event = {
 	option = {
 		name = hskv_heist.2500.option.b
 		custom_tooltip = hskv_heist.2500.option.b.tooltip
-		# TODO how to make this look nicer?
 		allow = {
-			has_country_flag = hskv_captured_vault_hq
+			custom_tooltip = {
+				fail_text = "hskv_heist.2500.option.b.tooltip.fail"
+				has_country_flag = hskv_captured_vault_hq
+			}
 		}
 		hidden_effect = {
 			owner = {
@@ -1019,13 +1078,13 @@ country_event = {
 			owner = {
 				resource_stockpile_compare = {
 					resource = volatile_motes
-					value >= 1000
+					value >= 2000
 				}
 			}
 		}
 		owner = {
 			add_resource = {
-				volatile_motes = -1000
+				volatile_motes = -2000
 			}
 		}
 		hidden_effect = {
@@ -1188,6 +1247,11 @@ ship_event = {
 
 	option = {
 		name = hskv_heist.2510.option.a
+		trigger = {
+			from.leader = {
+				has_skill < 5
+			}
+		}
 		allow = {
 			owner = {
 				NOR = {
@@ -1217,6 +1281,11 @@ ship_event = {
 	}
 	option = {
 		name = hskv_heist.2510.option.b
+		trigger = {
+			from.leader = {
+				has_skill < 5
+			}
+		}
 		allow = {
 			owner = {
 				has_technology = tech_shields_3
@@ -1246,6 +1315,11 @@ ship_event = {
 	}
 	option = {
 		name = hskv_heist.2510.option.c
+		trigger = {
+			from.leader = {
+				has_skill < 5
+			}
+		}
 		allow = {
 			owner = {
 				has_technology = tech_shields_4
@@ -1274,6 +1348,11 @@ ship_event = {
 	}
 	option = {
 		name = hskv_heist.2510.option.d
+		trigger = {
+			from.leader = {
+				has_skill < 5
+			}
+		}
 		allow = {
 			owner = {
 				has_technology = tech_shields_5
@@ -1348,9 +1427,21 @@ country_event = {
 	show_sound = event_default
 	hide_window = no
 	is_triggered_only = yes
+
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				has_leader_flag = hskv_potential_laser_victim
+			}
+			save_event_target_as = hskv_potential_laser_victim
+		}
+	}
 	
 	option = {
 		name = GOOD
+		event_target:hskv_potential_laser_victim = {
+			add_experience = 1000
+		} 
 		hidden_effect = {
 			owner = {
 				country_event = {
@@ -1372,12 +1463,18 @@ country_event = {
 	is_triggered_only = yes
 	immediate = {
 		hskv_get_vault_situation = yes
+		random_owned_leader = {
+			limit = {
+				has_leader_flag = hskv_potential_laser_victim
+			}
+			save_event_target_as = hskv_potential_laser_victim
+		}
 	}
 	option = {
 		name = CURSES
 		owner = {
 			event_target:hskv_vault_situation = {
-				add_situation_progress = 3
+				add_situation_progress = 5
 			}
 			random_owned_leader = {
 				limit = {
@@ -1408,6 +1505,12 @@ country_event = {
 	is_triggered_only = yes
 	immediate = {
 		hskv_get_vault_situation = yes
+		random_owned_leader = {
+			limit = {
+				has_leader_flag = hskv_potential_laser_victim
+			}
+			save_event_target_as = hskv_potential_laser_victim
+		}
 	}
 	option = {
 		name = AMAZING
@@ -1424,6 +1527,7 @@ country_event = {
 				remove_trait = leader_trait_slippery
 				remove_trait = leader_trait_towel
 				add_trait = leader_trait_maimed
+				add_experience = 1000
 			}
 		}
 		hidden_effect = {
@@ -1437,6 +1541,7 @@ country_event = {
 	}
 }
 
+# Turn it off
 country_event = {
 	id = hskv_heist.2520
 	title = hskv_heist.2500.name
@@ -1452,7 +1557,7 @@ country_event = {
 		name = GOOD
 		owner = {
 			event_target:hskv_vault_situation = {
-				add_situation_progress = 6
+				add_situation_progress = 3
 			} 
 		}
 		hidden_effect = {
@@ -1465,6 +1570,7 @@ country_event = {
 		}
 	}
 }
+# Hack
 country_event = {
 	id = hskv_heist.2530
 	title = hskv_heist.2500.name
@@ -1478,7 +1584,7 @@ country_event = {
 		hskv_get_codebreaking_score = yes
 		set_variable = {
 			which = hskv_codebreaking_duration
-			value = 11
+			value = 12
 		}
 		subtract_variable = {
 			which = hskv_codebreaking_duration
@@ -1502,7 +1608,7 @@ country_event = {
 		name = UNDERSTOOD
 		owner = {
 			event_target:hskv_vault_situation = {
-				add_situation_progress = hskv_codebreaking_duration
+				add_situation_progress = Prev.hskv_codebreaking_duration
 			} 
 		}
 		hidden_effect = {
@@ -1515,10 +1621,11 @@ country_event = {
 		}
 	}
 }
+# Explosions
 country_event = {
 	id = hskv_heist.2540
 	title = hskv_heist.2500.name
-	desc = hskv_heist.2520.desc
+	desc = hskv_heist.2540.desc
 	picture = GFX_evt_sabotaged_ship
 	show_sound = event_ship_explosion
 	hide_window = no
@@ -1530,7 +1637,7 @@ country_event = {
 		name = ACKNOWLEDGED
 		owner = {
 			event_target:hskv_vault_situation = {
-				add_situation_progress = 4
+				add_situation_progress = 6
 			} 
 		}
 		hidden_effect = {
@@ -1553,11 +1660,17 @@ country_event = {
 	show_sound = event_default
 	hide_window = no
 	is_triggered_only = yes
+	trigger = {
+		any_situation = {
+			is_situation_type = hskv_situation_vault
+			situation_progress < 60
+		}
+	}
 	immediate = {
 		hskv_get_vault_situation = yes
 	}
 	option = {
-		name = hskv_heist.2600.option.a
+		name = NOTIME
 		custom_tooltip = hskv_heist.2600.option.a.tooltip
 		hidden_effect = {
 			owner = {
@@ -1617,7 +1730,7 @@ country_event = {
 		name = REMARKABLE
 		owner = {
 			event_target:hskv_vault_situation = {
-				add_situation_progress = 5
+				add_situation_progress = 10
 			} 
 		}
 		owner = {
@@ -1650,7 +1763,14 @@ country_event = {
 					minor_artifacts = 500
 				}
 			}
-			give_fe_tech = yes
+			add_tech_progress = {
+				tech = tech_climate_restoration
+				progress = 0.25
+			}
+			add_tech_progress = {
+				tech = tech_nutrient_replication
+				progress = 0.25
+			}
 			hskv_give_random_fe_building = yes
 		}
 		hidden_effect = {
@@ -1690,12 +1810,20 @@ country_event = {
 			owner = {
 				resource_stockpile_compare = {
 					resource = volatile_motes
-					value >= 1000
+					value >= 1500
 				}
+			}
+		}
+		owner = {
+			add_resource = {
+				volatile_motes = -1500
 			}
 		}
 		hidden_effect = {
 			owner = {
+				add_resource = {
+					volatile_motes = 1500
+				}
 				country_event = {
 					id = hskv_heist.2810
 					days = 1
@@ -1774,7 +1902,7 @@ country_event = {
 	id = hskv_heist.2812
 	title = hskv_heist.2800.name
 	desc = hskv_heist.2812.desc
-	picture = GFX_evt_astral_rift_psionic_stranger
+	picture = GFX_evt_analyzing_artifacts
 	show_sound = event_default
 	hide_window = no
 	is_triggered_only = yes
@@ -1795,8 +1923,8 @@ country_event = {
 	id = hskv_heist.2813
 	title = hskv_heist.2800.name
 	desc = hskv_heist.2813.desc
-	picture = GFX_evt_scientific_experiments
-	show_sound = event_default
+	picture = GFX_evt_astral_rift_psionic_stranger_2
+	show_sound = evn_ove_crystal_mining
 	hide_window = no
 	is_triggered_only = yes
 	
@@ -1804,6 +1932,52 @@ country_event = {
 		name = CONTINUE
 		hidden_effect = {
 			owner = {
+				country_event = {
+					id = hskv_heist.2814
+					days = 1
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = hskv_heist.2814
+	title = hskv_heist.2800.name
+	desc = hskv_heist.2814.desc
+	diplomatic = yes
+	is_triggered_only = yes
+	picture_event_data = {
+		portrait = hskv_thayo_portrait
+		room = ethic_spaceship_room
+	}
+
+	immediate = {
+		hskv_get_event_target_thayo_leader = yes
+	}
+
+	option = {
+		name = AMAZING
+				# Thayo's final upgrade
+				event_target:hskv_thayo_everdawn_leader = {
+					remove_leader_flag = no_council_traits
+					remove_leader_flag = no_normal_traits
+					remove_leader_flag = no_destiny_traits
+
+					remove_trait = hskv_leader_trait_thayo_everdawn_4
+					remove_trait = hskv_leader_trait_pinnacle
+					remove_trait = leader_trait_psionic
+					add_trait = hskv_leader_trait_thayo_everdawn_5
+					add_trait = hskv_leader_trait_psionic
+
+					set_leader_flag = no_council_traits
+					set_leader_flag = no_normal_traits
+					set_leader_flag = no_destiny_traits
+					set_skill = 10
+				}
+
+		hidden_effect = {
+			owner = {
+				set_country_flag = hskv_ignore_dismiss_effect
 				country_event = {
 					id = hskv_heist.3000
 					days = 1
@@ -1854,14 +2028,92 @@ country_event = {
 
 	option ={
 		name = AMAZING
+		owner = {
+			# Free ships!
+			create_fleet = {
+				effect = {
+					set_owner = root.owner
+					while = {
+						count = 4
+						create_ship = {
+							name = random
+							design = "NAME_Beta"
+							graphical_culture = "fallen_empire_01"
+						}
+					}
+					while = {
+						count = 12
+						create_ship = {
+							name = random
+							design = "NAME_Gamma"
+							graphical_culture = "fallen_empire_01"
+						}
+					}
+					set_location = root.capital_scope
+				}
+				settings = {
+					spawn_debris = no
+				}
+			}
+
+			# Also all that cool tech
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier5researchreward
+				min = @tier5researchmin
+			}
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier5researchreward
+				min = @tier5researchmin
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier5researchreward
+				min = @tier5researchmin
+			}
+			add_resource = {
+				alloys = 10000
+				volatile_motes = 2000
+				exotic_gases = 2000
+				rare_crystals = 2000
+				sr_dark_matter = 100
+				nanites = 100
+				sr_living_metal = 100
+			}
+			if = {
+				limit = {
+					has_ancrel = yes
+				}
+				add_resource = {
+					minor_artifacts = 1000
+				}
+			}
+			give_technology = { tech = tech_mine_dark_matter }
+			add_tech_progress = {
+				tech = tech_dark_matter_propulsion
+				progress = 0.33
+			}
+			add_tech_progress = {
+				tech = tech_dark_matter_deflector
+				progress = 0.33
+			}
+			add_tech_progress = {
+				tech = tech_dark_matter_power_core
+				progress = 0.33
+			}
+			hskv_give_random_fe_building = yes
+			hskv_give_random_fe_building = yes
+		}
+
 		hidden_effect = {
 			owner = {
+				# Clean up the hyperlane
 				country_event = {
 					id = hskv_heist.3001
 					days = 30
 				}
 			}
-
 			random_system = {
 				limit = {
 					has_star_flag = hskv_dawns_end_system
@@ -1902,90 +2154,6 @@ country_event = {
 						delete_megastructure = this
 					}
 				}
-			}
-			
-			owner = {
-				# Thayo's final upgrade
-				event_target:hskv_thayo_everdawn_leader = {
-					remove_leader_flag = no_council_traits
-					remove_leader_flag = no_normal_traits
-					remove_leader_flag = no_destiny_traits
-
-					remove_trait = hskv_leader_trait_thayo_everdawn_4
-					remove_trait = hskv_leader_trait_pinnacle
-					add_trait = hskv_leader_trait_thayo_everdawn_5
-					add_trait = leader_trait_cyborg
-
-					set_leader_flag = no_council_traits
-					set_leader_flag = no_normal_traits
-					set_leader_flag = no_destiny_traits
-
-					# Make him no longer immortal
-					set_age = 40
-					set_immortal = no
-					set_skill = 10
-				}
-
-				# Free ships!
-				create_fleet = {
-					effect = {
-						set_owner = root.owner
-						while = {
-							count = 4
-							create_ship = {
-								name = random
-								design = "NAME_Beta"
-								graphical_culture = "fallen_empire_01"
-							}
-						}
-						while = {
-							count = 6
-							create_ship = {
-								name = random
-								design = "NAME_Gamma"
-								graphical_culture = "fallen_empire_01"
-							}
-						}
-						set_location = root.capital_scope
-					}
-				}
-
-				# Also all that cool tech
-				add_monthly_resource_mult = {
-					resource = engineering_research
-					value = @tier5researchreward
-					min = @tier5researchmin
-				}
-				add_monthly_resource_mult = {
-					resource = physics_research
-					value = @tier5researchreward
-					min = @tier5researchmin
-				}
-				add_monthly_resource_mult = {
-					resource = society_research
-					value = @tier5researchreward
-					min = @tier5researchmin
-				}
-				add_resource = {
-					alloys = 10000
-					volatile_motes = 2000
-					exotic_gases = 2000
-					rare_crystals = 2000
-					sr_dark_matter = 100
-					nanites = 100
-					sr_living_metal = 100
-				}
-				if = {
-					limit = {
-						has_ancrel = yes
-					}
-					add_resource = {
-						minor_artifacts = 750
-					}
-				}
-				give_fe_tech = yes
-				hskv_give_random_fe_building = yes
-				hskv_give_random_fe_building = yes
 			}
 		}
 	}
@@ -2229,7 +2397,6 @@ country_event = {
 }
 
 # The target of FE rage
-# TODO Can I use create_message to make a war notification?
 country_event = {
 	id = hskv_heist.3011
 	title = hskv_heist.3011.name
@@ -2258,6 +2425,15 @@ country_event = {
 				attacker_war_goal = wg_fe_humiliation
 			}
 		}
+		# TODO Failed with wrong target scope invalid?
+		create_message = { 
+			type = DIPLO_ACTION_DECLARE_WAR 
+			localization = MESSAGE_DECLARE_WAR_TITLE
+			days = 30 
+			target = root 
+			variable = { type = name localization = SYSTEM1 scope = from }
+			variable = { type = name localization = SYSTEM2 scope = fromfrom }
+		 }
 	}
 
 	option = {
