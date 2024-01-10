@@ -1,6 +1,6 @@
 namespace = ABCReg
 
-
+### Written by Regunes ### Massive thanks to Malthus, Tr33 and Zefnar for their help this wouldn't be possible without them.
 ##Meet the bubble
 ##Grant ownership of The BUBBLES and the ship
 country_event = {
@@ -13,13 +13,14 @@ country_event = {
 
 	event_window_type = leader_recruit
 	picture_event_data = {
-		portrait = event_target:ABCReg_Leader  ###portrait bubble TODO
+		portrait = event_target:ABCReg_Leader  
 	}
-	picture = GFX_leader_recruitment_bg_legendary_beholder
+	picture = GFX_leader_recruitment_bg_legendary_beholder  ### TODO Green variant
 
 	trigger = {
 		has_global_flag = ABCReg_system_spawned
 		is_ai = no
+		is_homicidal = no
 		exists = event_target:ABCReg_star
 	}
 
@@ -73,8 +74,8 @@ country_event = {
 			create_species = {
 				name = "NAME_Unknown"
 				class = PARAGON
-				portrait = art1
-				namelist = "PRT1"
+				portrait = ABCReg_bubbles_1
+				namelist = "FUN3"
 				traits = random
 				effect = {
 					save_event_target_as = ABCReg_country_species
@@ -84,10 +85,11 @@ country_event = {
 				species = event_target:ABCReg_country_species
 				event_leader = yes
 				class = commander
-				name = "NAME_The_Bubbles"
+				name = "ABCReg_The_Bubbles"
 				skill = 1
 				immortal = yes
 				randomize_traits = no
+				background_ethic = ethic_xenophile
 				can_manually_change_location = no
 				can_assign_to_council = yes
 				skip_background_generation = yes
@@ -95,8 +97,8 @@ country_event = {
 				custom_description = ABCReg_backstory
 				traits = {
 					trait = leader_trait_ABCReg_memories_1
-					trait = leader_trait_ABCReg_memories_2
-					trait = leader_trait_ABCReg_memories_3
+					trait = leader_trait_ABCReg_memories_B
+					trait = leader_trait_ABCReg_memories_C
 					trait = leader_trait_ABCReg_memories_4
 					trait = subclass_commander_admiral
 				}
@@ -120,14 +122,27 @@ country_event = {
 		name = HIRE
 		tag = hire_leader
 		custom_tooltip = ABCReg_leader_joins
-		sound = par_ABCReg_leader_hire
+		sound = event_space_amoeba
 
 		hidden_effect = {
-			set_country_flag = pacified_amoebas  #amoeba pacified
+			set_country_flag = amoeba_befriended  
+
+
+			every_country = {
+				limit = {
+					is_amoeba_country_type = yes
+				}
+				set_faction_hostility = {
+					set_hostile = no
+					set_neutral = yes
+					target = root
+				}
+			}
+	
 
 			# Spawn ship
 			create_fleet = {
-				name = "NAME_Gargantuan_Amoeba_Life-form"
+				name = "ABCReg_Gargantuan_Amoeba_Life-form"
 				settings = {
 					can_upgrade = no
 					can_change_composition = no
@@ -142,7 +157,7 @@ country_event = {
 					}
 					create_ship = {
 						design = last_created_design
-						name = "NAME_Gargantuan_Amoeba_Life-form"
+						name = "ABCReg_Gargantuan_Amoeba_Life-form"
 						prefix = no
 						upgradable = no
 						effect = {
@@ -192,7 +207,7 @@ country_event = {
 					value = "GFX_border_legendary"
 				}
 			}
-			country_event = { id = ABCReg.5 days = 1 random = 1 }
+			country_event = { id = ABCReg.5 days = 30 random = 30 }
 			hidden_effect = {
 				event_target:ABCReg_cyto = {
 						delete_ship = this
@@ -203,7 +218,7 @@ country_event = {
 	option = { # DISMISS
 		name = DISMISS
 		tag = dismiss_leader
-		sound = par_ABCReg_dismiss
+		sound = event_space_amoeba
 
 		hidden_effect = {
 			event_target:ABCReg_Leader = {
@@ -242,7 +257,7 @@ country_event = { # Visions of the future
 	picture = GFX_evt_friendly_amoeba
 	is_triggered_only = yes
 	event_window_type = leader_story
-	event_picture_background = "GFX_leader_recruitment_bg_ABCReg_Bubbles"       ## make green variant in  gfx\interface\leaders\recruitment_bgs
+	event_picture_background = "GFX_leader_recruitment_bg_legendary_beholder"       ## make green variant in  gfx\interface\leaders\recruitment_bgs
 
 	picture_event_data = {
 		portrait = event_target:ABCReg_Leader
@@ -277,7 +292,7 @@ country_event = { # Visions of the future
 	}
 
 	option = {
-		name = CURIOUS
+		name = ABCReg.5.a
 		begin_event_chain = {
 			event_chain = ABCReg_bubbly_chain
 			target = root
@@ -317,10 +332,10 @@ ship_event = { #Entering the Conclave system
 	id = ABCReg.10
 	title = "ABCReg.10.name"
 	desc = "ABCReg.10.desc"
-	picture = GFX_evt_scholarium_anomaly
+	picture = GFX_evt_shrouded_planet
 	show_sound = event_space_amoeba
 	fire_only_once = yes
-	location = event_target:spawn_point_project
+	location = event_target:ABCReg_spawn_point_project
 
 	is_triggered_only = yes
 
@@ -341,7 +356,7 @@ ship_event = { #Entering the Conclave system
 		FROM = {
 			random_system_planet = {
 				limit = { has_planet_flag = ABCReg_bubbly_1st_planet }
-				save_event_target_as = spawn_point_project
+				save_event_target_as = ABCReg_spawn_point_project
 			}
 		}
 	}
@@ -351,7 +366,7 @@ ship_event = { #Entering the Conclave system
 		FROM = {
 			enable_special_project = {
 				name = "ABCReg_bubbly_conclave_1"
-				location = event_target:spawn_point_project
+				location = event_target:ABCReg_spawn_point_project
 				owner = fromfrom
 			}
 		}
@@ -361,11 +376,11 @@ ship_event = { #Entering the Conclave system
 	}
 }
 
-country_event = { #Finished Project conclave
+country_event = { ##Finished Project conclave
 	id = ABCReg.11
 	title = "ABCReg.11.name"
 	desc = "ABCReg.11.desc"
-	picture = GFX_evt_molten
+	picture = GFX_evt_society_cache
 	show_sound = event_space_amoeba
 	fire_only_once = yes
 	location = from
@@ -397,16 +412,16 @@ country_event = { #Finished Project conclave
 	}
 }
 
-country_event = { 
+country_event = { ## gift of the conclave
 	id = ABCReg.12
 	title = "ABCReg.12.name"
 	desc = "ABCReg.12.desc"
-	picture = GFX_evt_surreal_visions
+	picture = GFX_evt_unity_symbol
 	show_sound = event_space_amoeba
 	fire_only_once = yes
 	is_triggered_only = yes
 	event_window_type = leader_story
-	event_picture_background = "GFX_leader_recruitment_bg_legendary_keides"
+	event_picture_background = "GFX_leader_recruitment_bg_legendary_beholder"
 
 	picture_event_data = {
 		portrait = event_target:ABCReg_Leader
@@ -417,7 +432,7 @@ country_event = {
 		exists = event_target:ABCReg_Leader
 	}
 	event_window_type = leader_story
-	event_picture_background = "GFX_leader_recruitment_bg_legendary_keides"
+	event_picture_background = "GFX_leader_recruitment_bg_legendary_beholder"
 
 	picture_event_data = {
 		portrait = event_target:ABCReg_Leader
@@ -448,14 +463,14 @@ country_event = {
 	}
 }
 
-ship_event = { 
+ship_event = {  ## entering the cyber pirate system
 	id = ABCReg.20
 	title = "ABCReg.20.name"
 	desc = "ABCReg.20.desc"
-	picture = GFX_evt_scholarium_anomaly
+	picture = GFX_evt_situation_the_seal
 	show_sound = event_space_amoeba
 	fire_only_once = yes
-	location = event_target:spawn_point_project
+	location = event_target:ABCReg_spawn_point_project
 
 	is_triggered_only = yes
 
@@ -474,7 +489,7 @@ ship_event = {
 		FROM = {
 			random_system_planet = {
 				limit = { has_planet_flag = ABCReg_bubbly_2nd_planet }
-				save_event_target_as = spawn_point_project
+				save_event_target_as = ABCReg_spawn_point_project
 			}
 		}
 	}
@@ -484,7 +499,7 @@ ship_event = {
 		FROM = {
 			enable_special_project = {
 				name = "ABCReg_bubbly_crew_2"
-				location = event_target:spawn_point_project
+				location = event_target:ABCReg_spawn_point_project
 				owner = fromfrom
 			}
 		}
@@ -494,11 +509,11 @@ ship_event = {
 	}
 }
 
-country_event = { 
+country_event = {  ##project of the cyber pirates
 	id = ABCReg.21
 	title = "ABCReg.21.name"
 	desc = "ABCReg.21.desc"
-	picture = GFX_evt_aggressive_flora
+	picture = GFX_evt_kaleidoscopic_lights
 	show_sound = event_space_amoeba
 	fire_only_once = yes
 	location = from
@@ -524,16 +539,16 @@ country_event = {
 	}
 }
 
-country_event = { 
+country_event = { ##gift of the cyper pirates
 	id = ABCReg.22
 	title = "ABCReg.22.name"
 	desc = "ABCReg.22.desc"
-	picture = GFX_evt_surreal_visions
+	picture = GFX_evt_machine_space_battle
 	show_sound = event_space_amoeba
 	fire_only_once = yes
 	is_triggered_only = yes
 	event_window_type = leader_story
-	event_picture_background = "GFX_leader_recruitment_bg_legendary_keides"
+	event_picture_background = "GFX_leader_recruitment_bg_legendary_beholder"
 
 	picture_event_data = {
 		portrait = event_target:ABCReg_Leader
@@ -543,7 +558,7 @@ country_event = {
 		exists = event_target:ABCReg_Leader
 	}
 	event_window_type = leader_story
-	event_picture_background = "GFX_leader_recruitment_bg_legendary_keides"
+	event_picture_background = "GFX_leader_recruitment_bg_legendary_beholder"
 
 	picture_event_data = {
 		portrait = event_target:ABCReg_Leader
@@ -551,22 +566,22 @@ country_event = {
 
 	immediate = {
 		event_target:ABCReg_Leader = {
-			remove_trait = leader_trait_ABCReg_memories_2
+			remove_trait = leader_trait_ABCReg_memories_B
 			add_trait = leader_trait_ABCReg_memories_20  
 		}
 		event_target:ABCReg_ship = { 
 			remove_modifier = bubble_pirate_modifier
 			add_modifier = { modifier = bubble_police_modifier days= -1 }
 		}
+		
+            every_owned_leader = {
+                limit = {
+                    NOT = { has_trait = leader_trait_ABCReg_memories_21 }
+                }
+                add_trait = leader_trait_ABCReg_memories_21
+            }
+        
 
-		hidden_effect = {
-			every_owned_leader = {
-				limit = {
-					NOT = { has_trait = leader_trait_emotional_support_pet }
-				}
-				add_trait = leader_trait_emotional_support_pet
-			}
-		}
 	}
 
 	option = {
@@ -589,10 +604,10 @@ ship_event = { #Entering the Imperium system
 	id = ABCReg.30
 	title = "ABCReg.30.name"
 	desc = "ABCReg.30.desc"
-	picture = GFX_evt_scholarium_anomaly
+	picture = GFX_evt_crystal_sphere
 	show_sound = event_space_amoeba
 	fire_only_once = yes
-	location = event_target:spawn_point_project
+	location = event_target:ABCReg_spawn_point_project
 
 	is_triggered_only = yes
 
@@ -611,7 +626,7 @@ ship_event = { #Entering the Imperium system
 		FROM = {
 			random_system_planet = {
 				limit = { has_planet_flag = ABCReg_bubbly_3rd_planet }
-				save_event_target_as = spawn_point_project
+				save_event_target_as = ABCReg_spawn_point_project
 			}
 		}
 	}
@@ -621,7 +636,7 @@ ship_event = { #Entering the Imperium system
 		FROM = {
 			enable_special_project = {
 				name = "ABCReg_bubbly_imperium_3"
-				location = event_target:spawn_point_project
+				location = event_target:ABCReg_spawn_point_project
 				owner = fromfrom
 			}
 		}
@@ -631,11 +646,11 @@ ship_event = { #Entering the Imperium system
 	}
 }
 
-country_event = { #Finished Project Graveyard Planet
+country_event = { #empire project
 	id = ABCReg.31
 	title = "ABCReg.31.name"
 	desc = "ABCReg.31.desc"
-	picture = GFX_evt_relic_shipyard
+	picture = GFX_evt_ai_planet
 	show_sound = event_space_amoeba
 	fire_only_once = yes
 	location = from
@@ -660,7 +675,7 @@ country_event = { #Finished Project Graveyard Planet
 	}
 }
 
-country_event = { #Graveyard Planet Vision
+country_event = { #empire gift
 	id = ABCReg.32
 	title = "ABCReg.32.name"
 	desc = "ABCReg.32.desc"
@@ -669,7 +684,7 @@ country_event = { #Graveyard Planet Vision
 	is_triggered_only = yes
 	show_sound = event_space_amoeba
 	event_window_type = leader_story
-	event_picture_background = "GFX_leader_recruitment_bg_legendary_keides"
+	event_picture_background = "GFX_leader_recruitment_bg_legendary_beholder"
 
 	picture_event_data = {
 		portrait = event_target:ABCReg_Leader
@@ -679,7 +694,7 @@ country_event = { #Graveyard Planet Vision
 		exists = event_target:ABCReg_Leader
 	}
 	event_window_type = leader_story
-	event_picture_background = "GFX_leader_recruitment_bg_legendary_keides"
+	event_picture_background = "GFX_leader_recruitment_bg_legendary_beholder"
 
 	picture_event_data = {
 		portrait = event_target:ABCReg_Leader
@@ -687,7 +702,7 @@ country_event = { #Graveyard Planet Vision
 
 	immediate = {
 		event_target:ABCReg_Leader = {
-			remove_trait = leader_trait_ABCReg_memories_3
+			remove_trait = leader_trait_ABCReg_memories_C
 			add_trait = leader_trait_ABCReg_memories_30
 		}
 		event_target:ABCReg_ship = { 
@@ -697,7 +712,7 @@ country_event = { #Graveyard Planet Vision
 	
 
 		create_country = {
-			name = "NAME_B_O_A_T_ABCReg"
+			name = "ABCReg_NAME_B_O_A_T"
 			type = global_event
 			auto_delete = yes
 			flag = {
@@ -724,7 +739,7 @@ country_event = { #Graveyard Planet Vision
 			create_species = {
 				name = "NAME_Unknown"
 				class = PARAGON
-				portrait = robot_blue
+				portrait = default_robot
 				namelist = "PRT1"
 				traits = random
 				effect = {
@@ -734,8 +749,8 @@ country_event = { #Graveyard Planet Vision
 			create_leader = {
 				species = event_target:ABCReg_puppet_country_species
 				event_leader = yes
-				class = official
-				name = "NAME_B_O_A_T"
+				class = commander
+				name = "ABCReg_NAME_B_O_A_T"
 				skill = 3
 				immortal = yes
 				randomize_traits = no
@@ -769,7 +784,7 @@ country_event = { #Graveyard Planet Vision
 
 	option = {
 		name = ABCReg.32.a
-		country_event = { id = ABCReg.321 days = 30 random = 30 }
+		
 		if = {
 			limit = {
 				has_completed_event_chain_counter = {
@@ -779,6 +794,10 @@ country_event = { #Graveyard Planet Vision
 			}
 			country_event = { id = ABCReg.60 }
 			end_event_chain = ABCReg_bubbly_chain
+		}
+		hidden_effect = {
+			event_target:ABCReg_puppet = { set_owner = root }    ###set_leader = event_target:ABCReg_puppet if it doesn't work
+			
 		}
 	}
 }
@@ -791,10 +810,10 @@ ship_event = { #Entering the system of the federation
 	id = ABCReg.40
 	title = "ABCReg.40.name"
 	desc = "ABCReg.40.desc"
-	picture = GFX_evt_scholarium_anomaly
+	picture = GFX_evt_molten
 	show_sound = event_space_amoeba
 	fire_only_once = yes
-	location = event_target:spawn_point_project
+	location = event_target:ABCReg_spawn_point_project
 
 	is_triggered_only = yes
 
@@ -813,7 +832,7 @@ ship_event = { #Entering the system of the federation
 		FROM = {
 			random_system_planet = {
 				limit = { has_planet_flag = ABCReg_bubbly_4th_planet }
-				save_event_target_as = spawn_point_project
+				save_event_target_as = ABCReg_spawn_point_project
 			}
 		}
 	}
@@ -823,7 +842,7 @@ ship_event = { #Entering the system of the federation
 		FROM = {
 			enable_special_project = {
 				name = "ABCReg_bubbly_federation_4"
-				location = event_target:spawn_point_project
+				location = event_target:ABCReg_spawn_point_project
 				owner = fromfrom
 			}
 		}
@@ -833,11 +852,11 @@ ship_event = { #Entering the system of the federation
 	}
 }
 
-country_event = { #Finished Project Graveyard Planet
+country_event = { #federation project
 	id = ABCReg.41
 	title = "ABCReg.41.name"
 	desc = "ABCReg.41.desc"
-	picture = GFX_evt_relic_shipyard
+	picture = GFX_evt_derelict_interior
 	show_sound = event_space_amoeba
 	fire_only_once = yes
 	location = from
@@ -864,16 +883,16 @@ country_event = { #Finished Project Graveyard Planet
 	}
 }
 
-country_event = { #Graveyard Planet Vision
+country_event = { #federation gift
 	id = ABCReg.42
 	title = "ABCReg.42.name"
 	desc = "ABCReg.42.desc"
-	picture = GFX_evt_surreal_visions
+	picture = GFX_evt_overtuned
 	fire_only_once = yes
 	is_triggered_only = yes
 	show_sound = event_space_amoeba
 	event_window_type = leader_story
-	event_picture_background = "GFX_leader_recruitment_bg_legendary_keides"
+	event_picture_background = "GFX_leader_recruitment_bg_legendary_beholder"
 
 	picture_event_data = {
 		portrait = event_target:ABCReg_Leader
@@ -883,7 +902,7 @@ country_event = { #Graveyard Planet Vision
 		exists = event_target:ABCReg_Leader
 	}
 	event_window_type = leader_story
-	event_picture_background = "GFX_leader_recruitment_bg_legendary_keides"
+	event_picture_background = "GFX_leader_recruitment_bg_legendary_beholder"
 
 	picture_event_data = {
 		portrait = event_target:ABCReg_Leader
@@ -919,10 +938,10 @@ ship_event = { #Entering the hidden system of the Calamity
 	id = ABCReg.50
 	title = "ABCReg.50.name"
 	desc = "ABCReg.50.desc"
-	picture = GFX_evt_scholarium_anomaly
+	picture = GFX_evt_ship_travel
 	show_sound = event_space_amoeba
 	fire_only_once = yes
-	location = event_target:spawn_point_project
+	location = event_target:ABCReg_spawn_point_project
 
 	is_triggered_only = yes
 
@@ -941,7 +960,7 @@ ship_event = { #Entering the hidden system of the Calamity
 		FROM = {
 			random_system_planet = {
 				limit = { has_planet_flag = ABCReg_bubbly_5th_planet }
-				save_event_target_as = spawn_point_project
+				save_event_target_as = ABCReg_spawn_point_project
 			}
 		}
 	}
@@ -951,12 +970,14 @@ ship_event = { #Entering the hidden system of the Calamity
 		FROM = {
 			enable_special_project = {
 				name = "ABCReg_bubbly_calamity_5"
-				location = event_target:spawn_point_project
+				location = event_target:ABCReg_spawn_point_project
 				owner = fromfrom
 			}
 		}
 		hidden_effect = {
-			owner = { remove_point_of_interest = ABCReg_bubbly_system.3 }
+			event_target:ABCReg_Leader = {
+							add_trait = leader_trait_ABCReg_memories_50 
+			}
 		}
 	}
 }
@@ -965,7 +986,7 @@ country_event = { #Finished Project Graveyard Planet
 	id = ABCReg.51
 	title = "ABCReg.51.name"
 	desc = "ABCReg.51.desc"
-	picture = GFX_evt_relic_shipyard
+	picture = GFX_evt_fleet_evil
 	show_sound = event_space_amoeba
 	fire_only_once = yes
 	location = from
@@ -988,12 +1009,12 @@ country_event = { #Graveyard Planet Vision
 	id = ABCReg.52
 	title = "ABCReg.52.name"
 	desc = "ABCReg.52.desc"
-	picture = GFX_evt_surreal_visions
+	picture = GFX_evt_relic_world_street
 	fire_only_once = yes
 	is_triggered_only = yes
 	show_sound = event_space_amoeba
 	event_window_type = leader_story
-	event_picture_background = "GFX_leader_recruitment_bg_legendary_keides"
+	event_picture_background = "GFX_leader_recruitment_bg_legendary_beholder"
 
 	picture_event_data = {
 		portrait = event_target:ABCReg_Leader
@@ -1003,17 +1024,21 @@ country_event = { #Graveyard Planet Vision
 		exists = event_target:ABCReg_Leader
 	}
 	event_window_type = leader_story
-	event_picture_background = "GFX_leader_recruitment_bg_legendary_keides"
+	event_picture_background = "GFX_leader_recruitment_bg_legendary_beholder"
 
 	picture_event_data = {
 		portrait = event_target:ABCReg_Leader
 	}
 
 	immediate = {
-		event_target:ABCReg_Leader = {
-		add_trait = leader_trait_ABCReg_memories_50 }
 		event_target:ABCReg_ship = {
 			remove_modifier = bubble_angry_modifier 
+		}
+		FROM = {
+			random_galaxy_planet = {
+				limit = { has_planet_flag = ABCReg_bubbly_5th_planet }
+				save_event_target_as = ABCReg_spawn_point_project
+			}
 		}
 	}
 
@@ -1021,9 +1046,9 @@ country_event = { #Graveyard Planet Vision
 	option = {
 		name = ABCReg.52.a
 		hidden_effect = {
-			event_target:ABCReg_bubbly_5th_planet = {
+			event_target:ABCReg_spawn_point_project = {
 				create_fleet = {
-					name = "NAME_proto_pion"
+					name = "ABCReg_NAME_proto_pion"
 					effect = {
 						set_owner = root
 						while = {
@@ -1100,7 +1125,7 @@ country_event = { #this event fires at the end of the previous event chain and a
 		hidden_effect = {	
 			event_target:ABCReg_ship = { 
 				add_modifier = { 
-					modifier = bubble_safe_belt_modifier 
+					modifier = bubble_bigger_safe_belt_modifier 
 					days = -1 
 				} 
 			} 
@@ -1122,14 +1147,9 @@ country_event = { #this event fires at the end of the previous event chain and a
 			
 	}
 
+
 	option = {
 		name = ABCReg.60.f
-		
-			event_target:ABCReg_Leader = { add_trait = ABCReg_trait_bomber }
-			
-	}
-	option = {
-		name = ABCReg.60.g
 		
 			event_target:ABCReg_Leader = { add_trait = ABCReg_trait_living_factory }
 			
@@ -1145,7 +1165,7 @@ country_event = {
 	id = ABCReg.221
 	title = "ABCReg.221.name"
 	desc = "ABCReg.221.desc"
-	picture = GFX_evt_friendly_amoeba
+	picture = GFX_evt_astral_rift_research_lab_specimen ##TODO maybe use GFX_evt_friendly_amoeba
 	show_sound = event_space_amoeba
 	is_triggered_only = yes
 
@@ -1158,14 +1178,14 @@ country_event = {
         }    
     }
 	
-	option = {
-        name = GOOD    
+	option = {     ###TODO add second indifferent option that cancels this effect
+        name = ABCReg.221.a    
         hidden_effect = {
             every_owned_leader = {
                 limit = {
-                    NOT = { has_trait = leader_trait_emotional_support_pet }
+                    NOT = { has_trait = leader_trait_ABCReg_memories_21 }
                 }
-                add_trait = leader_trait_emotional_support_pet
+                add_trait = leader_trait_ABCReg_memories_21
             }
         }
     }
@@ -1187,6 +1207,8 @@ country_event = {
         FROMFROM = {
             any_owned_leader = { 
                 has_trait = leader_trait_ABCReg_memories_30
+					NOT = { has_trait = leader_trait_ABCReg_memories_31 
+					}
             }
         }    
     }
@@ -1221,9 +1243,9 @@ country_event = {
         event_target:ABCReg_puppet_country = {
 			create_species = {
 				name = "NAME_Unknown"
-				class = PARAGON
-				portrait = robot_blue
-				namelist = "PRT1"
+				class = ROBOT
+				portrait = default_robot
+				namelist = "FUN3"
 				traits = random
 				effect = {
 					save_event_target_as = ABCReg_puppet_country_species
@@ -1232,8 +1254,8 @@ country_event = {
 			create_leader = {
 				species = event_target:ABCReg_puppet_country_species
 				event_leader = yes
-				class = official
-				name = "NAME_B_O_A_T"
+				class = commander
+				name = ABCReg_NAME_B_O_A_T
 				skill = 3
 				immortal = yes
 				randomize_traits = no
@@ -1268,8 +1290,8 @@ country_event = {
 	option = {
 		name = ABCReg.321.a
 		hidden_effect = {
-			event_target:ABCReg_puppet = { set_owner = root }
-			set_leader = event_target:ABCReg_puppet
+			event_target:ABCReg_puppet = { set_owner = root }    ###set_leader = event_target:ABCReg_puppet if it doesn't work
+			
 		}
 	}
 }
@@ -1299,11 +1321,11 @@ country_event = {
 		hidden_effect = {
 			capital_scope = {
 				create_fleet = {
-					name = "NAME_More_Amoebas"
+					name = "ABCReg_NAME_More_Amoebas"
 					effect = {
 						set_owner = root
 						while = {
-							count = 6
+							count = 3
 							create_ship = {
 								name = ""
 								prefix = no
@@ -1312,7 +1334,7 @@ country_event = {
 							}
 						}
 						while = {
-							count = 6
+							count = 3
 							create_ship = {
 								name = ""
 								prefix = no
@@ -1321,7 +1343,7 @@ country_event = {
 							}
 						}
 						while = {
-							count = 18
+							count = 12
 							create_ship = {
 								name = ""
 								prefix = no
@@ -1353,42 +1375,15 @@ country_event = {
 
 
 
-country_event = { #death of bubbles, tragic innit?
-	id = ABCReg.999
-	hide_window = yes
-	is_triggered_only = yes
-
-	trigger = {
-		has_global_flag = ABCReg_system_spawned
-		from = { has_trait = leader_trait_ABCReg_memories_1 
-			 has_trait = leader_trait_ABCReg_memories_2
-			 has_trait = leader_trait_ABCReg_memories_3
-			 has_trait = leader_trait_ABCReg_memories_4
-			 has_trait = leader_trait_ABCReg_memories_5
-			}
-	}
-
-	immediate = {
-		end_event_chain = ABCReg_bubbly_chain
-		abort_special_project = { type = ABCReg_bubbly_conclave_1 }
-		abort_special_project = { type = ABCReg_bubbly_crew_2 }
-		abort_special_project = { type = ABCReg_bubbly_imperium_3 }
-		abort_special_project = { type = ABCReg_bubbly_federation_4 }
-		abort_special_project = { type = ABCReg_bubbly_calamity_5 }
-
-		
-	}
-}
-
 #fired from on_entering_system_fleet
 # A fleet has entered a system | See also: on_fleet_auto_move_arrival
 # Scope = Fleet
 # From = System
-ship_event = { #Entering gehellum alveo, has a hard time working, for testing purposes use ABCReg.1 instead.
+ship_event = { 
     id = ABCReg.0
     title = "ABCReg.0.name"
     desc = "ABCReg.0.desc"
-    picture = GFX_evt_friendly_amoeba
+    picture = GFX_evt_unidentified_monster
     show_sound = event_space_amoeba
     fire_only_once = yes
     location = from
@@ -1516,8 +1511,8 @@ country_event = {
 			create_species = {
 				name = "NAME_Unknown"
 				class = PARAGON
-				portrait = art1
-				namelist = "PRT1"
+				portrait = ABCReg_bubbles_2
+				namelist = "FUN3"
 				traits = random
 				effect = {
 					save_event_target_as = ABCReg_country_species
@@ -1527,10 +1522,11 @@ country_event = {
 				species = event_target:ABCReg_country_species
 				event_leader = yes
 				class = commander
-				name = "NAME_The_Bubbles"
+				name = "ABCReg_The_Bubbles"
 				skill = 1
 				immortal = yes
 				randomize_traits = no
+				background_ethic = ethic_xenophile
 				can_manually_change_location = no
 				can_assign_to_council = yes
 				skip_background_generation = yes
@@ -1538,8 +1534,8 @@ country_event = {
 				custom_description = ABCReg_backstory
 				traits = {
 					trait = leader_trait_ABCReg_memories_1
-					trait = leader_trait_ABCReg_memories_2
-					trait = leader_trait_ABCReg_memories_3
+					trait = leader_trait_ABCReg_memories_B
+					trait = leader_trait_ABCReg_memories_C
 					trait = leader_trait_ABCReg_memories_4
 					trait = subclass_commander_admiral
 				}
@@ -1563,14 +1559,25 @@ country_event = {
 		name = HIRE
 		tag = hire_leader
 		custom_tooltip = ABCReg_leader_joins
-		sound = par_ABCReg_leader_hire
+		sound = event_space_amoeba
 
 		hidden_effect = {
-			set_country_flag = pacified_amoebas  #amoeba pacified
-
+			
+			
+			every_country = {
+				limit = {
+					is_amoeba_country_type = yes
+				}
+				set_faction_hostility = {
+					set_hostile = no
+					set_neutral = yes
+					target = root
+				}
+			}
+			
 			# Spawn ship
 			create_fleet = {
-				name = "NAME_Gargantuan_Amoeba_Life-form"
+				name = "ABCReg_Gargantuan_Amoeba_Life-form_shiny"
 				settings = {
 					can_upgrade = no
 					can_change_composition = no
@@ -1585,7 +1592,7 @@ country_event = {
 					}
 					create_ship = {
 						design = last_created_design
-						name = "NAME_Gargantuan_Amoeba_Life-form"
+						name = "ABCReg_Gargantuan_Amoeba_Life-form_shiny"
 						prefix = no
 						upgradable = no
 						effect = {
@@ -1635,7 +1642,7 @@ country_event = {
 					value = "GFX_border_legendary"
 				}
 			}
-			country_event = { id = ABCReg.5 days = 1 random = 1 }
+			country_event = { id = ABCReg.5 days = 30 random = 30 }
 			hidden_effect = {
 				event_target:ABCReg_cyto = {
 						delete_ship = this
@@ -1649,7 +1656,7 @@ country_event = {
 	option = { # DISMISS
 		name = DISMISS
 		tag = dismiss_leader
-		sound = par_ABCReg_dismiss
+		sound = event_space_amoeba
 
 		hidden_effect = {
 			event_target:ABCReg_Leader = {
@@ -1680,26 +1687,65 @@ country_event = {
 	}
 }
 
-country_event = {
-    id = ABCReg.888
-    #hide_window = yes
-        #(picture option etc)
-    is_triggered_only = yes
 
-    trigger = {
-        
-        
-        from = {
-            is_country_type = pirate
-            has_communications = root
-        }
-        fromfrom = {
-            leader = {
-                has_leader_flag = ABCReg_leader
-				has_trait = leader_trait_ABCReg_memories_20				
-            }
-        }
-        
-    }
-}
 ### to be balanced ###
+
+country_event = {
+	id = ABCReg.888
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+        has_global_flag = ABCReg_system_spawned
+	}
+		
+	immediate = {
+		FROMFROM = { # Winning ship.
+			if = {
+				limit = { exists = fleet.leader }
+				fleet.leader = {
+
+					# burnin lootin burnin shootin
+					if = {
+						limit = {
+							OR = {
+								has_trait = leader_trait_ABCReg_memories_20
+								
+							}
+							ROOT.FROM = { # Owner of losing ship.
+							   OR = {
+									is_country_type = dormant_marauders
+									is_country_type = awakened_marauders
+									is_country_type = pirate 
+								}
+							}
+						}
+						if = {
+							limit = { has_trait = leader_trait_ABCReg_memories_20 }
+							ROOT = { # Owner of winning ship.
+								add_resource = {
+									energy = @trait_ABCReg_police_amt
+									mult = value:hells_heart_effect
+								}
+							}
+						}
+						
+					}
+
+					# Devorer trait. yes it's edgy. 
+					if = {
+						limit = {
+								has_trait = leader_trait_ABCReg_memories_50
+						}
+						ROOT.FROMFROM = {
+							if = {
+								limit = { PREV = { has_trait = leader_trait_ABCReg_memories_50 } }
+								repair_percentage = @trait_ABCReg_amt
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
