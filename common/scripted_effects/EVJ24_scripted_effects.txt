@@ -1,97 +1,104 @@
 
 
 spawn_EVJ24 = {
+	hidden_effect = {
+		if = {
+			limit = { NOT = { has_global_flag = EVJ24_system_spawned } }
+			create_country = {
+				name = "NAME_EVJ24_The_Jailer_Unknown"
+				type = paragon_event_country
+				flag = {
+					icon = {
+						category = "special"
+						file = "unknown.dds"
+					}
+					background = {
+						category = "backgrounds"
+						file = "00_solid.dds"
+					}
+					colors = {
+						"red"
+						"red"
+						"null"
+						"null"
+					}
+				}
+				effect = {
+					save_global_event_target_as = EVJ24_jailer_country
+				}
+			}
+			event_target:EVJ24_jailer_country = {
+				set_country_flag = EVJ24_jailer_country_flag
+				set_faction_hostility = {
+					target = root.owner
+					set_hostile = no
+					set_neutral = yes
+					set_friendly = no
+				}
+				create_species = {
+					name = "NAME_Unknown"
+					class = REP
+					portrait = EVJ24_base_jailer
+					namelist = "PRT1"
+					traits = {
+						trait = "trait_nomadic"
+					}
+					effect = {
+						save_event_target_as = EVJ24_jailer_species
+					}
+				}
+				create_leader = {
+					class = commander
+					species = event_target:EVJ24_jailer_species
+					name = "NAME_EVJ24_The_Jailer"
+					skill = 1
+					gender = male
+					event_leader = yes
+					skip_background_generation = yes
+					background_ethic = ethic_authoritarian
+					custom_catch_phrase = EVJ24_Jailer_catchphrase
+					custom_description = EVJ24_Jailer_desc
+					randomize_traits = no
+					hide_age = yes
+					effect = {
+						set_leader_flag = legendary_leader
+					}
+				}
+				last_created_leader = {
+					set_leader_flag = EVJ24_jailer
+					set_leader_flag = immune_to_negative_traits
+					save_global_event_target_as = EVJ24_jailer_leader
+					set_owner = event_target:EVJ24_jailer_country
+					
+					set_immortal = yes
+					add_trait = subclass_commander_governor
+					add_trait = EVJ24_leader_trait_penal_col
+					add_trait = EVJ24_leader_trait_iron_fist
+					add_trait = leader_trait_cautious_2
+					add_trait = leader_trait_unyielding_2
+					set_skill = 5
+					
+					set_variable = { which = EVJ24_jailer_alignment_mercy value = 0 }
+					set_variable = { which = EVJ24_jailer_alignment_justice value = 0 }
+					set_variable = { which = EVJ24_jailer_alignment_ruthless value = 0 }
+					
+					set_leader_flag = cannot_be_ruler
+				}
+			}
+			
+			set_global_flag = EVJ24_AOL_jailed
+			
+			#last_created_system = {
+			#	log = "spawned [This.GetName]"
+			#}
+		}
+	}
 	if = {
 		limit = { NOT = { has_global_flag = EVJ24_system_spawned } }
-		create_country = {
-			name = "NAME_EVJ24_The_Jailer_Unknown"
-			type = paragon_event_country
-			flag = {
-				icon = {
-					category = "special"
-					file = "unknown.dds"
-				}
-				background = {
-					category = "backgrounds"
-					file = "00_solid.dds"
-				}
-				colors = {
-					"red"
-					"red"
-					"null"
-					"null"
-				}
-			}
-			effect = {
-				save_global_event_target_as = EVJ24_jailer_country
-			}
-		}
-		event_target:EVJ24_jailer_country = {
-			set_country_flag = EVJ24_jailer_country_flag
-			set_faction_hostility = {
-				target = root.owner
-				set_hostile = no
-				set_neutral = yes
-				set_friendly = no
-			}
-			create_species = {
-				name = "NAME_Unknown"
-				class = REP
-				portrait = EVJ24_base_jailer
-				namelist = "PRT1"
-				traits = {
-					trait = "trait_nomadic"
-				}
-				effect = {
-					save_event_target_as = EVJ24_jailer_species
-				}
-			}
-			create_leader = {
-				class = commander
-				species = event_target:EVJ24_jailer_species
-				name = "NAME_EVJ24_The_Jailer"
-				skill = 1
-				gender = male
-				event_leader = yes
-				skip_background_generation = yes
-				background_ethic = ethic_authoritarian
-				custom_catch_phrase = EVJ24_Jailer_catchphrase
-				custom_description = EVJ24_Jailer_desc
-				randomize_traits = no
-				hide_age = yes
-				effect = {
-					set_leader_flag = legendary_leader
-				}
-			}
-			last_created_leader = {
-				set_leader_flag = EVJ24_jailer
-				set_leader_flag = immune_to_negative_traits
-				save_global_event_target_as = EVJ24_jailer_leader
-				set_owner = event_target:EVJ24_jailer_country
-				
-				set_immortal = yes
-				add_trait = subclass_commander_governor
-				add_trait = EVJ24_leader_trait_penal_col
-				add_trait = EVJ24_leader_trait_iron_fist
-				add_trait = leader_trait_cautious_2
-				add_trait = leader_trait_unyielding_2
-				set_skill = 5
-				
-				set_variable = { which = EVJ24_jailer_alignment_mercy value = 0 }
-				set_variable = { which = EVJ24_jailer_alignment_justice value = 0 }
-				set_variable = { which = EVJ24_jailer_alignment_ruthless value = 0 }
-				
-				set_leader_flag = cannot_be_ruler
-			}
-		}
+		set_global_flag = EVJ24_system_spawned
 		spawn_system = {
 			initializer = EVJ24_jailer_system
 		}
-		#last_created_system = {
-		#	log = "spawned [This.GetName]"
-		#}
-		set_global_flag = EVJ24_system_spawned
-		set_global_flag = EVJ24_AOL_jailed
 	}
 }
 
@@ -106,6 +113,7 @@ EVJ24_jailer_recognise_mercy = {
 				target = prev
 			}
 		}
+		add_experience = 1250
 	}
 }
 
@@ -120,6 +128,7 @@ EVJ24_jailer_recognise_justice = {
 				target = prev
 			}
 		}
+		add_experience = 1250
 	}
 }
 
@@ -134,6 +143,7 @@ EVJ24_jailer_recognise_ruthless = {
 				target = prev
 			}
 		}
+		add_experience = 1250
 	}
 }
 
@@ -378,6 +388,95 @@ EVJ24_AOL_furious = {
 				}
 				effect = {
 					set_owner = event_target:EVJ24_AOL_minions
+					create_ship = {
+						name = ""
+						design = "NAME_Avatar_of_Light_Minion"
+						
+						effect = {
+							set_ship_flag = EVJ24_AOL_minion_ship
+							add_modifier = { modifier = EVJ24_avatar_of_light_minion_debuff days = -1 }
+						}
+					}
+					set_location = {
+						target = prev
+						distance = 60
+						angle = random
+					}
+					set_fleet_stance = aggressive
+					set_aggro_range_measure_from = return_point
+					set_aggro_range = 2000
+					set_fleet_flag = EVJ24_AOL_minion_fleet
+				}
+			}
+		}
+	}
+}
+
+EVJ24_AOL_mini_furious = {
+	
+	# Execute in any COUNTRY SCOPE, owner of The Jailer.
+	
+	create_country = {
+		name = "NAME_AOL_minions"
+		type = gray_goo # Using Gray Goo for the purposes of the can_orbital_bombard game rule.
+		flag = {
+			icon = {
+				category = "special"
+				file = "the_shroud.dds"
+			}
+			background= {
+				category = "backgrounds"
+				file = "00_solid.dds"
+			}
+			colors = {
+				"orange"
+				"black"
+				"null"
+				"null"
+			}
+		}
+	}
+	last_created_country = {
+		save_global_event_target_as = EVJ24_AOL_mini_minions
+		set_country_flag = EVJ24_AOL_mini_minions
+		set_faction_hostility = {
+			target = event_target:EVJ24_avatar_of_light
+			set_hostile = no
+			set_neutral = no
+			set_friendly = yes
+		}
+		establish_communications_no_message = root
+		every_country = {
+			limit = {
+				intel_level = {
+					system = root.solar_system
+					level > low
+				}
+			}
+			establish_communications_no_message = prev
+		}
+	}	
+	
+	export_trigger_value_to_variable = {
+		trigger = fleet_power
+		variable = EVJ24_country_fleet_power
+		rounded = yes
+	}
+	set_variable = { which = EVJ24_country_fleet_power value = value:EVJ24_AOL_num_minions }
+	divide_variable = { which = EVJ24_country_fleet_power value = 1.5 }
+	round_variable_to_closest = { which = EVJ24_country_fleet_power value = 1 }
+
+	while = {
+		count = this.EVJ24_country_fleet_power
+		event_target:EVJ24_megaprison_star = {
+			create_fleet = {
+				name = "NAME_AOL_minions"
+				settings = {
+					spawn_debris = no
+					is_boss = no
+				}
+				effect = {
+					set_owner = event_target:EVJ24_AOL_mini_minions
 					create_ship = {
 						name = ""
 						design = "NAME_Avatar_of_Light_Minion"

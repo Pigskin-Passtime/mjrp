@@ -9,10 +9,7 @@
 
 
 # FOR POLISH TIMEFRAME:
-#	Introduce and integrate the nakahi device for the final sequence
 #	The Jailer's age
-#	Icon for Jailer alignment messages
-#	Shield GFX for megaprison megastructure
 #	Jailer event picture
 #	Add non-english loc
 #	Improve additional final traits
@@ -351,19 +348,19 @@ fleet_event = {
 			}
 			else_if = {
 				limit = { has_technology = tech_shields_4 }
-				add_tech_progress = { tech = tech_shields_5 progress = 0.5 }
+				add_tech_progress = { tech = tech_shields_5 progress = 0.25 }
 			}
 			else_if = {
 				limit = { has_technology = tech_shields_3 }
-				add_tech_progress = { tech = tech_shields_4 progress = 0.5 }
+				add_tech_progress = { tech = tech_shields_4 progress = 0.25 }
 			}
 			else_if = {
 				limit = { has_technology = tech_shields_2 }
-				add_tech_progress = { tech = tech_shields_3 progress = 0.5 }
+				add_tech_progress = { tech = tech_shields_3 progress = 0.25 }
 			}
 			else_if = {
 				limit = { has_technology = tech_shields_1 }
-				add_tech_progress = { tech = tech_shields_2 progress = 0.5 }
+				add_tech_progress = { tech = tech_shields_2 progress = 0.25 }
 			}
 		}
 	}
@@ -411,14 +408,14 @@ fleet_event = {
 			}
 			else_if = {
 				limit = { has_technology = tech_kinetic_artillery_1 }
-				add_tech_progress = { tech = tech_kinetic_artillery_2 progress = 0.2 }
+				add_tech_progress = { tech = tech_kinetic_artillery_2 progress = 0.3 }
 			}
 			else = {
-				add_tech_progress = { tech = tech_mass_drivers_3 progress = 1.0 }
+				add_tech_progress = { tech = tech_mass_drivers_3 progress = 0.5 }
 			}
 			if = {
-				limit = { NOT = { has_technology = tech_starbase_4 } }
-				add_tech_progress = { tech = tech_starbase_4 progress = 0.25 }
+				limit = { NOT = { has_technology = tech_starbase_3 } }
+				add_tech_progress = { tech = tech_starbase_3 progress = 0.2 }
 			}
 			add_monthly_resource_mult = {
 				resource = engineering_research
@@ -427,7 +424,7 @@ fleet_event = {
 				max = @tier2researchmax
 			}
 			add_resource = {
-				alloys = 3000
+				alloys = 2000
 			}
 		}
 		hidden_effect = {
@@ -542,10 +539,10 @@ ship_event = {
 				}
 				
 			}
-			every_fleet_in_system = {
-				limit = { owner = { is_same_value = event_target:EVJ24_jailer_country } }
-				set_owner = root.owner
-			}
+			#every_fleet_in_system = {
+			#	limit = { owner = { is_same_value = event_target:EVJ24_jailer_country } }
+			#	set_owner = root.owner
+			#}
 		}
 		set_global_flag = EVJ24_ancient_defences_commandeered
 	}
@@ -558,6 +555,17 @@ ship_event = {
 				value = 12 
 				max = 20000
 				min = 4000
+			}
+		}
+		hidden_effect = {
+			owner = {
+				if = {
+					limit = { 
+						has_event_chain = EVJ24_intro_jailer_chain
+						has_country_flag = EVJ24_jailer_recruited
+					}
+					end_event_chain = EVJ24_intro_jailer_chain
+				}
 			}
 		}
 	}
@@ -695,7 +703,7 @@ country_event = {
 			set_country_flag = EVJ24_jailer_recruited
 			
 			# Flavour and story event loop:
-			country_event = { id = EVJ24.1000 days = 350 }
+			country_event = { id = EVJ24.1000 days = 700 }
 			
 			if = {
 				limit = { NOT = { has_country_flag = EVJ24_eternal_warden_loop_fired } }
@@ -704,13 +712,11 @@ country_event = {
 				#country_event = { id = EVJ24.902 }
 				country_event = { id = EVJ24.903 }
 			}
-			
-			from.solar_system = {
-				
-			}
-			owner = {  }
 		}
-		end_event_chain = "EVJ24_intro_jailer_chain"
+		if = {
+			limit = { NOT = { has_special_project = EVJ24_INTRO_REPAIR_PRISON } }
+			end_event_chain = EVJ24_intro_jailer_chain
+		}
 	}
 	
 	option = {
@@ -796,6 +802,7 @@ country_event = {
 		name = EVJ24.31.b
 		custom_tooltip = EVJ24.31.b.tooltip
 		response_text = EVJ24.31.b.response
+		trigger = { EVJ24_can_trigger_mercy = yes }
 		event_target:EVJ24_jailer_leader = { add_experience = 2000 }
 		hidden_effect = { EVJ24_jailer_recognise_mercy = yes }
 	}
@@ -803,6 +810,7 @@ country_event = {
 		name = EVJ24.31.c
 		custom_tooltip = EVJ24.31.c.tooltip
 		response_text = EVJ24.31.c.response
+		trigger = { EVJ24_can_trigger_justice = yes }
 		default_hide_option = yes
 		event_target:EVJ24_jailer_leader = { add_experience = 2000 }
 		hidden_effect = { EVJ24_jailer_recognise_justice = yes }
@@ -811,6 +819,7 @@ country_event = {
 		name = EVJ24.31.d
 		custom_tooltip = EVJ24.31.d.tooltip
 		response_text = EVJ24.31.d.response
+		trigger = { EVJ24_can_trigger_ruthless = yes }
 		event_target:EVJ24_jailer_leader = { add_experience = 2000 }
 		hidden_effect = { EVJ24_jailer_recognise_ruthless = yes }
 	}
@@ -953,6 +962,7 @@ country_event = {
 	option = {
 		name = EVJ24.35.a
 		custom_tooltip = EVJ24.35.a.tooltip
+		trigger = { EVJ24_can_trigger_mercy = yes }
 		event_target:EVJ24_temp_leader = {
 			set_owner = root
 		}
@@ -979,6 +989,7 @@ country_event = {
 	
 	option = {
 		name = EVJ24.35.b
+		trigger = { EVJ24_can_trigger_ruthless = yes }
 		event_target:EVJ24_temp_planet = {
 			add_modifier = {
 				modifier = EVJ24_interned_hatred
@@ -990,6 +1001,7 @@ country_event = {
 	
 	option = {
 		name = EVJ24.35.c
+		trigger = { EVJ24_can_trigger_justice = yes }
 		event_target:EVJ24_temp_planet = {
 			add_modifier = {
 				modifier = EVJ24_interned_talent
@@ -1476,6 +1488,7 @@ country_event = {
 	
 	option = {
 		name = EVJ24.60.a
+		trigger = { EVJ24_can_trigger_mercy = yes }
 		while = {
 			count = 2
 			random_owned_pop = {
@@ -1487,20 +1500,35 @@ country_event = {
 	}
 	option = {
 		name = EVJ24.60.b
+		trigger = { EVJ24_can_trigger_ruthless = yes }
 		random_owned_pop = {
 			limit = { NOT = { has_citizenship_type = { type = citizenship_purge country = root } } }
 			kill_pop = yes
+		}
+		event_target:EVJ24_unstable_colony = {
+			add_modifier = {
+				modifier = EVJ24_pop_happiness_debuff
+				days = 1000
+			}
+		}
+		add_modifier = {
+			modifier = EVJ24_demonstration
+			days = 1000
 		}
 		hidden_effect = { EVJ24_jailer_recognise_ruthless = yes }
 	}
 	option = {
 		name = EVJ24.60.c
-		trigger = { any_owned_planet = { has_modifier = penal_colony } }
+		trigger = { any_owned_planet = { has_modifier = penal_colony } EVJ24_can_trigger_justice = yes }
 		while = {
 			count = 2
 			random_owned_pop = {
 				limit = { NOT = { has_citizenship_type = { type = citizenship_purge country = root } } }
 				resettle_pop = { pop = this planet = event_target:EVJ24_penal_colony }
+				add_modifier = {
+					modifier = EVJ24_pop_happiness_debuff
+					days = 1000
+				}
 			}
 		}
 		hidden_effect = { EVJ24_jailer_recognise_justice = yes }
@@ -1515,10 +1543,6 @@ country_event = {
 		}
 	}
 }
-
-####################
-# FLAVOUR 6: (After you won a recent war) The Jailer finds and asks what to do with war criminals.
-####################
 
 ##################################
 # Middle Event 1: The Jailer learns of an injustice
@@ -1550,6 +1574,7 @@ country_event = {
 	after = {
 		hidden_effect = {
 			event_target:EVJ24_jailer_leader = {
+				unassign_leader = this
 				set_owner = event_target:global_event_country
 			}
 		}
@@ -1745,7 +1770,6 @@ country_event = {
 
 # On arriving at said location; a cloaked fleet is revealed and is hostile!
 
-# Event triggering when the first player enters the system, starts an event chain where the player rescuse Mau Tona prison and The Jailer.
 fleet_event = {
 	id = EVJ24.103
 	title = EVJ24.103.title
@@ -1966,6 +1990,8 @@ country_event = {
 	#show_sound = EVJ24_jailer_salute
 
 	is_triggered_only = yes
+	
+	trigger = { exists = event_target:EVJ24_temp_nefarious_leader }
 
 	picture_event_data = {
 		portrait = event_target:EVJ24_temp_nefarious_leader
@@ -2021,6 +2047,7 @@ country_event = {
 		name = EVJ24.108.a
 		#custom_tooltip = EVJ24.108.a.tooltip
 		response_text = EVJ24.108.a.response
+		trigger = { EVJ24_can_trigger_mercy = yes }
 		hidden_effect = { EVJ24_jailer_recognise_mercy = yes set_country_flag = EVJ24_middle1_mercy }
 		#event_target:EVJ24_temp_nefarious_leader = {
 		#	add_trait = leader_trait_righteous
@@ -2031,6 +2058,7 @@ country_event = {
 		name = EVJ24.108.b
 		#custom_tooltip = EVJ24.108.b.tooltip
 		response_text = EVJ24.108.b.response
+		trigger = { EVJ24_can_trigger_justice = yes }
 		default_hide_option = yes
 		#event_target:EVJ24_temp_nefarious_leader = {
 		#	kill_leader = { show_notification = yes fire = yes }
@@ -2042,6 +2070,7 @@ country_event = {
 		name = EVJ24.108.c
 		#custom_tooltip = EVJ24.108.c.tooltip
 		response_text = EVJ24.108.c.response
+		trigger = { EVJ24_can_trigger_ruthless = yes }
 		#event_target:EVJ24_temp_nefarious_leader = {
 		#	kill_leader = { show_notification = yes }
 		#}
@@ -2134,6 +2163,8 @@ country_event = {
 	event_chain = EVJ24_middle1_jailer_chain
 
 	is_triggered_only = yes
+	
+	trigger = { exists = event_target:EVJ24_temp_nefarious_leader }
 	
 	immediate = {
 		event_target:EVJ24_pirates = {
@@ -2301,6 +2332,7 @@ ship_event = {
 			clear_global_event_target = EVJ24_temp_nefarious_leader
 			clear_global_event_target = EVJ24_temp_enemy
 			clear_global_event_target = EVJ24_pirates
+			owner = { remove_country_flag = EVJ24_story_event_in_progress }
 		}
 		owner = { end_event_chain = EVJ24_middle1_jailer_chain }
 	}
@@ -2367,6 +2399,7 @@ country_event = {
 			limit = { has_country_flag = EVJ24_middle1_mercy }
 			event_target:EVJ24_temp_nefarious_leader = {
 				set_owner = root
+				add_trait = EVJ24_leader_trait_jailer_protege
 			}
 		}
 		if = {
@@ -2374,11 +2407,21 @@ country_event = {
 			event_target:EVJ24_temp_nefarious_leader = {
 				kill_leader = { show_notification = yes fire = yes }
 			}
+			add_monthly_resource_mult = {
+				resource = unity
+				value = @tier2unityreward
+				min = @tier2unitymin
+				max = @tier2unitymax
+			}
 		}
 		if = {
 			limit = { has_country_flag = EVJ24_middle1_ruthless }
 			event_target:EVJ24_temp_nefarious_leader = {
 				kill_leader = { show_notification = yes }
+			}
+			add_modifier = {
+				modifier = EVJ24_demonstration
+				days = 1000
 			}
 		}
 		
@@ -2391,6 +2434,7 @@ country_event = {
 			clear_global_event_target = EVJ24_temp_nefarious_leader
 			clear_global_event_target = EVJ24_temp_enemy
 			clear_global_event_target = EVJ24_pirates
+			remove_country_flag = EVJ24_story_event_in_progress
 		}
 	}
 }
@@ -2474,7 +2518,7 @@ fleet_event = {
 	}
 	desc = {
 		text = EVJ24.155.desc_02
-		trigger = { owner = { NOT = { has_country_flag = EVJ24_worm_in_ear } } }
+		trigger = { owner = { has_country_flag = EVJ24_worm_in_ear } }
 	}
 
 	archaeology = yes
@@ -2507,7 +2551,7 @@ fleet_event = {
 	}
 	desc = {
 		text = EVJ24.156.desc_02
-		trigger = { owner = { NOT = { has_country_flag = EVJ24_worm_in_ear } } }
+		trigger = { owner = { has_country_flag = EVJ24_worm_in_ear } }
 	}
 
 	archaeology = yes
@@ -2540,7 +2584,7 @@ fleet_event = {
 	}
 	desc = {
 		text = EVJ24.157.desc_02
-		trigger = { owner = { NOT = { has_country_flag = EVJ24_worm_in_ear } } }
+		trigger = { owner = { has_country_flag = EVJ24_worm_in_ear } }
 	}
 
 	archaeology = yes
@@ -2575,7 +2619,7 @@ fleet_event = {
 	}
 	desc = {
 		text = EVJ24.158.desc_02
-		trigger = { owner = { NOT = { has_country_flag = EVJ24_worm_in_ear } } }
+		trigger = { owner = { has_country_flag = EVJ24_worm_in_ear } }
 	}
 
 	archaeology = yes
@@ -2636,6 +2680,7 @@ fleet_event = {
 				location = this
 				owner = root.owner
 			}
+			set_planet_flag = EVJ24_nakahi_pilgrimage
 		}
 		hidden_effect = {
 			owner = {
@@ -2714,6 +2759,7 @@ country_event = {
 				set_leader_flag = EVJ24_name_chosen_1
 				set_name = NAME_EVJ24_Jailer_name1_full
 			}
+			remove_country_flag = EVJ24_story_event_in_progress
 		}
 	}
 	option = {
@@ -2725,6 +2771,7 @@ country_event = {
 				set_leader_flag = EVJ24_name_chosen_2
 				set_name = NAME_EVJ24_Jailer_name2_full
 			}
+			remove_country_flag = EVJ24_story_event_in_progress
 		}
 	}
 	option = {
@@ -2736,6 +2783,7 @@ country_event = {
 				set_leader_flag = EVJ24_name_chosen_3
 				set_name = NAME_EVJ24_Jailer_name3_full
 			}
+			remove_country_flag = EVJ24_story_event_in_progress
 		}
 	}
 	#option = {
@@ -2764,11 +2812,15 @@ ship_event = {
 	}
 
 	immediate = {
+		random_galaxy_planet = {
+			limit = { has_planet_flag = EVJ24_nakahi_pilgrimage }
+			save_event_target_as = EVJ24_nakahi_pilgrimage_site
+		}
 	}
 	
 	option = {
 		name = EVJ24.161.a
-		from = { create_archaeological_site = EVJ24_middle4_digsite_nakahi_pilgrimage }
+		event_target:EVJ24_nakahi_pilgrimage_site = { create_archaeological_site = EVJ24_middle4_digsite_nakahi_pilgrimage }
 	}
 }
 
@@ -2927,6 +2979,7 @@ situation_event = {
 	option = {
 		name = EVJ24.201.a
 		custom_tooltip = EVJ24.201.a.tooltip
+		trigger = { owner = { EVJ24_can_trigger_justice = yes } }
 		event_target:EVJ24_assassination_target = { kill_leader = { show_notification = yes fire = yes } }
 		hidden_effect = { EVJ24_jailer_recognise_justice = yes }
 	}
@@ -2934,6 +2987,7 @@ situation_event = {
 	option = {
 		name = EVJ24.201.b
 		custom_tooltip = EVJ24.201.b.tooltip
+		trigger = { owner = { EVJ24_can_trigger_mercy = yes } }
 		event_target:EVJ24_assassination_target = { add_trait = leader_trait_corrupt add_trait = leader_trait_maimed }
 		hidden_effect = { EVJ24_jailer_recognise_mercy = yes }
 	}
@@ -2941,6 +2995,7 @@ situation_event = {
 	option = {
 		name = EVJ24.201.c
 		custom_tooltip = EVJ24.201.c.tooltip
+		trigger = { owner = { EVJ24_can_trigger_ruthless = yes } }
 		event_target:EVJ24_assassination_target = { add_trait = leader_trait_corrupt add_trait = leader_trait_maimed }
 		hidden_effect = { EVJ24_jailer_recognise_ruthless = yes set_situation_flag = EVJ24_ruthless }
 	}
@@ -3026,10 +3081,18 @@ country_event = {
 	
 	option = {
 		name = EVJ24.204.a
-		hidden_effect = {
-			random_situation = {
-				limit = { is_situation_type = situation_EVJ24_middle3_crimelord }
-				set_situation_flag = EVJ24_signal_traced
+		default_hide_option = yes
+		#hidden_effect = {
+		#	random_situation = {
+		#		limit = { is_situation_type = situation_EVJ24_middle3_crimelord }
+		#		set_situation_flag = EVJ24_signal_traced
+		#	}
+		#}
+		event_target:EVJ24_crime_planet = {
+			enable_special_project = {
+				name = "EVJ24_MIDDLE_3_DIG"
+				location = this
+				owner = root
 			}
 		}
 	}
@@ -3043,16 +3106,10 @@ country_event = {
 				set_situation_flag = EVJ24_signal_traced
 			}
 		}
+		
 	}
 	
 	after = {
-		event_target:EVJ24_crime_planet = {
-			enable_special_project = {
-				name = "EVJ24_MIDDLE_3_DIG"
-				location = this
-				owner = root
-			}
-		}
 		hidden_effect = { clear_global_event_target = EVJ24_crime_planet }
 	}
 }
@@ -3110,12 +3167,14 @@ situation_event = {
 	
 	option = {
 		name = EVJ24.210.a
+		trigger = { current_situation_approach = situation_EVJ24_middle3_crimelord_monitor }
 		custom_tooltip = EVJ24.210.a.tooltip1
 		hidden_effect = { owner = { country_event = { id = EVJ24.211 } } }
 	}
 	
 	option = {
 		name = EVJ24.210.a
+		trigger = { current_situation_approach = situation_EVJ24_middle3_crimelord_hunt }
 		custom_tooltip = EVJ24.210.a.tooltip2
 		hidden_effect = { owner = { country_event = { id = EVJ24.211 } } }
 	}
@@ -3174,18 +3233,21 @@ country_event = {
 	option = {
 		name = EVJ24.211.a
 		response_text = EVJ24.211.a.response
+		trigger = { EVJ24_can_trigger_ruthless = yes }
 		hidden_effect = { EVJ24_jailer_recognise_ruthless = yes }
 	}
 	
 	option = {
 		name = EVJ24.211.b
 		response_text = EVJ24.211.b.response
+		trigger = { EVJ24_can_trigger_mercy = yes }
 		hidden_effect = { EVJ24_jailer_recognise_mercy = yes }
 	}
 	
 	option = {
 		name = EVJ24.211.c
 		response_text = EVJ24.211.c.response
+		trigger = { EVJ24_can_trigger_justice = yes }
 		hidden_effect = { EVJ24_jailer_recognise_justice = yes }
 	}
 }
@@ -3448,7 +3510,7 @@ country_event = {
 		}
 	}
 	
-	after = { hidden_effect = { fromfrom = { remove_planet_flag = EVJ24_vigilante_commandeer } clear_global_event_target = EVJ24_vigilante_invasion_location } }
+	after = { hidden_effect = { fromfrom = { remove_planet_flag = EVJ24_vigilante_commandeer } clear_global_event_target = EVJ24_vigilante_invasion_location } remove_country_flag = EVJ24_story_event_in_progress }
 }
 
 # Option 2: Send in The Jailer, gains a cool scar for his troubles.
@@ -3483,7 +3545,7 @@ ship_event = {
 		}
 	}
 	
-	after = { hidden_effect = { clear_global_event_target = EVJ24_vigilante_invasion_location } }
+	after = { hidden_effect = { clear_global_event_target = EVJ24_vigilante_invasion_location } owner = { remove_country_flag = EVJ24_story_event_in_progress } }
 }
 
 # You naturally defend the colony. Everything is solved! No further activity required.
@@ -3613,6 +3675,7 @@ country_event = {
 	}
 	
 	immediate = {
+		EVJ24_jailer_recognise_ruthless = yes
 	}
 	
 	option = {
@@ -3741,18 +3804,61 @@ situation_event = {
 		custom_tooltip = EVJ24.270.a.tooltip
 		if = {
 			limit = { owner = { NOT = { has_technology = tech_psionic_theory } } }
-			owner = { add_tech_progress = { tech = tech_psionic_theory progress = 0.1 } }
+			owner = { add_tech_progress = { tech = tech_psionic_theory progress = 0.5 } }
 		}
+		
+		owner.capital_scope = {
+			add_modifier = {
+				modifier = EVJ24_AOL_marked
+				days = -1
+			}
+		}
+		
+		owner = {
+			random_owned_planet = {
+				limit = { NOT = { has_modifier = EVJ24_AOL_marked } }
+				add_modifier = {
+					modifier = EVJ24_AOL_marked
+					days = -1
+				}
+			}
+			
+			random_owned_planet = {
+				limit = { NOT = { has_modifier = EVJ24_AOL_marked } }
+				add_modifier = {
+					modifier = EVJ24_AOL_marked
+					days = -1
+				}
+			}
+		}
+		
+		owner = {
+			add_modifier = {
+				modifier = EVJ24_AOL_god_fearing
+				days = -1
+			}
+		}
+		
 		hidden_effect = {
 			owner = { 
 				every_owned_leader = {
 					limit = { NOT = { is_same_value = event_target:EVJ24_jailer_leader } }
 					random_list = {
 						1 = {}
-						1 = { add_trait = leader_trait_psionic }
+						2 = { add_trait = leader_trait_psionic }
 					}
 				}
+				set_country_flag = EVJ24_AOL_signed_pact
 			}
+			owner = { remove_country_flag = EVJ24_story_event_in_progress }
+		}
+	}
+	
+	option = {
+		name = EVJ24.270.b
+		custom_tooltip = EVJ24.270.a.tooltip
+		hidden_effect = {
+			owner = { remove_country_flag = EVJ24_story_event_in_progress }
 		}
 	}
 	
@@ -3795,8 +3901,14 @@ situation_event = {
 			}
 		}
 		if = {
-			limit = { owner = { NOT = { has_technology = tech_psionic_theory  } } }
+			limit = { owner = { NOT = { has_technology = tech_psionic_theory } } }
 			owner = { add_tech_progress = { tech = tech_psionic_theory progress = 0.1 } }
+		}
+		hidden_effect = { 
+			owner = { 
+				remove_country_flag = EVJ24_story_event_in_progress 
+				set_country_flag = EVJ24_AOL_middle4_upset
+			} 
 		}
 	}
 	
@@ -3917,6 +4029,14 @@ situation_event = {
 	
 	option = {
 		name = EVJ24.808.a
+		trigger = { owner = { NOT = { has_country_flag = EVJ24_AOL_signed_pact } } }
+		hidden_effect = { owner = { country_event = { id = EVJ24.810 } } }
+	}
+	
+	option = {
+		name = EVJ24.808.b
+		custom_tooltip = EVJ24.808.b.tooltip
+		trigger = { owner = { has_country_flag = EVJ24_AOL_signed_pact } }
 		hidden_effect = { owner = { country_event = { id = EVJ24.810 } } }
 	}
 	
@@ -3929,9 +4049,23 @@ country_event = {
 	id = EVJ24.810
 	title = TRANSMISSION
 	diplomatic_title = BLANK_STRING
-	desc = EVJ24.810.desc
 	diplomatic = yes
 	event_chain = EVJ24_end_jailer_chain
+	
+	desc = {
+		text = EVJ24.810.desc_01
+		trigger = { NOT = { has_country_flag = EVJ24_AOL_middle4_upset } NOT = { has_country_flag = EVJ24_worm_in_ear } }
+	}
+	
+	desc = {
+		text = EVJ24.810.desc_02
+		trigger = { has_country_flag = EVJ24_AOL_middle4_upset }
+	}
+	
+	desc = {
+		text = EVJ24.810.desc_03
+		trigger = { NOT = { has_country_flag = EVJ24_AOL_middle4_upset } has_country_flag = EVJ24_worm_in_ear }
+	}
 
 	is_triggered_only = yes
 
@@ -3957,6 +4091,12 @@ country_event = {
 			random_planet_within_border = {
 				limit = { has_owner = yes }
 				save_global_event_target_as = EVJ24_avatar_target
+			}
+		}
+		event_target:EVJ24_megaprison_star.solar_system = {
+			every_system_ambient_object = { 
+				limit = { is_ambient_object_type = EVJ24_megaprison_shield } 
+				destroy_ambient_object = EVJ24_megaprison_shield
 			}
 		}
 		create_country = {
@@ -4026,6 +4166,22 @@ country_event = {
 					}
 				}
 			}
+		}
+		if = {
+			limit = { has_country_flag = EVJ24_AOL_middle4_upset }
+			EVJ24_AOL_mini_furious = yes
+		}
+		if = {
+			limit = { has_country_flag = EVJ24_AOL_signed_pact }
+			every_owned_planet = {
+				limit = { has_modifier = EVJ24_AOL_marked }
+				remove_modifier = EVJ24_AOL_marked
+				add_modifier = {
+					modifier = EVJ24_AOL_consequence
+					days = 2000
+				}
+			}
+			remove_modifier = EVJ24_AOL_god_fearing
 		}
 		country_event = { id = EVJ24.814 days = 30 }
 	}
@@ -4102,6 +4258,17 @@ country_event = {
 	
 	option = {
 		name = EVJ24.812.a
+		response_text = EVJ24.812.a.response
+	}
+	
+	option = {
+		name = EVJ24.812.b
+		response_text = EVJ24.812.b.response
+	}
+	
+	option = {
+		name = EVJ24.812.c
+		response_text = EVJ24.812.c.response
 	}
 }
 
@@ -4189,6 +4356,14 @@ country_event = {
 	
 	option = {
 		name = EVJ24.820.a
+		custom_tooltip = EVJ24.820.a.tooltip
+		response_text = EVJ24.820.a.response
+		is_dialog_only = yes
+		trigger = { has_country_flag = EVJ24_jailer_truth_found }
+	}
+	
+	option = {
+		name = EVJ24.820.b
 		event_target:EVJ24_nakahi_homeworld = {
 			enable_special_project = {
 				name = "EVJ24_END_2_REMEMBER"
@@ -4198,12 +4373,7 @@ country_event = {
 		}
 	}
 	
-	option = {
-		name = EVJ24.820.c
-		response_text = EVJ24.831.c.response
-		is_dialog_only = yes
-		trigger = { has_country_flag = EVJ24_jailer_truth_found }
-	}
+	
 }
 
 # The Avatar of Light is becoming impatient, they want the Jailer soon! But are willing the give the player more time.
@@ -4442,6 +4612,12 @@ country_event = {
 			if = {
 				limit = { exists = star }
 				star = { EVJ24_solar_eruption = yes }
+			}
+		}
+		
+		event_target:EVJ24_AOL_minions = {
+			every_owned_fleet = {
+				destroy_fleet = this
 			}
 		}
 		
@@ -4724,7 +4900,7 @@ country_event = {
 							}
 							effect = {
 								id = AOL.2.transform_planet
-								change_pc = pc_gaia
+								change_pc = pc_tundra
 								add_modifier = { modifier = EVJ24_restored_colony days = -1 }
 								reroll_deposits = yes
 							}
@@ -4756,7 +4932,7 @@ country_event = {
 							}
 							effect = {
 								id = AOL.3.transform_planet
-								change_pc = pc_gaia
+								change_pc = pc_tropical
 								add_modifier = { modifier = EVJ24_restored_colony days = -1 }
 								reroll_deposits = yes
 							}
@@ -4791,32 +4967,17 @@ country_event = {
 								change_pc = pc_gaia
 								add_modifier = { modifier = EVJ24_restored_colony days = -1 }
 								reroll_deposits = yes
-								
-								star = {
-									create_ambient_object = {
-										type = "psi_storm_1"
-										location = this
-									}
-									last_created_ambient_object = {
-										save_event_target_as = EVJ24_psi_portal
-									}
-								}
 							}
 						}
 					}
 					wait = {
 						duration = 90
 					}
-					move_to = event_target:EVJ24_psi_portal
-					wait = {
-						duration = 20
-					}
 					effect = {
 						id = AOL.5.byebye
 						event_target:EVJ24_avatar_of_light_fleet = {
 							destroy_fleet = this
 						}
-						destroy_ambient_object = event_target:EVJ24_psi_portal
 						
 						#clear_global_event_target = EVJ24_avatar_of_light
 						#clear_global_event_target = EVJ24_avatar_of_light_fleet
@@ -4835,12 +4996,14 @@ country_event = {
 		
 		end_event_chain = EVJ24_end_jailer_chain
 		
-		add_tech_progress = { tech = tech_mega_engineering progress = 0.25 }
+		#add_tech_progress = { tech = tech_mega_engineering progress = 0.25 }
 		
 		event_target:EVJ24_jailer_leader = {
 			remove_trait = EVJ24_leader_trait_ancient_hero
 			add_trait = EVJ24_leader_trait_just
 		}
+		
+		add_relic = r_EVJ24_manuscript
 		
 		hidden_effect = {
 			
@@ -4875,7 +5038,26 @@ country_event = {
 							effect = {
 								id = AOL.6.getjailedson
 								event_target:EVJ24_avatar_of_light_ship = { set_disabled = yes }
-								
+								event_target:EVJ24_mau_tona_prison = {
+									create_ambient_object = {
+										type = EVJ24_megaprison_shield
+										scale = 10.0
+										location = this
+										use_3d_location = yes
+										entity_offset = {
+											min = 0
+											max = 0
+										}
+										entity_offset_angle = {
+											min = 0
+											max = 0
+										}
+										entity_offset_height = {
+											min = 0
+											max = 0
+										}
+									}
+								}
 							}
 						}
 					}
@@ -5277,30 +5459,54 @@ country_event = {
 	immediate = {
 		
 		if = {
-			limit = {
-				AND = {
-					has_country_flag = EVJ24_middle4_fired 
-					mid_game_years_passed >= 0
-					NOT = { has_country_flag = EVJ24_end1_fired }
+			limit = { NOT = { has_country_flag = EVJ24_story_event_in_progress } }
+			if = {
+				limit = {
+					AND = {
+						has_country_flag = EVJ24_middle4_fired 
+						mid_game_years_passed >= 0
+						NOT = { has_country_flag = EVJ24_end1_fired }
+					}
 				}
+				# Finale event
+				
+				set_country_flag = EVJ24_end1_fired
+				country_event = { id = EVJ24.805 }
+				
 			}
-			# Finale event
-			
-			set_country_flag = EVJ24_end1_fired
-			country_event = { id = EVJ24.805 }
-			
-		}
-		else_if = {
-			limit = { AND = { has_country_flag = EVJ24_story_event_fired NOT = { has_country_flag = EVJ24_end1_fired } } }
-			remove_country_flag = EVJ24_story_event_fired
-			
-			random_list = {
+			else_if = {
+				limit = { AND = { has_country_flag = EVJ24_story_event_fired NOT = { has_country_flag = EVJ24_end1_fired } } }
+				remove_country_flag = EVJ24_story_event_fired
+				
 				# Flavour events - repeatable
-				8 = {
+				
+				if = {
+					limit = {
+						any_owned_planet = { 
+							AND = { 
+								OR = {
+									planet_crime > 40 
+									planet_stability < 35
+								}
+								NOT = { has_modifier = penal_colony }
+							} 
+						}
+						any_owned_planet = { 
+							AND = { 
+								OR = {
+									planet_crime < 10
+									planet_stability > 50
+								}
+								num_housing > 2
+								NOT = { has_modifier = penal_colony }
+							} 
+						}
+						NOT = { has_country_flag = EVJ24_crackdown_fired }
+					}
+					set_country_flag = EVJ24_crackdown_fired
 					country_event = { id = EVJ24.60 }
 				}
-				# Flavour events - one off
-				12 = {
+				else = {
 					if = {
 						limit = { NOT = { has_country_flag = EVJ24_30_flavour } }
 						set_country_flag = EVJ24_30_flavour
@@ -5321,36 +5527,46 @@ country_event = {
 						set_country_flag = EVJ24_50_flavour
 						country_event = { id = EVJ24.50 }
 					}
+					
+					if = {
+						limit = { has_country_flag = EVJ24_crackdown_fired }
+						remove_country_flag = EVJ24_crackdown_fired
+					}
+				}
+				
+				
+				
+			}
+			else_if = {
+				
+				# Story events
+				
+				set_country_flag = EVJ24_story_event_fired
+				#set_country_flag = EVJ24_story_event_in_progress
+				set_timed_country_flag = { flag = EVJ24_story_event_in_progress years = 6 }
+				
+				if = {
+					limit = { AND = { has_country_flag = EVJ24_middle3_fired NOT = { has_country_flag = EVJ24_middle4_fired } } }
+					set_country_flag = EVJ24_middle4_fired
+					country_event = { id = EVJ24.250 }
+				}
+				else_if = {
+					limit = { AND = { has_country_flag = EVJ24_middle2_fired NOT = { has_country_flag = EVJ24_middle3_fired } } }
+					set_country_flag = EVJ24_middle3_fired
+					country_event = { id = EVJ24.200 }
+				}
+				else_if = {
+					limit = { AND = { has_country_flag = EVJ24_middle1_fired NOT = { has_country_flag = EVJ24_middle2_fired } } }
+					set_country_flag = EVJ24_middle2_fired
+					country_event = { id = EVJ24.150 }
+				}
+				else_if = {
+					limit = { NOT = { has_country_flag = EVJ24_middle1_fired } }
+					set_country_flag = EVJ24_middle1_fired
+					country_event = { id = EVJ24.99 }
 				}
 			}
 		}
-		else_if = {
-			
-			# Story events
-			
-			set_country_flag = EVJ24_story_event_fired
-			
-			if = {
-				limit = { AND = { has_country_flag = EVJ24_middle3_fired NOT = { has_country_flag = EVJ24_middle4_fired } } }
-				set_country_flag = EVJ24_middle4_fired
-				country_event = { id = EVJ24.250 }
-			}
-			else_if = {
-				limit = { AND = { has_country_flag = EVJ24_middle2_fired NOT = { has_country_flag = EVJ24_middle3_fired } } }
-				set_country_flag = EVJ24_middle3_fired
-				country_event = { id = EVJ24.200 }
-			}
-			else_if = {
-				limit = { AND = { has_country_flag = EVJ24_middle1_fired NOT = { has_country_flag = EVJ24_middle2_fired } } }
-				set_country_flag = EVJ24_middle2_fired
-				country_event = { id = EVJ24.150 }
-			}
-			else_if = {
-				limit = { NOT = { has_country_flag = EVJ24_middle1_fired } }
-				set_country_flag = EVJ24_middle1_fired
-				country_event = { id = EVJ24.99 }
-			}
-		}
-		country_event = { id = EVJ24.1000 days = 1000 random = 500 }
+		country_event = { id = EVJ24.1000 days = 1300 random = 800 }
 	}
 }
