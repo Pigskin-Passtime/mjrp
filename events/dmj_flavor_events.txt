@@ -27,7 +27,7 @@ country_event = { # Flavor events intializer
 								has_modifier = dmj_reinhard_infiltration_buff
 								NOT = {
 									owner = {
-										any_owned_system = { # I don't know if this works, if there's a better way then tell me
+										any_system_within_border = { # I don't know if this works, if there's a better way then tell me
 											any_system_planet = {
 												owner = { is_country_type = primitive }
 											}
@@ -73,6 +73,8 @@ country_event = { # Flavor events intializer
 												negative = yes
 											}
 										}
+										NOT = { has_trait = leader_trait_dmj_reinhardist_devotee }
+										NOT = { is_same_value = event_target:dmj_daniel }
 									}
 								}
 								NOT = {
@@ -129,7 +131,7 @@ country_event = { # Flavor events intializer
 
 leader_event = { # Gives psionic techs
 	id = dmj_flavor.2
-	name = "dmj_flavor.2.name"
+	title = "dmj_flavor.2.name"
 	desc = "dmj_flavor.2.desc"
 	is_triggered_only = yes
 
@@ -137,7 +139,11 @@ leader_event = { # Gives psionic techs
 	show_sound = event_psionic
 
 	event_window_type = leader_story
-	event_picture_background = "GFX_leader_recruitment_bg_renowned"
+	event_picture_background = "GFX_leader_recruitment_bg_legendary_beholder"
+
+	picture_event_data = {
+		portrait = root
+	}
 
 	trigger = {
 		exists = owner
@@ -164,7 +170,7 @@ leader_event = { # Gives psionic techs
 				random_list = {
 					50 = {
 						if = {
-							limit = { NOT = { has_research_option = tech_psionic_theory } }
+							limit = { NOT = { has_tech_option = tech_psionic_theory } }
 							add_research_option = tech_psionic_theory
 							add_tech_progress = { tech = tech_psionic_theory progress = 0.25 }
 						}
@@ -178,7 +184,7 @@ leader_event = { # Gives psionic techs
 					}
 					50 = {
 						if = {
-							limit = { NOT = { has_research_option = tech_mine_zro } }
+							limit = { NOT = { has_tech_option = tech_mine_zro } }
 							add_research_option = tech_mine_zro
 							add_tech_progress = { tech = tech_mine_zro progress = 0.25 }
 						}
@@ -192,8 +198,12 @@ leader_event = { # Gives psionic techs
 					}
 				}
 			}
-			else if = {
+			else_if = {
 				limit = {
+					AND = {
+						has_technology = tech_psionic_theory
+						has_technology = tech_mine_zro
+					}
 					NAND = {
 						has_technology = tech_telepathy
 						has_technology = tech_thought_enforcement
@@ -202,7 +212,7 @@ leader_event = { # Gives psionic techs
 				if = {
 					limit = { NOT = { has_technology = tech_telepathy } }
 					if = {
-						limit = { NOT = { has_research_option = tech_telepathy } }
+						limit = { NOT = { has_tech_option = tech_telepathy } }
 						add_research_option = tech_telepathy
 						add_tech_progress = { tech = tech_telepathy progress = 0.25 }
 					}
@@ -212,7 +222,7 @@ leader_event = { # Gives psionic techs
 				}
 				else = {
 					if = {
-						limit = { NOT = { has_research_option = tech_thought_enforcement } }
+						limit = { NOT = { has_tech_option = tech_thought_enforcement } }
 						add_research_option = tech_thought_enforcement
 						add_tech_progress = { tech = tech_thought_enforcement progress = 0.25 }
 					}
@@ -221,8 +231,12 @@ leader_event = { # Gives psionic techs
 					}
 				}
 			}
-			else if = {
+			else_if = {
 				limit = {
+					AND = {
+						has_technology = tech_telepathy
+						has_technology = tech_thought_enforcement
+					}
 					NAND = {
 						has_technology = tech_precognition_interface
 						has_technology = tech_psi_jump_drive_1
@@ -231,76 +245,85 @@ leader_event = { # Gives psionic techs
 						has_technology = tech_psionic_shield
 					}
 				}
-				50 = {
-					if = {
-						limit = { NOT = { has_technology = tech_precognition_interface } }
+				random_list = {
+					50 = {
 						if = {
-							limit = { NOT = { has_research_option = tech_precognition_interface } }
-							add_research_option = tech_precognition_interface
-							add_tech_progress = { tech = tech_precognition_interface progress = 0.25 }
+							limit = { NOT = { has_technology = tech_precognition_interface } }
+							if = {
+								limit = { NOT = { has_tech_option = tech_precognition_interface } }
+								add_research_option = tech_precognition_interface
+								add_tech_progress = { tech = tech_precognition_interface progress = 0.25 }
+							}
+							else = {
+								add_tech_progress = { tech = tech_precognition_interface progress = 0.25 }
+							}
 						}
-						else = {
-							add_tech_progress = { tech = tech_precognition_interface progress = 0.25 }
+						else_if = {
+							limit = { NOT = { has_technology = tech_psi_jump_drive_1 } }
+							if = {
+								limit = { NOT = { has_tech_option = tech_psi_jump_drive_1 } }
+								add_research_option = tech_psi_jump_drive_1
+								add_tech_progress = { tech = tech_psi_jump_drive_1 progress = 0.25 }
+							}
+							else = {
+								add_tech_progress = { tech = tech_psi_jump_drive_1 progress = 0.25 }
+							}
 						}
-					}
-					else_if = {
-						limit = { NOT = { has_technology = tech_psi_jump_drive_1 } }
-						if = {
-							limit = { NOT = { has_research_option = tech_psi_jump_drive_1 } }
-							add_research_option = tech_psi_jump_drive_1
-							add_tech_progress = { tech = tech_psi_jump_drive_1 progress = 0.25 }
+						else_if = {
+							limit = {
+								has_first_contact_dlc = yes
+								NOT = { has_technology = tech_cloaking_psi }
+							}
+							if = {
+								limit = { NOT = { has_tech_option = tech_cloaking_psi } }
+								add_research_option = tech_cloaking_psi
+								add_tech_progress = { tech = tech_cloaking_psi progress = 0.25 }
+							}
+							else = {
+								add_tech_progress = { tech = tech_cloaking_psi progress = 0.25 }
+							}
 						}
-						else = {
-							add_tech_progress = { tech = tech_psi_jump_drive_1 progress = 0.25 }
-						}
-					}
-					else_if = {
-						limit = {
-							has_first_contact_dlc = yes
-							NOT = { has_technology = tech_cloaking_psi }
-						}
-						if = {
-							limit = { NOT = { has_research_option = tech_cloaking_psi } }
-							add_research_option = tech_cloaking_psi
-							add_tech_progress = { tech = tech_cloaking_psi progress = 0.25 }
-						}
-						else = {
-							add_tech_progress = { tech = tech_cloaking_psi progress = 0.25 }
-						}
-					}
-					modifier = {
-						factor = 0
-						AND = {
-							has_technology = tech_precognition_interface
-							has_technology = tech_psi_jump_drive_1
-							OR = {
-								NOT = { has_first_contact_dlc = yes }
-								has_technology = tech_cloaking_psi
+						modifier = {
+							factor = 0
+							AND = {
+								has_technology = tech_precognition_interface
+								has_technology = tech_psi_jump_drive_1
+								OR = {
+									NOT = { has_first_contact_dlc = yes }
+									has_technology = tech_cloaking_psi
+								}
 							}
 						}
 					}
-				}
-				50 = {
-					if = {
-						limit = { NOT = { has_technology = tech_psionic_barrier } }
+					50 = {
 						if = {
-							limit = { NOT = { has_research_option = tech_psionic_barrier } }
-							add_research_option = tech_psionic_barrier
-							add_tech_progress = { tech = tech_psionic_barrier progress = 0.25 }
+							limit = { NOT = { has_technology = tech_psionic_barrier } }
+							if = {
+								limit = { NOT = { has_tech_option = tech_psionic_barrier } }
+								add_research_option = tech_psionic_barrier
+								add_tech_progress = { tech = tech_psionic_barrier progress = 0.25 }
+							}
+							else = {
+								add_tech_progress = { tech = tech_psionic_barrier progress = 0.25 }
+							}
 						}
-						else = {
-							add_tech_progress = { tech = tech_psionic_barrier progress = 0.25 }
+						else_if = {
+							limit = { NOT = { has_technology = tech_psionic_shield } }
+							if = {
+								limit = { NOT = { has_tech_option = tech_psionic_shield } }
+								add_research_option = tech_psionic_shield
+								add_tech_progress = { tech = tech_psionic_shield progress = 0.25 }
+							}
+							else = {
+								add_tech_progress = { tech = tech_psionic_shield progress = 0.25 }
+							}
 						}
-					}
-					else_if = {
-						limit = { NOT = { has_technology = tech_psionic_shield } }
-						if = {
-							limit = { NOT = { has_research_option = tech_psionic_shield } }
-							add_research_option = tech_psionic_shield
-							add_tech_progress = { tech = tech_psionic_shield progress = 0.25 }
-						}
-						else = {
-							add_tech_progress = { tech = tech_psionic_shield progress = 0.25 }
+						modifier = {
+							factor = 0
+							AND = {
+								has_technology = tech_psionic_barrier
+								has_technology = tech_psionic_shield
+							}
 						}
 					}
 				}
@@ -311,7 +334,7 @@ leader_event = { # Gives psionic techs
 					NOT = { has_technology = tech_pk_godray }
 				}
 				if = {
-					limit = { NOT = { has_research_option = tech_pk_godray } }
+					limit = { NOT = { has_tech_option = tech_pk_godray } }
 					add_research_option = tech_pk_godray
 					add_tech_progress = { tech = tech_pk_godray progress = 0.25 }
 				}
@@ -339,7 +362,7 @@ leader_event = { # Gives psionic techs
 
 leader_event = { # Gives buffs to primitive infiltration, only if you have First Contact DLC
 	id = dmj_flavor.3
-	name = "dmj_flavor.3.name"
+	title = "dmj_flavor.3.name"
 	desc = "dmj_flavor.3.desc"
 	is_triggered_only = yes
 
@@ -347,7 +370,11 @@ leader_event = { # Gives buffs to primitive infiltration, only if you have First
 	show_sound = event_spymaster
 
 	event_window_type = leader_story
-	event_picture_background = "GFX_leader_recruitment_bg_renowned"
+	event_picture_background = "GFX_leader_recruitment_bg_legendary_beholder"
+
+	picture_event_data = {
+		portrait = root
+	}
 
 	trigger = {
 		exists = owner
@@ -375,7 +402,7 @@ leader_event = { # Gives buffs to primitive infiltration, only if you have First
 
 leader_event = { # Reinhard "borrows" some resources, what could he be doing with them?
 	id = dmj_flavor.4
-	name = "dmj_flavor.4.name"
+	title = "dmj_flavor.4.name"
 	desc = "dmj_flavor.4.desc"
 	is_triggered_only = yes
 
@@ -409,7 +436,7 @@ leader_event = { # Reinhard "borrows" some resources, what could he be doing wit
 
 leader_event = { # Builds a Reinhardist Cathedral on a random planet
 	id = dmj_flavor.40
-	name = "dmj_flavor.40.name"
+	title = "dmj_flavor.40.name"
 	desc = "dmj_flavor.40.desc"
 	is_triggered_only = yes
 
@@ -417,7 +444,11 @@ leader_event = { # Builds a Reinhardist Cathedral on a random planet
 	show_sound = event_construction
 
 	event_window_type = leader_story
-	event_picture_background = "GFX_leader_recruitment_bg_renowned"
+	event_picture_background = "GFX_leader_recruitment_bg_legendary_beholder"
+
+	picture_event_data = {
+		portrait = root
+	}
 
 	trigger = {
 		exists = owner
@@ -452,7 +483,7 @@ leader_event = { # Builds a Reinhardist Cathedral on a random planet
 
 leader_event = { # Random leader becomes a Reinhardist Devotee
 	id = dmj_flavor.5
-	name = "dmj_flavor.5.name"
+	title = "dmj_flavor.5.name"
 	desc = "dmj_flavor.5.desc"
 	is_triggered_only = yes
 
@@ -460,7 +491,11 @@ leader_event = { # Random leader becomes a Reinhardist Devotee
 	show_sound = event_hand_shake
 
 	event_window_type = leader_story
-	event_picture_background = "GFX_leader_recruitment_bg_renowned"
+	event_picture_background = "GFX_leader_recruitment_bg_legendary_beholder"
+
+	picture_event_data = {
+		portrait = root
+	}
 
 	trigger = {
 		exists = owner
@@ -484,6 +519,7 @@ leader_event = { # Random leader becomes a Reinhardist Devotee
 							negative = yes
 						}
 					}
+					NOT = { is_same_value = event_target:dmj_daniel }
 				}
 				save_event_target_as = dmj_event_devotee # used in loc
 			}
@@ -497,7 +533,10 @@ leader_event = { # Random leader becomes a Reinhardist Devotee
 	after = {
 		event_target:dmj_event_devotee = {
 			add_trait = leader_trait_dmj_reinhardist_devotee
-			add_trait = "random_negative"
+			custom_tooltip = dmj_random_negative_trait
+			hidden_effect = {
+				add_trait = "random_negative"
+			}
 			if = {
 				limit = {
 					NOR = {
@@ -524,7 +563,7 @@ leader_event = { # Random leader becomes a Reinhardist Devotee
 
 leader_event = { # A group of pops sacrifice their souls to Reinhard
 	id = dmj_flavor.6
-	name = "dmj_flavor.6.name"
+	title = "dmj_flavor.6.name"
 	desc = "dmj_flavor.6.desc"
 	is_triggered_only = yes
 
@@ -532,7 +571,11 @@ leader_event = { # A group of pops sacrifice their souls to Reinhard
 	show_sound = event_death_cult
 
 	event_window_type = leader_story
-	event_picture_background = "GFX_leader_recruitment_bg_renowned"
+	event_picture_background = "GFX_leader_recruitment_bg_legendary_beholder"
+
+	picture_event_data = {
+		portrait = root
+	}
 
 	trigger = {
 		exists = owner
@@ -616,7 +659,7 @@ leader_event = { # A group of pops sacrifice their souls to Reinhard
 
 leader_event = { # Reinhardist Agitation, reduces Reinhardist Faction approval
 	id = dmj_flavor.7
-	name = "dmj_flavor.7.name"
+	title = "dmj_flavor.7.name"
 	desc = "dmj_flavor.7.desc"
 	is_triggered_only = yes
 
@@ -624,7 +667,11 @@ leader_event = { # Reinhardist Agitation, reduces Reinhardist Faction approval
 	show_sound = event_assembly_fight
 
 	event_window_type = leader_story
-	event_picture_background = "GFX_leader_recruitment_bg_renowned"
+	event_picture_background = "GFX_leader_recruitment_bg_legendary_beholder"
+
+	picture_event_data = {
+		portrait = root
+	}
 
 	trigger = {
 		exists = owner

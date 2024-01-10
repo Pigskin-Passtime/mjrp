@@ -607,6 +607,10 @@ country_event = { # Destroy the battleform and kill the clone if Reinhard dies
 	is_triggered_only = yes
 
 	trigger = {
+		OR = {
+			exists = event_target:dmj_daniel
+			exists = event_target:dmj_daniel_clone
+		}
 		from = {
 			OR = {
 				is_same_value = event_target:dmj_daniel
@@ -644,6 +648,10 @@ country_event = { # Destroy the battleform and kill the clone if Reinhard is fir
 	is_triggered_only = yes
 
 	trigger = {
+		OR = {
+			exists = event_target:dmj_daniel
+			exists = event_target:dmj_daniel_clone
+		}
 		from = {
 			OR = {
 				is_same_value = event_target:dmj_daniel
@@ -716,15 +724,23 @@ country_event = { # Kill Faulkner if his battleform is destroyed
 	}
 
 	immediate = {
-		event_target:dmj_michael_clone = {
-			kill_leader = {
-				show_notification = no
-				fire = yes
+		if = {
+			limit = {
+				OR = {
+					exists = event_target:dmj_michael
+					exists = event_target:dmj_michael_clone
+				}
 			}
-		}
-		event_target:dmj_michael = {
-			kill_leader = {
-				show_notification = yes
+			event_target:dmj_michael_clone = {
+				kill_leader = {
+					show_notification = no
+					fire = yes
+				}
+			}
+			event_target:dmj_michael = {
+				kill_leader = {
+					show_notification = yes
+				}
 			}
 		}
 	}
@@ -736,6 +752,10 @@ country_event = { # Destroy the battleform and kill the clone if Faulkner dies
 	is_triggered_only = yes
 
 	trigger = {
+		OR = {
+			exists = event_target:dmj_michael
+			exists = event_target:dmj_michael_clone
+		}
 		from = {
 			OR = {
 				is_same_value = event_target:dmj_michael
@@ -773,6 +793,10 @@ country_event = { # Destroy the battleform and kill the clone if Faulkner is fir
 	is_triggered_only = yes
 
 	trigger = {
+		OR = {
+			exists = event_target:dmj_michael
+			exists = event_target:dmj_michael_clone
+		}
 		from = {
 			OR = {
 				is_same_value = event_target:dmj_michael
@@ -892,5 +916,108 @@ country_event = {
 
 	immediate = {
 		set_timed_country_flag = { flag = dmj_recently_fired_reinhardist_devotee days = 3600 }
+	}
+}
+
+fleet_event = {
+	id = dmj_misc.15
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = {
+			has_star_flag = dmj_spawn_system
+			NOT = { has_star_flag = dmj_michael_imprisoned }
+		}
+		owner = {
+			dmj_trigger = yes
+			has_country_flag = dmj_daniel_spawn_process
+		}
+		event_target:dmj_spawn_system = {
+			NOT = { has_star_flag = dmj_sentinels_cooldown }
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = { NOT = { exists = event_target:shroud_country } }
+			create_country = {
+				name = "NAME_Creatures_of_the_Shroud"
+				type = shroud_spirits
+				flag = {
+					icon = {
+						category = "special"
+						file = "the_shroud.dds"
+					}
+					background= {
+						category = "backgrounds"
+						file = "00_solid.dds"
+					}
+					colors={
+						"dark_purple"
+						"black"
+						"null"
+						"null"
+					}
+				}
+			}
+			last_created_country = {
+				establish_communications_no_message = root.owner
+				save_global_event_target_as = shroud_country
+			}
+		}
+		create_fleet = {
+			name = "NAME_dmj_Shroud_Sentinel"
+			settings = {
+				spawn_debris = no
+				is_boss = yes
+			}
+			effect = {
+				set_owner = event_target:shroud_country
+				create_ship = {
+					name = "NAME_dmj_Shroud_Sentinel"
+					design = "NAME_dmj_Shroud_Sentinel"
+				}
+				set_location = event_target:dmj_bastion_1
+				set_fleet_stance = aggressive
+				set_aggro_range_measure_from = return_point
+				set_aggro_range = 300
+				set_fleet_flag = dmj_sentinel
+			}
+		}
+		create_fleet = {
+			name = "NAME_dmj_Shroud_Sentinel"
+			settings = {
+				spawn_debris = no
+				is_boss = yes
+			}
+			effect = {
+				set_owner = event_target:shroud_country
+				create_ship = {
+					name = "NAME_dmj_Shroud_Sentinel"
+					design = "NAME_dmj_Shroud_Sentinel"
+				}
+				set_location = event_target:dmj_bastion_2
+				set_fleet_stance = aggressive
+				set_aggro_range_measure_from = return_point
+				set_aggro_range = 300
+				set_fleet_flag = dmj_sentinel
+			}
+		}
+		event_target:shroud_country = {
+			set_variable = {
+				which = dmj_alive_sentinels_count
+				value = 0
+			}
+			every_owned_fleet = {
+				limit = { has_fleet_flag = dmj_sentinel }
+				owner = {
+					change_variable = {
+						which = dmj_alive_sentinels_count
+						value = 1
+					}
+				}
+			}
+		}
 	}
 }

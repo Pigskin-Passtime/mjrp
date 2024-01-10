@@ -21,6 +21,7 @@ fleet_event = { # Detect when fleet enters system
 			dmj_trigger = yes
 			NOT = { has_country_flag = entered_dmj_spawn_system }
 			NOT = { has_country_flag = dmj_spawn_system_approved }
+			NOT = { has_country_flag = dmj_daniel_spawn_process }
 		}
 	}
 
@@ -105,8 +106,9 @@ fleet_event = { # Detect when fleet enters system
 				}
 			}
 		}
-		owner = {
+		root.owner = {
 			set_country_flag = entered_dmj_spawn_system
+			set_country_flag = dmj_daniel_spawn_process
 			save_global_event_target_as = dmj_trespasser
 		}
 	}
@@ -125,6 +127,7 @@ country_event = { # Detect when the Sentinels are defeated
 		exists = event_target:shroud_country
 		is_same_value = event_target:shroud_country
 		fromfrom = { has_fleet_flag = dmj_sentinel }
+		NOT = { has_global_flag = dmj_sentinel_respawn_safety }
 	}
 	immediate = {
 		change_variable = {
@@ -146,6 +149,9 @@ country_event = { # Detect when the Sentinels are defeated
 					country_event = { id = dmj.3 }
 					clear_global_event_target = dmj_trespasser
 				}
+			}
+			event_target:dmj_spawn_system = {
+				set_star_flag = dmj_sentinels_cooldown
 			}
 			country_event = { id = dmj.4 days = 180 }
 		}
@@ -202,47 +208,66 @@ country_event = { # Respawn the Sentinels
 
 	immediate = {
 		if = {
-			limit = { exists = event_target:dmj_bastion_1 }
-			create_fleet = {
-				name = "NAME_dmj_Shroud_Sentinel"
-				settings = {
-					spawn_debris = no
-					is_boss = yes
-				}
-				effect = {
-					set_owner = event_target:shroud_country
-					create_ship = {
-						name = "NAME_dmj_Shroud_Sentinel"
-						design = "NAME_dmj_Shroud_Sentinel"
+			limit = {
+				event_target:dmj_spawn_system = {
+					any_fleet_in_system = {
+						owner = {
+							has_country_flag = dmj_daniel_spawn_process
+						}
 					}
-					set_location = event_target:dmj_bastion_1
-					set_fleet_stance = aggressive
-					set_aggro_range_measure_from = return_point
-					set_aggro_range = 300
-					set_fleet_flag = dmj_sentinel
+				}
+			}
+			event_target:dmj_spawn_system = {
+				remove_star_flag = dmj_sentinels_cooldown
+			}
+			if = {
+				limit = { exists = event_target:dmj_bastion_1 }
+				create_fleet = {
+					name = "NAME_dmj_Shroud_Sentinel"
+					settings = {
+						spawn_debris = no
+						is_boss = yes
+					}
+					effect = {
+						set_owner = event_target:shroud_country
+						create_ship = {
+							name = "NAME_dmj_Shroud_Sentinel"
+							design = "NAME_dmj_Shroud_Sentinel"
+						}
+						set_location = event_target:dmj_bastion_1
+						set_fleet_stance = aggressive
+						set_aggro_range_measure_from = return_point
+						set_aggro_range = 300
+						set_fleet_flag = dmj_sentinel
+					}
+				}
+			}
+			if = {
+				limit = { exists = event_target:dmj_bastion_2 }
+				create_fleet = {
+					name = "NAME_dmj_Shroud_Sentinel"
+					settings = {
+						spawn_debris = no
+						is_boss = yes
+					}
+					effect = {
+						set_owner = event_target:shroud_country
+						create_ship = {
+							name = "NAME_dmj_Shroud_Sentinel"
+							design = "NAME_dmj_Shroud_Sentinel"
+						}
+						set_location = event_target:dmj_bastion_2
+						set_fleet_stance = aggressive
+						set_aggro_range_measure_from = return_point
+						set_aggro_range = 300
+						set_fleet_flag = dmj_sentinel
+					}
 				}
 			}
 		}
-		if = {
-			limit = { exists = event_target:dmj_bastion_2 }
-			create_fleet = {
-				name = "NAME_dmj_Shroud_Sentinel"
-				settings = {
-					spawn_debris = no
-					is_boss = yes
-				}
-				effect = {
-					set_owner = event_target:shroud_country
-					create_ship = {
-						name = "NAME_dmj_Shroud_Sentinel"
-						design = "NAME_dmj_Shroud_Sentinel"
-					}
-					set_location = event_target:dmj_bastion_2
-					set_fleet_stance = aggressive
-					set_aggro_range_measure_from = return_point
-					set_aggro_range = 300
-					set_fleet_flag = dmj_sentinel
-				}
+		else = {
+			event_target:dmj_spawn_system = {
+				remove_star_flag = dmj_sentinels_cooldown
 			}
 		}
 	}
@@ -267,7 +292,7 @@ ship_event = { # Destroy the planet and check for remaining bastions
 				prevent_anomaly = yes
 			}
 		}
-		else if = {
+		else_if = {
 			limit = {
 				exists = event_target:dmj_bastion_2
 				fromfrom = { is_same_value = event_target:dmj_bastion_2 }
@@ -448,6 +473,7 @@ country_event = { # Both bastions destroyed
 			}
 		}
 		set_country_flag = dmj_freed_reinhard
+		remove_country_flag = dmj_daniel_spawn_process
 		set_global_flag = dmj_reinhard_free
 	}
 	option = {
@@ -618,6 +644,7 @@ country_event = {
 			country_event = { id = dmj_sol.1 days = 90 random = 270 }
 			if = {
 				limit = {
+					exists = event_target:dmj_sol_country
 					has_communications = event_target:dmj_sol_country
 				}
 				country_event = { id = dmj_sol.7 days = 1 random = 9 }
@@ -649,6 +676,13 @@ pop_faction_event = { # Setup Reinhardist faction
 
 	picture = GFX_evt_alien_propaganda
 	show_sound = event_announcement
+
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_legendary_beholder"
+
+	picture_event_data = {
+		portrait = event_target:dmj_daniel
+	}
 
 	option = {
 		name = DISCONCERTING
@@ -694,6 +728,13 @@ pop_faction_event = { # Reinhardist Radicalization
 
 	picture = GFX_evt_civil_action
 	show_sound = event_assembly_fight
+
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_legendary_beholder"
+
+	picture_event_data = {
+		portrait = event_target:dmj_daniel
+	}
 
 	trigger = {
 		support >= 0.3

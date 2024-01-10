@@ -253,3 +253,61 @@ country_event = { # Destroy Faulkner battleform when not at war
 		}
 	}
 }
+
+event = { # Despawn Sentinels
+	id = dmj_maintenance.8
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = event_target:shroud_country
+		event_target:shroud_country = {
+			any_owned_fleet = {
+				has_fleet_flag = dmj_sentinel
+			}
+		}
+		event_target:dmj_spawn_system = {
+			count_fleet_in_system = {
+				count = 0
+				limit = {
+					owner = {
+						has_country_flag = dmj_daniel_spawn_process
+					}
+				}
+			}
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				event_target:dmj_spawn_system = {
+					count_fleet_in_system = {
+						count = 0
+						limit = {
+							owner = {
+								has_country_flag = dmj_daniel_spawn_process
+							}
+						}
+					}
+				}	
+			}
+			event_target:shroud_country = {
+				set_global_flag = dmj_sentinel_respawn_safety
+				every_owned_fleet = {
+					limit = { has_fleet_flag = dmj_sentinel }
+					delete_fleet = {
+						target = this
+						kill_leader = no
+						destroy_template = no
+					}
+				}
+				set_variable = {
+					which = dmj_alive_sentinels_count
+					value = 0
+				}
+				remove_global_flag = dmj_sentinel_respawn_safety
+			}		
+		}
+	}
+}
