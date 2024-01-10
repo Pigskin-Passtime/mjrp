@@ -11,9 +11,7 @@ country_event = {
 	is_triggered_only = yes
 	
 	trigger = { 
-		NOT = { 
-			has_country_flag = soj_flag_transcending 
-		}
+		NOT = { has_country_flag = soj_flag_transcending } 
 		has_country_flag = has_soj_leader
 	}
 	
@@ -35,64 +33,84 @@ country_event = {
 	}
 	
 	is_triggered_only = yes
+	
+	show_sound = event_space_amoeba
 
     option = { # Military Quest Path
+		name = soj_f.100.a
+        #custom_tooltip = soj_f.100.a.tooltip
 		trigger = {
 			NOT = { has_country_flag = soj_military }
 		}
-        name = soj_f.100.a
-        custom_tooltip = soj_f.100.a.tooltip
+
+		begin_event_chain = {
+			event_chain = soj_military_chain
+			target = ROOT
+		}
+
         hidden_effect = {
 			set_country_flag = soj_military
 			country_event = { id = soj_q.1001 }
 		}
     }
     option = { # Scientific Quest Path
+		name = soj_f.100.b
+        #custom_tooltip = soj_f.100.b.tooltip
 		trigger = {
 			NOT = { has_country_flag = soj_science }
 		}
-        name = soj_f.100.b
-        custom_tooltip = soj_f.100.b.tooltip
+
+		begin_event_chain = {
+			event_chain = soj_science_chain
+			target = ROOT
+		}
+
         hidden_effect = {
 			set_country_flag = soj_science
 			country_event = { id = soj_q.2001 }
 		}
     }
-	option = { # Engineering Quest Path
-		trigger = {
-			NOT = { has_country_flag = soj_engineering }
-		}
-        name = soj_f.100.c
-        custom_tooltip = soj_f.100.c.tooltip
-        hidden_effect = {
-			set_country_flag = soj_engineering
-			country_event = { id = soj_q.3001 }
-		}
-    }
     option = { # Cultural Quest Path
+		name = soj_f.100.c
+        #custom_tooltip = soj_f.100.c.tooltip
 		trigger = {
 			NOT = { has_country_flag = soj_culture }
 		}
-        name = soj_f.100.d
-        custom_tooltip = soj_f.100.d.tooltip
+
+		begin_event_chain = {
+			event_chain = soj_culture_chain
+			target = ROOT
+		}
+
+		allow = {
+			any_planet_within_border = {
+				has_observation_outpost = yes
+			}
+		}
         hidden_effect = {
 			set_country_flag = soj_culture
-			country_event = { id = soj_q.4001 }
+			country_event = { id = soj_q.3001 }
 		}
     }
-    option = { # Spiritual Quest Path
+	option = { # Spiritual Quest Path
+		name = soj_f.100.d
+        #custom_tooltip = soj_f.100.d.tooltip
 		trigger = {
 			NOT = { has_country_flag = soj_spiritual }
 		}
-        name = soj_f.100.e
-        custom_tooltip = soj_f.100.e.tooltip
+
+		begin_event_chain = {
+			event_chain = soj_engine_chain
+			target = ROOT
+		}
+
         hidden_effect = {
 			set_country_flag = soj_spiritual
-			country_event = { id = soj_q.5001 }
+			country_event = { id = soj_q.4001 }
 		}
     }
     option = { # Deny absorbing
-        name = soj_f.100.f
+        name = NOTIME
         hidden_effect = {
 			#TODO maybe trigger some bad event
 		}
@@ -110,9 +128,7 @@ country_event = {
 	is_triggered_only = yes
 	
 	trigger = { 
-		NOT = { 
-			has_country_flag = soj_flag_transcending 
-		}
+		NOT = { has_country_flag = soj_flag_transcending } 
 		has_country_flag = has_soj_leader
 	}
 	
@@ -259,11 +275,10 @@ country_event = {
 	id = soj_f.3000
 	hide_window = yes
 	is_triggered_only = yes
+	fire_only_once = yes
 	
 	trigger = { 
-		NOT = { 
-			has_country_flag = soj_flag_transcending 
-		}
+		NOT = { has_country_flag = soj_flag_transcending } 
 		has_country_flag = has_soj_leader
 	}
 	
@@ -358,7 +373,7 @@ country_event = {
 		name = FASCINATING
 	}
 	after = {
-		# Remove Leader
+		event_target:soj_leader = { kill_leader = { show_notification = no } }
 		add_relic = soj_r_gift
 	}
 }
