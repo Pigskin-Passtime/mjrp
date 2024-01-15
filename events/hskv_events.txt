@@ -4,8 +4,49 @@
 #########################################################################################
 
 namespace = hskv
-# Also TODO: Balance all the numbers
-# TODO Be concerned about situation where the FE is killed off early... or just don't care and hope it just works
+# HOTFIX Considerations
+# Can do another small balance pass on the numbers
+# Loc pass again if you want
+# Fix/test the situation where the FE is killed off early... or just don't care and hope it just works
+
+# Triggers event when each country first sends a ship into the system (once per country)
+# Scope = Ship
+# From = System
+# FromFrom = Country
+ship_event = {
+	id = hskv.1
+	hide_window = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	trigger = {
+		From = {
+			has_star_flag = hskv_azure_dream_system
+		}
+		FromFrom = {
+			is_ai = no
+		}
+		NOT = {
+			any_playable_country = {
+				has_country_flag = hskv_thayo_everdawn_country
+			}
+		}
+	}
+
+	immediate = {
+		FROM = { 
+			random_system_planet = {
+				limit = {
+					has_planet_flag = hskv_azure_prison_planet
+				}
+				add_anomaly = {
+					category = hskv_azure_prison_anomaly
+				}
+			}
+		}
+	}
+}
+
 # Special Project to follow up on the signal
 ship_event = {
 	id = hskv.10
@@ -14,6 +55,7 @@ ship_event = {
 	picture = GFX_evt_shielded_planet
 	show_sound = event_mysterious_signal
 	is_triggered_only = yes
+	fire_only_once = yes
 
 	option = {
 		name = INTERESTING
@@ -2770,7 +2812,12 @@ country_event = {
 	# This trigger is fine becasue this is just calling the actual event
 	trigger = {
 		has_country_flag = hskv_target_fe_country
-		
+		any_owned_leader = {
+			AND = {
+				has_leader_flag = hskv_thayo_everdawn_leader
+				has_skill = 10
+			}
+		}
 	}
 
 	immediate = {
