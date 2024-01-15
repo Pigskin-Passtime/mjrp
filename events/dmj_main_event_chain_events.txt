@@ -53,58 +53,62 @@ fleet_event = { # Detect when fleet enters system
 				save_global_event_target_as = shroud_country
 			}
 		}
-		create_fleet = {
-			name = "NAME_dmj_Shroud_Sentinel"
-			settings = {
-				spawn_debris = no
-				is_boss = yes
-			}
-			effect = {
-				set_owner = event_target:shroud_country
-				create_ship = {
-					name = "NAME_dmj_Shroud_Sentinel"
-					design = "NAME_dmj_Shroud_Sentinel"
+		if = {
+			limit = { NOT = { has_global_flag = dmj_no_double_spawn } }
+			create_fleet = {
+				name = "NAME_dmj_Shroud_Sentinel"
+				settings = {
+					spawn_debris = no
+					is_boss = yes
 				}
-				set_location = event_target:dmj_bastion_1
-				set_fleet_stance = aggressive
-				set_aggro_range_measure_from = return_point
-				set_aggro_range = 300
-				set_fleet_flag = dmj_sentinel
-			}
-		}
-		create_fleet = {
-			name = "NAME_dmj_Shroud_Sentinel"
-			settings = {
-				spawn_debris = no
-				is_boss = yes
-			}
-			effect = {
-				set_owner = event_target:shroud_country
-				create_ship = {
-					name = "NAME_dmj_Shroud_Sentinel"
-					design = "NAME_dmj_Shroud_Sentinel"
+				effect = {
+					set_owner = event_target:shroud_country
+					create_ship = {
+						name = "NAME_dmj_Shroud_Sentinel"
+						design = "NAME_dmj_Shroud_Sentinel"
+					}
+					set_location = event_target:dmj_bastion_1
+					set_fleet_stance = aggressive
+					set_aggro_range_measure_from = return_point
+					set_aggro_range = 300
+					set_fleet_flag = dmj_sentinel
 				}
-				set_location = event_target:dmj_bastion_2
-				set_fleet_stance = aggressive
-				set_aggro_range_measure_from = return_point
-				set_aggro_range = 300
-				set_fleet_flag = dmj_sentinel
 			}
-		}
-		event_target:shroud_country = {
-			set_variable = {
-				which = dmj_alive_sentinels_count
-				value = 0
+			create_fleet = {
+				name = "NAME_dmj_Shroud_Sentinel"
+				settings = {
+					spawn_debris = no
+					is_boss = yes
+				}
+				effect = {
+					set_owner = event_target:shroud_country
+					create_ship = {
+						name = "NAME_dmj_Shroud_Sentinel"
+						design = "NAME_dmj_Shroud_Sentinel"
+					}
+					set_location = event_target:dmj_bastion_2
+					set_fleet_stance = aggressive
+					set_aggro_range_measure_from = return_point
+					set_aggro_range = 300
+					set_fleet_flag = dmj_sentinel
+				}
 			}
-			every_owned_fleet = {
-				limit = { has_fleet_flag = dmj_sentinel }
-				owner = {
-					change_variable = {
-						which = dmj_alive_sentinels_count
-						value = 1
+			event_target:shroud_country = {
+				set_variable = {
+					which = dmj_alive_sentinels_count
+					value = 0
+				}
+				every_owned_fleet = {
+					limit = { has_fleet_flag = dmj_sentinel }
+					owner = {
+						change_variable = {
+							which = dmj_alive_sentinels_count
+							value = 1
+						}
 					}
 				}
 			}
+			set_global_flag = dmj_no_double_spawn
 		}
 		root.owner = {
 			set_country_flag = entered_dmj_spawn_system
@@ -141,6 +145,7 @@ country_event = { # Detect when the Sentinels are defeated
 					value = 0
 				}
 			}
+			remove_global_flag = dmj_no_double_spawn
 			if = {
 				limit = {
 					from = { is_same_value = event_target:dmj_trespasser }
@@ -424,7 +429,7 @@ country_event = { # Both bastions destroyed
 				name = NAME_Human
 				plural = NAME_Human_plural
 				class = "HUM"
-				portrait = dmj_daniel
+				portrait = "human"
 				traits = {
 					trait = "trait_adaptive"
 					trait = "trait_nomadic"
@@ -745,6 +750,9 @@ pop_faction_event = { # Reinhardist Radicalization
 				has_country_flag = dmj_reinhardists_radicalizing
 				has_country_flag = dmj_reinhardists_revolting
 				has_country_flag = dmj_reinhardist_rebellion_cooldown
+			}
+			any_owned_planet = {
+				is_capital = no
 			}
 		}
 	}
