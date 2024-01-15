@@ -299,6 +299,9 @@ country_event = {
 	event_chain = celestial_interdimensional_pursuit
 
 	trigger = {
+		any_owned_leader = {
+			has_leader_flag = celestial
+		}
 	}
 	
 	immediate = {
@@ -1495,10 +1498,17 @@ country_event = {
 				set_leader_flag = immune_to_negative_traits
 				set_owner = event_target:celestial_astral_corps_country
 			}
-			event_target:celestial_leader = {
-				kill_leader = {
-					show_notification = no
-					fire = yes
+			if = {
+				limit = {
+					any_owned_leader = {
+						has_leader_flag = celestial
+					}
+				}
+				event_target:celestial_leader = {
+					kill_leader = {
+						show_notification = no
+						fire = yes
+					}
 				}
 			}
 			event_target:celestial_fleet = {
