@@ -251,7 +251,12 @@ chronotec_convert_into_leader_effect = {
 	remove_country_flag = chronotec_chronolord_is_relic
 	set_country_flag = chronotec_chronolord_is_leader
 	# Removes the relic
-	remove_relic = r_chronotec_standard
+	if = {
+		limit = {
+			has_relic = r_chronotec_standard
+		}
+		remove_relic = r_chronotec_standard
+	}
 	#set_saved_date = {	# Transformation timer
 	#	key = chronotec_transformation_timer
 	#	days_from_present = @chronotec_charge_timer
@@ -289,6 +294,19 @@ chronotec_increase_charges_effect = {
 				}
 			}
 			change_leader_portrait = chronotec_chronolord_portrait_perfected
+			# Force the leader out of the stasis
+			if = {
+				limit = {
+					owner = {
+						NOT = {
+							has_country_flag = chronotec_chronolord_is_leader
+						}
+					}
+				}
+				owner = {
+					chronotec_convert_into_leader_effect = yes
+				}
+			}
 		}
 		else_if = {	# 4
 			limit = {
@@ -392,6 +410,19 @@ chronotec_decrease_charges_effect = {
 				}
 			}
 			change_leader_portrait = chronotec_chronolord_portrait_corrupted
+			# Force the leader out of the stasis
+			if = {
+				limit = {
+					owner = {
+						NOT = {
+							has_country_flag = chronotec_chronolord_is_leader
+						}
+					}
+				}
+				owner = {
+					chronotec_convert_into_leader_effect = yes
+				}
+			}
 		}
 		else_if = {	# -4 > -5
 			limit = {
