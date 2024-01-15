@@ -1204,7 +1204,7 @@ country_event = {
 	trigger = {
 		has_country_flag = mem_descended_flavor_active
 		NOT = {
-			has_country_flag = mem_flavor_pause
+			has_country_flag = mem_descended_flavor_pause
 		}
 	}
 
@@ -1349,20 +1349,22 @@ country_event = {
 				modifier = {
 					OR = {
 						has_country_flag = mem_descended_flavor_8
-						any_system_within_border = {
-							NOR = {
-								any_system_megastructure = {
-									exists = this	
-								}
-								any_system_planet = {
-									OR = {
-										exists = archaeological_site
-										is_a_habitable_planet_megastructure = yes
-										habitable_planet = yes
-									}						
+						NOT = {
+							any_system_within_border = {
+								NOR = {
+									any_system_megastructure = {
+										exists = this	
+									}
+									any_system_planet = {
+										OR = {
+											exists = archaeological_site
+											is_a_habitable_planet_megastructure = yes
+											habitable_planet = yes
+										}						
+									}
 								}
 							}
-						}
+						}						
 					}
 					factor = 0
 				}
@@ -1563,7 +1565,6 @@ country_event = {
 				}
 				mem_flavor_pause = yes
 			}
-
 			30 = { # Nothing happens at a 2/3 chance so 2 are subtracted for every outcome that has factor 0 to keep the balance
 				modifier = { # if 1 is disabled
 					OR = {
@@ -1631,17 +1632,19 @@ country_event = {
 				modifier = { # if 8 is disabled
 					OR = {
 						has_country_flag = mem_descended_flavor_8
-						any_system_within_border = {
-							NOR = {
-								any_system_megastructure = {
-									exists = this	
-								}
-								any_system_planet = {
-									OR = {
-										exists = archaeological_site
-										is_a_habitable_planet_megastructure = yes
-										habitable_planet = yes
-									}						
+						NOT = {
+							any_system_within_border = {
+								NOR = {
+									any_system_megastructure = {
+										exists = this	
+									}
+									any_system_planet = {
+										OR = {
+											exists = archaeological_site
+											is_a_habitable_planet_megastructure = yes
+											habitable_planet = yes
+										}						
+									}
 								}
 							}
 						}
@@ -1771,8 +1774,6 @@ country_event = {
 					}
 					subtract = 2
 				}
-				
-
 				modifier = { # lower the event chance after ascension to 1/7 instead of 1/3  (this assumes the other modifiers are applied first and the factor is multiplied with the reduced base number, otherwise this outcome will be more likely than intended - not the worst thing that could happen though, as the ascension basically closes the story)
 					has_completed_event_chain_counter = {
 						event_chain = mem_descended_chain
