@@ -28,26 +28,30 @@ country_event = { # Update Devotion variable monthly
 	}
 }
 
-country_event = { # Change leader portraits back, if they somehow get changed
+event = { # Change leader portraits back, if they somehow get changed
 	id = dmj_maintenance.2
 	hide_window = yes
 	is_triggered_only = yes
 
 	trigger = {
-		any_owned_leader = {
-			OR = {
-				is_same_value = event_target:dmj_daniel
-				is_same_value = event_target:dmj_michael
-			}
+		OR = {
+			exists = event_target:dmj_daniel
+			exists = event_target:dmj_michael
 		}	
 	}
 
 	immediate = {
-		event_target:dmj_daniel = {
-			change_leader_portrait = dmj_daniel
+		if = {
+			limit = { exists = event_target:dmj_daniel }
+			event_target:dmj_daniel = {
+				change_leader_portrait = dmj_daniel
+			}
 		}
-		event_target:dmj_michael = {
-			change_leader_portrait = dmj_michael
+		if = {
+			limit = { exists = event_target:dmj_michael }
+			event_target:dmj_michael = {
+				change_leader_portrait = dmj_michael
+			}
 		}
 	}
 }
@@ -58,6 +62,10 @@ country_event = { # Destroy Reinhard battleform when not at war
 	is_triggered_only = yes
 
 	trigger = {
+		exists = event_target:dmj_daniel
+		any_owned_leader = {
+			is_same_value = event_target:dmj_daniel
+		}
 		any_owned_fleet = {
 			has_fleet_flag = dmj_reinhard_battleform
 		}
@@ -112,6 +120,7 @@ country_event = { # If Reinhardist Faction does not exist within a year, force c
 	is_triggered_only = yes
 
 	trigger = {
+		exists = event_target:dmj_daniel
 		any_owned_leader = {
 			is_same_value = event_target:dmj_daniel
 		}
@@ -174,6 +183,10 @@ country_event = { # Create Michael's Battleform if he is at war
 
 	trigger = {
 		is_same_value = event_target:dmj_sol_country
+		exists = event_target:dmj_michael
+		any_owned_leader = {
+			is_same_value = event_target:dmj_michael
+		}
 		is_at_war = yes
 		NOT = {
 			any_owned_fleet = {
@@ -230,6 +243,10 @@ country_event = { # Destroy Faulkner battleform when not at war
 	is_triggered_only = yes
 
 	trigger = {
+		exists = event_target:dmj_michael
+		any_owned_leader = {
+			is_same_value = event_target:dmj_michael
+		}
 		any_owned_fleet = {
 			has_fleet_flag = dmj_faulkner_battleform
 		}
@@ -307,6 +324,7 @@ event = { # Despawn Sentinels
 					value = 0
 				}
 				remove_global_flag = dmj_sentinel_respawn_safety
+				remove_global_flag = dmj_no_double_spawn
 			}		
 		}
 	}
