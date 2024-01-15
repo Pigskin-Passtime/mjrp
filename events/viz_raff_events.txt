@@ -24,6 +24,10 @@ leader_event = {
 				flag = viz_raff_early_days
 				days = 720
 			}
+			set_variable = {
+				which = viz_raff_power_gained_hidden
+				value = 0
+			}
 			start_situation = {
 				type = situation_viz_raff_accumulating_power
 			}
@@ -358,9 +362,6 @@ leader_event = {
 				days = 7200
 			}
 		}
-		event_target:former_ruler = {
-			exile_leader_as = banished_ruler
-		}
 	}
 
 	option = {
@@ -412,14 +413,66 @@ country_event = {
 			}
 			destroy_situation = this
 		}		
+		remove_country_flag = viz_raff_present
 	}
 
 	option = {
 		name = UNFORTUNATE
 		hidden_effect = {
-			country_event = {
-				id = viz_raff.8
-				days = 360
+			if = {
+				limit = {
+					any_neighbor_country = {
+						is_country_type = default
+						is_homicidal = no
+						has_communications = root
+						NOR = {
+							is_at_war_with = root
+							is_country = root
+							has_defensive_pact = root
+							is_in_federation_with = root
+						}
+					}
+				}
+				random_neighbor_country = {
+					limit = {
+						is_country_type = default
+						is_homicidal = no
+						has_communications = root
+						NOR = {
+							is_at_war_with = root
+							is_country = root
+							has_defensive_pact = root
+							is_in_federation_with = root
+						}
+					}
+					save_event_target_as = new_viz_raffar_host
+					set_country_flag = viz_raff_present
+				}
+				clone_leader = {
+					target = event_target:viz_raff_off_to_coup
+					background_planet = event_target:viz_raff_nuked_ruins
+					background_job = politician
+				}
+				last_created_leader = {
+					save_global_event_target_as = viz_raff_leader
+					set_leader_flag = legendary_leader
+					set_leader_flag = viz_raff
+					set_leader_flag = immune_to_negative_traits
+					set_leader_flag = leader_death_events_blocked
+					set_owner = event_target:new_viz_raffar_host				
+					set_variable = {
+						which = viz_raff_vizier_level
+						value = 1
+					}
+					leader_event = {
+						id = viz_raff.1
+						days = 30
+					}
+				}
+				country_event = {
+					id = viz_raff.8
+					days = 360
+				}
 			}
 		}
 	}
@@ -465,9 +518,6 @@ country_event = {
 				days = 7200
 			}
 		}
-		event_target:former_ruler = {
-			exile_leader_as = banished_ruler
-		}
 	}
 }
 
@@ -484,14 +534,8 @@ country_event = {
 
 	trigger = {
 		any_neighbor_country = {
-			is_country_type = default
-			is_homicidal = no
-			has_communications = root
-			NOR = {
-				is_at_war_with = root
-				is_country = root
-				has_defensive_pact = root
-				is_in_federation_with = root
+			any_owned_leader = {
+				has_leader_flag = viz_raff
 			}
 		}
 	}
@@ -499,27 +543,14 @@ country_event = {
 	immediate = {
 		random_neighbor_country = {
 			limit = {
-				is_country_type = default
-				is_homicidal = no
-				has_communications = root
-				NOR = {
-					is_at_war_with = root
-					is_country = root
-					has_defensive_pact = root
-					is_in_federation_with = root
+				any_owned_leader = {
+					has_leader_flag = viz_raff
 				}
 			}
 			save_event_target_as = new_viz_raffar_host
 			add_opinion_modifier = {
 				who = root
 				modifier = opinion_viz_raff_lies
-			}
-		}
-		event_target:viz_raff_off_to_coup = {
-			set_owner = event_target:new_viz_raffar_host
-			leader_event = {
-				id = viz_raff.1
-				days = 30
 			}
 		}
 	}
@@ -923,7 +954,9 @@ country_event = {
 	hide_window = yes
 	is_triggered_only = yes
 	trigger = {
+		has_country_flag = viz_raff_present
 		any_owned_leader = {
+			has_leader_flag = viz_raff
 			has_trait = leader_trait_viz_raff_truth_dweller
 		}
 	}
@@ -931,6 +964,7 @@ country_event = {
 	immediate = {
 		random_owned_leader = {
 			limit = {
+				has_leader_flag = viz_raff
 				has_trait = leader_trait_viz_raff_truth_dweller
 			}
 			owner = {
@@ -1447,10 +1481,61 @@ country_event = {
 	id = viz_raff.26
 	is_triggered_only = yes
 	hide_window = yes
-	immediate = {
+
+	trigger = {
 		from = {
-			save_global_event_target_as = viz_raff_off_to_coup
-			exile_leader_as = viz_raff_off_to_coup
+			has_leader_flag = viz_raff
+		}
+		any_neighbor_country = {
+			is_country_type = default
+			is_homicidal = no
+			has_communications = root
+			NOR = {
+				is_at_war_with = root
+				is_country = root
+				has_defensive_pact = root
+				is_in_federation_with = root
+			}
+		}
+	}
+
+	immediate = {
+		remove_country_flag = viz_raff_present
+		random_neighbor_country = {
+			limit = {
+				is_country_type = default
+				is_homicidal = no
+				has_communications = root
+				NOR = {
+					is_at_war_with = root
+					is_country = root
+					has_defensive_pact = root
+					is_in_federation_with = root
+				}
+			}
+			save_event_target_as = new_viz_raffar_host
+			set_country_flag = viz_raff_present
+		}
+		clone_leader = {
+			target = from
+			background_planet = event_target:viz_raff_nuked_ruins
+			background_job = politician
+		}
+		last_created_leader = {
+			save_global_event_target_as = viz_raff_leader
+			set_leader_flag = legendary_leader
+			set_leader_flag = viz_raff
+			set_leader_flag = immune_to_negative_traits
+			set_leader_flag = leader_death_events_blocked
+			set_owner = event_target:new_viz_raffar_host				
+			set_variable = {
+				which = viz_raff_vizier_level
+				value = 1
+			}
+			leader_event = {
+				id = viz_raff.1
+				days = 30
+			}
 		}
 		country_event = {
 			id = viz_raff.8
