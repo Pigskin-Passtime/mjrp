@@ -1,0 +1,82 @@
+# Author: Starchitect
+# Allows Uplifted Zob pops to exist on a hiveworld without the hivemind trait. Prevents Zob pops from leaving the hiveworld and from being affected by Happiness
+
+#Root = planet
+#This = species
+species_can_live_on_planet = {
+	exists = root #somehow this appeared in the error log. No idea how!
+	NAND = {
+		root = { is_planet_class = pc_machine }		
+		NOR = {
+			has_trait = trait_machine_unit
+			has_trait = trait_mechanical			
+			AND = {
+				has_trait = trait_cybernetic
+				exists = root.owner
+				root.owner = {
+					has_authority = auth_machine_intelligence
+					OR = {
+						has_civic = civic_machine_assimilator # Assimilator empire
+						has_ascension_perk = ap_mechromancy
+					}
+				}
+			}
+		}
+	}
+	if = {
+		limit = {
+			root = { is_planet_class = pc_hive }
+		}
+		OR = {
+			has_trait = trait_hive_mind
+			has_trait = trait_zob_uplifted
+			AND = { #Necrophage Hive Mind can have Necrophytes
+				exists = root.owner
+				root.owner = {
+					is_hive_empire = yes
+					has_origin = origin_necrophage
+					prev = { species_can_be_necrophaged = yes }
+				}
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_trait = trait_zob_uplifted
+		}
+		root = { 
+			is_planet_class = pc_hive 
+			has_planet_flag = zob_planet
+		}
+	}
+}
+
+
+# Root = Species
+# From = Country
+# This = Species
+species_has_happiness = {
+	NOR = {
+		has_trait = trait_zob_uplifted
+		has_trait = trait_machine_unit
+		has_trait = trait_hive_mind
+		can_think = no
+		AND = {
+			has_trait = trait_mechanical
+			OR = {
+				NOT = { exists = from }
+				from = { has_authority = auth_machine_intelligence }
+				from = { NOT = { has_technology = tech_synthetic_workers } }
+				from = { has_policy_flag = ai_outlawed }
+			}
+		}
+		AND = {
+			has_trait = trait_cybernetic
+			exists = from
+			from = {
+				has_authority = auth_machine_intelligence
+				has_civic = civic_machine_assimilator # Assimilator empire
+			}
+		}
+	}
+}
