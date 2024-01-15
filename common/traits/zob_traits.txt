@@ -18,6 +18,30 @@ leader_trait_zob_severed = {
 	custom_tooltip = leader_trait_zob_severed_effect
 }
 
+###Trait if you uplift the feral Zob
+trait_zob_uplifted = {
+	cost = 0
+	species_potential_add = {
+		always = no
+	}
+	species_possible_remove = {
+		always = no
+	}
+	species_possible_merge_add = {
+		always = no
+	}
+	potential_crossbreeding_chance = 0	# 1.0 = 100% chance of being considered for new traits when forming half-species. does not guarantee the trait will be added if it costs points.
+	initial = no
+	randomized = no
+	advanced_trait = no
+	forced_happiness = yes
+	sapient = yes
+	allowed_archetypes = { BIOLOGICAL }
+	custom_tooltip_with_modifiers = trait_zob_uplifted_effect
+	icon = "gfx/interface/icons/traits/trait_zob_uplifted.dds"
+}
+
+
 ###Applies a modifier for each non councilor trait in the collective
 leader_trait_zob_collected = {
 	cost = 0
@@ -1462,6 +1486,20 @@ leader_trait_zob_mind_collector = {
 	leader_class = { commander scientist official }
 
 	custom_tooltip_with_modifiers = leader_trait_zob_mind_collector_effect
+
+	triggered_background_planet_modifier = { 
+		potential = {
+			exists = FROM
+			FROM = {
+				exists = owner
+				is_planet_class = pc_hive
+				owner = {
+					is_same_value = root.owner
+				}
+			}
+		}
+		planet_jobs_produces_mult = 0.3
+	}
 	triggered_councilor_modifier = {
 		potential = {
 			exists = owner

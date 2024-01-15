@@ -126,13 +126,16 @@ fleet_event = {
 
 	after = {
 		from = { set_site_progress_locked = no }
-		event_target:collected_scientist = {
-			exile_leader_as = collected_scientist
+		hidden_effect = {
+			event_target:collected_scientist = {
+				exile_leader_as = collected_scientist
+			}
 		}
 	}
 
 	option = {
 		name = TERRIBLE
+		custom_tooltip = zob_stage.4.tooltip
 		owner = {
 			add_monthly_resource_mult = {
 				resource = society_research
@@ -163,6 +166,10 @@ country_event = {
 	location = event_target:zob_planet
 	show_sound = event_alien_signal
 	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+	}
 
 	immediate = {
 		hidden_effect = {
@@ -262,6 +269,7 @@ country_event = {
 	}
 }
 
+#Hire Zob
 country_event = {
 	id = zob.11
 	title = "zob.11.name"
@@ -294,45 +302,6 @@ country_event = {
 
 	immediate = {
 		hidden_effect = {
-			# random_galaxy_species = {
-			# 	limit = {
-			# 		has_species_flag = zob_species
-			# 	}
-			# 	save_event_target_as = zob_species
-			# }
-			# create_leader = {
-			# 	species = event_target:zob_species
-			# 	event_leader = yes
-			# 	class = official
-			# 	name = "name_zob"
-			# 	skill = 5
-			# 	randomize_traits = no
-			# 	skip_background_generation = yes
-			# 	background_ethic = ethic_gestalt_consciousness
-			# 	custom_catch_phrase = zob_catch_phrase 			#TODO Catchphrases are a thing
-			# 	custom_description = zob_back_story
-			# 	background_planet = event_target:zob_planet
-			# 	traits = {
-			# 		trait = subclass_official_governor
-			# 		trait = leader_trait_zob_mind_collector
-			# 		trait = leader_trait_adaptable
-			# 		trait = leader_trait_pop_focused_2
-			# 		trait = leader_trait_gifted
-			# 		trait = leader_trait_zob_severed
-			# 	}
-			# 	gender = indeterminable
-			# 	set_age = 758
-			# 	immortal = yes
-			# 	effect = {
-			# 		save_global_event_target_as = zob_leader
-			# 		set_leader_flag = legendary_leader
-			# 		set_leader_flag = zob
-			# 		set_leader_flag = leader_death_events_blocked
-			# 		set_owner = root
-			# 		exile_leader_as = zob_leader
-			# 	}
-			# }
-			### Do not need to create a fake country since Zobs Species already exists. Keeping around incase this breaks
 			create_country = {
 				name = "name_zob_planet"
 				type = global_event
@@ -511,7 +480,9 @@ country_event = {
 		name = DISMISS
 		tag = dismiss_leader
 		event_target:collected_scientist = {
-			set_owner = root
+			hidden_effect = {
+				set_owner = root
+			}
 			add_trait = leader_trait_traumatized
 		}
 		event_target:zob_leader = {
@@ -528,6 +499,7 @@ country_event = {
 
 	trigger = {
 		has_country_flag = zob_hired
+		is_ai = no
 		from = {
 			OR = {
 				has_trait = leader_trait_zob_mind_collector
@@ -552,6 +524,7 @@ country_event = {
 
 	trigger = {
 		has_country_flag = zob_hired
+		is_ai = no
 	}
 
 	immediate = {
@@ -567,21 +540,39 @@ country_event = {
 	}
 }
 
-###Zob adds a mind, Gateway
+###Zob adds a mind, Gateway. Cyclical, triggered by hiring Zob. Ends if you lose Zob.
 country_event = {
 	id = zob.30
 	hide_window = yes
 	is_triggered_only = yes
 
 	trigger = {
-		any_owned_leader = {
-			has_trait = leader_trait_zob_mind_collector
-		}
+		has_country_flag = zob_hired
+		is_ai = no
+		# exists = event_target:zob_leader
 	}
 
 	immediate = {
 		count_zob_collective = yes
+		#Option to Uplift once you have Epigenetic Triggers
 		if = {
+			limit = {
+				NOT = { has_country_flag = zob_uplift }
+				has_technology = tech_epigenetic_triggers
+				is_hive_empire = no #Hives can uplift normally?
+			}
+			set_country_flag = zob_uplift
+			country_event = {
+				id = zob.40
+			}
+			country_event = {
+				id = zob.30
+				days = 1000
+				random = 1000
+			}
+		}
+		#Expand the Collective if there is room
+		else_if = {
 			limit = {
 				check_variable = {
 					which = zob_collective_size
@@ -595,6 +586,7 @@ country_event = {
 				id = zob.31
 			}
 		}
+		#Check again later
 		else = {
 			country_event = {
 				id = zob.30
@@ -828,11 +820,169 @@ country_event = {
 			remove_country_flag = zob_choose_pending
 		}
 	}
+	# option = { #Add Collector of Minds to Hive Leader. Unecessary as Zob will not be able to collect leaders with councilor traits.
+	# 	name = "zob.31.hive"
+	# 	trigger = {
+	# 		is_hive_empire = yes
+	# 		NOT = { has_country_flag = zob_choose_class }
+	# 		ruler = {
+	# 			NOT = {
+	# 				has_trait = leader_trait_zob_mind_collector
+	# 			}
+	# 		}
+	# 	}
+	# 	sound = event_evolution_mastery
+	# 	custom_tooltip =  zob.31.hive.tooltip
+	# 	hidden_effect = {
+	# 		ruler = {		
+	# 			add_trait = leader_trait_zob_mind_collector
+	# 			set_zob_variables = yes
+	# 		}
+	# 		remove_country_flag = zob_choose_pending
+	# 	}
+	# }
 	option = {
 		name = "zob.31.later"
 		hidden_effect = {
 			remove_country_flag = zob_choose_class
 			remove_country_flag = zob_choose_pending
 		}
+	}
+}
+
+
+###Epigenetic triggers discovered, Zob wants to uplift the Presapients
+country_event = {
+	id = zob.40
+	title = "zob.40.name"
+	desc = {
+		text = zob.40.desc
+	}
+	picture = GFX_evt_scientific_experiments
+	show_sound = event_alien_signal
+	is_triggered_only = yes
+
+	trigger = {	
+		has_country_flag = zob_hired
+		# exists = event_target:zob_leader	
+		is_ai = no
+		any_planet_within_border = {
+			has_planet_flag = zob_planet
+		}	
+		any_galaxy_species = {
+			has_species_flag = zob_species
+		}		
+	}
+	
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_renowned"
+
+	picture_event_data = {
+		portrait = event_target:zob_leader
+	}
+	
+
+	immediate = {
+		if = {
+			limit = {
+				any_owned_leader = {
+					has_trait = leader_trait_zob_collected
+					leader_class = scientist				
+				}
+			}
+			random_owned_leader = {
+				limit = {
+					has_trait = leader_trait_zob_collected
+					leader_class = scientist
+				}
+				save_event_target_as = zob_uplifter
+			}
+		}
+		else = {
+			random_owned_leader = {
+				limit = {
+					leader_class = scientist
+				}
+				save_event_target_as = zob_uplifter
+			}
+		}		
+	}
+
+	option = {
+		name = "zob.40.resposne"
+		enable_special_project = { name = zob_uplift location = event_target:zob_planet }
+	}
+}
+
+ship_event = {
+	id = zob.41
+	title = "zob.41.name"
+	desc = {
+		text = zob.41.desc
+	}
+	picture = GFX_evt_astral_rift_garden_1
+	show_sound = event_alien_signal
+	is_triggered_only = yes
+
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_renowned"
+	picture_event_data = {
+		portrait = event_target:zob_leader
+	}
+	trigger = {
+		any_galaxy_species = {
+			has_species_flag = zob_species
+		}
+	}
+
+	immediate = {
+		random_galaxy_species = {
+			limit = {
+				has_species_flag = zob_species
+			}
+			every_species_pop = {
+				kill_pop = yes
+			}
+		}
+		owner = {
+			create_species = {
+				name = "name_zob_species"
+				class = PLANT
+				portrait = pla12
+				traits = { 
+					trait = trait_zob_uplifted
+					trait = trait_plantoid_budding 
+				}
+				homeworld = event_target:zob_planet
+				sapient = yes
+				# can_be_modified = no
+				immortal = no
+				effect = { 
+					save_event_target_as = zob_species_uplifted 
+					set_species_flag = zob_species
+				}
+			}
+		}				
+		event_target:zob_planet = {			
+			create_colony = {
+				owner = root
+				species = event_target:zob_species_uplifted
+			}
+			set_name = name_zob_planet
+			add_deposit = d_zob_spawning_pool
+			remove_deposit = d_city_ruins
+			add_district = district_farming_uncapped
+			add_district = district_city
+			add_building = building_capital
+			while = {
+				count = 9
+				create_pop = { species = event_target:zob_species_uplifted }
+			}
+			assign_leader = event_target:zob_leader
+		}						
+	}
+	option = {
+		name = "zob.41.resposne"
+		custom_tooltip = zob.41.tooltip
 	}
 }
