@@ -1,0 +1,37 @@
+namespace = crime
+# Gangsters Assassinate Governor
+planet_event = {
+	id = crime.303
+	title = crime.303.name
+	desc = crime.303.desc
+	picture = GFX_evt_dark_alley
+	show_sound = event_criminal_activity
+	location = root
+	is_triggered_only = yes
+
+	pre_triggers = {
+		has_owner = yes
+	}
+
+	trigger = {
+		has_modifier = mob_rule
+		exists = leader
+		leader = {
+			NOR = {
+				has_leader_flag = legendary_leader
+				has_leader_flag = renowned_leader
+			}
+		}
+	}
+
+	immediate = {
+		leader = { save_event_target_as = governor_target }
+		
+		owner = { set_country_flag = gangsters_killed_governor }
+	}
+
+	option = {
+		name = crime.303.a
+		leader = { kill_leader = { show_notification = no } }
+	}
+}
