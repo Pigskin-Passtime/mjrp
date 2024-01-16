@@ -583,6 +583,7 @@ country_event = { # Kill Reinhard if his battleform is destroyed
 	is_triggered_only = yes
 
 	trigger = {
+		has_global_flag = dmj_system_spawned
 		fromfrom = { has_fleet_flag = dmj_reinhard_battleform }
 	}
 
@@ -648,6 +649,7 @@ country_event = { # Destroy the battleform and kill the clone if Reinhard is fir
 	is_triggered_only = yes
 
 	trigger = {
+		has_global_flag = dmj_system_spawned
 		OR = {
 			exists = event_target:dmj_daniel
 			exists = event_target:dmj_daniel_clone
@@ -664,17 +666,28 @@ country_event = { # Destroy the battleform and kill the clone if Reinhard is fir
 	}
 
 	immediate = {
-		event_target:dmj_daniel_clone = {
-			kill_leader = {
-				show_notification = no
-				fire = yes
+		if = {
+			limit = {
+				exists = event_target:dmj_daniel_clone
+			}
+			event_target:dmj_daniel_clone = {
+				kill_leader = {
+					show_notification = no
+					fire = yes
+				}
 			}
 		}
-		event_target:dmj_daniel = {
-			kill_leader = {
-				show_notification = no
+		if = {
+			limit = {
+				exists = event_target:dmj_daniel
+			}
+			event_target:dmj_daniel = {
+				kill_leader = {
+					show_notification = no
+				}
 			}
 		}
+		
 		every_owned_fleet = {
 			limit = { has_fleet_flag = dmj_reinhard_battleform }
 			destroy_fleet = {
@@ -793,6 +806,7 @@ country_event = { # Destroy the battleform and kill the clone if Faulkner is fir
 	is_triggered_only = yes
 
 	trigger = {
+		has_global_flag = dmj_system_spawned
 		OR = {
 			exists = event_target:dmj_michael
 			exists = event_target:dmj_michael_clone
@@ -887,6 +901,7 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
+		has_global_flag = dmj_system_spawned
 		NOT = { has_country_flag = spawning_renowned_leader }
 	}
 
@@ -908,6 +923,7 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
+		has_global_flag = dmj_system_spawned
 		any_pop_faction = {
 			is_pop_faction_type = reinhardist
 		}
@@ -925,6 +941,7 @@ fleet_event = {
 	is_triggered_only = yes
 
 	trigger = {
+		has_global_flag = dmj_system_spawned
 		NOT = { has_global_flag = dmj_no_double_spawn }
 		FROM = {
 			has_star_flag = dmj_spawn_system

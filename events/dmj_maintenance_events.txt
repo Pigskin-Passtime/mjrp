@@ -8,19 +8,36 @@ country_event = { # Update Devotion variable monthly
 	hide_window = yes
 	is_triggered_only = yes
 
+	trigger = {
+		has_global_flag = dmj_system_spawned
+		OR = {
+			exists = event_target:dmj_daniel
+			exists = event_target:dmj_michael
+		}
+	}
+
 	immediate = {
 		export_resource_income_to_variable = {
 			resource = dmj_sr_devotion
 			variable = dmj_devotion_value
 		}
 		if = {
-			limit = { any_owned_leader = { is_same_value = event_target:dmj_daniel } }
+			limit = { 
+				exists = event_target:dmj_daniel
+				any_owned_leader = { 
+					is_same_value = event_target:dmj_daniel 
+				} 
+			}
 			event_target:dmj_daniel = {
-				set_variable = { which = dmj_devotion_value_leader value = root.dmj_devotion_value }
+				set_variable = { 
+					which = dmj_devotion_value_leader value = root.dmj_devotion_value 
+				}
 			}
 		}
 		if = {
-			limit = { any_owned_leader = { is_same_value = event_target:dmj_michael } }
+			limit = { 
+				exists = event_target:dmj_michael
+				any_owned_leader = { is_same_value = event_target:dmj_michael } }
 			event_target:dmj_michael = {
 				set_variable = { which = dmj_devotion_value_leader value = root.dmj_devotion_value }
 			}
@@ -120,6 +137,7 @@ country_event = { # If Reinhardist Faction does not exist within a year, force c
 	is_triggered_only = yes
 
 	trigger = {
+		has_global_flag = dmj_system_spawned
 		exists = event_target:dmj_daniel
 		any_owned_leader = {
 			is_same_value = event_target:dmj_daniel
@@ -166,6 +184,7 @@ country_event = { # Trigger dmj_sol.7 if you open communications with Faulkner a
 	is_triggered_only = yes
 
 	trigger = {
+		exists = event_target:dmj_sol_country
 		has_communications = event_target:dmj_sol_country
 		has_country_flag = owns_reinhard
 		NOT = { has_country_flag = dmj_been_chewed_out }
@@ -182,6 +201,7 @@ country_event = { # Create Michael's Battleform if he is at war
 	is_triggered_only = yes
 
 	trigger = {
+		exists = event_target:dmj_sol_country
 		is_same_value = event_target:dmj_sol_country
 		exists = event_target:dmj_michael
 		any_owned_leader = {
@@ -277,7 +297,9 @@ event = { # Despawn Sentinels
 	is_triggered_only = yes
 
 	trigger = {
+		has_global_flag = dmj_system_spawned
 		exists = event_target:shroud_country
+		exists = event_target:dmj_spawn_system
 		event_target:shroud_country = {
 			any_owned_fleet = {
 				has_fleet_flag = dmj_sentinel
