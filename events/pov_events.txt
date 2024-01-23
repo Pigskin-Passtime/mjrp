@@ -65,7 +65,7 @@ country_event = {
 			add_trait = leader_trait_pov_short_temper
 			add_trait = leader_trait_scrapper_2
 			set_leader_flag = immune_to_negative_traits
-			set_leader_flag = normal_professor
+			set_leader_flag = prof_vir_leader
 		}
 		if = { limit = { has_utopia = yes } 
 			last_created_leader = { add_trait_no_notify = leader_trait_synthetic }
@@ -145,19 +145,6 @@ country_event = {
 
 	trigger = {
 		exists = event_target:prof_vir_leader
-	}
-	immediate = {
-	
-	event_target:vir_planet_0 = {
-			solar_system = {
-				every_system_planet = {
-					limit = {
-						is_planet_class = pc_pov_ai_broken
-					}
-					save_event_target_as = vir_home_planet
-				}
-			}
-		}
 	}
 	
 	option = {
@@ -322,6 +309,39 @@ country_event = { #testing event, spawns system next to capital most of the time
 						spawn_pov = yes
 					}
 				}
+			}
+		}
+	}
+}
+
+ship_event = { # added 1/16/2024 - spawns anomaly on entering the system, and prevents ai from "stealing" the anomaly
+	id = virprof.9
+	title = virprof.9.name
+	desc = virprof.9.desc
+	picture = GFX_evt_junkheap
+	show_sound = event_ghost_town
+	is_triggered_only = yes
+	fire_only_once = yes
+	location = from
+	
+	trigger = {
+		from = {
+			has_star_flag = professor_system
+		}
+		fromfrom = {
+			is_ai = no
+		}
+		event_target:vir_planet_0 = {
+			has_owner = no
+		}
+	}
+	
+	option = {
+		name = virprof.9.a
+		event_target:vir_planet_0 = {
+			add_anomaly = {
+				category = prof_vir_cat
+				target = fromfrom
 			}
 		}
 	}
@@ -598,7 +618,7 @@ planet_event = {
 				}
 			}
 			while = {
-				count = 4
+				count = 3
 				create_army = {
 					name = "angry_angry_robots"
 					owner = last_created_country
@@ -1445,7 +1465,6 @@ country_event = { #Professor dictatorship established, but removed
 			remove_trait = leader_trait_pov_short_temper_council
 			add_trait_no_notify = leader_trait_dedicated_teacher
 			add_trait_no_notify = leader_trait_pov_short_temper
-			set_leader_flag = normal_professor
 		}
 	}
 	
@@ -1532,11 +1551,12 @@ country_event = {
 			}
 		}
 		last_created_leader = {
-			add_trait = leader_trait_dedicated_teacher
-			add_trait = leader_trait_pov_short_temper
+			add_trait = leader_trait_gestalt_dedicated_teacher
+			add_trait = leader_trait_pov_gestalt_short_temper
 			add_trait = leader_trait_scrapper_2
 			set_leader_flag = immune_to_negative_traits
 			set_leader_flag = hive_professor
+			set_leader_flag = prof_vir_leader
 		}
 		if = { limit = { has_utopia = yes } 
 			last_created_leader = { add_trait_no_notify = leader_trait_synthetic }
@@ -1966,19 +1986,6 @@ country_event = { #hive hire event
 
 	trigger = {
 		exists = event_target:prof_vir_leader
-	}
-	
-	immediate = {
-	event_target:vir_planet_0 = { 
-			solar_system = {
-				every_system_planet = {
-					limit = {
-						is_planet_class = pc_pov_ai_broken
-					}
-					save_event_target_as = vir_home_planet
-				}
-			}
-		}
 	}
 	option = {
 		# Special tag to make mark this is the hire option
@@ -2620,7 +2627,7 @@ country_event = { # storyline is that the professor is actively avoiding machine
 			immortal = yes
 			randomize_traits = no
 			hide_age = yes
-			background_planet = vir_home_planet
+			background_planet = event_target:vir_home_planet
 			effect = {
 				save_global_event_target_as = prof_vir_leader
 				set_leader_flag = legendary_leader
@@ -2630,12 +2637,13 @@ country_event = { # storyline is that the professor is actively avoiding machine
 		}
 			
 		last_created_leader = {
-			add_trait = leader_trait_pov_short_temper
+			add_trait = leader_trait_pov_gestalt_short_temper
 			add_trait = leader_trait_scrapper_2
 			add_trait = leader_trait_stubborn
 			add_trait = leader_trait_architectural_interest_2
 			set_leader_flag = immune_to_negative_traits
 			set_leader_flag = hive_professor
+			set_leader_flag = prof_vir_leader
 		}
 		if = { limit = { has_utopia = yes } 
 			last_created_leader = { add_trait_no_notify = leader_trait_synthetic }
@@ -2988,14 +2996,14 @@ country_event = { #professor proposes macro computer, requires special project. 
 		if = {
 			limit = { has_country_flag = pov_light_programming }
 			event_target:prof_vir_leader = {
-				add_trait = leader_trait_dedicated_teacher
+				add_trait = leader_trait_gestalt_dedicated_teacher
 				remove_trait = leader_trait_stubborn
 			}
 		}
 		if = {
 			limit = { has_country_flag = pov_intrusive_reprogramming }
 			event_target:prof_vir_leader = {
-				remove_trait = leader_trait_pov_short_temper
+				remove_trait = leader_trait_pov_gestalt_short_temper
 				remove_trait = leader_trait_stubborn
 			}
 		}
