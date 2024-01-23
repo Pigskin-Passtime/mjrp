@@ -757,6 +757,7 @@ country_event = {
 	trigger = {
 		any_owned_leader = {
 			has_leader_flag = hskv_thayo_everdawn_leader
+			has_skill < 9
 		}
 	}
 
@@ -802,6 +803,7 @@ country_event = {
 	trigger = {
 		any_owned_leader = {
 			has_leader_flag = hskv_thayo_everdawn_leader
+			has_skill < 9
 		}
 	}
 
@@ -846,6 +848,7 @@ country_event = {
 	trigger = {
 		any_owned_leader = {
 			has_leader_flag = hskv_thayo_everdawn_leader
+			has_skill < 9
 		}
 	}
 
@@ -1293,8 +1296,8 @@ country_event = {
 			owner = {
 				country_event = {
 					id = hskv.136
-					days = 1000
-					random  = 700
+					days = 600
+					random  = 500
 				}
 			}
 		}
@@ -2466,6 +2469,7 @@ country_event = {
 	# Let him off with a warning
 	option = {
 		name = hskv.184.option.b
+		custom_tooltip = hskv.184.option.b.tooltip
 	}
 }
 
@@ -2581,11 +2585,11 @@ country_event = {
 				}
 				random_system_within_border = {
 					limit = {
-						always = yes
+						is_capital_system = yes
 					}
 					spawn_system = {
 						min_distance = 10
-						max_distance = 30
+						max_distance = 25
 						max_jumps = 0
 						initializer = "hskv_dawns_end_system"
 					}
@@ -2837,6 +2841,7 @@ country_event = {
 				limit = {
 					has_country_flag = hskv_thayo_everdawn_country
 				}
+				end_event_chain = hskv_thayo_epilogue_chain
 				country_event = {
 					id = hskv.3110
 					days = 20
@@ -2849,6 +2854,7 @@ country_event = {
 				limit = {
 					has_country_flag = hskv_thayo_everdawn_country
 				}
+				end_event_chain = hskv_thayo_epilogue_chain
 				country_event = {
 					id = hskv.3120
 					days = 20
@@ -2876,6 +2882,7 @@ country_event = {
 	}
 
 	immediate = {
+		end_event_chain = "hskv_thayo_epilogue_chain"
 		hskv_get_event_target_thayo_leader = yes
 	}
 
@@ -2921,7 +2928,6 @@ country_event = {
 	}
 }
 
-# TODO THIS CAN BE BETTER
 country_event = {
 	id = hskv.3120
 	title = hskv_event_thayo_coms_title
@@ -2932,6 +2938,9 @@ country_event = {
 	picture_event_data = {
 		portrait = hskv_thayo_portrait
 		room = ethic_spaceship_room
+	}
+	immediate = {
+		end_event_chain = "hskv_thayo_epilogue_chain"
 	}
 
 	trigger = {
@@ -2954,6 +2963,67 @@ country_event = {
 # This = Country
 # From = Leader
 country_event = {
+	id = hskv.3998
+	hide_window = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	trigger = {
+		has_country_flag = hskv_thayo_everdawn_country
+		FROM = {
+			has_leader_flag = hskv_thayo_everdawn_leader
+		}
+	}
+	immediate = {
+		if = {
+			limit = {
+				has_country_flag = hskv_ignore_dismiss_effect
+			}
+			# Dismissed after winning
+			owner = {
+				country_event = {
+					id = hskv.3999
+				}
+			}
+		}
+		else = {
+			# Dissmissed before winning
+			owner = {
+				country_event = {
+					id = hskv.4000
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = hskv.3999
+	title = hskv_event_thayo_coms_title
+	desc = hskv.3999.desc
+	show_sound = event_ship_bridge
+	diplomatic = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	picture_event_data = {
+		portrait = hskv_thayo_portrait
+		room = ethic_spaceship_room
+	}
+
+	immediate = {
+		random_country = {
+			limit = {
+				has_country_flag = hskv_thayo_everdawn_country
+			}
+			# I have no idea why I can't just do Root.GetLeaderName normally
+			save_global_event_target_as = hskv_temp_country
+		}
+	}
+
+	option = {
+		name =  hskv.3999.response
+	}
+}
+country_event = {
 	id = hskv.4000
 	title = hskv_event_thayo_coms_title
 	desc = hskv.4000.desc
@@ -2970,8 +3040,10 @@ country_event = {
 		NOT = {
 			has_country_flag = hskv_ignore_dismiss_effect
 		}
-		FROM = {
-			has_leader_flag = hskv_thayo_everdawn_leader
+		owner = {
+			any_owned_leader = {
+				has_leader_flag = hskv_thayo_everdawn_leader
+			}
 		}
 	}
 
@@ -2982,6 +3054,7 @@ country_event = {
 				end_event_chain = hskv_thayo_levelup_chain
 				end_event_chain = hskv_thayo_waiting_chain
 				end_event_chain = hskv_thayo_secure_dawns_end_chain
+				end_event_chain = hskv_thayo_epilogue_chain
 				abort_special_project = {
 					type = hskv_worm_hole_special_project
 				}
@@ -3157,6 +3230,18 @@ country_event = {
 
 	option = {
 		name = UNFORTUNATE
+		hidden_effect = {
+			owner = {
+				end_event_chain = hskv_thayo_levelup_chain
+				end_event_chain = hskv_thayo_waiting_chain
+				end_event_chain = hskv_thayo_secure_dawns_end_chain
+				end_event_chain = hskv_thayo_epilogue_chain
+				abort_special_project = {
+					type = hskv_worm_hole_special_project
+				}
+				remove_country_flag = hskv_can_build_wormhole_module
+			}
+		}
 	}
 }
 

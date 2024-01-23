@@ -63,13 +63,13 @@ country_event = {
 			owner = {
 				resource_stockpile_compare = {
 					resource = volatile_motes
-					value >= 2000
+					value >= 2500
 				}
 			}
 		}
 		owner = {
 			add_resource = {
-				volatile_motes = -2000
+				volatile_motes = -2500
 			}
 			hskv_get_event_target_everdawn_vault = yes
 			enable_special_project = {
@@ -374,19 +374,19 @@ country_event = {
 			owner = {
 				resource_stockpile_compare = {
 					resource = volatile_motes
-					value >= 2000
+					value >= 1500
 				}
 			}
 		}
 		owner = {
 			add_resource = {
-				volatile_motes = -2000
+				volatile_motes = -1500
 			}
 		}
 		hidden_effect = {
 			owner = {
 				add_resource = {
-					volatile_motes = 2000
+					volatile_motes = 1500
 				}
 				country_event = {
 					id = hskv_heist.2301
@@ -458,7 +458,7 @@ ship_event = {
 		if = {
 			limit = {
 				OR = {
-					from = {
+					fleet = {
 						num_ships > 20
 					}
 					Leader = {
@@ -756,12 +756,14 @@ country_event = {
 			}
 		}
 	}
-	# TODO Javorian Pox Sample?
 	option = {
 		name = hskv_heist.2450.option.c
 		custom_tooltip = hskv_heist.2450.option.c.tooltip
 		allow = {
-			has_modifier = killer_librarian_organism
+			OR = {
+				has_modifier = killer_librarian_organism
+				has_relic = r_pox_sample
+			}
 		}
 		owner = {
 		}
@@ -1079,13 +1081,13 @@ country_event = {
 			owner = {
 				resource_stockpile_compare = {
 					resource = volatile_motes
-					value >= 2000
+					value >= 1500
 				}
 			}
 		}
 		owner = {
 			add_resource = {
-				volatile_motes = -2000
+				volatile_motes = -1500
 			}
 		}
 		hidden_effect = {
@@ -2035,7 +2037,7 @@ country_event = {
 				effect = {
 					set_owner = root.owner
 					while = {
-						count = 4
+						count = 5
 						create_ship = {
 							name = random
 							design = "NAME_Beta"
@@ -2043,7 +2045,7 @@ country_event = {
 						}
 					}
 					while = {
-						count = 12
+						count = 15
 						create_ship = {
 							name = random
 							design = "NAME_Gamma"
@@ -2118,6 +2120,9 @@ country_event = {
 					id = hskv_heist.3002
 					days = 10
 				}
+				begin_event_chain = {
+					event_chain = "hskv_thayo_epilogue_chain"
+				}
 			}
 			random_system = {
 				limit = {
@@ -2152,6 +2157,11 @@ country_event = {
 					delete_megastructure = this
 				}
 				event_target:hskv_azure_dream_system = {
+					starbase = {
+						remove_starbase_building = {
+							building = hskv_wormhole_generator
+						}	
+					}
 					every_megastructure = {
 						limit = {
 							is_megastructure_type = hskv_fake_wormhole
@@ -2173,11 +2183,22 @@ country_event = {
 	immediate = {
 		hskv_get_event_target_dawns_end_system = yes
 
+		event_target:hskv_dawns_end_system = {
+			random_system_planet = {
+				add_deposit = d_minerals_10
+				add_deposit = d_alloys_5
+				add_deposit = d_physics_2
+				add_deposit = d_engineering_6
+			}
+		}
+
 		event_target:hskv_target_fe_country = {
-			random_system_within_border = {
-				add_hyperlane = {
-					from = event_target:hskv_dawns_end_system
-					to = THIS
+			capital_scope = {
+				solar_system = {
+					add_hyperlane = {
+						from = event_target:hskv_dawns_end_system
+						to = THIS
+					}
 				}
 			}
 		}
@@ -2442,17 +2463,6 @@ country_event = {
 				attacker_war_goal = wg_fe_humiliation
 			}
 		}
-		# Lol I didn't even need to bother doing this
-		# create_message = { 
-		# 	type = DIPLO_ACTION_DECLARE_WAR 
-		# 	localization = MESSAGE_DECLARE_WAR_TITLE
-		# 	days = 30 
-		# 	target = root 
-		# 	# variable = { type = name localization = SYSTEM1 scope = from }
-		# 	# variable = { type = name localization = SYSTEM2 scope = fromfrom }
-		# 	# variable = { type = name localization = COUNTRY1 scope = event_target:hskv_target_fe_country }
-		# 	# variable = { type = name localization = COUNTRY2 scope = ROOT }
-		#  }
 	}
 
 	option = {
