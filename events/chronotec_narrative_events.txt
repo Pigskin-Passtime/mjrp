@@ -998,8 +998,20 @@ namespace = chronotec_narrative
 		is_triggered_only = yes
 	
 		trigger = {
+			NOT = {
+				has_global_flag = chronotec_digsite_assigned
+			}
 			from = {
 				has_planet_flag = chronotec_chronolord_planet
+			}
+			owner = {
+				is_ai = no
+			}
+		}
+
+		immediate = {
+			hidden_effect = {
+				set_global_flag = chronotec_digsite_assigned
 			}
 		}
 		
@@ -1219,6 +1231,95 @@ namespace = chronotec_narrative
 
 		trigger = {
 			always = yes
+		}
+
+		immediate = {
+			# Redundancy/Contingency in case the leader has not spawned, somehow
+				# Country Created
+				if = {
+					limit = {
+						NOT = {
+							exists = event_target:chronotec_chronolord_country
+						}
+					}
+					create_country = {
+						name = "NAME_chronotec_chronolord"
+						type = chronotec_event_country
+						flag = {
+							icon = {
+								category = "spherical"
+								file = "flag_spherical_20.dds"
+							}
+							background= {
+								category = "backgrounds"
+								file = "00_solid.dds"
+							}
+							colors={
+								"purple"
+								"black"
+								"null"
+								"null"
+							}
+						}
+						effect = {
+							set_country_flag = suppress_first_contact_comms
+							save_global_event_target_as = chronotec_chronolord_country
+						}
+					}
+				}
+				# Leader created
+				if = {
+					limit = {
+						NOT = {
+							exists = event_target:chronotec_chronolord_leader
+						}
+					}
+					event_target:chronotec_chronolord_country = {
+						create_species = {
+							name = "NAME_Unknown"
+							class = PARAGON
+							portrait = "chronotec_chronolord_portrait_standard"
+							namelist = "PRT1"
+							traits = random
+							effect = {
+								save_event_target_as = chronotec_chronolord_species
+							}
+						}
+						create_leader = {
+							species = event_target:chronotec_chronolord_species
+							event_leader = yes
+							class = scientist
+							name = "NAME_chronotec_chronolord"
+							skill = 10
+							immortal = yes
+							background_ethic = ethic_materialist
+							randomize_traits = no
+							skip_background_generation = yes
+							custom_catch_phrase = chronotec_chronolord_catch_phrase
+							custom_description = chronotec_chronolord_backstory
+							traits = {
+								trait = leader_trait_physics_focus_3
+								trait = leader_trait_collaborator_3
+								trait = leader_trait_chronotec_chronolord_infusion_neutral
+								trait = subclass_scientist_governor
+							}
+							gender = indeterminable
+							set_age = 0
+							hide_age = yes
+							effect = {
+								save_global_event_target_as = chronotec_chronolord_leader
+								set_leader_flag = legendary_leader
+								set_leader_flag = chronotec_chronolord_leader
+								set_leader_flag = immune_to_negative_traits
+								set_leader_flag = leader_death_events_blocked
+								set_owner = event_target:chronotec_chronolord_country
+								exile_leader_as = chronotec_chronolord_leader
+							}
+						}
+					}
+				}
+				# /
+			# /
 		}
 
 		option = { # HIRE
