@@ -628,6 +628,7 @@ country_event = { # Setup for mictla sovereignty, triggered after activating the
 	option = {
 		trigger = {
 			has_ethic = ethic_spiritualist
+			exists = event_target:mictla_leader
 			has_country_flag = mictla_recruited
 		}
 
@@ -642,6 +643,7 @@ country_event = { # Setup for mictla sovereignty, triggered after activating the
 
 	option = {
 		trigger = {
+			exists = event_target:mictla_leader
 			has_country_flag = mictla_recruited
 		}
 
@@ -658,7 +660,8 @@ country_event = { # Setup for mictla sovereignty, triggered after activating the
 		name = "mictla_events.3.c"
 
 		trigger = {
-			NOT = {
+			NAND = {
+				exists = event_target:mictla_leader
 				has_country_flag = mictla_recruited
 			}
 		}
@@ -787,6 +790,11 @@ country_event = { # Assimilate Mictla onto government and pops, triggered by fin
 		portrait = event_target:mictla_leader
 		room = enclave_curator_room
 	}	
+
+	trigger = {
+		exists = event_target:mictla_leader
+		has_country_flag = mictla_recruited
+	}
 
 	immediate = {
 		every_owned_pop = {
@@ -1016,6 +1024,7 @@ country_event = { #Get Unique Technology - Formless Flesh
 
 	trigger = {
 		has_country_flag = mictla_recruited
+		exists = event_target:mictla_leader
 	}
 
 	immediate = {
@@ -1056,6 +1065,7 @@ country_event = { #Get Unique Technology - Tuned Cells
 
 	trigger = {
 		has_country_flag = mictla_recruited
+		exists = event_target:mictla_leader
 	}
 
 	immediate = {
@@ -1120,6 +1130,7 @@ country_event = { #Price to pay
 	trigger = {
 		AND = {
 			has_country_flag = mictla_recruited
+			exists = event_target:mictla_leader
 			NOT = {
 				event_target:mictla_leader = {
 					has_level = 10
@@ -1146,6 +1157,15 @@ country_event = { #Price to pay
 
 	option = { 
 		name = "mictla_pulse_events.3.a"
+		
+		trigger = {
+			any_owned_leader = {
+				NOT = {
+					has_leader_flag = legendary_leader
+				}
+				is_ruler = no
+				}
+			}
 
 		event_target:mictla_sacrifice = {
 			kill_leader = {
@@ -1155,10 +1175,17 @@ country_event = { #Price to pay
 		event_target:mictla_leader = {
 			add_skill = 1
 		}
-		#Kill a leader, level mictla up?
 	}
 	option = {
 		name = "mictla_pulse_events.3.b"
+		trigger = {
+			any_owned_leader = {
+				NOT = {
+					has_leader_flag = legendary_leader
+				}
+				is_ruler = no
+				}
+			}
 	}
 
 	option = {
@@ -1168,6 +1195,20 @@ country_event = { #Price to pay
 			exile_leader_as = exiled_leader
 		}
 		#Dismiss mictla
+	}
+
+	option = {
+		name = "mictla_pulse_events.3.d"
+		trigger = {
+			NOT = {
+				any_owned_leader = {
+					NOT = {
+						has_leader_flag = legendary_leader
+					}
+					is_ruler = no
+					}
+			}
+			}
 	}
 }
 
@@ -1184,6 +1225,11 @@ country_event = { #Mictla Relic
 		portrait = event_target:mictla_leader
 		room = enclave_curator_room
 	}	
+
+	trigger = {
+		exists = event_target:mictla_leader
+		has_country_flag = mictla_recruited
+	}
 
 	option = {
 		name = "mictla_pulse_events.4.question.a"
@@ -1251,6 +1297,7 @@ country_event = {
 
 	trigger = {
 		has_country_flag = mictla_recruited
+		exists = event_target:mictla_leader
 		from = {
 			event_target:mictla_leader = {
 				has_leader_flag = mictla
