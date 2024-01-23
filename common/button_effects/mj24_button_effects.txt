@@ -1,0 +1,166 @@
+
+#Scope type varies depending on what is selected
+# This = selected object (if planet, ship, fleet, system, ambient object, megastructure, federation, espionage operation, arc site or first contact) or player country
+# From = player country
+# Note: It's advised to check is_scope_type = planet/whatever in the allow trigger, since it's possible to confuse the scopes if multiple interfaces are open
+
+# Usage example in a .gui file:
+#	effectbuttonType = {
+#		name = button_effect_test
+#		quadTextureSprite = GFX_fleetview_destroy_fleet
+#		position = { x = 283 y = 0 }
+#		scale = 1
+#		orientation = UPPER_LEFT
+#		effect = example_button_effect
+#	}
+
+fixed_random_disabled = {
+	potential = {
+		NOT = {
+			has_global_flag = fixed_random
+		}
+		NOT = {
+			has_global_flag = okay_to_spawn
+		}
+	}
+	allow = {}
+
+	effect = {
+		custom_tooltip = "fixed_random_tooltip"
+		remove_all_spawning_flags = yes
+		set_global_flag = fixed_random
+	}
+}
+fixed_random_enabled = {
+	potential = {
+		has_global_flag = fixed_random
+		NOT = {
+			has_global_flag = okay_to_spawn
+		}
+	}
+	allow = {
+		custom_tooltip = "fixed_random_selected"
+		custom_tooltip = "fixed_random_tooltip"
+	#	always = no
+	}
+
+	effect = {
+		custom_tooltip = "fixed_random_tooltip"
+	#	remove_all_spawning_flags = yes
+	#	set_global_flag = fixed_random
+	}
+}
+
+random_player_disabled = {
+	potential = {
+		NOT = {
+			has_global_flag = random_player
+		}
+		NOT = {
+			has_global_flag = okay_to_spawn
+		}
+	}
+	allow = {}
+
+	effect = {
+		custom_tooltip = "random_player_tooltip"
+		remove_all_spawning_flags = yes
+		set_global_flag = random_player
+	}
+}
+random_player_enabled = {
+	potential = {
+		has_global_flag = random_player
+		NOT = {
+			has_global_flag = okay_to_spawn
+		}
+	}
+	allow = {
+		custom_tooltip = "random_player_selected"
+		custom_tooltip = "random_player_tooltip"
+	#	always = no
+	}
+
+	effect = {
+		custom_tooltip = "random_player_tooltip"
+	#	remove_all_spawning_flags = yes
+	#	set_global_flag = random_player
+	}
+}
+
+player_choice_disabled = {
+	potential = {
+		NOT = {
+			has_global_flag = player_choice
+		}
+		NOT = {
+			has_global_flag = okay_to_spawn
+		}
+	}
+	allow = {}
+
+	effect = {
+		custom_tooltip = "player_choice_tooltip"
+		remove_all_spawning_flags = yes
+		set_global_flag = player_choice
+	}
+}
+
+player_choice_enabled = {
+	potential = {
+		has_global_flag = player_choice
+		NOT = {
+			has_global_flag = okay_to_spawn
+		}
+	}
+	allow = {
+		custom_tooltip = "player_choice_selected"
+		custom_tooltip = "player_choice_tooltip"
+	#	always = no
+	}
+
+	effect = {
+		custom_tooltip = "random_player_tooltip"
+	#	remove_all_spawning_flags = yes
+	#	set_global_flag = player_choice
+	}
+}
+
+spawn_all_disabled = {
+	potential = {
+		NOT = {
+			has_global_flag = spawn_all
+		}
+		NOT = {
+			has_global_flag = okay_to_spawn
+		}
+	}
+	allow = {}
+
+	effect = {
+		custom_tooltip = "spawn_all_tooltip"
+		remove_all_spawning_flags = yes
+		set_global_flag = spawn_all
+	}
+}
+
+spawn_all_enabled = {
+	potential = {
+		has_global_flag = spawn_all
+		NOT = {
+			has_global_flag = okay_to_spawn
+		}
+	}
+	allow = {
+		custom_tooltip = "spawn_all_selected"
+		custom_tooltip = "spawn_all_tooltip"
+		#always = no
+	}
+
+	effect = {
+		custom_tooltip = "spawn_all_tooltip"
+		#remove_all_spawning_flags = yes
+		#set_global_flag = spawn_all
+	}
+}
+
