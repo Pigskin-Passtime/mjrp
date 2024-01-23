@@ -1274,15 +1274,29 @@ create_celestial_mission_vortex = { 	# Fire on system scope
 		init_effect = {
 			set_planet_flag = celestial_wayfarer_portal
 			set_name = "NAME_Celestial_Vortex"
-			# add_deposit = d_physics_1
+			add_deposit = d_physics_1
 			prevent_anomaly = yes
 			create_archaeological_site = site_$CELESTIAL_MISSION_TYPE$
 			create_ambient_object = {
 				type = "psi_storm_1"
 				location = this
-				entity_offset_height = { min = -15 max = -15 }
+				entity_offset_height = { min = -12 max = -12 }
 				entity_scale_to_size = yes
 				scale = 0.1
+			}
+			last_created_ambient_object = {	
+				set_ambient_object_flag = celestial_temp_vortex_gfx
+				set_location = {
+					target = prev
+					distance = 0
+					angle = random
+				}
+			}
+			create_ambient_object = {
+				type = "celestial_unbidden_rift"
+				location = this
+				entity_offset_height = { min = -15 max = -15 }
+				entity_scale_to_size = yes
 			}
 			last_created_ambient_object = {	
 				set_ambient_object_flag = celestial_temp_vortex_gfx

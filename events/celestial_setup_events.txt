@@ -109,7 +109,15 @@ country_event = {
 			event_target:celestial_leader = {
 				kill_leader = { show_notification = no }
 			}
+			event_target:celestial_fleet = {
+				delete_fleet = {
+					target = this
+				}
+			}
+			remove_relic = r_celestial_compass_alive
+			add_relic = r_celestial_compass_weak
 		}
+		custom_tooltip = r_celestial_compass_weak_given
 	}
 
 	option = {
@@ -214,6 +222,40 @@ planet_event = {
 		}
 		planet_event = { id = celestial_setup.6 days = 1800 }
 		log = "spatial distortion event lock end"
+		create_ambient_object = {
+			type = terraforming_planet_effect
+			location = this
+			use_3d_location = yes
+			entity_scale_to_size = yes
+			scripted_scale = 5
+		}
+		last_created_ambient_object = {
+			set_ambient_object_flag = celestial_isolating_effect
+		}
+		# create_ambient_object = {
+		# 	type = large_debris_object
+		# 	location = this
+		# 	play_animation_once = yes
+		# }
+		# last_created_ambient_object = {
+		# 	set_ambient_object_flag = celestial_isolating_effect
+		# 	set_location = {
+		# 		target = prev
+		# 		distance = 0
+		# 		angle = random
+		# 	}
+		# }
+		create_ambient_object = {
+			type = explosion_particle_object
+			location = this
+			use_3d_location = yes
+			duration = 10
+			scale = 30
+			play_animation_once = yes
+		}
+		last_created_ambient_object = {
+			set_ambient_object_flag = celestial_isolating_effect
+		}
 		solar_system = {
 			every_system_ambient_object = {
 				limit = {
@@ -223,31 +265,6 @@ planet_event = {
 				}
 				destroy_ambient_object = this
 			}
-			
-			create_ambient_object = {
-				type = terraforming_planet_effect
-				location = this
-				use_3d_location = yes
-				entity_scale_to_size = yes
-				scripted_scale = 5
-			}
-			last_created_ambient_object = {
-				set_ambient_object_flag = celestial_isolating_effect
-			}
-			create_ambient_object = {
-				type = large_debris_object
-				location = this
-				play_animation_once = yes
-			}
-			last_created_ambient_object = {
-				set_ambient_object_flag = celestial_isolating_effect
-				set_location = {
-					target = prev
-					distance = 0
-					angle = random
-				}
-			}
-			
 			set_star_flag = celestial_distortion_target_system
 			every_neighbor_system = {
 				limit = {
@@ -685,7 +702,7 @@ country_event = {
 			type = MESSAGE_EMPORIUM_SHUFFLED
 			localization = MESSAGE_EMPORIUM_SHUFFLED
 			days = 30
-			target = root
+			target = root.capital_scope
 		}
 	}
 }
@@ -847,7 +864,7 @@ country_event = {
 				type = MESSAGE_EMPORIUM_COOLDOWN
 				localization = MESSAGE_EMPORIUM_COOLDOWN
 				days = 30
-				target = root
+				target = root.capital_scope
 			}
 		}
 	}
