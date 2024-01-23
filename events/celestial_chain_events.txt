@@ -109,9 +109,13 @@ country_event = {
 	location = event_target:celestial_crux_outpost_target
 
 	trigger = {
+		NOT = {
+			has_country_flag = celestial_eventchain_1_begun
+		}
 	}
 	
 	immediate = {
+		set_country_flag = celestial_eventchain_1_begun
 		event_target:celestial_crux_outpost_target = {
 			create_ambient_object = {
 				type = "kaleidoscope_angry"
@@ -898,6 +902,9 @@ country_event = {
 	trigger = {
 		event_target:celestial_leader = {
 			leader_age >= 240
+		}
+		NOT = {
+			has_country_flag = celestial_eventchain_2_begun
 		}
 	}
 
@@ -2138,6 +2145,7 @@ country_event = {
 				}
 				country_event = {
 					id = celestial_chain.228
+					days = 1
 				}
 			}
 		}
@@ -2271,6 +2279,7 @@ country_event = {
 				}
 				country_event = {
 					id = celestial_chain.228
+					days = 1
 				}
 			}
 		}
@@ -2405,6 +2414,10 @@ country_event = {
 	option = {
 		name = "celestial_chain.228.a"
 		hidden_effect = {
+			set_variable = {
+				which = celestial_core_module_uses
+				value = 6
+			}
 			while = {
 				count = 2
 				random_list = {
