@@ -342,7 +342,7 @@ ship_event = { #Entering the Conclave system
 	trigger = {
 		has_global_flag = ABCReg_system_spawned
 		FROMFROM = {
-			NOT = { has_country_flag = leader_visited_1st_system }
+			NOT = { has_country_flag = ABCReg_leader_visited_1st_system }
 			
 		}
 		FROM = { has_star_flag = ABCReg_bubbly_1st_system }
@@ -351,7 +351,7 @@ ship_event = { #Entering the Conclave system
 
 	immediate = {
 		FROMFROM = {
-			set_country_flag = leader_visited_1st_system
+			set_country_flag = ABCReg_leader_visited_1st_system
 		}
 		FROM = {
 			random_system_planet = {
@@ -476,7 +476,7 @@ ship_event = {  ## entering the cyber pirate system
 
 	trigger = {
 		FROMFROM = {
-			NOT = { has_country_flag = leader_visited_2nd_system }
+			NOT = { has_country_flag = ABCReg_leader_visited_2nd_system }
 		}
 		FROM = { has_star_flag = ABCReg_bubbly_2nd_system }
 		Root = { has_ship_flag = is_ABCReg_ship }
@@ -484,7 +484,7 @@ ship_event = {  ## entering the cyber pirate system
 
 	immediate = {
 		FROMFROM = {
-			set_country_flag = leader_visited_2nd_system
+			set_country_flag = ABCReg_leader_visited_2nd_system
 		}
 		FROM = {
 			random_system_planet = {
@@ -613,7 +613,7 @@ ship_event = { #Entering the Imperium system
 
 	trigger = {
 		FROMFROM = {
-			NOT = { has_country_flag = leader_visited_3rd_system }
+			NOT = { has_country_flag = ABCReg_leader_visited_3rd_system }
 		}
 		FROM = { has_star_flag = ABCReg_bubbly_3rd_system }
 		Root = { has_ship_flag = is_ABCReg_ship }
@@ -621,7 +621,7 @@ ship_event = { #Entering the Imperium system
 
 	immediate = {
 		FROMFROM = {
-			set_country_flag = leader_visited_3rd_system
+			set_country_flag = ABCReg_leader_visited_3rd_system
 		}
 		FROM = {
 			random_system_planet = {
@@ -798,6 +798,22 @@ country_event = { #empire gift
 		hidden_effect = {
 			event_target:ABCReg_puppet = { set_owner = root }    ###set_leader = event_target:ABCReg_puppet if it doesn't work
 			
+			create_message = {
+				type = MESSAGE_RECRUITED_LEADER
+				localization =  MESSAGE_RECRUITED_LEADER_DESC
+				days = @toast_message_days
+				target = event_target:ABCReg_puppet
+				variable = {
+					type = name
+					localization = LEADER
+					scope = event_target:ABCReg_puppet
+				}
+				variable = {
+					key = "border"
+					value = "GFX_border_legendary"
+				}
+			}
+			
 		}
 	}
 }
@@ -819,7 +835,7 @@ ship_event = { #Entering the system of the federation
 
 	trigger = {
 		FROMFROM = {
-			NOT = { has_country_flag = leader_visited_4th_system }
+			NOT = { has_country_flag = ABCReg_leader_visited_4th_system }
 		}
 		FROM = { has_star_flag = ABCReg_bubbly_4th_system }
 		Root = { has_ship_flag = is_ABCReg_ship }
@@ -827,7 +843,7 @@ ship_event = { #Entering the system of the federation
 
 	immediate = {
 		FROMFROM = {
-			set_country_flag = leader_visited_4th_system
+			set_country_flag = ABCReg_leader_visited_4th_system
 		}
 		FROM = {
 			random_system_planet = {
@@ -920,7 +936,7 @@ country_event = { #federation gift
 
 	option = {
 		name = ABCReg.42.a
-		country_event = { id = ABCReg.421 days = 200 random = 1600 }
+		country_event = { id = ABCReg.421 days = 30 random = 90 }
 		if = {
 			limit = {
 				has_completed_event_chain_counter = {
@@ -947,7 +963,7 @@ ship_event = { #Entering the hidden system of the Calamity
 
 	trigger = {
 		FROMFROM = {
-			NOT = { has_country_flag = leader_visited_5th_system }
+			NOT = { has_country_flag = ABCReg_leader_visited_5th_system }
 			Root = { has_ship_flag = is_ABCReg_ship }
 		}
 		FROM = { has_star_flag = ABCReg_bubbly_5th_system }
@@ -955,7 +971,7 @@ ship_event = { #Entering the hidden system of the Calamity
 
 	immediate = {
 		FROMFROM = {
-			set_country_flag = leader_visited_5th_system
+			set_country_flag = ABCReg_leader_visited_5th_system
 		}
 		FROM = {
 			random_system_planet = {
@@ -1002,6 +1018,8 @@ country_event = { #Finished Project Graveyard Planet
 		country_event = {
 			id = ABCReg.52
 		}
+		
+
 	}
 }
 
@@ -1032,7 +1050,11 @@ country_event = { #Graveyard Planet Vision
 
 	immediate = {
 		event_target:ABCReg_ship = {
-			remove_modifier = bubble_angry_modifier 
+			remove_modifier = bubble_angry_modifier
+			add_modifier = { 
+					modifier = bubble_calm_modifier 
+					days = -1 
+				} 
 		}
 		FROM = {
 			random_galaxy_planet = {
@@ -1748,4 +1770,102 @@ country_event = {
 			}
 		}
 	}
+}
+
+
+
+country_event = { 
+	id = ABCReg.420
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+        has_global_flag = ABCReg_system_spawned
+        FROMFROM = {
+            any_owned_leader = { 
+                has_trait = leader_trait_ABCReg_memories_40
+            }
+        }    
+    }
+	
+	
+		immediate = {
+			capital_scope = {
+				create_fleet = {
+					name = "ABCReg_NAME_More_Amoebas"
+					effect = {
+						set_owner = root
+						while = {
+							count = 3
+							create_ship = {
+								name = ""
+								prefix = no
+								design = "NAME_Large_Space_Organism_Blue"
+								
+							}
+						}
+						while = {
+							count = 3
+							create_ship = {
+								name = ""
+								prefix = no
+								design = "NAME_Large_Space_Organism_Teal"
+							
+							}
+						}
+						while = {
+							count = 12
+							create_ship = {
+								name = ""
+								prefix = no
+								design = "NAME_Small_Space_Organism_Blue"
+								
+							}
+						}
+						set_location = {
+							target = prev
+							distance = 45
+							angle = random
+						}
+					}
+					settings = {
+						can_change_composition = yes
+						uses_naval_capacity = no
+						can_disband = yes
+					}
+				}
+					last_created_fleet = {
+				set_location = { target = event_target:ABCReg_ship }
+				}
+			
+			}
+		}
+	
+}
+
+country_event = { 
+	id = ABCReg.220
+	hide_window = yes
+	is_triggered_only = yes
+
+	 trigger = {
+        has_global_flag = ABCReg_system_spawned
+        FROMFROM = {
+            any_owned_leader = { 
+                has_trait = leader_trait_ABCReg_memories_20
+            }
+        }    
+	}
+	
+	   
+		immediate = {
+            every_owned_leader = {
+                limit = {
+                    NOT = { has_trait = leader_trait_ABCReg_memories_21 }
+                }
+                add_trait = leader_trait_ABCReg_memories_21
+            }
+        }
+    
+
 }
