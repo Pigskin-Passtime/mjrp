@@ -28,7 +28,7 @@ country_event = {
 	immediate = {
 		random_list = {
 			20 = { country_event = {id = TILLC.1} modifier = { factor = 0 has_country_flag = FRAGMENT_GIFT_1 }} #GIVE Choices for Technology
-			20 = { country_event = {id = TILLF.1} modifier = { factor = 0 has_country_flag = FALLEN_EMPIRE_RETURNED_FRAGMENT }} #FE Wants the Fragment 
+			20 = { country_event = {id = TILLF.1} modifier = { factor = 0 has_country_flag = FALLEN_EMPIRE_RETURNED_FRAGMENT } } #FE Wants the Fragment 
 			20 = { country_event = {id = TILLG.1} modifier = { factor= 0 has_country_flag = Investigating_Hideaways}} #Unkown Star
 			40 = { log = "Null Choice" }
 		}
@@ -137,6 +137,7 @@ country_event = {
 	diplomatic = yes
 	title = "TRANSMISSION"
 	diplomatic_title = "TRANSMISSION"
+	show_sound = "Intelegence_communications_line_01"
 	picture_event_data = {
 		portrait = ai_crisis_1
 	}
@@ -362,7 +363,7 @@ country_event = {
 country_event = {
 	id = TILLA.4
 	title = "TILLA.4.name"
-	show_sound = "Intelegence_communications_line_01"
+	show_sound = "Fragment_voice_02"
 	desc = {
 		trigger = {
 			has_country_flag = PEACEFULL_INTELEGENCE
@@ -813,16 +814,7 @@ country_event = {
 		response_text = "TILLB.1.b.response"
 	}
 		
-	option = {
-		trigger = {
-			NOT = {
-				has_country_flag = HOSTILE_INTELEGENCE
-			}
-		}
-		name = "TILLB.1.option.c"
-		is_dialog_only = yes
-		response_text = "TILLA.b.option.c.response"
-	}
+
 
 	option = {
 		trigger = {
@@ -1322,10 +1314,10 @@ country_event = {
 
 		}
 
-		any_country = {
+		any_country = { #Checks to make sure that there is actualy a fallen empire
 			is_valid_fallen_empire_for_task = yes
 			is_country_type = fallen_empire
-			#has_origin = origin_fallen_empire
+			has_origin = origin_fallen_empire
 			has_communications = root
 		}
 	}
@@ -1343,8 +1335,9 @@ country_event = {
 		random_country = {
 			limit = {
 				has_communications = root
+				is_country_type = fallen_empire
+				has_origin = origin_fallen_empire
 			}
-
 			save_event_target_as = FallenEmpireTaskOrigin
 			root = { country_event = { id = TILLF.2 } }
 		}
