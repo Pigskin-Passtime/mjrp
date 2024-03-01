@@ -5,26 +5,43 @@
 
 namespace = hskv_gamestart
 
-# Alright Freake, the wrapper is gone now. I'll just use this to do my spawn for testing
-country_event = {
+event = {
 	id = hskv_gamestart.1
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		hskv_trigger = yes
+	}
+
+	immediate = {
+		random_playable_country = {
+			limit = {
+				is_ai = no
+			}
+			owner = {
+				country_event = {
+					id = hskv_gamestart.2
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv_gamestart.2
 	is_triggered_only = yes
 	hide_window = yes
 
 	immediate = {
-		if = {
-			limit = {
-				NOT = {
-					has_global_flag = hskv_system_spawned
-				}
-			}
+		owner = {
 			capital_scope = {
 				solar_system = {
-					random_neighbor_system = {
+					random_system = {
 						limit = {
 							distance = {
 								min_jumps = 1
-								max_jumps = 1
+								max_jumps = 4
 							}
 						}
 						hskv_spawn = yes
@@ -32,5 +49,6 @@ country_event = {
 				}
 			}
 		}
+
 	}
 }
