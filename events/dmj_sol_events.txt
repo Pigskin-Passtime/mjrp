@@ -803,6 +803,10 @@ country_event = { # Faulkner captured
 	picture = GFX_evt_psionic_battle
 	show_sound = event_ground_battle
 
+	trigger = {
+		has_country_flag = owns_reinhard
+	}
+
 	option = {
 		name = ONSCREEN
 		country_event = { id = dmj_sol.14 }
@@ -853,13 +857,13 @@ country_event = { # Faulkner makes you feel bad about yourself
 	}
 
 	after = {
+		country_event = { id = dmj_sol.15 }
 		if = {
 			limit = { exists = event_target:dmj_michael_country }
 			event_target:dmj_michael_country = {
 				destroy_country = yes
 			}
 		}
-		country_event = { id = dmj_sol.14 }
 	}
 }
 
@@ -873,14 +877,16 @@ country_event = { # Faulkner Imprisoned
 	show_sound = event_energy_field
 	trigger = {
 		has_global_flag = dmj_system_spawned
-		exists = event_target:dmj_michael
 	}
 
 	immediate = {
-		event_target:dmj_michael = {
-			kill_leader = {
-				show_notification = no
-				fire = yes
+		if = {
+			limit = { exists = event_target:dmj_michael }
+			event_target:dmj_michael = {
+				kill_leader = {
+					show_notification = no
+					fire = yes
+				}
 			}
 		}
 		every_system = {
