@@ -1,6 +1,14 @@
-version="3.10.*"
+version="4.0.*"
 tags={
+	"Gameplay"
 	"Leaders"
+	"Galaxy Generation"
+	"Species"
+	"Diplomacy"
+	"Events"
+	"Spaceships"
+	"Technologies"
+	"Military"
 }
-name="#MODJAM2024 Testing"
-supported_version="3.10.4"
+name="ModJam Restoration Project"
+supported_version="v4.0.21"
