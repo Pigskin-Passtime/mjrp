@@ -1,0 +1,364 @@
+situation_worm_attack = {
+	picture = GFX_evt_in_the_dark
+	complete_icon_frame =  GFX_situation_outcome_frame_red
+	complete_icon =  GFX_situation_outcome_negative
+	fail_icon_frame = GFX_situation_outcome_frame_green
+	fail_icon = GFX_situation_outcome_positive
+	
+	on_start = {
+		#set_situation_locked = yes
+	}
+	
+	on_progress_complete = { # Worms Lose
+		custom_tooltip = situation_sw22_worm_attack_worms_lose_tooltip
+		hidden_effect = { 
+			situation_event = { id = sw22_situation.4  }
+		}
+	}
+
+	on_fail = { # Worms Win
+		custom_tooltip = situation_sw22_worm_attack_worms_win_tooltip
+		hidden_effect = { 
+			situation_event = { id = sw22_situation.3  }
+		}	
+	}
+
+	abort_trigger = {
+        OR = {
+            NOT = { exists = target.owner }
+            target.owner = { NOT = { is_same_value = root.owner } }
+        }
+    }
+
+	start_value = 30
+
+	progress_direction = bidirectional
+	complete_category = negative
+	fail_category = positive
+
+	on_monthly = {
+		events = {
+			sw22_situation.99
+		}
+		random_events = {
+			800 = 0
+			#10 = sw22_situation.11 # Wormling Attack
+			#10 = sw22_situation.12 # Wormling Attack Big
+			#10 = sw22_situation.13 # Eco Damage
+			#10 = sw22_situation.14 # Eco Damage Big
+			13 = sw22_situation.15 # Amry Wins
+			8 = sw22_situation.16 # Army Wins Big
+			20 = sw22_situation.17 # Worm Wins 
+			15 = sw22_situation.18 # Worm Wins Big
+			1 = sw22_situation.19 # Worm Dies
+		}
+	}
+
+	stages = {
+		worm_attack_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_red
+			end = 30
+		}
+		
+		worm_attack_2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_red
+			end = 40
+			target_modifier = {
+				planet_stability_add = -5
+				planet_emigration_push_add = 10
+			}
+			on_first_enter = {
+				situation_event = { id = sw22_situation.13 }
+			}
+		}
+
+		worm_attack_3 = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_red
+			end = 50
+			target_modifier = {
+				planet_stability_add = -10
+				planet_emigration_push_add = 20
+			}
+			on_first_enter = {
+				situation_event = { id = sw22_situation.13 }
+			}
+		}
+
+		worm_attack_4 = {
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_red
+			end = 60
+			target_modifier = {
+				planet_stability_add = -15
+				planet_emigration_push_add = 30
+			}
+			on_first_enter = {
+				situation_event = { id = sw22_situation.13 }
+			}
+		}
+
+		worm_attack_5 = {
+			icon = GFX_situation_stage_5
+			icon_background = GFX_situation_stage_frame_red
+			end = 70
+			target_modifier = {
+				planet_stability_add = -20
+				planet_emigration_push_add = 40
+			}
+			on_first_enter = {
+				situation_event = { id = sw22_situation.13 }
+			}
+		}
+
+		worm_attack_6 = {
+			icon = GFX_situation_stage_6
+			icon_background = GFX_situation_stage_frame_red
+			end = 80
+			target_modifier = {
+				planet_stability_add = -25
+				planet_emigration_push_add = 50
+			}
+			on_first_enter = {
+				situation_event = { id = sw22_situation.13 }
+			}
+		}
+
+		worm_attack_7 = {
+			icon = GFX_situation_stage_7
+			icon_background = GFX_situation_stage_frame_red
+			end = 90
+			target_modifier = {
+				planet_stability_add = -30
+				planet_emigration_push_add = 60
+			}
+			on_first_enter = {
+				situation_event = { id = sw22_situation.13 }
+			}
+		}
+
+		worm_attack_8 = {
+			icon = GFX_situation_stage_8
+			icon_background = GFX_situation_stage_frame_red
+			end = 100
+			target_modifier = {
+				planet_stability_add = -50
+				planet_emigration_push_add = 100
+			}
+			on_first_enter = {
+				situation_event = { id = sw22_situation.13 }
+			}
+		}
+	}
+	
+	monthly_progress = {
+		base = 1
+		modifier = {
+			subtract = target.value:sw22_situation_garrison_factor #1 for every 1000 over 200, max 5 (at 1200)
+			desc = STRING_PLANETARY_GARRISON
+			target = { planet_garrison_strength > 1 }
+		}
+		modifier = {
+			#add = 0
+			#factor = 1
+			desc = sw22_worm_containment_do_nothing
+			current_situation_approach = sw22_worm_attack_do_nothing
+		}
+		modifier = {
+			subtract = 0.5
+			#factor = 1.25
+			desc = sw22_worm_containment_contained
+			current_situation_approach = sw22_worm_attack_keep_contained 
+		}
+		modifier = {
+			subtract = 1
+			#factor = 1.5
+			desc = sw22_worm_containment_early_bird
+			current_situation_approach = sw22_worm_attack_early_bird 
+		}
+	}
+
+	approach = {
+		name = sw22_worm_attack_do_nothing
+		icon = GFX_situation_approach_this_is_fine
+		icon_background = GFX_situation_approach_bg_red
+		default = yes
+		on_select = {
+			custom_tooltip = deficit_approach_do_nothing_tooltip
+		}
+		target_modifier = {
+			biological_pop_happiness = -0.25
+		}
+	}
+
+	approach = {
+		name = sw22_worm_attack_keep_contained
+		icon = GFX_situation_approach_shrug
+		icon_background = GFX_situation_approach_bg_yellow
+		on_select = {
+			custom_tooltip = sw22_worm_attack_keep_contained_tooltip
+		}
+		ai_weight = {
+			base = 10
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				energy = 20
+			}
+		}
+		target_modifier = {
+			biological_pop_happiness = -0.10
+		}
+	}
+
+	approach = {
+		name = sw22_worm_attack_early_bird
+		icon = GFX_situation_approach_research
+		icon_background = GFX_situation_approach_bg_green
+		on_select = {
+			custom_tooltip = sw22_worm_attack_early_bird_tooltip
+		}
+		ai_weight = {
+			base = 100
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				energy = 25
+			}
+		}
+		potential = {
+			owner = {
+				has_technology = sw22_tech_early_bird
+			}
+		}
+	}
+}
+
+situation_search_for_the_worm_folk = {
+	picture = GFX_evt_in_the_dark
+	complete_icon_frame =  GFX_situation_outcome_frame_blue
+	complete_icon =  GFX_situation_outcome_unknown
+	fail_icon_frame = GFX_situation_outcome_frame_red
+	fail_icon = GFX_situation_outcome_negative
+	
+	on_start = {
+		#TODO - Event 
+	}
+	
+	on_progress_complete = { # We Find the Worm Folk
+		custom_tooltip = situation_sw22_search_for_the_worm_folk_found_tooltip
+		hidden_effect = { 
+			destroy_situation = this 
+			situation_event = { id = sw22_situation.221 }
+		}
+	}
+
+	#on_fail = { # Worms Win
+	#	Can't Fail
+	#}
+
+	start_value = 0
+	#progress_direction = bidirectional
+
+	on_monthly = {
+		events = { 
+			sw22_situation.99
+		}	
+		random_events = {
+			1250 = 0
+			1 = sw22_situation.300
+			1 = sw22_situation.301
+			1 = sw22_situation.302
+			1 = sw22_situation.303
+			1 = sw22_situation.304
+			1 = sw22_situation.305
+			1 = sw22_situation.306
+		}
+	}
+
+	stages = {
+		search_for_the_worm_folk_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_blue
+			end = 500
+		}
+
+		search_for_the_worm_folk_2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_blue
+			end = 1000
+			on_first_enter = {
+				situation_event = { id = sw22_situation.101 }
+			}
+		}
+
+		#	search_for_the_worm_folk_3 = {
+		#		icon = GFX_situation_stage_3
+		#		icon_background = GFX_situation_stage_frame_blue
+		#		end = 1000
+		#		#on_first_enter = {
+				#	situation_event = { id = sw22_situation_events.4 }
+				#}
+		#	}
+	}
+	
+	monthly_progress = {
+		base = 0
+		modifier = {
+			add = 1
+			desc = sw22_search_for_the_worm_folk_light
+			current_situation_approach = sw22_search_for_the_worm_folk_light
+		}
+		modifier = {
+			add = 2
+			desc = sw22_search_for_the_worm_folk_medium
+			current_situation_approach = sw22_search_for_the_worm_folk_medium 
+		}
+		modifier = {
+			add = 4
+			desc = sw22_search_for_the_worm_folk_medium_heavy
+			current_situation_approach = sw22_search_for_the_worm_folk_medium_heavy 
+		}
+	}
+
+	approach = {
+		name = sw22_search_for_the_worm_folk_light
+		icon = GFX_situation_approach_shrug
+		icon_background = GFX_situation_approach_bg_red
+		on_select = {
+			custom_tooltip = sw22_search_for_the_worm_folk_light_tooltip
+		}
+		modifier = {
+			all_technology_research_speed = -0.05
+			country_energy_produces_mult = -0.05
+		}
+	}
+	approach = {
+		name = sw22_search_for_the_worm_folk_medium
+		icon = GFX_situation_approach_balance_sheet
+		icon_background = GFX_situation_approach_bg_yellow
+		on_select = {
+			custom_tooltip = sw22_search_for_the_worm_folk_medium_tooltip
+		}
+		modifier = {
+			all_technology_research_speed = -0.1
+			country_energy_produces_mult = -0.1
+		}
+	}
+	approach = {
+		name = sw22_search_for_the_worm_folk_medium_heavy
+		icon = GFX_situation_approach_energy_credits
+		icon_background = GFX_situation_approach_bg_green
+		on_select = {
+			custom_tooltip = sw22_search_for_the_worm_folk_medium_heavy_tooltip
+		}
+		modifier = {
+			all_technology_research_speed = -0.25
+			country_energy_produces_mult = -0.25
+		}
+	}
+}
