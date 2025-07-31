@@ -1,0 +1,3428 @@
+# Filename:		scluster_distant_stars_initializers.txt
+# Contributors:	SirBlackAxe, modified version of distant_stars_initializers.txt
+
+@base_moon_distance = 10
+#### README: On changing and saving file, game must be restarted from desktop to prevent crash.
+
+####### Star Lifting System ######
+# flags = { star_lifting_system }
+# prevent_anomalies = yes
+# save_global_event_target_as = broken_star_lifting_platform
+scluster_star_lifting_system = {
+	class = sc_pulsar
+	# prevent_anomalies = yes # Removed
+	# usage = misc_system_init
+	# usage_odds = {
+		# base = 90000
+		# modifier = {
+		# 	factor = 0
+		# 	has_distar = no
+		# }
+		# modifier = {
+		# 	factor = 0
+		# 	is_fe_cluster = yes
+		# }
+		# modifier = {
+		# 	factor = 0
+		# 	has_star_flag = empire_cluster
+		# }
+	# }
+	max_instances = 1
+	# scaled_spawn_chance = 8
+
+	flags = { scluster star_lifting_system }
+
+	planet = {
+		class = star
+		orbit_distance = 0
+		anomaly = star_lifting_category
+		init_effect = {
+			set_planet_flag = star_lifting_star
+			clear_deposits = yes
+			prevent_anomaly = yes # Added/moved from system scope
+		}
+	}
+
+	change_orbit = 45
+	# 4-6 planets w/ 0-1 moons
+	planet = {
+		count = { min = 4 max = 6 } # Replaced: min 1->4
+		orbit_distance = 20
+		orbit_angle = { min = 90 max = 270 }
+
+		change_orbit = @base_moon_distance
+
+		moon = {
+			count = { min = 0 max = 1 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+	}
+
+	init_effect = {
+		random_system_planet = {
+			limit = { is_star = yes }
+			create_ambient_object = {
+				type = broken_star_lifting_platform
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 20
+				}
+				save_global_event_target_as = broken_star_lifting_platform
+			}
+		}
+	}
+}
+
+####### Vechtar Zavonia System ######
+# vechtar_zavonia_system = {}
+
+# ABANDONED OBSERVATION OUTPOST
+# flags = { big_rip_system }
+# save_global_event_target_as = big_rip_planet
+scluster_big_rip_system = {
+	class = sc_f
+	# usage = misc_system_init
+	# usage_odds = {
+		# base = 90000
+		# modifier = {
+		# 	factor = 0
+		# 	has_distar = no
+		# }
+		# modifier = {
+		# 	factor = 0
+		# 	is_fe_cluster = yes
+		# }
+		# modifier = {
+		# 	factor = 0
+		# 	has_star_flag = empire_cluster
+		# }
+	# }
+	max_instances = 1
+	# scaled_spawn_chance = 8
+	flags = { scluster big_rip_system }
+
+	planet = {
+		class = star
+		orbit_distance = 0
+	}
+
+	change_orbit = 20
+
+	planet = {
+		orbit_distance = 20
+		count = { min = 2 max = 3 } # Replaced: min 0->2
+
+		moon = { # Added
+			count = { min = 0 max = 1 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		} #
+	}
+
+	change_orbit = 20
+	# big_rip_planet
+	planet = {
+		count = 1
+		orbit_distance = 0
+		class = "rl_habitable_normal"
+		orbit_angle = { min = 90 max = 270 }
+		size = {
+			min = @scluster_planet_size_min # 12
+			max = @scluster_planet_size_max # 25
+		}
+		change_orbit = 20
+		deposit_blockers = none
+		anomaly = abandoned_outpost_category
+
+		init_effect = {
+			save_global_event_target_as = big_rip_planet
+			set_planet_flag = big_rip_planet
+			add_deposit = d_city_ruins
+			add_deposit = d_metal_boneyard
+			create_ambient_object = {
+				type = abandoned_observation_outpost
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 10
+				}
+				save_global_event_target_as = abandoned_observation_outpost
+			}
+		}
+	}
+}
+
+# flags = { time_loop_world_system }
+# save_global_event_target_as = time_loop_world
+scluster_time_loop_world_system = {
+	class = sc_b
+	# prevent_anomalies = yes # Removed
+
+	# usage = misc_system_init
+	# usage_odds = {
+		# base = 90000
+		# modifier = {
+		# 	factor = 0
+		# 	has_distar = no
+		# }
+		# modifier = {
+		# 	factor = 0
+		# 	is_fe_cluster = yes
+		# }
+		# modifier = {
+		# 	factor = 0
+		# 	has_star_flag = empire_cluster
+		# }
+	# }
+	max_instances = 1
+	# scaled_spawn_chance = 8
+	flags = { scluster time_loop_world_system }
+
+	planet = {
+		class = star
+		orbit_distance = 0
+	}
+
+	planet = {
+		class = random_non_colonizable
+		count = { min = 2 max = 4 }
+		orbit_angle = { min = 90 max = 270 }
+		orbit_distance = 35
+		change_orbit = 15
+	}
+
+	planet = {
+		count = 1
+		orbit_distance = 0
+		class = pc_desert
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 17 max = 20 }
+		deposit_blockers = none
+		anomaly = time_loop_world
+		init_effect = {
+			clear_deposits = yes
+			add_deposit = d_searing_desert
+			add_deposit = d_searing_desert
+			add_deposit = d_searing_desert
+			add_deposit = d_rushing_waterfalls
+			add_deposit = d_arid_highlands
+			add_deposit = d_tempestous_mountain
+			add_deposit = d_ore_rich_caverns
+			add_deposit = d_ore_rich_caverns
+			add_deposit = d_submerged_ore_veins
+			add_deposit = d_great_river
+			add_deposit = d_great_river
+			add_deposit = d_black_soil
+			add_deposit = d_dust_desert
+			set_planet_flag = time_loop_world
+			save_global_event_target_as = time_loop_world
+			change_pc = {
+				class = pc_shielded
+				inherit_entity = yes
+			}
+			set_planet_flag = is_time_loop_world
+		}
+	}
+
+	planet = {
+		count = { min = 2 max = 3 } # Replaced: min 1->2
+		orbit_distance = 30
+		orbit_angle = { min = 90 max = 270 }
+		class = random_non_colonizable
+
+		change_orbit = @base_moon_distance
+
+		moon = {
+			count = { min = 0 max = 2 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+			# init_effect = { # Removed
+			# 	prevent_anomaly = yes
+			# }
+		# }
+		# init_effect = { # Removed
+		# 	prevent_anomaly = yes
+		}
+	}
+
+	change_orbit = 20 # TODO: init_effect - starting deposits
+}
+
+####### Simple Systems #######
+
+### Toxic Planet with Toxic Moon
+# flags = { toxic_moon_system }
+scluster_toxic_planet_toxic_moon = {
+	class = "rl_standard_stars"
+	# usage = misc_system_init
+	# usage_odds = {
+	# 	base = 90000
+	# 	modifier = {
+	# 		factor = 0
+	# 		has_distar = no
+	# 	}
+	# 	modifier = {
+	# 		factor = 0
+	# 		has_star_flag = empire_cluster
+	# 	}
+	# }
+
+	max_instances = 1
+	# scaled_spawn_chance = 8
+
+	flags = { scluster toxic_moon_system }
+
+	planet = {
+		count = 1
+		class = star
+		orbit_distance = 0
+		orbit_angle = 1
+		size = { min = 20 max = 30 }
+		has_ring = no
+	}
+	planet = {
+		count = { min = 1 max = 2 } # Replaced: min 0->1
+		orbit_distance = 25
+		orbit_angle = { min = 90 max = 270 }
+	}
+	planet = {
+		orbit_distance = 40
+		orbit_angle = { min = 90 max = 180 }
+		class = pc_toxic
+
+		change_orbit = @base_moon_distance
+
+		moon = {
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+			class = pc_toxic
+			init_effect = {
+				prevent_anomaly = yes
+				add_deposit = d_society_3 # Replaced: set_deposit -> add_deposit
+			}
+		}
+		init_effect = {
+			prevent_anomaly = yes
+			scluster_clear_mining_deposits = yes # clear_deposits = yes # Replaced
+			add_deposit = d_society_9
+			add_modifier = { modifier = building_blocks days = -1 }
+		}
+	}
+	planet = {
+		count = { min = 1 max = 3 }
+		orbit_distance = 40
+		orbit_angle = { min = 90 max = 270 }
+
+		change_orbit = @base_moon_distance # Added
+		moon = { # Added
+			count = { min = 0 max = 1 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		} #
+	}
+}
+
+# Shattered world
+# flags = { shattered_world_system }
+scluster_shattered_world_system = {
+	class = "rl_standard_stars"
+	# usage = misc_system_init
+	# usage_odds = {
+	# 	base = 4
+	# 	modifier = {
+	# 		factor = 0
+	# 		has_distar = no
+	# 	}
+	# 	modifier = {
+	# 		factor = 0
+	# 		has_star_flag = empire_cluster
+	# 	}
+	# }
+
+	max_instances = 1
+	# scaled_spawn_chance = 8
+
+	flags = { scluster shattered_world_system }
+
+	planet = {
+		count = 1
+		class = star
+		orbit_distance = 0
+		orbit_angle = 1
+		size = { min = 20 max = 30 }
+		has_ring = no
+	}
+	planet = {
+		count = { min = 4 max = 6 } # Replaced: min 2->4
+		orbit_distance = 25
+		orbit_angle = { min = 90 max = 270 }
+	}
+	# pc_shattered w/ d_society_9
+	planet = {
+		orbit_distance = 40
+		orbit_angle = { min = 90 max = 180 }
+		class = pc_shattered
+
+		change_orbit = @base_moon_distance
+
+		moon = { # Added
+			count = { min = 0 max = 2 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+
+		init_effect = {
+			prevent_anomaly = yes
+			scluster_clear_mining_deposits = yes # clear_deposits = yes # Replaced
+			add_deposit = d_society_9
+		}
+	}
+	# random_non_colonizable w/ d_minerals_2
+	planet = { 
+		count = 1
+		class = random_non_colonizable
+		orbit_distance = 30
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 20 max = 30 }
+		has_ring = no
+
+		change_orbit = @base_moon_distance # Added
+		moon = { # Added
+			count = { min = 0 max = 1 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		} #
+
+		init_effect = {
+			scluster_clear_invalid_with_minerals_deposits = yes # Added
+			add_deposit = d_minerals_2 # Replaced: set_deposit -> add_deposit
+		}
+	}
+}
+
+# Asteroid System
+# flags = { asteroid_system }
+scluster_asteroid_system = {
+	class = "rl_standard_stars"
+
+	asteroid_belt = {
+		type = rocky_asteroid_belt
+		radius = 100
+	}
+
+	# usage = misc_system_init
+	# usage_odds = {
+	# 	base = 4
+	# 	modifier = {
+	# 		factor = 0
+	# 		has_distar = no
+	# 	}
+	# 	modifier = {
+	# 		factor = 0
+	# 		has_star_flag = empire_cluster
+	# 	}
+	# }
+	max_instances = 1
+	# scaled_spawn_chance = 8
+
+	flags = { scluster asteroid_system }
+
+	planet = {
+		count = 1
+		class = star
+		orbit_distance = 0
+		orbit_angle = 1
+		size = { min = 20 max = 30 }
+		has_ring = no
+	}
+	planet = {
+		class = "pc_barren"
+		orbit_distance = 30
+		orbit_angle = 60
+		size = 13
+		has_ring = no
+	}
+	# pc_asteroid w/ d_minerals_4
+	planet = {
+		class = "pc_asteroid"
+		orbit_distance = 70
+		orbit_angle = -220
+		size = 5
+		has_ring = no
+		init_effect = {
+			add_deposit = d_minerals_4 # Replaced: set_deposit -> add_deposit
+		}
+	}
+
+	planet = {
+		class = "pc_asteroid"
+		orbit_distance = 0
+		orbit_angle = -87
+		size = 5
+		has_ring = no
+	}
+	# pc_asteroid w/ d_minerals_4
+	planet = {
+		class = "pc_asteroid"
+		orbit_distance = 0
+		orbit_angle = 285
+		size = 5
+		has_ring = no
+		init_effect = {
+			add_deposit = d_minerals_4 # Replaced: set_deposit -> add_deposit
+		}
+	}
+	# pc_asteroid w/ d_minerals_4
+	planet = {
+		class = "pc_asteroid"
+		orbit_distance = 0
+		orbit_angle = 220
+		size = 5
+		has_ring = no
+		init_effect = {
+			add_deposit = d_minerals_4 # Replaced: set_deposit -> add_deposit
+		}
+	}
+
+	planet = {
+		class = "pc_asteroid"
+		orbit_distance = 5
+		orbit_angle = -80
+		size = 5
+		has_ring = no
+	}
+	# pc_frozen w/ d_energy_3
+	planet = { 
+		class = "pc_frozen"
+		orbit_distance = 40
+		orbit_angle = -160
+		size = { min = 10 max = 20}
+		has_ring = no
+		change_orbit = 6
+
+		moon = {
+			class = "pc_frozen"
+			size = 6
+			orbit_distance = 2.5
+			orbit_angle = 10
+			has_ring = no
+		}
+		moon = {
+			class = "pc_frozen"
+			size = 9
+			orbit_distance = 2.5
+			orbit_angle = 80
+			has_ring = no
+		}
+		init_effect = {
+			scluster_clear_invalid_with_energy_deposits = yes
+			add_deposit = d_energy_3 # Replaced: set_deposit -> add_deposit
+		}
+	}
+}
+
+##########################################
+
+# Big Mining Drones Fleet
+# flags = { hostile_system drone_system_4 }
+scluster_hostile_init_mining_drones = {
+	class = "rl_standard_stars"
+	asteroid_belt = {
+		type = rocky_asteroid_belt
+		radius = 95
+	}
+
+	max_instances = 2
+	# usage = misc_system_init
+	# usage_odds = {
+		# base = 4
+		# modifier = {
+		# 	factor = 0
+		# 	has_star_flag = empire_cluster
+		# }
+		# modifier = {
+		# 	factor = 0
+		# 	has_distar = no
+		# }
+		# modifier = {
+		# 	factor = 0
+		# 	is_bottleneck_system = yes
+		# }
+	# }
+
+	flags = { scluster hostile_system drone_system_4 }
+
+	planet = {
+		count = 1
+		class = star
+		orbit_distance = 0
+		orbit_angle = 1
+		size = { min = 20 max = 30 }
+		has_ring = no
+	}
+
+	change_orbit = 30
+
+	planet = { # d_minerals_4
+		class = random_non_colonizable
+		orbit_distance = 20
+		orbit_angle = { min = 90 max = 270 }
+		init_effect = {
+			scluster_clear_research_deposits = yes # clear_deposits = yes # Replaced
+			add_deposit = d_minerals_4 # Replaced: set->add
+		}
+	}
+	planet = {
+		orbit_distance = 20
+		orbit_angle = { min = 90 max = 270 }
+	}
+
+	change_orbit = 25
+
+	planet = { # d_rare_crystals_3
+		class = "pc_rare_crystal_asteroid"
+		orbit_distance = 0
+		orbit_angle = { min = 0 max = 150 }
+		init_effect = {
+			prevent_anomaly = yes # Added
+			scluster_clear_research_deposits = yes # clear_deposits = yes # Replaced
+			add_deposit = d_rare_crystals_3 # Replaced: set->add
+		}
+	}
+	planet = { # d_minerals_8
+		class = "pc_asteroid"
+		orbit_distance = 0
+		orbit_angle = { min = 160 max = 330 }
+		init_effect = {
+			prevent_anomaly = yes # Added
+			scluster_clear_research_deposits = yes # clear_deposits = yes # Replaced
+			add_deposit = d_minerals_8
+		}
+	}
+
+	planet = { # 2-5 w/ 0-1 moons
+		count = { min = 2 max = 5 }
+		orbit_distance = 25
+		orbit_angle = { min = 90 max = 270 }
+
+		change_orbit = @base_moon_distance
+
+		moon = {
+			count = { min = 0 max = 1 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+	}
+
+	init_effect = {
+		create_drone_country = yes
+		random_system_planet = {
+			limit = {
+				has_deposit_for = shipclass_mining_station
+				is_star = no
+				NOT = { is_planet_class = pc_gas_giant }
+			}
+			add_deposit = d_minerals_4 # Replaced: set->add
+			event_target:drone_country = {
+				save_event_target_as = mining_drones
+				create_fleet = {
+					name = "NAME_Ancient_Mining_Drones"
+					effect = {
+						set_owner = event_target:drone_country
+						while = {
+							count = 15
+							create_ship = {
+								name = ""
+								design = "NAME_Ancient_Mining_Drone"
+							}
+						}
+						while = {
+							count = 8
+							create_ship = {
+								name = ""
+								design = "NAME_Ancient_Combat_Drone"
+							}
+						}
+						while = {
+							count = 4
+							create_ship = {
+								name = ""
+								design = "NAME_Ancient_Destroyer"
+							}
+						}
+						set_location = prevprev
+						set_fleet_stance = aggressive
+						set_aggro_range_measure_from = return_point
+						set_aggro_range = 150
+						queue_actions = {
+							repeat = {
+								wait = {
+									duration = 999
+									random = 10
+								}
+							}
+						}
+					}
+				}
+			}
+			create_mining_station = {
+				owner = event_target:mining_drones
+			}
+		}
+	}
+}
+
+# Space Amoeba, Large pack
+# flags = { hostile_system amoeba_4_system }
+scluster_hostile_init_amoeba = {
+	class = "rl_standard_stars"
+
+	max_instances = 2
+
+	# usage = misc_system_init
+	# usage_odds = {
+		# base = 4
+		# modifier = {
+		# 	factor = 0
+		# 	has_distar = no
+		# }
+		# modifier = {
+		# 	factor = 0
+		# 	is_bottleneck_system = yes
+		# }
+		# modifier = {
+		# 	factor = 0
+		# 	has_star_flag = empire_cluster
+		# }
+	# }
+
+	flags = { scluster hostile_system amoeba_4_system }
+
+	planet = {
+		count = 1
+		class = star
+		orbit_distance = 0
+		orbit_angle = 1
+		size = { min = 20 max = 30 }
+		has_ring = no
+	}
+
+	change_orbit = 45
+
+	planet = {
+		class = pc_gas_giant
+		orbit_distance = 40
+		orbit_angle = { min = 160 max = 330 }
+		init_effect = {
+			scluster_clear_research_deposits = yes # clear_deposits = yes # Replaced
+			add_deposit = d_exotic_gases_1 # Replaced: set->add
+		}
+	}
+
+	planet = {
+		count = { min = 2 max = 6 }
+		orbit_distance = { min = 20 max = 35 }
+		orbit_angle = { min = 90 max = 270 }
+
+		change_orbit = @base_moon_distance
+
+		moon = {
+			count = { min = 0 max = 1 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 2
+		}
+	}
+
+	init_effect = {
+		create_amoeba_country = yes
+		random_system_planet = {
+			limit = { is_star = no }
+			event_target:amoeba_country = {
+				create_fleet = {
+					name = "NAME_Space_Amoeba_plural"
+					settings = {
+						garrison = yes
+					}
+					effect = {
+						set_owner = event_target:amoeba_country
+						while = {
+							count = 4
+							create_ship = {
+								name = ""
+								design = "NAME_Large_Space_Organism_Teal"
+							}
+						}
+						while = {
+							count = 5
+							create_ship = {
+								name = ""
+								design = "NAME_Large_Space_Organism_Zebra"
+							}
+						}
+						set_formation_scale = 3.0
+						set_location = PREVPREV
+						set_fleet_stance = aggressive
+						set_aggro_range_measure_from = self
+						set_aggro_range = 100
+					}
+				}
+			}
+		}
+	}
+}
+
+# Void Cloud System
+# flags = { hostile_system void3_system }
+scluster_hostile_init_void_cloud = {
+	class = sc_black_hole
+	# usage = misc_system_init
+	# usage_odds = {
+	# 	base = 4
+	# 	modifier = {
+	# 		factor = 0
+	# 		has_distar = no
+	# 	}
+	# 	modifier = {
+	# 		factor = 0
+	# 		is_bottleneck_system = yes
+	# 	}
+	# 	modifier = {
+	# 		factor = 0
+	# 		has_star_flag = empire_cluster
+	# 	}
+	# }
+
+	flags = { scluster hostile_system void3_system } # TODO: Ruined ring world?
+	max_instances = 1
+
+	planet = {
+		class = star
+		orbit_distance = 0
+
+		init_effect = {
+			prevent_anomaly = yes
+			while = {
+				count = 15
+				create_ambient_object = {
+					type = "large_debris_object"
+					entity_offset_height = { min = -0 max = -25 }
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 110
+						angle = random
+					}
+				}
+			}
+			while = {
+				count = 25
+				create_ambient_object = {
+					type = "medium_debris_01_object"
+					entity_offset_height = { min = -0 max = -25 }
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 110
+						angle = random
+					}
+				}
+			}
+			while = {
+				count = 25
+				create_ambient_object = {
+					type = "medium_debris_02_object"
+					entity_offset_height = { min = -0 max = -25 }
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 110
+						angle = random
+					}
+				}
+			}
+			while = {
+				count = 30
+				create_ambient_object = {
+					type = "small_debris_object"
+					entity_offset_height = { min = -0 max = -25 }
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 110
+						angle = random
+					}
+				}
+			}
+		}
+	}
+
+	change_orbit = 100
+
+	planet = {
+		class = "pc_ringworld_tech_damaged"
+		name = "NAME_Ring_Segment_B"
+		orbit_angle = 30
+		orbit_distance = 0
+		init_effect = { prevent_anomaly = yes }
+	}
+	planet = {
+		class = "pc_ringworld_seam_damaged"
+		name = "NAME_Ring_Segment_C"
+		orbit_angle = 130
+		orbit_distance = 0
+
+		init_effect = {
+			create_ambient_object = {
+				type = "medium_debris_01_object"
+				location = THIS
+			}
+			prevent_anomaly = yes
+		}
+	}
+
+	change_orbit = 30
+
+	planet = {
+		class = "pc_barren_cold"
+		size = { min = 10 max = 15 }
+		orbit_distance = 45
+
+		moon = {
+			class = "pc_toxic"
+			size = { min = 9 max = 11 }
+			orbit_distance = 8
+			orbit_angle = { min = 90 max = 270 }
+			has_ring = no
+		}
+		moon = {
+			class = "pc_barren_cold"
+			size = { min = 11 max = 16 }
+			orbit_distance = 6
+			orbit_angle = { min = 90 max = 270 }
+			has_ring = no
+			init_effect = {
+				create_ambient_object = {
+					type = "medium_debris_01_object"
+					location = THIS
+				}
+			}
+		}
+	}
+
+	change_orbit = 20
+
+	planet = {
+		count = { min = 1 max = 3 }
+		class = "pc_barren_cold"
+		orbit_distance = { min = 20 max = 25 }
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 10 max = 20 }
+		has_ring = no
+	}
+
+	planet = {
+		class = "pc_barren_cold"
+		orbit_distance = 25
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 10 max = 20 }
+		has_ring = yes
+		init_effect = {
+			create_ambient_object = {
+				type = "medium_debris_01_object"
+				location = THIS
+			}
+			prevent_anomaly = yes
+		}
+	}
+
+	planet = {
+		count = { min = 1 max = 2 }
+		class = "pc_gas_giant"
+		orbit_distance = 35
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 10 max = 20 }
+		has_ring = yes
+
+		change_orbit = @base_moon_distance # Added
+		moon = { # Added
+			count = { min = 0 max = 2 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}#
+	}
+
+	init_effect = {
+		create_cloud_country = yes
+		random_system_planet = {
+			limit = { is_star = yes }
+			add_dark_matter = yes
+			event_target:cloud_country = {
+				if = {
+					limit = {
+						NOT = {
+							has_modifier = cloud_power
+						}
+					}
+					add_modifier = {
+						modifier = cloud_power
+						days = -1
+					}
+				}
+				create_fleet = {
+					name = "NAME_Void_Cloud"
+					effect = {
+						set_owner = event_target:cloud_country
+						while = { # Added while
+							count = 3 # Added: +2 clouds
+							create_ship = {
+								name = ""
+								design = "NAME_Cloud_Entity"
+							}
+						} #
+						set_location = prevprev
+						set_fleet_stance = aggressive
+						set_aggro_range_measure_from = self
+						set_aggro_range = 500
+					}
+				}
+			}
+		}
+	}
+}
+
+##########################################
+
+# Ice System
+## flags = { ice_system }
+scluster_ice_system = {
+	class = sc_m
+
+	asteroid_belt = {
+		type = icy_asteroid_belt
+		radius = 145
+	}
+	asteroid_belt = {
+		type = icy_asteroid_belt
+		radius = 205
+	}
+
+	# usage = misc_system_init
+	# usage_odds = {
+	# 	base = 90000
+	# 	modifier = {
+	# 		factor = 0
+	# 		has_distar = no
+	# 	}
+	# 	modifier = {
+	# 		factor = 0
+	# 		has_star_flag = empire_cluster
+	# 	}
+	# }
+
+	max_instances = 1
+	# scaled_spawn_chance = 8	# scales by galaxy size (1000 stars = 10x base)
+
+	flags = { scluster ice_system }
+
+	planet = {
+		count = 1
+		class = star
+		orbit_distance = 0
+		orbit_angle = 1
+		size = { min = 10 max = 18 }
+		has_ring = no
+	}
+
+	change_orbit = 40
+
+	planet = {
+		count = 3
+		class = "pc_frozen"
+		orbit_distance = 25
+		orbit_angle = { min = 0 max = 360 }
+		size = { min = 10 max = 25}
+		has_ring = no
+		change_orbit = 10
+	}
+
+	change_orbit = 30
+
+	planet = {
+		count = { min = 1 max = 2 }
+		class = pc_ice_asteroid
+		orbit_distance = 0
+		orbit_angle = { min = 90 max = 270 }
+	}
+
+	planet = {
+		class = pc_arctic
+		orbit_distance = 30
+		orbit_angle = 80
+		size = 13
+		has_ring = no
+
+		change_orbit = @base_moon_distance
+
+		moon = {
+			class = "pc_arctic"
+			size = { min = 9 max = 11 }
+			orbit_distance = 2
+			has_ring = no
+		}
+		moon = {
+			class = "pc_frozen"
+			size = 6
+			orbit_distance = 5
+			orbit_angle = { min = 90 max = 270 }
+			has_ring = no
+		}
+	}
+
+	change_orbit = 30
+
+	planet = {
+		count = { min = 1 max = 2 }
+		class = pc_ice_asteroid
+		orbit_distance = 0
+		orbit_angle = { min = 90 max = 270 }
+	}
+
+	planet = {
+		class = "pc_frozen"
+		orbit_distance = 30
+		orbit_angle = -160
+		size = { min = 10 max = 20}
+		has_ring = no
+		change_orbit = 6
+
+		moon = {
+			class = "pc_frozen"
+			size = 9
+			orbit_distance = 2.5
+			orbit_angle = 80
+			has_ring = no
+		}
+	}
+	planet = {
+		class = "pc_arctic"
+		orbit_distance = 20
+		orbit_angle = { min = -160 max = 160 }
+		size = { min = 10 max = 20}
+		has_ring = no
+		change_orbit = 6
+	}
+}
+
+# High Energy System
+# flags = { high_energy_system }
+scluster_high_energy_system = {
+	class = sc_b
+
+	# usage = misc_system_init
+	# usage_odds = {
+	# 	base = 90000
+	# 	modifier = {
+	# 		factor = 0
+	# 		has_distar = no
+	# 	}
+	# 	modifier = {
+	# 		factor = 0
+	# 		has_star_flag = empire_cluster
+	# 	}
+	# }
+
+	max_instances = 1
+	# scaled_spawn_chance = 8	# scales by galaxy size (1000 stars = 10x base)
+
+	flags = { scluster high_energy_system }
+
+	planet = {
+		count = 1
+		class = star
+		orbit_distance = 0
+		init_effect = {
+			prevent_anomaly = yes # Added: Don't overwrite deposits
+			scluster_clear_research_deposits = yes # clear_deposits = yes # Replaced
+			add_deposit = d_energy_10
+			add_deposit = d_energy_2
+		}
+	}
+
+	planet = {
+		class = pc_molten
+		orbit_distance = 40
+		orbit_angle = 30
+		size = 13
+		has_ring = no
+		moon = {
+			class = "pc_molten"
+			size = { min = 9 max = 12 }
+			orbit_distance = 10
+			orbit_angle = 180
+			has_ring = no
+		}
+		init_effect = {
+			scluster_clear_research_deposits = yes # Added
+			add_deposit = d_energy_3 # Replaced: set_deposit -> add_deposit
+		}
+	}
+
+	planet = {
+		count = { min = 4 max = 6 } # Replaced: min 3->4
+		class = "pc_molten"
+		orbit_distance = 30
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 10 max = 20}
+		has_ring = no
+
+		change_orbit = @base_moon_distance # Added
+		moon = { # Added
+			class = "pc_molten"
+			count = { min = 0 max = 1 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		} #
+	}
+}
+
+####### HATCHLING/VOIDSPAWN SYSTEM ######
+# removed prevent_anomalies = yes
+# flags = { guardians_hatchling_system guardian hostile_system }
+# save_global_event_target_as = hatchling_egg
+scluster_guardians_init_hatchling = {
+	class = sc_g
+	# prevent_anomalies = yes # Removed
+	# usage = misc_system_init
+	# usage_odds = {
+	# 	base = 90000
+	# 	modifier = {
+	# 		factor = 0
+	# 		has_distar = no
+	# 	}
+	# 	modifier = {
+	# 		factor = 0
+	# 		OR = {
+	# 			is_fe_cluster = yes
+	# 			has_star_flag = empire_cluster
+	# 		}
+	# 	}
+	# 	modifier = {
+	# 		factor = 0
+	# 		is_bottleneck_system = yes
+	# 	}
+	# }
+
+	max_instances = 1
+	# scaled_spawn_chance = 8	# scales by galaxy size (1000 stars = 10x base)
+
+	flags = { scluster guardians_hatchling_system guardian hostile_system }
+
+	planet = {
+		count = 1
+		class = star
+		orbit_distance = 0
+		orbit_angle = 1
+		size = { min = 20 max = 30 }
+		has_ring = no
+	}
+	planet = {
+		count = { min = 1 max = 2 }
+		orbit_distance = 25
+		orbit_angle = { min = 90 max = 270 }
+	}
+
+	planet = {
+		class = rl_voidspawn_egg
+		orbit_distance = 20
+		orbit_angle = { min = 90 max = 270 }
+		size = 20 # TODO
+		has_ring = no
+		modifiers = none
+
+		init_effect = {
+			save_global_event_target_as = hatchling_egg
+			set_planet_flag = hatchling_egg
+			prevent_anomaly = yes
+			reroll_random = yes # Added
+			random_list = {
+				60 = { set_planet_flag = hatchling_will_trigger }
+				40 = {}
+			}
+		}
+	}
+
+	planet = {
+		count = { min = 2 max = 4 }
+		orbit_distance = 30
+		orbit_angle = { min = 90 max = 270 }
+
+		change_orbit = @base_moon_distance
+
+		moon = {
+			count = { min = 0 max = 1 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+	}
+	change_orbit = 15
+}
+
+# Great Wound - Void Cloud Home System
+# flags = { great_wound_system hostile_system } # Added
+# Prevents anomalies
+scluster_great_wound_system = {
+	class = sc_black_hole
+	name = "NAME_Great_Wound"
+
+	# usage = misc_system_init
+	# usage_odds = {
+		# base = 90000
+		# modifier = {
+		# 	factor = 0
+		# 	has_star_flag = empire_cluster
+		# }
+		# modifier = {
+		# 	factor = 0
+		# 	is_bottleneck_system = yes
+		# }
+	# }
+
+	max_instances = 1
+	# scaled_spawn_chance = 8	# scales by galaxy size (1000 stars = 10x base)
+
+	flags = { scluster great_wound_system hostile_system already_has_nebula_object } # Added
+
+	planet = {
+		class = star
+		orbit_distance = 0
+		size = 40
+
+		init_effect = {
+			prevent_anomaly = yes
+			scluster_clear_mining_deposits = yes # clear_deposits = yes # Replaced
+			save_event_target_as = patrol_1
+			add_deposit = d_dark_matter_deposit_10 # Replaced: set_deposit -> add_deposit
+			create_ambient_object = {
+				type = "space_storm_1"
+				location = this
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 0
+					angle = random
+				}
+			}
+		}
+	}
+
+	change_orbit = 60
+
+	planet = {
+		class = "pc_black_hole"
+		name = "NAME_Subspace_Rupture_1"
+		orbit_distance = 0
+		orbit_angle = 1
+		size = 20
+		has_ring = no
+
+		init_effect = {
+			prevent_anomaly = yes
+		}
+	}
+
+	change_orbit = 60
+
+	planet = {
+		class = "pc_black_hole"
+		name = "NAME_Subspace_Rupture_2"
+		orbit_distance = 0
+		orbit_angle = 210
+		size = 20
+		has_ring = no
+
+		init_effect = {
+			prevent_anomaly = yes
+			save_event_target_as = patrol_2
+			# clear_deposits = yes # Removed
+		}
+	}
+
+	change_orbit = 60
+
+	planet = {
+		class = "pc_black_hole"
+		name = "NAME_Subspace_Rupture_3"
+		orbit_distance = 0
+		orbit_angle = 75
+		size = 10
+		has_ring = no
+
+		init_effect = {
+			prevent_anomaly = yes
+		}
+	}
+
+	change_orbit = 10
+
+	planet = {
+		class = "pc_black_hole"
+		name = "NAME_Subspace_Rupture_4"
+		orbit_distance = 0
+		orbit_angle = 120
+		size = 20
+		has_ring = no
+
+		init_effect = {
+			prevent_anomaly = yes
+			# clear_deposits = yes # Removed
+		}
+	}
+
+	planet = {
+		class = "pc_black_hole"
+		name = "NAME_Subspace_Rupture_5"
+		orbit_distance = 0
+		orbit_angle = 200
+		size = 15
+		has_ring = no
+
+		init_effect = {
+			prevent_anomaly = yes
+		}
+	}
+
+	change_orbit = 5
+
+	planet = {
+		class = "pc_black_hole"
+		name = "NAME_Subspace_Rupture_6"
+		orbit_distance = 0
+		orbit_angle = 90
+		size = 15
+		has_ring = no
+
+		init_effect = {
+			prevent_anomaly = yes
+			save_event_target_as = patrol_3
+		}
+	}
+
+	planet = {
+		class = "pc_black_hole"
+		name = "NAME_Subspace_Rupture_7"
+		orbit_distance = 0
+		orbit_angle = 130
+		size = 20
+		has_ring = no
+
+		init_effect = {
+			prevent_anomaly = yes
+			# clear_deposits = yes # Removed
+		}
+	}
+
+	change_orbit = 30
+
+	planet = {
+		class = "pc_black_hole"
+		name = "NAME_Subspace_Rupture_8"
+		orbit_distance = 0
+		orbit_angle = 245
+		size = 10
+		has_ring = no
+
+		init_effect = {
+			prevent_anomaly = yes
+		}
+	}
+
+	change_orbit = 10
+
+	planet = {
+		class = "pc_black_hole"
+		name = "NAME_Subspace_Rupture_9"
+		orbit_distance = 0
+		orbit_angle = 110
+		size = 20
+		has_ring = no
+
+		init_effect = {
+			prevent_anomaly = yes
+			# clear_deposits = yes # Removed
+		}
+	}
+
+	change_orbit = 10
+
+	planet = {
+		class = "pc_black_hole"
+		name = "NAME_Subspace_Rupture_10"
+		orbit_distance = 0
+		orbit_angle = 170
+		size = 10
+		has_ring = no
+
+		init_effect = {
+			prevent_anomaly = yes
+			save_event_target_as = patrol_4
+		}
+	}
+
+	init_effect = {
+		create_cloud_country = yes
+		event_target:cloud_country = {
+			if = {
+				limit = {
+					NOT = {
+						has_modifier = cloud_power
+					}
+				}
+				add_modifier = {
+					modifier = cloud_power
+					days = -1
+				}
+			}
+			create_fleet = {
+				name = "NAME_Subspace_Rupture_Cloud_1"
+				effect = {
+					set_owner = event_target:cloud_country
+					create_ship = {
+						name = "NAME_Subspace_Rupture_Cloud_1"
+						design = "NAME_Cloud_Entity"
+					}
+					set_location = event_target:patrol_1
+					set_fleet_stance = aggressive
+					set_aggro_range_measure_from = self
+					set_aggro_range = 500
+					queue_actions = {
+						repeat = {
+							find_closest_planet = {
+								trigger = {
+									id = "great_wound.1.scluster.trigger.1" # "great_wound.1.trigger.1" # Replaced: Can't have duplicate trigger names
+									is_planet = event_target:patrol_4
+								}
+								found_planet = {
+									move_to = this
+									orbit_planet = this
+								}
+							}
+							find_closest_planet = {
+								trigger = {
+									id = "great_wound.1.scluster.trigger.2" # "great_wound.1.trigger.2" # Replaced: Can't have duplicate trigger names
+									is_planet = event_target:patrol_3
+								}
+								found_planet = {
+									move_to = this
+									orbit_planet = this
+								}
+							}
+							find_closest_planet = {
+								trigger = {
+									id = "great_wound.1.scluster.trigger.3" # "great_wound.1.trigger.3" # Replaced: Can't have duplicate trigger names
+									is_planet = event_target:patrol_2
+								}
+								found_planet = {
+									move_to = this
+									orbit_planet = this
+								}
+							}
+							find_closest_planet = {
+								trigger = {
+									id = "great_wound.1.scluster.trigger.4" # "great_wound.1.trigger.4" # Replaced: Can't have duplicate trigger names
+									is_planet = event_target:patrol_1
+								}
+								found_planet = {
+									move_to = this
+									orbit_planet = this
+								}
+							}
+						}
+					}
+				}
+			}
+			create_fleet = {
+				name = "NAME_Subspace_Rupture_Cloud_2"
+				effect = {
+					set_owner = event_target:cloud_country
+					create_ship = {
+						name = "NAME_Subspace_Rupture_Cloud_2"
+						design = "NAME_Cloud_Entity"
+					}
+					set_location = event_target:patrol_4
+					set_fleet_stance = aggressive
+					set_aggro_range_measure_from = self
+					set_aggro_range = 500
+					queue_actions = {
+						repeat = {
+							find_closest_planet = {
+								trigger = {
+									id = "great_wound.2.scluster.trigger.1" # "great_wound.2.trigger.1" # Replaced: Can't have duplicate trigger names
+									is_planet = event_target:patrol_1
+								}
+								found_planet = {
+									move_to = this
+									orbit_planet = this
+								}
+							}
+							find_closest_planet = {
+								trigger = {
+									id = "great_wound.2.scluster.trigger.2" # "great_wound.2.trigger.2" # Replaced: Can't have duplicate trigger names
+									is_planet = event_target:patrol_2
+								}
+								found_planet = {
+									move_to = this
+									orbit_planet = this
+								}
+							}
+							find_closest_planet = {
+								trigger = {
+									id = "great_wound.2.scluster.trigger.3" # "great_wound.2.trigger.3" # Replaced: Can't have duplicate trigger names
+									is_planet = event_target:patrol_3
+								}
+								found_planet = {
+									move_to = this
+									orbit_planet = this
+								}
+							}
+							find_closest_planet = {
+								trigger = {
+									id = "great_wound.2.scluster.trigger.4" # "great_wound.2.trigger.4" # Replaced: Can't have duplicate trigger names
+									is_planet = event_target:patrol_4
+								}
+								found_planet = {
+									move_to = this
+									orbit_planet = this
+								}
+							}
+						}
+					}
+				}
+			}
+			create_fleet = {
+				name = "NAME_Subspace_Rupture_Cloud_3"
+				effect = {
+					set_owner = event_target:cloud_country
+					create_ship = {
+						name = "NAME_Subspace_Rupture_Cloud_3"
+						design = "NAME_Cloud_Entity"
+					}
+					set_location = event_target:patrol_2
+					set_fleet_stance = aggressive
+					set_aggro_range_measure_from = self
+					set_aggro_range = 500
+					queue_actions = {
+						repeat = {
+							find_closest_planet = {
+								trigger = {
+									id = "great_wound.3.scluster.trigger.3" # "great_wound.3.trigger.3" # Replaced: Can't have duplicate trigger names
+									is_planet = event_target:patrol_1
+								}
+								found_planet = {
+									move_to = this
+									orbit_planet = this
+								}
+							}
+							find_closest_planet = {
+								trigger = {
+									id = "great_wound.3.scluster.trigger.4" # "great_wound.3.trigger.4" # Replaced: Can't have duplicate trigger names
+									is_planet = event_target:patrol_2
+								}
+								found_planet = {
+									move_to = this
+									orbit_planet = this
+								}
+							}
+							find_closest_planet = {
+								trigger = {
+									id = "great_wound.3.scluster.trigger.1" # "great_wound.3.trigger.1" # Replaced: Can't have duplicate trigger names
+									is_planet = event_target:patrol_3
+								}
+								found_planet = {
+									move_to = this
+									orbit_planet = this
+								}
+							}
+							find_closest_planet = {
+								trigger = {
+									id = "great_wound.3.scluster.trigger.2" # "great_wound.3.trigger.2" # Replaced: Can't have duplicate trigger names
+									is_planet = event_target:patrol_4
+								}
+								found_planet = {
+									move_to = this
+									orbit_planet = this
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Primitive Robot Civilization (Rage Virus Chain)
+# primitive_system = yes	# usage odds modified by primitives setup slider
+# flags = { primitive_robot_system }
+scluster_primitive_robot_system = {
+	class = "rl_standard_stars"
+	asteroid_belt = {
+		type = rocky_asteroid_belt
+		radius = 125
+	}
+
+	# usage = misc_system_init
+	# usage_odds = {
+	# 	base = 9000
+	# 	modifier = {
+	# 		factor = 0
+	# 		has_distar = no
+	# 	}
+	# 	modifier = {
+	# 		factor = 0
+	# 		is_fe_cluster = yes
+	# 	}
+	# 	modifier = {
+	# 		factor = 0
+	# 		has_star_flag = empire_cluster
+	# 	}
+	# }
+	# scaled_spawn_chance = 8	# scales by galaxy size (1000 stars = 10x base)
+	max_instances = 1
+	primitive_system = yes	# usage odds modified by primitives setup slider
+
+	flags = { scluster primitive_robot_system }
+
+	planet = {
+		count = 1
+		class = star
+		orbit_distance = 0
+		orbit_angle = 1
+		size = { min = 20 max = 30 }
+		deposit_blockers = none # SBA note: ??? Why would a star need to prevent blockers?
+		has_ring = no
+	}
+
+	change_orbit = 25
+
+	planet = {
+		count = 2
+		orbit_distance = 20
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 8 max = 12 }
+		class = "rl_unhabitable_planets"
+	}
+
+	planet = {
+		count = 1
+		orbit_distance = 25
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 12 max = 25 }
+		class = "rl_cool_moist_planets"
+		anomaly = "DISTAR_ROBO_CAT"
+
+		init_effect = { # TODO
+			set_planet_flag = primitive_robot_planet
+			prevent_anomaly = yes
+			#clear_blockers = yes
+			add_deposit = d_city_ruins
+			add_deposit = d_city_ruins
+			add_deposit = d_failing_infrastructure
+			add_deposit = d_failing_infrastructure
+			add_deposit = d_metal_boneyard
+		}
+	}
+
+	change_orbit = 38
+
+	planet = {
+		count = { min = 2 max = 3 } # Replaced: min 1->2
+		class = pc_asteroid
+		orbit_distance = 0
+		orbit_angle = { min = 0 max = 360 }
+	}
+
+	planet = {
+		class = pc_gas_giant
+		orbit_distance = 35
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 20 max = 30 }
+
+		change_orbit = @base_moon_distance
+
+		moon = {
+			count = { min = 1 max = 2 } # Replaced: min 0->1
+			size = { min = 6 max = 20 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 6
+		}
+	}
+}
+
+# Superflare Star System
+# flags = { superflare_system }
+scluster_superflare_system = {
+	class = "sc_g"
+	# usage = misc_system_init
+	# usage_odds = {
+		# base = 90000
+		# modifier = {
+		# 	factor = 0
+		# 	has_distar = no
+		# }
+		# modifier = {
+		# 	factor = 0
+		# 	is_fe_cluster = yes
+		# }
+		# modifier = {
+		# 	factor = 0
+		# 	has_star_flag = empire_cluster
+		# }
+	# }
+	# scaled_spawn_chance = 8
+	max_instances = 1
+
+	flags = { scluster superflare_system scluster_prescripted_habitable_planets_disabled }
+
+	planet = {
+		class = star
+		orbit_distance = 0
+		init_effect = {
+			add_modifier = { modifier = superflare_star days = -1 }
+			scluster_clear_mining_deposits = yes # Added
+			add_deposit = d_physics_3 # Replaced: set_deposit -> add_deposit
+		}
+	}
+
+	change_orbit = 40
+
+	planet = {
+		count = { min = 2 max = 3 }
+		class = "rl_no_atmosphere_planets"
+		orbit_distance = 20
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 8 max = 15 }
+	}
+
+	planet = {
+		count = 1
+		orbit_distance = 30
+		class = "pc_frozen"
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 9 max = 24 }
+		anomaly = "DISTAR_FLARE_CAT"
+		init_effect = {
+			clear_deposits = yes
+			set_planet_flag = frozen_in_time_flag
+			# if = { # Want to add this after the superflare
+			# 	limit = { has_aquatics = yes }
+			# 	add_modifier = { modifier = frozen_terraforming_candidate }
+			# }
+		}
+	}
+
+	planet = {
+		class = pc_gas_giant
+		orbit_distance = 40
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 30 max = 40 }
+
+		change_orbit = @base_moon_distance
+
+		moon = {
+			count = { min = 2 max = 4 } # Replaced: min 1->2
+			size = { min = 6 max = 12 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 7
+			class = "rl_no_atmosphere_planets"
+		}
+		moon = {
+			count = 1
+			size = { min = 9 max = 24 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 9
+			class = "pc_nuked"
+			init_effect = {
+				add_modifier = { modifier = superflare_planet days = -1 }
+				clear_blockers = yes
+				add_deposit = d_radioactive_wasteland
+				add_deposit = d_radioactive_wasteland
+				add_deposit = d_irradiated_valley
+			}
+		}
+	}
+}
+
+### Vacuum Collapse System
+# primitive_system = yes
+# flags = { collapse_system }
+# save_global_event_target_as = derelict_particle_accelerator
+scluster_collapse_system = {
+	class = "sc_m"
+
+	# usage = misc_system_init
+	# usage_odds = {
+	# 	base = 90000
+	# 	modifier = {
+	# 		factor = 0
+	# 		has_distar = no
+	# 	}
+	# 	modifier = {
+	# 		factor = 0
+	# 		is_fe_cluster = yes
+	# 	}
+	# 	modifier = {
+	# 		factor = 0
+	# 		has_star_flag = empire_cluster
+	# 	}
+	# }
+	primitive_system = yes
+	# scaled_spawn_chance = 8
+	max_instances = 1
+
+	flags = { scluster collapse_system primitive_system } # Added primitive_system
+
+	planet = {
+		class = star
+		orbit_distance = 0
+	}
+
+	change_orbit = 40
+
+	planet = {
+		count = { min = 2 max = 3 } # Replaced: min 1->2
+		class = "rl_unhabitable_planets"
+		orbit_distance = 20
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 8 max = 15 }
+	}
+
+	planet = {
+		count = 1
+		class = pc_gas_giant
+		orbit_distance = 30
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 30 max = 40 }
+
+		change_orbit = @base_moon_distance
+
+		moon = {
+			count = 1
+			size = { min = 9 max = 24 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 10
+			class = "pc_gaia"
+			anomaly = "DISTAR_COLLAPSE_CAT"
+			init_effect = {
+				create_ambient_object = {
+					type = derelict_particle_accelerator
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 10
+					}
+					save_global_event_target_as = derelict_particle_accelerator
+				}
+				create_species = {
+					name = random
+					class = MOL
+					portrait = mol7
+					homeworld = THIS
+					namelist = "MOL2"
+					traits = {
+						trait = "trait_extremely_adaptive"
+						trait = "trait_slow_breeders"
+						trait = "trait_sedentary"
+						trait = "trait_pc_gaia_preference"
+					}
+				}
+				create_country = {
+					name = random
+					authority = auth_democratic
+					civics = {
+						civic = civic_secret_of_fire
+						civic = civic_the_wheel
+					}
+					species = last_created_species
+					ethos = {
+						ethic = "ethic_fanatic_pacifist"
+						ethic = "ethic_materialist"
+					}
+					origin = "origin_default"
+					flag = {
+						icon = {
+							category = "pre_ftl"
+							file = "preftl_stone_age.dds"
+						}
+						background= {
+							category = "backgrounds"
+							file = "new_dawn.dds"
+						}
+						colors={
+							"turquoise"
+							"green"
+							"null"
+							"null"
+						}
+					}
+					type = primitive
+				}
+				last_created_country = {
+					set_country_flag = stone_age
+					set_pre_ftl_age = stone_age
+					set_graphical_culture = preindustrial_01
+				}
+				set_owner = last_created_country
+				set_capital = yes
+				every_deposit = {
+					limit = { is_deposit_type = d_dangerous_wildlife_blocker }
+					clear_blocker = yes
+				}
+				while = {
+					count = 4
+					create_pop = {
+						species = last_created_species
+					}
+				}
+				add_building = building_crude_huts
+				remove_building = building_colony_shelter
+			}
+		}
+	}
+
+	planet = {
+		count = 1
+		class = pc_gas_giant
+		orbit_distance = 40
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 20 max = 30 }
+		has_ring = yes
+
+		change_orbit = @base_moon_distance
+
+		moon = {
+			count = { min = 1 max = 3 }
+			size = { min = 6 max = 12 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 7
+			class = "rl_no_atmosphere_planets"
+		}
+	}
+}
+
+# Old Foes System
+# primitive_system = yes
+# flags = { old_foes_system }
+# spawn_old_foes_effect creates the species
+scluster_old_foes_system = {
+	class = "rl_standard_stars"
+	asteroid_belt = {
+		type = rocky_asteroid_belt
+		radius = 70
+	}
+
+	# usage = misc_system_init
+	# usage_odds = {
+		# base = 90000
+		# modifier = {
+		# 	factor = 0
+		# 	has_distar = no
+		# }
+		# modifier = {
+		# 	factor = 0
+		# 	is_fe_cluster = yes
+		# }
+		# modifier = {
+		# 	factor = 0
+		# 	has_star_flag = empire_cluster
+		# }
+	# }
+	primitive_system = yes
+	# scaled_spawn_chance = 8
+	max_instances = 1
+
+	flags = { scluster old_foes_system primitive_system }
+
+	planet = {
+		class = star
+		orbit_distance = 0
+	}
+
+	change_orbit = 30
+
+	planet = {
+		count = 2
+		class = "rl_unhabitable_planets"
+		orbit_distance = 30
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 10 max = 16 }
+	}
+
+	planet = {
+		count = 1
+		class = "pc_nuked"
+		orbit_distance = 35
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 9 max = 24 }
+		init_effect = {
+			prevent_anomaly = yes
+			set_planet_flag = czyrni_planet
+		}
+	}
+
+	planet = {
+		count = 1
+		class = "pc_nuked"
+		orbit_distance = 40
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 9 max = 24 }
+		moon = {
+			count = 1
+			size = { min = 6 max = 12 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 10
+		}
+		init_effect = {
+			prevent_anomaly = yes
+			set_planet_flag = pyorun_planet
+		}
+	}
+
+	planet = {
+		count = 1
+		class = pc_gas_giant
+		orbit_distance = 40
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 20 max = 30 }
+		has_ring = no
+
+		change_orbit = @base_moon_distance
+
+		moon = {
+			count = { min = 2 max = 3 } # Replaced: min 0->2
+			size = { min = 6 max = 12 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 7
+		}
+	}
+
+	init_effect = { # Added: create_species & create_country init effects moved to scripted effect in game_start.2 w/ First Contact
+		spawn_old_foes_effect = yes
+	}
+}
+
+# Scavenger Bot System
+# flags = { scavenger_bot_system guardian hostile_system }
+scluster_scavenger_system = {
+	class = "sc_m_giant"
+	asteroid_belt = {
+		type = rocky_asteroid_belt
+		radius = 124
+	}
+
+	# usage = misc_system_init
+	# usage_odds = {
+		# base = 90000
+		# modifier = {
+		# 	factor = 0
+		# 	has_distar = no
+		# }
+		# modifier = {
+		# 	factor = 0
+		# 	is_fe_cluster = yes
+		# }
+		# modifier = {
+		# 	factor = 0
+		# 	has_star_flag = empire_cluster
+		# }
+		# modifier = {
+		# 	factor = 0
+		# 	is_bottleneck_system = yes
+		# }
+	# }
+	# scaled_spawn_chance = 8
+	max_instances = 1
+
+	flags = { scluster scavenger_bot_system guardian hostile_system }
+
+	planet = {
+		class = star
+		orbit_distance = 0
+		init_effect = {
+			prevent_anomaly = yes
+			create_ambient_object = {
+				type = "large_debris_object"
+				location = this
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 37
+					angle = 30
+				}
+			}
+			create_ambient_object = {
+				type = "large_debris_object"
+				location = this
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 40
+					angle = 30
+				}
+				save_global_event_target_as = debris_field_01
+			}
+			create_ambient_object = {
+				type = "large_debris_object"
+				location = this
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 43
+					angle = 30
+				}
+			}
+			while = {
+				count = 2
+				create_ambient_object = {
+					type = "large_debris_object"
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 65
+						angle = random
+					}
+				}
+			}
+			while = {
+				count = 1
+				create_ambient_object = {
+					type = "ancient_battlefield_object"
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 65
+						angle = random
+					}
+					save_global_event_target_as = debris_field_02
+				}
+			}
+			create_ambient_object = {
+				type = "derelict_ship_object"
+				location = this
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 80
+					angle = random
+				}
+			}
+			while = {
+				count = 3
+				create_ambient_object = {
+					type = "medium_debris_01_object"
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 80
+						angle = random
+					}
+				}
+			}
+			while = {
+				count = 4
+				create_ambient_object = {
+					type = "small_debris_object"
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 90
+						angle = random
+					}
+				}
+			}
+			while = {
+				count = 3
+				create_ambient_object = {
+					type = "large_debris_object"
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 100
+						angle = random
+					}
+				}
+			}
+			create_ambient_object = {
+				type = "large_debris_object"
+				location = this
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 97
+					angle = 270
+				}
+			}
+			create_ambient_object = {
+				type = "large_debris_object"
+				location = this
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 100
+					angle = 265
+				}
+			}
+			create_ambient_object = {
+				type = "large_debris_object"
+				location = this
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 100
+					angle = 270
+				}
+				save_global_event_target_as = debris_field_03
+			}
+			create_ambient_object = {
+				type = "large_debris_object"
+				location = this
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 100
+					angle = 275
+				}
+			}
+			create_ambient_object = {
+				type = "large_debris_object"
+				location = this
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 103
+					angle = 270
+				}
+			}
+			while = {
+				count = 2
+				create_ambient_object = {
+					type = "abandoned_ship_2_object"
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 100
+						angle = random
+					}
+				}
+			}
+			create_ambient_object = {
+				type = "derelict_ship_object"
+				location = this
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 110
+					angle = random
+				}
+			}
+			while = {
+				count = 4
+				create_ambient_object = {
+					type = "medium_debris_01_object"
+					location = solar_system
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 110
+						angle = random
+					}
+				}
+			}
+			create_ambient_object = {
+				type = "large_debris_object"
+				location = this
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 117
+					angle = 180
+				}
+			}
+			create_ambient_object = {
+				type = "large_debris_object"
+				location = this
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 120
+					angle = 175
+				}
+			}
+			while = {
+				count = 4
+				create_ambient_object = {
+					type = "large_debris_object"
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 120
+						angle = random
+					}
+				}
+			}
+			create_ambient_object = {
+				type = "large_debris_object"
+				location = this
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 120
+					angle = 180
+				}
+				save_global_event_target_as = debris_field_04
+			}
+			create_ambient_object = {
+				type = "large_debris_object"
+				location = this
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 120
+					angle = 185
+				}
+			}
+			create_ambient_object = {
+				type = "large_debris_object"
+				location = this
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 123
+					angle = 180
+				}
+			}
+			create_ambient_object = {
+				type = "large_debris_object"
+				location = this
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 115
+					angle = 0
+				}
+			}
+			create_ambient_object = {
+				type = "large_debris_object"
+				location = this
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 117
+					angle = 350
+				}
+			}
+			create_ambient_object = {
+				type = "large_debris_object"
+				location = this
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 117
+					angle = 0
+				}
+				save_global_event_target_as = debris_field_05
+			}
+			create_ambient_object = {
+				type = "large_debris_object"
+				location = this
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 117
+					angle = 10
+				}
+			}
+			create_ambient_object = {
+				type = "large_debris_object"
+				location = this
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 120
+					angle = 0
+				}
+			}
+		}
+	}
+
+	change_orbit = 40
+
+	planet = {
+		count = 1
+		class = "pc_broken"
+		size = { min = 10 max = 15 }
+
+		init_effect = {
+			prevent_anomaly = yes
+			scluster_clear_research_deposits = yes # clear_deposits = yes # Replaced
+			add_deposit = d_minerals_10
+			add_deposit = d_minerals_2
+		}
+	}
+
+	change_orbit = 30
+
+	planet = {
+		count = 1
+		class = "pc_broken"
+		size = { min = 10 max = 25 }
+		has_ring = no
+		init_effect = {
+			prevent_anomaly = yes
+			scluster_clear_research_deposits = yes # clear_deposits = yes # Replaced
+			add_deposit = d_minerals_8
+			add_deposit = d_nanites_deposit
+		}
+	}
+
+	change_orbit = 27
+
+	planet = {
+		count = { min = 2 max = 3 } # Replaced: min 1->2
+		class = pc_asteroid
+		orbit_distance = 0
+		orbit_angle = { min = 0 max = 360 }
+		init_effect = {
+			# prevent_anomaly = yes # Removed
+		}
+	}
+
+	init_effect = {
+		create_country = {
+			name = "NAME_Autonomous_Repurposer"
+			type = guardian_scavenger_bot
+			flag = {
+				icon = {
+					category = "spherical"
+					file = "flag_spherical_16.dds"
+				}
+				background= {
+					category = "backgrounds"
+					file = "00_solid.dds"
+				}
+				colors={
+					"black"
+					"black"
+					"null"
+					"null"
+				}
+			}
+		}
+		last_created_country = {
+			set_country_flag = guardian_scavenger_bot
+			if = {
+				limit = { NOT = { has_modifier = scavenger_bot_power } }
+				add_modifier = { modifier = scavenger_bot_power	days = -1 }
+			}
+			save_global_event_target_as = scavenger_bot_country
+		}
+		event_target:scavenger_bot_country = {
+			create_fleet = {
+				name = "NAME_Scavenger_Bot"
+				settings = {
+					spawn_debris = no
+					is_boss = yes
+				}
+				effect = {
+					set_owner = event_target:scavenger_bot_country
+					create_ship = {
+						name = "NAME_Modulus"
+						design = "NAME_Reclaimer"
+					}
+					set_location = {
+						target = event_target:debris_field_01
+						distance = 30
+						angle = random
+					}
+					set_fleet_stance = aggressive
+					set_aggro_range_measure_from = self
+					set_aggro_range = 50
+					save_global_event_target_as = scavenger_bot_fleet
+					queue_actions = {
+						repeat = {
+							find_random_planet = {
+								trigger = {
+									id = scluster.scav.1
+									always = yes
+								}
+								found_planet = {
+									move_to = event_target:debris_field_01
+									wait = {
+										duration = 25
+										random = 5
+									}
+								}
+							}
+							find_random_planet = {
+								trigger = {
+									id = scluster.scav.2
+									always = yes
+								}
+								found_planet = {
+									move_to = event_target:debris_field_02
+									wait = {
+										duration = 25
+										random = 5
+									}
+								}
+							}
+							find_random_planet = {
+								trigger = {
+									id = scluster.scav.3
+									always = yes
+								}
+								found_planet = {
+									move_to = event_target:debris_field_04
+									wait = {
+										duration = 25
+										random = 5
+									}
+								}
+							}
+							find_random_planet = {
+								trigger = {
+									id = scluster.scav.4
+									always = yes
+								}
+								found_planet = {
+									move_to = event_target:debris_field_03
+									wait = {
+										duration = 25
+										random = 5
+									}
+								}
+							}
+							find_random_planet = {
+								trigger = {
+									id = scluster.scav.5
+									always = yes
+								}
+								found_planet = {
+									move_to = event_target:debris_field_05
+									wait = {
+										duration = 25
+										random = 5
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+### Sea of Consciousness System
+# flags = { living_planet_system }
+scluster_living_planet_system = {
+	class = "sc_binary_3"
+
+	# usage = misc_system_init
+	# usage_odds = {
+		# base = 90000
+		# modifier = {
+		# 	factor = 0
+		# 	has_distar = no
+		# }
+		# modifier = {
+		# 	factor = 0
+		# 	is_fe_cluster = yes
+		# }
+		# modifier = {
+		# 	factor = 0
+		# 	has_star_flag = empire_cluster
+		# }
+	# }
+	# scaled_spawn_chance = 8
+	max_instances = 1
+
+	flags = { scluster living_planet_system }
+
+	planet = {
+		count = 1
+		class = star
+		orbit_distance = 25
+		orbit_angle = 1
+		size = { min = 25 max = 30 }
+		has_ring = no
+	}
+	planet = {
+		count = 1
+		class = star
+		orbit_distance = 0
+		orbit_angle = 180
+# Bug: star w/ min size > max size
+		size = { min = 10 max = 15 } # 15 max = 10 }
+		has_ring = no
+	}
+
+	change_orbit = 45
+
+	planet = {
+		count = { min = 1 max = 3 }
+		class = "rl_unhabitable_planets"
+		orbit_distance = 20
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 8 max = 15 }
+
+		change_orbit = @base_moon_distance
+
+		moon = {
+			count = { min = 0 max = 1 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+	}
+
+	planet = {
+		class = "pc_ocean"
+		orbit_distance = 40
+		orbit_angle = { min = 90 max = 270 }
+		size = 24
+		has_ring = yes
+		anomaly = DISTAR_LIVING_CAT
+		entity = "ocean_planet_sea_of_conciousness_entity"
+		init_effect = {
+			set_planet_flag = living_planet
+			add_modifier = { modifier = living_sea years = -1 }
+			prevent_anomaly = yes
+			clear_blockers = yes
+			add_deposit = d_betharian_deposit
+		}
+	}
+
+	change_orbit = 20
+
+	planet = {
+		count = { min = 1 max = 2 }
+		orbit_distance = 60
+		class = pc_gas_giant
+		orbit_angle = { min = 90 max = 270 }
+		size = 25
+
+		change_orbit = @base_moon_distance
+
+		moon = {
+			count = { min = 2 max = 4 } # Replaced: min 1->2
+			size = { min = 8 max = 20 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 6
+		}
+	}
+}
+
+# Elderly Tiyanki System
+# flags = { elderly_tiyanki_system guardian hostile_system }
+scluster_elderly_tiyanki_system = {
+	class = "rl_all_stars"
+
+	# usage = misc_system_init
+	# usage_odds = {
+		# base = 90000
+		# modifier = {
+		# 	factor = 0
+		# 	has_distar = no
+		# }
+		# modifier = {
+		# 	factor = 0
+		# 	is_fe_cluster = yes
+		# }
+		# modifier = {
+		# 	factor = 0
+		# 	has_star_flag = empire_cluster
+		# }
+		# modifier = {
+		# 	factor = 0
+		# 	is_bottleneck_system = yes
+		# }
+	# }
+	# scaled_spawn_chance = 8
+	max_instances = 1
+
+	flags = { scluster elderly_tiyanki_system guardian hostile_system }
+
+	planet = {
+		class = star
+		orbit_distance = 0
+		init_effect = {
+			# prevent_anomaly = yes # Removed
+			while = {
+				count = 2
+				create_ambient_object = {
+					type = "large_debris_object"
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 100
+						angle = random
+					}
+				}
+			}
+			while = {
+				count = 2
+				create_ambient_object = {
+					type = "medium_debris_01_object"
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 70
+						angle = random
+					}
+				}
+			}
+			while = {
+				count = 2
+				create_ambient_object = {
+					type = "large_debris_object"
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 90
+						angle = random
+					}
+				}
+			}
+			while = {
+				count = 3
+				create_ambient_object = {
+					type = "small_debris_object"
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 110
+						angle = random
+					}
+				}
+			}
+		}
+	}
+
+	change_orbit = 45
+
+	planet = {
+		count = { min = 1 max = 2 }
+		class = "rl_all_normal_planets"
+		orbit_distance = 30
+		orbit_angle = { min = 0 max = 360 }
+
+		# init_effect = { # Removed
+		# 	prevent_anomaly = yes
+		# }
+	}
+
+	change_orbit = 30
+
+	planet = {
+		count = 1
+		class = "pc_gaia"
+		size = { min = 9 max = 25 }
+
+		# init_effect = { # Removed
+		# 	prevent_anomaly = yes
+		# }
+	}
+
+	change_orbit = 30
+
+	planet = {
+		count = 1
+		class = "pc_gas_giant"
+		size = { min = 25 max = 30 }
+
+		# init_effect = { # Removed
+		# 	prevent_anomaly = yes
+		# }
+	}
+
+	change_orbit = 30
+
+	planet = {
+		count = 1
+		class = "pc_gas_giant"
+		size = { min = 25 max = 30 }
+		has_ring = yes
+
+		# init_effect = { # Removed
+		# 	prevent_anomaly = yes
+		# }
+
+		change_orbit = @base_moon_distance
+
+		moon = {
+			count = { min = 2 max = 4 } # Replaced: min 1->2
+			size = { min = 6 max = 16 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 8
+			class = "rl_unhabitable_planets"
+			# init_effect = { # Removed
+			# 	prevent_anomaly = yes
+			# }
+		}
+	}
+
+	change_orbit = 20
+
+	init_effect = {
+		create_country = {
+			name = "NAME_Tiyanki_Space_Whale_Ancient"
+			type = guardian_elderly_tiyanki
+			flag = {
+				icon = {
+					category = "zoological"
+					file = "flag_zoological_17.dds"
+				}
+				background = {
+					category = "backgrounds"
+					file = "00_solid.dds"
+				}
+				colors = {
+					"blue"
+					"blue"
+					"null"
+					"null"
+				}
+			}
+		}
+		last_created_country = {
+			if = {
+				limit = { NOT = { has_modifier = elderly_tiyanki_power } }
+				add_modifier = { modifier = elderly_tiyanki_power days = -1 }
+			}
+			save_global_event_target_as = elderly_tiyanki_country
+		}
+		random_system_planet = {
+			limit = { is_star = no }
+			save_event_target_as = new_location
+		}
+		random_system_planet = {
+			limit = { is_star = yes }
+			save_event_target_as = start_point
+			event_target:elderly_tiyanki_country = {
+				create_fleet = {
+					name = "NAME_Elderly_Tiyanki"
+					settings = {
+						spawn_debris = no
+						is_boss = yes
+					}
+					effect = {
+						set_owner = event_target:elderly_tiyanki_country
+						create_ship = {
+							name = "NAME_Elder"
+							design = "NAME_Progenitor"
+						}
+						set_location = event_target:start_point
+						set_fleet_stance = aggressive
+						set_aggro_range_measure_from = self
+						set_aggro_range = 50
+						save_global_event_target_as = elderly_tiyanki_fleet
+						auto_move_to_planet = {
+							target = event_target:new_location
+							clear_auto_move_on_arrival = no		# distar.136 sets a new auto move target
+						}
+					}
+				}
+			}
+		}
+	}
+
+	change_orbit = 20
+
+	planet = {
+		count = 1
+		class = "pc_gas_giant"
+		size = { min = 20 max = 30 }
+
+		init_effect = {
+			prevent_anomaly = yes
+		}
+	}
+}
+
+##########################################
+### RUINED EMPIRE: JUNKHEAP RATLING SYSTEMS
+##########################################
+
+# Junkheap Ratling Home System
+# ratling_1_1 = {}
+# ratling_1_2 = {}
+# ratling_1_3 = {}
+
+##########################################
+
+# Simple System: Rare Crystals (Free Feature)
+# max_instances = 2
+# flags = { crystal_system }
+scluster_distar_crystal_system = {
+	class = "sc_b"
+
+	# usage = misc_system_init
+	# usage_odds = {
+	# 	base = 10
+	# 	modifier = {
+	# 		factor = 0
+	# 		has_distar = no
+	# 	}
+	# }
+	max_instances = 2
+
+	flags = { scluster crystal_system }
+
+	planet = {
+		count = 1
+		class = star
+		orbit_distance = 0
+		orbit_angle = 1
+		size = { min = 20 max = 30 }
+		has_ring = no
+	}
+
+	change_orbit = 30
+
+	planet = {
+		count = { min = 1 max = 2 }
+		class = "rl_unhabitable_planets"
+		orbit_distance = 20
+		orbit_angle = { min = 90 max = 270 }
+	}
+
+	change_orbit = 45
+
+	planet = {
+		count = { min = 1 max = 2 }
+		class = "pc_gas_giant"
+		orbit_distance = 20
+		orbit_angle = { min = 90 max = 270 }
+
+		change_orbit = @base_moon_distance
+
+		moon = {
+			count = { min = 0 max = 2 }
+			class = "pc_frozen"
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+			init_effect = {
+				scluster_clear_research_deposits = yes # Added
+				add_deposit = d_rare_crystals_1 # Replaced: set_deposit -> add_deposit
+			}
+		}
+	}
+
+	change_orbit = 35
+
+	planet = {
+		count = { min = 2 max = 3 }
+		class = "pc_frozen"
+		orbit_distance = 20
+		orbit_angle = { min = 90 max = 270 }
+
+		init_effect = {
+			scluster_clear_research_deposits = yes # Added
+			add_deposit = d_rare_crystals_1 # Replaced: set_deposit -> add_deposit
+		}
+	}
+}
+
+# # Sealed System Entry Point
+# distar_sealed_1_1 = {}
+# # Sealed System
+# distar_sealed_1_2 = {}
+
+# The Caretaker System
+## flags = { escape_pod_system }
+## save_global_event_target_as = droppod_tar
+scluster_distar_pod_system = {
+	class = "sc_binary_7"
+	asteroid_belt = {
+		type = rocky_asteroid_belt
+		radius = 135
+	}
+
+	# usage = misc_system_init
+	# usage_odds = {
+		# base = 90000
+		# modifier = {
+		# 	factor = 0
+		# 	has_distar = no
+		# }
+		# modifier = {
+		# 	factor = 0
+		# 	is_fe_cluster = yes
+		# }
+		# modifier = {
+		# 	factor = 0
+		# 	has_star_flag = empire_cluster
+		# }
+	# }
+	# scaled_spawn_chance = 8
+	max_instances = 1
+
+	flags = { scluster escape_pod_system }
+
+	planet = {
+		count = 1
+		class = star
+		orbit_distance = 25
+		orbit_angle = 30
+		size = { min = 25 max = 30 }
+		has_ring = no
+	}
+
+	planet = {
+		count = 1
+		class = star
+		orbit_distance = 0
+		orbit_angle = 180
+		size = { min = 20 max = 25 }
+		has_ring = no
+	}
+
+	change_orbit = 30
+
+	planet = {
+		count = 3
+		class = "rl_unhabitable_planets"
+		orbit_distance = 20
+		orbit_angle = { min = 90 max = 270 }
+	}
+
+	change_orbit = 35
+
+	planet = {
+		count = 2
+		class = "rl_all_normal_planets"
+		orbit_angle = { min = 90 max = 270 }
+		has_ring = yes
+
+		change_orbit = @base_moon_distance
+
+		moon = {
+			count = { min = 0 max = 1 }
+			class = "rl_unhabitable_planets"
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+
+	}
+
+	change_orbit = 20
+
+	planet = {
+		count = 1
+		class = "pc_gas_giant"
+		orbit_angle = { min = 90 max = 270 }
+		init_effect = {
+			add_anomaly = {
+				category = DISTAR_POD_CAT
+			}
+			while = {
+				count = 10
+				create_ambient_object = {
+					type = droppod_01_object
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 5
+						angle = random
+					}
+				}
+			}
+			while = {
+				count = 10
+				create_ambient_object = {
+					type = droppod_01_object
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 7
+						angle = random
+					}
+				}
+			}
+			create_ambient_object = {
+				type = droppod_02_object
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 10
+					angle = random
+				}
+				save_global_event_target_as = droppod_tar
+			}
+			while = {
+				count = 20
+				create_ambient_object = {
+					type = droppod_01_object
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 10
+						angle = random
+					}
+				}
+			}
+			while = {
+				count = 20
+				create_ambient_object = {
+					type = droppod_01_object
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 15
+						angle = random
+					}
+				}
+			}
+		}
+	}
+}
+
+# Phaseshifting Planet system
+## flags = { phaseshift_system }
+## save_global_event_target_as = phaseshift_planet
+scluster_distar_phaseshift_system = {
+	class = "sc_binary_5"
+
+	# usage = misc_system_init
+	# usage_odds = {
+		# base = 90000
+		# modifier = {
+		# 	factor = 0
+		# 	has_distar = no
+		# }
+		# modifier = {
+		# 	factor = 0
+		# 	is_fe_cluster = yes
+		# }
+		# modifier = {
+		# 	factor = 0
+		# 	has_star_flag = empire_cluster
+		# }
+	# }
+	# scaled_spawn_chance = 8
+	max_instances = 1
+
+	flags = { scluster phaseshift_system }
+
+	planet = {
+		count = 1
+		class = star
+		orbit_distance = 25
+		orbit_angle = 0
+		size = { min = 25 max = 30 }
+		has_ring = no
+	}
+
+	planet = {
+		count = 1
+		class = star
+		orbit_distance = 0
+		orbit_angle = 160
+		size = { min = 20 max = 25 }
+		has_ring = no
+	}
+
+	change_orbit = 55
+
+	planet = {
+		count = 3 # { min = 2 max = 3 } # Replaced
+		orbit_distance = 20
+		orbit_angle = { min = 90 max = 270 }
+
+		change_orbit = @base_moon_distance
+
+		moon = {
+			count = { min = 0 max = 1 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+	}
+
+	change_orbit = 35
+	# The Veil: shrouded<->gaia
+	planet = {
+		count = 1
+		class = "pc_shrouded"
+		orbit_angle = { min = 90 max = 270 }
+		init_effect = {
+			clear_deposits = yes
+			save_global_event_target_as = phaseshift_planet
+			set_planet_flag = phaseshifting_active
+		}
+	}
+
+	change_orbit = 35
+
+	planet = {
+		count = 3 # { min = 2 max = 3 } # Replaced
+		orbit_angle = { min = 90 max = 270 }
+
+		change_orbit = @base_moon_distance
+		moon = { # Added
+			count = { min = 0 max = 1 } #
+			orbit_angle = { min = 90 max = 270 } #
+			orbit_distance = 5 #
+		} #
+	}
+}
+
+##########################################
+# L-Gates & L-Cluster
+##########################################
+# L-Gate System
+# flags = { hostile_system lgate }
+# TODO: Needs more planets
+scluster_distantstars_init_00 = {
+	class = sc_black_hole
+
+	flags = { scluster hostile_system lgate }
+
+	# usage = scluster
+	# usage_odds = {
+		# base = 0
+		# modifier = {
+		# 	has_distar = yes
+		# 	lgate_enabled = yes
+		# 	add = 2
+		# }
+		# modifier = {
+		# 	factor = 0	# we don't want gateways too close to each other
+		# 	any_neighbor_system = {
+		# 		OR = {
+		# 			has_megastructure = lgate_base
+		# 			has_megastructure = gateway_ruined
+		# 		}
+		# 	}
+		# }
+	# }
+
+	# max_instances = 9
+	# scaled_spawn_chance = 10
+
+	planet = {
+		class = star
+		orbit_distance = 0
+	}
+
+	change_orbit = 60
+
+	planet = {
+		count = 1 # { min = 0 max = 1 } # Replaced
+		class = "pc_broken"
+		size = { min = 10 max = 15 }
+
+		# init_effect = { prevent_anomaly = yes } # Removed
+	}
+
+	change_orbit = 30
+
+	planet = {
+		count = 1 # { min = 0 max = 1 } # Replaced
+		class = "pc_barren_cold"
+		size = { min = 10 max = 20 }
+	}
+
+	init_effect = {
+		spawn_megastructure = {
+			type = lgate_base
+			orbit_angle = 225
+			orbit_distance = 30
+		}
+	}
+}
+
+# # Guaranteed L-Gate spawn
+# distantstars_init_06 = {}
+
+# # L-Cluster Entrance
+# distantstars_init_01 = {}
+# distantstars_init_02 = {}
+# distantstars_init_03 = {}
+# distantstars_init_04 = {}
+# distantstars_init_05 = {}
+# # EXTRAS
+# distantstars_init_01b = {}
+# # EXTRAS
+# distantstars_init_02b = {}
+# # EXTRAS
+# distantstars_init_03b = {}
+# # EXTRAS
+# distantstars_init_04b = {}
+
+# # Fallback solution for Star Crazy Event (distar.1070)
+# star_crazy_fallback_system = {}
+
+# effect every_galaxy_species = { limit = { has_trait = trait_aquatic NOT = { has_trait = trait_pc_ocean_preference } } log_error = "SBA manual error detection: The \\[This.GetName] species has an invalid climate preference for the Aquatic trait." }
+# effect every_galaxy_species = { limit = { has_trait = trait_aquatic exists = home_planet NOT = { home_planet = { is_planet_class = pc_ocean } } } home_planet = { log_error = "SBA manual error detection: The Aquatic species \\[prev.GetName] has an \\[This.GetClassName] homeworld." } }
+# effect every_galaxy_species = { limit = { exists = home_planet } home_planet = { log = "The \\[prev.GetName] species has an \\[This.GetClassName] homeworld." } }

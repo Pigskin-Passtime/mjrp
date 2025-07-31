@@ -1,0 +1,528 @@
+# Filename:		scluster_scripted_triggers.txt
+# Contributors:	SirBlackAxe
+
+### UPDATING
+# is_in_any_resource_cluster
+# scluster_is_<a/b/f/g/k/m/black_hole/neutron/pulsar/toxoid>_star_system: Any changes to common/star_classes/*?
+# scluster_<uninhabitable/ruined>_planet
+# scluster_habitable_planet_<urban/normal/normal_dry/normal_wet/normal_cold>
+# scluster_is_dry_not_urban
+# scluster_is_barren
+# scluster_can_have_<minerals/energy/physics/society/engineering/trade>_deposits
+# is_fallen_empire_scluster
+# scluster_is_terraforming_candidate
+# scluster_planet_available_to_modify
+# scluster_has_orbital_deposit_category_<resource>
+	# Becomes obsolete if: Base game adds categories to orbital deposits
+# scluster_has_fe_capital_building
+
+is_in_any_resource_cluster = {
+	# Used by: create_scluster_entrance in [common\scripted_effects\scluster_init_effects.txt]
+	# Necessary because: 
+	OR = {
+		is_in_cluster = resource_cluster_0
+		is_in_cluster = resource_cluster_1
+		is_in_cluster = resource_cluster_2
+		is_in_cluster = resource_cluster_3
+		is_in_cluster = resource_cluster_4
+		is_in_cluster = resource_cluster_5
+	}
+}
+
+# Star system groups
+
+scluster_is_a_star_system = { # White or Blueish Stars
+	# Used by: `scluster_create_system_nebula_effect` in [common\scripted_effects\scluster_init_effects.txt]
+	# Necessary because: is_star_class only accounts for the primary star
+	OR = {
+		is_star_class = sc_a
+		is_star_class = sc_binary_1  # pc_a_star + pc_pulsar
+		is_star_class = sc_binary_9  # pc_a_star + pc_f_star
+		is_star_class = sc_binary_10 # pc_a_star + pc_t_star
+	}
+}
+scluster_is_b_star_system = { # Blue Stars
+	# Used by: `scluster_create_system_nebula_effect` in [common\scripted_effects\scluster_init_effects.txt]
+	# Necessary because: is_star_class only accounts for the primary star
+	OR = {
+		is_star_class = sc_b
+		is_star_class = sc_binary_2  # pc_b_star + pc_neutron_star
+		is_star_class = sc_binary_5  # pc_b_star x2
+		is_star_class = sc_trinary_2 # pc_b_star + pc_a_star + pc_f_star
+		is_star_class = sc_trinary_4 # pc_b_star + pc_k_star + pc_t_star
+	}
+}
+scluster_is_f_star_system = { # Yellow-White Dwarves
+	# Used by: `scluster_create_system_nebula_effect` in [common\scripted_effects\scluster_init_effects.txt]
+	# Necessary because: is_star_class only accounts for the primary star
+	is_star_class = sc_f
+}
+scluster_is_g_star_system = { # Yellow Dwarves
+	# Used by: `scluster_create_system_nebula_effect` in [common\scripted_effects\scluster_init_effects.txt]
+	# Necessary because: is_star_class only accounts for the primary star
+	OR = {
+		is_star_class = sc_g
+		is_star_class = sc_binary_8 # pc_g_star + pc_f_star
+		is_star_class = sc_trinary_1
+	}
+}
+scluster_is_k_star_system = { # Orange Dwarves
+	# Used by: `scluster_create_system_nebula_effect` in [common\scripted_effects\scluster_init_effects.txt]
+	# Necessary because: is_star_class only accounts for the primary star
+	OR = {
+		is_star_class = sc_k
+		is_star_class = sc_binary_7 # pc_k_star + pc_f_star
+		is_star_class = sc_trinary_3
+	}
+}
+scluster_is_m_star_system = { # Red Dwarves & Red Giants
+	# Used by: `scluster_create_system_nebula_effect` in [common\scripted_effects\scluster_init_effects.txt]
+	# Necessary because: is_star_class only accounts for the primary star
+	OR = {
+		# Red Dwarf
+		is_star_class = sc_m		# pc_m_star
+		is_star_class = sc_binary_6 # pc_m_star + pc_g_star
+		# Red Giant
+		is_star_class = sc_m_giant	# pc_m_giant_star
+		is_star_class = sc_binary_3 # pc_m_giant_star + pc_b_star
+		is_star_class = sc_binary_4 # pc_m_giant_star + pc_f_star
+	}
+}
+scluster_is_t_star_system = { # Brown Dwarves
+	# Used by: `scluster_create_system_nebula_effect` in [common\scripted_effects\scluster_init_effects.txt]
+	# Necessary because: is_star_class only accounts for the primary star
+	is_star_class = sc_t
+}
+scluster_is_black_hole_star_system = {
+	# Used by: `scluster_create_system_nebula_effect` in [common\scripted_effects\scluster_init_effects.txt]
+	# Necessary because: is_star_class only accounts for the primary star
+	# modifier: ship_disengage_chance_reduction  = 0.5
+	#			ship_emergency_ftl_min_days_mult = 0.5
+	is_star_class = sc_black_hole
+}
+scluster_is_neutron_star_system = {
+	# Used by: `scluster_create_system_nebula_effect` in [common\scripted_effects\scluster_init_effects.txt]
+	# Necessary because: is_star_class only accounts for the primary star
+	# modifier: ship_speed_reduction = 0.5
+	OR = {
+		is_star_class = sc_neutron_star
+		# Added
+		is_star_class = sc_binary_2 # pc_b_star + pc_neutron_star
+	}
+}
+scluster_is_pulsar_star_system = {
+	# Used by: `scluster_create_system_nebula_effect` in [common\scripted_effects\scluster_init_effects.txt]
+	# Necessary because: is_star_class only accounts for the primary star
+	# modifier: ship_shield_reduction = 1.0
+	OR = {
+		is_star_class = sc_pulsar
+		# Added
+		is_star_class = sc_binary_1 # pc_a_star + pc_pulsar
+	}
+}
+scluster_is_toxoid_star_system = {
+	# Used by: `scluster_create_system_nebula_effect` in [common\scripted_effects\scluster_init_effects.txt]
+	# Necessary because: is_star_class only accounts for the primary star
+	# modifier: ship_armor_reduction = 1.0
+	is_star_class = sc_toxoid_star
+}
+
+### Planets ###
+
+scluster_uninhabitable_planet = {
+	# Used by: nothing
+	# Necessary because: 
+	OR = {
+		uninhabitable_regular_planet = yes
+			# Same as the random_list "rl_unhabitable_planets" in common\planet_classes\00_planet_classes.txt
+			# OR = {
+			# 	is_planet_class = pc_molten
+			# 	is_planet_class = pc_barren
+			# 	is_planet_class = pc_barren_cold
+			# 	is_planet_class = pc_frozen
+			# 	is_planet_class = pc_toxic
+			# }
+		is_planet_class = pc_gas_giant
+		# Not included in rl_unhabitable_planets:
+		# shrouded worlds
+		# ruined worlds
+	}
+}
+scluster_ruined_planet = {
+	# Used by: `scluster_can_have_minerals_deposits`
+	# Necessary because: 
+	OR = {
+		is_planet_class = pc_broken
+		is_planet_class = pc_machine_broken
+		is_planet_class = pc_shattered
+		is_planet_class = pc_shattered_2 # Same as Shattered, except no orbital lines
+		is_planet_class = pc_egg_cracked
+	}
+}
+scluster_habitable_planet_urban = {
+	# `habitable_planet` in [common/scripted_triggers/00_scripted_triggers.txt] with `habitable_planet_not_urban` removed
+	# Used by: `scluster_is_dry_not_urban`
+	# Necessary because: 
+	OR = {
+		is_planet_class = pc_relic
+		is_planet_class = pc_city
+	}
+}
+# scluster_habitable_planet_normal = { # Obsoleted by is_starting_planet_type
+	# Used by: 
+	# Necessary because: 
+	# Same as the random_list "rl_habitable_normal" in common\planet_classes\00_planet_classes.txt
+	# OR = {
+	# 	scluster_habitable_planet_normal_dry = yes
+	# 	scluster_habitable_planet_normal_wet = yes
+	# 	scluster_habitable_planet_normal_cold = yes
+	# }
+# }
+scluster_habitable_planet_normal_dry = {
+	# Used by: nothing
+	# Necessary because: 
+	OR = {
+		is_planet_class = pc_arid
+		is_planet_class = pc_desert
+		is_planet_class = pc_savannah
+	}
+}
+scluster_habitable_planet_normal_wet = {
+	# Used by: nothing
+	# Necessary because: 
+	OR = {
+		is_planet_class = pc_continental
+		is_planet_class = pc_ocean
+		is_planet_class = pc_tropical
+	}
+}
+scluster_habitable_planet_normal_cold = {
+	# Used by: nothing
+	# Necessary because: 
+	OR = {
+		is_planet_class = pc_tundra
+		is_planet_class = pc_arctic
+		is_planet_class = pc_alpine
+	}
+}
+
+scluster_is_dry_not_urban = {
+	# Used by: nothing
+	# Necessary because: 
+	has_climate = dry
+	scluster_habitable_planet_urban = no # also excludes relic
+}
+
+scluster_is_barren = {
+	# Used by: nothing
+	# Necessary because: is_barren in [common/scripted_triggers/00_scripted_triggers.txt] doesn't check for asteroid variants
+	OR = {
+		is_planet_class = pc_barren
+		is_planet_class = pc_barren_cold
+		is_asteroid = yes # is_planet_class = pc_asteroid # Replaced: Now accounts for ice and crystal asteroids
+	}
+}
+
+# Can planet have orbital deposits of TYPE?
+scluster_can_have_orbital_deposits_of_type = {
+	# Used by: nothing
+	# Necessary because: 
+	scluster_can_have_$TYPE$_deposits = yes
+}
+
+scluster_can_have_minerals_deposits = {
+	# Used by: `scluster_generate_home_system_resources` in [common\scripted_effects\scluster_planet_initializers.txt]
+	# Necessary because: 
+	OR = {
+		can_have_mineral_deposits = yes # common/scripted_triggers/00_scripted_triggers.txt
+			# Includes is_planet_class = pc_asteroid
+		# uninhabitable_regular_planet = yes
+		scluster_ruined_planet = yes
+	}
+}
+scluster_can_have_energy_deposits = {
+	# Used by: `scluster_generate_home_system_resources` in [common\scripted_effects\scluster_planet_initializers.txt]
+	# Necessary because: 
+	can_have_energy_deposits = yes # common/scripted_triggers/00_scripted_triggers.txt
+		# Includes Molten
+	NOR = {
+		has_modifier = chthonian_planet # always set to d_minerals_6 by anomay.6662
+		has_modifier = carbon_world 	# always set to d_minerals_6 by anomay.6662
+	}
+}
+scluster_can_have_physics_deposits = {
+	# Used by: nothing
+	# Necessary because: 
+	OR = {
+		can_have_physics_deposits = yes # common/scripted_triggers/00_scripted_triggers.txt
+		AND = {
+			is_colonizable = no
+			OR = {
+				has_modifier = high_gravity
+				has_modifier = low_gravity
+				has_modifier = strong_magnetic_field
+			}
+			scluster_is_terraforming_candidate = no
+		}
+	}
+}
+scluster_can_have_society_deposits = { # Can use can_have_society_deposits directly instead
+	# Used by: nothing
+	# Necessary because: 
+	# OR = {
+	can_have_society_deposits = yes # common/scripted_triggers/00_scripted_triggers.txt
+	# }
+	scluster_is_terraforming_candidate = no
+}
+scluster_can_have_engineering_deposits = {
+	# Used by: nothing
+	# Necessary because: 
+	OR = {
+		can_have_engineering_deposits = yes # common/scripted_triggers/00_scripted_triggers.txt
+		AND = {
+			is_colonizable = no
+			OR = {
+				has_modifier = carbon_world
+				has_modifier = unstable_tectonics
+			}
+			scluster_is_terraforming_candidate = no
+		}
+	}
+}
+scluster_can_have_trade_deposits = { # Can use can_have_trade_deposits directly instead
+	# Used by: nothing
+	# Necessary because: 
+	OR = {
+		can_have_trade_deposits = yes # common/scripted_triggers/00_scripted_triggers.txt
+	}
+}
+
+is_fallen_empire_scluster = {
+	# Used by: Ship designs for the scluster FE [common\global_ship_designs\scluster_ship_designs.txt]
+	# Necessary because: 
+	has_country_flag = scluster_fallen_empire
+}
+
+scluster_is_terraforming_candidate = {
+	# Used by: `scluster_init_final_pass` in [common\scripted_effects\scluster_init_effects.txt], `scluster_can_have_<physics/society/engineering>_deposits`, `scluster_planet_available_to_modify`
+	# Necessary because: 
+	OR = {
+		has_modifier = terraforming_candidate
+		has_modifier = frozen_terraforming_candidate
+		has_modifier = toxic_terraforming_candidate
+	}
+}
+scluster_planet_available_to_modify = {
+	# Used by: `scluster_init_final_pass`
+	# Necessary because: 
+	colonizable_planet = no
+	scluster_is_terraforming_candidate = no
+	has_anomaly = no
+	is_preventing_anomaly = no
+	NOR = {
+		has_planet_flag = ignore_startup_effect
+		has_planet_flag = starting_deposit
+		# has_deposit_for = shipclass_mining_station
+		# has_deposit_for = shipclass_research_station
+		exists = archaeological_site
+	}
+}
+
+### Orbital deposit 'category' checks ###
+# No changes in 3.8.3
+
+scluster_has_orbital_deposit_category_energy = {
+	# Used by: `scluster_init_final_pass`
+	# Necessary because: 
+	OR = {
+		has_deposit = d_energy_1
+		has_deposit = d_energy_2
+		has_deposit = d_energy_3
+		has_deposit = d_energy_4
+		has_deposit = d_energy_5
+		has_deposit = d_energy_6
+		has_deposit = d_energy_7
+		has_deposit = d_energy_8
+		has_deposit = d_energy_9
+		has_deposit = d_energy_10
+	}
+}
+scluster_has_orbital_deposit_category_minerals = {
+	# Used by: nothing
+	# Necessary because: 
+	OR = {
+		has_deposit = d_minerals_1
+		has_deposit = d_minerals_2
+		has_deposit = d_minerals_3
+		has_deposit = d_minerals_4
+		has_deposit = d_minerals_5
+		has_deposit = d_minerals_6
+		has_deposit = d_minerals_7
+		has_deposit = d_minerals_8
+		has_deposit = d_minerals_9
+		has_deposit = d_minerals_10
+	}
+}
+scluster_has_orbital_deposit_category_alloys = {
+	# Used by: nothing
+	# Necessary because: 
+	OR = {
+		has_deposit = d_alloys_1
+		has_deposit = d_alloys_2
+		has_deposit = d_alloys_3
+		has_deposit = d_alloys_4
+		has_deposit = d_alloys_5
+		has_deposit = d_alloys_10
+		has_deposit = d_alloys_25
+	}
+}
+
+scluster_has_orbital_deposit_category_research = {
+	# Used by: `scluster_init_final_pass`
+	# Necessary because: 
+	OR = {
+		scluster_has_orbital_deposit_category_physics = yes
+		scluster_has_orbital_deposit_category_society = yes
+		scluster_has_orbital_deposit_category_engineering = yes
+	}
+}
+scluster_has_orbital_deposit_category_physics = {
+	# Used by: `scluster_has_orbital_deposit_category_research`
+	# Necessary because: 
+	OR = {
+		has_deposit = d_physics_1
+		has_deposit = d_physics_2
+		has_deposit = d_physics_3
+		has_deposit = d_physics_4
+		has_deposit = d_physics_5
+		has_deposit = d_physics_6
+		has_deposit = d_physics_7
+		has_deposit = d_physics_8
+		has_deposit = d_physics_9
+		has_deposit = d_physics_10
+	}
+}
+scluster_has_orbital_deposit_category_society = {
+	# Used by: `scluster_has_orbital_deposit_category_research`
+	# Necessary because: 
+	OR = {
+		has_deposit = d_society_1
+		has_deposit = d_society_2
+		has_deposit = d_society_3
+		has_deposit = d_society_4
+		has_deposit = d_society_5
+		has_deposit = d_society_6
+		has_deposit = d_society_7
+		has_deposit = d_society_8
+		has_deposit = d_society_9
+		has_deposit = d_society_10
+	}
+}
+scluster_has_orbital_deposit_category_engineering = {
+	# Used by: `scluster_has_orbital_deposit_category_research`
+	# Necessary because: 
+	OR = {
+		has_deposit = d_engineering_1
+		has_deposit = d_engineering_2
+		has_deposit = d_engineering_3
+		has_deposit = d_engineering_4
+		has_deposit = d_engineering_5
+		has_deposit = d_engineering_6
+		has_deposit = d_engineering_7
+		has_deposit = d_engineering_8
+		has_deposit = d_engineering_9
+		has_deposit = d_engineering_10
+	}
+}
+
+scluster_has_orbital_deposit_category_trade_value = {
+	# Used by: nothing
+	# Necessary because: 
+	OR = {
+		has_deposit = d_trade_value_1
+		has_deposit = d_trade_value_2
+		has_deposit = d_trade_value_3
+		has_deposit = d_trade_value_4
+		has_deposit = d_trade_value_5
+		has_deposit = d_trade_value_6
+		has_deposit = d_trade_value_7
+		has_deposit = d_trade_value_8
+		has_deposit = d_trade_value_9
+		has_deposit = d_trade_value_10
+	}
+}
+
+scluster_has_orbital_deposit_category_rare = {
+	# Used by: nothing
+	# Necessary because: 
+	OR = {
+		scluster_has_orbital_deposit_category_exotic_gases = yes
+		scluster_has_orbital_deposit_category_rare_crystals = yes
+		scluster_has_orbital_deposit_category_volatile_motes = yes
+	}
+}
+scluster_has_orbital_deposit_category_exotic_gases = {
+	# Used by: `scluster_has_orbital_deposit_category_rare`
+	# Necessary because: 
+	OR = {
+		has_deposit = d_exotic_gases_1
+		has_deposit = d_exotic_gases_2
+		has_deposit = d_exotic_gases_3
+		has_deposit = d_exotic_gases_4
+		has_deposit = d_exotic_gases_5
+	}
+}
+scluster_has_orbital_deposit_category_rare_crystals = {
+	# Used by: `scluster_has_orbital_deposit_category_rare`
+	# Necessary because: 
+	OR = {
+		has_deposit = d_rare_crystals_1
+		has_deposit = d_rare_crystals_2
+		has_deposit = d_rare_crystals_3
+		has_deposit = d_rare_crystals_4
+		has_deposit = d_rare_crystals_5
+	}
+}
+scluster_has_orbital_deposit_category_volatile_motes = {
+	# Used by: `scluster_has_orbital_deposit_category_rare`
+	# Necessary because: 
+	OR = {
+		has_deposit = d_volatile_motes_1
+		has_deposit = d_volatile_motes_2
+		has_deposit = d_volatile_motes_3
+		has_deposit = d_volatile_motes_4
+		has_deposit = d_volatile_motes_5
+	}
+}
+
+scluster_has_orbital_deposit_category_zro = {
+	# Used by: nothing
+	# Necessary because: 
+	OR = {
+		has_deposit = d_zro_deposit_1
+		has_deposit = d_zro_deposit_2
+		has_deposit = d_zro_deposit_3
+		has_deposit = d_zro_deposit_4
+		has_deposit = d_zro_deposit_5
+	}
+}
+scluster_has_orbital_deposit_category_dark_matter = {
+	# Used by: nothing
+	# Necessary because: 
+	OR = {
+		has_deposit = d_dark_matter_deposit_1
+		has_deposit = d_dark_matter_deposit_2
+		has_deposit = d_dark_matter_deposit_3
+		has_deposit = d_dark_matter_deposit_10
+	}
+}
+
+scluster_has_fe_capital_building = { # Bug workaround
+	# Used by: building_planetary_shield_generator_fe
+	# Necessary because: `has_upgraded_capital` returns false for FE capital buildings, causing any advanced buildings on their planets to be auto-destroyed
+	OR = {
+		has_building = building_ancient_palace
+		has_building = building_ancient_control_center
+		has_building = building_hab_fe_capital
+	}
+}

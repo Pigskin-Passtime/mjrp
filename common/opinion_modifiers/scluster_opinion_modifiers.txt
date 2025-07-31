@@ -1,0 +1,24 @@
+# Filename:		scluster_opinion_modifiers.txt
+# Contributors:	SirBlackAxe
+
+### Notes:
+# Would like to have a diplo_phrase where they tell you they're closing their borders to you because you're at war as an aggressor, but it doesn't seem worth overwriting action_close_borders for.
+
+# Try to make them open borders
+opinion_nonviolence_scluster_fe = {
+	trigger = {
+		FROM = {
+			is_homicidal = no
+			NOR = {
+				has_country_flag = entered_war_as_attacker
+				any_war = { is_war_participant = { who = prev side = attackers } }
+			}
+		}
+	}
+	opinion = {
+		modifier = {
+			add = 100
+			has_ai_personality = scluster_fallen_empire_pacifist
+		}
+	}
+}

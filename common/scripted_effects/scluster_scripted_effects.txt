@@ -1,0 +1,317 @@
+# Filename:		scluster_init_effects.txt
+# Contributors:	SirBlackAxe
+
+enable_storm_cluster = {
+	if = {
+		limit = {
+			NOT = { has_global_flag = scluster_allowed }
+		}
+		set_global_flag = scluster_allowed
+	}
+}
+
+disable_storm_cluster = {
+	if = {
+		limit = {
+			has_global_flag = scluster_allowed
+		}
+		remove_global_flag = scluster_allowed
+	}
+}
+
+set_storm_cluster_variables = {
+	event_target:global_event_country = {
+		[[MAX_MEGASTRUCTURES]
+			set_variable = {
+				which = scluster_megastructures_max
+				value = $MAX_MEGASTRUCTURES$
+			}
+		]
+		[[MAX_GUARDIANS]
+			set_variable = {
+				which = scluster_guardians_max
+				value = $MAX_GUARDIANS$
+			}
+		]
+	}
+}
+
+# effect event_target:global_event_country = { country_event = { id = galactic_features.401 } }
+start_space_storm = {
+	event_target:global_event_country = {
+		country_event = { id = galactic_features.401 }
+	}
+}
+
+scluster_trigger_great_khan = {
+	if = {
+		limit = {
+			NOT = { has_global_flag = marauder_crisis_ongoing }
+		}
+		random_country = {
+			limit = {
+				is_country_type = dormant_marauders
+				has_country_flag = scluster_marauders
+			}
+			set_global_flag = horde_triggered
+			country_event = {
+				id = achievement.1
+			}
+		}
+	}
+}
+
+scluster_clear_orbital_deposits = {
+	every_deposit = {
+		limit = { scluster_has_orbital_deposit_category_$CAT$ = yes }
+		remove_deposit = yes
+	}
+	if = {
+		limit = { any_moon = { has_planet_flag = research_habitat } }
+	}
+}
+scluster_clear_orbital_energy_deposits = {
+	if = {
+		limit = { has_deposit_for = shipclass_mining_station }
+		every_deposit = {
+			limit = { scluster_has_orbital_deposit_category_energy = yes }
+			remove_deposit = yes
+		}
+	}
+}
+scluster_clear_orbital_minerals_deposits = {
+	if = {
+		limit = { has_deposit_for = shipclass_mining_station }
+		every_deposit = {
+			limit = { scluster_has_orbital_deposit_category_minerals = yes }
+			remove_deposit = yes
+		}
+		# if = {
+		# 	limit = {
+		# 		any_moon = {
+		# 			is_planet_class = pc_habitat
+		# 			has_planet_flag = research_habitat
+		#			# flag isn't from prospecting
+		#			# flag isn't still being triggered by a deposit from another resource
+		# 		}
+		# 	}
+		# 	every_moon = {
+		# 		limit = { has_planet_flag = research_habitat }
+		# 		remove_planet_flag = research_habitat
+		# 	}
+		# }
+	}
+}
+scluster_clear_orbital_research_deposits = {
+	if = {
+		limit = { has_deposit_for = shipclass_research_station }
+		every_deposit = {
+			limit = { scluster_has_orbital_deposit_category_research = yes }
+			remove_deposit = yes
+		}
+	}
+}
+scluster_validate_habitat_flags = {
+	if = {
+		limit = {
+			is_planet_class = pc_habitat
+			# Any way to exclude habitats that have used decision_prospect_void?
+		}
+		# has_planet_flag = energy_habitat
+		# has_planet_flag = mining_habitat
+		# has_planet_flag = research_habitat
+		if = {
+			limit = {
+				orbit = {
+					OR = {
+						has_deposit_for = shipclass_research_station
+						scluster_has_orbital_deposit_category_zro = yes
+						scluster_has_orbital_deposit_category_dark_matter = yes
+						has_deposit = d_living_metal_deposit
+						has_deposit = d_nanites_deposit
+						has_deposit = d_artifacts_1
+						has_deposit = d_artifacts_2
+						has_deposit = d_artifacts_3
+					}
+				}
+			}
+			set_planet_flag = research_habitat
+		}
+		else = {
+			remove_planet_flag = research_habitat
+			if = {
+				limit = {
+					orbit = {
+						OR = {
+							scluster_has_orbital_deposit_category_minerals = yes
+							scluster_has_orbital_deposit_category_alloys = yes
+						}
+					}
+				}
+				set_planet_flag = mining_habitat
+				remove_planet_flag = energy_habitat
+			}
+			else = {
+				remove_planet_flag = mining_habitat
+				limit = {
+					orbit = {
+						scluster_has_orbital_deposit_category_energy = yes
+					}
+				}
+				set_planet_flag = energy_habitat
+			}
+		}
+	}
+	# validate buildings & districts?
+}
+scluster_validate_habitat_deposits = {
+	if = {
+		limit = {
+			is_planet_class = pc_habitat
+		}
+		# has_planet_flag = energy_habitat
+		# has_planet_flag = mining_habitat
+		# has_planet_flag = research_habitat
+		every_deposit = { # Clear rare & SR resource deposits
+			limit = {
+				OR = {
+					is_deposit_type = d_hab_gas_1
+					is_deposit_type = d_hab_gas_2
+					is_deposit_type = d_hab_gas_3
+					is_deposit_type = d_hab_gas_4
+					is_deposit_type = d_hab_gas_5
+
+					is_deposit_type = d_hab_crystal_1
+					is_deposit_type = d_hab_crystal_2
+					is_deposit_type = d_hab_crystal_3
+					is_deposit_type = d_hab_crystal_4
+					is_deposit_type = d_hab_crystal_5
+
+					is_deposit_type = d_hab_mote_1
+					is_deposit_type = d_hab_mote_2
+					is_deposit_type = d_hab_mote_3
+					is_deposit_type = d_hab_mote_4
+					is_deposit_type = d_hab_mote_5
+
+					is_deposit_type = d_hab_zro_1
+					is_deposit_type = d_hab_zro_2
+					is_deposit_type = d_hab_zro_3
+					is_deposit_type = d_hab_zro_4
+					is_deposit_type = d_hab_zro_5
+
+					is_deposit_type = d_hab_dark_matter_1
+					is_deposit_type = d_hab_dark_matter_2
+					is_deposit_type = d_hab_dark_matter_3
+					is_deposit_type = d_hab_dark_matter_10
+
+					is_deposit_type = d_hab_living_metal_1
+
+					is_deposit_type = d_hab_alloy_1
+					is_deposit_type = d_hab_alloy_2
+					is_deposit_type = d_hab_alloy_3
+					is_deposit_type = d_hab_alloy_4
+					is_deposit_type = d_hab_alloy_5
+					is_deposit_type = d_hab_alloy_10
+					is_deposit_type = d_hab_alloy_25
+
+					is_deposit_type = d_hab_nanites_1
+
+					is_deposit_type = d_artifacts_planet_1
+					is_deposit_type = d_artifacts_planet_2
+					is_deposit_type = d_artifacts_planet_3
+				}
+			}
+			remove_deposit = yes
+		}
+		orbit = { # Added deposits based on orbited planet
+			every_deposit = {
+				switch = {
+					trigger = is_deposit_type
+					# d_exotic_gases_1 = { prev = { change_variable = { which = scuster_total_exotic_gases value = 1 } } }
+					d_exotic_gases_1 = { prev = { add_deposit = d_hab_gas_1 } }
+					d_exotic_gases_2 = { prev = { add_deposit = d_hab_gas_2 } }
+					d_exotic_gases_3 = { prev = { add_deposit = d_hab_gas_3 } }
+					d_exotic_gases_4 = { prev = { add_deposit = d_hab_gas_4 } }
+					d_exotic_gases_5 = { prev = { add_deposit = d_hab_gas_5 } }
+	
+					d_rare_crystals_1 = { prev = { add_deposit = d_hab_crystal_1 } }
+					d_rare_crystals_2 = { prev = { add_deposit = d_hab_crystal_2 } }
+					d_rare_crystals_3 = { prev = { add_deposit = d_hab_crystal_3 } }
+					d_rare_crystals_4 = { prev = { add_deposit = d_hab_crystal_4 } }
+					d_rare_crystals_5 = { prev = { add_deposit = d_hab_crystal_5 } }
+	
+					d_volatile_motes_1 = { prev = { add_deposit = d_hab_mote_1 } }
+					d_volatile_motes_2 = { prev = { add_deposit = d_hab_mote_2 } }
+					d_volatile_motes_3 = { prev = { add_deposit = d_hab_mote_3 } }
+					d_volatile_motes_4 = { prev = { add_deposit = d_hab_mote_4 } }
+					d_volatile_motes_5 = { prev = { add_deposit = d_hab_mote_5 } }
+	
+					d_zro_deposit_1 = { prev = { add_deposit = d_hab_zro_1 } }
+					d_zro_deposit_2 = { prev = { add_deposit = d_hab_zro_2 } }
+					d_zro_deposit_3 = { prev = { add_deposit = d_hab_zro_3 } }
+					d_zro_deposit_4 = { prev = { add_deposit = d_hab_zro_4 } }
+					d_zro_deposit_5 = { prev = { add_deposit = d_hab_zro_5 } }
+	
+					d_dark_matter_deposit_1 = { prev = { add_deposit = d_hab_dark_matter_1 } }
+					d_dark_matter_deposit_2 = { prev = { add_deposit = d_hab_dark_matter_2 } }
+					d_dark_matter_deposit_3 = { prev = { add_deposit = d_hab_dark_matter_3 } }
+					d_dark_matter_deposit_10 = { prev = { add_deposit = d_hab_dark_matter_10 } }
+	
+					d_living_metal_deposit = { prev = { add_deposit = d_hab_living_metal_1 } }
+	
+					d_alloys_1 = { prev = { add_deposit = d_hab_alloy_1 } }
+					d_alloys_2 = { prev = { add_deposit = d_hab_alloy_2 } }
+					d_alloys_3 = { prev = { add_deposit = d_hab_alloy_3 } }
+					d_alloys_4 = { prev = { add_deposit = d_hab_alloy_4 } }
+					d_alloys_5 = { prev = { add_deposit = d_hab_alloy_5 } }
+					d_alloys_10 = { prev = { add_deposit = d_hab_alloy_10 } }
+					d_alloys_25 = { prev = { add_deposit = d_hab_alloy_25 } }
+	
+					d_nanites_deposit = { prev = { add_deposit = d_hab_nanites_1 } }
+				
+					d_artifacts_1 = { prev = { add_deposit = d_artifacts_planet_1 } }
+					d_artifacts_2 = { prev = { add_deposit = d_artifacts_planet_2 } }
+					d_artifacts_3 = { prev = { add_deposit = d_artifacts_planet_3 } }
+					# d_$RESOURCE$_deposit_$SIZE$ = { prev = { add_deposit = d_hab_$RESOURCE$_$SIZE$ } }
+				}
+			}
+		}
+	}
+}
+
+scluster_clear_invalid_with_energy_deposits = {
+	if = {
+		limit = {
+			OR = {
+				has_deposit_for = shipclass_research_station
+				scluster_has_orbital_deposit_category_minerals = yes
+				scluster_has_orbital_deposit_category_alloys = yes
+			}
+		}
+		clear_deposits = yes
+	}
+}
+scluster_clear_invalid_with_minerals_deposits = {
+	if = {
+		limit = {
+			OR = {
+				has_deposit_for = shipclass_research_station
+				scluster_has_orbital_deposit_category_energy = yes
+			}
+		}
+		clear_deposits = yes
+	}
+}
+scluster_clear_invalid_with_research_deposits = {
+	if = {
+		limit = {
+			has_deposit_for = shipclass_mining_station
+			OR = {
+				scluster_has_orbital_deposit_category_energy = yes
+				scluster_has_orbital_deposit_category_minerals = yes
+				scluster_has_orbital_deposit_category_alloys = yes
+			}
+		}
+		clear_deposits = yes
+	}
+}
