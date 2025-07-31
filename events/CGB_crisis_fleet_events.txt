@@ -1,0 +1,394 @@
+namespace = cgb_crisis_fleet
+
+#################################################################
+#test用イベント
+namespace = cgb_test
+
+country_event = {
+	id = cgb_test.01
+	fire_only_once = yes
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		set_global_flag = cgb_crisis_ground_zero_entered
+		set_country_flag = cgb_infected_country
+		capital_scope = {
+			set_spawn_system_batch = begin
+			spawn_system = {
+				min_jumps = 1
+				max_jumps = 1
+				initializer = cgb_crisis_ground_zero_initializer
+				hyperlane = yes
+				is_discovered = yes
+			}
+			set_spawn_system_batch = end
+			add_extra_hyperlane_to_spawned_system_effect = yes
+		}
+		cgb_create_crisis = yes # クライシス国家生成
+	}
+}
+country_event = {
+	id = cgb_test.02
+	fire_only_once = yes
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		set_global_flag = cgb_crisis_ground_zero_entered
+		set_global_flag = cgb_crisis_phase_2
+		set_country_flag = cgb_health_lost_country
+	}
+}
+
+##################################################################
+
+country_event = {
+	id = cgb_crisis_fleet.01
+	trigger = {
+		has_global_flag = cgb_crisis_phase_2	#enteredの方だと艦隊初登場前に出てきてスト―リーにやや合わないので改変しました by爆雷
+
+	}
+	mean_time_to_happen = {
+		days = 2
+	}
+	hide_window = yes
+	fire_only_once = yes
+	hide_window = yes
+
+	immediate = {
+		every_country = {
+			if = {
+				limit = {
+					has_country_flag = cgb_virus_infected
+				}
+				set_variable = {
+					which = virus_fleet_attack
+					value = 50
+				}
+				set_country_flag = virus_awakened_fleet
+			}
+			country_event = {
+				id = cgb_crisis_fleet.02
+				days = 1
+			}
+		}
+	}
+}
+
+###仮
+country_event = {
+	id = cgb_crisis_fleet.02
+	#title = cgb_crisis_fleet.02.t
+	hide_window = yes
+	fire_only_once = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_global_flag = cgb_crisis_phase_2
+	}
+
+	immediate = { #動くもので上書きしました by爆雷
+		every_galaxy_planet = {
+			limit = {
+				exists = owner
+				owner = {
+					OR = {
+						has_country_flag = cgb_infected_country
+						has_country_flag = cgb_health_lost_country
+					}
+				}
+				or = {
+					has_planet_flag = cgb_infected_planet
+					has_modifier = planet_prevalence_level_0
+					has_modifier = planet_prevalence_level_1
+					has_modifier = planet_prevalence_level_2
+					has_modifier = planet_prevalence_level_3
+					has_modifier = planet_prevalence_level_4
+					has_modifier = planet_prevalence_level_5
+				}
+			}
+			save_event_target_as = cgb_fleet_spawn_planet_1
+		}
+		event_target:cgb_crisis_country = {
+			country_event = {
+				id = cgb_crisis_fleet.10
+				days = 180
+				random = 180
+			}
+			while = {
+				limit = {
+					event_target:cgb_fleet_spawn_planet_1 = {
+						not = { has_planet_flag = cgb_crisis_fleet_spawned_1 }
+					}
+				}
+				event_target:cgb_fleet_spawn_planet_1 = {
+					set_planet_flag = cgb_crisis_fleet_spawned_1
+				}
+				create_fleet = {
+             			       name = "NAME_Medium_Virus_fleet"
+					settings = {
+						garrison = yes
+						spawn_debris = no
+					}
+					effect = {
+						set_owner = event_target:cgb_crisis_country
+						#set_fleet_bombardment_stance = armageddon #エラーを吐くのでコメントアウト
+						while = {
+							count = 10
+							create_ship = {
+								name = random
+								design = "NAME_medium_virus"
+								graphical_culture = event_target:cgb_crisis_country
+							}
+						}
+						set_location = {
+							target = event_target:cgb_fleet_spawn_planet_1
+							distance = 1
+							angle = random
+						}
+					}
+				}
+			}
+		}
+	}
+	#option = {
+	#	name = cgb_crisis_fleet.02.a
+	#}
+}
+
+#感染した惑星の上に艦隊を出現させたいけれどこれで動くかわからない
+
+
+country_event = { #定期的増援
+	id = cgb_crisis_fleet.10
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		country_event = {
+			id = cgb_crisis_fleet.10
+			days = 400
+			random = 360
+		}
+		event_target:cgb_crisis_country = {
+			create_fleet = {#
+				name = "NAME_Medium_Virus_fleet"
+				settings = {
+					spawn_debris = no
+				}
+				effect = {
+					set_owner = event_target:cgb_crisis_country
+					create_cgb_crisis_medium_ships = yes
+					create_cgb_crisis_medium_ships = yes
+					create_cgb_crisis_medium_ships = yes
+					set_location = {
+						target = event_target:cgb_crisis_ground_zero_system.star
+						distance = 1
+						angle = random
+					}
+					random_list = {
+						50 = {
+							set_fleet_flag = cgb_is_arashi
+						}
+						50 = {
+							set_fleet_flag = cgb_is_random
+						}
+						50 = {
+						
+						}
+					}
+				}
+			}
+			create_fleet = {#
+				name = "NAME_Medium_Virus_fleet"
+				settings = {
+					spawn_debris = no
+				}
+				effect = {
+					set_owner = event_target:cgb_crisis_country
+					create_cgb_crisis_medium_ships = yes
+					create_cgb_crisis_medium_ships = yes
+					set_location = {
+						target = event_target:cgb_crisis_ground_zero_system.star
+						distance = 1
+						angle = random
+					}
+					random_list = {
+					50 = {
+							set_fleet_flag = cgb_is_arashi
+						}
+						50 = {
+							set_fleet_flag = cgb_is_random
+						}
+						50 = {
+						
+						}
+					}
+				}
+			}
+			create_fleet = {#
+				name = "NAME_Medium_Virus_fleet"
+				settings = {
+					spawn_debris = no
+				}
+				effect = {
+					set_owner = event_target:cgb_crisis_country
+					create_cgb_crisis_large_ships = yes
+					set_location = {
+						target = event_target:cgb_crisis_ground_zero_system.star
+						distance = 1
+						angle = random
+					}
+					random_list = {
+						50 = {
+							set_fleet_flag = cgb_is_arashi
+						}
+						50 = {
+							set_fleet_flag = cgb_is_random
+						}
+						50 = {
+						
+						}
+					}
+				}
+			}
+			random_list = {
+				75 = {
+				
+				}
+				25 = {
+				
+					create_fleet = {#
+						name = "NAME_Medium_Virus_fleet"
+						settings = {
+							spawn_debris = no
+						}
+						effect = {
+							set_owner = event_target:cgb_crisis_country
+							create_cgb_crisis_large_ships = yes
+							set_location = {
+								target = event_target:cgb_crisis_ground_zero_system.star
+								distance = 1
+								angle = random
+							}
+							random_list = {
+								50 = {
+									set_fleet_flag = cgb_is_arashi
+								}
+								50 = {
+								
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
+# Nanobot Assimilation
+planet_event = {#停滞阻止
+	id = cgb_crisis_fleet.1000
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		add_colony_progress = 1.0
+		while = {
+			count = 5
+			random_owned_pop = {
+				kill_pop = yes
+			}
+		}
+	}
+}
+
+fleet_event = {
+	id = cgb_crisis_fleet.1001
+	hide_window = yes
+	trigger = {
+		has_global_flag = cgb_crisis_phase_2
+		owner = {
+			is_same_value = event_target:cgb_crisis_country
+		}
+		nor = {
+			has_fleet_flag = cgb_is_garrison
+			has_fleet_flag = cgb_is_arashi
+			has_fleet_flag = cgb_is_random
+		}
+	}
+	mean_time_to_happen = {
+		days = 180
+	}
+	immediate = {
+		queue_actions = {
+			find_closest_system = {
+				trigger = {
+					id = "cgb_target_system"
+					any_system_planet = {
+						is_colony = yes
+					}
+				}
+				found_system = {
+					move_to = this
+					find_closest_planet = {
+						trigger = {
+							id = "cgb_target_planet"
+							is_colony = yes
+						}
+						found_planet = {
+							move_to = this
+							orbit_planet = this
+							destroy_planet = this
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+fleet_event = {
+	id = cgb_crisis_fleet.1002
+	hide_window = yes
+	trigger = {
+		has_global_flag = cgb_crisis_phase_2
+		owner = {
+			is_same_value = event_target:cgb_crisis_country
+		}
+		has_fleet_flag = cgb_is_random
+	}
+	mean_time_to_happen = {
+		days = 180
+	}
+	immediate = {
+		queue_actions = {
+			find_random_system = {
+				trigger = {
+					id = "cgb_target_system_random"
+					any_system_planet = {
+						is_colony = yes
+					}
+				}
+				found_system = {
+					move_to = this
+					find_closest_planet = {
+						trigger = {
+							id = "cgb_target_planet_random"
+							is_colony = yes
+						}
+						found_planet = {
+							move_to = this
+							orbit_planet = this
+							destroy_planet = this
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
