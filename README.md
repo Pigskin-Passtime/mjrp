@@ -1,2 +1,1 @@
 # mj24test
-Test
