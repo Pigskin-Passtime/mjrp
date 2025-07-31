@@ -1,0 +1,104 @@
+#########################
+#
+# Tiyanki Resurgence Crisis; projects
+#
+# Written by RegiZero
+#
+#########################
+
+special_project = {
+	key = "TIYRES_INFESTATION_PURGING_PROJECT"
+	cost = 6800
+	# days_to_research = 180
+	tech_department = engineering_technology
+	picture = GFX_evt_analyzing_artifacts
+	event_scope = planet_event
+	icon = "gfx/interface/icons/situation_log/situation_log_combat.dds"
+	# event_chain = x
+
+	on_success = {
+		prev = {
+			country_event = {
+				id = tiyres_show_events.10
+			}
+		}
+	}
+	on_fail = {}
+}
+
+special_project = {
+	key = "TIYRES_EXPLODING_THE_GRAVE"
+	cost = 0
+	days_to_research = 1080
+	tech_department = engineering_technology
+	picture = GFX_evt_derelict_interior
+	event_scope = planet_event
+	icon = "gfx/interface/icons/situation_log/situation_log_combat.dds"
+	# event_chain = x
+
+	requirements = {
+		shipclass_transport = 1
+	}
+
+	on_start = {
+		set_global_flag = tiyres_exploding_grave_started_flag
+		random_country = {
+			limit = {
+				is_country_type = tiyres_crisis
+			}
+			every_owned_fleet = {
+				add_modifier = {
+					modifier = tiy_speed
+					days = 1080
+				}
+			}
+		}
+	}
+	on_success = {
+		create_ambient_object = {
+			type = star_explosion
+			location = this
+			scale = 0.3
+			duration = 90
+		}
+		random_ambient_object = {
+			limit = {
+				OR = {
+					is_ambient_object_type = NAME_Orek_Vuul
+				}
+			}
+			destroy_ambient_object = this
+		}
+		remove_planet = yes
+		every_country = {
+			limit = {
+				is_country_type = default
+			}
+			country_event = {
+				id = tiyres_events.8
+			}
+		}
+	}
+	on_cancel = {
+		remove_global_flag = tiyres_exploding_grave_started_flag
+		random_country = {
+			limit = {
+				is_country_type = tiyres_crisis
+			}
+			every_owned_fleet = {
+				remove_modifier = tiy_speed
+			}
+		}
+	}
+	on_fail = {
+		remove_global_flag = tiyres_exploding_grave_started_flag
+		random_country = {
+			limit = {
+				is_country_type = tiyres_crisis
+			}
+			every_owned_fleet = {
+				remove_modifier = tiy_speed
+			}
+		}
+	}
+}

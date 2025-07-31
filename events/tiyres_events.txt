@@ -1,0 +1,696 @@
+#########################
+#
+# Tiyanki Resurgence Crisis; events
+#
+# Written by RegiZero
+#
+#########################
+
+namespace = tiyres_events
+
+event = { 
+	id = tiyres_events.2
+	is_triggered_only = yes
+	hide_window = yes
+	fire_only_once = yes
+
+	trigger = {
+		has_global_flag = tiyres_in_progress
+	}
+
+	immediate = {
+		create_country = {
+			name = "Tiyanki Resurgence"
+			type = tiyres_crisis
+			flag = {
+				icon = {
+					category = "domination"
+					file = "domination_16.dds"
+				}
+				background = {
+					category = "backgrounds"
+					file = "circle.dds"
+				}
+				colors = {
+					"black"
+					"dark_blue"
+					"null"
+					"null"
+				}
+			}
+	
+			effect = {
+				# save_global_event_target_as = tiyres_crisis_country
+				# add_resource = {
+				# 	minerals = 10000
+				# 	energy = 10000
+				# 	food = 10000
+				# 	influence = 10000
+				# }
+				# set_variable = {
+				# 	which = x
+				# 	value = x
+				# }
+				random_system = {
+					limit = {
+						has_star_flag = tiyanki_graveyard_system
+					}
+					random_ambient_object = {
+						limit = {
+							is_ambient_object_type = "NAME_Orek_Vuul"
+						}
+						while = {
+							count = 2
+							create_fleet = {
+								effect = {
+									set_owner = prevprevprev
+									while = {
+										count = 3
+										create_ship = {
+											name = NAME_Reanimated_Tiyanki_Cow
+											design = NAME_Reanimated_Tiyanki_Cow
+											prefix = yes
+										}
+									}
+									while = {
+										count = 6
+										create_ship = {
+											name = NAME_Reanimated_Tiyanki_Hatchling
+											design = NAME_Reanimated_Tiyanki_Hatchling
+											prefix = yes
+										}
+									}
+									while = {
+										count = 9
+										create_ship = {
+											name = NAME_Reanimated_Tiyanki_Bull
+											design = NAME_Reanimated_Tiyanki_Bull
+											prefix = yes
+										}
+									}
+									while = {
+										count = 12
+										create_ship = {
+											name = NAME_Reanimated_Tiyanki_Calf
+											design = NAME_Reanimated_Tiyanki_Calf
+											prefix = yes
+										}
+									}
+									set_location = prev
+								}
+							}
+						}
+						create_fleet = {
+							name = "NAME_Elderly_Tiyanki"
+							effect = {
+								set_owner = prevprevprev
+								create_ship = {
+									name = "NAME_Reanimated_Elderly_Tiyanki"
+									design = "NAME_Reanimated_Progenitor"
+									prefix = no
+									upgradable = no
+								}
+								set_location = {
+									target = prev
+									distance = 0
+									angle = random
+								}
+								set_fleet_stance = passive
+							}
+							# settings = {
+							# 	can_upgrade = no
+							# 	can_change_composition = no
+							# 	can_change_leader = no
+							# 	uses_naval_capacity = no
+							# 	spawn_debris = no
+							# }
+						}
+					}
+				}
+			}
+		}
+		every_country = {
+			limit = {
+				is_country_type = default
+			}
+			country_event = {
+				id = tiyres_show_events.3
+			}
+		}
+	}
+}
+
+# fleet_event = { 
+# 	id = tiyres_events.3
+# 	is_triggered_only = yes
+# 	hide_window = yes
+
+# 	trigger = {
+# 		has_global_flag = tiyres_in_progress
+# 		log = "trigger"
+# 		from = {
+# 			is_bio_planet = yes
+# 		}
+# 	}
+
+# 	immediate = {
+# 		log = "immediate"
+# 		from = {
+# 			if = {
+# 				limit = {
+# 					is_colony = no
+# 				}
+# 				change_pc = pc_infested
+# 				add_modifier = {
+# 					modifier = planet_tiy_mark
+# 				}
+# 				prev = {
+# 					random_owned_ship = {
+# 						delete_ship = this
+# 					}
+# 				}
+# 			}
+# 			else = {
+# 				if = {
+# 					limit = {
+# 						prev = {
+# 							OR = {
+# 								is_ship_size = reanimated_space_whale_1
+# 								is_ship_size = reanimated_space_whale_2
+# 								is_ship_size = reanimated_space_whale_3
+# 								is_ship_size = reanimated_space_whale_4
+# 							}
+# 						}
+# 					}
+# 					while = {
+# 						count = 5
+# 						create_army = {
+# 							owner = root.owner
+# 							type = tiyres_army
+# 						}
+# 					}
+# 					prev = {
+# 						delete_fleet = this
+# 					}
+# 				}
+# 				else_if = {
+# 					limit = {
+# 						prev = {
+# 							is_ship_size = tiyanki_planet_monster
+# 						}
+# 					}
+# 					while = {
+# 						count = 15
+# 						create_army = {
+# 							owner = root.owner
+# 							type = tiyres_army
+# 						}
+# 					}
+# 					prev = {
+# 						random_owned_ship = {
+# 							limit = {
+# 								is_ship_size = tiyanki_planet_monster
+# 							}
+# 							add_modifier = {
+# 								modifier = planet_army_drop days = 1
+# 							}
+# 						}
+# 					}
+# 				}
+# 			}
+# 		}
+# 	}
+# }
+
+# country_event = {
+# 	id = tiyres_events.4
+# 	hide_window = yes
+# 	is_triggered_only = yes
+
+# 	trigger = {
+# 		exists = fromfrom
+# 		fromfrom = {
+# 			is_country_type = tiyres_crisis
+# 		}
+# 		from = {
+# 			exists = species
+# 			species = {
+# 				is_robotic = no
+# 			}
+# 		}
+# 	}
+
+# 	immediate = {
+# 		fromfromfrom = {
+# 			if = {
+# 				limit = {
+# 					NOT = {
+# 						is_variable_set = tiyres_army_death_count
+# 					}
+# 				}
+# 				set_variable = {
+# 					which = tiyres_army_death_count
+# 					value = 0
+# 				}
+# 			}
+# 			change_variable = {
+# 				which = tiyres_army_death_count
+# 				value = 1
+# 			}
+# 		}
+# 		from = {
+# 			if = {
+# 				limit = {
+# 					NOT = {
+# 						is_variable_set = tiyres_army_death_count
+# 					}
+# 				}
+# 				set_variable = {
+# 					which = tiyres_army_death_count
+# 					value = 0
+# 				}
+# 			}
+# 			change_variable = {
+# 				which = tiyres_army_death_count
+# 				value = 1
+# 			}
+# 		}
+# 	}
+# }
+
+country_event = {
+	id = tiyres_events.4
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_global_flag = tiyres_in_progress
+		NOT = {
+			has_global_flag = tiyres_exploding_grave_started_flag
+		}
+		is_country_type = tiyres_crisis
+	}
+
+	immediate = {
+		random_system = {
+			limit = {
+				has_star_flag = tiyanki_graveyard_system
+			}
+			random_ambient_object = {
+				limit = {
+					is_ambient_object_type = "NAME_Orek_Vuul"
+				}
+				while = {
+					count = 3
+					create_fleet = {
+						effect = {
+							set_owner = prevprevprev
+							while = {
+								count = 3
+								create_ship = {
+									name = NAME_Reanimated_Tiyanki_Cow
+									design = NAME_Reanimated_Tiyanki_Cow
+									prefix = yes
+								}
+							}
+							while = {
+								count = 6
+								create_ship = {
+									name = NAME_Reanimated_Tiyanki_Hatchling
+									design = NAME_Reanimated_Tiyanki_Hatchling
+									prefix = yes
+								}
+							}
+							while = {
+								count = 9
+								create_ship = {
+									name = NAME_Reanimated_Tiyanki_Bull
+									design = NAME_Reanimated_Tiyanki_Bull
+									prefix = yes
+								}
+							}
+							while = {
+								count = 12
+								create_ship = {
+									name = NAME_Reanimated_Tiyanki_Calf
+									design = NAME_Reanimated_Tiyanki_Calf
+									prefix = yes
+								}
+							}
+							set_location = prev
+
+							add_modifier = {
+								modifier = tiy_power
+							}
+						}
+					}
+				}
+				while = {
+					count = 1
+					create_fleet = {
+						name = "NAME_Elderly_Tiyanki"
+						effect = {
+							set_owner = prevprevprev
+							create_ship = {
+								name = "NAME_Reanimated_Elderly_Tiyanki"
+								design = "NAME_Reanimated_Progenitor"
+								prefix = no
+								upgradable = no
+							}
+							set_location = {
+								target = prev
+								distance = 0
+								angle = random
+							}
+							set_fleet_stance = passive
+						}
+						# settings = {
+						# 	can_upgrade = no
+						# 	can_change_composition = no
+						# 	can_change_leader = no
+						# 	uses_naval_capacity = no
+						# 	spawn_debris = no
+						# }
+					}
+				}
+			}
+		}
+		every_owned_fleet = {
+			limit = {
+				is_ship_size = tiyanki_planet_monster
+			}
+			while = {
+				count = 1
+				create_fleet = {
+					effect = {
+						set_owner = prevprev
+						while = {
+							count = 3
+							create_ship = {
+								name = NAME_Reanimated_Tiyanki_Cow
+								design = NAME_Reanimated_Tiyanki_Cow
+								prefix = yes
+							}
+						}
+						while = {
+							count = 6
+							create_ship = {
+								name = NAME_Reanimated_Tiyanki_Hatchling
+								design = NAME_Reanimated_Tiyanki_Hatchling
+								prefix = yes
+							}
+						}
+						while = {
+							count = 9
+							create_ship = {
+								name = NAME_Reanimated_Tiyanki_Bull
+								design = NAME_Reanimated_Tiyanki_Bull
+								prefix = yes
+							}
+						}
+						while = {
+							count = 12
+							create_ship = {
+								name = NAME_Reanimated_Tiyanki_Calf
+								design = NAME_Reanimated_Tiyanki_Calf
+								prefix = yes
+							}
+						}
+						set_location = prev
+
+						add_modifier = {
+							modifier = tiy_power
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = tiyres_events.5
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_global_flag = tiyres_in_progress
+		is_country_type = tiyres_crisis
+	}
+
+	immediate = {
+		fromfrom = {
+			if = {
+				limit = {
+					NOT = {
+						is_variable_set = tiyres_pop_count
+					}
+				}
+				set_variable = {
+					which = tiyres_pop_count
+					value = 0
+				}
+			}
+			every_owned_pop = {
+				prev = {
+					change_variable = {
+						which = tiyres_pop_count
+						value = 1
+					}
+				}
+				kill_pop = yes
+			}
+			change_pc = pc_infested
+			clear_planet_modifiers = yes
+			add_modifier = {
+				modifier = planet_tiy_mark
+			}
+		}
+		every_owned_army = {
+			remove_army = yes
+		}
+	}
+}
+
+country_event = {
+	id = tiyres_events.6
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_global_flag = tiyres_in_progress
+		is_country_type = tiyres_crisis
+	}
+
+	immediate = {
+		fromfrom = {
+			add_modifier = {
+				modifier = planet_tiy_infestation
+			}
+		}
+		from = {
+			country_event = {
+				id = tiyres_show_events.9
+				days = 180
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = tiyres_events.7
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_global_flag = tiyres_in_progress
+		has_planet_flag = graveyard_site
+	}
+
+	immediate = {
+		from.owner = {
+			country_event = {
+				id = tiyres_events.8
+			}
+		}
+	}
+}
+
+country_event = {
+	id = tiyres_events.8
+	hide_window = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	trigger = {
+		has_global_flag = tiyres_in_progress
+	}
+
+	immediate = {
+		remove_global_flag = tiyres_in_progress
+		remove_global_flag = midgame_crisis_ongoing
+		random_country = {
+			limit = {
+				is_country_type = tiyres_crisis
+			}
+			every_owned_fleet = {
+				remove_modifier = tiy_speed
+			}
+			set_country_type = tiyanki
+		}
+		every_country = {
+			limit = {
+				is_country_type = default
+			}
+			country_event = {
+				id = tiyres_show_events.8
+			}
+		}
+	}
+}
+
+country_event = {
+	id = tiyres_events.9
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_global_flag = tiyres_in_progress
+		any_owned_planet = {
+			has_modifier = planet_tiy_infestation
+		}
+	}
+
+	immediate = {
+		every_owned_planet = {
+			limit = {
+				has_modifier = planet_tiy_infestation
+			}
+			if = {
+				limit = {
+					is_variable_set = tiyres_planet_infestation
+				}
+				change_variable = {
+					which = tiyres_planet_infestation
+					value = 1
+				}
+			}
+			else = {
+				set_variable = {
+					which = tiyres_planet_infestation
+					value = 1
+				}
+			}
+			if = {
+				limit = {
+					colony_age > 12
+				}
+				random_list = {
+					40 = {
+
+					}
+					60 = {
+						random_owned_pop = {
+							if = {
+								limit = {
+									species = {
+										is_robotic = no
+									}
+								}
+								prev = {
+									change_variable = {
+										which = tiyres_planet_infestation
+										value = value:tiyres_pop_infestation
+									}
+									if = {
+										limit = {
+											NOT = {
+												is_variable_set = tiyres_pop_count
+											}
+										}
+										set_variable = {
+											which = tiyres_pop_count
+											value = 1
+										}
+									}
+									else = {
+										change_variable = {
+											which = tiyres_pop_count
+											value = 1
+										}
+									}
+								}
+							}
+							kill_pop = yes
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					num_assigned_jobs = {
+						job = tiyres_infestation_purger
+						value > 1
+					}
+				}
+				subtract_variable = {
+					which = tiyres_planet_infestation
+					value = 6
+				}
+			}
+			else_if = {
+				limit = {
+					num_assigned_jobs = {
+						job = tiyres_infestation_purger
+						value > 0
+					}
+				}
+				subtract_variable = {
+					which = tiyres_planet_infestation
+					value = 3
+				}
+			}
+			remove_modifier = planet_tiy_infestation
+			add_modifier = {
+				modifier = planet_tiy_infestation
+				mult = tiyres_planet_infestation
+			}
+			if = {
+				limit = {
+					check_variable = {
+						which = tiyres_planet_infestation
+						value > 99
+					}
+				}
+				every_owned_pop = {
+					prev = {
+						change_variable = {
+							which = tiyres_pop_count
+							value = 1
+						}
+					}
+					kill_pop = yes
+				}
+				clear_planet_modifiers = yes
+				change_pc = pc_infested
+				add_modifier = {
+					modifier = planet_tiy_mark
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = {
+						which = tiyres_planet_infestation
+						value < 1
+					}
+				}
+				remove_modifier = planet_tiy_infestation
+				clear_variable = tiyres_pop_count
+				clear_variable = tiyres_planet_infestation
+				add_modifier = {
+					modifier = planet_tiy_infestation_remains
+				}
+			}
+		}
+	}
+}

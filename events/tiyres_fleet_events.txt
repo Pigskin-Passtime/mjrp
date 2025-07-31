@@ -1,0 +1,361 @@
+#########################
+#
+# Tiyanki Resurgence Crisis; fleet_events
+#
+# Written by RegiZero
+#
+#########################
+
+namespace = tiyres_fleet_events
+
+country_event = {
+	id = tiyres_fleet_events.1
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_global_flag = tiyres_in_progress
+		is_country_type = tiyres_crisis
+	}
+
+	immediate = {
+		every_owned_fleet = {
+			limit = {
+				NOT = {
+					is_ship_size = reanimated_leviathan_01_elder_tiyanki
+				}
+			}
+			fleet_event = {
+				id = tiyres_fleet_events.2
+			}
+		}
+		every_owned_fleet = {
+			limit = {
+				is_ship_size = reanimated_leviathan_01_elder_tiyanki
+			}
+			fleet_event = {
+				id = tiyres_fleet_events.3
+			}
+		}
+	}
+}
+
+fleet_event = { 
+	id = tiyres_fleet_events.2
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		# clear_fleet_actions = this
+		# clear_orders = yes
+		queue_actions = {
+			find_closest_system = {
+				trigger = {
+					id = tiyres_fleet_events.2.trigger.1
+					any_system_planet = {
+						is_bio_planet = yes
+						NOT = {
+							has_planet_flag = tiyres_invaded
+						}
+					}
+				}
+				found_system = {
+					move_to = this
+					find_closest_planet = {
+						trigger = {
+							id = tiyres_fleet_events.2.trigger.2
+							is_bio_planet = yes
+							NOT = {
+								has_planet_flag = tiyres_invaded
+							}
+						}
+						found_planet = {
+							orbit_planet = this
+							effect = {
+								id = tiyres_fleet_events.2.effect.1
+								if = {
+									limit = {
+										is_bio_planet = yes
+										NOT = {
+											has_planet_flag = tiyres_invaded
+										}
+									}
+									if = {
+										limit = {
+											is_colony = no
+										}
+										change_pc = pc_infested
+										add_modifier = {
+											modifier = planet_tiy_mark
+										}
+										root = {
+											delete_fleet = this
+										}
+										every_country = {
+											limit = {
+												is_country_type = default
+											}
+											country_event = {
+												id = tiyres_show_events.4
+											}
+										}
+									}
+									else = {
+										if = {
+											limit = {
+												root = {
+													OR = {
+														is_ship_size = reanimated_space_whale_1
+														is_ship_size = reanimated_space_whale_2
+														is_ship_size = reanimated_space_whale_3
+														is_ship_size = reanimated_space_whale_4
+													}
+												}
+											}
+											while = {
+												count = 5
+												create_army = {
+													owner = root.owner
+													type = tiyres_army
+												}
+											}
+											set_timed_planet_flag = {
+												flag = tiyres_invaded
+												days = 180
+											}
+											root = {
+												delete_fleet = this
+											}
+											every_country = {
+												limit = {
+													is_country_type = default
+												}
+												country_event = {
+													id = tiyres_show_events.5
+												}
+											}
+										}
+										else_if = {
+											limit = {
+												root = {
+													is_ship_size = tiyanki_planet_monster
+												}
+											}
+											while = {
+												count = 25
+												create_army = {
+													owner = root.owner
+													type = tiyres_army
+												}
+											}
+											set_timed_planet_flag = {
+												flag = tiyres_invaded
+												days = 360
+											}
+											root = {
+												random_owned_ship = {
+													limit = {
+														is_ship_size = tiyanki_planet_monster
+													}
+													add_modifier = {
+														modifier = planet_army_drop days = 1
+													}
+												}
+											}
+											every_country = {
+												limit = {
+													is_country_type = default
+												}
+												country_event = {
+													id = tiyres_show_events.5
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+fleet_event = { 
+	id = tiyres_fleet_events.3
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		# clear_fleet_actions = this
+		# clear_orders = yes
+		queue_actions = {
+			find_closest_system = {
+				trigger = {
+					id = tiyres_fleet_events.3.trigger.1
+					any_system_planet = {
+						has_modifier = planet_tiy_mark
+					}
+				}
+				found_system = {
+					move_to = this
+					find_closest_planet = {
+						trigger = {
+							id = tiyres_fleet_events.3.trigger.2
+							has_modifier = planet_tiy_mark
+						}
+						found_planet = {
+							effect = {
+								id = tiyres_fleet_events.3.effect.1
+								root = {
+									add_modifier = {
+										modifier = tiy_lev_speed_boost days = 60
+									}
+								}
+							}
+							orbit_planet = this
+							effect = {
+								id = tiyres_fleet_events.3.effect.2
+								create_ambient_object = {
+									type = star_explosion
+									location = this
+									scale = 0.3
+									duration = 90
+								}
+								if = {
+									limit = {
+										has_modifier = holy_planet
+									}
+									random_ambient_object = {
+										limit = {
+											OR = {
+												is_ambient_object_type = consecrated_planet_stage_1_object
+												is_ambient_object_type = consecrated_planet_stage_2_object
+												is_ambient_object_type = consecrated_planet_stage_3_object
+											}
+										}
+										destroy_ambient_object = this
+									}
+								}
+								create_fleet = {
+									name = "NAME_tiyanki_planet_creature"
+									effect = {
+										set_owner = root.owner
+										create_ship = {
+											name = "NAME_tiyanki_planet_creature"
+											design = "NAME_tiyanki_planet_creature"
+											prefix = no
+											upgradable = no
+										}
+										if = {
+											limit = {
+												is_variable_set = tiyres_pop_count
+											}
+											add_modifier = {
+												modifier = tiy_planet_pop_scaling
+												mult = tiyres_pop_count
+											}
+										}
+
+										set_location = {
+											target = prev
+											distance = 0
+											angle = random
+										}
+										set_fleet_stance = passive
+									}
+									# settings = {
+									# 	can_upgrade = no
+									# 	can_change_composition = no
+									# 	can_change_leader = no
+									# 	uses_naval_capacity = no
+									# 	spawn_debris = no
+									# }
+								}
+								root = {
+									delete_fleet = this
+								}
+								remove_planet = yes
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+fleet_event = { 
+	id = tiyres_fleet_events.4
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_global_flag = tiyres_in_progress
+		owner = {
+			is_country_type = default
+			# any_country = {
+			# 	is_country_type = tiyres_crisis
+			# 	is_hostile_to = prev
+			# }
+		}
+		from = {
+			any_system_planet = {
+				has_planet_flag = graveyard_site
+			}
+		}
+		owner = {
+			NOT = {
+				has_country_flag = tiyres_infestation_project_flag
+			}
+		}
+	}
+
+	immediate = {
+		# clear_fleet_actions = this
+		# clear_orders = yes
+		random_country = {
+			limit = {
+				is_country_type = tiyres_crisis
+			}
+			every_owned_fleet = {
+				queue_actions = {
+					find_closest_system = {
+						trigger = {
+							id = tiyres_fleet_events.4.trigger.1
+							any_system_planet = {
+								has_planet_flag = graveyard_site
+							}
+						}
+						found_system = {
+							move_to = this
+							find_closest_planet = {
+								trigger = {
+									id = tiyres_fleet_events.4.trigger.2
+									has_planet_flag = graveyard_site
+								}
+								found_planet = {
+									orbit_planet = this
+								}
+							}
+						}
+					}
+				}
+			}
+			country_event = {
+				id = tiyres_events.4
+			}
+		}
+		owner = {
+			country_event = {
+				id = tiyres_show_events.11
+			}
+			set_country_flag = tiyres_infestation_project_flag
+			# country_event = {
+			# 	id = tiyres_show_events.6
+			# 	days = 90
+			# }
+		}
+	}
+}
