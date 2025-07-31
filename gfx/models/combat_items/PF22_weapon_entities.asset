@@ -1,0 +1,122 @@
+#####################
+# PF22		    	#
+# Weapon ENTITIES  	#
+#####################
+
+
+entity = {
+	name = "pf22_bio_lance_muzzle_entity"
+	pdxmesh = "locator_mesh"
+	
+	default_state = "idle"
+	state = { name = "idle" state_time = 2 looping = no
+		event = { time = 0 particle = "pf22_bio_lance_muzzle_particle" keep_particle = yes sound = { soundeffect = PF22_bio_lance_fire } }
+		event = { trigger_once = yes sound = { soundeffect = "PF22_distance_bio_lance_fire" } }
+	}
+}
+
+entity = {
+	name = "pf22_bio_lance_hit_entity"
+	cull_radius = 1.0
+	default_state = "idle"
+	state = { name = "idle" 
+		start_event = { particle = pf22_bio_lance_hit_effect sound = { soundeffect = PF22_bio_lance_hit } }
+		start_event = { trigger_once = yes sound = { soundeffect = "PF22_distance_bio_lance_hit" } }
+	}
+	state = { name = "stop" state_time = 0.5 looping = no }
+}
+
+entity = {
+	name = "pf22_bio_lance_shield_hit_entity"
+	cull_radius = 1.0
+	default_state = "idle"
+	state = { name = "idle" 
+		start_event = { particle = pf22_bio_lance_hit_effect sound = { soundeffect = shield_hit } }
+		start_event = { particle = laser_large_shield_hit_effect }
+		start_event = { trigger_once = yes sound = { soundeffect = "distance_shield_hit" } } 
+	}
+	state = { name = "stop" state_time = 0.5 looping = no }
+}
+
+
+
+
+
+
+entity = {
+	name = "pf22_bio_plasma_hit_entity"
+	cull_radius = 1.0
+	
+	state = { name = "explode_med_hp" state_time = 0.8 looping = no
+		event = { time = 0.0 particle = "pf22_bio_plasma_hit_effect" sound = { soundeffect = PF22_bio_plasma_hit } }
+		event = { trigger_once = yes sound = { soundeffect = "PF22_distance_bio_plasma_hit" } }
+	}
+	default_state = "explode_med_hp"
+}
+
+
+
+entity = {
+	name = "pf22_bio_plasma_muzzle_entity"
+	cull_radius = 50.0
+	
+	default_state = "idle"
+	state = { name = "idle" state_time = 7 looping = no
+		event = { time = 0 particle = "pf22_bio_plasma_muzzle_particle" keep_particle = yes sound = { soundeffect = PF22_bio_plasma_fire } }
+		event = { trigger_once = yes sound = { soundeffect = "PF22_distance_bio_plasma_fire" } }
+	}
+}
+
+
+
+entity = {
+	name = "pf22_bio_plasma_entity"
+	pdxmesh = "arthropoid_01_missile_mesh"
+	
+	default_state = idle
+	state = { name = "idle" animation = "idle"
+		event = { time = 0 node = exhaust particle = "pf22_bio_plasma_idle_particle" keep_particle = yes }
+		event = { time = 0 node = exhaust particle = "pf22_bio_plasma_idle_flame_particle" keep_particle = yes }
+	}
+	state = { name = "stop"
+		looping = no
+		#state_time = 2.0
+		chance = 1
+		animation = "miss"
+		time_offset = { 0 1.4 }
+		animation_blend_time = 0.5
+		#start_event = { time = 0 node = exhaust particle = "small_missile_idle_particle" keep_particle = yes }
+		start_event = { trigger_once = yes time = 0 node = exhaust particle = "pf22_bio_plasma_idle_flame_particle" keep_particle = yes }
+	}
+	state = { name = "stop"
+		looping = no
+		#state_time = 2.0
+		chance = 1
+		animation = "miss2"
+		time_offset = { 0 1 }
+		animation_blend_time = 0.5
+		#start_event = { time = 0 node = exhaust particle = "small_missile_idle_particle" keep_particle = yes }
+		start_event = { trigger_once = yes time = 0 node = exhaust particle = "pf22_bio_plasma_idle_flame_particle" keep_particle = yes }
+	}
+	state = { name = "stop"
+		looping = no
+		#state_time = 2.0
+		chance = 1
+		animation = "miss_reversed"
+		time_offset = { 0 1.4 }
+		animation_blend_time = 0.5
+		#start_event = { time = 0 node = exhaust particle = "small_missile_idle_particle" keep_particle = yes }
+		start_event = { trigger_once = yes time = 0 node = exhaust particle = "pf22_bio_plasma_idle_flame_particle" keep_particle = yes }
+	}
+	state = { name = "stop"
+		looping = no
+		#state_time = 2.0
+		chance = 1
+		animation = "miss2_reversed"
+		time_offset = { 0 1 }
+		animation_blend_time = 0.5
+		#start_event = { time = 0 node = exhaust particle = "small_missile_idle_particle" keep_particle = yes }
+		start_event = { trigger_once = yes time = 0 node = exhaust particle = "pf22_bio_plasma_idle_flame_particle" keep_particle = yes }
+	}
+	scale = 2
+}

@@ -1,0 +1,205 @@
+##############################################
+##############	Rare Nebulas	##############
+##############################################
+
+entity = {
+	name = "PF22_pf_nebula_entity"
+	pdxmesh = "system_lightning_locations_mesh"
+	scale = 1
+	locator = {		name = "root"	}
+	locator = {		name = "lightning_core_1"	position = { 0 -200 0 }}
+	locator = {		name = "lightning_core_2"	position = { 0 -300 0 } rotation = { 0 0 120 }}
+
+#	attach = { "root" = "nebula_core_entity" }
+	attach = { "root" = "PF22_nebula_turbulent_2_entity" }
+#	attach = { "root" = "system_lightning_combined_ani_2_entity" }
+	
+#	default_state = "idle"
+#	state = {		name = "idle"		state_time = 20 looping = yes
+#		event = {	time = 0 	particle = "nebula_core_3_particle"		trigger_once = yes		keep_particle = yes		}
+#		event = {	time = 0 	node = "lightning_core_1" entity = "system_lightning_combined_ani_2_entity"	life = 60 }
+#		event = {	time = 10 	node = "lightning_core_2" entity = "system_lightning_combined_ani_1_entity"	life = 60 }
+#	}
+	default_state = "idle"
+	state = {		name = "idle"		state_time = 35 looping = yes
+		event = {	time = 0 		node = "lightning_01" 	entity = "system_lightning_ani_1_entity"	life = 30	}
+		event = {	time = 4 		node = "lightning_02" 	entity = "system_lightning_ani_2_entity"	life = 30	}
+		event = {	time = 8 		node = "lightning_03" 	entity = "system_lightning_ani_3_entity"	life = 30	}
+		event = {	time = 12 		node = "lightning_04" 	entity = "system_lightning_ani_4_entity"	life = 30	}
+		event = {	time = 17		node = "lightning_05" 	entity = "system_lightning_ani_3_entity"	life = 30	}
+		event = {	time = 21 		node = "lightning_06" 	entity = "system_lightning_ani_1_entity"	life = 30	}
+		event = {	time = 25		node = "lightning_07" 	entity = "system_lightning_ani_3_entity"	life = 30	}
+		event = {	time = 30		node = "lightning_08" 	entity = "system_lightning_ani_2_entity"	life = 30	}
+		event = {	time = 36		node = "lightning_09" 	entity = "system_lightning_ani_3_entity"	life = 30	}
+		event = {	time = 44		node = "lightning_10" 	entity = "system_lightning_ani_1_entity"	life = 30	}
+		event = {	time = 48		node = "lightning_11" 	entity = "system_lightning_ani_3_entity"	life = 30	}
+		event = {	time = 55		node = "lightning_12" 	entity = "system_lightning_ani_4_entity"	life = 30	}
+																											   
+		event = {	time = 1 		node = "lightning_03" 	entity = "system_lightning_ani_1_entity"	life = 30	}
+		event = {	time = 5 		node = "lightning_01" 	entity = "system_lightning_ani_2_entity"	life = 30	}
+		event = {	time = 7 		node = "lightning_02" 	entity = "system_lightning_ani_3_entity"	life = 30	}
+		event = {	time = 14 		node = "lightning_07" 	entity = "system_lightning_ani_4_entity"	life = 30	}
+		event = {	time = 18		node = "lightning_06" 	entity = "system_lightning_ani_3_entity"	life = 30	}
+		event = {	time = 22 		node = "lightning_05" 	entity = "system_lightning_ani_1_entity"	life = 30	}
+		event = {	time = 24		node = "lightning_04" 	entity = "system_lightning_ani_3_entity"	life = 30	}
+		event = {	time = 32		node = "lightning_09" 	entity = "system_lightning_ani_2_entity"	life = 30	}
+		event = {	time = 35		node = "lightning_10" 	entity = "system_lightning_ani_3_entity"	life = 30	}
+		event = {	time = 42		node = "lightning_08" 	entity = "system_lightning_ani_1_entity"	life = 30	}
+		event = {	time = 46		node = "lightning_12" 	entity = "system_lightning_ani_3_entity"	life = 30	}
+		event = {	time = 59		node = "lightning_11" 	entity = "system_lightning_ani_4_entity"	life = 30	}
+
+		start_event = {		trigger_once = yes		sound = { soundeffect = sfx_amb_nebula_turbulent } }
+	
+	}
+	cull_radius = 2000
+}
+
+entity = {
+	name = "PF22_nebula_turbulent_2_entity"
+	pdxmesh = "PF22_pf_nebula_turbulent_2_mesh"
+	locator = { name = "root" }
+	scale = 0.8
+	state = { 
+		name = "death"		
+		state_time = 5 
+	}		
+	game_data = {
+		bloom_factor = 0.5
+	}
+}
+
+entity = {
+	name = "PF22_pf_converting_planet_effect_entity"
+	locator = { name = "core" position = { 0 0 0 } rotation = { 0 0 0} }
+	scale = 0.1
+
+	erosion_in = 0.5
+	erosion_out = 3
+
+	attach = { core = "PF22_pf_converting_3_effect_entity" }
+	attach = { core = "PF22_pf_converting_4_effect_entity" }
+
+
+	cull_radius = 20000
+
+	default_state = "idle"
+    state = { 
+        name = "idle" 
+        start_event = { 
+			trigger_once = yes 
+			sound = { soundeffect = "sfx_amb_space_storm_2" } 
+        }
+    }
+}
+
+entity = {
+	name = "PF22_pf_converting_3_effect_entity"
+	pdxmesh = "PF22_pf_converting_3_effect_mesh"
+	scale = 5
+
+	game_data = {
+		bloom_factor			= 2
+		uv_animation_speed 	= 0.1
+		uv_animation_direction 	= { 0.2 1.0 }
+	}
+
+	cull_radius = 20000
+}
+
+entity = {
+	name = "PF22_pf_converting_4_effect_entity"
+	pdxmesh = "PF22_pf_converting_4_effect_mesh"
+	scale = 5
+
+	game_data = {
+		bloom_factor			= 2
+		uv_animation_speed 	= 0.1
+		uv_animation_direction 	= { 0.2 1.0 }
+	}
+
+	cull_radius = 20000
+}
+
+
+## Red with teal tints
+entity = {
+	name = "PF22_pf_calm_nebula_entity"
+	locator = { name = "root"  rotation = { 0 0 0 } }
+	scale = 1
+	
+	attach = { "root" = "PF22_nebula_core_2_entity" }
+	attach = { "root" = "PF22_nebula_5_2_entity" }
+	attach = { "root" = "PF22_nebula_5_color_2_entity" }
+	attach = { "root" = "PF22_nebula_6_2_entity" }
+	cull_radius = 2000
+}
+
+entity = {
+	name = "PF22_nebula_core_2_entity"
+	scale = 1
+
+	locator = {
+		name = "root"
+	}
+	
+	default_state = "idle"
+	state = {
+		name = "idle"
+		state_time = 5
+		event = {
+			time = 0 	particle = "PF22_nebula_core_particle"		trigger_once = yes		keep_particle = yes
+		}
+	}
+}
+
+entity = {
+	name = "PF22_nebula_5_2_entity"
+	pdxmesh = "PF22_nebula_5_2_mesh"
+	locator = { name = "root" }
+	scale = 1.4
+		
+	default_state = "idle"
+	state = { name = "idle"  
+	#animation = "idle" animation_speed = 0.05 looping = yes 	
+	}
+		game_data = {
+		bloom_factor			= 0.25
+		uv_animation_speed 		= -0.007
+		uv_animation_direction 	= { 0.2 1.0 }
+		}
+}
+
+entity = {
+	name = "PF22_nebula_5_color_2_entity"
+	pdxmesh = "PF22_nebula_5_2_mesh"
+	locator = { name = "root" }
+	scale = 1.4
+		
+	default_state = "idle"
+	state = { name = "idle"  
+	#animation = "idle" animation_speed = 0.05 looping = yes 	
+	}
+		game_data = {
+		bloom_factor			= 0.25
+#		uv_animation_speed 		= 0.007
+#		uv_animation_direction 	= { 0.2 1.0 }
+		}
+}
+
+entity = {
+	name = "PF22_nebula_6_2_entity"
+	pdxmesh = "PF22_nebula_6_2_mesh"
+	locator = { name = "root" }
+	scale = 1
+		
+	default_state = "idle"
+	state = { name = "idle"  
+	#animation = "idle" animation_speed = 0.05 looping = yes 	
+	}
+		game_data = {
+		bloom_factor			= 0.25
+		uv_animation_speed 		= -0.007
+		uv_animation_direction 	= { 0.2 1.0 }
+		}
+}
+
