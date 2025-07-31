@@ -1,0 +1,322 @@
+#cycris_pk_event.txt
+namespace = pk_event
+planet_event = {
+	id = pk_event.86
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		change_pc = pc_cybrex_machine
+		set_owner = from.owner
+		reroll_deposits = yes
+		clear_blockers = yes
+		if = {
+			limit = {
+				exists = owner #if owner exists
+				owner = { NOT = { is_same_value = from.owner } } #owner is not the same the owner of the ship
+			}
+			from.owner = {
+				country_event = { id = pk_event.87 }
+			}
+			#if owner of planet is not same as owner of ship firing weapon, but there is an owner, run pk_event.301
+		}
+		
+		#Dismantle observation post
+		if = {
+			limit = {
+				has_observation_outpost = yes #if there is a observation post
+			}
+			observation_outpost_owner = { #switches scope to the owner of the observation outpost
+				country_event = { id = planet_destruction.1000 days = 1 } #run event which destroys outpost over 1 day
+			}
+		}
+		
+		# Swarm Situation Log counter
+		if = {
+			limit = {
+				exists = owner #if there is an owner of the planet
+				owner = { is_country_type = swarm } #if the owner of the planet is the scourge country type
+			}
+			every_country = {
+				limit = { has_event_chain = "prethoryn_scourge_chain" } #checks if scourge is active
+				add_event_chain_counter = {
+					event_chain = "prethoryn_scourge_chain"
+					counter = "infested_worlds"
+					amount = -1
+					#takes away from the infested worlds remaining
+				}
+				add_event_chain_counter = {
+					event_chain = "prethoryn_scourge_chain"
+					counter = "infested_worlds_cleansed"
+					amount = 1
+					#adds to the infested worlds cleansed
+				}
+			}
+		}
+		
+		if = {
+			limit = {
+				OR = {
+					is_active_resolution = "resolution_rulesofwar_independent_tribunals"
+					is_active_resolution = "resolution_rulesofwar_last_resort_doctrine"
+					is_active_resolution = "resolution_rulesofwar_demobilization_initiative"
+					#checks if there are any active resolutions banning planet killers
+				}
+			}
+			from.owner = {
+				set_timed_country_flag = { flag = resolution_breached_fired_neutron days = 3600 }
+				#if there are, and resolution breached for ten years
+			}
+		}
+		
+		if = {
+			limit = {
+				exists = owner
+				owner = {
+					NOT = { is_same_value = from.owner } #checks if planet owner is same as ship owner
+					OR = {
+						is_country_type = default
+						is_country_type = fallen_empire
+						is_country_type = awakened_fallen_empire
+					} #checks if owner of the planet is another empire (so that destroying scourge planets does not generate threat or annoy allies and stuff)
+				}
+			}
+			# Generate threat
+			add_threat = { who = from.owner amount = 3 }
+			# modifier for allies + those upset by genocide
+		
+		
+			every_country = {
+				limit = {
+					NOR = {
+						is_same_value = from.owner #if the current country is the ships owners country
+						is_same_value = root.owner #if the current country is the planet owners country
+						AND = {
+							has_federation = yes
+							is_in_federation_with = from.owner
+						} #checks if the current country is in a federation with the ship owners country
+					} #returns true if the current country isn't the ship owners, planet owners country or is in a federation with the ship owners country.
+					OR = {
+						has_communications = from.owner #if the current country has communications with the ships owner
+						has_communications = root.owner #if the curent country has communications with the planets owner
+					}#returns true if this empire has communications with either the ships owner, or the planets owner
+					OR = {
+						AND = {
+							has_federation = yes
+							is_in_federation_with = root.owner
+						} #checks if the current country is in a federation with the planet owner
+						has_ai_personality = awakened_fallen_empire_xenophile #if the current country is a xenophile fallen empire (enigmatic observers)
+						AND = {	
+							is_country_type = default	#is regular country
+							OR = {	#if country has any of the following traits
+								is_egalitarian = yes	
+								is_xenophile = yes
+								is_spiritualist = yes
+							}
+						}
+					}	#returns true if the current country is in a federation with the planet owner, are the enigmatic observers, or has any of the previously listed features.
+				} #End of limit.
+		
+				#this is the one that can only trigger if it is not the planet or ship owners country
+				add_opinion_modifier = {
+					modifier = opinion_swept_a_world #note the swept_'a'_world compared to the swept_'my'_world below
+					who = from.owner #towards the ships owners country
+				} #adds a static opinion modifier towards the ships owners country from the currently targeted country(-80 opinion with +1 per month to a minimum of -400 opinion) 
+			} #end of every country block
+		
+		
+			# modifiers for victim
+			owner = { #switches to the planet owners scope
+				add_opinion_modifier = { #this one always triggers, but only from the owners empire
+					modifier = opinion_swept_my_world #this is the modifier for the empire whose world was swept, which is why it is more extreme (-800, +1 per month to a minimum of -8000)
+					who = from.owner #towards the ships owners country
+				}
+				if = {
+					limit = { NOT = { has_ethic = ethic_gestalt_consciousness } } #if the owner doesn't have gestalt consciousness
+					add_modifier = {
+						modifier = colossus_victim #adds a static modifier (more xenophobe and militarist pop ethic attraction. (+50%))
+						days = 10800 # 30 years
+					}
+				}
+			} #end of owner block
+		} #end of if statement for whether the empire exists and is a regular empire (not scourge or unbidden and stuff.)
+		
+		
+		else_if = { #if they aren't a regular empire
+			limit = {
+				exists = owner #if an owner exists
+				owner = { is_country_type = primitive } #owner is a primitive country
+			} #end of limit
+		
+		
+			# modifier for allies + those upset by genocide
+			every_country = { #iterates through every country as scopes
+				limit = {
+					NOT = { is_same_value = from.owner } #country is not the ships owners country
+					OR = {
+						has_communications = from.owner #has communications with ships owners country
+						has_communications = root.owner	#if the curent country has communications with the planets owners country
+					}
+					is_country_type = default #is a regular country
+					NOR = {
+						is_xenophobe = yes	#isn't xenophobe
+						is_homicidal = yes	#isn't homocidal
+						is_xenophile = yes	#isn't xenophile
+					}	#returns true if none of the above traits are listed
+				}
+				add_opinion_modifier = { #adds a static opinion modifier
+					modifier = opinion_swept_a_primitive_world #modifier effects : opinion -40, +1 per month, minimum of -200
+					who = from.owner #modifier is affecting the current country towards the ships owners country
+				}
+			}
+			every_country = { #iterates through every country
+				limit = { 
+					NOT = { is_same_value = from.owner } #current country is not the ships owners country
+					OR = {
+						has_communications = from.owner #has communications with ships owners country
+						has_communications = root.owner	#if the curent country has communications with the planets owners country
+					}
+					OR = {
+						has_ai_personality = awakened_fallen_empire_xenophile #is a xenophile fallen empire (enigmatic observers)
+						AND = {
+							is_country_type = default
+							is_xenophile = yes
+						} #returns true if the current country is a regular country and is a xenophile
+					}
+				}
+				add_opinion_modifier = { #adds a static opinion modifier
+					modifier = opinion_swept_a_primitive_world_phile #modifier effects : opinion -60, +1 per month, minimum of -300
+					who = from.owner #from the current country to the ships owners country
+				}
+			}
+		}
+		
+		
+		# Add war exhaustion to planet owner
+		owner = {
+			if = {
+				limit = { #isn't the case when the crisis bombards planets, for instance
+					is_at_war_with = from.fleet.owner #if the planet owner is at war with the ships owners country
+				}
+				add_static_war_exhaustion = { #adds war exhaustion
+					attacker = from.fleet.owner #add war exhaustion from the ships owners country
+					location = root	#location listed in the war screen which is the planets name
+					value_for_planet_destruction = 1.0	#amount of war exhaustion gained
+				}
+			}
+		} #end of war exhaustion phrase
+		
+		
+		every_owned_pop = { #iterates through every owned pop on the planet
+			from.owner = { #switch to country scope of the ships owners empire through owned pops
+				if = {
+					limit = { has_ascension_perk = ap_become_the_crisis } #if the become the crisis ascension perk is owned
+					complete_crisis_objective = crisobj_purge_pops #add 1 purged pop crisis goal for each pop iterated through
+				}
+			}
+			if = {
+				limit = { 
+					OR = {
+						is_robot_pop = yes
+						has_trait = trait_cybernetic
+					}
+				}
+			} else = {
+				modify_species = {
+					add_traits_at_start_of_list = yes
+					add_trait = trait_cybernetic
+				}
+			}	
+		} #end of crisis goal adding phrase thing
+		
+		
+		add_modifier = { #add a modifier
+			modifier = pk_terraformed #modifier effect : pop_environment_tolerance -30%
+			days = 3600 #for 10 years
+		}
+	}
+}
+
+
+country_event = { #this event is called from the previous event if the planet has an owner and the owner isn't the same as the ship who fired on the planet
+	id = pk_event.87 #event id
+	title = pk_event.87.name #title localisation key
+	desc = { 
+		text = pk_event.87.nobots.desc #one of the possible desc localisation keys, which is used if the planet is uninhabited and is not infested, barren, or barren_cold
+		trigger = { #if this returns true then the previously stated localisation key will be used
+			from = { #switches scope to planet scope, because the previous event which called this was a planet_event
+				NOT = { #returns true if the planet is not one of these classes
+					OR = {
+						is_planet_class = pc_infested 
+						is_planet_class = pc_barren
+						is_planet_class = pc_barren_cold
+					}
+				}
+				count_owned_pop = { #returns true if the amount of pops one this planet is less than 1
+					count < 1
+				}
+			}
+		}
+	}
+	desc = { #second possible description, used if the planet is inhabited
+		text = pk_event.87.bots.desc #localisation key
+		trigger = {
+			from = {
+				count_owned_pop = {
+					count > 0
+				}
+			}
+		}
+	}
+	desc = {
+		text = pk_event.87.infested.desc
+		trigger = {
+			from = {
+				OR = {
+					is_planet_class = pc_infested
+					is_planet_class = pc_barren
+					is_planet_class = pc_barren_cold
+				}
+			}
+		}
+	}
+	picture = GFX_evt_planet_beam
+	show_sound = event_solar_fusion
+	location = from
+
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = fired_terraforma }
+	}
+
+	immediate = {
+		set_country_flag = fired_terraforma
+	}
+
+	option = {
+		name = evt_option_ok
+		trigger = {
+			NOR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_valid_civic = civic_machine_terminator
+			}
+		}
+	}
+
+	option = {
+		name = pk_event.87.a.purifexter
+		trigger = {
+			OR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_valid_civic = civic_machine_terminator
+			}
+		}
+		add_monthly_resource_mult = {
+			resource = unity
+			value = 60
+			min = 600
+			max = 3000
+		}
+	}
+}

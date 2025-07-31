@@ -1,0 +1,322 @@
+#cycris_inits.txt me still.
+
+cybrex_gamma = {
+	name = "NAME_Cybrex_Gamma"
+	class = "sc_g"
+	flags = { cybrex_beta ring_world_built cybrex_gamma }
+	
+	planet = {
+		class = star
+		orbit_distance = 0
+
+		init_effect = {
+			create_species = {
+				name = "NAME_Cycris_Cybrex"
+				class = "ROBOT"
+				portrait = "ai_crisis_2"
+				immortal = yes
+				namelist = cybrex_1
+				homeworld = this
+				traits = random
+			}
+			
+			create_country = {
+				name = NAME_Cycris_Cybrex_Empire
+				type = "cycris_cybrex_empire"
+				species = last_created_species
+				authority = "auth_ancient_machine_intelligence"
+				ethos = {
+					ethic = ethic_gestalt_consciousness
+				}
+				civics = {
+					civic = civic_machine_built_to_last
+					civic = civic_machine_warbots
+				}
+				flag = {
+					icon= {
+						category = "special"
+						file = "ai_02.dds"
+					}
+					background= {
+						category = "backgrounds"
+						file = "circle.dds"
+					}
+					colors={
+						"black"
+						"blue"
+						"null"
+						"null"
+					}
+				}
+				effect = {
+					last_created_country = {
+						save_global_event_target_as = cybrex_0
+						set_country_flag = cybrex_reborn
+						create_ship_design = { design = "NAME_Cybrex_Transport" }
+						add_ship_design = last_created_design
+						create_ship_design = { design = "NAME_Reticent" }
+						add_ship_design = last_created_design
+						create_ship_design = { design = "NAME_Taciturn" }
+						add_ship_design = last_created_design
+						create_ship_design = { design = "NAME_Cybrex_Core" }	
+						add_ship_design = last_created_design
+						create_ship_design = { design = "NAME_Cybrex_Station_1" }
+						add_ship_design = last_created_design
+						create_ship_design = { design = "NAME_Cybrex_Station_2" }
+						add_ship_design = last_created_design
+						create_ship_design = { design = "NAME_BLUE_AI_STARBASE" }
+						add_ship_design = last_created_design
+						set_graphical_culture = ai_01
+						add_modifier = {
+							modifier = damage_to_fallen
+						}
+					}
+				}
+			}
+			create_starbase = {
+				size = starbase_ai
+				owner = last_created_country
+			}
+			every_playable_country = {
+				establish_communications = event_target:cybrex_0
+			}
+			create_fleet = {
+				name = "NAME_Cybrex_Core"
+				effect = {
+					set_owner = event_target:cybrex_0
+					create_ship = {
+						name = random
+						design = "NAME_Cybrex_Core"
+						graphical_culture = "ai_01"
+						effect = {
+							set_ship_flag = cybrex_core
+						}
+					}
+					set_location = {
+						target = prev
+						distance = 10
+						angle = random
+					}
+				}
+			}
+			event_target:cybrex_0 = {
+				create_leader = {
+					class = admiral
+					species = owner_main_species
+					name = random
+					skill = 5
+					traits = {
+						trait = leader_trait_cybrex
+					}
+				}
+				last_created_leader = { set_age = 0 }
+			}
+			create_fleet = {
+				effect = {
+					set_owner = event_target:cybrex_0
+					while = {
+						count = 20
+						create_ship = {
+							name = random
+							design = "NAME_Taciturn"
+							graphical_culture = "ai_01"
+						}
+					}
+					while = {
+						count = 40
+						create_ship = {
+							name = random
+							design = "NAME_Reticent"
+							graphical_culture = "ai_01"
+						}
+					}
+					set_location = {
+						target = prev
+						distance = 45
+						angle = random
+					}
+					set_aggro_range = 500
+					set_fleet_stance = aggressive
+					set_aggro_range_measure_from = self
+					assign_leader = last_created_leader
+				}
+			}
+		}
+	}
+
+	change_orbit = 45
+
+	planet = {
+		class = "pc_cybrex"
+		name = "NAME_Cybrex_Gamma_1"
+		orbit_angle = 30
+		orbit_distance = 0
+		deposit_blockers = none
+		modifiers = none
+
+		init_effect = {
+			prevent_anomaly = yes
+			set_owner = event_target:cybrex_0
+			set_capital = yes
+		}
+	}
+	planet = {
+		class = "pc_ringworld_tech"
+		name = "NAME_Ring_Section_B"
+		orbit_angle = 30
+		orbit_distance = 0
+	}
+	planet = {
+		class = "pc_ringworld_seam"
+		name = "NAME_Ring_Section_C"
+		orbit_angle = 30
+		orbit_distance = 0
+	}
+	planet = {
+		class = "pc_cybrex"
+		name = "NAME_Cybrex_Gamma_2"
+		orbit_angle = 30
+		orbit_distance = 0
+		deposit_blockers = none
+		modifiers = none
+
+		init_effect = {
+			prevent_anomaly = yes
+			set_owner = event_target:cybrex_0
+
+			create_fleet = {
+				name = "NAME_Cybrex_Station_1"
+				effect = {
+					set_owner = event_target:cybrex_0
+					create_ship = {
+						name = random
+						design = "NAME_Cybrex_Station_1"
+						graphical_culture = "ai_01"
+					}
+					set_location = {
+						target = prev
+						distance = 10
+						angle = random
+					}
+				}
+			}
+		}
+	}
+	planet = {
+		class = "pc_ringworld_tech"
+		name = "NAME_Ring_Section_E"
+		orbit_angle = 30
+		orbit_distance = 0
+	}
+	planet = {
+		class = "pc_ringworld_seam"
+		name = "NAME_Ring_Section_F"
+		orbit_angle = 30
+		orbit_distance = 0
+	}
+	planet = {
+		class = "pc_cybrex"
+		name = "NAME_Cybrex_Gamma_3"
+		orbit_angle = 30
+		orbit_distance = 0
+		deposit_blockers = none
+		modifiers = none
+
+		init_effect = {
+			prevent_anomaly = yes
+			set_owner = event_target:cybrex_0
+
+			create_fleet = {
+				name = "NAME_Cybrex_Station_1"
+				effect = {
+					set_owner = event_target:cybrex_0
+					create_ship = {
+						name = random
+						design = "NAME_Cybrex_Station_1"
+						graphical_culture = "ai_01"
+					}
+					set_location = {
+						target = prev
+						distance = 10
+						angle = random
+					}
+				}
+			}
+		}
+	}
+	planet = {
+		class = "pc_ringworld_tech"
+		name = "NAME_Ring_Section_H"
+		orbit_angle = 30
+		orbit_distance = 0
+	}
+	planet = {
+		class = "pc_ringworld_seam"
+		name = "NAME_Ring_Section_I"
+		orbit_angle = 30
+		orbit_distance = 0
+	}
+	planet = {
+		class = "pc_cybrex"
+		name = "NAME_Cybrex_Gamma_4"
+		orbit_angle = 30
+		orbit_distance = 0
+		deposit_blockers = none
+		modifiers = none
+
+		init_effect = {
+			prevent_anomaly = yes
+			set_owner = event_target:cybrex_0
+
+			create_fleet = {
+				name = "NAME_Cybrex_Station_1"
+				effect = {
+					set_owner = event_target:cybrex_0
+					create_ship = {
+						name = random
+						design = "NAME_Cybrex_Station_1"
+						graphical_culture = "ai_01"
+					}
+					set_location = {
+						target = prev
+						distance = 10
+						angle = random
+					}
+				}
+			}
+		}
+	}
+	planet = {
+		class = "pc_ringworld_tech"
+		name = "NAME_Ring_Section_K"
+		orbit_angle = 30
+		orbit_distance = 0
+	}
+	planet = {
+		class = "pc_ringworld_seam"
+		name = "NAME_Ring_Section_L"
+		orbit_angle = 30
+		orbit_distance = 0
+	}
+	change_orbit = 45
+	planet = {
+		class = pc_cybrex_machine
+		size = 54
+		name = "NAME_Central_Processing"
+		init_effect = {
+			save_global_event_target_as = cybrex_processing
+			set_owner = event_target:cybrex_0
+			prevent_anomaly = yes
+			add_building = building_class_4_singularity
+			add_building = building_class_4_singularity
+			add_building = building_class_4_singularity
+			add_building = building_class_4_singularity
+			add_building = building_class_4_singularity
+			add_building = building_class_4_singularity
+			add_building = building_class_4_singularity
+			add_building = building_class_4_singularity
+			add_building = building_class_4_singularity
+			add_building = building_class_4_singularity
+		}
+	}
+}

@@ -1,0 +1,182 @@
+#cycris_scripted_effects.txt me + MrFreake
+
+begin_crisis_cycris = {
+	if = {
+		limit = {
+			host_has_dlc = "Apocalypse"
+			host_has_dlc = "Synthetic Dawn Story Pack"
+		}
+		set_global_flag = mid_game_crisis_happened 			# this must be set and not removed
+		set_timed_global_flag = {							# this must be set and not removed
+			flag = mid_game_crisis_happened_recently
+			years = 12
+		}
+		set_global_flag = cycris_in_progress 				# must be removed when crisis is resolved
+		set_global_flag = cycris_fired 					# (optional) only set this flag if you want your crisis to fire only once
+		set_global_flag = midgame_crisis_ongoing			# must be removed when crisis is resolved
+		#country scope global event country
+		every_playable_country = {
+			if = {
+				limit = {
+					is_ai = no
+				}
+				begin_event_chain = {
+					event_chain = cybrex_gamma_chain
+				}
+				country_event = {
+					id = gen_events.1
+				}
+			}
+		}
+	}
+}
+
+spawn_cybrex_gamma = {
+	event_target:cybrex_precursor_spawn_system = {
+		spawn_system = {
+			initializer = cybrex_gamma
+			min_distance = 30
+			max_distance = 50
+			max_jumps = 1
+			is_discovered = yes
+			hyperlane = yes
+		}
+	}
+	event_target:cybrex_0 = {
+		country_event = { id = cycris_diplo.1 }
+	}
+	every_playable_country = {
+		event_target:cybrex_0 = {
+			declare_war = {
+				target = prev
+				attacker_war_goal = wg_assimilation
+			}
+		}
+	}
+	event_target:player_empire = {
+		country_event = {
+			id = gen_events.30
+			days = 10
+		}
+		country_event = {
+			id = gen_events.31
+			days = 360
+		}
+		country_event = {
+			id = gen_events.32
+			days = 1000
+		}
+	}
+	if = {
+		limit = { last_created_system = { NOT = { has_hyperlane_to = prev } } }
+		add_hyperlane = {
+			from = this
+			to = last_created_system
+		}
+	}
+	else = {
+		add_extra_hyperlane_to_spawned_system_effect = yes
+	}
+}	
+
+wave_2_spawn = {
+	event_target:cybrex_0 = {
+		create_leader = {
+			class = admiral
+			species = owner_main_species
+			name = random
+			skill = 8
+			traits = {
+				trait = leader_trait_cybrex
+			}
+		}
+		last_created_leader = { set_age = 0 }
+		create_fleet = {
+			effect = {
+				set_owner = event_target:cybrex_0
+				while = {
+					count = 15
+					create_ship = {
+						design = "NAME_Taciturn"
+						name = random
+						graphical_culture = "ai_01"
+					}
+				}
+				while = {
+					count = 30
+					create_ship = {
+						design = "NAME_Reticent"
+						name = random
+						graphical_culture = "ai_01"
+					}
+				}
+				set_location = {
+					target = event_target:cybrex_0.capital_scope
+					distance = 45
+					angle = random
+				}
+				set_aggro_range = 500
+				set_aggro_range_measure_from = self
+				assign_leader = last_created_leader
+			}
+		}
+	}
+}
+
+final_wave_spawn = {
+	event_target:cybrex_0 = {
+		create_leader = {
+			class = admiral
+			species = owner_main_species
+			name = random
+			skill = 10
+			traits = {
+				trait = leader_trait_cybrex
+			}
+		}
+		last_created_leader = { set_age = 0 }
+		create_fleet = {
+			effect = {
+				set_owner = event_target:cybrex_0
+				while = {
+					count = 40
+					create_ship = {
+						design = "NAME_Taciturn"
+						name = random
+						graphical_culture = "ai_01"
+					}
+				}
+				while = {
+					count = 80
+					create_ship = {
+						design = "NAME_Reticent"
+						name = random
+						graphical_culture = "ai_01"
+					}
+				}
+				set_location = {
+					target = event_target:cybrex_0.capital_scope
+					distance = 45
+					angle = random
+				}
+				set_aggro_range = 500
+				set_aggro_range_measure_from = self
+				assign_leader = last_created_leader
+			}
+		}
+	}
+}
+
+end_crisis_cycris = {
+	event_target:cybrex_0 = {
+		random_owned_ship = {
+			set_ship_flag = cybrex_core
+			ship_event = {
+				id = gen_events.27
+			}
+		}
+		country_event = {
+			id = gen_events.22
+		}
+	}
+}

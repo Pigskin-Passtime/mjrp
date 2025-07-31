@@ -1,0 +1,55 @@
+#cycris_decisions.txt me me me
+
+decision_machine = {
+	owned_planets_only = yes
+	enactment_time = 365
+	resources = {
+		category = decisions
+		cost = {
+			influence = 50
+			energy = 1000
+			minerals = 1000
+		}
+	}
+	potential = {
+		OR = {
+			is_planet_class = pc_machine
+			is_planet_class = pc_cybrex_machine
+		}
+		NOT = {
+			has_planet_flag = planet_upgraded
+		}
+		from = {
+			has_technology = tech_quasi_planar_processors
+		}
+	}
+	effect = {
+		this = {
+			add_modifier = {
+				modifier = resource_mult
+			}
+		}
+		custom_tooltip = decision_machine_effects_short
+		hidden_effect = {
+			set_planet_flag = planet_upgraded
+		}
+		create_message = {
+			target = this
+			type = MESSAGE_TYPE_PLANET_PROSPECTED
+			localization = MESSAGE_PLANET_UPGRADED
+			days = 30
+			variable = {
+				type = name
+				localization = PLANET
+				scope = THIS
+			}
+		}
+	 }
+	 ai_weight = {
+		weight = 1
+		modifier = {
+			factor = 0
+			num_pops < 20
+		}
+	 }
+}

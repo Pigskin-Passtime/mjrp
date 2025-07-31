@@ -1,0 +1,1083 @@
+namespace = gen_events	#cycris_gen_event.txt Just me
+
+@tier1researchreward = 4
+@tier1researchmin = 200
+@tier1researchmax = 1500
+#country_event = {
+
+	#hide_window = no
+	#is_triggered_only = yes
+	#trigger = {
+		#last_increased_tech = tech_organic_integration
+	#}
+	#title = gen_events.112_title
+	#desc = gen_events.112_desc
+	#immediate = {
+		#add_modifier = {
+			#modifier = pop_approval_static
+		 #}
+		#every_owned_pop_species = {
+			#if = {
+				#limit = {
+					#NOT = {
+						#has_trait = trait_cybernetic
+					#}
+				 #}
+				 #change_species_characteristics = {
+					#add_trait = trait_cybernetic
+					#add_traits_at_start_of_list = yes
+				 #}
+			#}
+		#}
+	#}
+#}
+country_event = {
+	id = gen_events.111
+	hide_window = no
+	picture = GFX_evt_pk_terraform
+	is_triggered_only = yes
+	trigger = {
+		last_increased_tech = tech_pk_terraforma
+	}
+	title = gen_events.111_title
+	desc = gen_events.111_desc
+	immediate = {
+		set_global_flag = terraforma_unlocked
+	}
+	
+	option = {
+		name = evt_option_ok
+	}
+}
+
+country_event = { #second mining base with more assimilation lore wth cyborgs
+	id = gen_events.1
+	title = "gen_events.1.name"
+	desc = "gen_events.1.desc"
+	picture = GFX_evt_archaeological_dig
+	trackable = yes
+	hide_window = no
+	is_triggered_only = yes
+	location = from
+
+	immediate = {
+		every_playable_country = {
+			if = {
+				limit = {
+					is_ai = no
+				}
+				save_global_event_target_as = player_empire
+				begin_event_chain = {
+					event_chain = cybrex_gamma_chain
+				}
+				random_planet_within_border = {
+					save_event_target_as = cybrex_evt_1_target
+				}
+			}
+		}
+		hidden_effect = {
+			solar_system = {
+				owner = { set_country_flag = cybrex_12 }
+			}
+		}
+	}
+
+	option = {
+		name = WORTH_INVESTIGATING
+			enable_special_project = {
+				name = CYBREX_ARCHEOLOGY_12
+				location = event_target:cybrex_evt_1_target
+				owner = root
+			}
+	}
+}
+
+ship_event = { #second mining base completed
+	id = gen_events.2
+	title = "cybrex.completed.name"
+	picture = GFX_evt_mining_station
+	is_triggered_only = yes
+	desc = {
+		trigger = {
+			owner = {
+				has_country_flag = cybrex_11
+			}
+		}
+		text = "cybrex.2.desc.found_cybernetic_station"
+	}	
+	desc = {
+		trigger = {
+			owner = {
+				NOT = {
+					has_country_flag = cybrex_11
+				}
+			}
+		}
+		text = "cybrex.2.desc.not_found_cybernetic_station"
+	}	
+	option = {
+		name = "cybrex.completed.option"
+		owner = {
+			if = {
+				limit = { has_ancrel = yes }
+				small_artifact_reward = yes
+			}
+			add_event_chain_counter = {
+				event_chain = cybrex_gamma_chain
+				counter = "cybrex_artifacts"
+				amount = 1
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = gen_events.20 } }
+		}
+	}
+}
+
+country_event = { #terraforma testing site
+	id = gen_events.3
+	title = "gen_events.3.name"
+	desc = "gen_events.3.desc"
+	picture = GFX_evt_archaeological_dig
+	trackable = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = cybrex_13 }
+		}
+		random_planet_within_border = {
+			save_event_target_as = gen_evts_3_target
+		}
+	}
+
+	option = {
+		name = SEND_A_TEAM
+		event_target:gen_evts_3_target = {
+			enable_special_project = {
+				name = CYBREX_ARCHEOLOGY_13
+				location = this
+				owner = event_target:player_empire
+			}
+		}
+	}
+}
+
+ship_event = { #testing site completed
+	id = gen_events.4
+	title = "cybrex.4.completed"
+	desc = "cybrex.4.desc"
+	picture = GFX_evt_barren_dig_site
+	is_triggered_only = yes
+	option = {
+		name = "cybrex.completed.option.4"
+		owner = {
+			if = {
+				limit = { has_ancrel = yes }
+				small_artifact_reward = yes
+			}
+			event_target:player_empire = {
+				add_event_chain_counter = {
+					event_chain = cybrex_gamma_chain
+					counter = "cybrex_artifacts"
+					amount = 1
+				}
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = gen_events.20 } }
+		}
+	}
+}
+
+
+country_event = { #crashed transport ship
+	id = gen_events.5
+	title = "gen_events.5.name"
+	desc = "gen_events.5.desc"
+	picture = GFX_evt_archaeological_dig
+	trackable = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		random_planet_within_border = {
+			save_event_target_as = gen_evts_5_target
+		}
+		hidden_effect = {
+			owner = { set_country_flag = cybrex_14 }
+		}
+	}
+
+	option = {
+		name = THIS_IS_INTERESTING
+		event_target:gen_evts_5_target = {
+			enable_special_project = {
+				name = CYBREX_ARCHEOLOGY_14
+				location = this
+				owner = root
+			}
+		}
+	}
+}
+
+ship_event = { #transport ship completed
+	id = gen_events.6
+	title = "cybrex.6.completed"
+	desc = "cybrex.6.desc"
+	picture = GFX_evt_relic_shipyard
+
+	is_triggered_only = yes
+
+	option = {
+		name = "cybrex.completed.option.6"
+		owner = {
+			if = {
+				limit = { has_ancrel = yes }
+				small_artifact_reward = yes
+			}
+			add_event_chain_counter = {
+				event_chain = cybrex_gamma_chain
+				counter = "cybrex_artifacts"
+				amount = 1
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = gen_events.20 } }
+		}
+	}
+}
+
+
+country_event = { #terraforma testing site
+	id = gen_events.7
+	title = "gen_events.7.name"
+	desc = "gen_events.7.desc"
+	picture = GFX_evt_archaeological_dig
+	trackable = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		random_planet_within_border = {
+			limit = {
+				is_colony = yes
+			}
+			save_event_target_as = gen_evts_7_target
+		}
+		hidden_effect = {
+			owner = { set_country_flag = cybrex_15 }
+		}
+	}
+
+	option = {
+		name = PECULIAR
+		event_target:gen_evts_7_target = {
+			enable_special_project = {
+				name = CYBREX_ARCHEOLOGY_15
+				location = this
+				owner = event_target:player_empire
+			}
+		}
+	}
+}
+
+ship_event = { #testing site completed
+	id = gen_events.8
+	title = "cybrex.8.completed"
+	desc = "cybrex.8.desc"
+	picture = GFX_evt_sapient_AI
+
+	is_triggered_only = yes
+
+	option = {
+		name = "cybrex.completed.option.8"
+		owner = {
+			if = {
+				limit = { has_ancrel = yes }
+				small_artifact_reward = yes
+			}
+			event_target:player_empire = {
+				add_event_chain_counter = {
+					event_chain = cybrex_gamma_chain
+					counter = "cybrex_artifacts"
+					amount = 1
+				}
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = gen_events.20 } }
+		}
+	}
+}
+
+
+country_event = { #strange rumblings
+	id = gen_events.9
+	title = "gen_events.9.name"
+	desc = "gen_events.9.desc"
+	picture = GFX_evt_archaeological_dig
+	trackable = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		random_planet_within_border = {
+			limit = {
+				is_moon = yes
+			}
+			save_event_target_as = gen_evts_9_target
+		}
+		hidden_effect = {
+			owner = { set_country_flag = cybrex_16 }
+		}
+	}
+
+	option = {
+		name = PECULIAR
+		event_target:gen_evts_9_target = {
+			enable_special_project = {
+				name = CYBREX_ARCHEOLOGY_16
+				location = this
+				owner = event_target:player_empire
+			}
+		}
+	}
+}
+
+ship_event = { #testing site completed
+	id = gen_events.10
+	title = "cybrex.10.completed"
+	desc = "cybrex.10.desc1"
+	picture = GFX_evt_clocks
+
+	is_triggered_only = yes
+
+	option = {
+		name = "cybrex.completed.option.10"
+		owner = {
+			if = {
+				limit = { has_ancrel = yes }
+				small_artifact_reward = yes
+			}
+			event_target:player_empire = {
+				add_event_chain_counter = {
+					event_chain = cybrex_gamma_chain
+					counter = "cybrex_artifacts"
+					amount = 1
+				}
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = gen_events.20 } }
+		}
+	}
+}
+
+
+country_event = { #spiritulists
+	id = gen_events.11
+	title = "gen_events.11.name"
+	desc = "gen_events.11.desc"
+	picture = GFX_evt_archaeological_dig
+	trackable = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		random_planet_within_border = {
+			limit = {
+				is_colony = yes
+				num_pops > 30
+			}
+			save_event_target_as = gen_evts_11_target
+		}
+		hidden_effect = {
+			owner = { set_country_flag = cybrex_17 }
+		}
+	}
+
+	option = {
+		name = PECULIAR
+		event_target:gen_evts_11_target = {
+			enable_special_project = {
+				name = CYBREX_ARCHEOLOGY_17
+				location = this
+				owner = event_target:player_empire
+			}
+		}
+	}
+}
+
+ship_event = { #testing site completed
+	id = gen_events.12
+	title = "cybrex.12.completed"
+	desc = "cybrex.12.desc"
+	picture = GFX_evt_dead_city
+
+	is_triggered_only = yes
+
+	option = {
+		name = "cybrex.completed.option.12"
+		owner = {
+			if = {
+				limit = { has_ancrel = yes }
+				small_artifact_reward = yes
+			}
+			event_target:player_empire = {
+				add_event_chain_counter = {
+					event_chain = cybrex_gamma_chain
+					counter = "cybrex_artifacts"
+					amount = 1
+				}
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = gen_events.20 } }
+		}
+	}
+}
+
+country_event = { #terraforma testing site
+	id = gen_events.13
+	title = "gen_events.13.name"
+	desc = "gen_events.13.desc"
+	picture = GFX_evt_archaeological_dig
+	trackable = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		random_planet_within_border = {
+			limit = {
+				OR = {
+					has_climate = "cold"
+				}
+			}
+			save_event_target_as = gen_evts_13_target
+		}
+		hidden_effect = {
+			owner = { set_country_flag = cybrex_18 }
+		}
+	}
+
+	option = {
+		name = PECULIAR
+		event_target:gen_evts_13_target = {
+			enable_special_project = {
+				name = CYBREX_ARCHEOLOGY_18
+				location = this
+				owner = event_target:player_empire
+			}
+		}
+	}
+}
+
+ship_event = { #testing site completed
+	id = gen_events.14
+	title = "cybrex.14.completed"
+	desc = "cybrex.14.desc"
+	picture = GFX_evt_dead_city
+
+	is_triggered_only = yes
+
+	option = {
+		name = "cybrex.completed.option.14"
+		owner = {
+			if = {
+				limit = { has_ancrel = yes }
+				small_artifact_reward = yes
+			}
+			event_target:player_empire = {
+				add_event_chain_counter = {
+					event_chain = cybrex_gamma_chain
+					counter = "cybrex_artifacts"
+					amount = 1
+				}
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = gen_events.20 } }
+		}
+	}
+}
+
+country_event = { #terraforma testing site
+	id = gen_events.15
+	title = "gen_events.15.name"
+	desc = "gen_events.15.desc"
+	picture = GFX_evt_archaeological_dig
+	trackable = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		random_planet_within_border = {
+			limit = {
+				has_mining_station = yes
+			}
+			save_event_target_as = gen_evts_15_target
+		}
+		hidden_effect = {
+			owner = { set_country_flag = cybrex_19 }
+		}
+	}
+
+	option = {
+		name = PECULIAR
+		event_target:gen_evts_15_target = {
+			enable_special_project = {
+				name = CYBREX_ARCHEOLOGY_19
+				location = this
+				owner = event_target:player_empire
+			}
+		}
+	}
+}
+
+ship_event = { #testing site completed
+	id = gen_events.16
+	title = "cybrex.16.completed"
+	desc = "cybrex.16.desc"
+	picture = GFX_evt_dead_city
+
+	is_triggered_only = yes
+
+	option = {
+		name = "cybrex.completed.option.16"
+		owner = {
+			if = {
+				limit = { has_ancrel = yes }
+				small_artifact_reward = yes
+			}
+			event_target:player_empire = {
+				add_event_chain_counter = {
+					event_chain = cybrex_gamma_chain
+					counter = "cybrex_artifacts"
+					amount = 1
+				}
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = { country_event = { id = gen_events.20 } }
+		}
+	}
+}
+
+country_event = {
+	id = gen_events.20
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		every_playable_country = {
+			limit = {
+				is_ai = no
+			}
+			save_event_target_as = player_empire
+		}
+		if = {
+			limit = {
+				has_completed_event_chain_counter = {
+					event_chain = cybrex_gamma_chain
+					counter = cybrex_artifacts
+				}
+				NOT = {
+					has_global_flag = cybrex_gamma_system_found
+				}
+			}
+			country_event = {
+				id = gen_events.17
+			}
+		}
+	}
+}
+
+country_event = {
+	id = gen_events.17
+	hide_window = yes
+	fire_only_once = yes
+	is_triggered_only = yes
+	immediate = {
+		set_global_flag = cybrex_gamma_system_found
+		if = {
+			limit = { 
+				any_planet_within_border = {
+					solar_system = {
+						has_star_flag = precursor_10
+					}
+				}
+			}
+			random_system = {
+				limit = {
+					has_star_flag = precursor_10
+				}
+				save_event_target_as = cybrex_precursor_spawn_system
+			}
+		}
+		else = {
+			random_system = {
+				limit = {
+					NOT = {
+						is_owned_by = event_target:player_empire
+					}
+				}
+				save_event_target_as = cybrex_precursor_spawn_system
+			}
+		}
+		event_target:cybrex_precursor_spawn_system = {
+			spawn_cybrex_gamma = yes
+		}
+		country_event = { id = gen_events.18 days = 2 }
+	}
+}
+
+country_event = {
+	id = gen_events.18
+	title = "gen_events.18_title"
+	desc = "gen_events.18_desc"
+	picture = GFX_evt_federation_fleet
+	is_triggered_only = yes
+	immediate = {
+		random_system = {
+			limit = {
+				has_star_flag = cybrex_gamma
+			}
+			save_event_target_as = cybrex_gamma
+			event_target:player_empire = {
+				set_visited = prev
+			}
+			random_system_megastructure = {
+				save_event_target_as = cybrex_gamma_homeworld
+			}
+		}
+		event_target:cybrex_processing = {
+			enable_special_project = {
+				name = CYBREX_ARCHEOLOGY_20
+				location = this
+				owner = event_target:player_empire
+			}
+		}
+	}
+	option = {
+		name = "cybrex_chain_complete_evt_option"
+		end_event_chain = cybrex_gamma_chain
+	}
+}
+
+country_event = {
+	id = gen_events.19
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		has_global_flag = cycris_in_progress
+	}
+	immediate = {
+		every_playable_country = {
+			limit = {
+				is_ai = no
+			}
+			save_event_target_as = player_empire
+		}
+		random_list = {
+			1 = {
+				if = {
+					limit = {
+						NOT = {
+							has_country_flag = cybrex_13
+						}
+					 }
+						event_target:player_empire = {
+							country_event = {
+								id = gen_events.3
+							}
+						}
+				}
+			}
+			2 = {
+				if = {
+					limit = {
+						NOT = {
+							has_country_flag = cybrex_14
+						}
+					}
+						event_target:player_empire = {
+							country_event = {
+								id = gen_events.5
+							}
+						}
+				}
+			}
+			3 = {
+				if = {
+					limit = {
+						NOT = {
+							has_country_flag = cybrex_15
+						}
+					}
+						event_target:player_empire = {
+							country_event = {
+								id = gen_events.7
+							}
+						}
+				}
+			}
+
+			4 = {
+				if = {
+					limit = {
+						NOT = {
+							has_country_flag = cybrex_16
+						}
+					}
+						event_target:player_empire = {
+							country_event = {
+								id = gen_events.9
+							}
+						}
+				}
+			}
+
+			5 = {
+				if = {
+					limit = {
+						NOT = {
+							has_country_flag = cybrex_17
+						}
+					}
+						event_target:player_empire = {
+							country_event = {
+								id = gen_events.11
+							}
+						}
+				}
+			}
+
+			6 = {
+				if = {
+					limit = {
+						NOT = {
+							has_country_flag = cybrex_18
+						}
+					}
+						event_target:player_empire = {
+							if = {
+								limit = {
+									any_planet_within_border = {
+										has_climate = cold
+									}
+								 }
+								 country_event = {
+									id = gen_events.13
+								}
+							}
+						}
+				}
+			}
+			7 = {
+				if = {
+					limit = {
+						NOT = {
+							has_country_flag = cybrex_19
+						}
+					}
+						event_target:player_empire = {
+							country_event = {
+								id = gen_events.15
+							}
+						}
+				}
+			}
+
+		}
+	}
+}
+
+event = {
+	id = gen_events.21
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		has_global_flag = cycris_in_progress
+	}
+	immediate = {
+		every_playable_country = {
+			limit = {
+				is_ai = no
+			}
+			if = {
+				limit = {
+					has_event_chain = cybrex_gamma_chain
+				}
+				country_event = {
+					id = gen_events.19
+				}
+			}
+		}
+	}
+}
+
+country_event = {#hidden cybrex defeated event
+	id = gen_events.22
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		is_country_type = cycris_cybrex_empire
+		has_global_flag = cycris_in_progress
+	}
+	immediate = {
+		every_country = {
+			limit = {
+				is_country_type = default
+			}
+			country_event = {
+				id = gen_events.23
+			}
+		}
+		set_global_flag = cycris_done
+		remove_global_flag = cycris_in_progress
+		remove_global_flag = midgame_crisis_ongoing
+		event_target:player_empire = {
+			country_event = {
+				id = gen_events.24
+			}
+		}
+	}
+}
+country_event = { #saying you won yay.
+	id = gen_events.23
+	title = "gen_events.23.name"
+	desc = "gen_events.23.desc"
+	picture = GFX_evt_archaeological_dig
+	trackable = yes
+
+	is_triggered_only = yes
+	option = {
+		name = cycris_done_option
+		add_modifier = {
+			modifier = defeated_cybrex
+		}
+	}
+}
+country_event = { #terraforma unlock
+	id = gen_events.24
+	title = "gen_events.24.name"
+	desc = "gen_events.24.desc"
+	picture = GFX_evt_archaeological_dig
+
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			owner = { set_country_flag = cybrex_20 }
+		}
+	}
+
+	option = {
+		name = gen_events.24.option
+		event_target:player_empire = {
+			enable_special_project = {
+				name = CYBREX_ARCHEOLOGY_20
+				location = capital_scope
+				owner = event_target:player_empire
+			}
+		}
+	}
+}
+
+country_event = { #terraforma unlocked
+	id = gen_events.25
+	title = "gen_events.25.name"
+	desc = "gen_events.25.desc"
+	picture = GFX_evt_archaeological_dig
+
+	is_triggered_only = yes
+	option = {
+		name = terraforma_project_done
+		set_country_flag = terraforma_unlocked
+	}
+}
+
+#On starbase destroyed goes here
+ship_event = {
+	id = gen_events.27
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		owner = {
+			is_country_type = cycris_cybrex_empire
+		}
+		has_ship_flag = cybrex_core
+	}
+	immediate = {
+		event_target:cybrex_0 = {
+			every_owned_ship = {
+				destroy_ship = this
+			}
+			every_owned_fleet = {
+				destroy_fleet = this
+			}
+			every_owned_planet = {
+				destroy_colony = yes
+			}
+			destroy_country = yes
+			country_event = {
+				id = gen_events.22
+			}
+		}
+	}
+}
+
+country_event = {
+	id = gen_events.26
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		is_country_type = cycris_cybrex_empire
+		fromfrom = {
+			has_ship_flag = cybrex_core
+		}
+	}
+	immediate = {
+		event_target:cybrex_0 = {
+			every_owned_ship = {
+				destroy_ship = this
+			}
+			every_owned_fleet = {
+				destroy_fleet = this
+			}
+			every_owned_planet = {
+				destroy_colony = yes
+			}
+			destroy_country = yes
+			country_event = {
+				id = gen_events.22
+			}
+		}
+	}
+}
+
+country_event = {
+	id = gen_events.30
+	is_triggered_only = yes
+	hide_window = no
+	picture = GFX_evt_crisis_declared
+	title = "DECLARED_WAR_UPON_BY_CYBREX"
+	desc = "CYBREX_WAR_DESC"
+	immediate = {
+		every_playable_country = {
+			event_target:cybrex_0 = {
+				declare_war = {
+					target = prevprev
+					attacker_war_goal = wg_assimilation
+				}
+			}
+		}
+	}
+	option = {
+		name = "Ok"
+	}
+}
+
+country_event = {
+	id = gen_events.31
+	is_triggered_only = yes
+	title = "wave_2_title"
+	desc = "wave_2_desc"
+	picture = GFX_evt_wormhole
+	immediate = {
+		event_target:cybrex_0 = {
+			wave_2_spawn = yes
+		}
+	}
+	option = {
+		name = Ok
+	}
+}
+
+country_event = {
+	id = gen_events.32
+	is_triggered_only = yes
+	title = "wave_3_title"
+	desc = "wave_3_desc"
+	picture = GFX_evt_worrying_signal
+	immediate = {
+		event_target:cybrex_0 = {
+			final_wave_spawn = yes
+		}
+	}
+	option = {
+		name = Ok
+	}
+}
+
+starbase_event = {
+	id = gen_events.40
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		from.owner = {
+			is_country_type = cycris_cybrex_empire
+		}
+	}
+	immediate = {
+		from.solar_system = {
+			create_starbase = {
+				size = starbase_ai
+				owner = event_target:cybrex_0
+			}
+		}
+	}
+}
+
+
+country_event = {
+	id = gen_events.50
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		fromfrom = {
+			is_country_type = cycris_cybrex_empire
+		}
+	}
+	immediate = {
+		country_event = {
+			id = cycris_diplo.2
+		}
+	}	
+}

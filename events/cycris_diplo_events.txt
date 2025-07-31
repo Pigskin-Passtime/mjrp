@@ -1,0 +1,105 @@
+namespace = cycris_diplo
+#cycris_diplo_events.txt Just me again
+country_event = { #establish contact with all empires upon system being found
+	id = cycris_diplo.1
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		every_country = {
+			limit = {
+				OR = {
+					is_country_type = default
+					is_country_type = fallen_empire
+					is_country_type = awakened_fallen_empire
+				}
+				NOT = { has_communications = root }
+			}
+
+			establish_communications_no_message = root
+		}
+		every_country = {
+			limit = {
+				is_ai = no
+			}
+			country_event = { id = cycris_diplo.2 }
+		}
+	}
+}
+
+country_event = { #main screen
+	id = cycris_diplo.2
+	title = cycris_diplo.2.name
+	location = event_target:cybrex_gamma_homeworld
+	diplomatic = yes
+	is_triggered_only = yes
+	picture_event_data = {
+		portrait = event_target:cybrex_0
+		planet_background = event_target:cybrex_0
+		graphical_culture = event_target:cybrex_0
+		graphical_culture = event_target:cybrex_0
+		city_level = event_target:cybrex_0
+		room = event_target:cybrex_0.leader
+	}
+	desc = cycris_diplo.2_desc
+	option = { #we will defeat you blah blah blah
+		name = cycris_diplo.2_option
+	}
+	option = { #who are you?
+		name = cycris_diplo.2_option2
+		country_event = {
+			id = cycris_diplo.3
+		}
+	}
+	option = { #but why?
+		name = cycris_diplo.2_option3
+		country_event = {
+			id = cycris_diplo.4
+		}
+	}
+}
+
+country_event = { #who are you
+	id = cycris_diplo.3
+	title = cycris_diplo.3.name
+	location = event_target:cybrex_gamma_homeworld
+	diplomatic = yes
+	is_triggered_only = yes
+	picture_event_data = {
+		portrait = event_target:cybrex_0
+		planet_background = event_target:cybrex_0
+		graphical_culture = event_target:cybrex_0
+		graphical_culture = event_target:cybrex_0
+		city_level = event_target:cybrex_0
+		room = event_target:cybrex_0.leader
+	}
+	desc = cycris_diplo.3_desc
+	option = { #back to main screen
+		name = cycris_diplo.3_option
+		country_event = {
+			id = cycris_diplo.2
+		}
+	}
+}
+
+country_event = { #but why?
+	id = cycris_diplo.4
+	title = cycris_diplo.4.name
+	location = event_target:cybrex_gamma_homeworld
+	diplomatic = yes
+	is_triggered_only = yes
+	picture_event_data = {
+		portrait = event_target:cybrex_0
+		planet_background = event_target:cybrex_0
+		graphical_culture = event_target:cybrex_0
+		graphical_culture = event_target:cybrex_0
+		city_level = event_target:cybrex_0
+		room = event_target:cybrex_0.leader
+	}
+	desc = cycris_diplo.4_desc
+	option = { #back to main screen
+		name = cycris_diplo.4_option
+		country_event = {
+			id = cycris_diplo.2
+		}
+	}
+}
