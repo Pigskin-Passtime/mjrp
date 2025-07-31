@@ -1,0 +1,1743 @@
+namespace = replicators
+
+# Written by Exakan.
+
+# TODO:
+# replicators.8 = add as event to replicators.2 like replicators.10 instead of 5y pulse
+# replicators.21 = Trigger only for one building, or similar.
+# replicators.29 = Add entry to delete the flags added by the diplomacy, to clear up the pring_flags ID command.
+# More random events for situations/projects.
+
+# The begin. Limits the place to cause an immediate war (probably).
+country_event = {
+	id = replicators.1
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		random_playable_country = {
+			limit = {
+				is_homicidal = no
+				is_country_type = default
+			}
+			country_event = { id = replicators.2 }
+		}
+	}
+}
+
+# Creates the country in a distant star system.
+# Adds also a secondary spawn in another empire, which isnt immediatly hostile to it (in theory).
+country_event = {
+	id = replicators.2
+	hide_window = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	immediate = {
+		no_scope = {
+			set_spawn_system_batch = begin
+				random_rim_system = {
+					spawn_system = {
+						min_distance >= 170
+						max_distance <= 165
+						direction = rimwards
+						initializer = replicators_arrival_system
+						hyperlane = no
+						effect = {
+							save_event_target_as = replicators_cluster_1
+							save_global_event_target_as = replicators_arrival_system
+						}
+					}
+				}
+				event_target:replicators_cluster_1 = {
+					solar_system = {
+						random_system_planet = {
+							limit = { is_star = yes }
+							save_event_target_as = main_star
+							save_global_event_target_as = replicators_star_system
+						}
+						create_species = {
+							name = "Replicators"
+							class = ROBOT
+							portrait = "replicators_1"
+							namelist = "replicators_names"
+							traits = { trait = trait_machine_unit }
+							effect = { save_event_target_as = replicators_species }
+						}
+						create_country = {
+							name = "Replicators"
+							type = "replicators"
+							ignore_initial_colony_error = yes
+							name_list = "replicators_names"
+							species = event_target:replicators_species
+							flag = {
+								icon= {
+									category = "Replicators"
+									file = "replicators_flag.dds"
+								}
+								background= {
+									category = "backgrounds"
+									file = "flag_BG_39.dds"
+								}
+								colors={
+								"black"
+								"medium_steel"
+								"black"
+								"null"
+								}
+							}
+							effect = {
+								save_event_target_as = replicators_country
+								save_global_event_target_as = replicators_country
+							}
+						}
+						event_target:replicators_country = {
+							create_leader = {
+								class = admiral
+								species = owner_main_species
+								name = random
+								skill = 6
+								leader_age_min = 25
+								leader_age_max = 45
+								traits = { trait = random_trait }
+							}
+						}
+						create_fleet = {
+							effect = {
+								set_owner = event_target:replicators_country
+								create_ship = {
+									name = random
+									design = "NAME_replicators_stellar_engine"
+									graphical_culture = "pirate_01"
+									effect = { set_ship_flag = replicators_stellar_engine_core }
+								}
+								set_location = {
+									target = event_target:main_star
+									distance = 55
+									angle = 270
+								}
+								save_event_target_as = replicators_factory
+								save_global_event_target_as = replicators_core_factory
+							}
+						}
+						event_target:replicators_core_factory = { add_modifier = { modifier = d_repl_core } }
+						every_country = { establish_communications_no_message = event_target:replicators_country }
+						create_fleet = {
+							name = "NAME_Replicators_Fleet"
+							effect = {
+								set_owner = event_target:replicators_country
+								create_replicators_ships = yes
+								set_formation_scale = 2
+								set_location = {
+									target = event_target:replicators_factory
+									distance = 80
+									angle = 0
+								}
+								assign_leader = last_created_leader
+							}
+						}
+						solar_system = { set_star_flag = replicators_star_system }
+					}
+				}
+			set_spawn_system_batch = end
+		}
+		set_update_modifiers_batch = begin
+			random_system_within_border = {
+				limit = { is_capital_system = no }
+					random_system_planet = {
+						limit = { is_star = yes }
+						save_event_target_as = main_star
+						save_global_event_target_as = replicators_star_system
+					}
+				create_fleet = {
+					effect = {
+						set_owner = event_target:replicators_country
+						create_ship = {
+							name = random
+							design = "NAME_replicators_stellar_engine"
+							graphical_culture = "pirate_01"
+						}
+						set_location = {
+							target = event_target:main_star
+							distance = 55
+							angle = 270
+						}
+						save_event_target_as = replicators_factory
+					}
+				}
+				create_fleet = {
+					name = "NAME_Replicators_Fleet"
+					effect = {
+						set_owner = event_target:replicators_country
+						create_replicators_ships = yes
+						set_formation_scale = 2
+						set_location = {
+							target = event_target:replicators_factory
+							distance = 80
+							angle = 0
+						}
+					}
+				}
+			}
+		event_target:replicators_country = { country_event = { id = replicators.10 days = 1825 } }
+		set_update_modifiers_batch = end
+		every_playable_country = { country_event = { id = replicators.3 } }
+#		observer_event = { id = observer.64 } # Whats that?
+	}
+	after = {
+		event_target:global_event_country = {
+			set_variable = { which = replicators_power value = 0 }
+			change_variable = { which = replicators_power value = trigger:years_passed }
+			multiply_variable = { which = replicators_power value = 0.5 }
+			ceiling_variable  = replicators_power
+		}
+#		event_target:global_event_country = {
+#			set_variable = {
+#				which = replicators_power
+#				value = 15
+#			}
+#		}
+	}
+}
+
+# Global information of the Arrival
+country_event = {
+	id = replicators.3
+	title = "replicators.3.name"
+	desc = "replicators.3.desc"
+	picture = GFX_evt_mysterious_signal
+	show_sound = event_radio_chatter
+	is_triggered_only = yes
+	immediate = {
+		begin_event_chain = {
+			event_chain = replicators_crisis_chain
+			target = root
+		}
+		enable_special_project = {
+			name = "REPLICATORS_CRISIS_INFO"
+			owner = ROOT
+		}
+		set_variable = { which = repl_hacked_by_root value = 0 }
+		set_variable = { which = repl_destroyed_by_root value = 0 }
+	}
+	option = {
+		name = replicators.3.a
+		hidden_effect = { country_event = { id = replicators.4 } }
+	}
+}
+
+# on_custom_diplomacy
+country_event = {
+	id = replicators.4000
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		from = { is_country_type = replicators }
+		NOR = {
+			has_active_event = {
+				replicators.4
+				replicators.5
+				replicators.6
+				replicators.7
+				replicators.400
+			}
+		}
+	}
+	immediate = { country_event = { id = replicators.4 }}
+}
+
+# Main Diplomacy
+country_event = {
+	id = replicators.4
+	title = "replicators_title_1"
+	desc = "replicators.4.desc"
+	diplomatic = yes
+	custom_gui = "enclave_artist_window"
+	picture_event_data = {
+		room = replicators_empire_room
+		portrait = owner_main_species
+	}
+	is_triggered_only = yes
+	option = { name = replicators.4.close }	# Located here because its the button with the default (ENTER) hotkey - to avoid any problem with accidentally clicking.
+	option = {
+		name = replicators.4.lore
+		hidden_effect = { country_event = { id = replicators.5 } }
+	}
+	option = {
+		name = replicators.4.missions
+#		allow = {
+#			NOR = {
+#				has_ethic = ethic_fanatic_xenophobe
+#				has_ethic = ethic_xenophobe
+#				has_ethic = ethic_fanatic_spiritualist
+#				has_ethic = ethic_spiritualist
+#				has_civic = civic_fanatic_purifiers
+#				has_civic = civic_hive_devouring_swarm
+#			}
+#		}
+		hidden_effect = { country_event = { id = replicators.6 } }
+	}
+	option = {
+		name = replicators.4.counterattack
+		hidden_effect = { country_event = { id = replicators.7 } }
+	}
+	option = {
+		name = replicators.4.choices
+		hidden_effect = { country_event = { id = replicators.400 } }
+	}
+}
+
+# They tell you what they are and do.
+# MENU 1
+country_event = {
+	id = replicators.5
+	title = "replicators_title_2"
+	desc = "replicators.5.desc"
+	diplomatic = yes
+	custom_gui = "enclave_artist_window"
+	picture_event_data = {
+		room = replicators_1_room
+		portrait = event_target:replicators_country
+	}
+	is_triggered_only = yes
+	option = {
+		name = replicators.diplo.back
+		hidden_effect = { country_event = { id = replicators.4 } }
+	}
+	option = {
+		name = replicators.5.a
+		custom_tooltip = tooltip_replicators_5_a
+		hidden_effect = {
+			set_country_flag = read_replicators_5a_response
+			if = {
+				limit = { NOT = { has_country_flag = has_replicators_5_a } }
+				random_owned_pop = { kill_pop = yes }
+				set_country_flag = has_replicators_5_a
+				country_event = { id = replicators.4 }
+			}
+			else = { country_event = { id = replicators.4 } }
+		}
+		allow = { hidden_trigger = { NOT = { has_country_flag = has_replicators_5_a } } }
+	}
+	option = {
+		name = replicators.5.b
+		custom_tooltip = tooltip_replicators_5_b
+		response_text = replicators.5.b.response
+		is_dialog_only = yes
+		hidden_effect = { set_country_flag = read_replicators_5b_response }
+		allow = { hidden_trigger = { has_country_flag = read_replicators_5a_response } }
+	}
+	option = {
+		name = replicators.5.c
+		response_text = replicators.5.c.response
+		is_dialog_only = yes
+		hidden_effect = { set_country_flag = read_replicators_5c_response }
+		allow = { hidden_trigger = { has_country_flag = read_replicators_5b_response } }
+	}
+	option = {
+		name = replicators.5.d
+		custom_tooltip = tooltip_replicators_5_d
+		response_text = replicators.5.d.response
+		is_dialog_only = yes
+		hidden_effect = { set_country_flag = read_replicators_5d_response }
+		allow = {
+			hidden_trigger = {
+				has_country_flag = read_replicators_5c_response
+				has_country_flag = has_replicators_6_e_project
+			}
+		}
+	}
+	option = {
+		name = replicators.5.e
+		response_text = replicators.5.e.response
+		is_dialog_only = yes
+		hidden_effect = { set_country_flag = read_replicators_5e_response }
+		allow = { hidden_trigger = { has_country_flag = read_replicators_5d_response } }
+	}
+}
+
+# Missions.
+# MENU 2
+country_event = {
+	id = replicators.6
+	title = "replicators_title_3"
+	desc = "replicators.6.desc"
+	diplomatic = yes
+	custom_gui = "enclave_artist_window"
+	picture_event_data = {
+		room = replicators_1_room
+		portrait = event_target:replicators_country
+	}
+	is_triggered_only = yes
+	option = {
+		name = replicators.diplo.back
+		hidden_effect = { country_event = { id = replicators.4 } }
+	}
+	option = {
+		name = replicators.6.a
+		custom_tooltip = tooltip_replicators_6_a
+		hidden_effect = { country_event = { id = replicators.32 } }
+		allow = {
+			hidden_trigger = {
+				has_country_flag = has_replicators_5_a
+				NOT = { has_country_flag = replicators_6_a_active }
+			}
+		}
+	}
+	option = {
+		name = replicators.6.b
+		custom_tooltip = tooltip_replicators_6_b
+		hidden_effect = { set_country_flag = has_replicators_6_b }
+		allow = {
+			hidden_trigger = {
+				has_country_flag = has_replicators_6_a_project
+				NOT = { has_country_flag = has_replicators_6_b }
+			}
+		}
+	}
+	option = {
+		name = replicators.6.c
+		custom_tooltip = tooltip_replicators_6_c
+		hidden_effect = {
+			set_country_flag = has_replicators_6_c_project
+			add_resource = { volatile_motes = -1500 }
+			add_resource = { exotic_gases = -1500 }
+			add_resource = { rare_crystals = -1500 }
+			country_event = { id = replicators.6 }
+		}
+		allow = {
+			hidden_trigger = {
+				has_country_flag = has_replicators_6_b_project
+				NOT = { has_country_flag = has_replicators_6_c_project }
+				resource_stockpile_compare = { resource = volatile_motes value >= 1500 }
+				resource_stockpile_compare = { resource = exotic_gases value >= 1500 }
+				resource_stockpile_compare = { resource = rare_crystals value >= 1500 }
+			}
+		}
+	}
+	option = {
+		name = replicators.6.d
+		custom_tooltip = tooltip_replicators_6_d
+		hidden_effect = {
+			set_country_flag = has_replicators_6_d_active
+			enable_special_project = {
+				name = REPLICATORS_MISSION_STRUCTURES
+				owner = ROOT
+			}
+		}
+		allow = {
+			has_technology = tech_encryption_2
+			has_technology = tech_decryption_2
+			hidden_trigger = {
+				has_country_flag = has_replicators_6_c_project
+				NOT = { has_country_flag = has_replicators_6_d_active }
+			}
+		}
+	}
+	option = {
+		name = replicators.6.e
+		custom_tooltip = tooltip_replicators_6_e
+		hidden_effect = {
+			set_country_flag = has_replicators_6_e
+			country_event = { id = replicators.40 }
+		}
+		allow = {
+			hidden_trigger = {
+				any_owned_leader = {
+					leader_class = scientist
+					has_skill >= 4
+				}
+				has_country_flag = has_replicators_6_d_project
+				NOT = { has_country_flag = has_replicators_6_e }
+			}
+		}
+	}
+	option = {
+		name = replicators.6.f
+		custom_tooltip = tooltip_replicators_6_f
+		hidden_effect = {
+			set_country_flag = has_replicators_6_f_active
+			country_event = { id = replicators.41 }
+		}
+		allow = {
+			hidden_trigger = {
+				has_country_flag = has_replicators_6_e_project
+				NOT = { has_country_flag = has_replicators_6_f_active }
+			}
+		}
+	}
+	option = {
+		name = replicators.6.g
+		custom_tooltip = tooltip_replicators_6_g
+		hidden_effect = {
+			set_country_flag = has_replicators_6_g_active
+			country_event = { id = replicators.43 }
+		}
+		allow = {
+			hidden_trigger = {
+				has_country_flag = has_replicators_6_f_project
+				NOR = {
+					has_country_flag = has_replictors_decision
+					has_country_flag = has_replicators_6_g_active
+					has_country_flag = has_replicators_7_d_decision_1
+				}
+			}
+		}
+	}
+}
+
+# You want to stop them.
+# MENU 3
+country_event = {
+	id = replicators.7
+	title = "replicators_title_4"
+	desc = "replicators.7.desc"
+	diplomatic = yes
+	custom_gui = "enclave_artist_window"
+	picture_event_data = {
+		room = replicators_1_room
+		portrait = event_target:replicators_country
+	}
+	is_triggered_only = yes
+	option = {
+		name = replicators.diplo.back
+		hidden_effect = { country_event = { id = replicators.4 } }
+	}
+	option = {
+		name = replicators.7.a
+		custom_tooltip = tooltip_replicators_7_a
+		hidden_effect = {
+			start_situation = { type = situation_replicators_counterhack target = root }
+			set_country_flag = replicators_7_a_active
+		}
+		allow = {
+			hidden_trigger = {
+				NOR = {
+					has_country_flag = replicators_7_a_active
+					has_country_flag = has_replicators_7_d_decision_1
+				}
+			}
+		}
+	}
+	option = {
+		name = replicators.7.b
+		custom_tooltip = tooltip_replicators_7_b
+		hidden_effect = {
+			set_country_flag = has_replicators_7_b
+			enable_special_project = {
+				name = "REPLICATORS_BRUTE_FORCE"
+				owner = ROOT
+			}
+		}
+		allow = {
+			has_technology = tech_encryption_2
+			has_technology = tech_decryption_2
+			hidden_trigger = {
+				check_variable = {
+					which = repl_hacked_by_root
+					value >= 7
+				}
+				check_variable = {
+					which = repl_destroyed_by_root
+					value >= 75
+				}
+				NOT = { has_country_flag = has_replicators_7_b }
+			}
+		}
+	}
+	option = {
+		name = replicators.7.c
+		custom_tooltip = tooltip_replicators_7_c
+		hidden_effect = {
+			begin_event_chain = {
+				event_chain = replicators_homesystem_chain
+				target = root
+			}
+			enable_special_project = {
+				name = "REPLICATORS_HOMESYSTEM_1"
+				owner = ROOT
+			}
+			set_country_flag = has_replicators_7_c_project
+		}
+		allow = {
+			hidden_trigger = {
+				has_country_flag = has_replicators_7_b_project
+				NOT = { has_country_flag = has_replicators_7_c_project }
+			}
+		}
+	}
+	option = {
+		name = replicators.7.d
+		custom_tooltip = tooltip_replicators_7_d
+		hidden_effect = {
+			country_event = { id = replicators.26 }
+		}
+		allow = {
+			hidden_trigger = {
+				has_country_flag = has_replicators_7_c
+				NOR = {
+					has_country_flag = has_replicators_7_d_decision_3
+					has_country_flag = has_replicators_7_d_decision_1
+					has_country_flag = has_replicators_7_d_decision_2
+					has_country_flag = has_replictors_decision
+					has_active_event = { replicators.26 }
+				}
+			}
+		}
+	}
+}
+
+# Select a possible ending, requires some parts of Menus2-3 to be done.
+# MENU 4
+country_event = {
+	id = replicators.400
+	title = "replicators_title_5"
+	desc = "replicators.400.desc"
+	diplomatic = yes
+	custom_gui = "enclave_artist_window"
+	picture_event_data = {
+		room = replicators_1_room
+		portrait = event_target:replicators_country
+	}
+	is_triggered_only = yes
+	option = {
+		name = replicators.diplo.back
+		hidden_effect = { country_event = { id = replicators.4 } }
+	}
+# Destruction
+	option = {
+		name = replicators.400.a
+		custom_tooltip = tooltip_replicators_400_a
+		hidden_effect = {
+			set_country_flag = has_replicators_400
+			enable_special_project = {
+				name = "REPLICATORS_ENDING_DESTRUCTION"
+				owner = ROOT
+			}
+		}
+		allow = {
+			hidden_trigger = {
+				has_country_flag = has_replicators_7_d_decision_1
+				NOT = { has_country_flag = has_replicators_400 }
+			}
+		}
+	}
+# Self Preservation
+	option = {
+		name = replicators.400.b
+		custom_tooltip = tooltip_replicators_400_b
+		hidden_effect = {
+			set_country_flag = has_replicators_400
+			capital_scope = { add_modifier = { modifier = d_repl_molecular_datacenter } }
+			add_modifier = { modifier = d_repl_molecular_datacenter_empire }
+		}
+		allow = {
+			hidden_trigger = {
+				has_country_flag = has_replicators_7_d_decision_2
+				NOT = { has_country_flag = has_replicators_400 }
+			}
+		}
+	}
+# Control
+	option = {
+		name = replicators.400.c
+		custom_tooltip = tooltip_replicators_400_c
+		hidden_effect = {
+			set_country_flag = has_replicators_400
+			country_event = { id = replicators.44 }
+		}
+		allow = {
+			hidden_trigger = {
+				has_country_flag = has_replicators_6_decision_1
+				NOR = {
+					has_country_flag = has_replicators_400
+					has_global_flag = replicators_total_control_began
+				}
+			}
+		}
+	}
+# Imitation
+	option = {
+		name = replicators.400.d
+		custom_tooltip = tooltip_replicators_400_d
+		hidden_effect = {
+			set_country_flag = has_replicators_400
+			country_event = { id = replicators.45 }
+		}
+		allow = {
+			hidden_trigger = {
+				has_country_flag = has_replicators_6_decision_2
+				has_country_flag = has_replicators_7_d_decision_3
+				NOT = { has_country_flag = has_replicators_400 }
+			}
+		}
+	}
+}
+
+# Begins hacking other empires via situation, every few years.
+# Difficulty increases with the level of the Replicators.
+country_event = {
+	id = replicators.8
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { has_global_flag = replicators_in_progress }
+	immediate = {
+		every_playable_country = {
+			limit = {
+				NOR = {
+					has_country_flag = replicators_hack_in_progress
+					has_country_flag = has_replicators_7_d_decision_2
+				}
+			}
+			country_event = { id = replicators.9 }
+			start_situation = {
+				type = situation_replicators_hack
+				target = root
+			}
+			set_country_flag = replicators_hack_in_progress
+		}
+	}
+}
+
+# Info window that a hack was detected.
+country_event = {
+	id = replicators.9
+	title = "replicators.9.name"
+	desc = "replicators.9.desc"
+	picture = GFX_evt_spymaster
+	show_sound = event_radio_chatter
+	is_triggered_only = yes
+	option = { name = replicators.9.a }
+}
+
+# event_target:replicators_country.replicators_power_var = (Replicator level*0.25)*2 = small ships
+# event_target:global_event_country.replicators_power = (Replicator level*2) = small ships, would be too strong in the midgame.
+country_event = {
+	id = replicators.10
+	hide_window = yes
+	is_triggered_only = yes
+#	trigger = { has_global_flag = replicators_in_progress }
+	trigger = {
+		event_target:replicators_arrival_system = {
+			any_fleet_in_system = { is_ship_size = replicators_stellar_engine }
+		}
+	}
+	immediate = {
+		event_target:global_event_country = {
+			change_variable = {
+				which = replicators_power
+				value = 5
+			}
+		}
+		# Multiplies the Replicator level by 0.25. A constant number would otherwise cause insane fleets of 50-200 ships, dependent on their level.
+		event_target:replicators_country = {
+			set_variable = { which = replicators_power_var value = 0 }
+			change_variable = { which = replicators_power_var value = event_target:global_event_country.replicators_power }
+			multiply_variable = { which = replicators_power_var value = 0.25 }
+			ceiling_variable = replicators_power_var
+		}
+		set_update_modifiers_batch = begin
+			random_system = {
+				limit = {
+					NOR = {
+						has_star_flag = replicators_star_system
+						has_star_flag = empire_home_system
+					}
+				}
+				random_system_planet = {
+					limit = { is_star = yes }
+					save_event_target_as = main_star
+				}
+				create_fleet = {
+					effect = {
+						set_owner = event_target:replicators_country
+						create_ship = {
+							name = random
+							design = "NAME_replicators_stellar_engine"
+							graphical_culture = "pirate_01"
+						}
+						set_location = {
+							target = event_target:main_star
+							distance = 55
+							angle = 270
+						}
+						save_event_target_as = replicators_factory
+					}
+				}
+				event_target:replicators_country = {
+					create_leader = {
+						class = admiral
+						species = owner_main_species
+						name = random
+						skill = 6
+						leader_age_min = 25
+						leader_age_max = 45
+						traits = { trait = random_trait }
+					}
+				}
+				create_fleet = {
+					name = "NAME_Replicators_Fleet"
+					effect = {
+						set_owner = event_target:replicators_country
+						create_replicators_ships_large = yes
+						while = {
+							count = event_target:replicators_country.replicators_power_var	#event_target:global_event_country.replicators_power
+							create_ship = {
+								name = random
+								design = "NAME_small_replicator_warship"
+								graphical_culture = "pirate_01"
+							}
+						}
+						while = {
+							count = event_target:replicators_country.replicators_power_var	#event_target:global_event_country.replicators_power
+							create_ship = {
+								name = random
+								design = "NAME_small_replicator_art_warship"
+								graphical_culture = "pirate_01"
+							}
+						}
+						set_formation_scale = 2
+						set_location = {
+							target = event_target:replicators_factory
+							distance = 80
+							angle = 0
+						}
+						assign_leader = last_created_leader
+					}
+				}
+				solar_system = { set_star_flag = replicators_star_system }
+				save_global_event_target_as = replicators_new_system
+			}
+		set_update_modifiers_batch = end
+		every_playable_country = { limit = { is_ai = no } country_event = { id = replicators.11 } }
+		event_target:replicators_country = { country_event = { id = replicators.10 days = 1825 } }
+	}
+	after = {
+		hidden_effect = {
+			break = yes # For the "after" to clear the global target, otherwise the message doesnt work.
+			clear_global_event_target = replicators_new_system
+		}
+	}
+}
+
+# Info that another SE appeared.
+country_event = {
+	id = replicators.11
+	title = "replicators.11.name"
+	desc = "replicators.11.desc"
+	picture = GFX_evt_spymaster
+	show_sound = event_radio_chatter
+	is_triggered_only = yes
+	option = { name = replicators.11.a }
+}
+
+# Replicators are here - for observers.
+observer_event = {
+	id = replicators.12
+	title = "replicators.3.name"
+	desc = "replicators.3.desc"
+	picture = GFX_evt_spymaster
+	show_sound = event_radio_chatter
+	is_triggered_only = yes
+	option = { name = OK }
+}
+
+
+############################################## test normal empire vs normal empire
+
+# Replicators Kill Count
+country_event = {
+	id = replicators.13
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { is_country_type = replicators }
+	immediate = {
+		from = { change_variable = { which = repl_destroyed_by_root value = 1 } }
+		every_playable_country = {
+			limit = { has_event_chain = "replicators_crisis_chain" }
+			add_event_chain_counter = {
+				event_chain = "replicators_crisis_chain"
+				counter = "replicators_ships_killed_count"
+				amount = 1
+			}
+		}
+	}
+}
+
+# Replicators Victims
+country_event = {
+	id = replicators.14
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		is_country_type = replicators
+		FROM = { NOR = { is_country_type = replicators } }
+	}
+	immediate = {
+		every_playable_country = {
+			limit = { has_event_chain = "replicators_crisis_chain" }
+			add_event_chain_counter = {
+				event_chain = "replicators_crisis_chain"
+				counter = "replicators_ships_killed_us_count"
+				amount = 1
+			}
+		}
+	}
+}
+
+# Removes the star flag when killing a starbase, so a new one can spawn there later (or again, dependent on RNG).
+country_event = {
+	id = replicators.15
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		is_country_type = replicators
+		FROMFROM = { is_ship_size = replicators_stellar_engine }
+	}
+	immediate = {
+		FROMFROM = {
+			solar_system = {
+				remove_star_flag = replicators_star_system
+				clear_global_event_target = replicators_star_system
+			}
+		}
+	}
+}
+
+# Situation Hack - Replicators are close to be done.
+situation_event = {
+	id = replicators.16
+	title = "replicators.16.name"
+	desc = "replicators.16.desc"
+	picture = GFX_evt_glitchy_matrix
+	show_sound = event_bad_omen
+	is_triggered_only = yes
+	situation = this
+	location = target
+	option = { name = ACKNOWLEDGED }
+}
+
+# Situation Hack - Replicators won.
+situation_event = {
+	id = replicators.17
+	title = "replicators.17.name"
+	desc = "replicators.17.desc"
+	picture = GFX_evt_glitchy_matrix
+	show_sound = event_bad_omen
+	is_triggered_only = yes
+	location = target
+	option = { name = ACKNOWLEDGED }
+	after = {
+		hidden_effect = {
+			every_playable_country = {
+				limit = { has_event_chain = replicators_crisis_chain }
+				add_event_chain_counter = {
+					event_chain = "replicators_crisis_chain"
+					counter = "replicators_hacks_count"
+					amount = 1
+				}
+			}
+			event_target:global_event_country = {
+				change_variable = {
+					which = replicators_power
+					value = 1
+				}
+			}
+		}
+	}
+}
+
+# Situation Hack - Replicators lost.
+situation_event = {
+	id = replicators.18
+	title = "replicators.18.name"
+	desc = "replicators.18.desc"
+	picture = GFX_evt_ancient_databank
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+	location = target
+	option = { name = ACKNOWLEDGED }
+	after = {
+		hidden_effect = {
+			event_target:global_event_country = {
+				change_variable = {
+					which = replicators_power
+					value = -1
+				}
+			}
+		}
+	}
+}
+
+# Situation Hack - You failed to hack the Replicators.
+situation_event = {
+	id = replicators.19
+	title = "replicators.19.name"
+	desc = "replicators.19.desc"
+	picture = GFX_evt_glitchy_matrix
+	show_sound = event_bad_omen
+	is_triggered_only = yes
+	location = target
+	immediate = {
+		owner = {
+			add_modifier = { modifier = d_repl_failed_counterhack years = 1 }
+			remove_country_flag = replicators_7_a_active
+		}
+	}
+	option = { name = ACKNOWLEDGED }
+	after = {
+		hidden_effect = {
+			every_playable_country = {
+				limit = { has_event_chain = replicators_crisis_chain }
+				add_event_chain_counter = {
+					event_chain = "replicators_crisis_chain"
+					counter = "replicators_hacks_count"
+					amount = 1
+				}
+			}
+			event_target:global_event_country = {
+				change_variable = {
+					which = replicators_power
+					value = 1
+				}
+			}
+		}
+	}
+}
+
+# Situation Hack - You hacked the Replicators.
+situation_event = {
+	id = replicators.20
+	title = "replicators.20.name"
+	desc = "replicators.20.desc"
+	picture = GFX_evt_ancient_databank
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+	location = target
+	immediate = {
+		owner = {
+			change_variable = { which = repl_hacked_by_root value = 1 }
+			remove_country_flag = replicators_7_a_active
+		}
+	}
+	option = { name = ACKNOWLEDGED }
+	after = {
+		hidden_effect = {
+			event_target:global_event_country = {
+				change_variable = {
+					which = replicators_power
+					value = -2
+				}
+			}
+		}
+	}
+}
+
+# Replicators hacked you - ruin a random building.
+# Desc not done.
+#situation_event = {
+#	id = replicators.21
+#	title = replicators.21.name
+#	desc = replicators.21.desc
+#	picture = GFX_evt_collapsing_roof
+#	show_sound = event_bad_omen
+#	is_triggered_only = yes
+#	location = target
+#	immediate = {
+#		owner = {
+#			if = {
+#				limit = { num_owned_planets = 1 }
+#				random_owned_planet = {
+#					save_event_target_as = hacked_infrastructure
+#					downgrade_all_buildings = yes
+#				}
+#			}
+#			else_if = {
+#				limit = { num_owned_planets >= 2 }
+#				random_owned_planet = {
+#					limit = { is_capital = no }
+#					save_event_target_as = hacked_infrastructure
+#					downgrade_all_buildings = yes
+#				}
+#			}
+#		}
+#	}
+#	option { name = ACKNOWLEDGED }
+#}
+
+# Replicators hacked you - devastation on a planet.
+situation_event = {
+	id = replicators.22
+	title = replicators.22.name
+	desc = replicators.22.desc
+	picture = GFX_evt_night_raid
+	show_sound = event_bad_omen
+	is_triggered_only = yes
+	location = target
+	immediate = {
+		owner = {
+			random_owned_planet = {
+				save_event_target_as = hacked_infrastructure
+				add_planet_devastation = 25
+			}
+		}
+	}
+	option { name = ACKNOWLEDGED }
+}
+
+# Replicators hacked you - ruin two starbase buildings/modules.
+situation_event = {
+	id = replicators.23
+	title = replicators.23.name
+	desc = replicators.23.desc
+	picture = GFX_evt_exploding_ship
+	show_sound = event_bad_omen
+	is_triggered_only = yes
+	location = target
+	immediate = {
+		owner = {
+			random_owned_starbase  = {
+				limit = { repl_hack_starbase_target = yes }
+				save_event_target_as = hacked_infrastructure
+				remove_random_starbase_module = { count = 2 }
+				remove_random_starbase_building = { count = 2 }
+			}
+		}
+	}
+	option { name = ACKNOWLEDGED }
+}
+
+# Replicators hacked you - damages a random fleet.
+situation_event = {
+	id = replicators.24
+	title = replicators.24.name
+	desc = replicators.24.desc
+	picture = GFX_evt_sabotaged_ship
+	show_sound = event_bad_omen
+	is_triggered_only = yes
+#	location = target
+	immediate = {
+		owner = {
+			random_owned_fleet  = {
+				limit = { is_ship_class = shipclass_military }
+				save_event_target_as = hacked_infrastructure
+				while = { count = 15 random_controlled_ship = { reduce_hp_percent = 75 } }
+			}
+		}	
+	}
+	option { name = ACKNOWLEDGED }
+}
+
+# MENU3 - Project of 7c done ("Source Location")
+country_event = {
+	id = replicators.25
+	title = "replicators.25.name"
+	desc = "replicators.25.desc"
+	picture = GFX_evt_wormhole
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+	immediate = {}
+	option = { name = ACKNOWLEDGED }
+}
+
+# MENU3 - Decision of 7d ("Counterattack")
+country_event = {
+	id = replicators.26
+	title = "replicators.26.name"
+	desc = "replicators.26.desc"
+	picture = GFX_evt_voting
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+	immediate = {}
+	option = { name = replicators.26.d }
+	option = {
+		name = replicators.26.a
+		hidden_effect = {
+			set_country_flag = has_replicators_7_d_decision_1
+			set_country_flag = has_replictors_decision
+		}
+		allow = { hidden_trigger = { NOR = { has_country_flag = has_replicators_6_decision_2 } } }
+	}
+	option = {
+		name = replicators.26.b
+		hidden_effect = {
+			set_country_flag = has_replicators_7_d_decision_2
+			set_country_flag = has_replictors_decision
+		}
+		allow = { hidden_trigger = { NOR = { has_country_flag = has_replicators_6_decision_2 } } }
+	}
+	option = {
+		name = replicators.26.c
+		hidden_effect = { set_country_flag = has_replicators_7_d_decision_3 }
+	}
+}
+
+# Destruction ending - opening the wormhole via special project.
+country_event = {
+	id = replicators.27
+	title = "replicators.27.name"
+	desc = "replicators.27.desc"
+	picture = GFX_evt_shroud_tunnel
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+	immediate = {
+		capital_scope = {
+			solar_system = {
+				spawn_natural_wormhole = {
+					bypass_type = repl_wormhole
+					random_pos = yes
+				}
+			}
+		}
+		if = {
+			# To avoid that too many strong fleets spawn.
+			limit = { NOT = { has_global_flag = replicators_arrival_system_opened } }
+			event_target:replicators_country = {
+				create_leader = {
+					class = admiral
+					species = owner_main_species
+					name = random
+					skill = 6
+					leader_age_min = 25
+					leader_age_max = 45
+					traits = { trait = random_trait }
+				}
+				create_fleet = {
+					name = "NAME_Replicators_Fleet"
+					effect = {
+						set_owner = event_target:replicators_country
+						create_replicators_ships_5x = yes
+						set_formation_scale = 2
+						set_location = {
+							target = event_target:replicators_core_factory
+							distance = 100
+							angle = 0
+						}
+						assign_leader = last_created_leader
+					}
+				}
+			}
+			set_global_flag = replicators_arrival_system_opened
+		}
+	}
+	option = { name = replicators.27.a }
+}
+
+# Destruction ending - opening the wormhole via special project.
+country_event = {
+	id = replicators.28
+	title = "replicators.28.name"
+	desc = "replicators.28.desc"
+	picture = GFX_evt_ancient_databank
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+	immediate = {}
+	option = { name = ACKNOWLEDGED }
+}
+
+# Core SE destroyed.
+# Ends the crisis.
+country_event = {
+	id = replicators.29
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		is_country_type = replicators
+		fromfrom = {
+			is_ship_size = replicators_stellar_engine
+			has_ship_flag = replicators_stellar_engine_core
+		}
+	}
+	immediate = {
+		from = {
+			save_event_target_as = replicators_destroyer
+			if = {
+				limit = { has_country_flag = has_replicators_6_decision_1 }
+				country_event = { id = replicators.4402 }
+			}
+		}
+		every_playable_country = {
+			limit = {
+				is_ai = no
+				NOT = { has_country_flag = has_replicators_6_decision_1 }
+			}
+			country_event = { id = replicators.30 }
+		}
+		observer_event = { id = replicators.31 }
+		every_controlled_fleet = { destroy_fleet = this }
+		destroy_country = yes
+		remove_global_flag = replicators_in_progress
+		remove_global_flag = midgame_crisis_ongoing
+	}
+}
+
+# Global information of replicators.29 - for players.
+country_event = {
+	id = replicators.30
+	title = "replicators.30.name"
+	desc = "replicators.30.desc"
+	picture = GFX_evt_crisis_defeated
+	show_sound = event_ship_explosion
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { has_event_chain = replicators_crisis_chain }
+			end_event_chain = replicators_crisis_chain
+		}
+		if = {
+			limit = { has_event_chain = replicators_homesystem_chain }
+			end_event_chain = replicators_homesystem_chain
+		}
+		if = {
+			limit = { has_event_chain = replicators_control_chain }
+			end_event_chain = replicators_control_chain
+		}
+		if = {
+			limit = { has_event_chain = replicators_imitation_chain }
+			end_event_chain = replicators_imitation_chain
+		}
+	}
+	option = { name = graygoo.182.a }
+}
+
+# Global information of replicators.29 - only for observer.
+observer_event = {
+	id = replicators.31
+	title = "replicators.30.name"
+	desc = "replicators.30.desc"
+	picture = GFX_evt_crisis_defeated
+	show_sound = event_ship_explosion
+	is_triggered_only = yes
+	option = { name = OK }
+}
+
+# Menu2 Mission: Samples
+country_event = {
+	id = replicators.32
+	title = "replicators.32.name"
+	desc = "replicators.32.desc"
+	picture = GFX_evt_binary_stars
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+	immediate = {
+		set_country_flag = replicators_6_a_active
+		capital_scope = { solar_system = { save_event_target_as = repl_survey_target } }
+		event_target:repl_survey_target = {
+			enable_special_project = {
+				name = "REPLICATORS_MISSION_SURVEY"
+				owner = ROOT
+			}
+		}
+	}
+	option = { name = OK }
+}
+
+# Finished their first task!
+ship_event = {
+	id = replicators.33
+	title = replicators.33.name
+	desc = replicators.33.desc
+	picture = GFX_evt_binary_stars
+	show_sound = event_laboratory_sound
+	is_triggered_only = yes
+	immediate = { owner = { set_country_flag = has_replicators_6_a_project } }
+	option = { name = "OK" }
+}
+
+# Menu 2 Mission: Espionage - Stage 1
+espionage_operation_event = {
+	id = replicators.34
+	title = replicators.34.name
+	desc = replicators.34.desc
+	picture = GFX_evt_spymaster
+	show_sound = event_radio_chatter
+	espionage_operation = yes
+	is_triggered_only = yes
+	immediate = { target = { save_event_target_as = target_country } }
+	option = { name = ACKNOWLEDGED }
+}
+
+# Menu 2 Mission: Espionage - Stage 2
+espionage_operation_event = {
+	id = replicators.35
+	title = replicators.35.name
+	desc = replicators.35.desc
+	picture = GFX_evt_spymaster
+	show_sound = event_radio_chatter
+	espionage_operation = yes
+	is_triggered_only = yes
+	immediate = { target = { save_event_target_as = target_country } }
+	option = { name = ACKNOWLEDGED }
+}
+
+# Menu 2 Mission: Espionage - Stage 3
+espionage_operation_event = {
+	id = replicators.36
+	title = replicators.36.name
+	desc = replicators.36.desc
+	picture = GFX_evt_spymaster
+	show_sound = event_radio_chatter
+	espionage_operation = yes
+	is_triggered_only = yes
+	immediate = {
+		owner = { save_event_target_as = hacker_country }
+		target = {
+			save_event_target_as = target_country
+			country_event = { id = replicators.38 }
+		}
+		spynetwork = { add_spy_network_level_on_success_effect = { VALUE = -20 } }
+		owner = { country_event = { id = replicators.37 } }
+		destroy_espionage_operation = root
+	}
+	option = { name = ACKNOWLEDGED }
+}
+
+# Finished the operation.
+country_event = {
+	id = replicators.37
+	title = replicators.37.name
+	desc = replicators.37.desc
+	picture = GFX_evt_ancient_databank
+	show_sound = event_laboratory_sound
+	is_triggered_only = yes
+	immediate = { owner = { set_country_flag = has_replicators_6_b_project } }
+	option = { name = "OK" }
+}
+
+# Informs  the empire that it got hacked.
+country_event = {
+	id = replicators.38
+	title = replicators.38.name
+	desc = replicators.38.desc
+	picture = GFX_evt_glitchy_matrix
+	show_sound = event_red_alert
+	is_triggered_only = yes
+	immediate = {
+		add_opinion_modifier = { who = event_target:hacker_country modifier = opinion_repl_hacker_country }
+	}
+	option = { name = "ACKNOWLEDGED" }
+}
+
+# Menu2 Mission: Into the Unknown.
+country_event = {
+	id = replicators.39
+	title = replicators.39.name
+	desc = replicators.39.desc
+	picture = GFX_evt_clocks
+	show_sound = event_laboratory_sound
+	is_triggered_only = yes
+	immediate = { set_country_flag = has_replicators_6_d_project }
+	option = { name = "ACKNOWLEDGED" }
+}
+
+# Menu2 Mission: Shared Sources
+country_event = {
+	id = replicators.40
+	title = replicators.40.name
+	desc = replicators.40.desc
+	picture = GFX_evt_arguing_senate
+	show_sound = event_laboratory_sound
+	is_triggered_only = yes
+	immediate = {
+		random_owned_leader ={
+			limit = {
+				leader_class = scientist
+				has_skill >= 4
+			}
+			save_event_target_as = replicator_scientist
+		}
+	}
+	option = {
+		name = replicators.40.a
+		hidden_effect = { remove_country_flag = has_replicators_6_e }
+	}
+	option = {
+		name = replicators.40.b
+		hidden_effect = {
+			set_country_flag = has_replicators_6_e_project 
+			event_target:replicator_scientist = {
+				kill_leader = {
+					show_notification = no
+					type = scientist
+				}
+			}
+		}
+	}
+}
+
+# Menu2 Mission: Compiling (adds the deposit to the capital).
+country_event = {
+	id = replicators.41
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = { capital_scope = { add_deposit = d_repl_emitter_site } }
+}
+
+# Menu2 Mission: Compiling (appears when the building is done).
+country_event = {
+	id = replicators.42
+	title = replicators.42.name
+	desc = replicators.42.desc
+	picture = GFX_evt_news_room
+	show_sound = event_laboratory_sound
+	is_triggered_only = yes
+	immediate = { set_country_flag = has_replicators_6_f_project }
+	option = { name = "ACKNOWLEDGED" }
+}
+
+# Menu2 Decision.
+country_event = {
+	id = replicators.43
+	title = replicators.43.name
+	desc = replicators.43.desc
+	picture = GFX_evt_galactic_senate
+	show_sound = event_death_cult
+	is_triggered_only = yes
+	immediate = {}
+	option = {
+		name = replicators.43.a
+		hidden_effect = { remove_country_flag = has_replicators_6_g_active }
+	}
+	option = {
+		name = replicators.43.b
+		hidden_effect = {
+			set_country_flag = has_replicators_6_decision_1
+			set_country_flag = has_replictors_decision
+		}
+		allow = { hidden_trigger = { NOT = { has_country_flag = has_replicators_7_d_decision_3 } } }
+	}
+	option = {
+		name = replicators.43.c
+		hidden_effect = { set_country_flag = has_replicators_6_decision_2 }
+	}
+}
+
+# Control ending
+country_event = {
+	id = replicators.44
+	title = "replicators.44.name"
+	desc = "replicators.44.desc"
+	picture = GFX_evt_grand_speech
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+	immediate = {
+		set_global_flag = replicators_total_control_began
+		begin_event_chain = {
+			event_chain = replicators_control_chain
+			target = root
+		}
+		enable_special_project = {
+			name = "REPLICATORS_CONTROL_1"
+			owner = ROOT
+		}
+	}
+	option = { name = ACKNOWLEDGED }
+}
+
+country_event = {
+	id = replicators.4401
+	title = replicators.4401.name
+	desc = replicators.4401.desc
+	picture = GFX_evt_ruined_system
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+	immediate = {
+		capital_scope = {
+			solar_system = {
+				spawn_natural_wormhole = {
+					bypass_type = repl_wormhole
+					random_pos = yes
+				}
+			}
+		}
+		if = {
+			# To avoid that too many strong fleets spawn.
+			limit = { NOT = { has_global_flag = replicators_arrival_system_opened } }
+			event_target:replicators_country = {
+				create_leader = {
+					class = admiral
+					species = owner_main_species
+					name = random
+					skill = 6
+					leader_age_min = 25
+					leader_age_max = 45
+					traits = { trait = random_trait }
+				}
+				create_fleet = {
+					name = "NAME_Replicators_Fleet"
+					effect = {
+						set_owner = event_target:replicators_country
+						create_replicators_ships_5x = yes
+						set_formation_scale = 2
+						set_location = {
+							target = event_target:replicators_core_factory
+							distance = 100
+							angle = 0
+						}
+						assign_leader = last_created_leader
+					}
+				}
+			}
+			set_global_flag = replicators_arrival_system_opened
+		}
+	}
+	option = { name = OK }
+}
+
+country_event = {
+	id = replicators.4402
+	title = replicators.4402.name
+	desc = replicators.4402.desc
+	picture = GFX_evt_ruined_system
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { has_event_chain = replicators_crisis_chain }
+			end_event_chain = replicators_crisis_chain
+		}
+		enable_special_project = {
+			name = "REPLICATORS_CONTROL_2"
+			owner = ROOT
+		}
+# TEST IF WORKS WHEN ONLY THE FIRST RECEIVES THE ENDING
+		every_playable_country = {
+			if = {
+				limit = { has_event_chain = replicators_crisis_chain }
+				end_event_chain = replicators_crisis_chain
+			}
+			if = {
+				limit = { has_event_chain = replicators_homesystem_chain }
+				end_event_chain = replicators_homesystem_chain
+			}
+#			if = {
+#				limit = { has_event_chain = replicators_control_chain }
+#				end_event_chain = replicators_control_chain
+#			}
+			if = {
+				limit = { has_event_chain = replicators_imitation_chain }
+				end_event_chain = replicators_imitation_chain
+			}
+		}
+	}
+	option = { name = OK }
+}
+
+country_event = {
+	id = replicators.4403
+	title = replicators.4403.name
+	desc = replicators.4403.desc
+	picture = GFX_evt_sapient_AI
+	show_sound = event_laboratory_sound
+	is_triggered_only = yes
+	immediate = {}
+	option = { name = ACKNOWLEDGED }
+}
+
+country_event = {
+	id = replicators.4404
+	title = replicators.4404.name
+	desc = replicators.4404.desc
+	picture = GFX_evt_sapient_AI
+	show_sound = event_laboratory_sound
+	is_triggered_only = yes
+	immediate = {
+		end_event_chain = replicators_control_chain
+		set_country_flag = has_replicators_control_ending
+	}
+	option = { name = ACKNOWLEDGED }
+}
+
+
+# Imitation ending
+country_event = {
+	id = replicators.45
+	title = "replicators.45.name"
+	desc = "replicators.45.desc"
+	picture = GFX_evt_exploding_planet
+	show_sound = event_death_cult
+	is_triggered_only = yes
+	immediate = {
+		begin_event_chain = {
+			event_chain = replicators_imitation_chain
+			target = root
+		}
+		enable_special_project = {
+			name = "REPLICATORS_IMITATION_1"
+			owner = ROOT
+		}
+	}
+	option = { name = ACKNOWLEDGED }
+}
+
+country_event = {
+	id = replicators.4501
+	title = replicators.4501.name
+	desc = replicators.4501.desc
+	picture = GFX_evt_sapient_AI
+	show_sound = event_laboratory_sound
+	is_triggered_only = yes
+	immediate = {
+
+	}
+	option = { name = ACKNOWLEDGED }
+}
+
+country_event = {
+	id = replicators.4502
+	title = replicators.4502.name
+	desc = replicators.4502.desc
+	picture = GFX_evt_sapient_AI
+	show_sound = event_laboratory_sound
+	is_triggered_only = yes
+	immediate = {
+
+	}
+	option = { name = ACKNOWLEDGED }
+}
+
+country_event = {
+	id = replicators.4503
+	title = replicators.4503.name
+	desc = replicators.4503.desc
+	picture = GFX_evt_sapient_AI
+	show_sound = event_laboratory_sound
+	is_triggered_only = yes
+	immediate = {
+
+	}
+	option = { name = ACKNOWLEDGED }
+}
+
+country_event = {
+	id = replicators.4504
+	title = replicators.4504.name
+	desc = replicators.4504.desc
+	picture = GFX_evt_sapient_AI
+	show_sound = event_laboratory_sound
+	is_triggered_only = yes
+	immediate = {
+
+	}
+	option = { name = ACKNOWLEDGED }
+}
+
+# Random SE destroyed - reduces Replicator level by 2.
+country_event = {
+	id = replicators.46
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		is_country_type = replicators
+		fromfrom = {
+			is_ship_size = replicators_stellar_engine
+			NOT = { has_ship_flag = replicators_stellar_engine_core }
+		}
+	}
+	immediate = {
+		event_target:global_event_country = {
+			change_variable = {
+				which = replicators_power
+				value = -2
+			}
+		}
+	}
+}

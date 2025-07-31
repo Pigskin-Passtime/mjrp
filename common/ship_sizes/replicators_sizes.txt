@@ -1,0 +1,123 @@
+# Stellar Engine
+replicators_stellar_engine = {
+	graphical_culture = no
+	entity = replicators_01_space_station_entity
+	max_speed = 0.0
+	acceleration = 0.0
+	rotation_speed = 0.0
+	modifier = {
+		ship_evasion_mult = -1
+		ship_armor_add = 15000
+	}
+	max_hitpoints = 50000
+	size_multiplier = 32
+	fleet_slot_size = 4
+	section_slots = { "mid" = { locator = "part1" } }
+	num_target_locators = 0
+	is_space_station = yes
+	build_block_radius = 20
+	class = shipclass_military_station
+	is_designable = no
+	icon = ship_size_military_station
+	required_component_set = "combat_computers"
+	required_component_set = "sensor_components"
+	components_add_to_cost = no
+	potential_country = { is_country_type = replicators }
+	resources = {
+		category = ships
+		cost = {
+			alloys = 100
+#			nanites = 100
+		}
+	}
+}
+
+replicators_warship_small = {
+	formation_priority = 30
+	max_speed = 120
+	acceleration = 0.25
+	rotation_speed = 0.175
+	collision_radius = 3.5
+	max_hitpoints = 1600
+	modifier = {
+		ship_evasion_add = 15
+		ship_piracy_suppression_add = 6
+	}
+	size_multiplier = 4
+	fleet_slot_size = 3
+	section_slots = { "mid" = { locator = "part2" } }
+	num_target_locators = 4
+	is_space_station = no
+	icon = ship_size_military_4
+	base_buildtime = 200
+	can_have_federation_design = no
+	enable_default_design = yes
+	enable_3dview_in_ship_browser = no
+	default_behavior = line
+	ship_roles = { gunship artillery explosive carrier energy_torpedoes }
+	combat_disengage_chance = 1.50
+	class = shipclass_military
+	construction_type = starbase_shipyard
+	is_designable = yes
+	components_add_to_cost = no
+	prerequisites = { "tech_repl_cruiser" }
+	potential_country = {
+		OR = {
+			is_country_type = replicators
+			has_technology = tech_repl_cruiser
+		}
+	}
+	required_component_set = "power_core"
+	required_component_set = "ftl_components"
+	required_component_set = "thruster_components"
+	required_component_set = "sensor_components"
+	required_component_set = "combat_computers"
+	resources = {
+		category = ships
+		cost = {
+			alloys = 650
+			nanites = 2
+		}
+		upkeep = {
+			energy = @cruiser_upkeep_energy
+			alloys = @cruiser_upkeep_alloys
+		}
+	}
+	min_upgrade_cost = { alloys = 2 }
+}
+
+replicators_warship_large = {
+	formation_priority = 50
+	max_speed = 100
+	acceleration = 0.2
+	rotation_speed = 0.15
+	collision_radius = 6
+	max_hitpoints = 4500
+	modifier = {
+		ship_evasion_add = 4
+		ship_piracy_suppression_add = 4
+	}
+	size_multiplier = 8
+	fleet_slot_size = 4
+	section_slots = { "bow" = { locator = "part1" } "mid" = { locator = "part2" } "stern" = { locator = "part3" } }
+	num_target_locators = 4
+	is_space_station = no
+	icon = ship_size_military_8
+	base_buildtime = 365
+	can_have_federation_design = no
+	enable_default_design = no
+	enable_3dview_in_ship_browser = no
+	default_behavior = artillery
+	ship_roles = { artillery carrier gunship }
+	combat_disengage_chance = 1.25
+	class = shipclass_military
+#	construction_type = starbase_shipyard
+	is_designable = no
+	components_add_to_cost = no
+	potential_country = { is_country_type = replicators }
+	required_component_set = "power_core"
+	required_component_set = "ftl_components"
+	required_component_set = "thruster_components"
+	required_component_set = "sensor_components"
+	required_component_set = "combat_computers"
+}

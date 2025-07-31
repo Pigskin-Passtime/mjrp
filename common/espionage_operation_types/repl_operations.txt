@@ -1,0 +1,42 @@
+operation_repl_hack_virus = {
+	categories = { op_cat_sabotage op_cat_military }
+	picture = GFX_evt_synth_sabotage
+	desc = { text = operation_repl_hack_virus_desc }
+	stages = 3
+	resources = {
+		category = operations
+		cost = { influence = 10 }
+		upkeep = { energy = 35 }
+	}
+	spy_power_cost = 10
+	target = none
+	potential = {
+		owner = {
+			has_country_flag = has_replicators_6_a_project
+			NOT = { has_country_flag = has_replicators_6_b_project }
+		}
+	}
+	allow = {
+		custom_tooltip = {
+			is_running_espionage_operation = no
+			fail_text = operation_one_at_a_time
+		}
+	}
+	stage = {
+		difficulty = 5
+		icon = GFX_espionage_chapter_icon_motion
+		event = replicators.34
+	}
+	stage = {
+		difficulty = 5
+		icon = GFX_espionage_chapter_icon_motion
+		event = replicators.35
+	}
+	stage = {
+		difficulty = 5
+		icon = GFX_espionage_chapter_icon_motion
+		event = replicators.36
+	}
+	on_roll_failed = { standard_espionage_operation_on_roll_failed = { RANDOM_EVENTS = operation_random_events_sabotage_targeted } }
+	on_create = {}
+}

@@ -1,0 +1,337 @@
+# TEST: effect = { start_situation = { type = situation_replicators_hack target = root } }
+
+# Replicators hack you.
+situation_replicators_hack = {
+	picture = GFX_evt_rare_tech_cache
+	category = negative
+	complete_icon_frame = GFX_situation_outcome_frame_red
+	complete_icon = GFX_situation_outcome_negative
+	fail_icon_frame = GFX_situation_outcome_frame_blue
+	fail_icon = GFX_situation_outcome_meh
+	on_start = {}
+# Empire couldnt stop the hack.
+	on_progress_complete = {
+		custom_tooltip = situation_replicators_hack_finish_tooltip
+		hidden_effect = {
+			situation_event = { id = replicators.17 }
+			random_list = {
+#				1 = { situation_event = { id = replicators.21 } } # Not used right now.
+				1 = { situation_event = { id = replicators.22 } }
+				1 = { situation_event = { id = replicators.23 } }
+				1 = { situation_event = { id = replicators.24 } }
+			}
+			destroy_situation = this
+		}
+	}
+# Replicators couldnt hack the empire.
+	on_fail = {
+		custom_tooltip = situation_replicators_hack_fail_tooltip
+		hidden_effect = {
+			situation_event = { id = replicators.18 }
+			destroy_situation = this
+		}
+	}
+	start_value = 65
+	progress_direction = monodirectional
+# Stages
+	stages = {
+		replicators_hack_weak = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_blue
+			end = 50
+			modifier = {
+				country_energy_produces_mult = -0.05
+			}
+		}
+		replicators_hack_medium = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_green
+			end = 70
+			modifier = {
+				country_energy_produces_mult = -0.05
+			}
+		}
+		replicators_hack_strong = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_green
+			end = 80
+			modifier = {
+				country_energy_produces_mult = -0.1
+				all_technology_research_speed = -0.05
+			}
+		}
+		replicators_hack_end = {
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_red
+			end = 100
+			on_first_enter = {
+				situation_event = { id = replicators.16 }
+			}
+			modifier = {
+				country_energy_produces_mult = -0.1
+				all_technology_research_speed = -0.05
+			}
+		}
+	}
+# Approaches
+	# Research
+	approach = {
+		name = approach_repl_firewall_research
+		icon = GFX_situation_approach_research
+		icon_background = GFX_situation_approach_bg_green
+		resources = {
+			category = situations
+			upkeep = {
+				engineering_research = 45
+				physics_research = 75
+			}
+		}
+		ai_weight = { base = 10 }
+	}
+	# Strong Firewall
+	approach = {
+		name = approach_repl_firewall_strong
+		icon = GFX_situation_approach_energy_credits
+		icon_background = GFX_situation_approach_bg_green
+		resources = {
+			category = situations
+			upkeep = { energy = 85 }
+		}
+		ai_weight = { base = 10 }
+	}
+	# Medium Firewall
+	approach = {
+		name = approach_repl_firewall_medium
+		icon = GFX_situation_approach_balance_sheet
+		icon_background = GFX_situation_approach_bg_yellow
+		resources = {
+			category = situations
+			upkeep = { energy = 45 }
+		}
+		ai_weight = { base = 5 }
+	}
+	# Do nothing.
+	approach = {
+		name = approach_repl_firewall_nothing
+		icon = GFX_situation_approach_shrug
+		icon_background = GFX_situation_approach_bg_red
+		resources = {
+			category = situations
+			upkeep = { energy = 5 }
+		}
+		ai_weight = { base = 0 }
+	}
+	# Progress: 0, 50, 70, 80, 100
+	monthly_progress = {
+		base = 5 # to go right
+		modifier = {
+			add = 1
+			desc = string_replicators_firewall
+			current_stage = replicators_hack_weak
+		}
+		modifier = {
+			add = 2
+			desc = string_replicators_firewall
+			current_stage = replicators_hack_medium
+		}
+		modifier = {
+			add = 3
+			desc = string_replicators_firewall
+			current_stage = replicators_hack_strong
+		}
+		modifier = {
+			add = 5
+			desc = string_replicators_firewall
+			current_stage = replicators_hack_end
+		}
+		# Approaches - to go left
+		modifier = {
+			add = -16
+			desc = string_current_approach
+			current_situation_approach = approach_repl_firewall_research
+		}
+		modifier = {
+			add = -12
+			desc = string_current_approach
+			current_situation_approach = approach_repl_firewall_strong
+		}
+		modifier = {
+			add = -8
+			desc = string_current_approach
+			current_situation_approach = approach_repl_firewall_medium
+		}
+		modifier = {
+			add = 2
+			desc = string_current_approach
+			current_situation_approach = approach_repl_firewall_nothing
+		}
+	}
+	abort_trigger = {
+		OR = {
+			NOT = { exists = target.owner }
+			target.owner = { NOT = { is_same_value = root.owner } }
+		}
+	}
+}
+
+
+# TEST: effect = { start_situation = { type = situation_replicators_counterhack target = root } }
+
+# You hack the Replicators.
+situation_replicators_counterhack = {
+	picture = GFX_evt_rare_tech_cache
+	category = negative	#positive to show the player the red icon in the UI to alert him easier
+
+	complete_icon_frame = GFX_situation_outcome_frame_blue
+	complete_icon = GFX_situation_outcome_meh
+	fail_icon_frame = GFX_situation_outcome_frame_red
+	fail_icon = GFX_situation_outcome_negative
+
+#	complete_icon_frame = GFX_situation_outcome_frame_red
+#	complete_icon = GFX_situation_outcome_negative
+#	fail_icon_frame = GFX_situation_outcome_frame_blue
+#	fail_icon = GFX_situation_outcome_meh
+
+	on_start = {}
+# Empire hacked the Replicators.
+	on_progress_complete = {
+		custom_tooltip = situation_replicators_counterhack_finish_tooltip
+		hidden_effect = {
+			situation_event = { id = replicators.20 }
+			destroy_situation = this
+		}
+	}
+# Replicators blocked the attack.
+	on_fail = {
+		custom_tooltip = situation_replicators_counterhack_fail_tooltip
+		hidden_effect = {
+			situation_event = { id = replicators.19 }
+			destroy_situation = this
+		}
+	}
+	start_value = 10
+	progress_direction = bidirectional
+# Stages
+	stages = {
+		replicators_counterhack_weak = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_blue
+			end = 50
+		}
+		replicators_counterhack_medium = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_green
+			end = 70
+		}
+		replicators_counterhack_strong = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_green
+			end = 80
+		}
+		replicators_counterhack_end = {
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_red
+			end = 100
+		}
+	}
+# Approaches
+	# Research
+	approach = {
+		name = approach_repl_brutforce_research
+		icon = GFX_situation_approach_research
+		icon_background = GFX_situation_approach_bg_green
+		resources = {
+			category = situations
+			upkeep = {
+				engineering_research = 25
+				physics_research = 90
+			}
+		}
+		ai_weight = { base = 10 }
+	}
+	# Strong Brutforce
+	approach = {
+		name = approach_repl_brutforce_strong
+		icon = GFX_situation_approach_energy_credits
+		icon_background = GFX_situation_approach_bg_green
+		resources = {
+			category = situations
+			upkeep = { energy = 45 }
+		}
+		ai_weight = { base = 10 }
+	}
+	# Medium Brutforce
+	approach = {
+		name = approach_repl_brutforce_medium
+		icon = GFX_situation_approach_energy_credits
+		icon_background = GFX_situation_approach_bg_yellow
+		resources = {
+			category = situations
+			upkeep = { energy = 15 }
+		}
+		ai_weight = { base = 5 }
+	}
+	# Simple attack
+	approach = {
+		name = approach_repl_brutforce_weak
+		icon = GFX_situation_approach_energy_credits
+		icon_background = GFX_situation_approach_bg_red
+		resources = {
+			category = situations
+			upkeep = { energy = 5 }
+		}
+		default = yes
+		ai_weight = { base = 0 }
+	}
+	# Progress: 0, 50, 70, 80, 100
+	monthly_progress = {
+		base = -5 # to go left
+		modifier = {
+			add = -1
+			desc = string_replicators_brutforce
+			current_stage = replicators_counterhack_weak
+		}
+		modifier = {
+			add = -2
+			desc = string_replicators_brutforce
+			current_stage = replicators_counterhack_medium
+		}
+		modifier = {
+			add = -3
+			desc = string_replicators_brutforce
+			current_stage = replicators_counterhack_strong
+		}
+		modifier = {
+			add = -5
+			desc = string_replicators_brutforce
+			current_stage = replicators_counterhack_end
+		}
+		# Approaches - to go right
+		modifier = {
+			add = 16
+			desc = string_current_approach
+			current_situation_approach = approach_repl_brutforce_research
+		}
+		modifier = {
+			add = 12
+			desc = string_current_approach
+			current_situation_approach = approach_repl_brutforce_strong
+		}
+		modifier = {
+			add = 8
+			desc = string_current_approach
+			current_situation_approach = approach_repl_brutforce_medium
+		}
+		modifier = {
+			add = 5
+			desc = string_current_approach
+			current_situation_approach = approach_repl_brutforce_weak
+		}
+	}
+	abort_trigger = {
+		OR = {
+			NOT = { exists = target.owner }
+			target.owner = { NOT = { is_same_value = root.owner } }
+		}
+	}
+}
