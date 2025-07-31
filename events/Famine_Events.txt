@@ -1,0 +1,2033 @@
+### Made By Kirby101#1199
+### Images provided by my good friend Peter (DrEnigma)
+### System/Empire/Fleet creation written by Exakan since i've no idea what i'm doing, thanks
+
+namespace = Famine
+
+# Flags mod to other mods
+event = {
+	id = Famine.200
+	hide_window = yes
+	fire_only_once = yes
+	is_triggered_only = yes
+	trigger = {
+		NOT = {
+			has_global_flag = TGF_installed
+		}
+	}
+	immediate = {
+		set_global_flag = TGF_installed
+	}
+}
+
+#############################################################################################################################################################
+### THE ID NUMBERS ARE ARBITRARY
+# As follows:
+# 1 = First visible window giving a 2 year warning of the incoming crisis
+# 2 = First modifiers being added to the planets
+# 3 = Second round of modifiers, and starts special project chain
+# 4 = final round of modifiers
+# 8 = Main empire + system + fleet spawning code, written by Exakan, uses name lists and and modded flags from DrEnigma (permission granted for use)
+# 9 = First event to go off, after the modjam will randmoly decide to run the crisis or not on each playthrough
+# 12 = Repeated pulse of modifiers being added to new colonies
+# 13 = ''
+# 14 = ''
+# 100 = Spawns a wormhole to the new system and allows for an ending of the crisis
+# 101 = Same as above but for the other event line being finished, they are identical right now, but for future proofing
+# 102 = Removing the system, and any remaning fleet just in case
+# 103 = Informing the player that that the event is over, and removing all modifiers and flags
+# 200 = Just to flag that famine mod exists
+
+# Hidden event trigger, randomly decides whether event will go off or not based on end-game date
+# Starts on mid-game pulse
+country_event = {
+	id = Famine.9
+	#fire_only_once = yes
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+		#Not = {
+		#	has_global_flag = TGF_fired
+		#}
+		always = yes
+	}
+	
+	immediate = {
+		#random = {
+		#	chance = 30
+		#	every_country = {
+		#		country_event = {
+		#			id = Famine.1
+		#			days = 500
+		#			random = 400
+		#		}
+		#	}
+		#}
+		
+		# Calls event start to every country
+		set_global_flag = TGF_Main_in_progress
+		set_global_flag = TGF_fired
+		every_country = {
+			country_event = {
+				id = Famine.1
+			}
+		}
+	}
+}
+
+# First visible window, gives 2 year warning
+country_event = {
+	id = Famine.1
+	is_triggered_only = yes
+	auto_opens = yes
+	trackable = yes
+	title = Famine.1.name
+	desc = Famine.1.desc
+	picture = GFX_evt_f1
+	
+	trigger = {	
+		has_global_flag = TGF_Main_in_progress
+		#end_game_years_passed < 0	
+	}
+
+	immediate = {
+		set_global_flag = TGF_Main_in_progress
+		
+		# Starts the empire and system spawning, which immediately calls the event to add the modifiers
+		country_event = {
+			id = Famine.8
+			days = 720
+			
+		}
+		country_event = {
+			id = Famine.2
+			days = 720
+		}
+		
+		# Starts event chain
+		begin_event_chain = {
+			event_chain = "mysterious_fluctuation_chain"
+		}
+	}
+	option = {
+		name = Famine.1.a	
+	}
+}
+
+country_event = {
+	id = Famine.8
+	fire_only_once = yes
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	
+	immediate = {
+
+		# Start of system and empire spawning, written by mostly by Exakan#5115 who helped me for the modjam
+
+		no_scope = {
+			set_spawn_system_batch = begin
+				random_rim_system = {
+					if = {
+						limit = { galaxy_size = tiny }
+						spawn_system = {
+							min_distance >= -200								
+							max_distance <= -199
+							direction = rimwards
+							initializer = Famine_system_initializer
+							hyperlane = no
+							effect = { save_event_target_as = Famine_system }
+						}
+					}
+					else_if = {
+						limit = { galaxy_size = small }
+						spawn_system = {
+							min_distance >= -400								
+							max_distance <= -399
+							direction = rimwards
+							initializer = Famine_system_initializer
+							hyperlane = no
+							effect = { save_event_target_as = Famine_system }
+						}
+					}
+					else_if = {
+						limit = { galaxy_size = medium }
+						spawn_system = {
+							min_distance >= -600								
+							max_distance <= -599
+							direction = rimwards
+							initializer = Famine_system_initializer
+							hyperlane = no
+							effect = { save_event_target_as = Famine_system }
+						}
+					}
+					else_if = {
+						limit = { galaxy_size = large }
+						spawn_system = {
+							min_distance >= -800							
+							max_distance <= -799
+							direction = rimwards
+							initializer = Famine_system_initializer
+							hyperlane = no
+							effect = { save_event_target_as = Famine_system }
+						}
+					}
+					else = {
+						spawn_system = {
+							min_distance >= -1000					
+							max_distance <= -999
+							direction = rimwards
+							initializer = Famine_system_initializer
+							hyperlane = no
+							effect = { save_event_target_as = Famine_system }
+						}
+					}
+				}
+				event_target:Famine_system = {
+					set_name = "Goblon"
+					solar_system = {
+						spawn_natural_wormhole = {
+							bypass_type = TGF_wormhole
+								orbit_distance = -10
+								orbit_angle = 270
+								random_pos = no
+						}
+						random_system_planet = {
+							limit = { is_star = yes }
+							save_event_target_as = main_star
+							save_global_event_target_as = Famine_system	 #
+						}
+						
+						create_species = {
+							name = "Human"						
+							class = HUM
+							portrait = "human_male_02" 					
+							namelist = random
+							traits = random
+							effect = { save_event_target_as = Famine_species }
+						}
+						
+						create_country = {
+							name = "Galacic Empire"								
+							type = "enemy"							
+							ignore_initial_colony_error = yes
+							name_list = "STAR_WARS"			
+							species = event_target:Famine_species
+							flag = {
+								icon= {
+									category = "TGF_flag"
+									file = "mod_flag_22.dds"
+								}
+								background = {
+									category = "backgrounds"
+									file = "circle.dds"
+								}
+								colors = {
+									"red"
+									"red"
+									"null"
+									"null"
+								}
+							}
+							effect = {
+								save_event_target_as = Famine_country
+								save_global_event_target_as = Famine_country
+							}
+						}
+						
+						event_target:Famine_country = {
+							set_country_flag = Passageway
+							create_leader = {
+								class = admiral
+								species = owner_main_species
+								name = random
+								skill = 7
+								leader_age_min = 25
+								leader_age_max = 45
+								traits = { trait = random_trait }
+							}
+						}
+						create_fleet = {
+							effect = {
+								set_owner = event_target:Famine_country
+								create_ship = {
+									name = "Neutron Launcher"
+									design = "NAME_Swarm_Starbase"		
+									#graphical_culture = "mammalian_01"
+								}
+								set_location = {
+									target = event_target:main_star
+									distance = 55
+									angle = 270
+								}
+								save_event_target_as = Famine_starbase
+							}
+						}
+						create_fleet = {
+							name = "Galacic Death I"									
+							effect = {
+								set_owner = event_target:Famine_country     
+								set_formation_scale = 2
+								while = {
+									count = 20
+									create_ship = {
+										name = random
+										design = "Galacic_Fleet_2"       # Fleet design
+										graphical_culture = "mammalian_01"
+									}
+								}
+								while = {
+									count = 15
+									create_ship = {
+										name = random
+										design = "Galacic_Fleet_1"       # Fleet design
+										graphical_culture = "mammalian_01"
+									}
+								}
+								while = {
+									count = 28
+									create_ship = {
+										name = random
+										design = "Galacic_Fleet_3"
+										graphical_culture = "mammalian_01"
+									}
+								}
+								while = {
+									count = 38
+									create_ship = {
+										name = random
+										design = "Galacic_Fleet_4"
+										graphical_culture = "mammalian_01"
+									}
+								}
+								set_location = {
+									target = event_target:Famine_starbase
+									distance = 50
+									angle = 270
+								}
+								save_event_target_as = event_target:Famine_fleet
+								assign_leader = last_created_leader
+							}
+						}
+						solar_system = {
+							set_star_flag = Famine_star_system
+							set_star_flag = TGF_nexus
+						}
+					}
+				}
+			set_spawn_system_batch = end
+		}
+	}
+}
+
+# First major event chain action, spawns the system and starts the event chain
+country_event = {
+	id = Famine.2
+
+	title = Famine.2.name
+	desc = Famine.2.desc
+	picture = GFX_evt_f2
+	is_triggered_only = yes
+	auto_opens = yes
+	location = capital_star
+
+	trigger = {
+		always = yes
+	}
+	
+	immediate = {
+		set_global_flag = TGF_2_in_progress
+		end_event_chain = "mysterious_fluctuation_chain"
+		country_event = {
+			id = Famine.3
+			days = 1800
+		}
+		every_owned_planet = {
+			limit = { is_colony = yes }
+			set_planet_flag = TGF_12_in_progress 
+			add_modifier = { modifier = TGF_Mod_2
+			}
+		}
+	}
+
+	option = {
+		trigger = {
+			is_lithoid_empire = yes
+		}
+		name = Famine.2.a
+	}
+	
+	option = {
+		name = Famine.2.b
+	}
+}
+
+country_event = {
+	id = Famine.3
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.3.title
+	desc = Famine.3.desc
+	location = capital_star
+	picture = GFX_evt_f3
+
+	trigger = {
+		AND = {
+			has_global_flag = TGF_Main_in_progress
+			has_global_flag = TGF_2_in_progress
+		}
+	}
+
+	immediate = {
+		set_global_flag = TGF_3_in_progress
+		#enable_special_project = {
+		#	name = "Stage_0"
+		#	owner = root
+		#}
+		every_owned_planet = {
+			set_planet_flag = TGF_13_in_progress
+			add_modifier = { modifier = TGF_Mod_3
+			}
+		}
+
+		if = {
+			limit = { is_ai = yes }
+			enable_special_project = {
+				name = "Stage_AI"
+				owner = root
+			}
+		}
+		else = {
+			enable_special_project = {
+				name = "Stage_0"
+				owner = root
+			}
+		}
+		
+		country_event = {
+			id = Famine.4
+			days = 1800
+		}
+	}
+	option = {
+		name = Famine.3.a
+		trigger = {
+			OR = {
+				has_ethic = ethic_spiritualist
+				has_ethic = ethic_fanatic_spiritualist
+			}
+		}
+	}
+	option = {
+		name = Famine.3.b
+		trigger = { always = yes}
+	}
+}
+
+country_event = {
+	id = Famine.4
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.4.title
+	desc = Famine.4.desc
+	location = capital_star
+	picture = GFX_evt_f4
+
+	trigger = {
+		AND = {
+			has_global_flag = TGF_Main_in_progress
+			has_global_flag = TGF_2_in_progress
+			has_global_flag = TGF_3_in_progress
+		}
+	}
+
+	immediate = {
+		set_global_flag = TGF_4_in_progress
+		
+			every_owned_planet = {
+				set_planet_flag = TGF_14_in_progress
+				add_modifier = { modifier = TGF_Mod_4
+				}
+			}
+	}
+	option = {
+		name = Famine.4.a
+		trigger = {
+			OR = {
+				has_ethic = ethic_spiritualist
+				has_ethic = ethic_fanatic_spiritualist
+			}
+		}
+	}
+	option = {
+		name = Famine.4.b
+		trigger = { always = yes }
+	}
+}
+
+###############################################################################################################################################################
+
+# Repeat effects for newly colonised planets
+event = {
+	id = Famine.12
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_global_flag = TGF_2_in_progress
+	}
+	immediate = {
+		every_playable_country = {
+			every_owned_planet = {
+				if = {
+					limit = {
+						has_planet_flag = TGF_12_in_progress
+					}
+					set_planet_flag = TGF_15
+				}
+				else = {
+					set_planet_flag = TGF_12_in_progress
+					add_modifier = { modifier = TGF_Mod_2
+				}
+				}
+			}
+		}
+	}
+}
+
+event = {
+	id = Famine.13
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_global_flag = TGF_3_in_progress
+	}
+	immediate = {
+		every_playable_country = {
+			every_owned_planet = {
+				if = {
+					limit = { 
+						has_planet_flag = TGF_13_in_progress
+					}
+					set_planet_flag = TGF_16
+				}
+				else = {
+					set_planet_flag = TGF_13_in_progress
+					add_modifier = { modifier = TGF_Mod_3
+				}
+				}			
+			}
+		}
+	}
+}
+
+event = {
+	id = Famine.14
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_global_flag = TGF_4_in_progress
+	}
+	immediate = {
+		every_playable_country = {
+			every_owned_planet = {
+				if = {
+					limit = { 
+						has_planet_flag = TGF_14_in_progress
+					}
+					set_planet_flag = TGF_17
+				}
+				else = {
+					set_planet_flag = TGF_14_in_progress
+					add_modifier = { modifier = TGF_Mod_4
+					}	
+				}
+				random = {
+					chance = 30
+					add_planet_devastation = 25
+				}
+			}
+		}
+	}
+}
+
+###############################################################################################################################################################
+
+# Events for calling back special project
+# Event chains numbered with it's parent options, followed by each option's explanation and continuation of the chain
+country_event = {
+	id = Famine.20
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.20.title
+	desc = Famine.20.desc
+	picture = GFX_evt_f20
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	immediate = {
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_1_a_x"
+			location = root.owner.capital_scope
+			owner = root.owner
+		    }
+		}
+	}
+	option = {
+		name = Famine.20.a
+	}
+}
+
+country_event = {
+	id = Famine.21
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.21.title
+	desc = Famine.21.desc
+	picture = GFX_evt_f21
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.21.c
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_2_b_x"
+			location = root.owner.capital_scope
+			owner = root.owner
+		}
+		country_event = {
+			id = Famine.24
+			days = 15
+            }
+		}
+	}
+	option = {
+		name = Famine.21.a
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_1_a_y"
+			location = root.owner.capital_scope
+			owner = root.owner
+		}
+		country_event = {
+			id = Famine.22
+			days = 15
+            }
+		}
+	}
+	option = {
+		name = Famine.21.b
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_2_b_y"
+			location = root.owner.capital_scope
+			owner = root.owner
+		}
+		country_event = {
+			id = Famine.23
+			days = 15
+            }
+		}
+	}
+	option = {
+		name = Famine.21.d
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_2_a_x"
+			location = root.owner.capital_scope
+			owner = root.owner
+		}
+		country_event = {
+			id = Famine.25
+			days = 15
+            }
+		}
+	}	
+}
+
+country_event = {
+	id = Famine.22
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.22.title
+	desc = Famine.22.desc
+	picture = GFX_evt_f22
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.22.a
+	}
+}
+
+country_event = {
+	id = Famine.23
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.23.title
+	desc = Famine.23.desc
+	picture = GFX_evt_f23
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.23.a
+	}
+}
+
+country_event = {
+	id = Famine.24
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.24.title
+	desc = Famine.24.desc
+	picture = GFX_evt_f24
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.24.a
+	}
+}
+
+country_event = {
+	id = Famine.25
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.25.title
+	desc = Famine.25.desc
+	picture = GFX_evt_f25
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.25.a
+	}
+}
+
+country_event = {
+	id = Famine.26
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.26.title
+	desc = Famine.26.desc
+	picture = GFX_evt_f26
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.26.b
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_2_a_y"
+			location = root.owner.capital_scope
+			owner = root.owner
+		}
+		country_event = {
+			id = Famine.28
+			days = 15
+            }
+		}
+	}
+	option = {
+		name = Famine.26.c
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_3_a_x"
+			location = root.owner.capital_scope
+			owner = root.owner
+		}
+		country_event = {
+			id = Famine.29
+			days = 15
+            }
+		}
+	}
+	option = {
+		name = Famine.26.a
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_2_a_y"
+			location = root.owner.capital_scope
+			owner = root.owner
+		}
+		country_event = {
+			id = Famine.27
+			days = 15
+            }
+		}				
+	}
+}
+
+country_event = {
+	id = Famine.27
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.27.title
+	desc = Famine.27.desc
+	picture = GFX_evt_f27
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.27.a
+	}
+}
+
+country_event = {
+	id = Famine.28
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.28.title
+	desc = Famine.28.desc
+	picture = GFX_evt_f28
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.28.a
+	}
+}
+
+country_event = {
+	id = Famine.29
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.29.title
+	desc = Famine.29.desc
+	picture = GFX_evt_f29
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.29.a
+	}
+}
+
+country_event = {
+	id = Famine.30
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.30.title
+	desc = Famine.30.desc
+	picture = GFX_evt_f30
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.30.a
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_2_a_y"
+			location = root.owner.capital_scope
+			owner = root.owner
+		}
+		country_event = {
+			id = Famine.31
+			days = 15
+            }
+		}
+	}
+	option = {
+		name = Famine.30.b
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_4_b_x"
+			location = root.owner.capital_scope
+			owner = root.owner
+		}
+		country_event = {
+			id = Famine.32
+			days = 15
+            }
+		}
+	}
+	option = {
+		name = Famine.30.c
+		hidden_effect = {
+		country_event = {
+			id = Famine.100
+			days = 15
+            }
+		}
+	}
+	option = {
+		name = Famine.30.d
+		hidden_effect = {
+			enable_special_project = {
+				name = "Stage_3_a_y"
+				location = root.owner.capital_scope
+				owner = root.owner
+			}
+			country_event = {
+				id = Famine.37
+				days = 15
+			}
+		}
+	}
+}
+
+country_event = {
+	id = Famine.37
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.37.title
+	desc = Famine.37.desc
+	picture = GFX_evt_f37
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.37.a
+	}
+}
+
+country_event = {
+	id = Famine.31
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.31.title
+	desc = Famine.31.desc
+	picture = GFX_evt_f31
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.31.a
+	}
+}
+
+country_event = {
+	id = Famine.32
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.32.title
+	desc = Famine.32.desc
+	picture = GFX_evt_f32
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.32.a
+	}
+}
+
+country_event = {
+	id = Famine.33
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.33.title
+	desc = Famine.33.desc
+	picture = GFX_evt_f33
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.33.a
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_1_a_y"
+			location = root.owner.capital_scope
+			owner = root.owner
+		}
+		country_event = {
+			id = Famine.22
+			days = 15
+            }
+		}
+	}
+	option = {
+		name = Famine.33.c
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_2_a_x"
+			location = root.owner.capital_scope
+			owner = root.owner
+		}
+		country_event = {
+			id = Famine.25
+			days = 15
+            }
+		}
+	}	
+	option = {
+		name = Famine.33.b
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_2_b_x"
+			location = root.owner.capital_scope
+			owner = root.owner
+		}
+		country_event = {
+			id = Famine.34
+			days = 15
+            }
+		}
+	}
+}
+
+country_event = {
+	id = Famine.34
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.34.title
+	desc = Famine.34.desc
+	picture = GFX_evt_f34
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.34.a
+	}
+}
+
+country_event = {
+	id = Famine.35
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.35.title
+	desc = Famine.35.desc
+	picture = GFX_evt_f35
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.35.a
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_3_a_x"
+			location = root.owner.capital_scope
+			owner = root.owner
+		}
+	}
+	}
+}
+
+country_event = {
+	id = Famine.38
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.38.title
+	desc = Famine.38.desc
+	picture = GFX_evt_f38
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.38.c
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_4_a_y"
+			location = root.owner.capital_scope
+			owner = root.owner
+		}
+		country_event = {
+			id = Famine.41
+			days = 15
+            }
+		}
+	}
+	option = {
+		name = Famine.38.b
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_3_a_y"
+			location = root.owner.capital_scope
+			owner = root.owner
+		}
+		country_event = {
+			id = Famine.40
+			days = 15
+            }
+		}
+	}
+	option = {
+		name = Famine.38.a
+		hidden_effect = {
+		country_event = {
+			id = Famine.100
+			days = 15
+            }
+		}
+	}
+}
+
+country_event = {
+	id = Famine.40
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.40.title
+	desc = Famine.40.desc
+	picture = GFX_evt_f40
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.40.a
+	}
+}
+
+country_event = {
+	id = Famine.41
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.41.title
+	desc = Famine.41.desc
+	picture = GFX_evt_f41
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.41.a
+	}
+}
+
+country_event = {
+	id = Famine.42
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.42.title
+	desc = Famine.42.desc
+	picture = GFX_evt_f42
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.42.c
+		hidden_effect = {
+		country_event = {
+			id = Famine.100
+			days = 15
+            }
+		}
+	}
+	option = {
+		name = Famine.42.b
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_3_b_y"
+			location = root.owner.capital_scope
+			owner = root.owner
+		}
+		country_event = {
+			id = Famine.44
+			days = 15
+            }
+		}
+	}
+}
+
+country_event = {
+	id = Famine.44
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.44.title
+	desc = Famine.44.desc
+	picture = GFX_evt_f44
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.44.a
+	}
+}
+
+country_event = {
+	id = Famine.45
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.45.title
+	desc = Famine.45.desc
+	picture = GFX_evt_f45
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	
+	option = {
+		name = Famine.45.b
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_1_b_y"
+			location = root.owner.capital_scope
+			owner = root.owner
+		}
+		country_event = {
+			id = Famine.47
+			days = 15
+            }
+		}
+	}
+	option = {
+		name = Famine.45.c
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_2_b_x"
+			location = root.owner.capital_scope
+			owner = root.owner
+		}
+		country_event = {
+			id = Famine.48
+			days = 15
+            }
+		}
+	}
+	option = {
+		name = Famine.45.d
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_2_b_x"
+			location = root.owner.capital_scope
+			owner = root.owner
+		}
+		country_event = {
+			id = Famine.49
+			days = 15
+            }
+		}
+	}
+	option = {
+		name = Famine.45.a
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_1_a_y"
+			location = root.owner.capital_scope
+			owner = root.owner
+		}
+		country_event = {
+			id = Famine.46
+			days = 15
+            }
+		}		
+	}
+}
+
+country_event = {
+	id = Famine.46
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.46.title
+	desc = Famine.46.desc
+	picture = GFX_evt_f46
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.46.a
+	}
+}
+
+country_event = {
+	id = Famine.47
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.47.title
+	desc = Famine.47.desc
+	picture = GFX_evt_f47
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.47.a
+	}
+}
+
+country_event = {
+	id = Famine.48
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.48.title
+	desc = Famine.48.desc
+	picture = GFX_evt_f48
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.48.a
+	}
+}
+
+country_event = {
+	id = Famine.49
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.49.title
+	desc = Famine.49.desc
+	picture = GFX_evt_f49
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.49.a
+	}
+}
+
+country_event = {
+	id = Famine.50
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.50.title
+	desc = Famine.50.desc
+	picture = GFX_evt_f50
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.50.c
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_2_b_y"
+			location = root.owner.capital_scope
+			owner = root.owner
+		}
+		country_event = {
+			id = Famine.53
+			days = 15
+            }
+		}
+	}
+	option = {
+		name = Famine.50.b
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_2_b_y"
+			location = root.owner.capital_scope
+			owner = root.owner
+		}
+		country_event = {
+			id = Famine.52
+			days = 15
+            }
+		}
+	}
+	option = {
+		name = Famine.50.d
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_3_b_x"
+			location = root.owner.capital_scope
+			owner = root.owner
+		}
+		country_event = {
+			id = Famine.54
+			days = 15
+            }
+		}
+	}
+	option = {
+		name = Famine.50.a
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_1_a_y"
+			location = root.owner.capital_scope
+			owner = root.owner
+		}
+		country_event = {
+			id = Famine.51
+			days = 15
+            }
+		}
+	}
+}
+
+country_event = {
+	id = Famine.51
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.51.title
+	desc = Famine.51.desc
+	picture = GFX_evt_f51
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.51.a
+	}
+}
+
+country_event = {
+	id = Famine.52
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.52.title
+	desc = Famine.52.desc
+	picture = GFX_evt_f52
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.52.a
+	}
+}
+
+country_event = {
+	id = Famine.53
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.53.title
+	desc = Famine.53.desc
+	picture = GFX_evt_f53
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.53.a
+	}
+}
+
+country_event = {
+	id = Famine.54
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.54.title
+	desc = Famine.54.desc
+	picture = GFX_evt_f54
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.54.a
+	}
+}
+
+country_event = {
+	id = Famine.55
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.55.title
+	desc = Famine.55.desc
+	picture = GFX_evt_f55
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.55.b
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_3_b_y"
+			location = root.owner.capital_scope
+			owner = root.owner
+		}
+		country_event = {
+			id = Famine.57
+			days = 15
+            }
+		}
+	}
+	option = {
+		name = Famine.55.a
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_2_a_x"
+			location = root.owner.capital_scope
+			owner = root.owner
+		}
+		country_event = {
+			id = Famine.56
+			days = 15
+            }
+		}
+	}
+	
+	option = {
+		name = Famine.55.c
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_4_b_x"
+			location = root.owner.capital_scope
+			owner = root.owner
+		}
+		country_event = {
+			id = Famine.58
+			days = 15
+            }
+		}
+	}
+}
+
+country_event = {
+	id = Famine.56
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.56.title
+	desc = Famine.56.desc
+	picture = GFX_evt_f56
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.56.a
+	}
+}
+
+country_event = {
+	id = Famine.57
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.57.title
+	desc = Famine.57.desc
+	picture = GFX_evt_f57
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.57.a
+	}
+}
+
+country_event = {
+	id = Famine.58
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.58.title
+	desc = Famine.58.desc
+	picture = GFX_evt_f58
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.58.a
+	}
+}
+
+country_event = {
+	id = Famine.59
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.59.title
+	desc = Famine.59.desc
+	picture = GFX_evt_f59
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.59.b
+		hidden_effect = {
+		country_event = {
+			id = Famine.101
+			days = 15
+            }
+		}
+	}
+	option = {
+		name = Famine.59.a
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_3_b_y"
+			location = root.owner.capital_star
+			owner = root.owner
+		}
+		country_event = {
+			id = Famine.60
+			days = 15
+            }
+		}
+	}
+}
+
+country_event = {
+	id = Famine.60
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.60.title
+	desc = Famine.60.desc
+	picture = GFX_evt_f60
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.60.a
+	}
+}
+
+country_event = {
+	id = Famine.61
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.61.title
+	desc = Famine.61.desc
+	picture = GFX_evt_f61
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.61.a
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_1_b_y"
+			location = root.owner.capital_scope
+			owner = root.owner
+		}
+		country_event = {
+			id = Famine.62
+			days = 15
+            }
+		}
+	}
+	option = {
+		name = Famine.21.d
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_2_a_x"
+			location = root.owner.capital_scope
+			owner = root.owner
+		}
+		country_event = {
+			id = Famine.25
+			days = 15
+            }
+		}
+	}
+	option = {
+		name = Famine.61.b
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_2_b_x"
+			location = root.owner.capital_scope
+			owner = root.owner
+		}
+		country_event = {
+			id = Famine.63
+			days = 15
+            }
+		}
+	}
+}
+
+country_event = {
+	id = Famine.62
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.62.title
+	desc = Famine.62.desc
+	picture = GFX_evt_f62
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.62.a
+	}
+}
+
+country_event = {
+	id = Famine.63
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.63.title
+	desc = Famine.63.desc
+	picture = GFX_evt_f63
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.63.a
+	}
+}
+
+country_event = {
+	id = Famine.64
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.64.title
+	desc = Famine.64.desc
+	picture = GFX_evt_f64
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.64.a
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_3_a_x"
+			location = root.owner.capital_scope
+			owner = root.owner
+		}
+		country_event = {
+			id = Famine.65
+			days = 15
+            }
+		}
+	}
+	option = {
+		name = Famine.64.c
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_3_b_x"
+			location = root.owner.capital_scope
+			owner = root.owner
+		}
+		country_event = {
+			id = Famine.66
+			days = 15
+            }
+		}
+	}
+	option = {
+		name = Famine.64.b
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_3_b_x"
+			location = root.owner.capital_scope
+			owner = root.owner
+		}
+		country_event = {
+			id = Famine.66
+			days = 15
+            }
+		}
+	}
+}
+
+country_event = {
+	id = Famine.65
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.65.title
+	desc = Famine.65.desc
+	picture = GFX_evt_f65
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.65.a
+	}
+}
+
+country_event = {
+	id = Famine.66
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.66.title
+	desc = Famine.66.desc
+	picture = GFX_evt_f66
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.66.a
+	}
+}
+
+country_event = {
+	id = Famine.67
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.67.title
+	desc = Famine.67.desc
+	picture = GFX_evt_f67
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.67.a
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_4_b_x"
+			location = root.owner.capital_scope
+			owner = root.owner
+		}
+		country_event = {
+			id = Famine.68
+			days = 15
+            }
+		}
+	}
+	option = {
+		name = Famine.67.b
+		hidden_effect = {
+		country_event = {
+			id = Famine.101
+			days = 15
+            }
+		}
+	}
+}
+
+country_event = {
+	id = Famine.68
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.68.title
+	desc = Famine.68.desc
+	picture = GFX_evt_f68
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	option = {
+		name = Famine.68.a
+	}
+}
+
+country_event = {
+	id = Famine.69
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.69.title
+	desc = Famine.69.desc
+	picture = GFX_evt_f69
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+	immediate = {
+		hidden_effect = {
+        enable_special_project = {
+			name = "Stage_1_b_x"
+			location = root.owner.capital_scope
+			owner = root.owner
+		    }
+		}
+	}
+	option = {
+		name = Famine.69.a
+	}
+}
+
+##############################################################################################################################################################
+
+# End of situation chain, dictates how the crisis ends
+country_event = {
+	id = Famine.100
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.100.title
+	desc = Famine.100.desc
+	message_desc = Famine.100.desc
+	trackable = yes
+	location = event_target:Famine_system
+	diplomatic = yes
+	force_open = yes
+	picture_event_data = {
+		portrait = event_target:Famine_country
+		planet_background = event_target:Famine_country
+		graphical_culture = event_target:Famine_country
+		city_level = event_target:Famine_country
+		room = "galactic_emperor_room"
+	}
+	
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+		
+	}
+
+	immediate = {
+		set_country_flag = Passageway
+		begin_event_chain = {
+			event_chain = "kill_enemy"
+			target = event_target:Famine_system
+		}
+		establish_communications = event_target:Famine_country
+		random_system_within_border = {
+			limit = { NOT = {
+				has_star_flag = TGF_node
+			} }
+			set_star_flag = TGF_node
+			
+			spawn_natural_wormhole = {
+				bypass_type = TGF_wormhole
+				random_pos = yes
+			}
+		}
+	}
+	option = {
+		name = Famine.100.a
+		trigger = {
+			always = yes
+		}
+	}
+	option = {
+		name = Famine.100.b
+		trigger = {
+			always = yes
+		}
+	}
+	option = {
+		name = Famine.100.c
+		trigger = {
+			always = yes
+		}
+	}
+}
+
+country_event = {
+	id = Famine.101
+	is_triggered_only = yes
+	auto_opens = yes
+	title = Famine.101.title
+	desc = Famine.101.desc
+	message_desc = Famine.100.desc
+	trackable = yes
+	location = last_created_system
+	diplomatic = yes
+	force_open = yes
+	picture_event_data = {
+		portrait = event_target:Famine_country
+		planet_background = event_target:Famine_country
+		graphical_culture = event_target:Famine_country
+		city_level = event_target:Famine_country
+		room = "galactic_emperor_room"
+	}
+
+	trigger = {
+		has_global_flag = TGF_Main_in_progress
+	}
+
+	immediate = {
+		set_country_flag = Passageway
+		establish_communications = event_target:Famine_country
+		begin_event_chain = {
+			event_chain = "kill_enemy"
+			target = last_created_system
+		}
+		random_system_within_border = {
+			limit = { NOT = {
+				has_star_flag = TGF_node
+			} }
+			set_star_flag = TGF_node
+			spawn_natural_wormhole = {
+				bypass_type = TGF_wormhole
+				random_pos = yes
+			}
+		}
+	}
+	option = {
+		name = Famine.101.a
+		trigger = {
+			always = yes
+		}
+	}
+	option = {
+		name = Famine.101.b
+		trigger= {
+			always = yes
+		}
+	}
+	option = {
+		name = Famine.101.c
+		trigger = {
+			always = yes
+		}
+	}
+}
+
+##########################################################################################################################################################
+
+starbase_event = {
+	id = Famine.102
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+		owner = { is_country_type = "enemy" }
+	}
+
+	immediate = {
+		every_country = {
+			country_event = {
+				id = Famine.103
+			}
+		}
+		from = {
+			owner = {
+				add_relic = r_potato
+			}
+		}
+		owner = {
+			destroy_fleet = event_target:Famine_Fleet
+			destroy_country = yes
+		}
+		remove_global_flag = midgame_crisis_ongoing
+		remove_global_flag = TGF_2_in_progress
+		remove_global_flag = TGF_3_in_progress
+		remove_global_flag = TGF_4_in_progress
+		remove_global_flag = TGF_Main_in_progress
+	}
+}
+
+country_event = {
+	id = Famine.103
+	is_triggered_only = yes
+	fire_only_once = yes
+	auto_opens = yes
+	major = yes
+	location = last_created_system
+	title = Famine.103.title
+	desc = Famine.103.desc
+	picture = GFX_evt_over
+	trigger = {
+		has_global_flag = TGF_fired
+	}
+	immediate = {
+		every_country = {
+			every_owned_planet = {
+				remove_modifier = TGF_Mod_2
+			    remove_modifier = TGF_Mod_3
+			    remove_modifier = TGF_Mod_4
+			    remove_planet_flag = TGF_12_in_progress
+			    remove_planet_flag = TGF_13_in_progress
+			    remove_planet_flag = TGF_14_in_progress
+				remove_planet_flag = TGF_15
+				remove_planet_flag = TGF_16
+				remove_planet_flag = TGF_17
+			}
+			end_event_chain = "kill_enemy"
+		
+		# I know this looks ugly just... abort doesn't allow more than 1 type
+		abort_special_project = {
+			type = "Stage_0"
+		}
+		abort_special_project = {
+			type = "Stage_1_a_x"
+		}
+		abort_special_project = {
+			type = "Stage_2_a_x"
+		}
+		abort_special_project = {
+			type = "Stage_3_a_x"
+		}
+		abort_special_project = {
+			type = "Stage_1_a_y"
+		}
+		abort_special_project = {
+			type = "Stage_2_a_y"
+		}
+		abort_special_project = {
+			type = "Stage_3_a_y"
+		}
+		abort_special_project = {
+			type = "Stage_4_a_y"
+		}
+		abort_special_project = {
+			type = "Stage_1_b_x"
+		}
+		abort_special_project = {
+			type = "Stage_2_b_x"
+		}
+		abort_special_project = {
+			type = "Stage_3_b_x"
+		}
+		abort_special_project = {
+			type = "Stage_4_b_x"
+		}
+		abort_special_project = {
+			type = "Stage_1_b_y"
+		}
+		abort_special_project = {
+			type = "Stage_2_b_y"
+		}
+		abort_special_project = {
+			type = "Stage_3_b_y" 
+		}
+		}
+		
+	}
+	option = {
+		name = Famine.103.a
+		trigger = {
+			always = yes
+		}
+	}
+}
