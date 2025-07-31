@@ -1,0 +1,773 @@
+###lbd_dathnak_primary_scripted_effects
+###By Banjomarx
+###By Bread
+lbd_dathnak_original_dathnak_crisis_spawn = {
+	switch = {
+		trigger = has_global_flag
+		lbd_dathnak_supported_regime_authoritarian = {
+planet_event = {
+	id = lbd_dathnak.1
+}
+		}
+		lbd_dathnak_supported_rebel_uprising = {
+			planet_event = {
+				id = lbd_dathnak.2
+			}
+		}
+
+		lbd_dathnak_helped_relocate_twice = {
+			planet_event = {
+				id = lbd_dathnak.3
+			}
+		}
+		lbd_dathnak_helped_relocate_once = {
+			planet_event = {
+				id = lbd_dathnak.3
+			}
+		}
+		# lbd_dathnak_begun_vanilla_chain = {
+		# 	planet_event = {
+		# 		id = lbd_dathnak.5
+		# 	}
+		# }
+		 default = {
+			planet_event = {
+				id = lbd_dathnak.4
+			}
+		 }
+	}
+}
+lbd_dathnak_create_xenon_empire = {
+[[DIFFICULTY]
+event_target:lbd_dathnak_planet_xenon = {
+	create_country = {
+	name = dathnak_xenon_warrior_empire_name
+	adjective = "Dathnak"
+	type = default
+	name_list = lbd_dathnak_name_list
+	ship_prefix = "Dathnak"
+	authority = auth_imperial
+	species = event_target:lbd_dathnak_species
+	origin = origin_lbd_dathnak_xenon_warrior_princess_$DIFFICULTY$
+	civics = {
+		civic = civic_lbd_dathnak_wrath_of_xenon_$DIFFICULTY$
+		civic = civic_lbd_dathnak_vengeance_for_the_fallen_$DIFFICULTY$
+	}
+	ethos = {
+		ethic = ethic_fanatic_militarist
+		ethic = ethic_authoritarian
+	}
+	
+	effect = {
+		save_global_event_target_as = lbd_dathnak_xenon_crisis_country
+		set_ai_personality = lbd_dathnak_xenon_warriors_crisis
+		event_target:lbd_dathnak_planet_xenon = {
+			create_colony = {
+				owner = event_target:lbd_dathnak_xenon_crisis_country
+				species = event_target:lbd_dathnak_species
+			}
+			while = {
+				count = 75
+				create_pop = {
+					species = event_target:lbd_dathnak_species
+					ethos = {
+						ethic = ethic_militarist
+					}
+				}
+			}
+			while = {
+				count = 14
+				add_district = district_lbd_dathnak_city
+			}
+			while = {
+				count = 4
+				add_district = district_lbd_dathnak_generator
+			}
+			while = {
+				count = 4
+				add_district = district_lbd_dathnak_science
+			}
+			while = {
+				count = 4
+				add_district = district_lbd_dathnak_industrial
+			}
+			while = {
+				count = 8
+				add_district = district_lbd_dathnak_gas_gatherers
+			}
+
+		}
+		
+		set_country_flag = lbd_dathnak_xenon_ruled
+		set_country_flag = lbd_dathnak_country
+		country_event = {
+			id = lbd_dathnak.202
+		}
+		event_target:lbd_dathnak_planet_xenon = {
+			add_building = building_lbd_dathnak_growth_inducer
+			add_building = building_lbd_dathnak_foundry_3
+			add_building = building_lbd_dathnak_energy_nexus
+			add_building = building_lbd_dathnak_mineral_processing_plant
+			add_building = building_lbd_dathnak_mineral_processing_plant
+			set_deposit = d_exotic_gases_5
+			solar_system = {
+				every_system_planet = {
+					limit = {
+						is_planet_class = pc_lbd_dathnak_gas_giant
+						not = {
+							is_same_value = prevprev
+						}
+					}
+					create_colony = {
+						owner = event_target:lbd_dathnak_xenon_crisis_country
+						species = event_target:lbd_dathnak_species
+					}
+					while = {
+						count = 12
+						create_pop = {
+							species = event_target:lbd_dathnak_species
+							ethos = {
+								ethic = ethic_militarist
+							}
+						}
+					}
+					while = {
+						count = 4
+						add_district = district_lbd_dathnak_city
+					}
+					while = {
+						count = 2
+						add_district = district_lbd_dathnak_generator
+					}
+					while = {
+						count = 1
+						add_district = district_lbd_dathnak_science
+					}
+					while = {
+						count = 1
+						add_district = district_lbd_dathnak_industrial
+					}
+					while = {
+						count = 2
+						add_district = district_lbd_dathnak_gas_gatherers
+					}
+add_building = building_lbd_dathnak_mineral_processing_plant
+add_building = building_lbd_dathnak_mineral_processing_plant
+add_building = building_lbd_dathnak_growth_inducer
+add_building = building_lbd_dathnak_energy_grid
+				}
+			}
+		}
+
+		# country_event = {
+		# 	id = lbd_dathnak.10
+		# }
+		country_event = {
+			id = lbd_dathnak.203
+			days = 1
+		}
+		every_country = {
+			limit = {
+				is_ai = no
+				not = {
+					is_same_empire = event_target:lbd_dathnak_xenon_crisis_country
+				}
+			}
+			country_event = {
+				id = lbd_story.201
+				days = 1
+			}
+		}
+	}
+}
+}
+
+
+]
+
+	[[!DIFFICULTY]
+	event_target:lbd_dathnak_planet_xenon = {
+		create_country = {
+		name = dathnak_xenon_warrior_empire_name
+		adjective = "Dathnak"
+		type = default
+		name_list = lbd_dathnak_name_list
+		ship_prefix = "Dathnak"
+		authority = auth_imperial
+		species = event_target:lbd_dathnak_species
+		origin = origin_lbd_dathnak_xenon_warrior_princess
+		civics = {
+			civic = civic_lbd_dathnak_wrath_of_xenon
+			civic = civic_lbd_dathnak_vengeance_for_the_fallen
+		}
+		ethos = {
+			ethic = ethic_fanatic_militarist
+			ethic = ethic_authoritarian
+		}
+		
+		effect = {
+			save_global_event_target_as = lbd_dathnak_xenon_crisis_country
+			set_ai_personality = lbd_dathnak_xenon_warriors_crisis
+			event_target:lbd_dathnak_planet_xenon = {
+				create_colony = {
+					owner = event_target:lbd_dathnak_xenon_crisis_country
+					species = event_target:lbd_dathnak_species
+				}
+				while = {
+					count = 75
+					create_pop = {
+						species = event_target:lbd_dathnak_species
+						ethos = {
+							ethic = ethic_militarist
+						}
+					}
+				}
+				while = {
+					count = 14
+					add_district = district_lbd_dathnak_city
+				}
+				while = {
+					count = 4
+					add_district = district_lbd_dathnak_generator
+				}
+				while = {
+					count = 4
+					add_district = district_lbd_dathnak_science
+				}
+				while = {
+					count = 4
+					add_district = district_lbd_dathnak_industrial
+				}
+				while = {
+					count = 8
+					add_district = district_lbd_dathnak_gas_gatherers
+				}
+
+			}
+			
+			set_country_flag = lbd_dathnak_xenon_ruled
+			set_country_flag = lbd_dathnak_country
+			country_event = {
+				id = lbd_dathnak.202
+			}
+			event_target:lbd_dathnak_planet_xenon = {
+				add_building = building_lbd_dathnak_growth_inducer
+				add_building = building_lbd_dathnak_foundry_3
+				add_building = building_lbd_dathnak_energy_nexus
+				add_building = building_lbd_dathnak_mineral_processing_plant
+				add_building = building_lbd_dathnak_mineral_processing_plant
+				set_deposit = d_exotic_gases_5
+				solar_system = {
+					every_system_planet = {
+						limit = {
+							is_planet_class = pc_lbd_dathnak_gas_giant
+							not = {
+								is_same_value = prevprev
+							}
+						}
+						create_colony = {
+							owner = event_target:lbd_dathnak_xenon_crisis_country
+							species = event_target:lbd_dathnak_species
+						}
+						while = {
+							count = 12
+							create_pop = {
+								species = event_target:lbd_dathnak_species
+								ethos = {
+									ethic = ethic_militarist
+								}
+							}
+						}
+						while = {
+							count = 4
+							add_district = district_lbd_dathnak_city
+						}
+						while = {
+							count = 2
+							add_district = district_lbd_dathnak_generator
+						}
+						while = {
+							count = 1
+							add_district = district_lbd_dathnak_science
+						}
+						while = {
+							count = 1
+							add_district = district_lbd_dathnak_industrial
+						}
+						while = {
+							count = 2
+							add_district = district_lbd_dathnak_gas_gatherers
+						}
+add_building = building_lbd_dathnak_mineral_processing_plant
+add_building = building_lbd_dathnak_mineral_processing_plant
+add_building = building_lbd_dathnak_growth_inducer
+add_building = building_lbd_dathnak_energy_grid
+					}
+				}
+			}
+
+			# country_event = {
+			# 	id = lbd_dathnak.10
+			# }
+			country_event = {
+				id = lbd_dathnak.203
+				days = 1
+			}
+			every_country = {
+				limit = {
+					is_ai = no
+					not = {
+						is_same_empire = event_target:lbd_dathnak_xenon_crisis_country
+					}
+				}
+				country_event = {
+					id = lbd_story.201
+					days = 1
+				}
+			}
+		}
+	}
+}
+]
+}
+lbd_dathnak_planet_setup = {
+while = {
+	count = 7
+	add_district = district_lbd_dathnak_city
+}
+while = {
+	count = 4
+	add_district = district_lbd_dathnak_generator
+
+}
+while = {
+	count = 4
+	add_district = district_lbd_dathnak_industrial
+}
+while = {
+	count = 4
+	add_district = district_lbd_dathnak_science
+}
+while = {
+	count = 4
+	add_district = district_lbd_dathnak_gas_gatherers
+}
+while = {
+	count = 2
+	add_building = building_lbd_dathnak_mineral_processing_plant
+	
+}
+add_building = building_lbd_dathnak_foundry_2
+add_building = building_lbd_dathnak_growth_inducer
+add_building = building_lbd_dathnak_energy_nexus
+
+}
+lbd_declare_new_xenon_war = {
+	
+	random_country = {
+		limit = {
+			not = {
+				is_same_empire = event_target:lbd_dathnak_xenon_crisis_country
+			}
+			
+			event_target:lbd_dathnak_xenon_crisis_country = {
+				can_declare_war = {
+					target = prev
+					attacker_war_goal = wg_lbd_dathnak_xenon_crisis_containment
+				}
+			}
+		}
+event_target:lbd_dathnak_xenon_crisis_country = {
+declare_war = {
+	target = prev
+	attacker_war_goal = wg_lbd_dathnak_xenon_crisis_containment
+	effect = {
+		save_global_event_target_as = lbd_dathnak_current_xenon_war
+	}
+}
+
+}
+save_global_event_target_as = lbd_dathnak_xenon_current_main_combatant
+		weights = {
+			base =5
+			modifier = {
+				is_ai = no
+				factor = 250
+			}
+			modifier = {
+				num_pops > 0
+			num_ships > 0
+			 add = 200
+			}
+		}
+	}
+	lbd_dathnak_add_to_xenon_war = yes
+}
+lbd_dathnak_add_to_xenon_war = {
+	if = {
+		limit = {
+			exists = event_target:lbd_dathnak_current_xenon_war
+		}
+		every_country = {
+		limit = {
+			# OR = {
+				num_pops > 0
+				num_ships >0
+			# }
+			NOR = {
+				is_same_empire = event_target:lbd_dathnak_xenon_crisis_country
+				is_at_war_with = event_target:lbd_dathnak_xenon_crisis_country
+			}
+
+		}
+		join_war_on_side = {
+			war = event_target:lbd_dathnak_current_xenon_war
+			side = defenders
+		}
+
+	}	}
+}
+
+lbd_dathnak_remove_difficulty_flags = {
+
+
+
+		remove_global_flag = lbd_dathnak_massacre_mode
+		remove_global_flag = lbd_dathnak_brutal_mode
+		remove_global_flag = lbd_dathnak_deadly_mode
+		remove_global_flag = lbd_dathnak_medium_mode
+		remove_global_flag = lbd_dathnak_mild_mode
+		remove_global_flag = lbd_dathnak_flimsy_mode
+		
+	
+}
+lbd_dathnak_create_original_dathnak_empire = {
+	[[DIFFICULTY]
+	if = {
+		limit = {
+			has_megacorp = yes
+		}
+		root = {
+			
+			create_country = {
+				name = dathnak_unknown_country_name
+				adjective = "Dathnakian"
+				type = default
+				name_list = lbd_dathnak_name_list
+				ship_prefix = "Dathnak"
+				authority = auth_corporate
+				species = prev
+				origin = origin_lbd_dathnak_crisis_initial_$DIFFICULTY$
+				civics = {
+					civic = civic_lbd_dathnak_generic_civic_one_$DIFFICULTY$
+					civic = civic_criminal_heritage
+				}
+				ethos = {
+					ethic = ethic_xenophile
+					ethic = ethic_materialist
+					ethic = ethic_militarist
+				}
+				effect = {
+					
+					set_country_flag = lbd_dathnak_country
+					set_ai_personality = lbd_dathnak_original_crisis
+					root = {
+						create_colony = {
+							owner = prev
+							species = prevprevprev
+						}
+						while = {
+							count = 45
+							create_pop = {
+								species = prevprevprev
+								ethos = random
+							}
+						}
+						lbd_dathnak_planet_setup = yes
+					}
+					switch = {
+						trigger = has_global_flag
+						lbd_dathnak_supported_regime_authoritarian = {
+							force_add_civic = civic_lbd_dathnak_authoritarian_regime_$DIFFICULTY$
+							force_remove_civic = civic_lbd_dathnak_generic_civic_one_$DIFFICULTY$
+						}
+						lbd_dathnak_supported_rebel_uprising = {
+							force_add_civic = civic_lbd_dathnak_revolution_is_on_$DIFFICULTY$
+							force_remove_civic = civic_lbd_dathnak_generic_civic_one_$DIFFICULTY$
+						}
+						lbd_dathnak_helped_relocate_twice = {
+							force_add_civic = civic_lbd_dathnak_helped_relocate_twice_$DIFFICULTY$
+							force_remove_civic = civic_lbd_dathnak_generic_civic_one_$DIFFICULTY$
+						}
+						lbd_dathnak_helped_relocate_once = {
+							force_add_civic = civic_lbd_dathnak_helped_relocate_once_$DIFFICULTY$
+							force_remove_civic = civic_lbd_dathnak_generic_civic_one_$DIFFICULTY$
+						}
+						default = {
+
+						}
+					}
+					save_global_event_target_as = lbd_dathnak_original_crisis_country
+					country_event = {
+						id = lbd_dathnak.10
+					}
+					every_country = {
+						limit = {
+							is_ai = no
+							not = {
+								is_same_empire = prev
+							}
+						}
+						country_event = {
+							id = lbd_story.4
+							days = 1
+						}
+					}
+				}
+			}
+		}
+	}
+	else = {
+		root = {
+			create_country = {
+				name = dathnak_unknown_country_name
+				adjective = "Dathnakian"
+				type = default
+				name_list = lbd_dathnak_name_list
+				ship_prefix = "Dathnak"
+				authority = auth_imperial
+				species = prev
+				origin = origin_lbd_dathnak_crisis_initial_$DIFFICULTY$
+				civics = {
+					civic = civic_lbd_dathnak_generic_civic_one_$DIFFICULTY$
+					civic = civic_imperial_cult
+				}
+				ethos = {
+					ethic = ethic_authoritarian
+					ethic = ethic_spiritualist
+					ethic = ethic_militarist
+				}
+				effect = {
+					
+					set_ai_personality = lbd_dathnak_original_crisis
+					root = {
+						create_colony = {
+							owner = prev
+							species = prevprevprev
+						}
+						while = {
+							count = 45
+							create_pop = {
+								species = prevprevprev
+								ethos = random
+							}
+						}
+					}
+					switch = {
+						trigger = has_global_flag
+						lbd_dathnak_supported_regime_authoritarian = {
+							force_add_civic = civic_lbd_dathnak_authoritarian_regime_$DIFFICULTY$
+							force_remove_civic = civic_lbd_dathnak_generic_civic_one_$DIFFICULTY$
+						}
+						lbd_dathnak_supported_rebel_uprising = {
+							force_add_civic = civic_lbd_dathnak_revolution_is_on_$DIFFICULTY$
+							force_remove_civic = civic_lbd_dathnak_generic_civic_one_$DIFFICULTY$
+						}
+						lbd_dathnak_helped_relocate_twice = {
+							force_add_civic = civic_lbd_dathnak_helped_relocate_twice_$DIFFICULTY$
+							force_remove_civic = civic_lbd_dathnak_generic_civic_one_$DIFFICULTY$
+						}
+						lbd_dathnak_helped_relocate_once = {
+							force_add_civic = civic_lbd_dathnak_helped_relocate_once_$DIFFICULTY$
+							force_remove_civic = civic_lbd_dathnak_generic_civic_one_$DIFFICULTY$
+						}
+						default = {
+
+						}
+					}
+					save_global_event_target_as = lbd_dathnak_original_crisis_country
+					country_event = {
+						id = lbd_dathnak.10
+					}
+					every_country = {
+						limit = {
+							is_ai = no
+							not = {
+								is_same_empire = prev
+							}
+						}
+						country_event = {
+							id = lbd_story.4
+							days = 1
+						}
+					}
+				}
+			}
+		}
+	} 
+	]
+	[[!DIFFICULTY] 
+	if = {
+		limit = {
+			has_megacorp = yes
+		}
+		root = {
+			
+			create_country = {
+				name = dathnak_unknown_country_name
+				adjective = "Dathnakian"
+				type = default
+				name_list = lbd_dathnak_name_list
+				ship_prefix = "Dathnak"
+				authority = auth_corporate
+				species = prev
+				origin = origin_lbd_dathnak_crisis_initial
+				civics = {
+					civic = civic_lbd_dathnak_generic_civic_one
+					civic = civic_criminal_heritage
+				}
+				ethos = {
+					ethic = ethic_xenophile
+					ethic = ethic_materialist
+					ethic = ethic_militarist
+				}
+				effect = {
+					
+					set_country_flag = lbd_dathnak_country
+					set_ai_personality = lbd_dathnak_original_crisis
+					root = {
+						create_colony = {
+							owner = prev
+							species = prevprevprev
+						}
+						while = {
+							count = 45
+							create_pop = {
+								species = prevprevprev
+								ethos = random
+							}
+						}
+						lbd_dathnak_planet_setup = yes
+					}
+					switch = {
+						trigger = has_global_flag
+						lbd_dathnak_supported_regime_authoritarian = {
+							force_add_civic = civic_lbd_dathnak_authoritarian_regime
+							force_remove_civic = civic_lbd_dathnak_generic_civic_one
+						}
+						lbd_dathnak_supported_rebel_uprising = {
+							force_add_civic = civic_lbd_dathnak_revolution_is_on
+							force_remove_civic = civic_lbd_dathnak_generic_civic_one
+						}
+						lbd_dathnak_helped_relocate_twice = {
+							force_add_civic = civic_lbd_dathnak_helped_relocate_twice
+							force_remove_civic = civic_lbd_dathnak_generic_civic_one
+						}
+						lbd_dathnak_helped_relocate_once = {
+							force_add_civic = civic_lbd_dathnak_helped_relocate_once
+							force_remove_civic = civic_lbd_dathnak_generic_civic_one
+						}
+						default = {
+
+						}
+					}
+					save_global_event_target_as = lbd_dathnak_original_crisis_country
+					country_event = {
+						id = lbd_dathnak.10
+					}
+					every_country = {
+						limit = {
+							is_ai = no
+							not = {
+								is_same_empire = prev
+							}
+						}
+						country_event = {
+							id = lbd_story.4
+							days = 1
+						}
+					}
+				}
+			}
+		}
+	}
+	else = {
+		root = {
+			create_country = {
+				name = dathnak_unknown_country_name
+				adjective = "Dathnakian"
+				type = default
+				name_list = lbd_dathnak_name_list
+				ship_prefix = "Dathnak"
+				authority = auth_imperial
+				species = prev
+				origin = origin_lbd_dathnak_crisis_initial
+				civics = {
+					civic = civic_lbd_dathnak_generic_civic_one
+					civic = civic_imperial_cult
+				}
+				ethos = {
+					ethic = ethic_authoritarian
+					ethic = ethic_spiritualist
+					ethic = ethic_militarist
+				}
+				effect = {
+					
+					set_ai_personality = lbd_dathnak_original_crisis
+					root = {
+						create_colony = {
+							owner = prev
+							species = prevprevprev
+						}
+						while = {
+							count = 45
+							create_pop = {
+								species = prevprevprev
+								ethos = random
+							}
+						}
+					}
+					switch = {
+						trigger = has_global_flag
+						lbd_dathnak_supported_regime_authoritarian = {
+							force_add_civic = civic_lbd_dathnak_authoritarian_regime
+							force_remove_civic = civic_lbd_dathnak_generic_civic_one
+						}
+						lbd_dathnak_supported_rebel_uprising = {
+							force_add_civic = civic_lbd_dathnak_revolution_is_on
+							force_remove_civic = civic_lbd_dathnak_generic_civic_one
+						}
+						lbd_dathnak_helped_relocate_twice = {
+							force_add_civic = civic_lbd_dathnak_helped_relocate_twice
+							force_remove_civic = civic_lbd_dathnak_generic_civic_one
+						}
+						lbd_dathnak_helped_relocate_once = {
+							force_add_civic = civic_lbd_dathnak_helped_relocate_once
+							force_remove_civic = civic_lbd_dathnak_generic_civic_one
+						}
+						default = {
+
+						}
+					}
+					save_global_event_target_as = lbd_dathnak_original_crisis_country
+					country_event = {
+						id = lbd_dathnak.10
+					}
+					every_country = {
+						limit = {
+							is_ai = no
+							not = {
+								is_same_empire = prev
+							}
+						}
+						country_event = {
+							id = lbd_story.4
+							days = 1
+						}
+					}
+				}
+			}
+		}
+	} 
+	]
+}

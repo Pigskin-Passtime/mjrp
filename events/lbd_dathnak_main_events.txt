@@ -1,0 +1,3523 @@
+###lbd_dathnak_main_events
+###By Banjomarx
+###By Bread
+namespace = lbd_dathnak
+namespace = lbd_story
+country_event = {
+	id = lbd_dathnak.0
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+		NOT = { has_global_flag = lbd_dathnak_has_host }
+	}
+
+	immediate = {
+		set_global_flag = lbd_dathnak_has_host
+		set_country_flag = lbd_dathnak_host
+		country_event = {
+			id = lbd_dathnak.75
+			days = 5
+		}
+	}
+}
+
+country_event = {
+	id = lbd_dathnak.75
+	is_triggered_only = yes
+	hide_window = no
+	title = lbd_dathnak.75.title
+	desc = lbd_dathnak.75.desc
+
+	trigger = {
+		has_global_flag = lbd_dathnak_allowed
+	}
+
+	immediate = {
+	
+	}
+	option = {
+		name = lbd_dathnak.75.massacre
+		lbd_dathnak_remove_difficulty_flags = yes
+		set_global_flag = lbd_dathnak_massacre_mode
+		country_event = {
+			id = lbd_dathnak.75
+		}
+	}
+	option = {
+		name = lbd_dathnak.75.brutal
+		lbd_dathnak_remove_difficulty_flags = yes
+		set_global_flag = lbd_dathnak_brutal_mode
+		country_event = {
+			id = lbd_dathnak.75
+		}
+	}
+	option = {
+		name = lbd_dathnak.75.deadly
+		lbd_dathnak_remove_difficulty_flags = yes
+		set_global_flag = lbd_dathnak_deadly_mode
+		country_event = {
+			id = lbd_dathnak.75
+		}
+	}
+	option = {
+		name = lbd_dathnak.75.medium
+		lbd_dathnak_remove_difficulty_flags = yes
+		set_global_flag = lbd_dathnak_medium_mode
+		country_event = {
+			id = lbd_dathnak.75
+		}
+	}
+	option = {
+		name = lbd_dathnak.75.mild
+		lbd_dathnak_remove_difficulty_flags = yes
+		set_global_flag = lbd_dathnak_mild_mode
+		country_event = {
+			id = lbd_dathnak.75
+		}
+	}
+	option = {
+		name = lbd_dathnak.75.flimsy
+		lbd_dathnak_remove_difficulty_flags = yes
+		set_global_flag = lbd_dathnak_flimsy_mode
+		country_event = {
+			id = lbd_dathnak.75
+		}
+	}
+	option = {
+		name = lbd_dathnak.75.done
+	}
+}
+planet_event = {
+	id = lbd_dathnak.1
+	is_triggered_only = yes
+	hide_window = yes
+	immediate = {
+		create_species = {
+			name = "Dathnak"
+			plural = "Dathnak"
+			class = LBDDATHNAK
+			homeworld = root
+			sapient = yes
+			namelist = lbd_dathnak_name_list
+			traits = {
+				trait = trait_lbd_dathnak_base
+				trait = trait_lithoid_gaseous_byproducts
+				trait = trait_rapid_breeders
+				trait = trait_repugnant
+			}
+			effect = {
+				save_global_event_target_as = lbd_dathnak_species
+				root = {
+					create_country = {
+						name = dathnak_authoritarian_country_name
+						adjective = "Dathnakian"
+						type = default
+						name_list = lbd_dathnak_name_list
+						ship_prefix = "Dathnak"
+						authority = auth_imperial
+						species = prev
+						origin = origin_lbd_dathnak_crisis_initial
+						civics = {
+							civic = civic_lbd_dathnak_generic_civic_one
+							civic = civic_police_state
+						}
+						ethos = {
+							ethic = ethic_fanatic_authoritarian
+							ethic = ethic_militarist
+						}
+						effect = {
+							set_country_flag = lbd_dathnak_country
+							set_ai_personality = lbd_dathnak_original_crisis
+							root = {
+								create_colony = {
+									owner = prev
+									species = prevprevprev
+								}
+								while = {
+									count = 45
+									create_pop = {
+										species = prevprevprev
+										ethos = {
+											ethic = ethic_authoritarian
+										}
+									}
+								}
+								lbd_dathnak_planet_setup = yes
+							}
+							switch = {
+								trigger = has_global_flag
+								lbd_dathnak_supported_regime_authoritarian = {
+									force_add_civic = civic_lbd_dathnak_authoritarian_regime
+									force_remove_civic = civic_lbd_dathnak_generic_civic_one
+								}
+								lbd_dathnak_supported_rebel_uprising = {
+									force_add_civic = civic_lbd_dathnak_revolution_is_on
+									force_remove_civic = civic_lbd_dathnak_generic_civic_one
+								}
+								lbd_dathnak_helped_relocate_twice = {
+									force_add_civic = civic_lbd_dathnak_helped_relocate_twice
+									force_remove_civic = civic_lbd_dathnak_generic_civic_one
+								}
+								lbd_dathnak_helped_relocate_once = {
+									force_add_civic = civic_lbd_dathnak_helped_relocate_once
+									force_remove_civic = civic_lbd_dathnak_generic_civic_one
+								}
+								default = {
+		
+								}
+							}
+							save_global_event_target_as = lbd_dathnak_original_crisis_country
+							country_event = {
+								id = lbd_dathnak.10
+							}
+							every_country = {
+								limit = {
+									is_ai = no
+									not = {
+										is_same_empire = prev
+									}
+								}
+								country_event = {
+									id = lbd_story.1
+									days = 1
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = lbd_dathnak.2
+	is_triggered_only = yes
+	hide_window = yes
+	immediate = {
+		create_species = {
+			name = "Dathnak"
+			plural = "Dathnak"
+			class = LBDDATHNAK
+			homeworld = root
+			sapient = yes
+			namelist = lbd_dathnak_name_list
+			traits = {
+				trait = trait_lbd_dathnak_base
+				trait = trait_lithoid_gaseous_byproducts
+				trait = trait_rapid_breeders
+				trait = trait_repugnant
+			}
+			effect = {
+				save_global_event_target_as = lbd_dathnak_species
+				root = {
+					create_country = {
+						name = dathnak_communist_country_name
+						adjective = "Dathnakian"
+						type = default
+						name_list = lbd_dathnak_name_list
+						ship_prefix = "Dathnak"
+						authority = auth_democratic
+						species = prev
+						origin = origin_lbd_dathnak_crisis_initial
+						civics = {
+							civic = civic_lbd_dathnak_generic_civic_one
+							civic = civic_citizen_service
+						}
+						ethos = {
+							ethic = ethic_fanatic_egalitarian
+							ethic = ethic_militarist
+						}
+						effect = {
+							set_country_flag = lbd_dathnak_country
+							set_ai_personality = lbd_dathnak_original_crisis
+							root = {
+								create_colony = {
+									owner = prev
+									species = prevprevprev
+								}
+								while = {
+									count = 45
+									create_pop = {
+										species = prevprevprev
+										ethos = {
+											ethic = ethic_egalitarian
+										}
+									}
+								}
+								lbd_dathnak_planet_setup = yes
+							}
+							switch = {
+								trigger = has_global_flag
+								lbd_dathnak_supported_regime_authoritarian = {
+									force_add_civic = civic_lbd_dathnak_authoritarian_regime
+									force_remove_civic = civic_lbd_dathnak_generic_civic_one
+								}
+								lbd_dathnak_supported_rebel_uprising = {
+									force_add_civic = civic_lbd_dathnak_revolution_is_on
+									force_remove_civic = civic_lbd_dathnak_generic_civic_one
+								}
+								lbd_dathnak_helped_relocate_twice = {
+									force_add_civic = civic_lbd_dathnak_helped_relocate_twice
+									force_remove_civic = civic_lbd_dathnak_generic_civic_one
+								}
+								lbd_dathnak_helped_relocate_once = {
+									force_add_civic = civic_lbd_dathnak_helped_relocate_once
+									force_remove_civic = civic_lbd_dathnak_generic_civic_one
+								}
+								default = {
+		
+								}
+							}
+							save_global_event_target_as = lbd_dathnak_original_crisis_country
+							country_event = {
+								id = lbd_dathnak.10
+							}
+							every_country = {
+								limit = {
+									is_ai = no
+									not = {
+										is_same_empire = prev
+									}
+								}
+								country_event = {
+									id = lbd_story.2
+									days = 1
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = lbd_dathnak.3
+	is_triggered_only = yes
+	hide_window = yes
+	immediate = {
+		create_species = {
+			name = "Dathnak"
+			plural = "Dathnak"
+			class = LBDDATHNAK
+			homeworld = root
+			sapient = yes
+			namelist = lbd_dathnak_name_list
+			traits = {
+				trait = trait_lbd_dathnak_base
+				trait = trait_lithoid_gaseous_byproducts
+				trait = trait_rapid_breeders
+				trait = trait_repugnant
+			}
+			effect = {
+				save_global_event_target_as = lbd_dathnak_species
+				root = {
+					create_country = {
+						name = dathnak_relocate_country_name
+						adjective = "Dathnakian"
+						type = default
+						name_list = lbd_dathnak_name_list
+						ship_prefix = "Dathnak"
+						authority = auth_oligarchic
+						species = prev
+						origin = origin_lbd_dathnak_crisis_initial
+						civics = {
+							civic = civic_lbd_dathnak_generic_civic_one
+							civic = civic_meritocracy
+						}
+						ethos = {
+							ethic = ethic_xenophile
+							ethic = ethic_materialist
+							ethic = ethic_militarist
+						}
+						effect = {
+							set_country_flag = lbd_dathnak_country
+							set_ai_personality = lbd_dathnak_original_crisis
+							root = {
+								create_colony = {
+									owner = prev
+									species = prevprevprev
+								}
+								while = {
+									count = 45
+									create_pop = {
+										species = prevprevprev
+										ethos = random
+									}
+								}
+								lbd_dathnak_planet_setup = yes
+							}
+							switch = {
+								trigger = has_global_flag
+								lbd_dathnak_supported_regime_authoritarian = {
+									force_add_civic = civic_lbd_dathnak_authoritarian_regime
+									force_remove_civic = civic_lbd_dathnak_generic_civic_one
+								}
+								lbd_dathnak_supported_rebel_uprising = {
+									force_add_civic = civic_lbd_dathnak_revolution_is_on
+									force_remove_civic = civic_lbd_dathnak_generic_civic_one
+								}
+								lbd_dathnak_helped_relocate_twice = {
+									force_add_civic = civic_lbd_dathnak_helped_relocate_twice
+									force_remove_civic = civic_lbd_dathnak_generic_civic_one
+								}
+								lbd_dathnak_helped_relocate_once = {
+									force_add_civic = civic_lbd_dathnak_helped_relocate_once
+									force_remove_civic = civic_lbd_dathnak_generic_civic_one
+								}
+								default = {
+		
+								}
+							}
+							save_global_event_target_as = lbd_dathnak_original_crisis_country
+							country_event = {
+								id = lbd_dathnak.10
+							}
+							every_country = {
+								limit = {
+									is_ai = no
+									not = {
+										is_same_empire = prev
+									}
+								}
+								country_event = {
+									id = lbd_story.3
+									days = 1
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = lbd_dathnak.4
+	is_triggered_only = yes
+	hide_window = yes
+	immediate = {
+		create_species = {
+			name = "Dathnak"
+			plural = "Dathnak"
+			class = LBDDATHNAK
+			homeworld = root
+			sapient = yes
+			namelist = lbd_dathnak_name_list
+			traits = {
+				trait = trait_lbd_dathnak_base
+				trait = trait_lithoid_gaseous_byproducts
+				trait = trait_rapid_breeders
+				trait = trait_repugnant
+			}
+			effect = {
+				save_global_event_target_as = lbd_dathnak_species
+				switch = {
+					trigger = has_global_flag
+					lbd_dathnak_massacre_mode = {
+						lbd_dathnak_create_original_dathnak_empire = {
+							DIFFICULTY = massacre
+						}
+					}
+					lbd_dathnak_brutal_mode = {
+						lbd_dathnak_create_original_dathnak_empire = {
+							DIFFICULTY = brutal
+						}
+					}
+					lbd_dathnak_medium_mode = {
+						lbd_dathnak_create_original_dathnak_empire = {
+							DIFFICULTY = medium
+						}
+					}
+					lbd_dathnak_mild_mode = {
+						lbd_dathnak_create_original_dathnak_empire = {
+							DIFFICULTY = mild
+						}
+					}
+					lbd_dathnak_flimsy_mode = {
+						lbd_dathnak_create_original_dathnak_empire = {
+							DIFFICULTY = flimsy
+						}
+					}
+					default = {
+						lbd_dathnak_create_original_dathnak_empire = yes
+					}
+				}
+				
+			}
+		}
+	}
+}
+
+country_event = {
+	id = lbd_dathnak.10
+	is_triggered_only = yes
+	hide_window = yes
+	immediate = {
+		every_country = {
+			establish_communications_no_message = root
+		}
+		create_country = {
+			name = "Tier 2 Country"
+			type = lbd_dathnak_tier_4_country
+			flag = {
+				icon = {
+					category = "special"
+					file = "the_shroud.dds"
+				}
+				background = {
+					category = "backgrounds"
+					file = "00_solid.dds"
+				}
+				colors = {
+					"black"
+					"black"
+					"null"
+					"null"
+				}
+			}
+			effect = {
+				event_target:lbd_dathnak_original_crisis_country = {
+					set_country_flag = lbd_dathnak_original_crisis_country
+					copy_techs_from = {
+						target = prev
+						except = {
+							tech_akx_worm_1
+							tech_akx_worm_2
+							tech_akx_worm_3
+							tech_nanite_assemblers
+							tech_nanite_repair_system
+							tech_nanite_transmutation
+							null_void_beam
+							tech_acot_swarm_strike_craft
+							tech_swarm_strike_craft_1
+							tech_acot_scourge_missile
+							tech_scourge_missile_1
+							tech_acot_matter_disintegrator
+							tech_extradimensional_weapon_1
+							tech_energy_lance_edi
+							tech_energy_lance_contingency
+							tech_perdition_beam_contingency
+						}
+					}
+					add_resource = {
+						energy = 5000
+						minerals = 8000
+						alloys = 5000
+						consumer_goods = 4000
+						exotic_gases = 1500
+						volatile_motes = 500
+						rare_crystals = 500
+						food = 500
+						unity = 1000
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_colonization
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_exotic_gas_refining
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_armor
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_hull
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_shields
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_small_lasers
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_medium_lasers
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_power_hub_1
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_power_hub_2
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_large_lasers
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_energy_torpedoes
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_energy_lance
+					}
+					give_technology = {
+						tech = tech_titans
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_titan_titanic_lasers
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_titanic_lasers
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_basic_industry
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_alloys_1
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_alloys_2
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_exotic_gas_growth_induction
+					}
+				}
+				destroy_country = yes
+			}
+		}
+		switch = {
+			trigger = has_global_flag
+			lbd_dathnak_supported_regime_authoritarian = {
+				country_event = {
+					id = lbd_dathnak.101
+					days = 7200
+					random = 360
+				}
+				country_event = {
+					id = lbd_dathnak.130
+					days = 360
+					random = 360
+				}
+			}
+			lbd_dathnak_supported_rebel_uprising = {
+				country_event = {
+					id = lbd_dathnak.101
+					days = 7200
+					random = 360
+				}
+				country_event = {
+					id = lbd_dathnak.130
+					days = 360
+					random = 360
+				}
+			}
+			lbd_dathnak_helped_relocate_twice = {
+				country_event = {
+					id = lbd_dathnak.101
+					days = 3600
+					random = 360
+				}
+				country_event = {
+					id = lbd_dathnak.130
+					days = 360
+					random = 360
+				}
+			}
+			lbd_dathnak_helped_relocate_once = {
+				country_event = {
+					id = lbd_dathnak.101
+					days = 1800
+					random = 360
+				}
+				country_event = {
+					id = lbd_dathnak.130
+					days = 360
+					random = 360
+				}
+			}
+			lbd_dathnak_begun_vanilla_chain = {
+				country_event = {
+					id = lbd_dathnak.101
+					days = 360
+					random = 180
+				}
+			}
+			default = {
+				country_event = {
+					id = lbd_dathnak.101
+					days = 180
+					random = 90
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = lbd_story.1
+	hide_window = no
+	force_open = yes
+	is_triggered_only = yes
+	show_sound = diplomatic_notification
+	diplomatic = yes
+	title = lbd_story.1.title
+	desc = {
+		text = lbd_story.1.hive
+		trigger = {
+			is_hive_empire = yes
+		}
+	}
+	desc = {
+		text = lbd_story.1.machine
+		trigger = {
+			is_machine_empire = yes
+		}
+	}
+	desc = {
+		text = lbd_story.1.reg
+		trigger = {
+			is_regular_empire = yes
+		}
+	}
+	option = {
+		name = lbd_story.1.what_do_you_want
+	}
+	option = {
+		name = lbd_story.1.please_no
+	}
+	option = {
+		name = lbd_story.1.exterminate
+	}
+	option = {
+		name = lbd_story.1.screaming
+		ai_chance = {
+			base = 100
+		}
+	}
+	option = {
+		name = lbd_story.1.oh_hi
+	}
+	after = {
+		country_event = {
+			id = lbd_story.5
+		}
+	}
+}
+
+country_event = {
+	id = lbd_story.2
+	hide_window = no
+	force_open = yes
+	is_triggered_only = yes
+	show_sound = diplomatic_notification
+	diplomatic = yes
+	title = lbd_story.2.title
+	desc = {
+		text = lbd_story.2.hive
+		trigger = {
+			is_hive_empire = yes
+		}
+	}
+	desc = {
+		text = lbd_story.2.machine
+		trigger = {
+			is_machine_empire = yes
+		}
+	}
+	desc = {
+		text = lbd_story.2.reg
+		trigger = {
+			is_regular_empire = yes
+		}
+	}
+	option = {
+		name = lbd_story.2.what_do_you_want
+	}
+	option = {
+		name = lbd_story.2.please_no
+	}
+	option = {
+		name = lbd_story.2.exterminate
+	}
+	option = {
+		name = lbd_story.2.screaming
+		ai_chance = {
+			base = 100
+		}
+	}
+	option = {
+		name = lbd_story.2.oh_hi
+	}
+	after = {
+		country_event = {
+			id = lbd_story.5
+		}
+	}
+}
+
+country_event = {
+	id = lbd_story.3
+	hide_window = no
+	force_open = yes
+	is_triggered_only = yes
+	show_sound = diplomatic_notification
+	diplomatic = yes
+	title = lbd_story.3.title
+	desc = {
+		text = lbd_story.3.hive
+		trigger = {
+			is_hive_empire = yes
+		}
+	}
+	desc = {
+		text = lbd_story.3.machine
+		trigger = {
+			is_machine_empire = yes
+		}
+	}
+	desc = {
+		text = lbd_story.3.reg
+		trigger = {
+			is_regular_empire = yes
+		}
+	}
+	option = {
+		name = lbd_story.3.what_do_you_want
+	}
+	option = {
+		name = lbd_story.3.please_no
+	}
+	option = {
+		name = lbd_story.3.exterminate
+	}
+	option = {
+		name = lbd_story.3.screaming
+		ai_chance = {
+			base = 100
+		}
+	}
+	option = {
+		name = lbd_story.3.oh_hi
+	}
+	after = {
+		country_event = {
+			id = lbd_story.5
+		}
+	}
+}
+
+country_event = {
+	id = lbd_story.4
+	hide_window = no
+	force_open = yes
+	is_triggered_only = yes
+	show_sound = diplomatic_notification
+	diplomatic = yes
+	title = lbd_story.4.title
+	desc = {
+		text = lbd_story.4.hive
+		trigger = {
+			is_hive_empire = yes
+		}
+	}
+	desc = {
+		text = lbd_story.4.machine
+		trigger = {
+			is_machine_empire = yes
+		}
+	}
+	desc = {
+		text = lbd_story.4.reg
+		trigger = {
+			is_regular_empire = yes
+		}
+	}
+	option = {
+		name = lbd_story.4.what_do_you_want
+	}
+	option = {
+		name = lbd_story.4.please_no
+	}
+	option = {
+		name = lbd_story.4.exterminate
+	}
+	option = {
+		name = lbd_story.4.screaming
+		ai_chance = {
+			base = 100
+		}
+	}
+	option = {
+		name = lbd_story.4.oh_hi
+	}
+	after = {
+		country_event = {
+			id = lbd_story.5
+		}
+	}
+}
+
+country_event = {
+	id = lbd_story.5
+	hide_window = no
+	force_open = yes
+	is_triggered_only = yes
+	show_sound = diplomatic_notification
+	diplomatic = yes
+	title = lbd_story.5.title
+	desc = {
+		text = lbd_story.5.authoritarian
+		trigger = {
+			has_global_flag = lbd_dathnak_supported_regime_authoritarian
+		}
+	}
+	desc = {
+		text = lbd_story.5.rebel
+		trigger = {
+			has_global_flag = lbd_dathnak_supported_rebel_uprising
+		}
+	}
+	desc = {
+		text = lbd_story.5.reloc_twice
+		trigger = {
+			has_global_flag = lbd_dathnak_helped_relocate_twice
+			nor = {
+				has_global_flag = lbd_dathnak_supported_regime_authoritarian
+				has_global_flag = lbd_dathnak_supported_rebel_uprising
+			}
+		}
+	}
+	desc = {
+		text = lbd_story.5.reloc_once
+		trigger = {
+			has_global_flag = lbd_dathnak_helped_relocate_once
+			not = {
+				has_global_flag = lbd_dathnak_helped_relocate_twice
+			}
+		}
+	}
+	desc = {
+		text = lbd_story.5.reloc_none
+		trigger = {
+			has_global_flag = lbd_dathnak_begun_vanilla_chain
+			not = {
+				has_global_flag = lbd_dathnak_helped_relocate_once
+			}
+		}
+	}
+	desc = {
+		text = lbd_story.5.no_encounter
+		trigger = {
+			not = {
+				has_global_flag = lbd_dathnak_begun_vanilla_chain
+			}
+		}
+	}
+	option = {
+		name = lbd_story.5.ya_sure
+	}
+	option = {
+		name = lbd_story.5.we_will_find_you
+	}
+	option = {
+		name = lbd_story.5.exterminate
+	}
+	option = {
+		name = lbd_story.5.screaming
+	}
+	option = {
+		name = lbd_story.5.car_insurance
+		ai_chance = {
+			base = 100
+		}
+	}
+	after = {
+		country_event = {
+			id = lbd_story.6
+		}
+	}
+}
+
+country_event = {
+	id = lbd_story.6
+	hide_window = no
+	force_open = yes
+	is_triggered_only = yes
+	show_sound = diplomatic_notification
+	diplomatic = yes
+	title = lbd_story.6.title
+	desc = {
+		text = lbd_story.6.authoritarian
+		trigger = {
+			has_global_flag = lbd_dathnak_supported_regime_authoritarian
+		}
+	}
+	desc = {
+		text = lbd_story.6.rebel
+		trigger = {
+			has_global_flag = lbd_dathnak_supported_rebel_uprising
+		}
+	}
+	desc = {
+		text = lbd_story.6.reloc_twice
+		trigger = {
+			has_global_flag = lbd_dathnak_helped_relocate_twice
+			nor = {
+				has_global_flag = lbd_dathnak_supported_regime_authoritarian
+				has_global_flag = lbd_dathnak_supported_rebel_uprising
+			}
+		}
+	}
+	desc = {
+		text = lbd_story.6.reloc_once
+		trigger = {
+			has_global_flag = lbd_dathnak_helped_relocate_once
+			not = {
+				has_global_flag = lbd_dathnak_helped_relocate_twice
+			}
+		}
+	}
+	desc = {
+		text = lbd_story.6.reloc_none
+		trigger = {
+			has_global_flag = lbd_dathnak_begun_vanilla_chain
+			not = {
+				has_global_flag = lbd_dathnak_helped_relocate_once
+			}
+		}
+	}
+	desc = {
+		text = lbd_story.6.no_encounter
+		trigger = {
+			not = {
+				has_global_flag = lbd_dathnak_begun_vanilla_chain
+			}
+		}
+	}
+	option = {
+		name = lbd_story.6.ugh
+	}
+	option = {
+		name = lbd_story.6.well_then
+	}
+	option = {
+		name = lbd_story.6.exterminate
+	}
+	option = {
+		name = lbd_story.6.screaming
+		ai_chance = {
+			base = 100
+		}
+	}
+	option = {
+		name = lbd_story.6.you_too
+	}
+	after = {
+		add_resource = {
+			exotic_gases = 100
+		}
+	}
+}
+
+country_event = {
+	id = lbd_dathnak.101
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		exists = event_target:lbd_dathnak_original_crisis_country
+	}
+	immediate = {
+		if = {
+			limit = {
+				OR = {
+					NAND = {
+						is_subject = yes
+						is_specialist_subject_tier = {
+							TYPE = lbd_dathnak_specialist
+							TIER = 1
+						}
+					}
+					has_country_flag = lbd_dathnak_planned_rebellion
+				}
+			}
+			remove_global_flag = lbd_dathnak_planned_rebellion
+			if = {
+				limit = {
+					has_global_flag = lbd_dathnak_player_fought_once
+					not = {
+						has_country_flag = lbd_dathnak_event_delayed_once
+					}
+				}
+				set_country_flag = lbd_dathnak_event_delayed_once
+				country_event = {
+					id = lbd_dathnak.101
+					days = 3600
+					random = 180
+				}
+			}
+			else_if = {
+				limit = {
+					any_country = {
+						is_ai = no
+						is_at_war_with = root
+					}
+				}
+				country_event = {
+					id = lbd_dathnak.101
+					days = 360
+					random = 60
+				}
+			}
+			else = {
+				add_resource = {
+					exotic_gases = 6000
+					alloys = 15000
+					energy = 10000
+					volatile_motes = 3000
+					rare_crystals = 3000
+					consumer_goods = 2000
+					minerals = 8000
+				}
+				create_fleet_from_naval_cap = {
+					fraction = 0.25
+					ship_owner_type = country
+				}
+				set_country_flag = lbd_dathnak_original_crisis_awoken
+				set_ai_personality = lbd_dathnak_original_crisis_awoken
+				country_event = {
+					id = lbd_dathnak.100
+					days = 360
+				}
+				if = {
+					limit = {
+						exists = federation
+					}
+					leave_alliance = {
+						override_requirements = yes
+					}
+				}
+				every_country = {
+					limit = {
+						is_ai = no
+						NOT = {
+							is_same_empire = root
+						}
+					}
+					country_event = {
+						id = lbd_story.101
+						days = 1
+					}
+				}
+			}
+		}
+		else = {
+			random = {
+				chance = 50
+				set_global_flag = lbd_dathnak_planned_rebellion
+			}
+			country_event = {
+				id = lbd_dathnak.101
+				days = 7200
+			}
+		}
+	}
+}
+
+country_event = {
+	id = lbd_dathnak.100
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		exists = event_target:lbd_dathnak_original_crisis_country
+	}
+	immediate = {
+		if = {
+			limit = {
+				or = {
+					AND = {
+						is_at_war = yes
+						used_naval_capacity_percent <= 0.7
+					}
+					fleet_power < 50
+				}
+			}
+			create_fleet_from_naval_cap = {
+				fraction = 0.3
+				ship_owner_type = country
+			}
+		}
+		country_event = {
+			id = lbd_dathnak.100
+			days = 360
+			random = 30
+		}
+		country_event = {
+			id = lbd_dathnak.121
+			days = 360
+			random = 30
+		}
+	}
+}
+
+country_event = {
+	id = lbd_dathnak.121
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		exists = event_target:lbd_dathnak_original_crisis_country
+	}
+	immediate = {
+		if = {
+			limit = {
+				is_subject = yes
+				NOT = {
+					is_at_war_with = overlord
+				}
+			}
+			if = {
+				limit = {
+					NAND = {
+						is_subject = yes
+						is_specialist_subject_tier = {
+							TYPE = lbd_dathnak_specialist
+							TIER = 1
+						}
+					}
+				}
+				declare_war = {
+					target = overlord
+					attacker_war_goal = wg_independence
+				}
+			}
+			else = {
+				random = {
+					chance = 4
+					declare_war = {
+						target = overlord
+						attacker_war_goal = wg_independence
+					}
+				}
+			}
+			# country_event = {
+			# 	id = lbd_dathnak.121
+			# 	days = 900
+			# 	random = 100
+			# }
+		}
+		else_if = {
+			limit = {
+				any_country = {
+					not = {
+						is_same_empire = root
+					}
+					NAND = {
+						exists = overlord
+						overlord = {
+							is_same_empire = root
+						}
+					}
+					root = {
+						can_declare_war = {
+							target = prev
+							attacker_war_goal = wg_lbd_dathnak_cleansing
+						}
+					}
+				}
+			}
+			while = {
+				count = 3
+				random_country = {
+					limit = {
+						NOR = {
+							is_same_empire = root
+							is_at_war_with = root
+							AND = {
+								exists = overlord
+								overlord = {
+									is_same_empire = root
+								}
+							}
+						}
+						root = {
+							can_declare_war = {
+								target = prev
+								attacker_war_goal = wg_lbd_dathnak_cleansing
+							}
+						}
+					}
+					save_global_event_target_as = lbd_dathnak_temp_random_empire
+					weights = {
+						base = 1
+						divide = event_target:lbd_dathnak_original_crisis_country.capital_scope.value:lbd_dathnak_calculate_empire_closeness
+					}
+					root = {
+						declare_war = {
+							target = prev
+							attacker_war_goal = wg_lbd_dathnak_cleansing
+						}
+					}
+				}
+			}
+			# country_event = {
+			# 	id = lbd_dathnak.121
+			# 	days = 900
+			# 	random = 100
+			# }
+		}
+		# else = {
+		# 	country_event = {
+		# 		id = lbd_dathnak.121
+		# 		days = 90
+		# 		random = 15
+		# 	}
+		# }
+		# else = {
+		# 	country_event = {
+		# 		id = lbd_dathnak.121
+		# 		days = 90
+		# 		random = 15
+		# 	}
+		# }
+		# every_neighbor_country = {
+		# 	limit = {
+		# 		NOR = {
+		# 			is_same_empire = root
+		# 			is_at_war_with = root
+		# 		}
+		# 		is_fallen_empire = no
+		# 		root = {
+		# 			can_declare_war = {
+		# 				target = prev
+		# 				attacker_war_goal = wg_lbd_dathnak_cleansing
+		# 			}
+		# 		}
+		# 	}
+		# 	root = {
+		# 		declare_war = {
+		# 			target = prev
+		# 			attacker_war_goal = wg_lbd_dathnak_cleansing
+		# 		}
+		# 	}
+		# }
+	}
+}
+
+country_event = {
+	id = lbd_story.101
+	is_triggered_only = yes
+	hide_window = no
+	force_open = yes
+	trigger = {
+		exists = event_target:lbd_dathnak_original_crisis_country
+	}
+	show_sound = diplomatic_notification
+	diplomatic = yes
+	title = lbd_story.101.title
+	desc = {
+		text = lbd_story.101.authoritarian
+		trigger = {
+			has_global_flag = lbd_dathnak_supported_regime_authoritarian
+		}
+	}
+	desc = {
+		text = lbd_story.101.rebel
+		trigger = {
+			has_global_flag = lbd_dathnak_supported_rebel_uprising
+		}
+	}
+	desc = {
+		text = lbd_story.101.reloc_twice
+		trigger = {
+			has_global_flag = lbd_dathnak_helped_relocate_twice
+			nor = {
+				has_global_flag = lbd_dathnak_supported_regime_authoritarian
+				has_global_flag = lbd_dathnak_supported_rebel_uprising
+			}
+		}
+	}
+	desc = {
+		text = lbd_story.101.reloc_once
+		trigger = {
+			has_global_flag = lbd_dathnak_helped_relocate_once
+			not = {
+				has_global_flag = lbd_dathnak_helped_relocate_twice
+			}
+		}
+	}
+	desc = {
+		text = lbd_story.101.reloc_none
+		trigger = {
+			has_global_flag = lbd_dathnak_begun_vanilla_chain
+			not = {
+				has_global_flag = lbd_dathnak_helped_relocate_once
+			}
+		}
+	}
+	desc = {
+		text = lbd_story.101.no_encounter
+		trigger = {
+			not = {
+				has_global_flag = lbd_dathnak_begun_vanilla_chain
+			}
+		}
+	}
+	option = {
+		name = lbd_story.101.you_again
+	}
+	option = {
+		name = lbd_story.101.well_stop_you
+	}
+	option = {
+		name = lbd_story.101.exterminate
+	}
+	option = {
+		name = lbd_story.101.screaming
+	}
+	option = {
+		name = lbd_story.101.oh_hey_again
+		ai_chance = {
+			base = 100
+		}
+	}
+	after = {
+		country_event = {
+			id = lbd_story.102
+		}
+	}
+}
+
+country_event = {
+	id = lbd_story.102
+	is_triggered_only = yes
+	hide_window = no
+	force_open = yes
+	trigger = {
+		exists = event_target:lbd_dathnak_original_crisis_country
+	}
+	show_sound = diplomatic_notification
+	diplomatic = yes
+	title = lbd_story.102.title
+	desc = {
+		text = lbd_story.102.authoritarian
+		trigger = {
+			has_global_flag = lbd_dathnak_supported_regime_authoritarian
+		}
+	}
+	desc = {
+		text = lbd_story.102.rebel
+		trigger = {
+			has_global_flag = lbd_dathnak_supported_rebel_uprising
+		}
+	}
+	desc = {
+		text = lbd_story.102.reloc_twice
+		trigger = {
+			has_global_flag = lbd_dathnak_helped_relocate_twice
+			nor = {
+				has_global_flag = lbd_dathnak_supported_regime_authoritarian
+				has_global_flag = lbd_dathnak_supported_rebel_uprising
+			}
+		}
+	}
+	desc = {
+		text = lbd_story.102.reloc_once
+		trigger = {
+			has_global_flag = lbd_dathnak_helped_relocate_once
+			not = {
+				has_global_flag = lbd_dathnak_helped_relocate_twice
+			}
+		}
+	}
+	desc = {
+		text = lbd_story.102.reloc_none
+		trigger = {
+			has_global_flag = lbd_dathnak_begun_vanilla_chain
+			not = {
+				has_global_flag = lbd_dathnak_helped_relocate_once
+			}
+		}
+	}
+	desc = {
+		text = lbd_story.102.no_encounter
+		trigger = {
+			not = {
+				has_global_flag = lbd_dathnak_begun_vanilla_chain
+			}
+		}
+	}
+	option = {
+		name = lbd_story.102.youll_never_get_away_with_it
+	}
+	option = {
+		name = lbd_story.102.this_is_madness
+	}
+	option = {
+		name = lbd_story.102.exterminate
+	}
+	option = {
+		name = lbd_story.102.screaming
+	}
+	option = {
+		name = lbd_story.102.can_we_talk_this_out
+	}
+	option = {
+		name = lbd_story.102.is_there_an_ignore_button
+		ai_chance = {
+			base = 100
+		}
+	}
+	after = {
+		country_event = {
+			id = lbd_story.103
+		}
+	}
+}
+
+country_event = {
+	id = lbd_story.103
+	is_triggered_only = yes
+	hide_window = no
+	force_open = yes
+	trigger = {
+		exists = event_target:lbd_dathnak_original_crisis_country
+	}
+	show_sound = diplomatic_notification
+	diplomatic = yes
+	title = lbd_story.103.title
+	desc = {
+		text = lbd_story.103.authoritarian
+		trigger = {
+			has_global_flag = lbd_dathnak_supported_regime_authoritarian
+		}
+	}
+	desc = {
+		text = lbd_story.103.rebel
+		trigger = {
+			has_global_flag = lbd_dathnak_supported_rebel_uprising
+		}
+	}
+	desc = {
+		text = lbd_story.103.reloc_twice
+		trigger = {
+			has_global_flag = lbd_dathnak_helped_relocate_twice
+			nor = {
+				has_global_flag = lbd_dathnak_supported_regime_authoritarian
+				has_global_flag = lbd_dathnak_supported_rebel_uprising
+			}
+		}
+	}
+	desc = {
+		text = lbd_story.103.reloc_once
+		trigger = {
+			has_global_flag = lbd_dathnak_helped_relocate_once
+			not = {
+				has_global_flag = lbd_dathnak_helped_relocate_twice
+			}
+		}
+	}
+	desc = {
+		text = lbd_story.103.reloc_none
+		trigger = {
+			has_global_flag = lbd_dathnak_begun_vanilla_chain
+			not = {
+				has_global_flag = lbd_dathnak_helped_relocate_once
+			}
+		}
+	}
+	desc = {
+		text = lbd_story.103.no_encounter
+		trigger = {
+			not = {
+				has_global_flag = lbd_dathnak_begun_vanilla_chain
+			}
+		}
+	}
+	option = {
+		name = lbd_story.103.bring_it_on
+	}
+	option = {
+		name = lbd_story.103.well_stop_you
+	}
+	option = {
+		name = lbd_story.103.exterminate
+	}
+	option = {
+		name = lbd_story.103.screaming
+		ai_chance = {
+			base = 100
+		}
+	}
+	option = {
+		name = lbd_story.103.let_us_be_friends
+	}
+	option = {
+		allow = {
+			# custom_tooltip = {
+			# 	fail_text = LBD_DATHNAK_NOT_YET_IMPLEMENTED
+			# 	always = no
+			# }
+			custom_tooltip = {
+				fail_text = LBD_DATHNAK_MUST_HAVE_HELPED_DATHNAK
+				or = {
+					has_country_flag = baldarak_revolution_1
+					has_country_flag = new_baldarak_occupation_1
+					species = {
+						is_species = "Baldarak"
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = lbd_story.104
+			}
+		}
+		name = lbd_story.103.remember_how_we_helped_you
+	}
+}
+
+country_event = {
+	id = lbd_story.104
+	is_triggered_only = yes
+	hide_window = no
+	force_open = yes
+	trigger = {
+		exists = event_target:lbd_dathnak_original_crisis_country
+	}
+	show_sound = diplomatic_notification
+	diplomatic = yes
+	title = lbd_story.104.title
+	desc = {
+		text = lbd_story.104.authoritarian
+		trigger = {
+			or = {
+				has_global_flag = lbd_dathnak_supported_regime_authoritarian
+				species = {
+					is_species = "Baldarak"
+				}
+			}
+		}
+	}
+	desc = {
+		text = lbd_story.104.rebel
+		trigger = {
+			has_global_flag = lbd_dathnak_supported_rebel_uprising
+		}
+	}
+	option = {
+		name = lbd_story.104.well_be_overlord
+		custom_tooltip = lbd_dathnak_gain_special_subject
+		allow = {
+			has_overlord_dlc = yes
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					NOR = {
+						has_global_flag = lbd_dathnak_dathnak_subject_received
+						has_global_flag = lbd_dathnak_dathnak_subject_activated
+					}
+				}
+				set_global_flag = lbd_dathnak_dathnak_subject_activated
+				country_event = {
+					id = lbd_story.106
+				}
+			}
+			else = {
+				country_event = {
+					id = lbd_story.108
+				}
+			}
+		}
+	}
+	option = {
+		name = lbd_story.104.agreed_well_be_subject
+		set_name = "Baldarak"
+		allow = {
+			has_overlord_dlc = yes
+		}
+		custom_tooltip = lbd_dathnak_become_special_subject
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = {
+						has_global_flag = lbd_dathnak_dathnak_subject_activated
+					}
+				}
+				set_global_flag = lbd_dathnak_dathnak_subject_received
+				country_event = {
+					id = lbd_story.107
+				}
+			}
+			else = {
+				country_event = {
+					id = lbd_story.108
+				}
+			}
+		}
+		ai_chance = {
+			base = 100
+		}
+	}
+	option = {
+		name = lbd_story.104.nevermind
+		hidden_effect = {
+			country_event = {
+				id = lbd_story.105
+			}
+		}
+	}
+}
+
+country_event = {
+	id = lbd_story.105
+	is_triggered_only = yes
+	hide_window = no
+	force_open = yes
+	trigger = {
+		exists = event_target:lbd_dathnak_original_crisis_country
+	}
+	show_sound = diplomatic_notification
+	diplomatic = yes
+	title = lbd_story.105.title
+	desc = {
+		text = lbd_story.105.authoritarian
+		trigger = {
+			or = {
+				has_global_flag = lbd_dathnak_supported_regime_authoritarian
+				species = {
+					is_species = "Baldarak"
+				}
+			}
+		}
+	}
+	desc = {
+		text = lbd_story.105.rebel
+		trigger = {
+			has_global_flag = lbd_dathnak_supported_rebel_uprising
+		}
+	}
+	option = {
+		name = lbd_story.105.ok
+		ai_chance = {
+			base = 100
+		}
+	}
+}
+
+country_event = {
+	id = lbd_story.106
+	is_triggered_only = yes
+	hide_window = no
+	force_open = yes
+	trigger = {
+		exists = event_target:lbd_dathnak_original_crisis_country
+	}
+	show_sound = diplomatic_notification
+	diplomatic = yes
+	title = lbd_story.106.title
+	desc = {
+		text = lbd_story.106.authoritarian
+		trigger = {
+			or = {
+				has_global_flag = lbd_dathnak_supported_regime_authoritarian
+				species = {
+					is_species = "Baldarak"
+				}
+			}
+		}
+	}
+	desc = {
+		text = lbd_story.106.rebel
+		trigger = {
+			has_global_flag = lbd_dathnak_supported_rebel_uprising
+		}
+	}
+	immediate = {
+		event_target:lbd_dathnak_original_crisis_country = {
+			set_subject_of = {
+				who = prev
+				preset = preset_lbd_dathnak_specialist
+				allow_instant_negotiation = no
+			}
+		}
+	}
+	option = {
+		name = lbd_story.106.ok
+		ai_chance = {
+			base = 100
+		}
+	}
+	after = {
+	}
+}
+
+country_event = {
+	id = lbd_story.107
+	is_triggered_only = yes
+	hide_window = no
+	force_open = yes
+	trigger = {
+		exists = event_target:lbd_dathnak_original_crisis_country
+	}
+	show_sound = diplomatic_notification
+	diplomatic = yes
+	title = lbd_story.107.title
+	immediate = {
+		set_subject_of = {
+			who = event_target:lbd_dathnak_original_crisis_country
+			preset = preset_lbd_dathnak_specialist
+			allow_instant_negotiation = no
+		}
+		event_target:lbd_dathnak_original_crisis_country = {
+			set_ai_personality = lbd_dathnak_original_crisis_awoken_2
+		}
+	}
+	desc = {
+		text = lbd_story.107.authoritarian
+		trigger = {
+			or = {
+				has_global_flag = lbd_dathnak_supported_regime_authoritarian
+				species = {
+					is_species = "Baldarak"
+				}
+			}
+		}
+	}
+	desc = {
+		text = lbd_story.107.rebel
+		trigger = {
+			has_global_flag = lbd_dathnak_supported_rebel_uprising
+		}
+	}
+	option = {
+		name = lbd_story.107.ok
+		ai_chance = {
+			base = 100
+		}
+	}
+}
+
+country_event = {
+	id = lbd_story.108
+	is_triggered_only = yes
+	hide_window = no
+	force_open = yes
+	trigger = {
+		exists = event_target:lbd_dathnak_original_crisis_country
+	}
+	show_sound = diplomatic_notification
+	diplomatic = yes
+	title = lbd_story.108.title
+	desc = {
+		text = lbd_story.108.authoritarian
+		trigger = {
+			or = {
+				has_global_flag = lbd_dathnak_supported_regime_authoritarian
+				species = {
+					is_species = "Baldarak"
+				}
+			}
+		}
+	}
+	desc = {
+		text = lbd_story.108.rebel
+		trigger = {
+			has_global_flag = lbd_dathnak_supported_rebel_uprising
+		}
+	}
+	option = {
+		name = lbd_story.108.ok
+		ai_chance = {
+			base = 100
+		}
+	}
+}
+
+country_event = {
+	id = lbd_dathnak.111
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_global_flag = lbd_dathnak_in_progress
+		has_country_flag = lbd_dathnak_original_crisis_country
+	}
+	immediate = {
+		random_system = {
+			limit = {
+				has_star_flag = lbd_dathnak_original_crisis_system
+			}
+			spawn_system = {
+				min_distance = 20
+				max_distance = 50
+				initializer = lbd_dathnak_xenon_crisis_initializer
+				hyperlane = yes
+				is_discovered = yes
+			}
+		}
+	}
+}
+
+country_event = {
+	id = lbd_dathnak.130
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		exists = event_target:lbd_dathnak_original_crisis_country
+		NOT = {
+			has_country_flag = lbd_dathnak_original_crisis_awoken
+		}
+	}
+	immediate = {
+		every_country = {
+			limit = {
+				is_ai = no
+				NOT = {
+					is_at_war_with = root
+				}
+			}
+			random_list = {
+				1 = {
+					modifier = {
+						mult = value:lbd_dathnak_relative_encryption
+					}
+					create_message = {
+						type = LBD_DATHNAK_MESSAGE_BLOCKED
+						localization = lbd_dathnak_message_blocked_desc
+						days = 30
+						target = THIS
+					}
+				}
+				1 = {
+					random_list = {
+						15 = {
+							country_event = {
+								id = lbd_story.131
+							}
+						}
+						25 = {
+							country_event = {
+								id = lbd_story.132
+							}
+						}
+						20 = {
+							country_event = {
+								id = lbd_story.133
+							}
+						}
+						25 = {
+							country_event = {
+								id = lbd_story.134
+							}
+						}
+						30 = {
+							country_event = {
+								id = lbd_story.135
+							}
+						}
+						15 = {
+							country_event = {
+								id = lbd_story.136
+							}
+						}
+						# 25 = {
+						# 	country_event = {
+						# 		id = lbd_story.137
+						# 	}
+						# }
+						# 10 = {
+						# 	country_event = {
+						# 		id = lbd_story.138
+						# 	}
+						# }
+						# 15 = {
+						# 	country_event = {
+						# 		id = lbd_story.139
+						# 	}
+						# }
+						# 20 = {
+						# 	country_event = {
+						# 		id = lbd_story.140
+						# 	}
+						# }
+					}
+				}
+			}
+		}
+		country_event = {
+			id = lbd_dathnak.130
+			days = 360
+			random = 100
+		}
+	}
+}
+
+country_event = {
+	id = lbd_story.131
+	is_triggered_only = yes
+	hide_window = no
+	force_open = yes
+	trigger = {
+		exists = event_target:lbd_dathnak_original_crisis_country
+	}
+	show_sound = diplomatic_notification
+	diplomatic = yes
+	title = lbd_story.131.title
+	desc = {
+		text = lbd_story.131.authoritarian
+		trigger = {
+			has_global_flag = lbd_dathnak_supported_regime_authoritarian
+		}
+	}
+	desc = {
+		text = lbd_story.131.rebel
+		trigger = {
+			has_global_flag = lbd_dathnak_supported_rebel_uprising
+		}
+	}
+	option = {
+		name = lbd_story.131.ok
+		ai_chance = {
+			base = 100
+		}
+	}
+}
+
+country_event = {
+	id = lbd_story.132
+	is_triggered_only = yes
+	hide_window = no
+	force_open = yes
+	trigger = {
+		exists = event_target:lbd_dathnak_original_crisis_country
+	}
+	show_sound = diplomatic_notification
+	diplomatic = yes
+	title = lbd_story.132.title
+	desc = {
+		text = lbd_story.132.authoritarian
+		trigger = {
+			has_global_flag = lbd_dathnak_supported_regime_authoritarian
+		}
+	}
+	desc = {
+		text = lbd_story.132.rebel
+		trigger = {
+			has_global_flag = lbd_dathnak_supported_rebel_uprising
+		}
+	}
+	option = {
+		name = lbd_story.132.ok
+		ai_chance = {
+			base = 100
+		}
+	}
+}
+
+country_event = {
+	id = lbd_story.133
+	is_triggered_only = yes
+	hide_window = no
+	force_open = yes
+	trigger = {
+		exists = event_target:lbd_dathnak_original_crisis_country
+	}
+	show_sound = diplomatic_notification
+	diplomatic = yes
+	title = lbd_story.133.title
+	desc = {
+		text = lbd_story.133.authoritarian
+		trigger = {
+			has_global_flag = lbd_dathnak_supported_regime_authoritarian
+		}
+	}
+	desc = {
+		text = lbd_story.133.rebel
+		trigger = {
+			has_global_flag = lbd_dathnak_supported_rebel_uprising
+		}
+	}
+	option = {
+		name = lbd_story.133.ok
+		ai_chance = {
+			base = 100
+		}
+	}
+}
+
+country_event = {
+	id = lbd_story.134
+	is_triggered_only = yes
+	hide_window = no
+	force_open = yes
+	trigger = {
+		exists = event_target:lbd_dathnak_original_crisis_country
+	}
+	show_sound = diplomatic_notification
+	diplomatic = yes
+	title = lbd_story.134.title
+	desc = {
+		text = lbd_story.134.authoritarian
+		trigger = {
+			has_global_flag = lbd_dathnak_supported_regime_authoritarian
+		}
+	}
+	desc = {
+		text = lbd_story.134.rebel
+		trigger = {
+			has_global_flag = lbd_dathnak_supported_rebel_uprising
+		}
+	}
+	option = {
+		name = lbd_story.134.ok
+		ai_chance = {
+			base = 100
+		}
+	}
+}
+
+country_event = {
+	id = lbd_story.135
+	is_triggered_only = yes
+	hide_window = no
+	force_open = yes
+	trigger = {
+		exists = event_target:lbd_dathnak_original_crisis_country
+	}
+	show_sound = diplomatic_notification
+	diplomatic = yes
+	title = lbd_story.135.title
+	desc = {
+		text = lbd_story.135.authoritarian
+		trigger = {
+			has_global_flag = lbd_dathnak_supported_regime_authoritarian
+		}
+	}
+	desc = {
+		text = lbd_story.135.rebel
+		trigger = {
+			has_global_flag = lbd_dathnak_supported_rebel_uprising
+		}
+	}
+	option = {
+		name = lbd_story.135.ok
+		ai_chance = {
+			base = 100
+		}
+	}
+}
+
+country_event = {
+	id = lbd_story.136
+	is_triggered_only = yes
+	hide_window = no
+	force_open = yes
+	trigger = {
+		exists = event_target:lbd_dathnak_original_crisis_country
+	}
+	show_sound = diplomatic_notification
+	diplomatic = yes
+	title = lbd_story.136.title
+	desc = {
+		text = lbd_story.136.authoritarian
+		trigger = {
+			has_global_flag = lbd_dathnak_supported_regime_authoritarian
+		}
+	}
+	desc = {
+		text = lbd_story.136.rebel
+		trigger = {
+			has_global_flag = lbd_dathnak_supported_rebel_uprising
+		}
+	}
+	option = {
+		name = lbd_story.136.ok
+		ai_chance = {
+			base = 100
+		}
+	}
+}
+
+# country_event = {
+# 	id = lbd_story.137
+# 	is_triggered_only = yes
+# 	hide_window = no
+# 	force_open = yes
+# 	trigger = {
+# 		exists = event_target:lbd_dathnak_original_crisis_country
+# 	}
+# 	show_sound = diplomatic_notification
+# 	diplomatic = yes
+# 	title = lbd_story.137.title
+# 	desc = {
+# 		text = lbd_story.137.authoritarian
+# 		trigger = {
+# 			has_global_flag = lbd_dathnak_supported_regime_authoritarian
+# 		}
+# 	}
+# 	desc = {
+# 		text = lbd_story.137.rebel
+# 		trigger = {
+# 			has_global_flag = lbd_dathnak_supported_rebel_uprising
+# 		}
+# 	}
+# 	option = {
+# 		name = lbd_story.137.ok
+# 		ai_chance = {
+# 			base = 100
+# 		}
+# 	}
+# }
+# country_event = {
+# 	id = lbd_story.138
+# 	is_triggered_only = yes
+# 	hide_window = no
+# 	force_open = yes
+# 	trigger = {
+# 		exists = event_target:lbd_dathnak_original_crisis_country
+# 	}
+# 	show_sound = diplomatic_notification
+# 	diplomatic = yes
+# 	title = lbd_story.138.title
+# 	desc = {
+# 		text = lbd_story.138.authoritarian
+# 		trigger = {
+# 			has_global_flag = lbd_dathnak_supported_regime_authoritarian
+# 		}
+# 	}
+# 	desc = {
+# 		text = lbd_story.138.rebel
+# 		trigger = {
+# 			has_global_flag = lbd_dathnak_supported_rebel_uprising
+# 		}
+# 	}
+# 	option = {
+# 		name = lbd_story.138.ok
+# 		ai_chance = {
+# 			base = 100
+# 		}
+# 	}
+# }
+# country_event = {
+# 	id = lbd_story.139
+# 	is_triggered_only = yes
+# 	hide_window = no
+# 	force_open = yes
+# 	trigger = {
+# 		exists = event_target:lbd_dathnak_original_crisis_country
+# 	}
+# 	show_sound = diplomatic_notification
+# 	diplomatic = yes
+# 	title = lbd_story.139.title
+# 	desc = {
+# 		text = lbd_story.139.authoritarian
+# 		trigger = {
+# 			has_global_flag = lbd_dathnak_supported_regime_authoritarian
+# 		}
+# 	}
+# 	desc = {
+# 		text = lbd_story.139.rebel
+# 		trigger = {
+# 			has_global_flag = lbd_dathnak_supported_rebel_uprising
+# 		}
+# 	}
+# 	option = {
+# 		name = lbd_story.139.ok
+# 		ai_chance = {
+# 			base = 100
+# 		}
+# 	}
+# }
+# country_event = {
+# 	id = lbd_story.140
+# 	is_triggered_only = yes
+# 	hide_window = no
+# 	force_open = yes
+# 	trigger = {
+# 		exists = event_target:lbd_dathnak_original_crisis_country
+# 	}
+# 	show_sound = diplomatic_notification
+# 	diplomatic = yes
+# 	title = lbd_story.140.title
+# 	desc = {
+# 		text = lbd_story.140.authoritarian
+# 		trigger = {
+# 			has_global_flag = lbd_dathnak_supported_regime_authoritarian
+# 		}
+# 	}
+# 	desc = {
+# 		text = lbd_story.140.rebel
+# 		trigger = {
+# 			has_global_flag = lbd_dathnak_supported_rebel_uprising
+# 		}
+# 	}
+# 	option = {
+# 		name = lbd_story.140.ok
+# 		ai_chance = {
+# 			base = 100
+# 		}
+# 	}
+# }
+#############################################################################################
+############################################XENON############################################
+#############################################################################################
+system_event = {
+	id = lbd_dathnak.201
+	is_triggered_only = yes
+	hide_window = yes
+	immediate = {
+		if = {
+			limit = {
+				or = {
+					not = {
+						exists = event_target:lbd_dathnak_species
+					}
+					event_target:lbd_dathnak_species = {
+						or = {
+							is_sapient = no
+							can_think = no
+							has_trait = trait_syncretic_proles
+							has_trait = trait_nerve_stapled
+						}
+					}
+				}
+			}
+			create_species = {
+				name = "Dathnak"
+				plural = "Dathnak"
+				class = LBDDATHNAK
+				sapient = yes
+				namelist = lbd_dathnak_name_list
+				traits = {
+					trait = trait_lbd_dathnak_base
+					trait = trait_lithoid_gaseous_byproducts
+					trait = trait_rapid_breeders
+					trait = trait_repugnant
+				}
+				homeworld = event_target:lbd_dathnak_planet_xenon
+				effect = {
+					save_global_event_target_as = lbd_dathnak_species
+					switch = {
+						trigger = has_global_flag
+						lbd_dathnak_massacre_mode = {
+							lbd_dathnak_create_xenon_empire = {
+								DIFFICULTY = massacre
+							}
+						}
+						lbd_dathnak_brutal_mode = {
+							lbd_dathnak_create_xenon_empire = {
+								DIFFICULTY = brutal
+							}
+						}
+						lbd_dathnak_medium_mode = {
+							lbd_dathnak_create_xenon_empire = {
+								DIFFICULTY = medium
+							}
+						}
+						lbd_dathnak_mild_mode = {
+							lbd_dathnak_create_xenon_empire = {
+								DIFFICULTY = mild
+							}
+						}
+						lbd_dathnak_flimsy_mode = {
+							lbd_dathnak_create_xenon_empire = {
+								DIFFICULTY = flimsy
+							}
+						}
+						default = {
+							lbd_dathnak_create_xenon_empire = yes
+						}
+					}
+					
+				}
+			}
+		}
+		else = {
+			event_target:lbd_dathnak_species = {
+				switch = {
+					trigger = has_global_flag
+					lbd_dathnak_massacre_mode = {
+						lbd_dathnak_create_xenon_empire = {
+							DIFFICULTY = massacre
+						}
+					}
+					lbd_dathnak_brutal_mode = {
+						lbd_dathnak_create_xenon_empire = {
+							DIFFICULTY = brutal
+						}
+					}
+					lbd_dathnak_medium_mode = {
+						lbd_dathnak_create_xenon_empire = {
+							DIFFICULTY = medium
+						}
+					}
+					lbd_dathnak_mild_mode = {
+						lbd_dathnak_create_xenon_empire = {
+							DIFFICULTY = mild
+						}
+					}
+					lbd_dathnak_flimsy_mode = {
+						lbd_dathnak_create_xenon_empire = {
+							DIFFICULTY = flimsy
+						}
+					}
+					default = {
+						lbd_dathnak_create_xenon_empire = yes
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = lbd_dathnak.202
+	is_triggered_only = yes
+	hide_window = yes
+	immediate = {
+		every_country = {
+			establish_communications_no_message = root
+		}
+		create_country = {
+			name = "Tier 3 Country"
+			type = lbd_dathnak_tier_5_country
+			flag = {
+				icon = {
+					category = "special"
+					file = "the_shroud.dds"
+				}
+				background = {
+					category = "backgrounds"
+					file = "00_solid.dds"
+				}
+				colors = {
+					"black"
+					"black"
+					"null"
+					"null"
+				}
+			}
+			effect = {
+				event_target:lbd_dathnak_xenon_crisis_country = {
+					set_country_flag = lbd_dathnak_xenon_ruled
+					copy_techs_from = {
+						target = prev
+						except = {
+							tech_akx_worm_1
+							tech_akx_worm_2
+							tech_akx_worm_3
+							tech_nanite_assemblers
+							tech_nanite_repair_system
+							tech_nanite_transmutation
+							null_void_beam
+							tech_acot_swarm_strike_craft
+							tech_swarm_strike_craft_1
+							tech_acot_scourge_missile
+							tech_scourge_missile_1
+							tech_acot_matter_disintegrator
+							tech_extradimensional_weapon_1
+							tech_energy_lance_edi
+							tech_energy_lance_contingency
+							tech_perdition_beam_contingency
+						}
+					}
+					add_resource = {
+						energy = 50000
+						minerals = 80000
+						alloys = 50000
+						consumer_goods = 40000
+						exotic_gases = 15000
+						volatile_motes = 5000
+						rare_crystals = 5000
+						food = 5000
+						unity = 10000
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_colonization
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_exotic_gas_refining
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_armor
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_hull
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_shields
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_small_lasers
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_medium_lasers
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_power_hub_1
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_power_hub_2
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_large_lasers
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_energy_torpedoes
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_energy_lance
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_titan_titanic_lasers
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_titanic_lasers
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_basic_industry
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_alloys_1
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_alloys_2
+					}
+					give_technology = {
+						tech = tech_lbd_dathnak_exotic_gas_growth_induction
+					}
+				}
+				destroy_country = yes
+			}
+		}
+	}
+}
+
+country_event = {
+	id = lbd_dathnak.203
+	is_triggered_only = yes
+	hide_window = yes
+	immediate = {
+		create_leader = {
+			name = "Xenon"
+			species = event_target:lbd_dathnak_species
+			gender = female
+			class = admiral
+			skill = 10
+			set_age = 20
+			traits = {
+				trait = leader_trait_aggressive
+				trait = leader_trait_unyielding
+				trait = leader_trait_gale_speed
+				trait = leader_trait_fleet_logistician
+				trait = leader_trait_eager
+				#trait = leader_trait_dragonbane
+			}
+		}
+		last_created_leader = {
+			save_global_event_target_as = lbd_dathnak_xenon_warrior_princess
+		}
+		assign_leader = event_target:lbd_dathnak_xenon_warrior_princess
+		set_female_ruler_title = lbd_dathnak_warrior_princess_title
+		create_fleet_from_naval_cap = {
+			fraction = 0.25
+			ship_owner_type = country
+		}
+		country_event = {
+			id = lbd_dathnak.204
+			days = 360
+			random = 15
+		}
+		lbd_declare_new_xenon_war = yes
+		random_system = {
+			limit = {
+				NAND = {
+					exists = space_owner
+					space_owner = {
+						is_same_empire = root
+					}
+				}
+				any_system_planet = {
+					is_planet_class = pc_gas_giant
+				}
+			}
+			system_event = {
+				id = lbd_dathnak.222
+			}
+			
+		}
+		# every_galaxy_planet = {
+		# 	limit = {
+		# 		is_planet_class = pc_gas_giant
+		# 		OR = {
+		# 	NOT = {
+		# 		exists = space_owner
+		# 	}	
+		# 		NOT = {
+		# 			space_owner = {
+		# 				is_same_empire = root
+		# 			}
+		# 		}
+		# 	}
+		# 	}
+		# 	if = {
+		# 		limit = {
+		# 			root = {
+		# 				used_naval_capacity_integer < 800
+		# 			}
+		# 		}
+		# 		random = {
+		# 			chance = 50
+		# 			create_fleet = {
+		# 				name = dathnak_freedom_force_name
+		# 				effect = {
+		# 					set_owner = root
+		# 					while = {
+		# 						count = 8
+		# 						create_ship = {
+		# 						name = random
+		# 						design = random_existing_design
+		# 						random_existing_design = frigate
+		# 					}
+		# 				}
+		# 				while = {
+		# 					count = 4
+		# 					create_ship = {
+		# 						name = random
+		# 						design = random_existing_design
+		# 						random_existing_design = corvette
+		# 					}
+		# 				}
+		# 				while ={
+		# 					count = 2
+		# 					create_ship = {
+		# 					name = random
+		# 					design = random_existing_design
+		# 					random_existing_design = destroyer
+		# 				}
+		# 			}
+		# 			create_ship = {
+		# 				name = random
+		# 				design = random_existing_design
+		# 				random_existing_design = cruiser
+		# 			}
+		# 					random = {
+		# 						chance = 75
+		# 						while = {
+		# 							count = 10
+		# 							create_ship = {
+		# 								name = random
+		# 								design = random_existing_design
+		# 								random_existing_design = frigate
+		# 							}
+		# 						}
+		# 					}
+		# 					random = {
+		# 						chance = 50
+		# 						while = {
+		# 							count = 6
+		# 							create_ship = {
+		# 								name = random
+		# 								design = random_existing_design
+		# 								random_existing_design = corvette
+		# 							}
+		# 						}
+		# 					}
+		# 					random = {
+		# 						chance = 25
+		# 						while = {
+		# 							count = 3
+		# 							create_ship = {
+		# 								name = random
+		# 								design = random_existing_design
+		# 								random_existing_design = cruiser
+		# 							}
+		# 						}
+		# 					}
+		# 					random = {
+		# 						chance = 10
+		# 							create_ship = {
+		# 								name = random
+		# 								design = random_existing_design
+		# 								random_existing_design = battleship
+		# 							}
+		# 					}
+		# 					random = {
+		# 						chance = 10
+		# 						event_target:lbd_dathnak_xenon_crisis_country = {
+		# 							create_leader = {
+		# 								name = random
+		# 								species = event_target:lbd_dathnak_species
+		# 								class = admiral
+		# 								skill = random
+		# 							}
+		# 						}
+		# 						assign_leader = last_created_leader
+		# 					}
+		# 					set_location = prev
+		# 				}
+		# 			}
+		# 		}
+		# 	}
+		# }
+	}
+}
+system_event = {
+	id = lbd_dathnak.222
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		exists = event_target:lbd_dathnak_xenon_crisis_country
+		event_target:lbd_dathnak_xenon_crisis_country = {
+			used_naval_capacity_integer < 1000
+		}
+	}
+	immediate = {
+		set_star_flag = lbd_dathnak_staggered_spawning
+		every_system_planet = {
+			limit = {
+				is_planet_class = pc_gas_giant
+			}
+			if = {
+				limit = {
+					event_target:lbd_dathnak_xenon_crisis_country = {
+						used_naval_capacity_integer < 1000
+					}
+				}
+				random = {
+					chance = 50
+					create_fleet = {
+						name = dathnak_freedom_force_name
+						effect = {
+							set_owner = event_target:lbd_dathnak_xenon_crisis_country
+							while = {
+								count = 8
+								create_ship = {
+									name = random
+									design = random_existing_design
+									random_existing_design = frigate
+								}
+							}
+							while = {
+								count = 4
+								create_ship = {
+									name = random
+									design = random_existing_design
+									random_existing_design = corvette
+								}
+							}
+							while = {
+								count = 2
+								create_ship = {
+									name = random
+									design = random_existing_design
+									random_existing_design = destroyer
+								}
+							}
+							create_ship = {
+								name = random
+								design = random_existing_design
+								random_existing_design = cruiser
+							}
+							random = {
+								chance = 75
+								while = {
+									count = 10
+									create_ship = {
+										name = random
+										design = random_existing_design
+										random_existing_design = frigate
+									}
+								}
+							}
+							random = {
+								chance = 50
+								while = {
+									count = 6
+									create_ship = {
+										name = random
+										design = random_existing_design
+										random_existing_design = corvette
+									}
+								}
+							}
+							random = {
+								chance = 25
+								while = {
+									count = 3
+									create_ship = {
+										name = random
+										design = random_existing_design
+										random_existing_design = cruiser
+									}
+								}
+							}
+							random = {
+								chance = 10
+								create_ship = {
+									name = random
+									design = random_existing_design
+									random_existing_design = battleship
+								}
+							}
+							random = {
+								chance = 10
+								event_target:lbd_dathnak_xenon_crisis_country = {
+									create_leader = {
+										name = random
+										species = event_target:lbd_dathnak_species
+										class = admiral
+										skill = random
+									}
+								}
+								assign_leader = last_created_leader
+							}
+							set_location = prev
+						}
+					}
+				}
+			}
+		}
+		random_system = {
+			limit = {
+				NOT = {
+					has_star_flag = lbd_dathnak_staggered_spawning
+				}
+				NAND = {
+					exists = space_owner
+					space_owner = {
+						is_same_empire = event_target:lbd_dathnak_xenon_crisis_country
+					}
+				}
+				any_system_planet = {
+					is_planet_class = pc_gas_giant
+				}
+			}
+			system_event = {
+				id = lbd_dathnak.222
+				days = 1
+			}
+		}
+	}
+}
+country_event = {
+	id = lbd_dathnak.204
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		exists = event_target:lbd_dathnak_xenon_crisis_country
+	}
+	immediate = {
+		add_resource = {
+			exotic_gases = 100
+			energy = 1000
+			alloys = 1500
+			minerals = 500
+			consumer_goods = 500
+			volatile_motes = 50
+			rare_crystals = 50
+			unity = 250
+		}
+		if = {
+			limit = {
+				used_naval_capacity_percent <= 0.95
+			}
+			create_fleet_from_naval_cap = {
+				fraction = 0.05
+				ship_owner_type = country
+			}
+		}
+		country_event = {
+			id = lbd_dathnak.204
+			days = 360
+			random = 15
+		}
+		if = {
+			limit = {
+				any_war = {
+					any_country = {
+						is_at_war = yes
+						NOR = {
+							is_same_empire = root
+							AND = {
+								is_subject = yes
+								overlord = {
+									is_same_empire = root
+								}
+							}
+						}
+						prev = {
+							is_war_participant = {
+								who = prev
+								side = root
+							}
+						}
+					}
+				}
+			}
+			every_war = {
+				limit = {
+					any_country = {
+						is_at_war = yes
+						NOR = {
+							is_same_empire = root
+							AND = {
+								is_subject = yes
+								overlord = {
+									is_same_empire = root
+								}
+							}
+						}
+						prev = {
+							is_war_participant = {
+								who = prev
+								side = root
+							}
+						}
+					}
+				}
+				remove_war_participant = root
+			}
+		}
+		if = {
+			limit = {
+				any_country = {
+					# OR = {
+					num_pops > 0
+					num_ships > 0
+					# }
+				}
+				NOT = {
+					is_at_war_with = event_target:lbd_dathnak_xenon_crisis_country
+				}
+			}
+			if = {
+				limit = {
+					exists = event_target:lbd_dathnak_current_xenon_war
+				}
+				lbd_dathnak_add_to_xenon_war = yes
+			}
+			else = {
+				lbd_declare_new_xenon_war = yes
+			}
+		}
+	}
+}
+
+country_event = {
+	id = lbd_story.201
+	is_triggered_only = yes
+	hide_window = no
+	force_open = yes
+	diplomatic = yes
+	trigger = {
+		exists = event_target:lbd_dathnak_xenon_crisis_country
+	}
+	show_sound = diplomatic_notification
+	title = lbd_story.201.title
+	desc = lbd_story.201.desc
+	option = {
+		name = lbd_story.201.more_of_you
+		country_event = {
+			id = lbd_story.202
+		}
+	}
+	option = {
+		name = lbd_story.201.finally_a_worthy_adversary
+		country_event = {
+			id = lbd_story.202
+		}
+	}
+	option = {
+		name = lbd_story.201.screaming
+		country_event = {
+			id = lbd_story.203
+		}
+		ai_chance = {
+			base = 100
+		}
+	}
+	option = {
+		name = lbd_story.201.exterminate
+		country_event = {
+			id = lbd_story.203
+		}
+	}
+	option = {
+		name = lbd_story.201.can_we_talk_about_this
+		country_event = {
+			id = lbd_story.204
+		}
+	}
+	abort_effect = {
+		country_event = {
+			id = lbd_story.202
+		}
+	}
+}
+
+country_event = {
+	id = lbd_story.202
+	is_triggered_only = yes
+	hide_window = no
+	force_open = yes
+	diplomatic = yes
+	trigger = {
+		exists = event_target:lbd_dathnak_xenon_crisis_country
+	}
+	show_sound = diplomatic_notification
+	title = lbd_story.202.title
+	desc = lbd_story.202.desc
+	option = {
+		name = lbd_story.202.what_makes_you_think
+	}
+	option = {
+		name = lbd_story.202.i_enjoyed_their_deaths
+	}
+	option = {
+		name = lbd_story.202.screaming
+		ai_chance = {
+			base = 100
+		}
+	}
+	option = {
+		name = lbd_story.202.exterminate
+	}
+	after = {
+		country_event = {
+			id = lbd_story.205
+		}
+	}
+}
+
+country_event = {
+	id = lbd_story.203
+	is_triggered_only = yes
+	hide_window = no
+	force_open = yes
+	diplomatic = yes
+	trigger = {
+		exists = event_target:lbd_dathnak_xenon_crisis_country
+	}
+	show_sound = diplomatic_notification
+	immediate = {
+		set_country_flag = lbd_dathnak_insane_xenon_convo_1
+	}
+	title = lbd_story.203.title
+	desc = lbd_story.203.desc
+	option = {
+		name = lbd_story.203.thank_you_i_try
+		ai_chance = {
+			base = 100
+		}
+	}
+	option = {
+		name = lbd_story.203.finally_a_worthy_adversary
+	}
+	option = {
+		name = lbd_story.203.screaming
+	}
+	option = {
+		name = lbd_story.203.exterminate
+	}
+	after = {
+		country_event = {
+			id = lbd_story.206
+		}
+	}
+}
+
+country_event = {
+	id = lbd_story.204
+	is_triggered_only = yes
+	hide_window = no
+	force_open = yes
+	diplomatic = yes
+	trigger = {
+		exists = event_target:lbd_dathnak_xenon_crisis_country
+	}
+	show_sound = diplomatic_notification
+	title = lbd_story.204.title
+	desc = lbd_story.204.desc
+	immediate = {
+		set_country_flag = lbd_dathnak_nice_xenon_convo_1
+	}
+	option = {
+		name = lbd_story.204.compassion_isnt_weakness
+		country_event = {
+			id = lbd_story.207
+		}
+	}
+	option = {
+		name = lbd_story.204.dang_you_almost_fell_for_it
+		country_event = {
+			id = lbd_story.208
+		}
+	}
+	option = {
+		name = lbd_story.204.who_hurt_you
+		country_event = {
+			id = lbd_story.207
+		}
+	}
+	option = {
+		name = lbd_story.204.so_be_it
+		hidden_effect = {
+			country_event = {
+				id = lbd_dathnak.205
+			}
+		}
+		ai_chance = {
+			base = 100
+		}
+	}
+	abort_effect = {
+		country_event = {
+			id = lbd_story.208
+		}
+	}
+}
+
+country_event = {
+	id = lbd_story.205
+	is_triggered_only = yes
+	hide_window = no
+	force_open = yes
+	diplomatic = yes
+	trigger = {
+		exists = event_target:lbd_dathnak_xenon_crisis_country
+	}
+	show_sound = diplomatic_notification
+	immediate = {
+		set_country_flag = lbd_dathnak_warrior_xenon_convo
+	}
+	title = lbd_story.205.title
+	desc = lbd_story.205.desc
+	option = {
+		name = lbd_story.205.from_one_warrior_to_another
+	}
+	option = {
+		name = lbd_story.205.only_the_strongest_shall_survive
+	}
+	option = {
+		name = lbd_story.205.there_is_no_more_need_for_words
+		ai_chance = {
+			base = 100
+		}
+	}
+	option = {
+		name = lbd_story.205.prepare_for_annihilation
+	}
+	option = {
+		name = lbd_story.205.i_will_revel_in_the_carnage
+	}
+	after = {
+		hidden_effect = {
+			country_event = {
+				id = lbd_dathnak.205
+			}
+		}
+	}
+}
+
+country_event = {
+	id = lbd_story.206
+	is_triggered_only = yes
+	hide_window = no
+	force_open = yes
+	diplomatic = yes
+	trigger = {
+		exists = event_target:lbd_dathnak_xenon_crisis_country
+	}
+	show_sound = diplomatic_notification
+	immediate = {
+		set_country_flag = lbd_dathnak_insane_xenon_convo_2
+	}
+	title = lbd_story.206.title
+	desc = lbd_story.206.desc
+	option = {
+		name = lbd_story.206.another_dead_gas_bag
+	}
+	option = {
+		name = lbd_story.206.give_it_your_best
+	}
+	option = {
+		name = lbd_story.206.screaming
+		ai_chance = {
+			base = 100
+		}
+	}
+	option = {
+		name = lbd_story.206.exterminate
+	}
+	option = {
+		name = lbd_story.206.i_will_revel_in_the_carnage
+	}
+	after = {
+		hidden_effect = {
+			country_event = {
+				id = lbd_dathnak.205
+			}
+		}
+	}
+}
+
+country_event = {
+	id = lbd_story.207
+	is_triggered_only = yes
+	hide_window = no
+	force_open = yes
+	diplomatic = yes
+	trigger = {
+		exists = event_target:lbd_dathnak_xenon_crisis_country
+	}
+	show_sound = diplomatic_notification
+	immediate = {
+		set_country_flag = lbd_dathnak_nice_xenon_convo_2
+	}
+	title = lbd_story.207.title
+	desc = lbd_story.207.desc
+	option = {
+		name = lbd_story.207.let_out_your_pain
+		country_event = {
+			id = lbd_story.211
+		}
+	}
+	option = {
+		name = lbd_story.207.so_you_choose_cowardice
+		country_event = {
+			id = lbd_story.212
+		}
+	}
+	option = {
+		name = lbd_story.207.dang_you_almost_fell_for_it
+		country_event = {
+			id = lbd_story.208
+		}
+	}
+	option = {
+		name = lbd_story.207.i_dont_have_time_for_this
+		country_event = {
+			id = lbd_story.213
+		}
+		ai_chance = {
+			base = 100
+		}
+	}
+	abort_effect = {
+		country_event = {
+			id = lbd_story.208
+		}
+	}
+}
+
+country_event = {
+	id = lbd_story.208
+	is_triggered_only = yes
+	hide_window = no
+	force_open = yes
+	diplomatic = yes
+	trigger = {
+		exists = event_target:lbd_dathnak_xenon_crisis_country
+	}
+	show_sound = diplomatic_notification
+	immediate = {
+		set_country_flag = lbd_dathnak_trickery_xenon_convo
+	}
+	title = lbd_story.208.title
+	desc = lbd_story.208.desc
+	option = {
+		name = lbd_story.208.minorly_terrifying
+	}
+	option = {
+		name = lbd_story.208.you_think_your_primitive
+	}
+	option = {
+		name = lbd_story.208.if_you_fight_as_much_as_you_talk
+	}
+	option = {
+		name = lbd_story.208.i_dont_have_time_for_this
+		ai_chance = {
+			base = 100
+		}
+	}
+	after = {
+		hidden_effect = {
+			country_event = {
+				id = lbd_dathnak.205
+			}
+		}
+	}
+}
+
+country_event = {
+	id = lbd_story.211
+	is_triggered_only = yes
+	hide_window = no
+	force_open = yes
+	diplomatic = yes
+	trigger = {
+		exists = event_target:lbd_dathnak_xenon_crisis_country
+	}
+	show_sound = diplomatic_notification
+	immediate = {
+		set_country_flag = lbd_dathnak_nice_xenon_convo_3
+	}
+	title = lbd_story.211.title
+	desc = lbd_story.211.desc
+	option = {
+		name = lbd_story.211.nothing_but_regret
+	}
+	option = {
+		name = lbd_story.211.no_wait
+	}
+	option = {
+		name = lbd_story.211.you_leave_us_no_choice
+		ai_chance = {
+			base = 100
+		}
+	}
+	after = {
+		hidden_effect = {
+			country_event = {
+				id = lbd_dathnak.205
+			}
+		}
+	}
+}
+
+country_event = {
+	id = lbd_story.212
+	is_triggered_only = yes
+	hide_window = no
+	force_open = yes
+	diplomatic = yes
+	trigger = {
+		exists = event_target:lbd_dathnak_xenon_crisis_country
+	}
+	show_sound = diplomatic_notification
+	immediate = {
+		set_country_flag = lbd_dathnak_provoke_nice_xenon_convo_1
+	}
+	title = lbd_story.212.title
+	desc = lbd_story.212.desc
+	option = {
+		name = lbd_story.212.how_very_sad
+	}
+	option = {
+		name = lbd_story.212.you_cannot_hide_fear_as_anger
+	}
+	option = {
+		name = lbd_story.212.dang_you_almost_fell_for_it
+	}
+	option = {
+		name = lbd_story.212.you_leave_us_no_choice
+		ai_chance = {
+			base = 100
+		}
+	}
+	after = {
+		hidden_effect = {
+			country_event = {
+				id = lbd_dathnak.205
+			}
+		}
+	}
+}
+
+country_event = {
+	id = lbd_story.213
+	is_triggered_only = yes
+	hide_window = no
+	force_open = yes
+	diplomatic = yes
+	trigger = {
+		exists = event_target:lbd_dathnak_xenon_crisis_country
+	}
+	show_sound = diplomatic_notification
+	immediate = {
+		set_country_flag = lbd_dathnak_dismissive_xenon_convo_1
+	}
+	title = lbd_story.213.title
+	desc = lbd_story.213.desc
+	option = {
+		name = lbd_story.213.finally
+	}
+	option = {
+		name = lbd_story.212.well_that_could_have_gone_better
+	}
+	option = {
+		name = lbd_story.212.sigh
+	}
+	option = {
+		name = lbd_story.212.you_leave_us_no_choice
+		ai_chance = {
+			base = 100
+		}
+	}
+	after = {
+		hidden_effect = {
+			country_event = {
+				id = lbd_dathnak.205
+			}
+		}
+	}
+}
+
+country_event = {
+	id = lbd_dathnak.205
+	is_triggered_only = yes
+	hide_window = yes
+	immediate = {
+		event_target:lbd_dathnak_xenon_crisis_country = {
+			declare_war = {
+				target = prev
+				attacker_war_goal = wg_lbd_dathnak_xenon_crisis_containment
+			}
+		}
+	}
+}
+
+country_event = {
+	id = lbd_dathnak.214
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_global_flag = lbd_dathnak_in_progress
+		has_country_flag = lbd_dathnak_xenon_ruled
+	}
+	immediate = {
+		remove_global_flag = lbd_dathnak_in_progress
+		remove_global_flag = midgame_crisis_ongoing
+		set_global_flag = lbd_dathnak_xenon_defeated
+		every_country = {
+			country_event = {
+				id = lbd_story.214
+			}
+		}
+	}
+}
+
+country_event = {
+	id = lbd_story.214
+	is_triggered_only = yes
+	hide_window = no
+	force_open = yes
+	diplomatic = yes
+	show_sound = diplomatic_notification
+	immediate = {
+	}
+	title = lbd_story.214.title
+	desc = lbd_story.214.desc
+	option = {
+		name = lbd_story.214.it_didnt_have_to_be_this_way
+	}
+	option = {
+		name = lbd_story.214.why_are_you_laughing
+	}
+	option = {
+		name = lbd_story.214.finally_you_die
+	}
+	option = {
+		name = lbd_story.214.you_were_weak_and_that_is_all
+	}
+	option = {
+		name = lbd_story.214.screaming
+	}
+	option = {
+		name = lbd_story.214.a_worthy_opponent
+		ai_chance = {
+			base = 100
+		}
+	}
+	after = {
+		hidden_effect = {
+			country_event = {
+				id = lbd_story.215
+			}
+		}
+	}
+}
+
+country_event = {
+	id = lbd_story.215
+	is_triggered_only = yes
+	hide_window = no
+	force_open = yes
+	diplomatic = yes
+	show_sound = diplomatic_notification
+	immediate = {
+	}
+	title = lbd_story.215.title
+	desc = lbd_story.215.desc
+	option = {
+		name = lbd_story.215.why_why_did_you_have_to_do_this
+	}
+	option = {
+		name = lbd_story.215.they_will_die_as_you_have_died
+	}
+	option = {
+		name = lbd_story.215.ugh_not_more_of_you
+	}
+	option = {
+		name = lbd_story.215.then_the_strong_will_survive
+	}
+	option = {
+		name = lbd_story.215.screaming
+	}
+	option = {
+		name = lbd_story.215.i_look_forward_to_it
+	}
+	option = {
+		ai_chance = {
+			base = 100
+		}
+		name = lbd_story.215.wait_what
+	}
+}
+
+country_event = {
+	id = lbd_dathnak.90
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_global_flag = lbd_dathnak_in_progress
+		NOT = {
+			has_global_flag = lbd_dathnak_player_fought_once
+		}
+		OR = {
+			from = {
+				AND = {
+					has_country_flag = lbd_dathnak_original_crisis_country
+					root = {
+						is_ai = no
+					}
+				}
+			}
+			AND = {
+				has_country_flag = lbd_dathnak_original_crisis_country
+				from = {
+					is_ai = no
+				}
+			}
+		}
+	}
+	immediate = {
+		set_global_flag = lbd_dathnak_player_fought_once
+	}
+}
+
+country_event = {
+	id = lbd_dathnak.91
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_global_flag = lbd_dathnak_in_progress
+		NOT = {
+			has_global_flag = lbd_dathnak_player_fought_once
+		}
+		from = {
+			any_war_participant = {
+				has_country_flag = lbd_dathnak_original_crisis_country
+			}
+			any_war_participant = {
+				is_ai = no
+			}
+		}
+	}
+	immediate = {
+		set_global_flag = lbd_dathnak_player_fought_once
+	}
+}

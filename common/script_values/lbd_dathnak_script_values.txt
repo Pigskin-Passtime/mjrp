@@ -1,0 +1,88 @@
+###lbd_dathnak_script_values
+###By Banjomarx
+###By Bread
+lbd_dathnak_count_dathnak = {
+	base = 0
+	complex_trigger_modifier = {
+		trigger = count_owned_pop
+parameters = {
+	limit = {
+		lbd_dathnak_is_lbd_dathnak_pop = yes
+	}
+}
+		mode = add
+	}
+	
+}
+
+
+lbd_dathnak_relative_encryption = {
+	base = 0
+	complex_trigger_modifier = {
+		trigger = relative_encryption_decryption
+		parameters = {
+			target = event_target:lbd_dathnak_original_crisis_country
+		}
+		mode = add
+	}
+	square = yes
+	square = yes
+	square = yes
+}
+
+lbd_dathnak_calculate_empire_closeness = {
+	base = 1
+	complex_trigger_modifier = {
+		trigger = distance_to_empire 
+		parameters = {
+			type = hyperlane
+			who = event_target:lbd_dathnak_temp_random_empire
+		}
+		mode = mult
+		
+	}
+	min = 0.01
+	modifier = {
+		event_target:lbd_dathnak_temp_random_empire = {
+			has_closed_borders = event_target:lbd_dathnak_original_crisis_country
+		}
+		divide = 3
+	}
+	modifier = {
+		event_target:lbd_dathnak_temp_random_empire = {
+		is_fallen_empire = yes
+		}
+		factor = 2
+	}
+
+}
+
+lbd_dathnak_calculate_time_multiplier_debuff = {
+	base = 1
+
+	complex_trigger_modifier = {
+		potential = {
+			not ={
+			relative_encryption_decryption = {
+				value = 0
+				target = event_target:temp_lbd_dathnak_debuff_applier
+			}}
+		}
+		trigger = relative_encryption_decryption
+		parameters = {
+				target = event_target:temp_lbd_dathnak_debuff_applier
+		}
+		mode = divide
+	}
+}
+lbd_dathnak_pop_number_calculator = {
+	base = 0
+	complex_trigger_modifier = {
+		trigger = num_pops
+		mode = add
+		mult = 0.05
+	}
+	floor = yes
+	min = 1
+
+}
