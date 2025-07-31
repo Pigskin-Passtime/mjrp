@@ -1,0 +1,135 @@
+begin_crisis_fleshsong = {
+	set_global_flag = mid_game_crisis_happened 			# this must be set and not removed
+	set_timed_global_flag = {							# this must be set and not removed
+		flag = mid_game_crisis_happened_recently
+		years = 12
+	}
+	set_global_flag = fleshsong_in_progress 				# must be removed when crisis is resolved
+	set_global_flag = fleshsong_fired 					# (optional) only set this flag if you want your crisis to fire only once
+	set_global_flag = midgame_crisis_ongoing			# must be removed when crisis is resolved
+	# BOOM BOOM PEW PEW effects go here
+	# this is in country scope, on global event country
+	country_event = { id = fleshsong.001 }
+}
+
+fleshsong_mutate_pops = {
+	random_owned_pop_species = {
+		save_event_target_as = selected_species
+	}
+
+	if = {
+		limit = {
+			event_target:selected_species = { is_robotic = yes }
+		}
+		random_list = {
+			10 = {
+				modify_species = {
+					species = event_target:selected_species
+					add_trait = trait_fleshsong_ichor_leakage
+					add_traits_at_start_of_list = yes
+					change_scoped_species = no
+					effect = {
+						save_event_target_as = new_species
+					}
+				}
+			}
+			10 = {
+				modify_species = {
+					species = event_target:selected_species
+					add_trait = trait_fleshsong_moldy_circuitry
+					add_traits_at_start_of_list = yes
+					change_scoped_species = no
+					effect = {
+						save_event_target_as = new_species
+					}
+				}
+			}
+			10 = {
+				modify_species = {
+					species = event_target:selected_species
+					add_trait = trait_fleshsong_gunked_gears
+					add_traits_at_start_of_list = yes
+					change_scoped_species = no
+					effect = {
+						save_event_target_as = new_species
+					}
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			event_target:selected_species = { is_lithoid = yes }
+		}
+		random_list = {
+			10 = {
+				modify_species = {
+					species = event_target:selected_species
+					add_trait = trait_fleshsong_sonorous
+					add_traits_at_start_of_list = yes
+					change_scoped_species = no
+					effect = {
+						save_event_target_as = new_species
+					}
+				}
+			}
+			10 = {
+				modify_species = {
+					species = event_target:selected_species
+					add_trait = trait_fleshsong_attuned
+					add_traits_at_start_of_list = yes
+					change_scoped_species = no
+					effect = {
+						save_event_target_as = new_species
+					}
+				}
+			}
+		}
+	}
+	else = {
+		random_list = {
+			10 = {
+				modify_species = {
+					species = event_target:selected_species
+					add_trait = trait_fleshsong_attuned
+					add_traits_at_start_of_list = yes
+					change_scoped_species = no
+					effect = {
+						save_event_target_as = new_species
+					}
+				}
+			}
+			10 = {
+				modify_species = {
+					species = event_target:selected_species
+					add_trait = trait_fleshsong_rythmic
+					add_traits_at_start_of_list = yes
+					change_scoped_species = no
+					effect = {
+						save_event_target_as = new_species
+					}
+				}
+			}
+			10 = {
+				modify_species = {
+					species = event_target:selected_species
+					add_trait = trait_fleshsong_sonorous
+					add_traits_at_start_of_list = yes
+					change_scoped_species = no
+					effect = {
+						save_event_target_as = new_species
+					}
+				}
+			}
+		}
+	}
+	while = {
+		count = $COUNT$
+		random_owned_pop = {
+			limit = {
+				is_species = event_target:selected_species
+			}
+			change_species = event_target:new_species
+		}
+	}
+}

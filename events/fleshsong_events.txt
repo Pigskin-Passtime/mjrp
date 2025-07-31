@@ -1,0 +1,513 @@
+namespace = fleshsong
+
+
+
+#event to give all countries the situation
+country_event = { 
+	id = fleshsong.001
+	is_triggered_only = yes
+	hide_window = yes
+    fire_only_once = yes
+
+	trigger = {
+        has_global_flag =fleshsong_fired
+    }
+
+    immediate = {
+        every_country = {
+            limit = {
+                is_country_type = default
+            }
+            start_situation = {
+                type = situation_song_of_flesh
+                target = root
+            }
+            set_country_flag = has_fleshsong
+			country_event = { id = fleshsong.002 days = 3600 } #in 10 years the Song prepares to return to the Shroud			
+        }
+		country_event = { id = fleshsong.005 days = 5400 random =360 }#end of crisis
+    }
+
+}
+
+country_event = { #event for Song preparing to enter Shroud
+	id = fleshsong.002
+    title = fleshsong.002.name
+	desc = fleshsong.002.desc
+	picture = GFX_evt_emergency_workers
+	show_sound = event_laboratory_sound
+	is_triggered_only = yes
+
+    option = {
+		name = fleshsong.002.A
+	}
+}
+
+country_event = { #event for Song leaving and entering shroud
+	id = fleshsong.003
+    title = fleshsong.003.name
+	desc = fleshsong.003.desc
+	picture = GFX_evt_emergency_workers
+	show_sound = event_laboratory_sound
+	is_triggered_only = yes
+
+
+    option = {
+		name = fleshsong.003.A
+		hidden_effect = {
+			country_event = { id = fleshsong.004 days = 14 }
+		}
+	}
+}
+
+country_event = { #event for psionic countries detailing Song's fight and defeat
+	id = fleshsong.004
+    title = fleshsong.004.name
+	desc = fleshsong.004.desc
+	picture = GFX_evt_zro_3
+	show_sound = event_laboratory_sound
+	is_triggered_only = yes
+
+	trigger = {
+		species = { has_trait = trait_psionic }
+	}
+
+
+    option = {
+		name = fleshsong.004.A
+	}
+}
+
+country_event = { #end of crisis
+	id = fleshsong.005
+	is_triggered_only = yes
+	hide_window = yes
+    fire_only_once = yes
+
+	immediate = {
+        every_country = {
+            limit = {
+                is_country_type = default
+            }
+			country_event = { id = fleshsong.003 }	
+			country_event = { id = fleshsong.004 }		
+        }
+		remove_global_flag = fleshsong_in_progress
+		remove_global_flag = midgame_crisis_ongoing
+    }
+}
+
+
+#######################################################################
+### CURE SONG EVENTS
+#######################################################################
+
+#making improvement to building safety
+situation_event = { 
+	id = fleshsong.010
+    title = fleshsong.010.name
+	desc = fleshsong.010.desc
+	picture = GFX_evt_emergency_workers
+	show_sound = event_laboratory_sound
+	is_triggered_only = yes
+
+	situation = this
+
+	immediate = {
+		set_situation_locked = yes
+	}
+	after = {
+		set_situation_locked = no
+	}
+
+
+    option = {
+		name = fleshsong.010.A
+		owner = {
+			set_country_flag = fleshsong_improved_safety
+		}
+	}
+}
+
+#better improvements to building safety
+situation_event = { 
+	id = fleshsong.011
+    title = fleshsong.011.name
+	desc = fleshsong.011.desc
+	picture = GFX_evt_emergency_workers
+	show_sound = event_laboratory_sound
+	is_triggered_only = yes
+
+	situation = this
+
+	immediate = {
+		set_situation_locked = yes
+	}
+	after = {
+		set_situation_locked = no
+	}
+
+
+    option = {
+		name = fleshsong.011.A
+		owner = {
+			set_country_flag = fleshsong_secured_safety
+		}
+	}
+}
+
+#discover cure to fleshsong
+situation_event = { 
+	id = fleshsong.012
+    title = fleshsong.012.name
+	desc = fleshsong.012.desc
+	picture = GFX_evt_genetic_modification
+	show_sound = event_laboratory_sound
+	is_triggered_only = yes
+
+	situation = this
+
+	immediate = {
+		set_situation_locked = yes
+	}
+	after = {
+		set_situation_locked = no
+	}
+
+
+    option = {
+		name = fleshsong.012.A
+		owner = {
+			give_technology = {
+				tech = tech_cure_fleshsong
+			}
+		}
+	}
+}
+
+#######################################################################
+### EMBRACE SONG EVENTS
+#######################################################################
+
+#begin to hear the tune
+situation_event = { 
+	id = fleshsong.020
+    title = fleshsong.020.name
+	desc = fleshsong.020.desc
+	picture = GFX_evt_genetic_modification
+	show_sound = event_laboratory_sound
+	is_triggered_only = yes
+
+	situation = this
+
+	immediate = {
+		set_situation_locked = yes
+	}
+	after = {
+		set_situation_locked = no
+	}
+
+
+    option = {
+		name = fleshsong.020.A
+		owner = {
+			set_country_flag = fleshsong_encouraging_flesh
+		}
+	}
+}
+
+#the song takes a stronger hold
+situation_event = { 
+	id = fleshsong.021
+    title = fleshsong.021.name
+	desc = fleshsong.021.desc
+	picture = GFX_evt_genetic_modification
+	show_sound = event_laboratory_sound
+	is_triggered_only = yes
+
+	situation = this
+
+	immediate = {
+		set_situation_locked = yes
+	}
+	after = {
+		set_situation_locked = no
+	}
+
+
+    option = {
+		name = fleshsong.021.A
+		owner = {
+			set_country_flag = fleshsong_one_with_flesh
+		}
+	}
+}
+
+#we are the tune we sing the song the flesh speaks to us
+situation_event = { 
+	id = fleshsong.022
+    title = fleshsong.022.name
+	desc = fleshsong.022.desc
+	picture = GFX_evt_genetic_modification
+	show_sound = event_laboratory_sound
+	is_triggered_only = yes
+
+	situation = this
+
+	immediate = {
+		set_situation_locked = yes
+	}
+	after = {
+		set_situation_locked = no
+	}
+
+
+    option = {
+		name = fleshsong.022.A
+		owner = {
+			give_technology = {
+				tech = tech_sing_fleshsong
+			}
+		}
+	}
+}
+
+
+#######################################################################
+### MONTHLY EVENTS
+#######################################################################
+
+#some clone biowaste has started moving...
+situation_event = { 
+	id = fleshsong.101
+    title = fleshsong.101.name
+	desc = fleshsong.101.desc
+	picture = GFX_evt_clones
+	show_sound = event_dangerous_animals
+	is_triggered_only = yes
+
+	situation = this
+
+	trigger = {
+		owner = {
+			any_owned_planet = {
+				OR = { 
+					has_active_building = building_clone_vats
+					has_active_building = building_clone_army_clone_vat
+					has_active_building = building_spawning_pool
+				}
+			}
+		}
+		has_global_flag = fleshsong_in_progress
+	}
+
+	immediate = {
+		set_situation_locked = yes
+		owner = {
+			random_owned_planet = {
+				limit = {
+					is_colony = yes
+					OR = { 
+						has_active_building = building_clone_vats
+						has_active_building = building_clone_army_clone_vat
+						has_active_building = building_spawning_pool
+					}
+				}
+
+				save_event_target_as = clone_planet
+
+			}
+		}
+		create_country = {
+			name = "NAME_Biowaste_Amalgams"
+			type = faction
+			effect = {
+				establish_communications_no_message = root.owner
+				save_event_target_as = fleshsong_amalgams
+			}
+		}
+	}
+	after = {
+		set_situation_locked = no
+	}
+
+
+    option = {
+		name = fleshsong.101.A
+		event_target:clone_planet = {
+			if = {
+				limit = { has_building = building_clone_vats }
+				ruin_building = building_clone_vats
+			}
+			else_if = {
+				limit = { has_building = building_clone_army_clone_vat }
+				ruin_building = building_clone_army_clone_vat
+			}
+			else_if = {
+				limit = { has_building = building_spawning_pool }
+				ruin_building = building_spawning_pool
+			}
+			while = {
+				count = 4
+				create_army = {
+					owner = event_target:fleshsong_amalgams
+					type = fleshsong_amalgam_army
+				}
+			}
+		}
+	}
+}
+
+#Things have started going awry at one of our gene clinics
+situation_event = { 
+	id = fleshsong.102
+    title = fleshsong.102.name
+	desc = fleshsong.102.desc
+	picture = GFX_evt_clones
+	show_sound = event_dangerous_animals
+	is_triggered_only = yes
+
+	situation = this
+
+	trigger = {
+		owner = {
+			any_owned_planet = {
+				OR = { 
+					has_active_building = building_clinic
+					has_active_building = building_hospital
+					has_active_building = building_spawning_pool
+				}
+			}
+		}
+		has_global_flag = fleshsong_in_progress
+	}
+
+	immediate = {
+		set_situation_locked = yes
+		owner = {
+			random_owned_planet = {
+				limit = {
+					is_colony = yes
+					OR = { 
+						has_active_building = building_clinic
+						has_active_building = building_hospital
+					}
+				}
+
+				save_event_target_as = clone_planet
+
+			}
+		}
+		create_country = {
+			name = "NAME_Biowaste_Amalgams"
+			type = faction
+			effect = {
+				establish_communications_no_message = root.owner
+				save_event_target_as = fleshsong_amalgams
+			}
+		}
+	}
+	after = {
+		set_situation_locked = no
+	}
+
+
+    option = {
+		name = fleshsong.102.A
+		event_target:clone_planet = {
+			random_owned_pop = {
+				kill_pop = yes
+			}
+			if = {
+				limit = { has_building = building_clinic }
+				ruin_building = building_clinic
+			}
+			else_if = {
+				limit = { has_building = building_hospital }
+				ruin_building = building_hospital
+			}
+			while = {
+				count = 2
+				create_army = {
+					owner = event_target:fleshsong_amalgams
+					type = fleshsong_amalgam_army
+				}
+			}
+		}
+	}
+}
+
+
+
+
+#some of out pops have mutated...
+situation_event = {
+    id = fleshsong.201
+    title = "fleshsong.201.name"
+    desc = "fleshsong.201.desc"
+    picture = GFX_evt_genetic_modification
+    show_sound = event_bad_omen
+	is_triggered_only = yes
+
+    #limit = {
+    #    owner = { has_country_flag = has_fleshsong }
+    #}
+	trigger = {
+		has_global_flag = fleshsong_in_progress
+	}
+
+    weight_multiplier = {
+        factor = 1
+		modifier = {
+            factor = 1.6
+            owner = { has_country_flag = fleshsong_one_with_flesh }
+        }
+        modifier = {
+            factor = 1.3
+            owner = { has_country_flag = fleshsong_encouraging_flesh }
+        }
+        modifier = {
+            factor = 0.6
+            owner = { has_country_flag = fleshsong_improved_safety }
+        }
+		modifier = {
+            factor = 0.3
+            owner = { has_country_flag = fleshsong_secured_safety }
+        }
+    }
+
+    
+    immediate = {
+        owner = { 
+			if = {
+				limit = {
+					has_country_flag = fleshsong_encouraging_flesh
+				}
+				fleshsong_mutate_pops = { COUNT = 3 }
+			}
+			else_if = {
+				limit = {
+					has_country_flag = fleshsong_one_with_flesh
+				}
+				fleshsong_mutate_pops = { COUNT = 4 }
+			}
+			else = {
+				fleshsong_mutate_pops = { COUNT = 2 }
+			}
+            
+        }
+        
+    }
+
+    option = {
+        name = fleshsong.201.A
+        
+    }
+    
+    
+
+}
+
+
+
+# TODO: A Covenant

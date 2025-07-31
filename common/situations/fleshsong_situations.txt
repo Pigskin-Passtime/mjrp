@@ -1,0 +1,265 @@
+situation_song_of_flesh = {
+	picture = GFX_evt_disease_outbreak
+	start_value = 50
+	progress_direction = bidirectional
+	complete_icon_frame = GFX_situation_outcome_frame_blue
+	complete_icon = GFX_situation_outcome_unknown
+	fail_icon_frame = GFX_situation_outcome_frame_green
+	fail_icon = GFX_situation_outcome_positive
+
+
+	triggered_modifier = {
+		potential = {
+			owner = {
+				NOR = { 
+					has_country_flag = fleshsong_improved_safety 
+					has_country_flag = fleshsong_secured_safety
+				}
+			}
+		}
+		modifier = {
+			leader_age = -20
+			planet_pop_assembly_mult = 0.6
+		}
+	}
+	triggered_modifier = {
+		potential = {
+			owner = {
+				has_country_flag = fleshsong_improved_safety
+			}
+		}
+		modifier = {
+			planet_pop_assemblers_upkeep_mult = 1.25
+			leader_age = -10
+			planet_pop_assembly_mult = 0.8
+		}
+	}
+	triggered_modifier = {
+		potential = {
+			owner = {
+				has_country_flag = fleshsong_secured_safety
+			}
+		}
+		modifier = {
+			planet_pop_assemblers_upkeep_mult = 1.5
+			planet_pop_assembly_mult = 1
+		}
+	}
+
+
+    on_monthly = {
+		random_events = {
+			120 = 0
+			80 = fleshsong.201
+			10 = fleshsong.101
+			20 = fleshsong.102
+		}
+	}
+	monthly_progress = {
+		base = 0.1
+		modifier = {
+			add = 0.2
+			desc = string_current_approach
+			current_situation_approach = situation_fleshsong_embrace
+		}
+		modifier = {
+			add = -0.4
+			desc = string_current_approach
+			current_situation_approach = situation_fleshsong_fix_it
+		}
+		modifier = {
+			add = -0.5
+			desc = string_current_approach
+			current_situation_approach = situation_fleshsong_robot_fix_it
+		}
+	}
+
+
+	on_progress_complete = {
+		custom_tooltip = situation_unknown_outcome_approach
+		#hidden_effect = {
+		situation_event = { id = fleshsong.022 }
+		#}
+	}
+	on_fail = {
+		custom_tooltip = situation_unknown_outcome_approach
+		#hidden_effect = {
+		situation_event = { id = fleshsong.012 }
+		#}
+	}
+
+
+
+	stages = {
+		stage_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_blue
+			end = 20
+			on_first_enter = {
+				situation_event = { id = fleshsong.011 }
+			}
+			custom_tooltip = stage_unknown_effects
+		}
+		stage_2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_blue
+			end = 40
+			on_first_enter = {
+				situation_event = { id = fleshsong.010 }
+			}
+			custom_tooltip = stage_unknown_effects
+		}
+		stage_3 = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_blue
+			end = 60
+			custom_tooltip = stage_unknown_effects
+		}
+		stage_4 = {
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_blue
+			end = 80
+			on_first_enter = {
+				situation_event = { id = situation.155 }
+			}
+			custom_tooltip = stage_unknown_effects
+		}
+		stage_5 = {
+			icon = GFX_situation_stage_5
+			icon_background = GFX_situation_stage_frame_blue
+			end = 100
+			on_first_enter = {
+				situation_event = { id = situation.155 }
+			}
+			custom_tooltip = stage_unknown_effects
+		}
+	}
+
+	approach = { #do nothing
+		name = situation_fleshsong_noconcern
+		icon = GFX_situation_approach_shrug
+		icon_background = GFX_situation_approach_bg_yellow
+		default = yes
+		allow = {
+			owner = {
+				NOR = { 
+					has_country_flag = fleshsong_secured_safety 
+					has_country_flag = fleshsong_one_with_flesh
+				}
+			}
+		}
+		on_select = {
+			custom_tooltip = approach_outcome_tooltip
+			owner = {
+				set_country_flag = fleshsong_donothing
+				remove_country_flag = fleshsong_embrace
+				remove_country_flag = fleshsong_fixit
+				remove_country_flag = fleshsong_fixit_robot
+			}
+		}
+	}
+
+	approach = { #embrace the song
+		name = situation_fleshsong_embrace
+		icon = GFX_situation_approach_genetics
+		icon_background = GFX_situation_approach_bg_yellow
+
+		#robots do not like the song
+		potential = { 
+			owner = {
+				NOT = { is_machine_empire = yes }
+			}
+		} 
+		allow = {
+			owner = {
+				NOT = { has_country_flag = fleshsong_secured_safety }
+			}
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				unity = 20
+			}
+		}
+
+		on_select = {
+			custom_tooltip = approach_outcome_tooltip
+			owner = {
+				set_country_flag = fleshsong_embrace
+				remove_country_flag = fleshsong_donothing
+				remove_country_flag = fleshsong_fixit
+				remove_country_flag = fleshsong_fixit_robot
+			}
+		}
+	}
+
+	approach = { #undo these horrors
+		name = situation_fleshsong_fix_it
+		icon = GFX_situation_approach_research
+		icon_background = GFX_situation_approach_bg_green
+
+		#robots have a better version of this
+		potential = { 
+			owner = {
+				NOT = { is_machine_empire = yes }
+			}
+		} 
+		allow = {
+			owner = {
+				NOT = { 
+					has_country_flag = fleshsong_one_with_flesh
+				}
+			}
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				society_research = 20
+			}
+		}
+
+		on_select = {
+			custom_tooltip = approach_outcome_tooltip
+			owner = {
+				set_country_flag = fleshsong_fixit
+				remove_country_flag = fleshsong_embrace
+				remove_country_flag = fleshsong_donothing
+			}
+		}
+	}
+
+	approach = { #undo these horrors (machine flavoured)
+		name = situation_fleshsong_robot_fix_it
+		icon = GFX_situation_approach_research
+		icon_background = GFX_situation_approach_bg_green
+
+		potential = { 
+			owner = {
+				is_machine_empire = yes
+			}
+		} 
+
+		resources = {
+			category = situations
+			upkeep = {
+				society_research = 10
+				engineering_research = 10
+			}
+		}
+
+		on_select = {
+			custom_tooltip = approach_outcome_tooltip
+			owner = {
+				set_country_flag = fleshsong_fixit_robot
+				remove_country_flag = fleshsong_fixit
+				remove_country_flag = fleshsong_embrace
+				remove_country_flag = fleshsong_donothing
+			}
+		}
+	}
+
+	
+	abort_trigger = {
+
+	}
+}
