@@ -258,7 +258,7 @@ country_event = {
 	id = mem_descended.5
 	title = mem_descended.5.name
 	desc = mem_descended.5.desc
-	picture = GFX_evt_a_rift_in_space
+	picture = GFX_evt_cosmic_storms_shroud_storm
 	show_sound = event_ship_explosion
 	location = event_target:mem_descended_system
 
@@ -448,9 +448,9 @@ country_event = {
 						custom_catch_phrase = mem_descended_catchphrase
 						custom_description = mem_descended_backstory
 						traits = {
-							add_trait = subclass_official_economy_councilor
-							add_trait = leader_trait_bureaucrat_2
-							add_trait = leader_trait_legendary_mem_descended_ascendant
+							trait = subclass_official_economy_councilor
+							trait = leader_trait_bureaucrat
+							trait = leader_trait_legendary_mem_descended_ascendant
 						}
 						gender = male
 						hide_age = yes
@@ -472,9 +472,9 @@ country_event = {
 						custom_catch_phrase = mem_descended_catchphrase
 						custom_description = mem_descended_backstory
 						traits = {
-							add_trait = subclass_official_governor
-							add_trait = leader_trait_bureaucrat_2
-							add_trait = leader_trait_legendary_mem_descended_ascendant
+							trait = subclass_official_governor
+							trait = leader_trait_bureaucrat
+							trait = leader_trait_legendary_mem_descended_ascendant
 						}
 						gender = male
 						hide_age = yes
@@ -809,7 +809,9 @@ country_event = {
 		}
 		event_target:mem_descended_leader = {
 			remove_trait = leader_trait_legendary_mem_descended_ascendant
-			add_trait = leader_trait_legendary_mem_descended_aspect
+			add_trait = {
+				trait = leader_trait_legendary_mem_descended_aspect
+			}
 			set_name = NAME_Avatar_Neochadamus
 		}
 		add_event_chain_counter = {
@@ -1341,7 +1343,10 @@ country_event = {
 			}
 			1 = { # Event 7: Reactor Overload
 				modifier = {
-					has_country_flag = mem_descended_flavor_7
+					OR = {
+						has_country_flag = mem_descended_flavor_7
+						is_at_war = yes
+					}
 					factor = 0
 				}
 				set_country_flag = mem_descended_flavor_7
@@ -2102,12 +2107,19 @@ country_event = {
 				NOT = {
 					has_starbase_size = starbase_outpost
 				}
+				is_orbital_ring = no
+				solar_system = {
+					is_capital_system = no
+				}
 			}
 			solar_system = {
 				save_event_target_as = mem_descended_flavor_system
 				random_fleet_in_system = {
 					limit = {
 						is_ship_class = shipclass_starbase
+						orbit = {
+							is_star = yes
+						}
 					}
 					destroy_fleet = this
 				}
@@ -2268,7 +2280,7 @@ country_event = {
 	id = mem_descended.110
 	title = mem_descended.110.name
 	desc = mem_descended.110.desc
-	picture = GFX_evt_slingshot_stars
+	picture = GFX_evt_astral_rift_research_lab_specimen
 	show_sound = event_air_raid_siren
 	location = event_target:mem_descended_flavor_planet
 
@@ -2325,7 +2337,7 @@ country_event = {
 	id = mem_descended.111
 	title = mem_descended.111.name
 	desc = mem_descended.111.desc
-	picture = GFX_evt_throne_room
+	picture = GFX_evt_but_they_are_cute
 	show_sound = event_conversation
 
 	event_chain = mem_descended_chain
@@ -2358,7 +2370,9 @@ country_event = {
 	option = {
 		name = INTRIGUING
 		event_target:mem_descended_flavor_target_leader = {
-			add_trait = leader_trait_emotional_support_pet
+			add_trait = {
+				trait = leader_trait_emotional_support_pet
+			}
 		}
 	}
 }
@@ -2763,20 +2777,20 @@ country_event = {
 	}
 
 	immediate = {
-		export_trigger_value_to_variable = {
-			trigger = num_assigned_jobs
-			parameters = {
-				job = priest	
-			}
-			variable = mem_num_priest_jobs
-		}
-		export_trigger_value_to_variable = {
-			trigger = num_assigned_jobs
-			parameters = {
-				job = death_priest	
-			}
-			variable = mem_num_death_priest_jobs
-		}
+		# export_trigger_value_to_variable = {
+		# 	trigger = num_assigned_jobs
+		# 	parameters = {
+		# 		job = priest	
+		# 	}
+		# 	variable = mem_num_priest_jobs
+		# }
+		# export_trigger_value_to_variable = {
+		# 	trigger = num_assigned_jobs
+		# 	parameters = {
+		# 		job = death_priest	
+		# 	}
+		# 	variable = mem_num_death_priest_jobs
+		# }
 		export_trigger_value_to_variable = {
 			trigger = num_assigned_jobs
 			parameters = {
@@ -2898,12 +2912,16 @@ country_event = {
 		}
 		set_variable = {
 			which = mem_num_unity_jobs
-			value = mem_num_priest_jobs
+			value = 0
 		}
-		change_variable = {
-			which = mem_num_unity_jobs
-			value = mem_num_death_priest_jobs
-		}
+		# change_variable = {
+		# 	which = mem_num_unity_jobs
+		# 	value = mem_num_priest_jobs
+		# }
+		# change_variable = {
+		# 	which = mem_num_unity_jobs
+		# 	value = mem_num_death_priest_jobs
+		# }
 		change_variable = {
 			which = mem_num_unity_jobs
 			value = mem_num_telepath_jobs
@@ -3348,6 +3366,7 @@ country_event = {
 
 	option = {
 		name = GOODBYE
+		default_hide_option = yes
 		hidden_effect = {
 			if = {
 				limit = {
@@ -3616,6 +3635,7 @@ country_event = {
 
 	option = {
 		name = BACK
+		default_hide_option = yes
 		hidden_effect = {
 			country_event = {
 				id = mem_descended.300
@@ -3693,6 +3713,7 @@ country_event = {
 
 	option = {
 		name = BACK
+		default_hide_option = yes
 		hidden_effect = {
 			country_event = {
 				id = mem_descended.300
@@ -3753,6 +3774,7 @@ country_event = {
 
 	option = {
 		name = BACK
+		default_hide_option = yes
 		hidden_effect = {
 			country_event = {
 				id = mem_descended.300
@@ -3903,6 +3925,7 @@ country_event = {
 
 	option = {
 		name = BACK
+		default_hide_option = yes
 		hidden_effect = {
 			if = {
 				limit = {
