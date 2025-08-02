@@ -213,12 +213,36 @@ leader_event = {
 				value = 1
 			}
 			random_list = {
-				1 = { add_trait = leader_trait_viz_raff_master_of_ceremonies }
-				1 = { add_trait = leader_trait_viz_raff_staff_bearer }
-				1 = { add_trait = leader_trait_viz_raff_truth_dweller }
-				1 = { add_trait = leader_trait_viz_raff_water_bringer }
-				1 = { add_trait = leader_trait_viz_raff_supreme_hierophant }
-				1 = { add_trait = leader_trait_viz_raff_seal_keeper }
+				1 = {
+					add_trait = {
+						trait = leader_trait_viz_raff_master_of_ceremonies
+					}
+				}
+				1 = {
+					add_trait = {
+						trait = leader_trait_viz_raff_staff_bearer
+					}
+				}
+				1 = {
+					add_trait = {
+						trait = leader_trait_viz_raff_truth_dweller
+					}
+				}
+				1 = {
+					add_trait = {
+						trait = leader_trait_viz_raff_water_bringer
+					}
+				}
+				1 = {
+					add_trait = {
+						trait = leader_trait_viz_raff_supreme_hierophant
+					}
+				}
+				1 = {
+					add_trait = {
+						trait = leader_trait_viz_raff_seal_keeper
+					}
+				}
 				1 = { 
 					modifier = {
 						factor = 0
@@ -228,7 +252,9 @@ leader_event = {
 							}
 						}
 					}
-					add_trait = leader_trait_viz_raff_monument_builder
+					add_trait = {
+						trait = leader_trait_viz_raff_monument_builder
+					}
 				}
 				1 = {
 					modifier = {
@@ -239,7 +265,9 @@ leader_event = {
 							}
 						}
 					}
-					add_trait = leader_trait_viz_raff_constellation_hammer
+					add_trait = {
+						trait = leader_trait_viz_raff_constellation_hammer
+					}
 				}
 				1 = {
 					modifier = {
@@ -248,7 +276,9 @@ leader_event = {
 							is_spiritualist = no
 						}
 					}
-					add_trait = leader_trait_viz_raff_divine_oracle
+					add_trait = {
+						trait = leader_trait_viz_raff_divine_oracle
+					}
 				}
 			}
 			owner = {
@@ -451,7 +481,6 @@ country_event = {
 				clone_leader = {
 					target = event_target:viz_raff_off_to_coup
 					background_planet = event_target:viz_raff_nuked_ruins
-					background_job = politician
 				}
 				last_created_leader = {
 					save_global_event_target_as = viz_raff_leader
@@ -702,10 +731,10 @@ country_event = {
 				save_event_target_as = new_robotic_species_viz_raff_rulers
 			}
 		}
-		every_owned_pop = {
+		every_owned_pop_group = {
 			limit = {
 				is_being_purged = no
-				has_job_category = ruler
+				has_pop_category = ruler
 				species = {
 					is_robotic = no
 					is_livestock = no
@@ -713,7 +742,7 @@ country_event = {
 			}
 			change_species = event_target:new_robotic_species_viz_raff_rulers
 		}
-		every_owned_pop = {
+		every_owned_pop_group = {
 			limit = {
 				is_being_purged = no
 				species = {
@@ -723,7 +752,7 @@ country_event = {
 			}
 			if = {
 				limit = {
-					has_job_category = worker
+					has_pop_category = worker
 				}
 				change_species = event_target:new_robotic_species_viz_raff_slaves
 			}
@@ -828,7 +857,10 @@ country_event = {
 					has_leader_flag = legendary_leader
 				}
 			}
-			add_trait_no_notify = leader_trait_synthetic
+			add_trait = {
+				trait = leader_trait_synthetic
+				show_message = no
+			} 
 			remove_trait = leader_trait_cyborg
 		}
 
@@ -866,7 +898,10 @@ country_event = {
 				species = { has_trait = trait_mechanical }
 				NOT = { has_trait = leader_trait_synthetic }
 			}
-			add_trait_no_notify = leader_trait_synthetic
+			add_trait = {
+				trait = leader_trait_synthetic
+				show_message = no
+			}
 			remove_trait = leader_trait_cyborg
 		}
 
@@ -1164,7 +1199,7 @@ leader_event = {
 		name = viz_raff.14.a
 		trigger = {
 			owner = {
-				any_owned_pop = {
+				any_owned_pop_group = {
 					is_enslaved = yes
 				}
 			}
@@ -1172,11 +1207,11 @@ leader_event = {
 		while = {
 			count = 3
 			owner = {
-				random_owned_pop = {
+				random_owned_pop_group = {
 					limit = {
 						is_enslaved = yes
 					}
-					kill_pop = yes
+					kill_single_pop = yes
 				}
 			}
 		}
@@ -1274,10 +1309,14 @@ country_event = {
 						has_trait = trait_mechanical
 					}
 				}
-				add_trait = leader_trait_viz_raff_mysterious_illness_robot
+				add_trait = {
+					trait = leader_trait_viz_raff_mysterious_illness_robot
+				} 
 			}
 			else = {
-				add_trait = leader_trait_viz_raff_mysterious_illness
+				add_trait = {
+					trait = leader_trait_viz_raff_mysterious_illness
+				} 
 			}
 		}
 	}
@@ -1519,7 +1558,6 @@ country_event = {
 		clone_leader = {
 			target = from
 			background_planet = event_target:viz_raff_nuked_ruins
-			background_job = politician
 		}
 		last_created_leader = {
 			save_global_event_target_as = viz_raff_leader
@@ -1543,6 +1581,8 @@ country_event = {
 		}
 	}
 }
+
+# Testing Events
 
 country_event = {
 	id = viz_raff.27
@@ -1568,8 +1608,12 @@ country_event = {
 			limit = {
 				has_leader_flag = viz_raff
 			}
-			add_trait = leader_trait_viz_raff_master_of_ceremonies
-			add_trait = leader_trait_viz_raff_staff_bearer
+			add_trait = {
+				trait = leader_trait_viz_raff_master_of_ceremonies
+			} 
+			add_trait = {
+				trait = leader_trait_viz_raff_staff_bearer
+			} 
 		}
 		capital_scope = {
 			create_army = {
