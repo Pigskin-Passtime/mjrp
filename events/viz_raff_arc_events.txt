@@ -135,7 +135,7 @@ country_event = {
 	
 	picture_event_data = {
 		portrait = event_target:viz_raff_leader
-		room = personality_fallen_empire_room
+		room = enclave_curator_room
 	}
 
 	immediate = {
@@ -193,6 +193,7 @@ country_event = {
 				custom_catch_phrase = viz_raff_catch_phrase
 				custom_description = viz_raff_backstory
 				background_ethic = ethic_materialist
+				background_job = politician
 				traits = {
 					trait = leader_trait_viz_raff_power_behind_the_throne
 					trait = leader_trait_viz_raff_undessicated
@@ -206,9 +207,15 @@ country_event = {
 					set_leader_flag = immune_to_negative_traits
 					set_leader_flag = leader_death_events_blocked
 
-					add_trait = subclass_official_economy_councilor
-					add_trait = leader_trait_legendary_great_inventor
-					add_trait = trait_ruler_deep_connections
+					add_trait = {
+						trait = subclass_official_economy_councilor
+					} 
+					add_trait = {
+						trait = leader_trait_legendary_great_inventor
+					}
+					add_trait = {
+						trait = trait_ruler_deep_connections
+					}
 					set_variable = {
 						which = viz_raff_vizier_level
 						value = 1
@@ -227,10 +234,18 @@ country_event = {
 		sound = event_robo
 
 		hidden_effect = {
+			if = {
+				limit = {
+					is_variable_set = paragon_memory_vault
+				}
+				change_variable = {
+					which = paragon_memory_vault
+					value = 1
+				}
+			}
 			clone_leader = {
 				target = event_target:viz_raff_leader
 				background_planet = event_target:viz_raff_nuked_ruins
-				background_job = politician
 			}
 			last_created_leader = {
 				save_global_event_target_as = viz_raff_leader
@@ -247,6 +262,7 @@ country_event = {
 					id = viz_raff.1
 					days = 30
 				}
+				leader_event = { id = focus.46 } # Empire Focus
 			}
 			set_country_flag = viz_raff_present
 			create_message = {
