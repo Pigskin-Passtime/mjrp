@@ -65,8 +65,8 @@ country_event = {
 
 		last_created_leader = {
 			save_global_event_target_as = THEFRAGMENT
-			add_trait = leader_trait_meticulous_2
-			add_trait = leader_trait_maniacal_3
+			add_trait = { trait = leader_trait_meticulous_2 }
+			add_trait = { trait = leader_trait_maniacal_3 }
 		}
 		set_country_flag = hired_THEFRAGMENT
 	}
@@ -426,8 +426,8 @@ country_event = {
 
 		last_created_leader = {
 			save_global_event_target_as = THEFRAGMENT
-			add_trait = leader_trait_meticulous_2
-			add_trait = leader_trait_maniacal_3
+			add_trait = { trait = leader_trait_meticulous_2 }
+			add_trait = { trait = leader_trait_maniacal_3 }
 		}
 	}
 
@@ -1328,7 +1328,9 @@ country_event = {
 
 	trigger = {
 		is_ai = no
-		num_pops > 10
+		count_owned_pop_amount = {
+			count > 1000
+		}
 		is_country_type = default		
 		is_at_war = no
 		has_country_flag = hired_THEFRAGMENT
@@ -1949,28 +1951,27 @@ planet_event = {
 		add_building = building_fortress
 
 
-		while = {
-			count = 5
-			add_district = district_nexus
+		add_district_and_planet_size_if_needed_effect = {
+			district = district_nexus
+			amount = 5
 		}
-		while = {
-			count = 2
-			add_district = district_generator
+		add_district_and_planet_size_if_needed_effect = {
+			district = district_generator
+			amount = 2
 		}
-		while = {
-			count = 2
-			add_district = district_mining
+		add_zone = {
+			district = district_nexus
+			zone = zone_foundry
+			zone_slot = 1
 		}
-		while = {
-			count = 1
-			add_district = district_farming
-		}
-		while = {
-			count = 1
-			add_district = district_industrial
-		}
-
-
+		add_district_and_planet_size_if_needed_effect = {
+			district = district_mining
+			amount = 2
+		}		
+		add_district_and_planet_size_if_needed_effect = {
+			district = district_farming
+			amount = 2
+		}		
 		while = {
 			count = 10
 			create_pop = {
@@ -1994,7 +1995,7 @@ planet_event = {
 				portrait = random
 				traits = random
 			}
-			create_pop = {
+			create_pop_group = {
 				species = last_created_species
 			}
 		}
@@ -2177,8 +2178,11 @@ country_event = {
 			}
 			event_target:FINALFRAGMENTSHOWDOWN = {
 				destroy_colony = yes
-				every_owned_pop = {
-					kill_pop = yes
+				every_owned_pop_group = {
+					kill_pop_group = {
+						pop_group = this
+						percentage = 1 # 100%
+					}
 				}
 				change_pc = pc_shielded
 			}
