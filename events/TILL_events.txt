@@ -83,6 +83,30 @@ country_event = {
 
 }
 
+country_event = {
+	id = TILLDebug.2
+	hide_window = no
+	picture = GFX_evt_dark_alley
+	is_triggered_only = yes
+	title = "Fragment Fixer"
+	desc = "Use this window to set the fragment's flags"
+
+	immediate = {
+		set_country_flag = hired_THEFRAGMENT
+	}
+
+	option = {
+		name = Passive
+		set_country_flag = PEACEFULL_INTELEGENCE
+	}
+
+	option = {
+		name = Hostile
+		set_country_flag = HOSTILE_INTELEGENCE
+	}
+
+}
+
 
 namespace = TILLA 
 
@@ -1454,6 +1478,11 @@ country_event = {
 		name = "TILLF.3.d"
 	}
 
+
+	option = {
+		name = OK
+	}
+
 	after = {
 		event_target:THEFRAGMENT = {
 			set_owner = event_target:FallenEmpireTaskOrigin
@@ -1537,6 +1566,10 @@ country_event = {
 			has_country_flag = HOSTILE_INTELEGENCE
 		}
 		name = "TILLF.4.d"
+	}
+
+	option = {
+		name = OK
 	}
 
 	after = {
@@ -1629,9 +1662,6 @@ country_event = {
 	}
 
 	option = {
-		trigger = {
-			has_country_flag = HOSTILE_INTELEGENCE
-		}
 		name = "TILLF.5.d"
 		event_target:THEFRAGMENT = {
 			set_owner = event_target:FallenEmpireTaskOrigin
@@ -2214,5 +2244,72 @@ country_event = {
 		}
 		name = "TILL.8.d"
 	}
+
+}
+
+
+namespace = TILLSTART
+
+country_event = {
+
+	id = TILLSTART.1
+	is_triggered_only = yes
+	picture = GFX_evt_TILLA_breachpoint_system
+	desc = TILLSTART.1.desc
+
+	option = {
+		name = "Do Not Spawn Fragment"
+		custom_tooltip = "Breachpoint System will not be spawned"
+	}
+
+	option = {
+		name = NEAR
+		custom_tooltip = "Breachpoint System will Spawn 4 to 8 jumps from your capital."
+		random_system_within_border = {
+			hidden_effect = {
+				spawn_system = {
+					min_jumps = 4
+					max_jumps = 8
+					initializer = "TILL_breachpoint_01"
+				}
+			}
+		}
+
+
+
+	}
+
+	option = {
+		name = FAR
+		custom_tooltip = "Breachpoint System will Spawn 8 to 16 jumps from your capital."
+		hidden_effect = {
+			random_system_within_border = {
+				spawn_system = {
+					min_jumps = 8
+					max_jumps = 16
+					initializer = "TILL_breachpoint_01"
+				}
+			}
+
+		}
+	}
+
+
+	option = {
+		name = "WHEREVER YOU ARE!"
+		custom_tooltip = "Breachpoint System will Spawn randomly in the Galaxy."
+		hidden_effect = {
+			random_system = {
+				spawn_system = {
+					max_jumps = 5
+					min_jumps = 1
+					initializer = "TILL_breachpoint_01"
+				}
+			}
+
+		}
+	}
+
+
 
 }
