@@ -9,6 +9,7 @@ spawn_celestial = {
 		set_global_flag = celestial_system_spawned
 		spawn_system = {
 			initializer = celestial_wayfarer_start_system
+			hyperlane = yes
 		}
 		last_created_system = {
 			log = "spawned \\[This.GetName\\]"
@@ -461,7 +462,7 @@ cosmic_emporium_pop_1_effect = {
 		capital_scope = {
 			while = {
 				count = 3
-				create_pop = {
+				create_pop_group = {
 					species = celestial_emporium_pop1_species
 					ethos = random
 				}
@@ -602,7 +603,7 @@ cosmic_emporium_pop_2_effect = {
 		capital_scope = {
 			while = {
 				count = 3
-				create_pop = {
+				create_pop_group = {
 					species = last_created_species
 					ethos = random
 				}
@@ -635,7 +636,7 @@ cosmic_emporium_pop_3_effect = {
 		capital_scope = {
 			while = {
 				count = 3
-				create_pop = {
+				create_pop_group = {
 					species = last_created_species
 					ethos = random
 				}
@@ -674,7 +675,9 @@ cosmic_emporium_leader_1_effect = {
 		last_created_leader = {
 			set_leader_flag = celestial_clone
 			set_skill = 4
-			add_trait = leader_trait_celestial_clone
+			add_trait = {
+				trait = leader_trait_celestial_clone
+			}
 		}
 	}
 	if = {
@@ -1554,7 +1557,7 @@ celestial_beacon_effect_planet = {
 		}
 		while = {
 			count = celestial_beacon_pop_num
-			create_pop = {
+			create_pop_group = {
 				species = last_created_species
 			}
 		}
@@ -1597,15 +1600,15 @@ celestial_create_extradimensional_species = {
 }
 
 celestial_spread_portal_sickness = {	# Fire on planet scope
-	random_owned_pop = {
+	random_owned_pop_group = {
 		limit = {
 			NOR = {
 				species = { has_species_flag = celestial_extradimensional_species }
-				pop_has_trait = trait_exd
-				pop_has_trait = trait_notofthisworld
-				pop_has_trait = trait_robot_notofthisworld
-				pop_has_trait = trait_celestial_extradimensionl
-				pop_has_trait = trait_celestial_portal_sickness
+				pop_group_has_trait = trait_exd
+				pop_group_has_trait = trait_notofthisworld
+				pop_group_has_trait = trait_robot_notofthisworld
+				pop_group_has_trait = trait_celestial_extradimensionl
+				pop_group_has_trait = trait_celestial_portal_sickness
 			}
 		}
 		random_list = {
@@ -1773,7 +1776,9 @@ celestial_create_wormholes = {
 # Tainted Crystal
 celestial_gem_effect = {
 	random_owned_leader = {
-		add_trait = leader_trait_celestial_crystal_power
+		add_trait = { 
+			trait = leader_trait_celestial_crystal_power
+		}
 		add_skill = 2
 	}
 }
