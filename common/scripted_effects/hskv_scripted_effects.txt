@@ -2,7 +2,6 @@
 # Thayo Everdawn - The Everdawn Heist
 # Author: TheRingBearer
 #########################################################################################
-
 hskv_spawn = {
 	if = {
 		limit = {
@@ -46,6 +45,7 @@ hskv_get_event_target_vault_country = {
 		save_event_target_as = hskv_vault_country
 	}
 }
+
 hskv_get_event_target_azure_prison_planet = {
 	random_system = {
 		limit = {
@@ -59,6 +59,7 @@ hskv_get_event_target_azure_prison_planet = {
 		}
 	}
 }
+
 hskv_get_event_target_azure_dream_system = {
 	random_system = {
 		limit = {
@@ -67,6 +68,7 @@ hskv_get_event_target_azure_dream_system = {
 		save_event_target_as = hskv_azure_dream_system
 	}
 }
+
 hskv_get_event_target_thayo_leader = {
 	random_owned_leader = {
 		limit = {
@@ -75,6 +77,7 @@ hskv_get_event_target_thayo_leader = {
 		save_event_target_as = hskv_thayo_everdawn_leader
 	}
 }
+
 hskv_get_event_target_dawns_end_system = {
 	random_system = {
 		limit = {
@@ -83,6 +86,7 @@ hskv_get_event_target_dawns_end_system = {
 		save_event_target_as = hskv_dawns_end_system
 	}
 }
+
 hskv_get_event_target_everdawn_vault = {
 	random_system = {
 		limit = {
@@ -96,6 +100,7 @@ hskv_get_event_target_everdawn_vault = {
 		}
 	}
 }
+
 hskv_get_thayo_manhunt_situation = {
 	every_situation = {
 		limit = {
@@ -104,6 +109,7 @@ hskv_get_thayo_manhunt_situation = {
 		save_event_target_as = hskv_situation_thayo_manhunt
 	}
 }
+
 hskv_get_vault_situation = {
 	every_situation = {
 		limit = {
@@ -114,46 +120,99 @@ hskv_get_vault_situation = {
 }
 
 hskv_get_codebreaking_score = {
-	export_modifier_to_variable = { modifier = intel_encryption_add variable = hskv_codebreaking }
+	export_modifier_to_variable = {
+		modifier = intel_encryption_add
+		variable = hskv_codebreaking
+	}
 }
 
-
-hskv_give_random_fe_building = {
+# Set one should be econimical
+# Class 3, Nourishment, Drilling, Galactic Commerce Hub
+hskv_give_random_fe_building_set1 = {
 	random_list = {
 		1 = {
 			country_event = {
-				id = ancrel.10004
+				id = hskv.10008				# nourishment_center_build_count
 			}
 		}
 		1 = {
 			country_event = {
-				id = ancrel.10005
+				id = hskv.10009				# class_3_singularity_build_count
 			}
 		}
 		1 = {
 			country_event = {
-				id = ancrel.10006
+				id = hskv.10010				# Drilling
 			}
 		}
 		1 = {
 			country_event = {
-				id = ancrel.10007
+				id = hskv.10011				# Galactic Commerce Hub
 			}
 		}
 		1 = {
 			country_event = {
-				id = ancrel.10008
-			}
-		}
-		1 = {
-			country_event = {
-				id = ancrel.10009
+				id = hskv.10016				# Nourishment
 			}
 		}
 	}
 }
 
+# Set two is adv resources
+# Affluence, Hyper-forge, Replicator, Omnivident or Celestial
+hskv_give_random_fe_building_set2 = {
+	random_list = {
+		1 = {
+			country_event = {
+				id = hskv.10007				# affluence_center_build_count
+			}
+		}
+		1 = {
+			country_event = {
+				id = hskv.10004				# nano_forge_build_count
+			}
+		}
+		1 = {
+			country_event = {
+				id = hskv.10006				# dimensional_replicator_build_count
+			}
+		}
+		1 = {
+			country_event = {
+				id = hskv.10012				#  Omnivident or Celestial
+			}
+		}
+	}
+}
 
+# Set 3 is misc
+# Sky Dome, Shrinkspace, Virtual Bliss Plaza, Aspis Bastion
+hskv_give_random_fe_building_set3 = {
+	random_list = {
+		1 = {
+			country_event = {
+				id = hskv.10005				# fe_sky_dome_build_count
+			}
+		}
+		1 = {
+			country_event = {
+				id = hskv.10013				# Shrinkspace
+			}
+		}
+		1 = {
+			country_event = {
+				id = hskv.10014				# Virtual Bliss Plaza
+			}
+		}
+		1 = {
+			country_event = {
+				id = hskv.10014				# Aspis Bastion
+			}
+		}
+	}
+}
+
+# TODO - Replace NAME_hskv_fe_empire with the actual name of the FE empire somehow... IDK how though
 hskv_create_fe_aux_defense_country = {
 	if = {
 		limit = {
@@ -190,7 +249,6 @@ hskv_create_shield_defense_force = {
 				save_event_target_as = hskv_spawn_point
 			}
 		}
-
 		create_fleet = {
 			name = "NAME_Pirate_Fleet"
 			settings = {
@@ -203,7 +261,7 @@ hskv_create_shield_defense_force = {
 					create_ship = {
 						name = random
 						design = "NAME_Gamma"
-						graphical_culture = "fallen_empire_04" #Hack, I know I am using the same one for all three valid FEs
+						graphical_culture = "fallen_empire_04"						#Hack, I know I am using the same one for all three valid FEs
 					}
 				}
 				if = {
@@ -219,7 +277,7 @@ hskv_create_shield_defense_force = {
 						create_ship = {
 							name = random
 							design = "NAME_Gamma"
-							graphical_culture = "fallen_empire_04" #Hack, I know I am using the same one for all three valid FEs
+							graphical_culture = "fallen_empire_04"							#Hack, I know I am using the same one for all three valid FEs
 						}
 					}
 				}
@@ -236,7 +294,7 @@ hskv_create_shield_defense_force = {
 						create_ship = {
 							name = random
 							design = "NAME_Gamma"
-							graphical_culture = "fallen_empire_04" #Hack, I know I am using the same one for all three valid FEs
+							graphical_culture = "fallen_empire_04"							#Hack, I know I am using the same one for all three valid FEs
 						}
 					}
 				}
@@ -250,7 +308,7 @@ hskv_create_shield_defense_force = {
 	}
 }
 
-hskv_create_vault_defense_force ={
+hskv_create_vault_defense_force = {
 	event_target:hskv_fe_aux_defense_country = {
 		every_system = {
 			limit = {
@@ -263,7 +321,6 @@ hskv_create_vault_defense_force ={
 				save_event_target_as = hskv_spawn_point
 			}
 		}
-
 		owner = {
 			create_leader = {
 				class = commander
@@ -274,7 +331,6 @@ hskv_create_vault_defense_force ={
 				leader_age_max = 45
 			}
 		}
-
 		create_fleet = {
 			name = "NAME_Pirate_Fleet"
 			settings = {
@@ -282,7 +338,6 @@ hskv_create_vault_defense_force ={
 			}
 			effect = {
 				set_owner = event_target:hskv_fe_aux_defense_country
-				
 				while = {
 					count = 22
 					create_ship = {
@@ -331,11 +386,13 @@ hskv_create_vault_defense_force ={
 				set_fleet_flag = hskv_vault_defense_force_fleet
 			}
 		}
-		last_created_fleet = { assign_leader = last_created_leader }
+		last_created_fleet = {
+			assign_leader = last_created_leader
+		}
 	}
 }
 
-hskv_create_vault_defense_force_2 ={
+hskv_create_vault_defense_force_2 = {
 	if = {
 		limit = {
 			any_country = {
@@ -352,8 +409,6 @@ hskv_create_vault_defense_force_2 ={
 		}
 		save_event_target_as = hskv_fe_aux_defense_country
 	}
-
-
 	event_target:hskv_fe_aux_defense_country = {
 		every_system = {
 			limit = {
@@ -366,7 +421,6 @@ hskv_create_vault_defense_force_2 ={
 				save_event_target_as = hskv_spawn_point
 			}
 		}
-
 		owner = {
 			create_leader = {
 				class = commander
@@ -377,7 +431,6 @@ hskv_create_vault_defense_force_2 ={
 				leader_age_max = 45
 			}
 		}
-
 		create_fleet = {
 			name = "NAME_Pirate_Fleet"
 			settings = {
@@ -385,7 +438,6 @@ hskv_create_vault_defense_force_2 ={
 			}
 			effect = {
 				set_owner = event_target:hskv_fe_aux_defense_country
-				
 				while = {
 					count = 10
 					create_ship = {
@@ -418,6 +470,8 @@ hskv_create_vault_defense_force_2 ={
 				set_fleet_flag = hskv_vault_defense_fleet
 			}
 		}
-		last_created_fleet = { assign_leader = last_created_leader }
+		last_created_fleet = {
+			assign_leader = last_created_leader
+		}
 	}
 }
