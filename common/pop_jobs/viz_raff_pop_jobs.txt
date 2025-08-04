@@ -83,19 +83,52 @@ ascension_engineer = {
 		mult = value:scripted_modifier_mult|MODIFIER|pop_job_amenities_mult|
 	}
 
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				has_tradition = tr_modularity_2
+			}
+		}
+		planet_pop_assembly_add = 1 #If this changes, update tr_modularity_2_modifier_desc
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				has_active_tradition = tr_synthetics_prefabricated_components
+			}
+		}
+		planet_amenities_add = 200
+		mult = value:scripted_modifier_mult|MODIFIER|pop_job_amenities_mult|
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			check_modifier_value = {
+				modifier = job_roboticist_branch_office_value_mult
+				value > 0
+			}
+		}
+		# Actual value determined in the script value below
+		branch_office_value_mult = 1
+		mult = value:roboticist_branch_office_value_mult
+	}
+
 	resources = {
 		category = planet_pop_assemblers
+		upkeep = {
+			alloys = 1
+		}
 		upkeep = {
 			trigger = {
 				exists = owner
 				owner = {
-					NAND = {
-						is_regular_empire = yes
-						has_policy_flag = robots_outlawed
-					}				
+					has_country_flag = synth_unscheduled_updates
 				}
 			}
-			alloys = 1
+			alloys = 0.5
 		}
 		produces = {
 			trigger = {
@@ -124,6 +157,16 @@ ascension_engineer = {
 		modifier = {
 			factor = 10
 			owner = { is_synthetic_empire = yes }
+		}
+	}
+
+	promotion = {
+		time = @standard_promotion_time
+		effect = {
+			pop_amount_change_category = {
+				CATEGORY = specialist
+				AMOUNT = local_pop_amount
+			}
 		}
 	}
 }
