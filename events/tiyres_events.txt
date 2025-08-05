@@ -448,26 +448,24 @@ country_event = {
 				}
 				set_variable = {
 					which = tiyres_pop_count
-					value = 0
+					value = trigger:pop_amount
 				}
 			}
-			every_owned_pop = {
-				prev = {
-					change_variable = {
-						which = tiyres_pop_count
-						value = 1
-					}
+			every_fleet_in_orbit = {
+				limit = {
+					is_ship_size = transport
+					is_owned_by = prevprev
 				}
-				kill_pop = yes
+				delete_fleet = this
+			}
+			every_owned_pop_group = {
+				kill_all_pop = yes
 			}
 			change_pc = pc_infested
 			clear_planet_modifiers = yes
 			add_modifier = {
 				modifier = planet_tiy_mark
 			}
-		}
-		every_owned_army = {
-			remove_army = yes
 		}
 	}
 }
@@ -590,38 +588,36 @@ country_event = {
 
 					}
 					60 = {
-						random_owned_pop = {
-							if = {
-								limit = {
-									species = {
-										is_robotic = no
+						random_owned_pop_group = {
+							limit = {
+								species = {
+									is_robotic = no
+								}
+							}
+							prev = {
+								change_variable = {
+									which = tiyres_planet_infestation
+									value = value:tiyres_pop_infestation
+								}
+								if = {
+									limit = {
+										NOT = {
+											is_variable_set = tiyres_pop_count
+										}
+									}
+									set_variable = {
+										which = tiyres_pop_count
+										value = 1
 									}
 								}
-								prev = {
+								else = {
 									change_variable = {
-										which = tiyres_planet_infestation
-										value = value:tiyres_pop_infestation
-									}
-									if = {
-										limit = {
-											NOT = {
-												is_variable_set = tiyres_pop_count
-											}
-										}
-										set_variable = {
-											which = tiyres_pop_count
-											value = 1
-										}
-									}
-									else = {
-										change_variable = {
-											which = tiyres_pop_count
-											value = 1
-										}
+										which = tiyres_pop_count
+										value = 1
 									}
 								}
 							}
-							kill_pop = yes
+							kill_single_pop = yes
 						}
 					}
 				}
@@ -662,14 +658,19 @@ country_event = {
 						value > 99
 					}
 				}
-				every_owned_pop = {
-					prev = {
-						change_variable = {
-							which = tiyres_pop_count
-							value = 1
+				if = {
+					limit = {
+						NOT = {
+							is_variable_set = tiyres_pop_count
 						}
 					}
-					kill_pop = yes
+					set_variable = {
+						which = tiyres_pop_count
+						value = trigger:pop_amount
+					}
+				}
+				every_owned_pop_group = {
+					kill_all_pop = yes
 				}
 				clear_planet_modifiers = yes
 				change_pc = pc_infested
