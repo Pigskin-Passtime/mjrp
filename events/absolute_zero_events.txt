@@ -45,6 +45,12 @@ country_event = {
 						}
 					}
 				}
+				random_system_planet = {
+					limit = {
+						has_planet_flag = absolute_zero_sun_flag
+					}
+					save_event_target_as = absolute_zero_sun_@root
+				}
 			}
 		}
 	}
@@ -93,7 +99,7 @@ country_event = {
 		name = "absolute_zero.3.a" #custom_tooltip = "absolute_zero.2.tooltip"
 		enable_special_project = {
 			name = THE_CACHE_3
-			location = event_target:absolute_zero_sun
+			location = event_target:absolute_zero_sun_@root
 			owner = root
 		}
 	}
@@ -114,7 +120,7 @@ country_event = {
 			name = "beacons_construction"
 			desc = "beacons_construction_desc"
 			event_chain = the_cache_chain
-			location = event_target:absolute_zero_sun
+			location = event_target:absolute_zero_sun_@root
 		}
 	}
 }
@@ -199,12 +205,12 @@ planet_event = {
 					has_country_flag = capital_2222_destruction_flag
 				}
 			}
-			every_owned_pop = {
-				kill_pop = yes
+			every_owned_pop_group = {
+				kill_all_pop = yes
 			}
 			remove_all_buildings = yes
 			change_pc = pc_frozen
-			event_target:absolute_zero_sun = {
+			event_target:absolute_zero_sun_@root = {
 				spawn_planet_temperature_effect = yes
 				change_pc = pc_shattered
 			}
@@ -217,7 +223,6 @@ planet_event = {
 				remove_point_of_interest = beacons_construction_poi.1
 				end_event_chain = the_cache_chain
 				remove_country_flag = capital_2222_destruction_flag
-				clear_global_event_target = absolute_zero_sun
 				country_event = {
 					id = absolute_zero.6
 					days = 360
@@ -474,8 +479,8 @@ planet_event = {
 				}
 			}
 		}
-		every_owned_pop = {
-			kill_pop = yes
+		every_owned_pop_group = {
+			kill_all_pop = yes
 		}
 		remove_all_buildings = yes
 		# destroy habitats and ringworlds
