@@ -1,6 +1,6 @@
-version="3.10.*"
+version="4.0.*"
 tags={
 	"Leaders"
 }
 name="#MODJAM2024 Testing"
-supported_version="3.10.4"
+supported_version="v4.0.*"
