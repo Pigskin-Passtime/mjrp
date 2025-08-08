@@ -1,0 +1,2319 @@
+#(The Intelegence Legendary Leader)
+# TILLM - Controll event that randomly picks events
+#TILLMJ24 The Event that allows for the Fragments home system to spawn
+#TILLDebug - Events that allow for mod testing
+# TILLA - Frist Contact/Hire the Fragment
+# TILLB - On Diplomacy for Intelegence
+# TILLC - Give Tech Event
+# TILLE - Knowledge of Crisis
+# TILLF - Fallen Empire asks for Fragment
+# TILLG - Leader Main Story Part II
+# TILLH - Fight off the Interlopers
+# TILLM - The Event that is run every five years to allow more spaced out story.
+
+
+#Master Controller Event
+namespace = TILLM
+
+country_event = {
+	id = TILLM.1
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_country_flag = hired_THEFRAGMENT
+		any_owned_leader = {
+			has_leader_flag = Is_Fragment
+		}
+	}
+	#To Debug
+	immediate = {
+		random_list = {
+			20 = { country_event = {id = TILLC.1} modifier = { factor = 0 has_country_flag = FRAGMENT_GIFT_1 }} #GIVE Choices for Technology
+			20 = { country_event = {id = TILLF.1} modifier = { factor = 0 has_country_flag = FALLEN_EMPIRE_RETURNED_FRAGMENT } } #FE Wants the Fragment 
+			20 = { country_event = {id = TILLG.1} modifier = { factor = 0 has_country_flag = Investigating_Hideaways}} #Unkown Star
+			40 = { log = "Null Choice" }
+		}
+	}
+
+}
+
+
+
+
+namespace = TILLDebug
+country_event = {
+	id = TILLDebug.1
+	hide_window = no
+	picture = GFX_evt_dark_alley
+	is_triggered_only = yes
+	title = "TILL.DEBUG"
+	desc = "TILL.DEBUG.DESC"
+
+	immediate = {
+		create_leader = {
+			SPECIES = event_target:FRAGMENTSPECIES
+			name = "NAME_Fragment"
+			skill = 8
+			class = scientist
+			custom_description = fragement_desc
+			randomize_traits = no
+			effect = {
+				set_leader_flag = legendary_leader
+				set_leader_flag = Is_Fragment
+			}
+		}
+
+		last_created_leader = {
+			save_global_event_target_as = THEFRAGMENT
+			add_trait = { trait = leader_trait_meticulous_2 }
+			add_trait = { trait = leader_trait_maniacal_3 }
+		}
+		set_country_flag = hired_THEFRAGMENT
+	}
+
+	option = {
+		name = P
+		set_country_flag = PEACEFULL_INTELEGENCE
+	}
+
+	option = {
+		name = H
+		set_country_flag = HOSTILE_INTELEGENCE
+	}
+
+}
+
+country_event = {
+	id = TILLDebug.2
+	hide_window = no
+	picture = GFX_evt_dark_alley
+	is_triggered_only = yes
+	title = "Fragment Fixer"
+	desc = "Use this window to set the fragment's flags"
+
+	immediate = {
+		set_country_flag = hired_THEFRAGMENT
+	}
+
+	option = {
+		name = Passive
+		set_country_flag = PEACEFULL_INTELEGENCE
+	}
+
+	option = {
+		name = Hostile
+		set_country_flag = HOSTILE_INTELEGENCE
+	}
+
+}
+
+
+namespace = TILLA 
+
+
+ship_event = {
+	id = TILLA.1
+	is_triggered_only = yes
+	picture = GFX_evt_TILLA_breachpoint_system
+	title = "Tilla.1"
+	desc = "TILLA.1.desc"
+
+trigger = {
+	from = {
+		has_star_flag = THE_INTELEGENCE_SPAWN_SYSTEM
+	}
+}
+
+
+	immediate = {
+		log = "TILLA.1 Works"
+	}
+
+	option = {
+		name = TILLA.1.a
+			from = {		
+				country_event = {
+				id = TILLA.2
+			}
+		}
+	}
+
+	option = {
+		name = TILLA.1.b
+		from = {		
+			country_event = {
+			id = TILLA.2
+			}
+		}
+	}
+
+	after = {
+		FROMFROM = {
+			country_event = {
+				id = TILLA.2
+			}
+		}	
+	}
+}
+
+
+country_event = {
+	id = TILLA.2
+	diplomatic = yes
+	title = "TRANSMISSION"
+	diplomatic_title = "TRANSMISSION"
+	show_sound = "Intelegence_communications_line_01"
+	picture_event_data = {
+		portrait = ai_crisis_1
+	}
+
+	is_triggered_only = yes
+
+	desc = {
+		#MACHINES#
+		trigger = {
+			has_authority = auth_machine_intelligence
+			text = TILLA.2.desc.a
+		}
+	}
+
+		#All Else#
+	desc = {
+		trigger = {
+			NOT = {
+				has_authority = auth_machine_intelligence
+			}	
+			text = TILLA.2.desc.b
+		}
+	}
+
+#Find out more Information#
+	option = {
+		name = TILLA.2.option.a
+		is_dialog_only = yes
+		response_text = TILLA.2.option.a.response
+	}
+	option = {
+		name = TILLA.2.option.b
+		is_dialog_only = yes
+		response_text = TILLA.2.option.b.response
+	}
+	option = {
+		name = TILLA.2.option.c
+		is_dialog_only = yes
+		response_text = TILLA.2.option.c.response
+	}
+	option = {
+		name = TILLA.2.option.d
+		is_dialog_only = yes
+		response_text = TILLA.2.option.d.response
+	}
+
+	#OPTIONS FOR DIPLOMACY
+
+	#WE WILL HELP#
+	option = {
+		trigger = {
+			NOR = {
+				has_ethic = ethic_fanatic_spiritualist
+				has_valid_civic = civic_fanatic_purifiers
+				has_valid_civic = civic_machine_terminator
+				has_valid_civic = civic_hive_devouring_swarm
+				has_country_flag = BLOCK_YGATE_SECOND_TIME
+				
+			}
+			OR = {
+				has_technology = tech_exotic_gases
+				has_technology = tech_mine_exotic_gases
+			}
+				
+		}
+		allow = {
+			root = {
+			has_resource = {
+					type = exotic_gases
+					amount > 250
+				}
+				has_resource = {
+					type = alloys
+					amount > 50
+				}
+
+			}
+		}
+		name = TILLA.2.option.e
+		response_text = TILLA.2.option.e.response
+
+		#event_target:YGATEINTELEGENCE = {
+			hidden_effect = {
+				ROOT = {
+					add_resource = {
+						exotic_gases = -250
+						alloys = -50
+					}
+				}
+				set_country_flag = PEACEFULL_INTELEGENCE
+				set_country_flag = BLOCK_YGATE_SECOND_TIME
+				enable_special_project = {
+					name = "TILLA_Y_GATE_ACTIVATION" #This Works, What the FLIP is up with the compiler?
+					location = event_target:YGATEINTELEGENCE
+					owner = this
+				}
+			}
+
+		#}
+	}
+
+	#How about we capture you instead?#
+	option = {
+		trigger = {
+			OR = {
+				has_ethic = ethic_militarist
+				has_ethic = ethic_fanatic_militarist
+				has_ethic = ethic_spiritualist
+				has_ethic = ethic_xenophobe
+				has_ethic = ethic_fanatic_xenophobe
+				has_ethic = ethic_gestalt_consciousness
+				
+			}
+		}
+		name = TILLA.2.option.f
+		response_text = TILLA.2.option.f.response
+		hidden_effect = {
+			set_country_flag = HOSTILE_INTELEGENCE
+			set_faction_hostility = {
+				target = event_target:THEINTELEGENCE
+				set_hostile = yes
+				set_neutral = no
+				set_friendly = no
+			}
+		}
+	}
+
+#DESTROY THE MACHINE!#
+
+	option = {
+		trigger = {
+			OR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_valid_civic = civic_machine_terminator
+				has_valid_civic = civic_hive_devouring_swarm
+			}
+		}
+		name = TILLA.2.option.i
+		response_text = TILLA.2.option.i.response
+		hidden_effect = {
+			set_country_flag = HOSTILE_INTELEGENCE
+			set_faction_hostility = {
+				target = event_target:THEINTELEGENCE
+				set_hostile = yes
+				set_neutral = no
+				set_friendly = no
+			}
+		}
+	}
+
+	#For Driven Assmilators#
+	option = {
+		trigger = {
+			has_valid_civic = civic_machine_assimilator
+		}
+		name =  TILLA.2.option.i
+		response_text =  TILLA.2.option.i.response
+
+		hidden_effect = {
+			set_country_flag = HOSTILE_INTELEGENCE
+			set_faction_hostility = {
+				target = event_target:THEINTELEGENCE
+				set_hostile = yes
+				set_neutral = no
+				set_friendly = no
+			}
+		}
+	}
+
+	#For Fanatic Spiritualist
+
+		option = {
+			trigger = {
+		has_ethic = ethic_fanatic_spiritualist
+			}
+			name = TILLA.2.option.h
+			response_text = TILLA.option.h.response
+
+			hidden_effect = {
+				set_country_flag = HOSTILE_INTELEGENCE
+				set_faction_hostility = {
+					target = event_target:THEINTELEGENCE
+					set_hostile = yes
+					set_neutral = no
+					set_friendly = no
+				}
+			}
+		}
+
+	option = {
+		name = TILLA.2.option.j
+		response_text = TILLA.option.j.response
+	}
+
+}
+
+
+#Intelegence recruitment#
+country_event = {
+	id = TILLA.3
+	diplomatic = yes
+	title = "TRANSMISSION"
+	diplomatic_title = "TRANSMISSION"
+	picture_event_data = {
+		portrait = ai_crisis_1
+	}
+
+	is_triggered_only = yes
+
+
+	desc = "TILLA.3.desc"
+
+	option = {
+		name = "TILLA.3.a.desc"
+		country_event = {
+			id = TILLA.4
+		}
+
+	}
+}
+
+#Hiring the Fragment#
+country_event = {
+	id = TILLA.4
+	title = "TILLA.4.name"
+	show_sound = "Fragment_voice_02"
+	desc = {
+		trigger = {
+			has_country_flag = PEACEFULL_INTELEGENCE
+			text = 	"TILLA.4.a.desc"
+		}
+	}
+
+	desc = {
+		trigger = {
+			has_country_flag = HOSTILE_INTELEGENCE
+			text = 	"TILLA.4.b.desc"
+		}
+	}
+
+	immediate = {
+	event_target:THEINTELEGENCE = {
+		create_leader = {
+			SPECIES = event_target:FRAGMENTSPECIES
+			#LEADER_PORTRAIT = sd_avi_robot
+			name = "The Fragment"
+			skill = 4
+			class = scientist
+			custom_description = fragement_desc
+			randomize_traits = no
+			immortal = yes
+			effect = {
+				set_leader_flag = legendary_leader
+				
+				set_leader_flag = cannot_be_ruler
+				set_leader_flag = no_destiny_traits
+				set_leader_flag = no_council_traits
+				
+			}
+		}
+
+		last_created_leader = {
+			save_global_event_target_as = THEFRAGMENT
+			add_trait = { trait = leader_trait_meticulous_2 }
+			add_trait = { trait = leader_trait_maniacal_3 }
+		}
+	}
+
+	event_target:GTINTELEGENCESHIP = {
+		fleet = {
+			delete_fleet = this	
+		}
+
+	}
+
+}
+
+
+	event_window_type = leader_recruit
+	is_triggered_only = yes
+	
+
+	picture_event_data = {
+		portrait = event_target:THEFRAGMENT
+	}
+
+	#Questions#
+	#Wait, I thought that you were the Intelegence?#
+	option = {
+		name = TILLA.4.a
+		is_dialog_only = yes
+		response_text = TILLA.4.a.response
+	}
+
+	option = {
+		name = TILLA.4.b
+		is_dialog_only = yes
+		response_text = TILLA.4.b.response
+	}
+
+	option = {
+		name = TILLA.c.b
+		is_dialog_only = yes
+		response_text = TILLA.4.c.response
+	}
+
+	#Hire, Frankencoded from Skrand hire#
+	option = {
+		name = HIRE
+		tag = hire_leader
+		#hidden_effect = {
+			ethic_leader_hire_effect = {
+				GLOBAL_EVENT_TARGET = THEFRAGMENT
+			}
+			play_sound = Fragment_voice_hired
+			set_country_flag = hired_THEFRAGMENT
+			event_target:THEFRAGMENT = {
+				set_leader_flag = Is_Fragment
+				set_owner = root
+			}
+			create_message = {
+				type = MESSAGE_RECRUITED_LEADER
+				localization =  MESSAGE_RECRUITED_LEADER_DESC
+				days = @toast_message_days
+				target = event_target:THEFRAGMENT
+				variable = {
+					type = name
+					localization = LEADER
+					scope = event_target:THEFRAGMENT
+				}
+				variable = {
+					key = "border"
+					value = "GFX_border_legendary"
+				}
+			}
+		#}
+	}
+
+	#On Second Thought#
+	option = {
+		name = DISMISS
+		tag = dismiss_leader
+		play_sound = Fragment_voice_dismissed
+		hidden_effect = {
+			ethic_leader_kill_effect = yes
+			set_country_flag = dismissed_THEFRAGMENT
+		}
+
+	}
+	#Check to make sure that this is being properly executed.
+	after = {
+		set_global_flag = TILL_Fragment_spawned
+		if = {
+			limit = {
+				has_country_flag = PEACEFULL_INTELEGENCE
+			}
+			
+			country_event = {
+				id = TILLA.5
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = HOSTILE_INTELEGENCE
+			}
+
+			country_event = {
+				id = TILLA.10
+			}
+		}
+	}
+
+}
+
+
+country_event = {
+	id = TILLA.5
+	title = "TILLA.5.name"
+	is_triggered_only = yes
+	picture = GFX_evt_TILLA_breachpoint_system
+	desc = {
+		trigger = {
+			has_country_flag = hired_THEFRAGMENT
+			text = "TILLA.5.a.desc"
+	}
+}
+desc = {
+	trigger = {
+		has_country_flag = dismissed_THEFRAGMENT
+		text = "Tilla.5.b.desc"
+	}
+}
+
+option = {
+	name = "TILLA.5.a"
+}
+
+option = {
+	name = "TILLA.5.b"
+}
+
+	after = {
+		event_target:THEINTELEGENCE = {
+			country_event = {
+				id = TILLA.11
+			}
+		}
+
+	}
+}
+
+
+#When INTELEGENCE SHIP Destroyed (On Ship Destroyed Victim)
+#With Help from Automated Dreadnaught and Enigmatic Fortress Code
+ship_event = {
+	id = TILLA.6
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_ship_flag = FLAGINTELEGENCESHIP
+		from.owner = { is_country_type = default }
+	}
+
+		immediate = {
+			
+			from.owner = {
+				country_event = { id = TILLA.7 }
+			}
+		}
+}
+
+
+
+
+#Either Special Project or Resources#
+
+country_event = {
+	id = TILLA.7
+	title = "TILLA.7"
+	desc = "TILLA.7.desc"
+	picture = GFX_evt_automated_dreadnought
+	show_sound = event_ship_bridge
+	trackable = yes
+
+	is_triggered_only = yes
+
+
+	immediate = {
+	#For All
+
+		event_target:GTINTELEGENCESHIP = {
+			enable_special_project = {
+				name = "TILLA_SORT_DEBRIS" #Dont know why theres a FLIPPING ERROR, It works in game, the FREAKING PROJECT is usable!
+				location = THIS
+				owner = ROOT
+			}
+		}
+	}
+
+
+	option = {
+		trigger = {
+			OR = {
+				has_ethic = ethic_militarist
+				has_ethic = ethic_fanatic_militarist
+				has_ethic = ethic_spiritualist
+				has_ethic = ethic_xenophobe
+				has_ethic = ethic_fanatic_xenophobe
+				has_ethic = ethic_gestalt_consciousness
+				
+			}
+		}
+		name = "TILLA.7.a"
+
+	}
+
+	option = {
+		trigger = {
+			OR = {
+			is_homicidal = yes
+			has_ethic = ethic_fanatic_spiritualist
+			}
+		}
+		name = "TILLA.7.b"
+
+
+	}
+}
+
+#Find the Fragment after investigating
+country_event = {
+	id = TILLA.8
+	is_triggered_only = yes
+	picture = GFX_evt_debris
+	title = "TILLA.8.name"
+	desc = "TILLA.8.desc"
+	
+	immediate = {
+		country_event = {
+			id = TILLA.11
+		}
+		set_country_flag = HOSTILE_INTELEGENCE
+	}
+
+	option = {
+		name = "TILLA.8.a"
+		country_event = {
+			id = TILLA.4
+		}
+	}
+	
+
+}
+
+#After Debris Cleared Destroyer empire
+country_event = {
+	id = TILLA.9
+	is_triggered_only = yes
+	picture = GFX_evt_debris
+	title = "TILLA.9.name"
+	desc = "TILLA.9.desc"
+	immediate = {
+		add_resource = {
+			alloys = 500
+			engineering_research = 500
+			physics_research = 500
+		}
+	}
+	option = {
+		name = "TILLA.9.a"
+	}
+
+}
+
+#Hostile Hire#
+country_event = {
+	id = TILLA.10
+	title = "TILLA.10.name"
+	is_triggered_only = yes
+	picture = GFX_evt_TILLA_breachpoint_system
+	desc = {
+		trigger = {
+			has_country_flag = hired_THEFRAGMENT
+			text = "TILLA.10.a.desc"
+	}
+}
+desc = {
+	trigger = {
+		has_country_flag = dismissed_THEFRAGMENT
+		text = "Tilla.10.b.desc"
+	}
+}
+
+option = {
+	name = "TILLA.10.a"
+}
+
+option = {
+	name = "TILLA.10.b"
+}
+	after = {
+		event_target:THEINTELEGENCE = {
+			country_event = {
+				id = TILLA.11
+			}
+		}
+
+	}
+}
+
+country_event = {
+	id = TILLA.11
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		event_target:GTINTELEGENCESHIP = {
+			fleet = {
+				delete_fleet = this	
+			}
+
+		}
+	}
+}
+
+#Custom Diplomacy#
+namespace = TILLB
+
+
+
+country_event = {
+	id = TILLB.1
+	is_triggered_only = yes
+	diplomatic = yes
+	title = "TILLB.1"
+	force_open = yes
+	show_sound = "Intelegence_communications_line_01"
+	picture_event_data = {
+		portrait = ai_crisis_1
+	}
+	
+	trigger = {
+		FROM = {
+			is_country_type = the_intelegence_ship
+		}
+	}
+
+	desc = {
+		trigger = {
+			NOT = {
+				has_country_flag = HOSTILE_INTELEGENCE
+			}
+		}
+		text = "TILLB.1.desc.a"
+
+	}
+
+	desc = {
+		trigger = {
+				has_country_flag = HOSTILE_INTELEGENCE
+			}
+
+		text = "TILLB.1.desc.b"
+
+	}
+
+	option = {
+		trigger = {
+			NOT = {
+				has_country_flag = HOSTILE_INTELEGENCE
+			}
+			OR = {
+				has_technology = tech_exotic_gases
+				has_technology = tech_mine_exotic_gases
+			}
+		}
+
+		allow = {
+			root = {
+				AND	= {
+					has_resource = {
+						type = exotic_gases
+						amount > 250
+					}
+					has_resource = {
+						type = alloys
+						amount > 50
+					}
+				}
+			}
+		}
+		name = "TILLB.1.a"
+		root = {
+			add_resource = {
+				exotic_gases = -250
+				alloys = -50
+			}
+		}
+		enable_special_project = {
+			name = "TILLA_Y_GATE_ACTIVATION" #This Works, What the FLIP is up with the compiler?
+			location = event_target:YGATEINTELEGENCE
+			owner = this
+		}
+	}
+
+	option = {
+		trigger = {
+			NOT = {
+				has_country_flag = HOSTILE_INTELEGENCE
+			}
+		}
+		name = "TILLB.1.b"
+		response_text = "TILLB.1.b.response"
+	}
+		
+
+
+	option = {
+		trigger = {
+			NOT = {
+				has_country_flag = HOSTILE_INTELEGENCE
+			}
+		}
+		name = "TILLB.1.c"
+		response_text = "TILLB.1.c.response"
+	}
+
+	
+	option = {
+		trigger = {
+			has_country_flag = HOSTILE_INTELEGENCE
+		}
+		name = "TILLB.1.option.e"
+		response_text = "TILLB.1.option.e.response"
+	}
+}
+
+
+
+namespace = TILLC
+
+
+country_event = {
+	id = TILLC.1
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_country_flag = hired_THEFRAGMENT
+		NOT = {
+			has_country_flag = FRAGMENT_GIFT_1
+		}
+		any_owned_leader = {
+			has_leader_flag = Is_Fragment
+		}
+		
+	}
+
+	weight_multiplier = {
+		factor = 1
+		modifier = {
+			fleet_power > 50000
+			factor = .5
+		}
+		modifier = {
+			fleet_power < 50000
+			factor = 2
+		}
+	}
+
+	immediate = {
+		log = "TILLCdot1 Working!"
+			country_event = {
+				id = TILLC.2
+			}
+	}
+}
+
+
+country_event = {
+	id = TILLC.2
+	is_triggered_only = yes
+	picture = "GFX_evt_TILLA_tech_options"
+	desc = "TILLC.2.desc"
+	title = "Fragment Technologies"
+	trigger = {
+		NOT = {
+			has_country_flag = FRAGMENT_GIFT_1
+		}
+	}
+
+	event_window_type = leader_story
+
+	picture_event_data = {
+		portrait = event_target:THEFRAGMENT
+	}
+	option = {
+		name = "TILLC.2.e"
+		is_dialog_only = yes
+		response_text = "TILLC.2.e.response"
+	}
+	option = {
+		name = "TILLC.2.a"
+		country_event = {
+			id = TILLC.3
+		}
+	}
+	option = {
+		name = "TILLC.2.b"
+		country_event = {
+			id = TILLC.4
+		}
+	}
+	option = {
+		name = "TILLC.2.c"
+		country_event = {
+			id = TILLC.5
+		}
+	}
+	option = {
+		name = "TILLC.2.d"
+		country_event = {
+			id = TILLC.6
+		}
+	}
+}
+
+#Singularity Drive#
+country_event = {
+	id = TILLC.3
+	is_triggered_only = yes
+	picture = "GFX_evt_TILLA_singularity_drive"
+	desc = "TILLC.3.desc"
+	title = "Singularity Drive Info"
+	trigger = {
+		NOT = {
+			has_country_flag = FRAGMENT_GIFT_1
+		}
+	}
+
+	event_window_type = leader_story
+
+	picture_event_data = {
+		portrait = event_target:THEFRAGMENT
+	}
+
+	option = {
+		name = "TILLC.3.a"
+		from = {
+			give_technology = {
+				tech = tech_singularity_drive
+			}
+			set_country_flag = FRAGMENT_GIFT_1
+		}
+
+	}
+	option = {
+		name = "TILLC.3.b"
+		country_event = {
+			id = TILLC.2
+		}
+	}
+}
+
+#Dark Flare Cannon#
+
+country_event = {
+	id = TILLC.4
+	is_triggered_only = yes
+	picture = "GFX_evt_TILLA_dark_flare_cannon"
+	desc = "TILLC.4.desc"
+	title = "Dark Flare Cannon Info"
+	trigger = {
+		NOT = {
+			has_country_flag = FRAGMENT_GIFT_1
+		}
+	}
+
+	event_window_type = leader_story
+
+	picture_event_data = {
+		portrait = event_target:THEFRAGMENT
+	}
+
+	option = {
+		name = "TILLC.4.a"
+		from = {
+			give_technology = {
+				tech = tech_dark_flare_cannon
+			}
+			set_country_flag = FRAGMENT_GIFT_1
+		}
+
+	}
+	option = {
+		name = "TILLC.4.b"
+		country_event = {
+			id = TILLC.2
+		}
+	}
+}
+
+#Fractal Armies#
+
+country_event = {
+	id = TILLC.5
+	is_triggered_only = yes
+	picture = "GFX_evt_TILLA_fractal_armies"
+	desc = "TILLC.5.desc"
+	title = "Fractal Armies Info"
+	trigger = {
+		NOT = {
+			has_country_flag = FRAGMENT_GIFT_1
+		}
+	}
+
+	event_window_type = leader_story
+
+	picture_event_data = {
+		portrait = event_target:THEFRAGMENT
+	}
+
+	option = {
+		name = "TILLC.5.a"
+		from = {
+			give_technology = {
+				tech = tech_fractal_armies
+			}
+			set_country_flag = FRAGMENT_GIFT_1
+		}
+
+	}
+	option = {
+		name = "TILLC.5.b"
+		country_event = {
+			id = TILLC.2
+		}
+		
+	}
+}
+
+#Quantum Entanglement#
+
+country_event = {
+	id = TILLC.6
+	is_triggered_only = yes
+	picture = "GFX_evt_TILLA_quantum_entanglement"
+	desc = "TILLC.6.desc"
+	title = "Quantum Entanglement Info"
+	trigger = {
+		NOT = {
+			has_country_flag = FRAGMENT_GIFT_1
+		}
+	}
+
+	event_window_type = leader_story
+
+	picture_event_data = {
+		portrait = event_target:THEFRAGMENT
+	}
+
+	option = {
+		name = "TILLC.6.a"
+		from = {
+			give_technology = {
+				tech = tech_quantum_entanglemet
+			}
+			set_country_flag = FRAGMENT_GIFT_1
+		}
+		
+	}
+	option = {
+		name = "TILLC.6.b"
+		country_event = {
+			id = TILLC.2
+		}
+	}
+}
+
+#Incoming Crisis
+
+namespace = TILLE
+
+country_event = {
+	id = TILLE.1
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		exists = event_target:THEFRAGMENT
+		has_country_flag = hired_THEFRAGMENT
+		any_owned_leader = {
+			has_leader_flag = Is_Fragment
+		}
+		OR = {
+			has_global_flag = prethoryn_subspace_echoes
+			has_global_flag = extradimensional_invasion_happened
+			has_global_flag = ai_ghost_signal
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				has_global_flag = prethoryn_subspace_echoes
+			}
+			country_event = {
+				id = TILLE.2
+			}
+		}
+			else_if = {
+				limit = {
+					has_global_flag = extradimensional_invasion_happened
+				}
+				country_event = {
+					id = TILLE.3
+				}
+			}
+
+			else_if = {
+				limit = {
+					has_global_flag =  ai_invasion_happened
+				}
+				country_event = {
+					id = TILLE.4
+				}
+			}
+
+			else_if = {
+				limit = {
+					any_country = {
+						has_country_flag = declared_crisis
+					}
+				 }
+				 country_event = {
+					id = TILLE.5
+				}
+			}
+
+		
+	}
+}
+#Prethorian Scourge
+country_event = {
+	id = TILLE.2
+	is_triggered_only = yes
+	event_window_type = leader_story
+	picture = GFX_evt_crisis_declared
+	title = "TILLE.2.title"
+
+	desc = "TILLE.2.desc.a"
+
+	trigger = {
+		has_country_flag = hired_THEFRAGMENT
+		exists = event_target:THEFRAGMENT
+
+	}
+
+	picture_event_data = {
+		portrait = event_target:THEFRAGMENT
+	}
+	#Peacefull options#
+	option = {
+		name = "TILLE.2.a"
+	}
+
+	option = {
+		name = "TILLE.2.b"
+	}
+
+	after = {
+		set_country_flag = TILLA_PRETHORIAN_DAMAGE
+		add_modifier = {
+			modifier = preth_damage_modidier
+		}
+	}
+
+}
+#unbidden
+country_event = {
+	id = TILLE.3
+	is_triggered_only = yes
+	event_window_type = leader_story
+	picture = GFX_evt_crisis_declared
+	title = "TILLE.3.title"
+
+	desc = "TILLE.3.desc.a"
+
+	trigger = {
+		has_country_flag = hired_THEFRAGMENT
+		exists = event_target:THEFRAGMENT
+
+		
+	}
+
+	picture_event_data = {
+		portrait = event_target:THEFRAGMENT
+	}
+
+	option = {
+		name = "TILLE.3.a"
+	}
+
+	option = {
+		name = "TILLE.3.b"
+	}
+
+	after = {
+		set_country_flag = TILLA_UNBIDDEN_DAMAGE
+		add_modifier = {
+			modifier = unbid_damage_modidier
+		}
+	}
+
+}
+
+
+#Contingency
+country_event = {
+	id = TILLE.4
+	is_triggered_only = yes
+	event_window_type = leader_story
+	picture = GFX_evt_crisis_declared
+	title = "TILLE.4.title"
+
+	desc = "TILLE.4.desc.a"
+
+	trigger = {
+		has_country_flag = hired_THEFRAGMENT
+		exists = event_target:THEFRAGMENT
+
+		
+	}
+
+	picture_event_data = {
+		portrait = event_target:THEFRAGMENT
+	}
+
+	option = {
+		name = "TILLE.4.a"
+	}
+
+	option = {
+		name = "TILLE.4.b"
+	}
+	after = {
+		set_country_flag = TILLA_CONTINGENCY_MODIFIER
+		add_modifier = {
+			modifier = cont_damage_modidier
+		}
+	}
+
+}
+
+#Crisis Empire
+
+country_event = {
+	id = TILLE.5
+	is_triggered_only = yes
+	event_window_type = leader_story
+	picture = GFX_evt_crisis_declared
+	title = "TILLE.5.title"
+
+	desc = "TILLE.5.desc.a"
+
+	trigger = {
+		has_country_flag = hired_THEFRAGMENT
+		exists = event_target:THEFRAGMENT
+
+		
+	}
+
+	picture_event_data = {
+		portrait = event_target:THEFRAGMENT
+	}
+
+	option = {
+		name = "TILLE.5.a"
+	}
+
+	option = {
+		name = "TILLE.5.b"
+	}
+
+	after = {
+		add_modifier = {
+			modifier = crisis_damage_modifier
+		}
+	}
+
+}
+
+
+
+#FALLEN EMPIRE REQUESTS LEADER, With Code Borrowed and Disected from events/fallen_empire_events.txt
+
+namespace = TILLF
+country_event = {
+	id = TILLF.1
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+		count_owned_pop_amount = {
+			count > 1000
+		}
+		is_country_type = default		
+		is_at_war = no
+		has_country_flag = hired_THEFRAGMENT
+		exists = event_target:THEFRAGMENT
+		any_owned_leader = {
+			leader_class = scientist
+			has_leader_flag = Is_Fragment
+
+		}
+
+		any_country = { #Checks to make sure that there is actualy a fallen empire
+			is_valid_fallen_empire_for_task = yes
+			is_country_type = fallen_empire
+			has_origin = origin_fallen_empire
+			has_communications = root
+		}
+	}
+
+	immediate = {
+
+		random_owned_leader ={
+			limit = {
+				leader_class = scientist
+				has_leader_flag = Is_Fragment
+			}
+			save_event_target_as = FallenEmpireScientistTarget
+		}
+
+		random_country = {
+			limit = {
+				has_communications = root
+				is_country_type = fallen_empire
+				has_origin = origin_fallen_empire
+			}
+			save_event_target_as = FallenEmpireTaskOrigin
+			root = { country_event = { id = TILLF.2 } }
+		}
+	}
+}
+
+country_event = {
+	id = TILLF.2
+	title = TILLF.2.name
+	desc = TILLF.2.desc
+
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:FallenEmpireTaskOrigin
+		planet_background = event_target:FallenEmpireTaskOrigin
+		graphical_culture = event_target:FallenEmpireTaskOrigin
+		city_level = event_target:FallenEmpireTaskOrigin
+		room = event_target:FallenEmpireTaskOrigin.ruler
+	}
+	option = {
+		name = "TILLF.2.d"
+		response_text = "TILLF.2.d.response"
+		is_dialog_only = yes
+	}
+	#NO#
+	option = {
+		name = "TILLF.2.a"
+		country_event = {
+			id = TILLF.4
+		}
+	}
+	#Lets ask the Intelegence#
+	option = {
+		name = "TILLF.2.b"
+		response_text = "TILLF.2.b.response"
+		country_event = {
+			id = TILLF.5
+		}
+	}
+	#We have no choice#
+	option = {
+		name = "TILLF.2.c"
+		country_event = {
+			id = TILLF.3
+		}
+	}
+}
+
+
+#giving up the Intelegence to the FE#
+country_event = {
+	id = TILLF.3
+	is_triggered_only = yes
+	event_window_type = leader_story
+	picture = GFX_evt_fallen_empire
+	title = "TILLF.3.title"
+
+	#If Peacefull recruitment
+	desc = {
+		trigger = {
+			has_country_flag = PEACEFULL_INTELEGENCE
+		}
+		text = "TILLF.3.desc.a"
+	}
+
+	#If Hostile Recruitment
+	desc = {
+		trigger = {
+			has_country_flag = PEACEFULL_INTELEGENCE
+		}
+		text = "TILLF.3.desc.b"
+	}
+
+
+	trigger = {
+		has_country_flag = hired_THEFRAGMENT
+		exists = event_target:THEFRAGMENT
+	}
+
+	picture_event_data = {
+		portrait = event_target:THEFRAGMENT
+	}
+	#Peacefull options#
+	option = {
+		trigger = {
+			has_country_flag = PEACEFULL_INTELEGENCE
+		}
+		name = "TILLF.3.a"
+	}
+
+	option = {
+		trigger = {
+			has_country_flag = PEACEFULL_INTELEGENCE
+		}
+		name = "TILLF.3.b"
+	}
+
+	#hostile Options#
+
+	option = {
+		trigger = {
+			has_country_flag = HOSTILE_INTELEGENCE
+		}
+		name = "TILLF.3.c"
+	}
+
+	option = {
+		trigger = {
+			has_country_flag = HOSTILE_INTELEGENCE
+		}
+		name = "TILLF.3.d"
+	}
+
+
+	option = {
+		name = OK
+	}
+
+	after = {
+		event_target:THEFRAGMENT = {
+			set_owner = event_target:FallenEmpireTaskOrigin
+		}
+		add_opinion_modifier = {
+			who = event_target:FallenEmpireTaskOrigin
+			modifier = TILL_opinion_modifier_accepted_FE_demands
+		}
+
+		remove_country_flag = hired_THEFRAGMENT
+		country_event = {
+			id = TILLF.5 days = 3600 random = 360
+		}
+	}
+}
+
+
+
+#Telling the FE No#
+
+country_event = {
+	id = TILLF.4
+	picture = GFX_evt_fallen_empire
+	is_triggered_only = yes
+	event_window_type = leader_story
+
+	title = "TILLF.4.title"
+
+	#If Peacefull recruitment
+	desc = {
+		trigger = {
+			has_country_flag = PEACEFULL_INTELEGENCE
+		}
+		text = "TILLF.4.desc.a"
+	}
+
+	#If Hostile Recruitment
+	desc = {
+		trigger = {
+			has_country_flag = PEACEFULL_INTELEGENCE
+		}
+		text = "TILLF.4.desc.b"
+	}
+
+
+	trigger = {
+		has_country_flag = hired_THEFRAGMENT
+		exists = event_target:THEFRAGMENT
+		
+	}
+
+	picture_event_data = {
+		portrait = event_target:THEFRAGMENT
+	}
+	#Peacefull options#
+	option = {
+		trigger = {
+			has_country_flag = PEACEFULL_INTELEGENCE
+		}
+		name = "TILLF.4.a"
+	}
+
+	option = {
+		trigger = {
+			has_country_flag = PEACEFULL_INTELEGENCE
+		}
+		name = "TILLF.4.b"
+	}
+
+	#hostile Options#
+
+	option = {
+		trigger = {
+			has_country_flag = HOSTILE_INTELEGENCE
+		}
+		name = "TILLF.4.c"
+	}
+
+	option = {
+		trigger = {
+			has_country_flag = HOSTILE_INTELEGENCE
+		}
+		name = "TILLF.4.d"
+	}
+
+	option = {
+		name = OK
+	}
+
+	after = {
+		add_opinion_modifier = {
+			who = event_target:FallenEmpireTaskOrigin
+			modifier = TILL_opinion_modifier_refused_FE_demands
+		}
+	}
+}
+
+
+#Ask the Intelegence#
+
+country_event = {
+	id = TILLF.5
+	is_triggered_only = yes
+	event_window_type = leader_story
+	picture = GFX_evt_fallen_empire
+	title = "TILLF.5.title"
+
+	#If Peacefull recruitment
+	desc = {
+		trigger = {
+			has_country_flag = PEACEFULL_INTELEGENCE
+		}
+		text = "TILLF.5.desc.a"
+	}
+
+	#If Hostile Recruitment
+	desc = {
+		trigger = {
+			has_country_flag = PEACEFULL_INTELEGENCE
+		}
+		text = "TILLF.5.desc.b"
+	}
+
+
+	trigger = {
+		has_country_flag = hired_THEFRAGMENT
+		exists = event_target:THEFRAGMENT
+		
+	}
+
+	picture_event_data = {
+		portrait = event_target:THEFRAGMENT
+	}
+	#Peacefull options#
+	option = {
+		trigger = {
+			has_country_flag = PEACEFULL_INTELEGENCE
+		}
+		name = "TILLF.5.a"
+		event_target:THEFRAGMENT = {
+			set_owner = event_target:FallenEmpireTaskOrigin
+			remove_country_flag = PEACEFULL_INTELEGENCE
+			remove_country_flag = HOSTILE_INTELEGENCE
+			remove_country_flag = hired_THEFRAGMENT
+		}
+		add_opinion_modifier = {
+			who = event_target:FallenEmpireTaskOrigin
+			modifier = TILL_opinion_modifier_accepted_FE_demands
+		}
+		country_event = {
+			id = TILLF.6 days = 3600 random = 360
+		}
+	}
+
+	option = {
+		trigger = {
+			has_country_flag = PEACEFULL_INTELEGENCE
+		}
+		name = "TILLF.5.b"
+		add_opinion_modifier = {
+			who = event_target:FallenEmpireTaskOrigin
+			modifier = TILL_opinion_modifier_refused_FE_demands
+		}
+	}
+
+	#hostile Options#
+
+	option = {
+		trigger = {
+			has_country_flag = HOSTILE_INTELEGENCE
+		}
+		name = "TILLF.5.c"
+		add_opinion_modifier = {
+			who = event_target:FallenEmpireTaskOrigin
+			modifier = TILL_opinion_modifier_refused_FE_demands
+		}
+	}
+
+	option = {
+		name = "TILLF.5.d"
+		event_target:THEFRAGMENT = {
+			set_owner = event_target:FallenEmpireTaskOrigin
+			remove_country_flag = hired_THEFRAGMENT
+		}
+		country_event = {
+			id = TILLF.6 days = 3600 random = 360
+		}
+		add_opinion_modifier = {
+			who = event_target:FallenEmpireTaskOrigin
+			modifier = TILL_opinion_modifier_accepted_FE_demands
+		}
+	}
+}
+
+
+country_event = {
+	id = TILLF.6
+	is_triggered_only = yes
+	diplomatic = yes
+	title = "TILLF.6"
+	desc = "TILLF6.desc"
+
+	picture_event_data = {
+		portrait = event_target:FallenEmpireTaskOrigin
+		planet_background = event_target:FallenEmpireTaskOrigin
+		graphical_culture = event_target:FallenEmpireTaskOrigin
+		city_level = event_target:FallenEmpireTaskOrigin
+		room = event_target:FallenEmpireTaskOrigin.ruler
+	}
+
+	option = {
+		name = "TILLF.6.a"
+	}
+
+		after = {
+			country_event = {
+				id = TILLF.7
+			}
+		}
+}
+
+country_event = {
+	id = TILLF.7
+	is_triggered_only = yes
+	event_window_type = leader_recruit
+	title = "TILLF.7"
+	desc = "TILLF.7.desc"
+	show_sound = Fragment_voice_02
+
+	picture = GFX_evt_fallen_empire
+	picture_event_data = {
+		portrait = event_target:THEFRAGMENT
+	}
+
+
+	option = {
+		name = "TILLF.7.a"
+		is_dialog_only = yes
+		response_text = "TILLF.7.a.response"
+	}
+
+	option = {
+		name = "TILLF.7.b"
+		is_dialog_only = yes
+		response_text = "TILLF.7.b.response"
+	}
+
+	option = {
+		name = "TILLF.7.c"
+		is_dialog_only = yes
+		response_text = "TILLF.7.c.response"
+	}
+
+
+
+
+
+	option = {
+		name = "Welcome_back"
+		tag = hire_leader
+		hidden_effect = {
+			event_target:THEFRAGMENT = {
+				set_owner = root
+			}
+		}
+		create_message = {
+			type = MESSAGE_RECRUITED_LEADER
+			localization =  MESSAGE_RECRUITED_LEADER_DESC
+			days = @toast_message_days
+			target = event_target:THEFRAGMENT
+			variable = {
+				type = name
+				localization = LEADER
+				scope = event_target:THEFRAGMENT
+			}
+			variable = {
+				key = "border"
+				value = "GFX_border_legendary"
+			}
+		}
+		set_country_flag = hired_THEFRAGMENT
+		set_country_flag = PEACEFULL_INTELEGENCE
+		set_country_flag = FALLEN_EMPIRE_RETURNED_FRAGMENT
+	}
+
+	#On Second Thought#
+	option = {
+		name = DISMISS
+		tag = dismiss_leader
+		hidden_effect = {
+			ethic_leader_kill_effect = yes
+			set_country_flag = dismissed_THEFRAGMENT
+		}
+
+	}
+
+}
+
+
+
+#Final Story line, a bit messy as this was done on the last working day I had.
+
+namespace = TILLG
+country_event = {
+	id = TILLG.0
+	#fire_only_once = yes
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_global_flag = Hideout_discovered
+		random_system_within_border = {
+			save_event_target_as = TILL_Hidden_system
+		}
+
+		event_target:TILL_Hidden_system = {
+			spawn_system = {
+				min_distance = 10
+				max_distance = 30
+				max_jumps = 0
+				initializer = "TILL_final_02"
+			}
+			if = {
+				limit = { last_created_system = { NOT = { has_hyperlane_to = prev } } }
+				add_hyperlane = {
+					from = this
+					to = last_created_system
+				}
+			}
+			else = {
+				add_extra_hyperlane_to_spawned_system_effect = yes
+			}
+			
+		}
+	}
+}
+
+#Unkonwn System
+
+country_event = {
+	id = TILLG.1
+	is_triggered_only = yes
+	picture = "GFX_evt_TILLA_star_chart_last_light"
+	title = "TILLG.1"
+	desc = "TILLG.1.desc"
+	trigger = {
+		has_country_flag = hired_THEFRAGMENT
+		#has_country_flag = FRAGMENT_GIFT_1
+		exists = event_target:THEFRAGMENT
+		any_owned_leader = {
+			has_leader_flag = Is_Fragment
+		}
+	
+	}
+	option = {
+		name = "TILLG.1.a"
+	}
+
+	option = {
+		name = "TILLG.1.b"
+	}
+
+	after = {
+		#from = {
+			enable_special_project = {
+				name = "TILL_fragment_data_set"
+			}		
+			set_country_flag = Investigating_Hideaways
+		#}
+
+	}
+
+}
+
+country_event = {
+	id = TILLG.2
+	is_triggered_only = yes
+	title = "TILLG.2"
+	desc = "TILLG.2.desc"
+	picture = "GFX_evt_TILLA_last_light_system"
+	option = {
+		name = "TILLG.2.a"
+	}
+
+	option = {
+		name = "TILLG.2.b"
+	}
+
+	after = {
+		country_event = {
+			id = TILLG.0
+		}
+	}
+}
+
+
+#On System Enter First Time
+ship_event = {
+	id = TILLG.3
+	is_triggered_only = yes
+	picture = GFX_evt_cold_barren
+	show_sound = event_mysterious_signal
+	title = "TILLG.3.name"
+	desc = "TILLG.3.desc"
+
+	trigger = {
+		from = {
+			has_star_flag = TILLA_darkness
+		}
+	}
+	immediate = {
+		event_target:FINALFRAGMENTSHOWDOWN = {
+			enable_special_project = {
+				name = "TILL_Weird_signals"
+			}
+		}
+
+	}
+	option = {
+		name = "TILLG.3.a"
+	}
+}
+
+
+planet_event = {
+	id = TILLG.4
+	is_triggered_only = yes
+	hide_window = yes
+	immediate = {
+
+		change_pc = pc_gaia
+		add_deposit = d_rich_mountain
+		add_deposit = d_fertile_lands
+		add_deposit = d_fertile_lands
+		add_deposit = d_hot_springs
+		add_deposit = d_hot_springs
+		create_country = {
+			name = "HIDEAWAYS"
+			authority = auth_machine_intelligence
+			type = default
+			species = event_target:FRAGMENTSPECIES
+			ethos = {
+				ethic = ethic_gestalt_consciousness
+			}
+			civics = {
+				civic = civic_machine_servitor
+				civic = civic_machine_warbots
+			}
+			origin = origin_default
+			ignore_initial_colony_error = yes
+			effect = {
+				save_global_event_target_as = THEHIDEAWAYS
+			}
+		}
+		last_created_country = {
+			set_graphical_culture = mammalian_01
+			give_fe_tech = yes
+		}
+		set_controller = last_created_country
+		set_capital = yes
+		
+
+		add_building = building_machine_capital
+		add_building = building_fortress
+
+
+		add_district_and_planet_size_if_needed_effect = {
+			district = district_nexus
+			amount = 5
+		}
+		add_district_and_planet_size_if_needed_effect = {
+			district = district_generator
+			amount = 2
+		}
+		add_zone = {
+			district = district_nexus
+			zone = zone_foundry
+			zone_slot = 1
+		}
+		add_district_and_planet_size_if_needed_effect = {
+			district = district_mining
+			amount = 2
+		}		
+		add_district_and_planet_size_if_needed_effect = {
+			district = district_farming
+			amount = 2
+		}		
+		while = {
+			count = 10
+			create_pop = {
+				species = event_target:FRAGMENTSPECIES
+			}
+		}
+
+		while = {
+			count = 35
+			create_army = {
+				owner = PREV
+				type = fractal_army
+			}
+		}
+
+		while = {
+			count = 10
+			create_species = {
+				name = random
+				class = random_non_machine
+				portrait = random
+				traits = random
+			}
+			create_pop_group = {
+				species = last_created_species
+			}
+		}
+
+	}
+
+	after = {
+		planet_event = {
+			id = TILLG.10000
+		}
+	}
+
+}
+
+planet_event = {
+	id = TILLG.10000
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		event_target:FINALFRAGMENTSHOWDOWN = {
+			add_building = building_organic_paradise
+			add_building = building_archaeo_refinery
+		}
+	}
+}
+#Planet has changed, theres a colony
+ship_event = {
+	id = TILLG.5
+	is_triggered_only = yes
+	title = "TILLG.5"
+	desc = "TILLG.5.desc"
+	picture = GFX_evt_ai_planet
+
+
+	option = {
+		name = "TILLG.5.a"
+
+	}
+
+immediate = {
+	
+	event_target:FINALFRAGMENTSHOWDOWN = {
+		planet_event = {
+			id = TILLG.4
+		}
+	}
+
+}
+
+after = {
+	FROMFROMFROMFROM = {
+		establish_communications_no_message = event_target:THEHIDEAWAYS
+		country_event = {
+			id = TILLG.6
+		}
+	}
+
+}
+
+}
+
+#The Truth.
+country_event = {
+	id = TILLG.6
+	diplomatic = yes
+	is_triggered_only = yes
+	title = "The Fragment"
+	show_sound = "fragment_voice_hideaways_found"
+	picture_event_data = {
+		city_level = this
+		portrait = event_target:THEFRAGMENT
+	}
+	desc = {
+		trigger = {
+			has_country_flag = PEACEFULL_INTELEGENCE
+			text = "TILLG.6.Hostile"
+		}
+	}
+
+	desc = {
+		trigger = {
+			has_country_flag = PEACEFULL_INTELEGENCE
+			text = "TILLG.6.Peacefull"
+		}
+	}
+
+	option = {
+		name = "TILLG.6.a"
+		is_dialog_only = yes
+		response_text = "TILLG.6.a.response"
+	}
+
+	option = {
+		name = "TILLG.6.b"
+		is_dialog_only = yes
+		response_text = "TILLG.6.b.response"
+	}
+
+	option = {
+		name = "TILLG.6.c"
+		is_dialog_only = yes
+		response_text = "TILLG.6.c.response"
+	}
+
+	option = {
+		name = "TILLG.6.d"
+		is_dialog_only = yes
+		response_text = "TILLG.6.d.response"
+	}
+
+	option = {
+		name = "TILLG.6.F"
+	}
+
+	after = {
+		country_event = { 
+			id = TILLG.7 days = 4 #This Allows the Empire to completely spawn in.
+	}
+	}
+	
+}
+#Care for the Colony
+country_event = {
+	id = TILLG.7
+	diplomatic = yes
+	is_triggered_only = yes
+	picture_event_data = {
+		city_level = this
+		graphical_culture = this
+		portrait = event_target:THEFRAGMENT
+	}
+
+	title = "TILLG.7.Title"
+	desc = "TILLG.7.Desc"
+
+	#We Annex the Struggling Colony
+	option = {
+		name = "TILLG.7.a"
+		hidden_effect = {
+			set_country_flag = ANNEXTED_FRAGMENT
+			event_target:FINALFRAGMENTSHOWDOWN = {
+				modify_species = {
+					species = event_target:FRAGMENTSPECIES
+					remove_trait = trait_machine_unit
+				}
+				set_owner = from
+			}
+		}
+	}
+	#We vassalise the Struggling colony
+	option = {
+		name = "TILLG.7.b"
+
+		hidden_effect = {
+			set_country_flag = VASSALIZED_FRAGMENT
+			#This took Several hours of trial and error and is really Jank, but it works.
+			random_country = {
+				limit = {
+					has_country_flag = hired_THEFRAGMENT
+				}
+				save_event_target_as = ITISME
+			}
+			event_target:THEHIDEAWAYS = {
+				set_subject_of = {
+					who = event_target:ITISME
+					preset = preset_vassal
+				}
+			}
+
+		}
+	}
+	#The Colony goes back into hiding.
+	option = {
+		name = "TILLG.7.c"
+		hidden_effect = {
+			set_country_flag = REFUSED_FRAGMENT
+			event_target:THEHIDEAWAYS = {
+				destroy_country = yes
+			}
+			event_target:FINALFRAGMENTSHOWDOWN = {
+				destroy_colony = yes
+				every_owned_pop_group = {
+					kill_pop_group = {
+						pop_group = this
+						percentage = 1 # 100%
+					}
+				}
+				change_pc = pc_shielded
+			}
+		}
+	}
+
+	after = {
+		country_event = {
+			id = TILLG.8
+		}
+	}
+}
+
+
+country_event = {
+	id = TILLG.8
+	is_triggered_only = yes
+	title = "Last Light"
+	picture = "GFX_evt_TILLA_last_light_system"
+	desc = {
+		trigger = {
+			has_country_flag = ANNEXTED_FRAGMENT
+			text = "TILL.8.desc.a"
+		}
+	}
+
+	desc = {
+		trigger = {
+			has_country_flag = VASSALIZED_FRAGMENT
+			text = "TILLG.8.desc.b"
+		}
+	}
+
+	desc = {
+		trigger = {
+			has_country_flag = REFUSED_FRAGMENT
+			text = "TILLG.8.desc.C"
+		}
+	}
+
+	option = {
+		name = "TILL8.a"
+
+	}
+
+	option = {
+		name = "TILL.8.b"
+		trigger = {
+			has_country_flag = ANNEXTED_FRAGMENT
+		}
+	}
+
+	option = {
+		trigger = {
+			has_country_flag = VASSALIZED_FRAGMENT
+		}
+		name = "TILL.8.c"
+	}
+
+	option = {
+		trigger = {
+			has_country_flag = REFUSED_FRAGMENT
+		}
+		name = "TILL.8.d"
+	}
+
+}
+
+
+namespace = TILLSTART
+
+country_event = {
+
+	id = TILLSTART.1
+	is_triggered_only = yes
+	picture = GFX_evt_TILLA_breachpoint_system
+	desc = TILLSTART.1.desc
+
+	option = {
+		name = "Do Not Spawn Fragment"
+		custom_tooltip = "Breachpoint System will not be spawned"
+	}
+
+	option = {
+		name = NEAR
+		custom_tooltip = "Breachpoint System will Spawn 4 to 8 jumps from your capital."
+		random_system_within_border = {
+			hidden_effect = {
+				spawn_system = {
+					min_jumps = 4
+					max_jumps = 8
+					initializer = "TILL_breachpoint_01"
+				}
+			}
+		}
+
+
+
+	}
+
+	option = {
+		name = FAR
+		custom_tooltip = "Breachpoint System will Spawn 8 to 16 jumps from your capital."
+		hidden_effect = {
+			random_system_within_border = {
+				spawn_system = {
+					min_jumps = 8
+					max_jumps = 16
+					initializer = "TILL_breachpoint_01"
+				}
+			}
+
+		}
+	}
+
+
+	option = {
+		name = "WHEREVER YOU ARE!"
+		custom_tooltip = "Breachpoint System will Spawn randomly in the Galaxy."
+		hidden_effect = {
+			random_system = {
+				spawn_system = {
+					max_jumps = 5
+					min_jumps = 1
+					initializer = "TILL_breachpoint_01"
+				}
+			}
+
+		}
+	}
+
+
+
+}
