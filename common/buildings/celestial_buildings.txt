@@ -1,0 +1,64 @@
+# celestial_buildings.txt
+# By MadeinCanada
+
+building_celestial_temporal_spire = {
+	base_buildtime = 900
+	base_cap_amount = 1
+	can_demolish = no
+	can_be_ruined = no
+	can_be_disabled = no
+
+	category = research
+
+	building_sets = {
+		government
+		urban
+	}
+
+	potential = {
+		exists = owner
+		owner = {
+			has_country_flag = celestial_temporal_spire_bought
+		}
+	}
+
+	allow = {
+		custom_tooltip = {
+			fail_text = celestial_need_emporium_purchase
+			owner = {
+				check_variable = { which = celestial_temporal_spire_build_count value >= 1 }
+			}
+		}
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = 1000
+		}
+		upkeep = {
+			energy = @b3_upkeep
+		}
+		produces = {
+			physics_research = 12
+			society_research = 12
+			engineering_research = 12
+		}
+	}
+
+	on_queued = {
+		owner = {
+			subtract_variable = { which = celestial_temporal_spire_build_count value = 1 }
+		}
+	}
+
+	on_unqueued = {
+		owner = {
+			change_variable = { which = celestial_temporal_spire_build_count value = 1 }
+		}
+	}
+
+	triggered_desc = {
+		text = celestial_spire_effects
+	}
+}

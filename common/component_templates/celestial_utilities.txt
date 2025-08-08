@@ -1,0 +1,120 @@
+# celestial_utilities.txt
+# By MadeinCanada
+
+@cost1 = 5
+@cost2 = 10
+@cost3 = 15
+@cost4 = 20
+
+@power0 = -5
+@power1 = -10
+@power2 = -15
+@power3 = -20
+@power4 = -30
+
+utility_component_template = {
+	key = "SHIP_CELESTIAL_DISTORTION"
+	size = large
+	icon = GFX_ship_part_aura_electromagnetic_disruptor
+	icon_frame = 1
+	power = 0
+	
+	scripted_action_button_possible = {
+		event_target:celestial_fleet.owner = {
+			has_resource = { type = energy amount >= 5000 }
+			NOT = { has_modifier = celestial_used_distortion }
+		}
+	}
+	
+	scripted_action_possible = {
+		is_star = yes
+		if = {
+			limit = { exists = space_owner }
+			space_owner = { is_same_value = event_target:celestial_fleet.owner }
+		}
+	}
+	
+	scripted_action_icon = GFX_fleet_order_button_special_project
+	scripted_action_name = on_celestial_target_planet_reached
+	scripted_action_tooltip = celestial_ship_button_desc
+	scripted_action_activity_key = celestial_action_activity_key
+	scripted_action_context_menu_name = celestial_context_menu_title
+}
+
+utility_component_template = {
+	key = "CELESTIAL_WARP_DRIVE_1"
+	size = small
+	icon = "GFX_ship_part_warp_drive_1"
+	icon_frame = 1
+	power = @power2
+	resources = {
+		category = ship_components
+		cost = {
+			alloys = 10
+			energy = 15
+		}
+	}
+	ftl = yes
+	jumpdrive = yes
+	ship_modifier = {
+		ship_jumpdrive_cooldown_mult = -0.25
+		ship_ftl_jumpdrive_range_mult = -0.50
+	}
+
+	class_restriction = { shipclass_military shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport shipclass_military_special shipclass_starbase }
+	prerequisites = { "tech_celestial_warp_drive_1" }
+	component_set = "ftl_components"
+	upgrades_to = "CELESTIAL_WARP_DRIVE_2"
+}
+
+utility_component_template = {
+	key = "CELESTIAL_WARP_DRIVE_2"
+	size = small
+	icon = "GFX_ship_part_warp_drive_2"
+	icon_frame = 1
+	power = @power3
+	resources = {
+		category = ship_components
+		cost = {
+			alloys = 15
+			energy = 20
+		}
+	}
+	ftl = yes
+	jumpdrive = yes
+	ship_modifier = {
+		ship_jumpdrive_cooldown_mult = -0.50
+	}
+
+	class_restriction = { shipclass_military shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport shipclass_military_special shipclass_starbase }
+	prerequisites = { "tech_celestial_warp_drive_2" }
+	component_set = "ftl_components"
+	upgrades_to = "CELESTIAL_WARP_DRIVE_3"
+}
+
+utility_component_template = {
+	key = "CELESTIAL_WARP_DRIVE_3"
+	size = small
+	icon = "GFX_ship_part_warp_drive_3"
+	icon_frame = 1
+	power = @power4
+	resources = {
+		category = ship_components
+		cost = {
+			alloys = 20
+			energy = 30
+		}
+	}
+	ftl = yes
+	jumpdrive = yes
+	ship_modifier = {
+		ship_jumpdrive_cooldown_mult = -0.50
+		ship_ftl_jumpdrive_range_mult = 0.25
+		ship_windup_mult = -0.25
+	}
+
+	class_restriction = { shipclass_military shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport shipclass_military_special shipclass_starbase }
+	prerequisites = { "tech_celestial_warp_drive_3" }
+	component_set = "ftl_components"
+	upgrades_to = "PSI_JUMP_DRIVE_1"
+}

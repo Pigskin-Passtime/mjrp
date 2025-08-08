@@ -1,0 +1,66 @@
+# celestial_bypasses.txt
+# By MadeinCanada
+
+celestial_underpass = {
+	name = CELESTIAL_UNDERPASS
+	is_pathfind = yes
+	requires_exploration = no
+	uses_action = no
+	always_active = yes
+	windup_time = 10
+	winddown_time = 00
+	ftl_multiplier = 0 #instant
+	extends_sensors = yes
+	icon_frame = 12
+	remember_instances = no
+	galactic_map_tooltip_header = CELESTIAL_UNDERPASS
+	galactic_map_tooltip_desc = CELESTIAL_UNDERPASS_DESC
+	system_view_tooltip_header = BYPASS_CELESTIAL_UNDERPASS
+	connection_type = any_other	# scripted_connection
+	can_bypass_be_locked = yes
+
+	# scripted_connection = {
+	# 	node = { #system scope
+	# 		starbase = {
+	# 			has_starbase_building = shroud_beacon
+	# 		}
+	# 	}
+	# 	nexus = { #system scope
+	# 		has_star_flag = shroud_tunnel_nexus
+	# 	}
+	# }
+
+	ftl_ship_effect	= "gateway_ftl_ship_effect_entity"
+	ftl_bypass_effect = "gateway_ftl_bypass_effect_entity"
+	animation_time = 3 # number of days to wait for the jump animation to be played
+
+	potential = {
+		always = yes
+	}
+
+	country_can_use = {
+		custom_tooltip = {
+			fail_text = NATURAL_WORMHOLE_COUNTRY_CANNOT_USE
+			# Wormhole can be used if...
+			OR = {
+				# System has no owner
+				NOT = { exists = from }
+				# System's owner has not closed borders to you
+				from = {
+					NOT = { has_closed_borders = root }
+				}
+				# System's owner is at war with you
+				from = { is_at_war_with = root }
+				# System's owner is not a proper empire
+				from = {
+					NOR = {
+						is_country_type = default
+						is_country_type = awakened_fallen_empire
+						is_country_type = fallen_empire
+					}
+				}
+			}
+		}
+	}
+	on_action = "on_entering_wormhole"
+}

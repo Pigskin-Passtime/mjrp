@@ -1,0 +1,875 @@
+# celestial_setup_events.txt
+# By MadeinCanada
+
+namespace = celestial_setup
+
+# Fires on game start - sets the Celestial Wayfarer to allowed to spawn
+# Can be changed with the Modjam wrapper
+event = {
+	id = celestial_setup.1
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		if = {
+			limit = {
+				celestial_trigger = yes
+			}
+			set_global_flag = celestial_allowed	
+			set_global_flag = celestial_installed
+		}
+	}
+}
+
+# Create Celestial Wayfarer
+country_event = {
+	id = celestial_setup.2
+	hide_window = yes
+	
+	is_triggered_only = yes
+	trigger = {
+	}
+	
+	immediate = {
+		event_target:celestial_crux_outpost_target = { save_event_target_as = wayfarer_target_planet }
+		create_celestial_wayfarer = yes
+	}
+}
+
+# Hire Celestial Wayfarer
+country_event = {
+	id = celestial_setup.3
+	title = celestial_setup.3.name
+	desc = celestial_setup.3.desc
+	show_sound = par_portrait_12 	# par_event_keides
+	is_triggered_only = yes
+
+	event_window_type = leader_recruit
+	picture_event_data = {
+		portrait = event_target:celestial_leader
+	}
+	picture = GFX_leader_recruitment_bg_legendary_beholder
+
+	trigger = {
+	}
+
+	immediate = {
+		# create_celestial_wayfarer = yes
+	}
+
+	option = { # HIRE
+		name = HIRE
+		tag = hire_leader
+		custom_tooltip = paragon_celestial_joins
+		sound = par_portrait_12		#celestial_hire
+		remove_relic = r_celestial_compass_alive
+
+		hidden_effect = {
+			country_event = {
+				id = celestial_setup.20
+				days = 360
+			}
+			clone_leader = {
+				target = event_target:celestial_leader
+			}
+			last_created_leader = {
+				set_leader_flag = legendary_leader
+				set_leader_flag = celestial
+				save_global_event_target_as = celestial_leader
+				set_leader_flag = immune_to_negative_traits
+				set_owner = root
+			}
+			event_target:celestial_fleet = {
+				set_owner = root
+				assign_leader = event_target:celestial_leader
+			}
+		}
+			create_message = {
+				type = MESSAGE_RECRUITED_LEADER
+				localization =  MESSAGE_RECRUITED_LEADER_DESC
+				days = @toast_message_days
+				target = event_target:celestial_leader
+				variable = {
+					type = name
+					localization = LEADER
+					scope = event_target:celestial_leader
+				}
+				variable = {
+					key = "border"
+					value = "GFX_border_legendary"
+				}
+			}
+	}
+
+	option = { # DISMISS
+		name = DISMISS
+		tag = dismiss_leader
+		# sound = celestial_dismiss
+
+		hidden_effect = {
+			event_target:celestial_leader = {
+				kill_leader = { show_notification = no }
+			}
+			event_target:celestial_fleet = {
+				delete_fleet = {
+					target = this
+				}
+			}
+			remove_relic = r_celestial_compass_alive
+			add_relic = r_celestial_compass_weak
+		}
+		custom_tooltip = r_celestial_compass_weak_given
+	}
+
+	option = {
+		name = celestial_setup.3.a # Are you looking for some compass, by any chance?
+		response_text = celestial_setup.3.a.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = celestial_setup.3.b # What can you do for us?
+		response_text = celestial_setup.3.b.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = celestial_setup.3.c # Relics and artifacts? Of what kind?
+		response_text = celestial_setup.3.c.response
+		is_dialog_only = yes
+	}
+
+	after = {
+		hidden_effect = {
+		}
+	}
+}
+
+# Spatial Distortion Process
+planet_event = {
+	id = celestial_setup.4
+	hide_window = yes
+	location = from
+	
+	is_triggered_only = yes
+	trigger = {
+		NOR = {
+			has_planet_flag = celestial_isolation_started
+		}
+	}
+	
+	immediate = {
+		set_planet_flag = celestial_isolation_started
+	
+		event_target:celestial_fleet = {
+			set_event_locked = yes
+			owner = {
+				add_resource = {
+					energy = -5000
+				}
+			}
+		}
+		log = "spatial distortion event lock begin"
+		create_ambient_object = {
+			type = terraforming_ship_beam
+			location = event_target:iss_wayfarer
+			entity_face_object = this
+			use_3d_location = yes
+			entity_scale_to_size = yes
+			scripted_scale = 8
+			# play_animation_once = yes
+		}
+		last_created_ambient_object = {
+			set_ambient_object_flag = celestial_isolating_beam
+		}
+		
+		planet_event = { id = celestial_setup.5 days = 20 }
+	}
+}
+
+# Spatial Distortion Occurs
+planet_event = {
+	id = celestial_setup.5
+	hide_window = yes
+	
+	is_triggered_only = yes
+	trigger = {
+	}
+	
+	immediate = {
+		remove_planet_flag = celestial_isolation_started
+		add_modifier = {
+			modifier = celestial_isolated_star
+			# days = 1800 # Bug? Timer constantly shows 5 years, does not tick down
+		}
+	
+		event_target:celestial_fleet = {
+			set_event_locked = no
+		}
+		event_target:celestial_fleet.owner = {
+			add_modifier = {
+				modifier = celestial_used_distortion
+				days = 3600
+			}
+			create_message = {
+				type = MESSAGE_STAR_ISOLATED
+				localization = MESSAGE_STAR_ISOLATED
+				days = 30
+				target = root
+				variable = {
+					type = name
+					localization = PLANET
+					scope = root
+				}
+			}
+		}
+		planet_event = { id = celestial_setup.6 days = 1800 }
+		log = "spatial distortion event lock end"
+		create_ambient_object = {
+			type = terraforming_planet_effect
+			location = this
+			use_3d_location = yes
+			entity_scale_to_size = yes
+			scripted_scale = 5
+		}
+		last_created_ambient_object = {
+			set_ambient_object_flag = celestial_isolating_effect
+		}
+		# create_ambient_object = {
+		# 	type = large_debris_object
+		# 	location = this
+		# 	play_animation_once = yes
+		# }
+		# last_created_ambient_object = {
+		# 	set_ambient_object_flag = celestial_isolating_effect
+		# 	set_location = {
+		# 		target = prev
+		# 		distance = 0
+		# 		angle = random
+		# 	}
+		# }
+		create_ambient_object = {
+			type = explosion_particle_object
+			location = this
+			use_3d_location = yes
+			duration = 10
+			scale = 30
+			play_animation_once = yes
+		}
+		last_created_ambient_object = {
+			set_ambient_object_flag = celestial_isolating_effect
+		}
+		solar_system = {
+			every_system_ambient_object = {
+				limit = {
+					OR = {
+						has_ambient_object_flag = celestial_isolating_beam
+					}
+				}
+				destroy_ambient_object = this
+			}
+			set_star_flag = celestial_distortion_target_system
+			every_neighbor_system = {
+				limit = {
+					NOR = {
+						has_star_flag = celestial_distortion_target_system
+						has_star_flag = celestial_distortion_affected_system
+					}
+				}
+				set_star_flag = celestial_distortion_affected_system
+				remove_hyperlane = {
+					from = this
+					to = prev
+				}
+			}
+		}
+	}
+}
+
+# Spatial Distortion Ends
+planet_event = {
+	id = celestial_setup.6
+	hide_window = yes
+	
+	is_triggered_only = yes
+	trigger = {
+	}
+	
+	immediate = {
+		remove_modifier = celestial_isolated_star
+		event_target:celestial_fleet.owner = {
+			create_message = {
+				type = MESSAGE_STAR_RETURNED
+				localization = MESSAGE_STAR_RETURNED
+				days = 30
+				target = root
+				variable = {
+					type = name
+					localization = PLANET
+					scope = root
+				}
+			}
+		}
+		
+		log = "spatial distortion ends"
+		solar_system = {
+			every_system_ambient_object = {
+				limit = {
+					has_ambient_object_flag = celestial_isolating_effect
+				}
+				destroy_ambient_object = this
+			}
+			
+			remove_star_flag = celestial_distortion_target_system
+			every_system = {
+				limit = { has_star_flag = celestial_distortion_affected_system }
+				remove_star_flag = celestial_distortion_affected_system
+				add_hyperlane = {
+					from = this
+					to = prev
+				}
+			}
+		}
+	}
+}
+
+# Debug - Spawn Nexus of Convergence (start system)
+country_event = {
+	id = celestial_setup.7
+	hide_window = yes
+	
+	is_triggered_only = yes
+	trigger = {
+	}
+	
+	immediate = {
+		random_system_within_border = {
+			spawn_system = {
+				min_jumps = 1
+				max_jumps = 3
+				initializer = celestial_wayfarer_start_system
+				hyperlane = yes
+				is_discovered = no
+			}
+		}
+	}
+}
+
+# Astral Corps initial diplomacy
+country_event = {
+	id = celestial_setup.8
+	title = "celestial_setup.8.name"
+	desc = "celestial_setup.8.desc"
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	custom_gui_option = "enclave_curator_option"
+	picture_event_data = {
+		portrait = event_target:celestial_astral_corps_country
+		room = celestial_astral_keeper_room
+    }
+	location = event_target:celestial_crux_outpost_target
+	
+	is_triggered_only = yes
+	trigger = {
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = "celestial_setup.8.a"
+		is_dialog_only = yes
+		response_text = "celestial_setup.8.a.reply"
+	}
+	option = {
+		name = "celestial_setup.8.b"
+		is_dialog_only = yes
+		response_text = "celestial_setup.8.b.reply"
+	}
+	option = {
+		name = "celestial_setup.8.c"
+		response_text = "celestial_setup.8.c.reply"
+	}
+}
+
+# Entering Base of Convergence
+ship_event = {
+	id = celestial_setup.10
+	title = "celestial_setup.10.name"
+	desc = "celestial_setup.10.desc"
+	picture = GFX_evt_astral_rift_vortex
+	is_triggered_only = yes
+	show_sound = event_kaleidoscopic_lights
+	location = from
+	
+	trigger = {
+		owner = {
+			is_ai = no
+			NOT = { has_country_flag = celestial_entered_convergence_system }
+		}
+		from = { has_star_flag = celestial_convergence_system }
+		NOT = {
+			has_global_flag = celestial_wayfarer_setup_begun
+		}
+	}
+
+	immediate = {
+		owner = { set_country_flag = celestial_entered_convergence_system }
+		set_global_flag = celestial_wayfarer_setup_begun
+	}
+
+	option = {
+		name = "celestial_setup.10.a"
+		event_target:celestial_crux_outpost_target = {
+			enable_special_project = {
+				name = celestial_convergence_sp
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Base of Convergence SP midway through
+ship_event = {
+	id = celestial_setup.11
+	title = "celestial_setup.11.name"
+	desc = "celestial_setup.11.desc"
+	picture = GFX_evt_astral_rift_crystal_3
+	is_triggered_only = yes
+	location = from
+	
+	trigger = {
+	}
+
+	immediate = {
+		create_astral_corps = yes
+	}
+
+	option = {
+		name = "celestial_setup.11.a"
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = celestial_setup.8
+				}
+			}
+		}
+	}
+}
+
+# Base of Convergence SP Completed
+ship_event = {
+	id = celestial_setup.12
+	title = "celestial_setup.12.name"
+	desc = "celestial_setup.12.desc"
+	picture = GFX_evt_vortex
+	is_triggered_only = yes
+	location = from
+	
+	trigger = {
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = "celestial_setup.12.a"
+		owner = {
+			add_relic = r_celestial_compass_broken
+			hidden_effect = {
+				country_event = {
+					id = celestial_setup.13
+					days = 180
+					random = 180
+				}
+			}
+		}
+	}
+}
+
+# Astral Corps - Offer
+country_event = {
+	id = celestial_setup.13
+	title = "celestial_setup.8.name"
+	desc = "celestial_setup.13.desc"
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	custom_gui_option = "enclave_curator_option"
+	picture_event_data = {
+		portrait = event_target:celestial_astral_corps_country
+		room = celestial_astral_keeper_room
+    }
+	location = event_target:celestial_crux_outpost_target
+	
+	is_triggered_only = yes
+	trigger = {
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		allow = {
+			has_resource = {
+				type = energy
+				amount >= 2500
+			}
+			has_resource = {
+				type = minerals
+				amount >= 500
+			}
+		}
+		name = "celestial_setup.13.a" # Give the relic over
+		response_text = "celestial_setup.13.a.reply"
+		remove_relic = r_celestial_compass_broken
+		add_resource = {
+			energy = -2500
+			minerals = -500
+		}
+		custom_tooltip = celestial_give_relic
+		set_country_flag = celestial_compass_handed_over
+		hidden_effect = {
+			country_event = {
+				id = celestial_setup.14
+				days = 360
+				random = 180
+			}
+		}
+	}
+	option = {
+		name = "celestial_setup.13.b" # Just provide us with help
+		response_text = "celestial_setup.13.b.reply"
+		custom_tooltip = celestial_get_relic_aid
+		hidden_effect = {
+			country_event = {
+				id = celestial_setup.14
+				days = 720
+				random = 120
+			}
+		}
+	}
+}
+
+# Astral Corps - Relic Restored
+country_event = {
+	id = celestial_setup.14
+	title = "celestial_setup.8.name"
+	desc = "celestial_setup.14.desc"
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+	custom_gui_option = "enclave_curator_option"
+	picture_event_data = {
+		portrait = event_target:celestial_astral_corps_country
+		room = celestial_astral_keeper_room
+    }
+	location = event_target:celestial_crux_outpost_target
+	
+	is_triggered_only = yes
+	trigger = {
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = "celestial_setup.14.a"
+		trigger = {
+			has_country_flag = celestial_compass_handed_over
+		}
+		add_relic = r_celestial_compass_alive
+	}
+	option = {
+		name = "celestial_setup.14.b"
+		trigger = {
+			NOT = { has_country_flag = celestial_compass_handed_over }
+		}
+		hidden_effect = {
+			remove_relic = r_celestial_compass_broken
+		}
+		add_relic = r_celestial_compass_alive
+	}
+}
+
+# Celestial Compass Activated
+country_event = {
+	id = celestial_setup.15
+	title = "celestial_setup.15.name"
+	desc = "celestial_setup.15.desc"
+	picture = GFX_evt_a_rift_in_space
+	is_triggered_only = yes
+	location = event_target:celestial_crux_outpost_target
+
+	fire_only_once = yes
+	
+	trigger = {
+	}
+
+	immediate = {
+		country_event = {
+			id = celestial_setup.2
+		}
+	}
+
+	option = {
+		name = "celestial_setup.15.a"
+		country_event = {
+			id = celestial_setup.3
+			days = 30
+		}
+	}
+}
+
+# Cosmic Emporium Established
+country_event = {
+	id = celestial_setup.20
+	title = "celestial_setup.20.name"
+	desc = "celestial_setup.20.desc"
+	diplomatic = yes
+	custom_gui = "enclave_caravaneer_window"
+	picture_event_data = {
+		portrait = event_target:celestial_leader
+		room = paragon_keides_room
+    }
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = {
+			has_country_flag = celestial_cosmic_emporium_established
+		}
+	}
+
+	immediate = {
+		set_country_flag = celestial_cosmic_emporium_established
+		set_country_flag = celestial_cosmic_emporium_active
+		create_cosmic_emporium = yes
+		shuffle_cosmic_emporium_items = yes
+
+		country_event = {
+			id = celestial_setup.21
+			days = 3601
+		}
+
+		# Set flags for the timer in the custom menu
+		set_country_flag = celestial_emporium_years_10
+		country_event = {
+			id = celestial_setup.22
+			days = 360
+		}
+	}
+
+	# option = {
+	# 	name = "celestial_setup.20.a"
+	# 	custom_gui = "enclave_caravaneer_option"
+	# 	hidden_effect = {
+	# 		set_country_flag = celestial_diplo_opened
+	# 		country_event = {
+	# 			id = celestial_diplo.0
+	# 			scopes = {
+	# 				from = event_target:celestial_emporium_country
+	# 			}
+	# 		}
+	# 	}
+	# 	custom_tooltip = celestial_cosmic_emporium_opening
+	# }
+	option = {
+		name = "celestial_setup.20.b"
+		custom_gui = "enclave_caravaneer_option"
+		custom_tooltip = celestial_cosmic_emporium_available
+	}
+}
+
+# Cosmic Emporium Reshuffle
+country_event = {
+	id = celestial_setup.21
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	trigger = {
+		has_country_flag = celestial_cosmic_emporium_active
+	}
+
+	immediate = {
+		shuffle_cosmic_emporium_items = yes
+		country_event = {
+			id = celestial_setup.21
+			days = 3601
+		}
+
+		# Set flags for the timer in the custom menu
+		set_country_flag = celestial_emporium_years_10
+		country_event = {
+			id = celestial_setup.22
+			days = 360
+		}
+
+		create_message = {
+			type = MESSAGE_EMPORIUM_SHUFFLED
+			localization = MESSAGE_EMPORIUM_SHUFFLED
+			days = 30
+			target = root.capital_scope
+		}
+	}
+}
+
+# Update Yearly Flag for Timer
+country_event = {
+	id = celestial_setup.22
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	trigger = {
+		has_country_flag = celestial_cosmic_emporium_active
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				has_country_flag = celestial_emporium_years_10
+			}
+			remove_country_flag = celestial_emporium_years_10
+			set_country_flag = celestial_emporium_years_9
+			country_event = {
+				id = celestial_setup.22
+				days = 360
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = celestial_emporium_years_9
+			}
+			remove_country_flag = celestial_emporium_years_9
+			set_country_flag = celestial_emporium_years_8
+			country_event = {
+				id = celestial_setup.22
+				days = 360
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = celestial_emporium_years_8
+			}
+			remove_country_flag = celestial_emporium_years_8
+			set_country_flag = celestial_emporium_years_7
+			country_event = {
+				id = celestial_setup.22
+				days = 360
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = celestial_emporium_years_7
+			}
+			remove_country_flag = celestial_emporium_years_7
+			set_country_flag = celestial_emporium_years_6
+			country_event = {
+				id = celestial_setup.22
+				days = 360
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = celestial_emporium_years_6
+			}
+			remove_country_flag = celestial_emporium_years_6
+			set_country_flag = celestial_emporium_years_5
+			country_event = {
+				id = celestial_setup.22
+				days = 360
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = celestial_emporium_years_5
+			}
+			remove_country_flag = celestial_emporium_years_5
+			set_country_flag = celestial_emporium_years_4
+			country_event = {
+				id = celestial_setup.22
+				days = 360
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = celestial_emporium_years_4
+			}
+			remove_country_flag = celestial_emporium_years_4
+			set_country_flag = celestial_emporium_years_3
+			country_event = {
+				id = celestial_setup.22
+				days = 360
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = celestial_emporium_years_3
+			}
+			remove_country_flag = celestial_emporium_years_3
+			set_country_flag = celestial_emporium_years_2
+			country_event = {
+				id = celestial_setup.22
+				days = 360
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = celestial_emporium_years_2
+			}
+			remove_country_flag = celestial_emporium_years_2
+			set_country_flag = celestial_emporium_years_1
+			country_event = {
+				id = celestial_setup.22
+				days = 360
+			}
+		}
+		else = {
+			remove_country_flag = celestial_emporium_years_1
+		}
+	}
+}
+
+# Update Yearly Flag for Store Cooldown
+country_event = {
+	id = celestial_setup.23
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	trigger = {
+		has_country_flag = celestial_cosmic_emporium_active
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				has_country_flag = cosmic_emporium_cooldown_years_3
+			}
+			remove_country_flag = cosmic_emporium_cooldown_years_3
+			set_country_flag = cosmic_emporium_cooldown_years_2
+			country_event = {
+				id = celestial_setup.23
+				days = 360
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = cosmic_emporium_cooldown_years_2
+			}
+			remove_country_flag = cosmic_emporium_cooldown_years_2
+			set_country_flag = cosmic_emporium_cooldown_years_1
+			country_event = {
+				id = celestial_setup.23
+				days = 360
+			}
+		}
+		else = {
+			remove_country_flag = cosmic_emporium_cooldown_years_1
+			create_message = {
+				type = MESSAGE_EMPORIUM_COOLDOWN
+				localization = MESSAGE_EMPORIUM_COOLDOWN
+				days = 30
+				target = root.capital_scope
+			}
+		}
+	}
+}

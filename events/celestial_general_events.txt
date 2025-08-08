@@ -1,0 +1,536 @@
+# celestial_general_events.txt
+# By MadeinCanada
+
+namespace = celestial
+
+# Aetherial Codex Activation
+country_event = {
+	id = celestial.1
+	title = celestial.1.name
+	desc = celestial.1.desc
+	picture = GFX_evt_engineering_research
+	show_sound = event_default
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_legendary"
+
+	picture_event_data = {
+		portrait = event_target:celestial_codex_target
+	}
+	
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				NOR = {
+					has_leader_flag = legendary_leader
+					has_leader_flag = celestial_immune_to_codex
+				}
+			}
+			save_event_target_as = celestial_codex_target
+		}
+	}
+
+	option = {
+		name = celestial.1.a
+		custom_tooltip = celestial.1.tt
+		hidden_effect = {
+			event_target:celestial_codex_target = {
+				random_list = {
+					20 = {
+						while = {
+							count = 2
+							add_trait = {
+								trait = random_negative
+							}
+						}
+					}
+					80 = {
+						add_trait = {
+							trait = random_negative
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Spectral Beacon: Spread Portal Sickness
+planet_event = {
+	id = celestial.2
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_planet_flag = celestial_beacon_active
+		has_modifier = celestial_beacon_modifier
+	}
+	
+	immediate = {
+		random_list = {
+			50 = {
+				# Nothing
+			}
+			25 = {
+				celestial_spread_portal_sickness = yes
+			}
+			25 = {
+				while = {
+					count = 2
+					celestial_spread_portal_sickness = yes
+				}
+			}
+		}
+		planet_event = {
+			id = celestial.2
+			days = 360
+		}
+	}
+}
+
+# Cinders of a Star: Upgrade Station (Necessary to ensure only one is done at a time)
+starbase_event = {
+	id = celestial.3
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			NOT = {
+				has_country_flag = celestial_core_building_built
+			}
+		}
+	}
+	
+	immediate = {
+		celestial_core_effect_starbase = yes
+		owner = {
+			set_timed_country_flag = {
+				flag = celestial_core_building_built
+				days = 5
+			}
+		}
+	}
+}
+
+# Tainted Crystal: End of relic activation, remove flags and wormhole (send message?)
+country_event = {
+	id = celestial.4
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+		remove_country_flag = celestial_crystal_target1_set
+		remove_country_flag = celestial_tainted_crystal_used_up
+		every_owned_megastructure = {
+			limit = {
+				has_megastructure_flag = celestial_crystal_wormhole
+			}
+			remove_megastructure = this
+		}
+		every_planet_within_border = {
+			limit = {
+				is_star = yes
+				OR = {
+					has_planet_flag = celestial_crystal_wormhole_star_1
+					has_planet_flag = celestial_crystal_wormhole_star_2
+				}
+			}
+			remove_planet_flag = celestial_crystal_wormhole_star_1
+			remove_planet_flag = celestial_crystal_wormhole_star_2
+		}
+		create_message = {
+			type = MESSAGE_TAINTED_CRYSTAL_OVER
+			localization = MESSAGE_TAINTED_CRYSTAL_OVER
+			days = 30
+			target = root
+		}
+	}
+}
+
+# Harmonic Pacification
+system_event = {
+	id = celestial.5
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+		random_system_megastructure = {
+			limit = {
+				is_megastructure_type = celestial_harmonic_resonator
+			}
+			owner = {
+				save_event_target_as = celestial_resonator_owner
+			}
+		}
+		every_fleet_in_system = {
+			limit = {
+				OR = {
+					celestial_is_spaceborne_fauna = yes
+					celestial_is_leviathan = yes
+				}
+				owner = {
+					is_hostile = event_target:celestial_resonator_owner
+				}
+			}
+			owner = {
+				set_faction_hostility = {
+					target = event_target:celestial_resonator_owner
+					set_hostile = no
+					set_neutral = yes
+					set_friendly = no
+				}
+			}
+			if = {
+				limit = {
+					celestial_is_leviathan = yes
+				}
+				owner = {
+					set_timed_country_flag = {
+						flag = celestial_recently_pacified
+						days = 3600
+					}
+					country_event = {
+						id = celestial.6
+						days = 3600
+						scopes = {
+							from = event_target:celestial_resonator_owner
+						}
+					}
+				}
+			}
+		}
+		every_neighbor_system = {
+			every_fleet_in_system = {
+				limit = {
+					OR = {
+						celestial_is_spaceborne_fauna = yes
+						celestial_is_leviathan = yes
+					}
+					owner = {
+						NOT = {
+							has_country_flag = celestial_recently_pacified
+						}
+						is_hostile = event_target:celestial_resonator_owner
+					}
+				}
+				fleet.owner = {
+					set_faction_hostility = {
+						target = event_target:celestial_resonator_owner
+						set_hostile = no
+						set_neutral = yes
+						set_friendly = no
+					}
+				}
+				if = {
+					limit = {
+						celestial_is_leviathan = yes
+					}
+					owner = {
+						set_timed_country_flag = {
+							flag = celestial_recently_pacified
+							days = 3600
+						}
+						country_event = {
+							id = celestial.6
+							days = 3600
+							scopes = {
+								from = event_target:celestial_resonator_owner
+							}
+						}
+					}
+				}
+			}
+		}
+		event_target:celestial_resonator_owner = {
+			create_message = {
+				type = MESSAGE_HARMONIC_PACIFIER
+				localization = MESSAGE_HARMONIC_PACIFIER
+				days = 30
+				target = root
+				variable = {
+					type = name
+					localization = SYSTEM
+					scope = root
+				}
+			}
+		}
+	}
+}
+
+# Leviathan Pacification Over
+country_event = {
+	id = celestial.6
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+		root = {
+			set_faction_hostility = {
+				target = from
+				set_hostile = yes
+				set_neutral = no
+				set_friendly = no
+			}
+		}
+	}
+}
+
+# On built Temporal Spire
+planet_event = {
+	id = celestial.7
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	pre_triggers = {
+		is_ai = no
+	}
+
+	trigger = {
+		has_building = building_celestial_temporal_spire
+		NOT = {
+			has_planet_flag = celestial_temporal_spire_built_here
+		}
+	}
+
+	immediate = {
+		set_timed_planet_flag = {
+			flag = celestial_temporal_spire_built_here
+			days = 9000 # 25 years
+		}
+		add_modifier = {
+			modifier = celestial_temporal_spire_modifier
+			days = 9000 # 25 years
+		}
+		planet_event = {
+			id = celestial.8
+			days = 9000 # 25 years
+		}
+		planet_event = {
+			id = celestial.9
+			days = 180
+			random = 720
+		}
+	}
+}
+
+# Remove Temporal Spire
+planet_event = {
+	id = celestial.8
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	pre_triggers = {
+	}
+
+	trigger = {
+		has_building = building_celestial_temporal_spire
+		NOT = {
+			has_planet_flag = celestial_temporal_spire_built_here
+		}
+	}
+
+	immediate = {
+		remove_building = building_celestial_temporal_spire
+	}
+}
+
+# Every 5ish years - Temporal Spires have negative effects
+planet_event = {
+	id = celestial.9
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	pre_triggers = {
+	}
+
+	trigger = {
+		has_modifier = celestial_temporal_spire_modifier
+	}
+
+	immediate = {
+		planet_event = {
+			id = celestial.9
+			days = 1700 # 5 years ish
+			random = 100
+		}
+
+		random_list = {
+			20 = {
+				add_modifier = {
+					modifier = celestial_temporal_spire_malus_1
+					days = 1440 # 4 years
+				}
+			}
+			20 = {
+				add_modifier = {
+					modifier = celestial_temporal_spire_malus_2
+					days = 1440 # 4 years
+				}
+			}
+			20 = {
+				add_modifier = {
+					modifier = celestial_temporal_spire_malus_3
+					days = 1440 # 4 years
+				}
+			}
+			20 = {
+				add_modifier = {
+					modifier = celestial_temporal_spire_malus_4
+					days = 1440 # 4 years
+				}
+			}
+			20 = {
+				modifier = {
+					factor = 0
+					owner = {
+						is_gestalt = yes
+					}
+				}
+				add_modifier = {
+					modifier = celestial_temporal_spire_malus_5
+					days = 1440 # 4 years
+				}
+			}
+			20 = {
+				modifier = {
+					factor = 0
+					owner = {
+						is_gestalt = no
+					}
+				}
+				add_modifier = {
+					modifier = celestial_temporal_spire_malus_5_gestalt
+					days = 1440 # 4 years
+				}
+			}
+		}
+	}
+}
+
+# Triggers Flavour Events and Event Chains
+# Fired on on_decade_pulse_country
+country_event = {
+	id = celestial.10
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = event_target:celestial_leader
+		any_owned_leader = {
+			has_leader_flag = celestial
+		}
+	}
+	
+	immediate = {
+		random_list = {
+			# Flavour Events
+			10 = {
+				modifier = {
+					factor = 0
+					has_country_flag = celestial_flavour_1
+				}
+				modifier = {
+					factor = 0
+					has_country_flag = celestial_wayfarer_awol
+				}
+				country_event = {
+					id = celestial_flavour.1
+					days = 1
+					random = 1800
+				}
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					has_country_flag = celestial_flavour_2
+				}
+				modifier = {
+					factor = 0
+					has_country_flag = celestial_wayfarer_awol
+				}
+				country_event = {
+					id = celestial_flavour.2
+					days = 1
+					random = 1800
+				}
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					has_country_flag = celestial_flavour_3
+				}
+				modifier = {
+					factor = 0
+					has_country_flag = celestial_wayfarer_awol
+				}
+				country_event = {
+					id = celestial_flavour.5
+					days = 1
+					random = 1800
+				}
+			}
+			# Event Chains
+			15 = {
+				modifier = {
+					factor = 0
+					has_country_flag = celestial_eventchain_1_begun
+				}
+				modifier = {
+					factor = 0
+					has_country_flag = celestial_wayfarer_awol
+				}
+				country_event = {
+					id = celestial_chain.101
+					days = 1
+					random = 1800
+				}
+			}
+			15 = {
+				modifier = {
+					factor = 0
+					has_country_flag = celestial_eventchain_2_begun
+				}
+				modifier = {
+					factor = 0
+					has_country_flag = celestial_wayfarer_awol
+				}
+				modifier = { # Requires 1st event chain to have been done first
+					factor = 0
+					NOT = {
+						has_country_flag = celestial_eventchain_1_completed
+					}
+				}
+				modifier = {
+					factor = 0
+					event_target:celestial_leader = {
+						leader_age < 240
+					}
+				}
+				country_event = {
+					id = celestial_chain.201
+					days = 1
+					random = 1800
+				}
+			}
+			# Nothing
+			10 = {}
+		}
+	}
+}

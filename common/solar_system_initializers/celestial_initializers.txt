@@ -1,0 +1,345 @@
+# celestial_initializers.txt
+# By MadeinCanada
+
+# Nexus of Convergence
+celestial_wayfarer_start_system = {
+	name = "NAME_Nexus_of_Convergence"
+	
+	class = "sc_celestial_vortex_star"
+	asteroid_belt = {
+		type = icy_asteroid_belt
+		radius = 50
+	}
+	asteroid_belt = {
+		type = icy_asteroid_belt
+		radius = 80
+	}
+	
+	flags = { celestial_system celestial_convergence_system }
+	init_effect = {
+		# save_global_event_target_as = celestial_wayfarer_system # Unused, might as well remove to improve performance
+		#create_nebula = {
+		#	name = "NAME_Spatial_Smog"
+		#	radius = 100
+		#}
+	}
+	
+	planet = {
+		name = "NAME_Nexus_of_Convergence_Star"
+		class = "pc_celestial_vortex"
+		orbit_distance = 0
+		orbit_angle = 0
+		size = 12
+		has_ring = no
+
+		init_effect = {
+			prevent_anomaly = yes
+			clear_deposits = yes
+			add_deposit = d_physics_5
+			# Crux Outpost
+			create_ambient_object = {
+				type = "celestial_outpost"
+				location = this
+				entity_offset_height = { min = 10 max = 10 }
+				entity_scale_to_size = yes
+				scale = 2
+			}
+			last_created_ambient_object = {	
+				set_ambient_object_flag = celestial_crux_outpost
+				set_location = {
+					target = prev
+					distance = 0
+					angle = random
+				}
+				save_global_event_target_as = celestial_crux_outpost_target
+			}
+			# Storm gfx
+			create_ambient_object = {
+				type = "psi_storm_1"
+				location = this
+				entity_offset_height = { min = 5 max = 7 }
+				entity_scale_to_size = yes
+				scale = 0.3
+			}
+			last_created_ambient_object = {	
+				set_ambient_object_flag = celestial_convergence_gfx
+				set_location = {
+					target = prev
+					distance = 0
+					angle = random
+				}
+			}
+			# Debris
+			while = {
+				count = 5
+				create_ambient_object = {
+					type = "large_debris_object"
+					entity_offset_height = { min = -0 max = -25 }
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 85
+						angle = random
+					}
+				}
+			}
+			while = {
+				count = 7
+				create_ambient_object = {
+					type = "medium_debris_01_object"
+					entity_offset_height = { min = -0 max = -25 }
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 95
+						angle = random
+					}
+				}
+			}
+			while = {
+				count = 6
+				create_ambient_object = {
+					type = "small_debris_object"
+					entity_offset_height = { min = -0 max = -25 }
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 115
+						angle = random
+					}
+				}
+			}
+			while = {
+				count = 6
+				create_ambient_object = {
+					type = "small_debris_object"
+					entity_offset_height = { min = -0 max = -25 }
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 105
+						angle = random
+					}
+				}
+			}
+			while = {
+				count = 10
+				create_ambient_object = {
+					type = "ancient_battlefield_02_object"
+					entity_offset_height = { min = -0 max = -25 }
+					location = this
+					entity_scale_to_size = yes
+					scale = 1.15
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 90
+						angle = random
+					}
+				}
+			}
+			while = {
+				count = 5
+				create_ambient_object = {
+					type = "abandoned_starbase_01_object"
+					entity_offset_height = { min = -0 max = -25 }
+					location = this
+					entity_scale_to_size = yes
+					scale = 1.5
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 75
+						angle = random
+					}
+				}
+			}
+		}
+	}
+
+	change_orbit = 90
+
+	planet = {
+		class = "pc_shattered_2"
+		name = "NAME_Unknown_Remnants"
+		orbit_distance = 0
+		orbit_angle = random
+		size = 15
+		has_ring = no
+		flags = {}
+		init_effect = {
+		}
+	}
+
+	planet = {
+		class = "pc_shattered_2"
+		name = "NAME_Unknown_Remnants"
+		orbit_distance = 10
+		orbit_angle = random
+		size = 18
+		has_ring = no
+		flags = {}
+		init_effect = {
+		}
+	}
+
+	planet = {
+		class = "pc_broken_no_orbit"
+		name = "NAME_Unknown_Remnants"
+		orbit_distance = -5
+		orbit_angle = random
+		size = 12
+		has_ring = no
+		flags = {}
+		init_effect = {
+		}
+	}
+
+}
+
+# Zullius
+celestial_unbidden_system = {
+	name = "NAME_Zullius"
+
+	class = "sc_pulsar"
+	asteroid_belt = {
+		type = rocky_asteroid_belt
+		radius = 60
+	}
+	asteroid_belt = {
+		type = icy_asteroid_belt
+		radius = 100
+	}
+
+	flags = { celestial_system celestial_invader_system }
+
+	planet = {
+		name = "NAME_Zullius"
+		class = "pc_pulsar"
+		orbit_distance = 0
+		orbit_angle = 0
+		size = 20
+		has_ring = no
+
+		init_effect = {
+			prevent_anomaly = yes
+			clear_deposits = yes
+		}
+	}
+
+	planet = {
+		class = "pc_crystal_asteroid"
+		orbit_distance = 60
+		orbit_angle = 0
+		size = 1
+		has_ring = no
+		init_effect = {
+			set_deposit = d_rare_crystals_1
+		}
+	}
+
+	planet = {
+		class = "pc_crystal_asteroid"
+		orbit_distance = 0
+		orbit_angle = 90
+		size = 2
+		has_ring = no
+	}
+
+	planet = {
+		class = "pc_crystal_asteroid"
+		orbit_distance = 0
+		orbit_angle = 90
+		size = 1
+		has_ring = no
+	}
+
+	planet = {
+		class = "pc_crystal_asteroid"
+		orbit_distance = 0
+		orbit_angle = 90
+		size = 2
+		has_ring = no
+		init_effect = {
+			set_deposit = d_rare_crystals_2
+		}
+	}
+
+	planet = {
+		class = "pc_ice_asteroid"
+		orbit_distance = 40
+		orbit_angle = 45
+		size = 3
+		has_ring = no
+	}
+
+	planet = {
+		class = "pc_ice_asteroid"
+		orbit_distance = 0
+		orbit_angle = 90
+		size = 4
+		has_ring = no
+	}
+
+	planet = {
+		class = "pc_ice_asteroid"
+		orbit_distance = 0
+		orbit_angle = 90
+		size = 3
+		has_ring = no
+		init_effect = {
+			set_deposit = d_minerals_2
+		}
+	}
+
+	planet = {
+		class = "pc_ice_asteroid"
+		orbit_distance = 0
+		orbit_angle = 90
+		size = 5
+		has_ring = no
+	}
+
+	init_effect = {
+		create_ambient_object = {
+			type = "celestial_unbidden_rift"
+			location = this
+			entity_offset_height = { min = -15 max = -15 }
+			entity_scale_to_size = yes
+			scale = 0.25
+		}
+		last_created_ambient_object = {	
+			set_ambient_object_flag = celestial_unbidden_rift
+			save_global_event_target_as = celestial_unbidden_rift
+			set_location = {
+				target = prev
+				distance = -120
+				angle = 80
+			}
+		}
+		star = {
+			create_ambient_object = {
+				type = "nebula_L4_entity"
+				location = this
+			}
+			last_created_ambient_object = {
+				set_ambient_object_flag = celestial_extradimensional_system_effect
+				set_location = {
+					target = prev
+					distance = 0
+					angle = random
+				}
+			}
+		}
+	}
+}

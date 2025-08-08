@@ -1,0 +1,467 @@
+# celestial_relics.txt
+# By MadeinCanada
+
+@activation_cost = 3000
+@triumph_duration = 3600
+@triumph_duration_short = 1800
+@triumph_duration_veryshort = 900
+
+# Celestial Compass
+r_celestial_compass_alive = {
+	activation_duration = @triumph_duration
+	portrait = "GFX_celestial_compass_alive"
+	sound = "relic_activation_extradimensional_warlock"
+
+	resources = {
+		category = relics
+		cost = {
+			energy = 2500
+		}
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			always = yes
+		}
+		country_physics_tech_research_speed = 0.10
+		ship_base_speed_mult = 0.15
+	}
+
+	score = 1000
+
+	active_effect = {
+		custom_tooltip = relic_compass_alive_effect
+		custom_tooltip = relic_triumph_cooldown
+		hidden_effect = {
+			country_event = { id = celestial_setup.15 }
+			set_country_flag = celestial_compass_used
+		}
+	}
+
+	# Possible check for activation
+	possible = {
+		NOT = { has_country_flag = celestial_compass_used }
+	}
+}
+
+r_celestial_compass_broken = {
+	activation_duration = @triumph_duration
+	portrait = "GFX_celestial_compass_broken"
+	sound = "relic_activation_extradimensional_warlock"
+
+	resources = {
+		category = relics
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			always = yes
+		}
+		country_physics_tech_research_speed = 0.05
+	}
+
+	active_effect = {
+	}
+
+	score = 500
+
+	# Possible check for activation
+	possible = {
+		custom_tooltip = {
+			fail_text = "relic_cant_activate"
+			always = no
+		}
+		custom_tooltip = {
+			fail_text = "celestial_relic_timer"
+			always = no
+		}
+	}
+}
+
+r_celestial_compass_final = {
+	activation_duration = @triumph_duration
+	portrait = "GFX_celestial_compass_alive"
+	sound = "relic_activation_extradimensional_warlock"
+
+	resources = {
+		category = relics
+		cost = {
+			unity = 2000
+			energy = 5000
+		}
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			always = yes
+		}
+		country_physics_tech_research_speed = 0.10
+		ship_base_speed_mult = 0.15
+	}
+
+	score = 2500
+
+	active_effect = {
+		add_modifier = {
+			modifier = celestial_r_celestial_compass_final_modifier
+			days = @triumph_duration
+		}
+		custom_tooltip = relic_triumph_cooldown
+		hidden_effect = {
+			set_timed_country_flag = { flag = r_celestial_compass_final days = @triumph_duration }	
+			add_modifier = {
+				modifier = "relic_activation_cooldown"
+				days = @triumph_duration
+			}
+		}
+	}
+
+	# Possible check for activation
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_relic_no_cooldown"
+			NOT = { has_modifier = relic_activation_cooldown }
+		}
+	}
+}
+
+r_celestial_compass_weak = {
+	activation_duration = @triumph_duration
+	portrait = "GFX_celestial_compass_alive"
+	sound = "relic_activation_extradimensional_warlock"
+
+	resources = {
+		category = relics
+		cost = {
+			unity = 2000
+			energy = 2000
+		}
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			always = yes
+		}
+		country_physics_tech_research_speed = 0.05
+		ship_base_speed_mult = 0.1
+	}
+
+	score = 1500
+
+	active_effect = {
+		add_modifier = {
+			modifier = celestial_r_celestial_compass_weak_modifier
+			days = @triumph_duration
+		}
+		custom_tooltip = relic_triumph_cooldown
+		hidden_effect = {
+			set_timed_country_flag = { flag = r_celestial_compass_final days = @triumph_duration }	
+			add_modifier = {
+				modifier = "relic_activation_cooldown"
+				days = @triumph_duration
+			}
+		}
+	}
+
+	# Possible check for activation
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_relic_no_cooldown"
+			NOT = { has_modifier = relic_activation_cooldown }
+		}
+	}
+}
+
+# Mission Relics
+r_celestial_aetherial_codex = {
+	activation_duration = @triumph_duration
+	portrait = "GFX_celestial_aetherial_codex"
+	sound = "relic_activation_extradimensional_warlock"
+
+	resources = {
+		category = relics
+		cost = {
+			unity = 2000
+		}
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			always = yes
+		}
+		num_tech_alternatives_add = 1
+		planet_researchers_produces_mult = 0.15
+	}
+
+	score = 1000
+
+	active_effect = {
+		custom_tooltip = relic_aetherial_codex_effect
+		custom_tooltip = relic_triumph_cooldown
+		hidden_effect = {
+			celestial_codex_effect = yes
+			set_timed_country_flag = { flag = r_celestial_aetherial_codex days = @triumph_duration }	
+			add_modifier = {
+				modifier = "relic_activation_cooldown"
+				days = @triumph_duration
+			}
+		}
+	}
+
+	# Possible check for activation
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_relic_no_cooldown"
+			NOT = { has_modifier = relic_activation_cooldown }
+		}
+	}
+}
+
+r_celestial_profane_arca = {
+	activation_duration = @triumph_duration
+	portrait = "GFX_celestial_profane_arca"
+	sound = "relic_activation_extradimensional_warlock"
+
+	resources = {
+		category = relics
+		cost = {
+			unity = 2000
+		}
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			always = yes
+		}
+		diplomacy_upkeep_mult = -0.50
+		country_trust_growth = 0.50
+	}
+
+	score = 1000
+
+	active_effect = {
+		custom_tooltip = relic_profane_arca_effect
+		add_modifier = {
+			modifier = celestial_profane_arca_modifier
+			days = 3600
+		}
+		custom_tooltip = relic_triumph_cooldown
+		hidden_effect = {
+			celestial_tome_effect = yes
+			set_timed_country_flag = { flag = r_celestial_profane_arca days = @triumph_duration }	
+			add_modifier = {
+				modifier = "relic_activation_cooldown"
+				days = @triumph_duration
+			}
+		}
+	}
+
+	# Possible check for activation
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_relic_no_cooldown"
+			NOT = { has_modifier = relic_activation_cooldown }
+		}
+	}
+}
+
+r_celestial_quantum_gem = {
+	activation_duration = @triumph_duration
+	portrait = "GFX_celestial_quantum_gem"
+	sound = "relic_activation_extradimensional_warlock"
+
+	resources = {
+		category = relics
+		cost = {
+			unity = 2000
+			energy = 3000
+		}
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			always = yes
+		}
+		ship_evasion_mult = 0.20
+		ship_base_speed_mult = 0.10
+		ship_accuracy_mult = 0.10
+
+	}
+
+	score = 1000
+
+	active_effect = {
+		custom_tooltip = relic_quantum_gem_effect
+		custom_tooltip = relic_triumph_cooldown
+		hidden_effect = {
+			celestial_crystal_effect = yes
+			set_timed_country_flag = { flag = r_celestial_quantum_gem days = @triumph_duration }	
+			add_modifier = {
+				modifier = "relic_activation_cooldown"
+				days = @triumph_duration
+			}
+		}
+	}
+
+	# Possible check for activation
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_relic_no_cooldown"
+			NOT = { has_modifier = relic_activation_cooldown }
+		}
+	}
+}
+
+r_celestial_spectral_beacon = {
+	activation_duration = @triumph_duration
+	portrait = "GFX_celestial_spectral_beacon"
+	sound = "relic_activation_extradimensional_warlock"
+
+	resources = {
+		category = relics
+		cost = {
+			unity = 2000
+		}
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			always = yes
+		}
+		ship_shield_mult = 0.50
+		country_physics_research_produces_mult = 0.20
+	}
+
+	score = 1000
+
+	active_effect = {
+		custom_tooltip = relic_spectral_beacon_effect
+		custom_tooltip = relic_triumph_cooldown
+		hidden_effect = {
+			celestial_beacon_effect = yes
+			set_timed_country_flag = { flag = r_celestial_spectral_beacon days = @triumph_duration }	
+			add_modifier = {
+				modifier = "relic_activation_cooldown"
+				days = @triumph_duration
+			}
+		}
+	}
+
+	# Possible check for activation
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_relic_no_cooldown"
+			NOT = { has_modifier = relic_activation_cooldown }
+		}
+	}
+}
+
+r_celestial_star_core = {
+	activation_duration = @triumph_duration
+	portrait = "GFX_celestial_star_core"
+	sound = "relic_activation_extradimensional_warlock"
+
+	resources = {
+		category = relics
+		cost = {
+			unity = 2000
+			alloys = 1000
+		}
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			always = yes
+		}
+		country_energy_produces_mult = 0.10
+		starbases_upkeep_mult = -0.10
+		shipsize_starbase_outpost_build_speed_mult = 0.50
+	}
+
+	score = 1000
+
+	active_effect = {
+		custom_tooltip = relic_star_core_effect
+		custom_tooltip = relic_triumph_cooldown
+		hidden_effect = {
+			celestial_core_effect = yes
+			set_timed_country_flag = { flag = r_celestial_star_core days = @triumph_duration }	
+			add_modifier = {
+				modifier = "relic_activation_cooldown"
+				days = @triumph_duration
+			}
+		}
+	}
+
+	# Possible check for activation
+	possible = {
+		custom_tooltip = {
+			fail_text = "celestial_star_core_depleted"
+			check_variable = {
+				which = celestial_core_module_uses
+				value > 0
+			}
+		}
+		custom_tooltip = {
+			fail_text = "requires_relic_no_cooldown"
+			NOT = { has_modifier = relic_activation_cooldown }
+		}
+	}
+}
+
+r_celestial_tainted_gem = {
+	activation_duration = @triumph_duration
+	portrait = "GFX_celestial_tainted_gem"
+	sound = "relic_activation_extradimensional_warlock"
+
+	resources = {
+		category = relics
+		cost = {
+			unity = 2000
+			# sr_dark_matter = 50
+		}
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			always = yes
+		}
+		species_leader_exp_gain = 0.10
+		country_unity_produces_mult = 0.15
+	}
+
+	score = 1000
+
+	active_effect = {
+		custom_tooltip = relic_tainted_gem_effect
+		add_monthly_resource_mult = {
+			resource = rare_crystals
+			value = 120
+			min = 1000
+			max = 50000
+		}
+		add_monthly_resource_mult = {
+			resource = sr_dark_matter
+			value = 120
+			min = 1000
+			max = 50000
+		}
+		custom_tooltip = relic_triumph_cooldown
+		hidden_effect = {
+			celestial_gem_effect = yes
+			set_timed_country_flag = { flag = r_celestial_tainted_gem days = @triumph_duration }	
+			add_modifier = {
+				modifier = "relic_activation_cooldown"
+				days = @triumph_duration
+			}
+		}
+	}
+
+	# Possible check for activation
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_relic_no_cooldown"
+			NOT = { has_modifier = relic_activation_cooldown }
+		}
+	}
+}
