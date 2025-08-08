@@ -1,0 +1,3676 @@
+#########################################################################################
+# Thayo Everdawn - The Everdawn Heist
+# Author: TheRingBearer
+#########################################################################################
+namespace = hskv
+# HOTFIX Considerations
+# Can do another small balance pass on the numbers
+# Loc pass again if you want
+# Fix/test the situation where the FE is killed off early... or just don't care and hope it just works
+# Triggers event when each country first sends a ship into the system (once per country)
+# Scope = Ship
+# From = System
+# FromFrom = Country
+ship_event = {
+	id = hskv.1
+	hide_window = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		From = {
+			has_star_flag = hskv_azure_dream_system
+		}
+		FromFrom = {
+			is_ai = no
+		}
+		NOT = {
+			any_playable_country = {
+				has_country_flag = hskv_thayo_everdawn_country
+			}
+		}
+	}
+	immediate = {
+		FROM = {
+			random_system_planet = {
+				limit = {
+					has_planet_flag = hskv_azure_prison_planet
+				}
+				add_anomaly = {
+					category = hskv_azure_prison_anomaly
+				}
+			}
+		}
+	}
+}
+
+# Special Project to follow up on the signal
+ship_event = {
+	id = hskv.10
+	title = hskv.10.name
+	desc = hskv.10.desc
+	picture = GFX_evt_shielded_planet
+	show_sound = event_mysterious_signal
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = {
+		name = INTERESTING
+		owner = {
+			enable_special_project = {
+				name = hskv_investigate_signal_special_project
+				location = capital_star
+				owner = this
+			}
+		}
+		hidden_effect = {
+			owner = {
+				set_country_flag = hskv_thayo_everdawn_country
+			}
+		}
+	}
+}
+
+# Special Project Complete, initiate Communications
+country_event = {
+	id = hskv.11
+	title = hskv.11.name
+	desc = hskv.11.desc
+	picture = GFX_evt_mysterious_signal
+	show_sound = event_default
+	is_triggered_only = yes
+	option = {
+		name = ON_SCREEN
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv.12
+					days = 1
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv.12
+	title = hskv.12.name
+	desc = hskv.12.desc
+	show_sound = event_ship_bridge
+	diplomatic = yes
+	is_triggered_only = yes
+	picture_event_data = {
+		room = hskv_mysterious_signal_room
+	}
+	option = {
+		name = hskv.12.option.a
+		response_text = hskv.12.option.a.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = hskv.12.option.b
+		response_text = hskv.12.option.b.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = hskv.12.option.c
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv.13
+					days = 1
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv.13
+	title = hskv.12.name
+	desc = hskv.13.desc
+	show_sound = event_ship_bridge
+	diplomatic = yes
+	is_triggered_only = yes
+	picture_event_data = {
+		room = hskv_mysterious_signal_room
+	}
+	option = {
+		name = hskv.13.option.a
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv.15
+					days = 1
+				}
+			}
+		}
+	}
+	option = {
+		name = hskv.13.option.b
+		custom_tooltip = hskv.30.option.dismiss.tooltip
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv.14
+					days = 1
+				}
+			}
+		}
+	}
+}
+
+# Rejected Thayo :(
+country_event = {
+	id = hskv.14
+	title = hskv.12.name
+	desc = hskv.14.desc
+	show_sound = event_ship_bridge
+	diplomatic = yes
+	is_triggered_only = yes
+	picture_event_data = {
+		room = hskv_mysterious_signal_room
+	}
+	option = {
+		name = END_TRANSMISSION
+	}
+}
+
+# To Crack the Shield
+country_event = {
+	id = hskv.15
+	title = hskv.12.name
+	desc = hskv.15.desc
+	show_sound = event_ship_bridge
+	diplomatic = yes
+	is_triggered_only = yes
+	picture_event_data = {
+		room = hskv_mysterious_signal_room
+	}
+	option = {
+		name = INTRIGUING
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv.16
+					days = 1
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv.16
+	title = hskv.12.name
+	desc = hskv.16.desc
+	show_sound = event_ship_bridge
+	diplomatic = yes
+	is_triggered_only = yes
+	picture_event_data = {
+		room = hskv_mysterious_signal_room
+	}
+	option = {
+		name = END_TRANSMISSION
+		hidden_effect = {
+			owner = {
+				begin_event_chain = {
+					event_chain = "hskv_thayo_crack_the_shield_chain"
+				}
+				country_event = {
+					id = hskv.20
+					days = 30
+				}
+			}
+		}
+	}
+}
+
+# To Crack the Shield
+country_event = {
+	id = hskv.20
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			# Has a starbase with the module in the right system
+			limit = {
+				count_owned_starbase = {
+					count >= 1
+					limit = {
+						has_starbase_building = disruption_field
+						solar_system = {
+							has_star_flag = hskv_azure_dream_system
+						}
+					}
+				}
+			}
+			country_event = {
+				id = hskv.21
+			}
+		}
+		else = {
+			country_event = {
+				id = hskv.20
+				days = 30
+			}
+		}
+	}
+}
+
+# Enable Special Project to do the thing
+# Yeah if you decide to drop the starbase or module you can still do it, but whatever.
+country_event = {
+	id = hskv.21
+	title = hskv.21.name
+	desc = hskv.21.desc
+	picture = GFX_evt_mysterious_signal
+	show_sound = event_default
+	is_triggered_only = yes
+	option = {
+		name = UNDERSTOOD
+		hidden_effect = {
+			owner = {
+				end_event_chain = "hskv_thayo_crack_the_shield_chain"
+			}
+		}
+		owner = {
+			enable_special_project = {
+				name = hskv_destablize_shield_special_project
+			}
+		}
+	}
+}
+
+# Shield got cracked open like an egg
+country_event = {
+	id = hskv.22
+	title = hskv.22.name
+	desc = hskv.22.desc
+	picture = GFX_evt_machine_space_battle
+	show_sound = event_energy_field
+	is_triggered_only = yes
+	option = {
+		name = BATTLESTATIONS
+		hidden_effect = {
+			hskv_create_fe_aux_defense_country = yes
+			hskv_create_shield_defense_force = yes
+		}
+		every_system = {
+			limit = {
+				has_star_flag = hskv_azure_dream_system
+			}
+			every_ship_in_system = {
+				add_modifier = {
+					modifier = hskv_emp_blast
+					days = 60
+				}
+			}
+		}
+	}
+}
+
+# Destroyed Shield Defense Fleet
+# on_fleet_destroyed_perp
+# This = owner of fleet 1 (combatant)
+# From = owner of fleet 2 (destroyed)
+# FromFrom = fleet 1
+# FromFromFrom = fleet 2
+country_event = {
+	id = hskv.23
+	hide_window = yes
+	fire_only_once = yes
+	is_triggered_only = yes
+	trigger = {
+		FromFromFrom = {
+			has_fleet_flag = hskv_shield_defense_force_fleet
+		}
+	}
+	immediate = {
+		every_country = {
+			limit = {
+				has_country_flag = hskv_thayo_everdawn_country
+			}
+			country_event = {
+				id = hskv.24
+				days = 1
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv.24
+	title = hskv.24.name
+	desc = hskv.24.desc
+	picture = GFX_evt_astral_rift_riftworld_visit
+	show_sound = event_default
+	is_triggered_only = yes
+	option = {
+		name = AMAZING
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv.26
+					days = 1
+				}
+				hskv_get_event_target_azure_prison_planet = yes
+				event_target:hskv_azure_prison_planet = {
+					if = {
+						limit = {
+							from = {
+								OR = {
+									has_trait = trait_pc_alpine_preference
+									has_trait = trait_pc_arctic_preference
+									has_trait = trait_pc_tundra_preference
+								}
+							}
+						}
+						random_list = {
+							8 = {
+								change_pc = pc_alpine
+							}
+							8 = {
+								change_pc = pc_arctic
+							}
+							8 = {
+								change_pc = pc_tundra
+							}
+							1 = {
+								change_pc = pc_gaia
+							}
+						}
+					}
+					else_if = {
+						limit = {
+							from = {
+								OR = {
+									has_trait = trait_pc_desert_preference
+									has_trait = trait_pc_arid_preference
+									has_trait = trait_pc_savannah_preference
+								}
+							}
+						}
+						random_list = {
+							8 = {
+								change_pc = pc_desert
+							}
+							8 = {
+								change_pc = pc_arid
+							}
+							8 = {
+								change_pc = pc_savannah
+							}
+							1 = {
+								change_pc = pc_gaia
+							}
+						}
+					}
+					else_if = {
+						limit = {
+							from = {
+								OR = {
+									has_trait = trait_pc_tropical_preference
+									has_trait = trait_pc_continental_preference
+									has_trait = trait_pc_ocean_preference
+								}
+							}
+						}
+						random_list = {
+							8 = {
+								change_pc = pc_tropical
+							}
+							8 = {
+								change_pc = pc_continental
+							}
+							8 = {
+								change_pc = pc_ocean
+							}
+							1 = {
+								change_pc = pc_gaia
+							}
+						}
+					}
+					else = {
+						random_list = {
+							5 = {
+								change_pc = pc_alpine
+							}
+							5 = {
+								change_pc = pc_arctic
+							}
+							5 = {
+								change_pc = pc_tundra
+							}
+							5 = {
+								change_pc = pc_continental
+							}
+							5 = {
+								change_pc = pc_ocean
+							}
+							5 = {
+								change_pc = pc_tropical
+							}
+							5 = {
+								change_pc = pc_arid
+							}
+							5 = {
+								change_pc = pc_desert
+							}
+							5 = {
+								change_pc = pc_savannah
+							}
+							3 = {
+								change_pc = pc_gaia
+							}
+						}
+					}
+					reroll_deposits = yes
+					add_deposit = d_hskv_azure_prison_facility
+					add_modifier = {
+						modifier = low_gravity
+					}
+				}
+			}
+		}
+	}
+}
+
+## (on_colonized)
+planet_event = {
+	id = hskv.25
+	hide_window = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_planet_flag = hskv_azure_prison_planet
+	}
+	immediate = {
+		add_building = building_hskv_azure_prision_singularity_fabricator
+	}
+}
+
+country_event = {
+	id = hskv.26
+	title = hskv.26.name
+	desc = hskv.26.desc
+	picture = GFX_evt_astral_rift_research_lab
+	show_sound = event_ship_bridge
+	is_triggered_only = yes
+	option = {
+		name = AMAZING
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv.27
+					days = 1
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv.27
+	title = hskv.27.name
+	desc = hskv.27.desc
+	picture = GFX_evt_resource_cache
+	show_sound = event_think_tank_build_upgrade
+	is_triggered_only = yes
+	option = {
+		name = ONSCREEN
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv.30
+					days = 1
+				}
+			}
+		}
+	}
+}
+
+# Your Hired!
+# TODO - POSSIBLE BUG HERE SOMEHOW IDK BUT PLEASE WORK
+country_event = {
+	id = hskv.30
+	title = hskv_event_thayo_title
+	desc = hskv.30.desc
+	picture = GFX_leader_recruitment_bg_renowned
+	show_sound = event_default
+	diplomatic_title = NAME_hskv_thayo_everdawn
+	event_window_type = leader_recruit
+	is_triggered_only = yes
+	immediate = {
+		create_country = {
+			name = random
+			type = faction
+			auto_delete = yes
+			flag = {
+				icon = {
+					category = "special"
+					file = "unknown.dds"
+				}
+				background = {
+					category = "backgrounds"
+					file = "00_solid.dds"
+				}
+				colors = {
+					"red"
+					"red"
+					"null"
+					"null"
+				}
+			}
+			effect = {
+				save_event_target_as = hskv_leader_country
+			}
+		}
+		event_target:hskv_leader_country = {
+			create_species = {
+				name = UNKNOWN
+				class = AVI
+				portrait = hskv_thayo_portrait
+				namelist = random_class
+				traits = {
+				}
+				immortal = no
+				allow_negative_traits = no
+				effect = {
+					save_event_target_as = hskv_leader_species
+				}
+			}
+			create_leader = {
+				class = official
+				species = event_target:hskv_leader_species
+				name = NAME_hskv_thayo_everdawn
+				skill = 1
+				gender = male
+				event_leader = yes
+				background_ethic = ethic_authoritarian
+				skip_background_generation = yes
+				custom_description = hskv_thayo_everdawn_leader_desc
+				custom_catch_phrase = hskv_thayo_everdawn_leader_catch_phrase
+				immortal = yes
+				hide_age = yes
+				randomize_traits = yes
+				effect = {
+					set_skill = 1
+					set_leader_flag = is_in_recruit_window
+					remove_all_traits = yes
+				}
+			}
+		}
+		last_created_leader = {
+			set_leader_flag = legendary_leader
+			set_leader_flag = immune_to_negative_traits
+			set_leader_flag = cannot_be_ruler
+			set_leader_flag = hskv_thayo_everdawn_leader
+			add_trait = {
+				trait = subclass_official_diplomacy_councilor
+				show_message = no
+			}
+			add_trait = {
+				trait = hskv_leader_trait_thayo_everdawn
+				show_message = no
+			}
+			add_trait = {
+				trait = leader_trait_psionic
+				show_message = no
+			}
+			add_trait = {
+				trait = trait_ruler_charismatic
+				show_message = no
+			}
+			add_trait = {
+				trait = hskv_leader_trait_rusty_3
+				show_message = no
+			}
+			set_age = 20
+			save_event_target_as = hskv_thayo_everdawn_leader
+		}
+	}
+	picture_event_data = {
+		portrait = event_target:hskv_thayo_everdawn_leader
+		room = ethic_spaceship_room
+	}
+	option = {
+		name = hskv.30.option.a
+		response_text = hskv.30.option.a.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = hskv.30.option.b
+		response_text = hskv.30.option.b.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = hskv.30.option.c
+		response_text = hskv.30.option.c.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = hskv.30.option.dismiss
+		custom_tooltip = hskv.30.option.dismiss.tooltip
+		tag = dismiss_leader
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv.4000
+					days = 5000
+				}
+				country_event = {
+					id = hskv.31
+					days = 1
+				}
+			}
+		}
+	}
+	option = {
+		name = hskv.30.option.hire
+		custom_tooltip = hskv.30.option.hire.tooltip
+		allow = {
+			NOR = {
+				is_gestalt = yes
+				is_homicidal = yes
+			}
+		}
+		tag = hire_leader
+		hidden_effect = {
+			clone_leader = {
+				target = event_target:hskv_thayo_everdawn_leader
+				skip_background_generation = yes
+				randomize_traits = no
+				set_age = 20
+				effect = {
+					set_leader_flag = legendary_leader
+					set_leader_flag = immune_to_negative_traits
+					set_leader_flag = cannot_be_ruler
+					set_leader_flag = cannot_explore_rift
+					add_trait = {
+						trait = subclass_official_diplomacy_councilor
+						show_message = no
+					}
+					add_trait = {
+						trait = hskv_leader_trait_thayo_everdawn
+						show_message = no
+					}
+					add_trait = {
+						trait = leader_trait_psionic
+						show_message = no
+					}
+					add_trait = {
+						trait = trait_ruler_charismatic
+						show_message = no
+					}
+					add_trait = {
+						trait = hskv_leader_trait_rusty_3
+						show_message = no
+					}
+					set_leader_flag = no_council_traits
+					set_leader_flag = no_normal_traits
+					set_leader_flag = no_subclass_traits
+					set_leader_flag = no_destiny_traits
+					set_leader_flag = hskv_thayo_everdawn_leader
+				}
+			}
+			hire_event_leader_message = {
+				LEADER = hskv_thayo_everdawn_leader
+			}
+			owner = {
+				# Lower Rusty pentalty every 20 years (First one is slightly faster)
+				country_event = {
+					id = hskv.95
+					days = 7000
+				}
+				begin_event_chain = {
+					event_chain = "hskv_thayo_levelup_chain"
+				}
+			}
+		}
+	}
+}
+
+# Escapes into the sunset... for now
+country_event = {
+	id = hskv.31
+	title = hskv_event_thayo_title
+	desc = hskv.31.desc
+	picture = GFX_evt_ship_travel
+	show_sound = event_ship_thrusters
+	is_triggered_only = yes
+	option = {
+		name = hskv.4000.response
+	}
+}
+
+# Thayo Derusts a bit
+country_event = {
+	id = hskv.95
+	title = hskv.95.name
+	desc = hskv.95.desc
+	picture = GFX_evt_legendary_leader
+	show_sound = event_default
+	is_triggered_only = yes
+	trigger = {
+		any_owned_leader = {
+			has_leader_flag = hskv_thayo_everdawn_leader
+			has_base_skill < 9
+		}
+	}
+	immediate = {
+		hskv_get_event_target_thayo_leader = yes
+	}
+	option = {
+		name = UNDERSTOOD
+		event_target:hskv_thayo_everdawn_leader = {
+			remove_trait = hskv_leader_trait_rusty_3
+			add_trait = {
+				trait = hskv_leader_trait_rusty_2
+			}
+		}
+		hidden_effect = {
+			event_target:hskv_thayo_everdawn_leader = {
+				remove_leader_flag = no_council_traits
+				remove_leader_flag = no_normal_traits
+				remove_leader_flag = no_destiny_traits
+				remove_trait = hskv_leader_trait_rusty_3
+				add_trait = {
+					trait = hskv_leader_trait_rusty_2
+				}
+				set_leader_flag = no_council_traits
+				set_leader_flag = no_normal_traits
+				set_leader_flag = no_destiny_traits
+			}
+			country_event = {
+				id = hskv.96
+				days = 7120
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv.96
+	title = hskv.96.name
+	desc = hskv.96.desc
+	picture = GFX_evt_legendary_leader
+	show_sound = event_default
+	is_triggered_only = yes
+	trigger = {
+		any_owned_leader = {
+			has_leader_flag = hskv_thayo_everdawn_leader
+			has_base_skill < 9
+		}
+	}
+	immediate = {
+		hskv_get_event_target_thayo_leader = yes
+	}
+	option = {
+		name = UNDERSTOOD
+		event_target:hskv_thayo_everdawn_leader = {
+			remove_trait = hskv_leader_trait_rusty_2
+			add_trait = {
+				trait = hskv_leader_trait_rusty_1
+			}
+		}
+		hidden_effect = {
+			event_target:hskv_thayo_everdawn_leader = {
+				remove_leader_flag = no_council_traits
+				remove_leader_flag = no_normal_traits
+				remove_leader_flag = no_destiny_traits
+				remove_trait = hskv_leader_trait_rusty_2
+				add_trait = {
+					trait = hskv_leader_trait_rusty_1
+				}
+				set_leader_flag = no_council_traits
+				set_leader_flag = no_normal_traits
+				set_leader_flag = no_destiny_traits
+			}
+			country_event = {
+				id = hskv.97
+				days = 7120
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv.97
+	title = hskv.97.name
+	desc = hskv.97.desc
+	picture = GFX_evt_legendary_leader
+	show_sound = event_default
+	is_triggered_only = yes
+	trigger = {
+		any_owned_leader = {
+			has_leader_flag = hskv_thayo_everdawn_leader
+			has_base_skill < 9
+		}
+	}
+	immediate = {
+		hskv_get_event_target_thayo_leader = yes
+	}
+	option = {
+		name = EXCELLENT
+		event_target:hskv_thayo_everdawn_leader = {
+			remove_trait = hskv_leader_trait_rusty_1
+			add_trait = {
+				trait = hskv_leader_trait_adaptable
+			}
+		}
+		hidden_effect = {
+			event_target:hskv_thayo_everdawn_leader = {
+				remove_leader_flag = no_council_traits
+				remove_leader_flag = no_normal_traits
+				remove_leader_flag = no_destiny_traits
+				remove_trait = hskv_leader_trait_rusty_1
+				add_trait = {
+					trait = hskv_leader_trait_adaptable
+				}
+				set_leader_flag = no_council_traits
+				set_leader_flag = no_normal_traits
+				set_leader_flag = no_destiny_traits
+			}
+		}
+	}
+}
+
+# Thayo Levels up
+# Xp to level up, 400, 1100, 2100, 3400, 5000, 6900, 9100, 11600, 14400 
+# XP to get to lvl 8 - 28000
+# Time to level 8 with no bonuses and just one job - 466 years
+# Time to level 8 with no bonuses and two jobs - 233 years
+# Time to level 8 with 20% bonuses and two jobs - 194 years
+# A leader leveled up.
+# Scope = Country
+# From = Leader
+country_event = {
+	id = hskv.100
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		From = {
+			has_leader_flag = hskv_thayo_everdawn_leader
+		}
+	}
+	immediate = {
+		if = {
+			limit = {
+				From = {
+					has_base_skill = 2
+				}
+			}
+			country_event = {
+				id = hskv.120
+			}
+		}
+		if = {
+			limit = {
+				From = {
+					has_base_skill = 3
+				}
+			}
+			country_event = {
+				id = hskv.130
+			}
+		}
+		if = {
+			limit = {
+				From = {
+					has_base_skill = 4
+				}
+			}
+			country_event = {
+				id = hskv.140
+			}
+		}
+		if = {
+			limit = {
+				From = {
+					has_base_skill = 5
+				}
+			}
+			country_event = {
+				id = hskv.150
+			}
+		}
+		if = {
+			limit = {
+				From = {
+					has_base_skill = 6
+				}
+			}
+			country_event = {
+				id = hskv.160
+			}
+		}
+		if = {
+			limit = {
+				From = {
+					has_base_skill = 7
+				}
+			}
+			country_event = {
+				id = hskv.170
+			}
+		}
+		if = {
+			limit = {
+				From = {
+					has_base_skill = 8
+				}
+			}
+			country_event = {
+				id = hskv.180
+			}
+		}
+	}
+}
+
+# Nothing off, just get something positive
+# Gain intel/commms with the FE and some society research
+country_event = {
+	id = hskv.120
+	title = hskv_event_thayo_title
+	desc = hskv.120.desc
+	picture = GFX_evt_legendary_leader
+	show_sound = event_default
+	is_triggered_only = yes
+	immediate = {
+		hskv_get_event_target_thayo_leader = yes
+	}
+	option = {
+		name = INTERESTING
+		owner = {
+			establish_communications = event_target:hskv_target_fe_country
+			add_intel = {
+				amount = 30
+				who = event_target:hskv_target_fe_country
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier3researchreward
+				min = @tier2researchmin
+				max = @tier3researchmax
+			}
+			event_target:hskv_thayo_everdawn_leader = {
+				add_trait = {
+					trait = leader_trait_politician
+				}
+			}
+		}
+		hidden_effect = {
+			event_target:hskv_thayo_everdawn_leader = {
+				remove_leader_flag = no_council_traits
+				remove_leader_flag = no_normal_traits
+				remove_leader_flag = no_destiny_traits
+				add_trait = {
+					trait = leader_trait_politician
+				}
+				set_leader_flag = no_council_traits
+				set_leader_flag = no_normal_traits
+				set_leader_flag = no_destiny_traits
+			}
+			owner = {
+				country_event = {
+					id = hskv.121
+					days = 1424
+					random = 712
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv.121
+	title = hskv.121.name
+	desc = hskv.121.desc
+	picture = GFX_evt_spy_network
+	show_sound = event_default
+	is_triggered_only = yes
+	trigger = {
+		any_owned_leader = {
+			has_leader_flag = hskv_thayo_everdawn_leader
+		}
+	}
+	immediate = {
+		hskv_get_event_target_thayo_leader = yes
+		random_owned_planet = {
+			save_event_target_as = hskv_target_planet
+		}
+	}
+	option = {
+		name = hskv.121.option.a
+		custom_tooltip = hskv.121.option.a.tooltip
+		# Gain 3 pops, but also costs resources and they bring significant crime with them
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 1000
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				energy = -1000
+			}
+			event_target:hskv_target_planet = {
+				add_modifier = {
+					modifier = crime_wave
+					years = 10
+				}
+				add_modifier = {
+					modifier = hskv_crime_city
+					years = 40
+				}
+				create_pop_group = {
+					species = owner
+					ethos = random
+					size = 1200
+				}
+			}
+			add_resource = {
+				unity = 500
+			}
+		}
+	}
+	option = {
+		name = hskv.121.option.b
+		custom_tooltip = hskv.121.option.b.tooltip
+		# The least costs overall, but you do gain a minor longterm crime modifier
+		owner = {
+			add_resource = {
+				energy = 750
+			}
+			add_modifier = {
+				modifier = hskv_deal_with_crime_cities
+				years = 40
+			}
+		}
+	}
+	option = {
+		name = hskv.121.option.c
+		custom_tooltip = hskv.121.option.c.tooltip
+		# Most expensive short term, but mostly negates the event
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = unity
+					value >= 1000
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				unity = -1000
+			}
+			event_target:hskv_target_planet = {
+				create_pop_group = {
+					species = owner
+					ethos = random
+					size = 300
+				}
+				add_planet_devastation = 20
+			}
+			add_modifier = {
+				modifier = hskv_fight_crime_cities
+				years = 5
+			}
+		}
+	}
+}
+
+# Shows off his super power organizational skills. Nothing wrong, but at least hint that he is starting to work outside the system
+country_event = {
+	id = hskv.130
+	title = hskv_event_thayo_title
+	desc = hskv.130.desc
+	picture = GFX_evt_legendary_leader
+	show_sound = event_default
+	is_triggered_only = yes
+	immediate = {
+		hskv_get_event_target_thayo_leader = yes
+	}
+	option = {
+		name = UNDERSTOOD
+		owner = {
+			event_target:hskv_thayo_everdawn_leader = {
+				add_trait = {
+					trait = hskv_leader_trait_worker_oversight
+				}
+			}
+		}
+		hidden_effect = {
+			event_target:hskv_thayo_everdawn_leader = {
+				remove_leader_flag = no_council_traits
+				remove_leader_flag = no_normal_traits
+				remove_leader_flag = no_destiny_traits
+				remove_leader_flag = no_subclass_traits
+				add_trait = {
+					trait = hskv_leader_trait_worker_oversight
+				}
+				set_leader_flag = no_council_traits
+				set_leader_flag = no_normal_traits
+				set_leader_flag = no_destiny_traits
+				set_leader_flag = no_subclass_traits
+			}
+			owner = {
+				country_event = {
+					id = hskv.131
+					days = 1000
+					random = 1000
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv.131
+	title = hskv_event_thayo_title
+	desc = hskv.131.desc
+	picture = GFX_evt_spymaster
+	show_sound = event_default
+	is_triggered_only = yes
+	trigger = {
+		any_owned_leader = {
+			has_leader_flag = hskv_thayo_everdawn_leader
+		}
+	}
+	option = {
+		name = PECULIAR
+		hidden_effect = {
+			country_event = {
+				id = hskv.132
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv.132
+	title = hskv_event_thayo_coms_title
+	desc = hskv.132.desc
+	show_sound = event_ship_bridge
+	diplomatic = yes
+	is_triggered_only = yes
+	picture_event_data = {
+		portrait = hskv_thayo_portrait
+		room = ethic_spaceship_room
+	}
+	option = {
+		name = hskv.132.response
+		hidden_effect = {
+			country_event = {
+				id = hskv.133
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv.133
+	title = hskv_event_thayo_coms_title
+	desc = hskv.133.desc
+	show_sound = event_ship_bridge
+	diplomatic = yes
+	is_triggered_only = yes
+	picture_event_data = {
+		portrait = hskv_thayo_portrait
+		room = ethic_spaceship_room
+	}
+	option = {
+		name = hskv.133.response
+		hidden_effect = {
+			country_event = {
+				id = hskv.135
+				days = 1000
+				random = 500
+			}
+		}
+	}
+}
+
+# First Random Crime Wave
+country_event = {
+	id = hskv.135
+	title = hskv_event_thayo_title
+	desc = hskv.135.desc
+	picture = GFX_evt_smugglers_in_bar
+	show_sound = event_default
+	is_triggered_only = yes
+	trigger = {
+		any_owned_leader = {
+			has_leader_flag = hskv_thayo_everdawn_leader
+		}
+	}
+	immediate = {
+		hskv_get_event_target_thayo_leader = yes
+	}
+	option = {
+		name = DISCONCERTING
+		owner = {
+			random_owned_planet = {
+				add_modifier = {
+					modifier = crime_wave
+					years = 10
+				}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv.136
+					days = 600
+					random = 500
+				}
+			}
+		}
+	}
+}
+
+# Thayo's Governing Planet gets a real boost, but then bad event later on
+country_event = {
+	id = hskv.136
+	title = hskv.136.name
+	desc = hskv.136.desc
+	picture = GFX_evt_civil_action
+	show_sound = event_default
+	is_triggered_only = yes
+	trigger = {
+		any_owned_planet = {
+			exists = leader
+			leader = {
+				has_leader_flag = hskv_thayo_everdawn_leader
+			}
+		}
+	}
+	immediate = {
+		hskv_get_event_target_thayo_leader = yes
+		random_owned_planet = {
+			limit = {
+				exists = leader
+				leader = {
+					has_leader_flag = hskv_thayo_everdawn_leader
+				}
+			}
+			save_event_target_as = hskv_thayo_governing_planet
+		}
+	}
+	option = {
+		name = INTRIGUING
+		event_target:hskv_thayo_governing_planet = {
+			add_modifier = {
+				modifier = hskv_productivity_boost
+				years = 10
+			}
+		}
+		hidden_effect = {
+			event_target:hskv_thayo_governing_planet = {
+				planet_event = {
+					id = hskv.137
+					days = 1000
+					random = 2200
+				}
+			}
+		}
+	}
+}
+
+# Factory Explosion
+planet_event = {
+	id = hskv.137
+	title = hskv.137.name
+	desc = hskv.137.desc
+	picture = GFX_evt_night_raid
+	show_sound = event_air_raid_siren
+	is_triggered_only = yes
+	option = {
+		name = UNFORTUNATE
+		planet = {
+			remove_modifier = hskv_productivity_boost
+			add_planet_devastation = 20
+			add_blocker = {
+				type = d_failing_infrastructure
+				blocked_deposit = random
+			}
+			ruin_building = random_no_capital
+			ruin_building = random_no_capital
+			random_owned_pop_group = {
+				kill_pop_group = {
+					pop_group = this
+					percentage = 1
+				}
+			}
+			random_owned_pop_group = {
+				kill_pop_group = {
+					pop_group = this
+					percentage = 1
+				}
+			}
+		}
+	}
+}
+
+# The first hints of his ulterior motives
+# The fruits of him working with your spy agency
+country_event = {
+	id = hskv.140
+	title = hskv_event_thayo_title
+	desc = hskv.140.desc
+	picture = GFX_evt_legendary_leader
+	show_sound = event_default
+	is_triggered_only = yes
+	immediate = {
+		hskv_get_event_target_thayo_leader = yes
+	}
+	option = {
+		name = AMAZING
+		owner = {
+			event_target:hskv_thayo_everdawn_leader = {
+				remove_trait = hskv_leader_trait_thayo_everdawn
+				add_trait = {
+					trait = hskv_leader_trait_thayo_everdawn_2
+				}
+			}
+		}
+		hidden_effect = {
+			event_target:hskv_thayo_everdawn_leader = {
+				remove_leader_flag = no_council_traits
+				remove_leader_flag = no_normal_traits
+				remove_leader_flag = no_destiny_traits
+				remove_trait = hskv_leader_trait_thayo_everdawn
+				add_trait = {
+					trait = hskv_leader_trait_thayo_everdawn_2
+				}
+				set_leader_flag = no_council_traits
+				set_leader_flag = no_normal_traits
+				set_leader_flag = no_destiny_traits
+			}
+			owner = {
+				# Free Assets
+				country_event = {
+					id = hskv.141
+					days = 2000
+				}
+				# Questionable Deal
+				country_event = {
+					id = hskv.142
+					days = 1000
+					random = 3560
+				}
+				# Random Crime
+				country_event = {
+					id = hskv.143
+					days = 356
+					random = 3560
+				}
+			}
+		}
+	}
+}
+
+# Free Assets on everyone, but at what cost?
+country_event = {
+	id = hskv.141
+	title = hskv.141.name
+	desc = hskv.141.desc
+	picture = GFX_evt_spymaster
+	show_sound = event_espionage_concluded
+	is_triggered_only = yes
+	trigger = {
+		any_owned_leader = {
+			has_leader_flag = hskv_thayo_everdawn_leader
+		}
+	}
+	immediate = {
+		hskv_get_event_target_thayo_leader = yes
+		save_event_target_as = hskv_thayo_country
+	}
+	# Massive Free asset with every empire you have communication with DLC LOCKED
+	# IF you lack the DLC, gain 2x intel instead
+	# add_base_country_intel = 10
+	# But also an opinion hit a -25 opinion hit (decays)
+	# Also costs resources
+	option = {
+		name = hskv.141.option.a
+		custom_tooltip = hskv.141.option.a.tooltip
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 5000
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				energy = -5000
+			}
+			if = {
+				limit = {
+					has_nemesis = yes
+				}
+				# Free Intel
+				add_modifier = {
+					modifier = hskv_deep_agents
+				}
+			}
+			else = {
+				add_modifier = {
+					modifier = hskv_deep_agents_2
+				}
+			}
+			if = {
+				limit = {
+					has_nemesis = yes
+				}
+				# Free Assets
+				every_spynetwork = {
+					if = {
+						limit = {
+							target = {
+								is_hive_empire = yes
+							}
+						}
+						espionage_create_asset_hive = yes
+					}
+					else_if = {
+						limit = {
+							target = {
+								is_machine_empire = yes
+							}
+						}
+						espionage_create_asset_machine = yes
+					}
+					else_if = {
+						limit = {
+							target = {
+								is_country_type = default
+							}
+						}
+						espionage_create_asset_regular = yes
+					}
+				}
+			}
+			else = {
+				every_playable_country = {
+					limit = {
+						NOT = {
+							has_country_flag = hskv_thayo_everdawn_country
+						}
+					}
+					event_target:hskv_thayo_country = {
+						add_intel_report = {
+							category = government
+							level = 3
+							days = 240
+							who = prev
+						}
+						add_intel_report = {
+							category = diplomacy
+							level = 3
+							days = 240
+							who = prev
+						}
+						add_intel_report = {
+							category = economy
+							level = 3
+							days = 240
+							who = prev
+						}
+						add_intel_report = {
+							category = technology
+							level = 3
+							days = 240
+							who = prev
+						}
+						add_intel_report = {
+							category = military
+							level = 3
+							days = 240
+							who = prev
+						}
+					}
+				}
+			}
+			# Free Opinion ;)
+			every_playable_country = {
+				limit = {
+					NOT = {
+						has_country_flag = hskv_thayo_everdawn_country
+					}
+				}
+				add_opinion_modifier = {
+					who = PREV
+					modifier = hskv_opinion_hacked_us
+				}
+			}
+		}
+	}
+	# Just get some free temporary intel on every empire instead
+	option = {
+		name = hskv.141.option.b
+		custom_tooltip = hskv.141.option.b.tooltip
+		owner = {
+			every_spynetwork = {
+				add_spy_network_level = 20
+			}
+		}
+		hidden_effect = {
+			every_playable_country = {
+				limit = {
+					NOT = {
+						has_country_flag = hskv_thayo_everdawn_country
+					}
+				}
+				event_target:hskv_thayo_country = {
+					add_intel_report = {
+						category = government
+						level = 2
+						days = 240
+						who = prev
+					}
+					add_intel_report = {
+						category = diplomacy
+						level = 2
+						days = 240
+						who = prev
+					}
+					add_intel_report = {
+						category = economy
+						level = 2
+						days = 240
+						who = prev
+					}
+					add_intel_report = {
+						category = technology
+						level = 2
+						days = 240
+						who = prev
+					}
+					add_intel_report = {
+						category = military
+						level = 2
+						days = 240
+						who = prev
+					}
+				}
+			}
+		}
+	}
+}
+
+# A Questionable deal
+country_event = {
+	id = hskv.142
+	title = hskv.142.name
+	desc = hskv.142.desc
+	picture = GFX_evt_striking_a_deal
+	show_sound = event_default
+	is_triggered_only = yes
+	trigger = {
+		any_owned_leader = {
+			has_leader_flag = hskv_thayo_everdawn_leader
+		}
+	}
+	immediate = {
+		hskv_get_event_target_thayo_leader = yes
+	}
+	# Don't change Thayo's Deal (25 years)
+	# -10% ship/base cost
+	# +15% ship/base upkeep costs
+	option = {
+		name = hskv.142.response.a
+		owner = {
+			add_modifier = {
+				modifier = hskv_questionable_military_contract
+				years = 25
+			}
+		}
+	}
+	# No. Just No
+	# Pay the breach of contract fee to get out of this
+	option = {
+		name = hskv.142.response.b
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 5000
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				energy = -5000
+			}
+		}
+	}
+}
+
+# Mysterious Crimewave
+country_event = {
+	id = hskv.143
+	title = hskv.143.name
+	desc = hskv.143.desc
+	picture = GFX_evt_dark_alley
+	show_sound = event_whispering
+	is_triggered_only = yes
+	trigger = {
+		any_owned_leader = {
+			has_leader_flag = hskv_thayo_everdawn_leader
+		}
+	}
+	immediate = {
+		hskv_get_event_target_thayo_leader = yes
+	}
+	option = {
+		name = UNFORTUNATE
+		owner = {
+			add_resource = {
+				energy = -1000
+				minerals = -500
+				food = -500
+			}
+			random_owned_planet = {
+				limit = {
+					NOT = {
+						has_modifier = crime_wave
+					}
+				}
+				add_modifier = {
+					modifier = crime_wave
+					years = 10
+				}
+			}
+			random_owned_planet = {
+				limit = {
+					NOT = {
+						has_modifier = crime_wave
+					}
+				}
+				add_modifier = {
+					modifier = crime_wave
+					years = 10
+				}
+			}
+		}
+	}
+}
+
+# Specialist Oversight, but now there is proof of his corruption
+country_event = {
+	id = hskv.150
+	title = hskv_event_thayo_title
+	desc = hskv.150.desc
+	picture = GFX_evt_legendary_leader
+	show_sound = event_default
+	is_triggered_only = yes
+	immediate = {
+		hskv_get_event_target_thayo_leader = yes
+	}
+	option = {
+		name = UNDERSTOOD
+		owner = {
+			event_target:hskv_thayo_everdawn_leader = {
+				add_trait = {
+					trait = hskv_leader_trait_specialist_oversight
+				}
+			}
+		}
+		hidden_effect = {
+			event_target:hskv_thayo_everdawn_leader = {
+				remove_leader_flag = no_council_traits
+				remove_leader_flag = no_normal_traits
+				remove_leader_flag = no_destiny_traits
+				add_trait = {
+					trait = hskv_leader_trait_specialist_oversight
+				}
+				set_leader_flag = no_council_traits
+				set_leader_flag = no_normal_traits
+				set_leader_flag = no_destiny_traits
+			}
+			owner = {
+				# Actual Evidence of Corruption
+				country_event = {
+					id = hskv.151
+					days = 1200
+				}
+				# Trade goes up, but a new age of priacy
+				country_event = {
+					id = hskv.152
+					days = 1000
+					random = 3560
+				}
+			}
+		}
+	}
+}
+
+# Actual Evidence of Corruption
+country_event = {
+	id = hskv.151
+	title = hskv.151.name
+	desc = hskv.151.desc
+	picture = GFX_evt_bribery
+	show_sound = event_default
+	is_triggered_only = yes
+	trigger = {
+		any_owned_leader = {
+			has_leader_flag = hskv_thayo_everdawn_leader
+		}
+	}
+	immediate = {
+		hskv_get_event_target_thayo_leader = yes
+	}
+	option = {
+		name = DISAPPOINTING
+		event_target:hskv_thayo_everdawn_leader = {
+			add_trait = {
+				trait = hskv_leader_trait_corruption
+			}
+		}
+		add_resource = {
+			energy = -2500
+		}
+		hidden_effect = {
+			event_target:hskv_thayo_everdawn_leader = {
+				remove_leader_flag = no_council_traits
+				remove_leader_flag = no_normal_traits
+				remove_leader_flag = no_destiny_traits
+				add_trait = {
+					trait = hskv_leader_trait_corruption
+				}
+				set_leader_flag = no_council_traits
+				set_leader_flag = no_normal_traits
+				set_leader_flag = no_destiny_traits
+			}
+		}
+	}
+}
+
+# Trade goes up, but a new age of priacy
+country_event = {
+	id = hskv.152
+	title = hskv.152.name
+	desc = hskv.152.desc
+	picture = GFX_evt_pirates_attacking_cargo
+	show_sound = event_default
+	is_triggered_only = yes
+	trigger = {
+		any_owned_leader = {
+			has_leader_flag = hskv_thayo_everdawn_leader
+		}
+	}
+	immediate = {
+		hskv_get_event_target_thayo_leader = yes
+	}
+	option = {
+		name = DISCONCERTING
+		owner = {
+			add_modifier = {
+				modifier = hskv_new_age_of_piracy
+				years = 40
+			}
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv.153
+					days = 356
+					random = 1560
+				}
+			}
+		}
+	}
+}
+
+# Another Crimewave (this one is big)
+country_event = {
+	id = hskv.153
+	title = hskv.143.name
+	desc = hskv.143.desc
+	picture = GFX_evt_dark_alley
+	show_sound = event_whispering
+	is_triggered_only = yes
+	trigger = {
+		any_owned_leader = {
+			has_leader_flag = hskv_thayo_everdawn_leader
+		}
+	}
+	immediate = {
+		hskv_get_event_target_thayo_leader = yes
+	}
+	option = {
+		name = UNFORTUNATE
+		owner = {
+			add_resource = {
+				energy = -2500
+				minerals = -750
+				food = -500
+				consumer_goods = -750
+				alloys = -500
+			}
+			random_owned_planet = {
+				limit = {
+					NOT = {
+						has_modifier = crime_wave
+					}
+				}
+				add_modifier = {
+					modifier = crime_wave
+					years = 10
+				}
+			}
+			random_owned_planet = {
+				limit = {
+					NOT = {
+						has_modifier = crime_wave
+					}
+				}
+				add_modifier = {
+					modifier = crime_wave
+					years = 10
+				}
+			}
+			random_owned_planet = {
+				limit = {
+					NOT = {
+						has_modifier = crime_wave
+					}
+				}
+				add_modifier = {
+					modifier = crime_wave
+					years = 10
+				}
+			}
+			random_owned_planet = {
+				limit = {
+					NOT = {
+						has_modifier = crime_wave
+					}
+				}
+				add_modifier = {
+					modifier = crime_wave
+					years = 10
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv.160
+	title = hskv_event_thayo_title
+	desc = hskv.160.desc
+	picture = GFX_evt_legendary_leader
+	show_sound = event_default
+	is_triggered_only = yes
+	immediate = {
+		hskv_get_event_target_thayo_leader = yes
+	}
+	option = {
+		name = AMAZING
+		owner = {
+			event_target:hskv_thayo_everdawn_leader = {
+				remove_trait = hskv_leader_trait_thayo_everdawn_2
+				add_trait = {
+					trait = hskv_leader_trait_thayo_everdawn_3
+				}
+			}
+		}
+		hidden_effect = {
+			event_target:hskv_thayo_everdawn_leader = {
+				remove_leader_flag = no_council_traits
+				remove_leader_flag = no_normal_traits
+				remove_leader_flag = no_destiny_traits
+				remove_trait = hskv_leader_trait_thayo_everdawn_2
+				add_trait = {
+					trait = hskv_leader_trait_thayo_everdawn_3
+				}
+				set_leader_flag = no_council_traits
+				set_leader_flag = no_normal_traits
+				set_leader_flag = no_destiny_traits
+			}
+			owner = {
+				# Empirewide Crime, but police are more effective
+				country_event = {
+					id = hskv.161
+					days = 1500
+					random = 600
+				}
+				# Thayo's stealing becomes even more brazen and known
+				country_event = {
+					id = hskv.162
+					days = 2000
+					random = 600
+				}
+			}
+		}
+	}
+}
+
+# Empirewide Crime, and it seems like Thayo's fault as his stealing becomes even more brazen and known
+country_event = {
+	id = hskv.161
+	title = hskv.161.name
+	desc = hskv.161.desc
+	picture = GFX_evt_worrying_signal
+	show_sound = event_default
+	is_triggered_only = yes
+	trigger = {
+		any_owned_leader = {
+			has_leader_flag = hskv_thayo_everdawn_leader
+		}
+	}
+	immediate = {
+		hskv_get_event_target_thayo_leader = yes
+	}
+	option = {
+		name = WORRYING
+		event_target:hskv_thayo_everdawn_leader = {
+			add_trait = {
+				trait = hskv_leader_trait_insider_trading
+			}
+		}
+		hidden_effect = {
+			event_target:hskv_thayo_everdawn_leader = {
+				remove_leader_flag = no_council_traits
+				remove_leader_flag = no_normal_traits
+				remove_leader_flag = no_destiny_traits
+				add_trait = {
+					trait = hskv_leader_trait_insider_trading
+				}
+				set_leader_flag = no_council_traits
+				set_leader_flag = no_normal_traits
+				set_leader_flag = no_destiny_traits
+			}
+		}
+	}
+}
+
+# Confront Thayo about the crime problem and he has worked to make the police more effective
+country_event = {
+	id = hskv.162
+	title = hskv.162.name
+	desc = hskv.162.desc
+	picture = GFX_evt_salute
+	show_sound = event_salute
+	is_triggered_only = yes
+	trigger = {
+		any_owned_leader = {
+			has_leader_flag = hskv_thayo_everdawn_leader
+		}
+	}
+	immediate = {
+		hskv_get_event_target_thayo_leader = yes
+	}
+	option = {
+		name = hskv.162.response
+		event_target:hskv_thayo_everdawn_leader = {
+			add_trait = {
+				trait = hskv_leader_trait_asset_forfeiture
+			}
+		}
+		hidden_effect = {
+			event_target:hskv_thayo_everdawn_leader = {
+				remove_leader_flag = no_council_traits
+				remove_leader_flag = no_normal_traits
+				remove_leader_flag = no_destiny_traits
+				add_trait = {
+					trait = hskv_leader_trait_asset_forfeiture
+				}
+				set_leader_flag = no_council_traits
+				set_leader_flag = no_normal_traits
+				set_leader_flag = no_destiny_traits
+			}
+			owner = {
+				# Steals from another empire
+				country_event = {
+					id = hskv.163
+					days = 500
+					random = 2560
+				}
+			}
+		}
+	}
+}
+
+# Steals from another empire
+country_event = {
+	id = hskv.163
+	title = hskv.163.name
+	desc = hskv.163.desc
+	picture = GFX_evt_spymaster
+	show_sound = event_default
+	is_triggered_only = yes
+	trigger = {
+		any_owned_leader = {
+			has_leader_flag = hskv_thayo_everdawn_leader
+		}
+	}
+	immediate = {
+		hskv_get_event_target_thayo_leader = yes
+		random_playable_country = {
+			limit = {
+				NOR = {
+					has_country_flag = hskv_thayo_everdawn_country
+				}
+			}
+			save_event_target_as = hskv_target_country_theft
+		}
+	}
+	option = {
+		name = hskv.163.response.a
+		owner = {
+			event_target:hskv_target_country_theft = {
+				add_opinion_modifier = {
+					who = root
+					modifier = hskv_opinion_stole_from_us
+				}
+			}
+			# Random tech
+			copy_random_tech_from = {
+				who = event_target:hskv_target_country_theft
+			}
+			# Resources
+			add_resource = {
+				energy = 4000
+				minerals = 2000
+				food = 2000
+				consumer_goods = 1000
+				alloys = 500
+				rare_crystals = 150
+				exotic_gases = 150
+				volatile_motes = 150
+				physics_research = 1000
+				society_research = 1000
+				engineering_research = 1000
+				influence = 100
+			}
+		}
+		hidden_effect = {
+			event_target:hskv_target_country_theft = {
+				add_resource = {
+					energy = -6000
+					minerals = -3000
+					food = -2500
+					consumer_goods = -1500
+					alloys = -1500
+					rare_crystals = -350
+					exotic_gases = -350
+					volatile_motes = -350
+					physics_research = -2000
+					society_research = -2000
+					engineering_research = -2000
+				}
+			}
+		}
+	}
+	option = {
+		name = hskv.163.response.b
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = influence
+					value >= 200
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				energy = -5000
+				minerals = -3000
+				food = -2500
+				consumer_goods = -1500
+				alloys = -1000
+				rare_crystals = -200
+				exotic_gases = -200
+				volatile_motes = -200
+				influence = -200
+			}
+		}
+		hidden_effect = {
+			event_target:hskv_target_country_theft = {
+				add_resource = {
+					energy = 4000
+					minerals = 2000
+					food = 2000
+					consumer_goods = 1000
+					alloys = 500
+					rare_crystals = 150
+					exotic_gases = 150
+					volatile_motes = 150
+					physics_research = 1000
+					society_research = 1000
+					engineering_research = 1000
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv.170
+	title = hskv_event_thayo_title
+	desc = hskv.170.desc
+	picture = GFX_evt_legendary_leader
+	show_sound = event_default
+	is_triggered_only = yes
+	immediate = {
+		hskv_get_event_target_thayo_leader = yes
+	}
+	option = {
+		name = CURIOUS
+		owner = {
+			add_research_option = tech_mine_zro
+			add_research_option = tech_wormhole_stabilization
+			event_target:hskv_thayo_everdawn_leader = {
+				remove_trait = trait_ruler_charismatic
+				remove_trait = leader_trait_politician
+				add_trait = {
+					trait = trait_ruler_charismatic_2
+				}
+				add_trait = {
+					trait = leader_trait_politician
+				}
+			}
+		}
+		hidden_effect = {
+			event_target:hskv_thayo_everdawn_leader = {
+				remove_leader_flag = no_council_traits
+				remove_leader_flag = no_normal_traits
+				remove_leader_flag = no_destiny_traits
+				remove_trait = trait_ruler_charismatic
+				remove_trait = leader_trait_politician
+				add_trait = {
+					trait = trait_ruler_charismatic_2
+				}
+				add_trait = {
+					trait = leader_trait_politician
+				}
+				set_leader_flag = no_council_traits
+				set_leader_flag = no_normal_traits
+				set_leader_flag = no_destiny_traits
+			}
+			owner = {
+				# Unrestricted Research, but now he is funneling some away
+				country_event = {
+					id = hskv.171
+					days = 2000
+					random = 600
+				}
+			}
+		}
+	}
+}
+
+# Unrestricted Research, but now he is funneling some away
+country_event = {
+	id = hskv.171
+	title = hskv.171.name
+	desc = hskv.171.desc
+	picture = GFX_evt_physics_research
+	show_sound = event_psionic
+	is_triggered_only = yes
+	trigger = {
+		any_owned_leader = {
+			has_leader_flag = hskv_thayo_everdawn_leader
+		}
+	}
+	immediate = {
+		hskv_get_event_target_thayo_leader = yes
+	}
+	option = {
+		name = UNDERSTOOD
+		event_target:hskv_thayo_everdawn_leader = {
+			add_trait = {
+				trait = hskv_leader_trait_unrestricted_research
+			}
+		}
+		add_resource = {
+			physics_research = 2000
+			society_research = 2000
+			engineering_research = 2000
+		}
+		hidden_effect = {
+			event_target:hskv_thayo_everdawn_leader = {
+				remove_leader_flag = no_council_traits
+				remove_leader_flag = no_normal_traits
+				remove_leader_flag = no_destiny_traits
+				add_trait = {
+					trait = hskv_leader_trait_unrestricted_research
+				}
+				set_leader_flag = no_council_traits
+				set_leader_flag = no_normal_traits
+				set_leader_flag = no_destiny_traits
+			}
+			owner = {
+				# Reuse the old big crime wave event
+				country_event = {
+					id = hskv.153
+					days = 1500
+					random = 600
+				}
+				country_event = {
+					id = hskv.153
+					days = 3000
+					random = 600
+				}
+			}
+		}
+	}
+}
+
+# Thayo stops leveling up normally
+country_event = {
+	id = hskv.180
+	title = hskv_event_thayo_title
+	desc = hskv.180.desc
+	picture = GFX_evt_legendary_leader
+	show_sound = event_default
+	is_triggered_only = yes
+	immediate = {
+		hskv_get_event_target_thayo_leader = yes
+		random_playable_country = {
+			limit = {
+				NOT = {
+					has_country_flag = hskv_thayo_everdawn_country
+				}
+			}
+			save_event_target_as = hskv_target_country_theft
+		}
+	}
+	option = {
+		name = UNDERSTOOD
+		owner = {
+			end_event_chain = hskv_thayo_levelup_chain
+			begin_event_chain = {
+				event_chain = hskv_thayo_waiting_chain
+			}
+		}
+		event_target:hskv_thayo_everdawn_leader = {
+			remove_trait = hskv_leader_trait_thayo_everdawn_3
+			remove_trait = hskv_leader_trait_adaptable
+			add_trait = {
+				trait = hskv_leader_trait_thayo_everdawn_4
+			}
+			add_trait = {
+				trait = hskv_leader_trait_pinnacle
+			}
+		}
+		hidden_effect = {
+			event_target:hskv_thayo_everdawn_leader = {
+				remove_leader_flag = no_council_traits
+				remove_leader_flag = no_normal_traits
+				remove_leader_flag = no_destiny_traits
+				remove_trait = hskv_leader_trait_thayo_everdawn_3
+				remove_trait = hskv_leader_trait_adaptable
+				add_trait = {
+					trait = hskv_leader_trait_thayo_everdawn_4
+				}
+				add_trait = {
+					trait = hskv_leader_trait_pinnacle
+				}
+				set_leader_flag = no_council_traits
+				set_leader_flag = no_normal_traits
+				set_leader_flag = no_destiny_traits
+			}
+			owner = {
+				country_event = {
+					id = hskv.181
+					days = 1500
+				}
+			}
+		}
+	}
+}
+
+# A prelude to going full Eve Online
+# Embezzler and Inside Trading Rank 2
+country_event = {
+	id = hskv.181
+	title = hskv.181.name
+	desc = hskv.181.desc
+	picture = GFX_evt_legendary_leader
+	show_sound = event_default
+	is_triggered_only = yes
+	trigger = {
+		any_owned_leader = {
+			has_leader_flag = hskv_thayo_everdawn_leader
+		}
+	}
+	immediate = {
+		hskv_get_event_target_thayo_leader = yes
+	}
+	option = {
+		name = ON_SCREEN
+		event_target:hskv_thayo_everdawn_leader = {
+			remove_trait = hskv_leader_trait_insider_trading
+			add_trait = {
+				trait = hskv_leader_trait_insider_trading_2
+			}
+		}
+		hidden_effect = {
+			event_target:hskv_thayo_everdawn_leader = {
+				remove_leader_flag = no_council_traits
+				remove_leader_flag = no_normal_traits
+				remove_leader_flag = no_destiny_traits
+				remove_trait = hskv_leader_trait_insider_trading
+				add_trait = {
+					trait = hskv_leader_trait_insider_trading_2
+				}
+				set_leader_flag = no_council_traits
+				set_leader_flag = no_normal_traits
+				set_leader_flag = no_destiny_traits
+			}
+			owner = {
+				# Enough is enough!
+				country_event = {
+					id = hskv.182
+					days = 1
+				}
+			}
+		}
+	}
+}
+
+# ENOUGH is ENOUGH. Confront Thayo
+country_event = {
+	id = hskv.182
+	title = hskv_event_thayo_coms_title
+	desc = hskv.182.desc
+	show_sound = event_ship_bridge
+	diplomatic = yes
+	is_triggered_only = yes
+	picture_event_data = {
+		portrait = hskv_thayo_portrait
+		room = ethic_spaceship_room
+	}
+	trigger = {
+		any_owned_leader = {
+			has_leader_flag = hskv_thayo_everdawn_leader
+		}
+	}
+	immediate = {
+		hskv_get_event_target_thayo_leader = yes
+	}
+	option = {
+		name = hskv.182.response
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv.184
+					days = 1
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv.184
+	title = hskv_event_thayo_coms_title
+	desc = hskv.184.desc
+	show_sound = event_ship_bridge
+	diplomatic = yes
+	is_triggered_only = yes
+	picture_event_data = {
+		portrait = hskv_thayo_portrait
+		room = ethic_spaceship_room
+	}
+	trigger = {
+		any_owned_leader = {
+			has_leader_flag = hskv_thayo_everdawn_leader
+		}
+	}
+	immediate = {
+		hskv_get_event_target_thayo_leader = yes
+		owner = {
+			country_event = {
+				id = hskv_hunt.1000
+				days = 1000
+				random = 1000
+			}
+		}
+	}
+	# Time to put a leesh on Thayo
+	# Constant Surveillance
+	option = {
+		name = hskv.184.option.a
+		custom_tooltip = hskv.184.option.a.tooltip
+		owner = {
+			event_target:hskv_thayo_everdawn_leader = {
+				add_trait = {
+					trait = hskv_leader_trait_constant_surveillance
+				}
+			}
+		}
+		hidden_effect = {
+			event_target:hskv_thayo_everdawn_leader = {
+				remove_leader_flag = no_council_traits
+				remove_leader_flag = no_normal_traits
+				remove_leader_flag = no_destiny_traits
+				add_trait = {
+					trait = hskv_leader_trait_constant_surveillance
+				}
+				set_leader_flag = no_council_traits
+				set_leader_flag = no_normal_traits
+				set_leader_flag = no_destiny_traits
+			}
+			owner = {
+				set_country_flag = hskv_thayo_under_constant_surveillance
+			}
+		}
+	}
+	# Let him off with a warning
+	option = {
+		name = hskv.184.option.b
+		custom_tooltip = hskv.184.option.b.tooltip
+	}
+}
+
+# DEBUG force level up Thayo
+country_event = {
+	id = hskv.999
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		every_owned_leader = {
+			limit = {
+				has_leader_flag = hskv_thayo_everdawn_leader
+			}
+			add_skill_without_trait_selection = 1
+		}
+	}
+}
+
+##########################################################################################################
+##########################################################################################################
+# Create the Wormhole to Dawn's End
+# Check every month if the module was built
+country_event = {
+	id = hskv.1112
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			# Has a starbase with the module in the right system
+			limit = {
+				count_owned_starbase = {
+					count >= 1
+					limit = {
+						has_starbase_building = hskv_wormhole_generator
+						solar_system = {
+							has_star_flag = hskv_azure_dream_system
+						}
+					}
+				}
+			}
+			country_event = {
+				id = hskv.1113
+			}
+		}
+		else = {
+			country_event = {
+				id = hskv.1112
+				days = 30
+			}
+		}
+	}
+}
+
+# Enable Special Project to do the thing
+# Yeah if you decide to drop the starbase you can still do it, but whatever.
+country_event = {
+	id = hskv.1113
+	title = hskv.1113.name
+	desc = hskv.1113.desc
+	picture = GFX_evt_shroud_tunnel
+	show_sound = event_default
+	is_triggered_only = yes
+	option = {
+		name = UNDERSTOOD
+		hidden_effect = {
+			end_event_chain = "hskv_thayo_create_wormhole_chain"
+		}
+		owner = {
+			enable_special_project = {
+				name = hskv_worm_hole_special_project
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv.1114
+	title = hskv.1114.name
+	desc = hskv.1114.desc
+	picture = GFX_evt_shroud_tunnel
+	show_sound = evn_ove_shroud_tunnel
+	is_triggered_only = yes
+	immediate = {
+		create_species = {
+			name = UNKNOWN
+			class = AVI
+			portrait = hskv_thayo_portrait
+			namelist = random_class
+			traits = {
+			}
+			immortal = no
+			allow_negative_traits = no
+			effect = {
+				save_event_target_as = hskv_leader_species
+			}
+		}
+	}
+	option = {
+		name = EXCELLENT
+		hidden_effect = {
+			random_country = {
+				limit = {
+					has_country_flag = hskv_target_fe_country
+				}
+				random_system_within_border = {
+					limit = {
+						is_capital_system = yes
+					}
+					spawn_system = {
+						min_distance = 10
+						max_distance = 25
+						max_jumps = 0
+						initializer = "hskv_dawns_end_system"
+					}
+					last_created_system = {
+						save_event_target_as = hskv_dawns_end_system
+						set_star_flag = hskv_dawns_end_system
+						hskv_create_fe_aux_defense_country = yes
+						hskv_create_vault_defense_force = yes
+						random_system = {
+							limit = {
+								has_star_flag = hskv_azure_dream_system
+							}
+							save_event_target_as = hskv_azure_dream_system
+							spawn_megastructure = {
+								type = "hskv_fake_wormhole"
+								orbit_distance = 200
+								orbit_angle = 60
+							}
+						}
+						random_neighbor_system = {
+							limit = {
+								always = yes
+							}
+							save_event_target_as = hskv_target_hyperlane_removal
+						}
+						remove_hyperlane = {
+							from = THIS
+							to = event_target:hskv_target_hyperlane_removal
+						}
+						spawn_megastructure = {
+							type = "hskv_fake_wormhole"
+							orbit_distance = 200
+							orbit_angle = 360
+						}
+						PREVPREVPREV = {
+							set_visited = event_target:hskv_dawns_end_system
+						}
+					}
+				}
+			}
+			owner = {
+				remove_country_flag = hskv_can_build_wormhole_module
+				begin_event_chain = {
+					event_chain = "hskv_thayo_secure_dawns_end_chain"
+					target = event_target:hskv_dawns_end_system
+				}
+			}
+		}
+	}
+}
+
+# Scope = Fleet
+# From = System
+fleet_event = {
+	id = hskv.1120
+	title = hskv.1120.name
+	desc = hskv.1120.desc
+	picture = GFX_evt_enigmatic_fortress
+	show_sound = event_default
+	hide_window = no
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		From = {
+			has_star_flag = hskv_dawns_end_system
+		}
+		owner = {
+			has_country_flag = hskv_thayo_everdawn_country
+		}
+		is_civilian = no
+	}
+	option = {
+		name = ON_SCREEN
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv.1121
+					days = 1
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv.1121
+	title = hskv.1121.name
+	desc = hskv.1121.desc
+	show_sound = event_ship_bridge
+	diplomatic = yes
+	is_triggered_only = yes
+	picture_event_data = {
+		portrait = event_target:hskv_target_fe_country
+		planet_background = event_target:hskv_target_fe_country
+		graphical_culture = event_target:hskv_target_fe_country
+		city_level = event_target:hskv_target_fe_country
+		room = event_target:hskv_target_fe_country.ruler
+	}
+	option = {
+		name = hskv.1121.response
+		# Too slow
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv.1122
+					days = 880
+				}
+			}
+		}
+	}
+}
+
+#  Better Hurry up
+country_event = {
+	id = hskv.1122
+	title = hskv.1122.name
+	desc = hskv.1122.desc
+	picture = GFX_evt_clocks
+	show_sound = event_default
+	hide_window = no
+	is_triggered_only = yes
+	trigger = {
+		NOT = {
+			has_country_flag = hskv_vault_defense_fleet_defeated
+		}
+	}
+	option = {
+		name = NOTIME
+		# Too slow
+		hidden_effect = {
+			owner = {
+				set_country_flag = hskv_secure_vault_slow
+				country_event = {
+					id = hskv.1123
+					days = 900
+				}
+			}
+		}
+	}
+}
+
+# TOO SLOW
+country_event = {
+	id = hskv.1123
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		NOT = {
+			has_country_flag = hskv_vault_defense_fleet_defeated
+		}
+	}
+	immediate = {
+		owner = {
+			country_event = {
+				id = hskv.4041
+				days = 1
+			}
+		}
+	}
+}
+
+# This = owner of fleet 1 (combatant)
+# From = owner of fleet 2 (destroyed)
+# FromFrom = fleet 1
+# FromFromFrom = fleet 2
+country_event = {
+	id = hskv.1130
+	title = hskv.1130.name
+	desc = hskv.1130.desc
+	picture = GFX_evt_enigmatic_fortress
+	show_sound = event_default
+	hide_window = no
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		FromFromFrom = {
+			has_fleet_flag = hskv_vault_defense_force_fleet
+		}
+	}
+	immediate = {
+		owner = {
+			set_country_flag = hskv_vault_defense_fleet_defeated
+		}
+	}
+	option = {
+		name = UNDERSTOOD
+		owner = {
+			start_situation = {
+				type = hskv_situation_vault
+				target = root
+			}
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv_heist.1130
+					days = 1
+				}
+				country_event = {
+					id = hskv_heist.1131
+					days = 3
+				}
+				end_event_chain = "hskv_thayo_secure_dawns_end_chain"
+			}
+		}
+	}
+}
+
+# The final reward from Thayo
+# If he is still alive and the FE falls to your hand
+country_event = {
+	id = hskv.3100
+	hide_window = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	# This trigger is fine becasue this is just calling the actual event
+	trigger = {
+		has_country_flag = hskv_target_fe_country
+		any_owned_leader = {
+			AND = {
+				has_leader_flag = hskv_thayo_everdawn_leader
+				has_base_skill = 10
+			}
+		}
+	}
+	immediate = {
+		if = {
+			limit = {
+				any_war = {
+					any_war_participant = {
+						has_country_flag = hskv_thayo_everdawn_country
+						any_owned_leader = {
+							has_leader_flag = hskv_thayo_everdawn_leader
+						}
+					}
+				}
+			}
+			# You helped!
+			random_playable_country = {
+				limit = {
+					has_country_flag = hskv_thayo_everdawn_country
+				}
+				end_event_chain = hskv_thayo_epilogue_chain
+				country_event = {
+					id = hskv.3110
+					days = 20
+				}
+			}
+		}
+		else = {
+			# You didn't lift a finger
+			random_playable_country = {
+				limit = {
+					has_country_flag = hskv_thayo_everdawn_country
+				}
+				end_event_chain = hskv_thayo_epilogue_chain
+				country_event = {
+					id = hskv.3120
+					days = 20
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv.3110
+	title = hskv_event_thayo_coms_title
+	desc = hskv.3110.desc
+	show_sound = event_ship_bridge
+	diplomatic = yes
+	is_triggered_only = yes
+	picture_event_data = {
+		portrait = hskv_thayo_portrait
+		room = ethic_spaceship_room
+	}
+	trigger = {
+		any_owned_leader = {
+			has_leader_flag = hskv_thayo_everdawn_leader
+		}
+	}
+	immediate = {
+		end_event_chain = "hskv_thayo_epilogue_chain"
+		hskv_get_event_target_thayo_leader = yes
+	}
+	option = {
+		name = CONTINUE
+		hidden_effect = {
+			country_event = {
+				id = hskv.3111
+				days = 1
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv.3111
+	title = hskv_event_thayo_coms_title
+	desc = hskv.3111.desc
+	show_sound = event_ship_bridge
+	diplomatic = yes
+	is_triggered_only = yes
+	picture_event_data = {
+		portrait = hskv_thayo_portrait
+		room = ethic_spaceship_room
+	}
+	immediate = {
+		hskv_get_event_target_thayo_leader = yes
+	}
+	option = {
+		name = hskv.3111.response
+		event_target:hskv_thayo_everdawn_leader = {
+			remove_leader_flag = no_council_traits
+			remove_leader_flag = no_normal_traits
+			remove_leader_flag = no_destiny_traits
+			add_trait = {
+				trait = hskv_leader_trait_gratitude
+			}
+			set_leader_flag = no_council_traits
+			set_leader_flag = no_normal_traits
+			set_leader_flag = no_destiny_traits
+		}
+	}
+}
+
+country_event = {
+	id = hskv.3120
+	title = hskv_event_thayo_coms_title
+	desc = hskv.3120.desc
+	show_sound = event_ship_bridge
+	diplomatic = yes
+	is_triggered_only = yes
+	picture_event_data = {
+		portrait = hskv_thayo_portrait
+		room = ethic_spaceship_room
+	}
+	immediate = {
+		end_event_chain = "hskv_thayo_epilogue_chain"
+	}
+	trigger = {
+		any_owned_leader = {
+			has_leader_flag = hskv_thayo_everdawn_leader
+		}
+	}
+	option = {
+		name = UNDERSTOOD
+	}
+}
+
+##########################################################################################################
+##########################################################################################################
+##########################################################################################################
+##########################################################################################################
+# Fail state 1, Thayo carries out his plan without you (but doesn't blame you)
+# If you dismiss him
+# This = Country
+# From = Leader
+country_event = {
+	id = hskv.3998
+	hide_window = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = hskv_thayo_everdawn_country
+		FROM = {
+			has_leader_flag = hskv_thayo_everdawn_leader
+		}
+	}
+	immediate = {
+		if = {
+			limit = {
+				has_country_flag = hskv_ignore_dismiss_effect
+			}
+			# Dismissed after winning
+			owner = {
+				country_event = {
+					id = hskv.3999
+				}
+			}
+		}
+		else = {
+			# Dissmissed before winning
+			owner = {
+				country_event = {
+					id = hskv.4000
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv.3999
+	title = hskv_event_thayo_coms_title
+	desc = hskv.3999.desc
+	show_sound = event_ship_bridge
+	diplomatic = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	picture_event_data = {
+		portrait = hskv_thayo_portrait
+		room = ethic_spaceship_room
+	}
+	immediate = {
+		random_country = {
+			limit = {
+				has_country_flag = hskv_thayo_everdawn_country
+			}
+			# I have no idea why I can't just do Root.GetLeaderName normally
+			save_global_event_target_as = hskv_temp_country
+		}
+	}
+	option = {
+		name = hskv.3999.response
+	}
+}
+
+country_event = {
+	id = hskv.4000
+	title = hskv_event_thayo_coms_title
+	desc = hskv.4000.desc
+	show_sound = event_ship_bridge
+	diplomatic = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	picture_event_data = {
+		portrait = hskv_thayo_portrait
+		room = ethic_spaceship_room
+	}
+	trigger = {
+		has_country_flag = hskv_thayo_everdawn_country
+		NOT = {
+			has_country_flag = hskv_ignore_dismiss_effect
+		}
+		owner = {
+			any_owned_leader = {
+				has_leader_flag = hskv_thayo_everdawn_leader
+			}
+		}
+	}
+	option = {
+		name = hskv.4000.response
+		hidden_effect = {
+			owner = {
+				end_event_chain = hskv_thayo_levelup_chain
+				end_event_chain = hskv_thayo_waiting_chain
+				end_event_chain = hskv_thayo_secure_dawns_end_chain
+				end_event_chain = hskv_thayo_epilogue_chain
+				abort_special_project = {
+					type = hskv_worm_hole_special_project
+				}
+				remove_country_flag = hskv_can_build_wormhole_module
+				country_event = {
+					id = hskv.4001
+					days = 3560
+					random = 6000
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv.4001
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = {
+				mid_game_years_passed >= 50
+			}
+			owner = {
+				country_event = {
+					id = hskv.4010
+					days = 356
+					random = 6000
+				}
+			}
+		}
+		else = {
+			country_event = {
+				id = hskv.4001
+				days = 3560
+				random = 2000
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv.4010
+	title = hskv.4010.name
+	desc = hskv.4010.desc
+	picture = GFX_evt_astral_rift_advisor_exploding
+	show_sound = event_ship_explosion
+	is_triggered_only = yes
+	trigger = {
+		exists = event_target:hskv_target_fe_country
+	}
+	option = {
+		name = WORRYING
+		hidden_effect = {
+			every_playable_country = {
+				limit = {
+					is_fallen_empire = no
+				}
+				event_target:hskv_target_fe_country = {
+					add_opinion_modifier = {
+						who = prev
+						modifier = hskv_opinion_fe_paranoid
+					}
+				}
+			}
+		}
+	}
+}
+
+# Fail state 2, Thayo carries out his plan without you (but does blame you)
+country_event = {
+	id = hskv.4020
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = {
+				mid_game_years_passed >= 50
+			}
+			owner = {
+				country_event = {
+					id = hskv.4021
+					days = 356
+					random = 6000
+				}
+			}
+		}
+		else = {
+			country_event = {
+				id = hskv.4020
+				days = 3560
+				random = 2000
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv.4021
+	title = hskv.4021.name
+	desc = hskv.4021.desc
+	picture = GFX_evt_astral_rift_advisor_exploding
+	show_sound = event_ship_explosion
+	is_triggered_only = yes
+	trigger = {
+		exists = event_target:hskv_target_fe_country
+	}
+	option = {
+		name = WORRYING
+		hidden_effect = {
+			country_event = {
+				id = hskv.4022
+				days = 90
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv.4022
+	title = hskv.4022.name
+	desc = hskv.4022.desc
+	show_sound = event_ship_bridge
+	is_triggered_only = yes
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:hskv_target_fe_country
+		planet_background = event_target:hskv_target_fe_country
+		graphical_culture = event_target:hskv_target_fe_country
+		city_level = event_target:hskv_target_fe_country
+		room = event_target:hskv_target_fe_country.ruler
+	}
+	trigger = {
+		exists = event_target:hskv_target_fe_country
+	}
+	option = {
+		name = hskv.4022.response
+		owner = {
+			event_target:hskv_target_fe_country = {
+				add_opinion_modifier = {
+					who = prev
+					modifier = hskv_opinion_fe_pissed
+				}
+			}
+		}
+	}
+}
+
+# Fail State 3, Thayo Dies (luckily nothing happens to you because they never notice)
+# Maybe could have made the fail state have them turn hostile against you... But too much effort
+country_event = {
+	id = hskv.4030
+	title = hskv.4030.name
+	desc = hskv.4030.desc
+	picture = GFX_evt_space_funeral
+	show_sound = event_life_support_fail
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = hskv_thayo_everdawn_country
+		FROM = {
+			has_leader_flag = hskv_thayo_everdawn_leader
+		}
+	}
+	option = {
+		name = UNFORTUNATE
+		hidden_effect = {
+			owner = {
+				end_event_chain = hskv_thayo_levelup_chain
+				end_event_chain = hskv_thayo_waiting_chain
+				end_event_chain = hskv_thayo_secure_dawns_end_chain
+				end_event_chain = hskv_thayo_epilogue_chain
+				abort_special_project = {
+					type = hskv_worm_hole_special_project
+				}
+				remove_country_flag = hskv_can_build_wormhole_module
+			}
+		}
+	}
+}
+
+# Fail State 4: Out of time during the finale
+situation_event = {
+	id = hskv.4040
+	hide_window = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		owner = {
+			NOT = {
+				has_country_flag = hskv_vault_secure
+			}
+		}
+	}
+	immediate = {
+		owner = {
+			country_event = {
+				id = hskv.4041
+				days = 1
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv.4041
+	title = hskv.4041.name
+	desc = hskv.4041.desc
+	picture = GFX_evt_worrying_signal
+	show_sound = event_default
+	hide_window = no
+	is_triggered_only = yes
+	option = {
+		name = WORRYING
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv.4042
+					days = 1
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv.4042
+	title = hskv.4042.name
+	desc = hskv.4042.desc
+	picture = GFX_evt_ghost_ship
+	show_sound = event_default
+	hide_window = no
+	is_triggered_only = yes
+	option = {
+		name = CONTINUE
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv.4043
+					days = 1
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv.4043
+	title = hskv.4043.name
+	desc = hskv.4043.desc
+	picture = GFX_evt_astral_rift_advisor_exploding
+	show_sound = event_ship_explosion
+	hide_window = no
+	is_triggered_only = yes
+	immediate = {
+		set_country_flag = hskv_heist_failed
+		hskv_get_event_target_dawns_end_system = yes
+		hskv_get_event_target_azure_dream_system = yes
+		hskv_get_vault_situation = yes
+		destroy_situation = event_target:hskv_vault_situation
+		event_target:hskv_dawns_end_system = {
+			every_fleet_in_system = {
+				destroy_fleet = this
+			}
+		}
+		every_megastructure = {
+			limit = {
+				is_megastructure_type = hskv_fake_wormhole
+			}
+			delete_megastructure = this
+		}
+		event_target:hskv_azure_dream_system = {
+			every_megastructure = {
+				limit = {
+					is_megastructure_type = hskv_fake_wormhole
+				}
+				delete_megastructure = this
+			}
+		}
+		# Clean up the hyperlane
+		country_event = {
+			id = hskv_heist.3001
+			days = 30
+		}
+	}
+	option = {
+		name = hskv.4043.response.a
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv.4044
+					days = 90
+				}
+			}
+		}
+	}
+	option = {
+		name = hskv.4043.response.b
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = hskv.4044
+					days = 90
+				}
+			}
+		}
+	}
+}
+
+# WAR is declared
+country_event = {
+	id = hskv.4044
+	title = hskv.4044.name
+	desc = hskv.4044.desc
+	desc = {
+		trigger = {
+			owner = {
+				has_country_flag = hskv_heist_failed
+			}
+		}
+		text = hskv.4044.desc.alt
+	}
+	diplomatic = yes
+	is_triggered_only = yes
+	picture_event_data = {
+		portrait = event_target:hskv_target_fe_country
+		planet_background = event_target:hskv_target_fe_country
+		graphical_culture = event_target:hskv_target_fe_country
+		city_level = event_target:hskv_target_fe_country
+		room = event_target:hskv_target_fe_country.ruler
+	}
+	immediate = {
+		event_target:hskv_target_fe_country = {
+			add_opinion_modifier = {
+				who = prev
+				modifier = hskv_opinion_fe_pissed
+			}
+		}
+		event_target:hskv_target_fe_country = {
+			declare_war = {
+				target = Prev
+				attacker_war_goal = wg_fe_humiliation
+			}
+		}
+	}
+	option = {
+		name = hskv.4044.response
+	}
+}
+
+
+
+
+country_event = {
+	id = hskv.10004
+	title = "ancrel.10004.name"
+	desc = "ancrel.10004.nanoforge"
+	picture = GFX_evt_ancient_records
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EXCELLENT"
+
+		hidden_effect = {
+			owner = {
+				change_variable = { which = nano_forge_build_count value = 1 }
+				change_variable = { which = nano_forge_upgrade_count value = 200 }
+				set_country_flag = nano_forge_can_build
+
+				change_variable = { which = micro_forge_build_count value = 1 }
+				change_variable = { which = micro_forge_upgrade_count value = 200 }
+				set_country_flag = micro_forge_can_build
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv.10005
+	title = "ancrel.10004.name"
+	desc = "ancrel.10004.skydome"
+	picture = GFX_evt_ancient_records
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EXCELLENT"
+
+		hidden_effect = {
+			owner = {
+				change_variable = { which = fe_sky_dome_build_count value = 1 }
+				change_variable = { which = fe_sky_dome_upgrade_count value = 200 }
+				set_country_flag = fe_sky_dome_can_build
+				set_country_flag = fe_sky_dome_can_build
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv.10006
+	title = "ancrel.10004.name"
+	desc = "ancrel.10004.dimensional_fabricator"
+	picture = GFX_evt_ancient_records
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EXCELLENT"
+
+		hidden_effect = {
+			owner = {
+				change_variable = { which = dimensional_replicator_build_count value = 1 }
+				change_variable = { which = dimensional_replicator_upgrade_count value = 200 }
+				set_country_flag = dimensional_replicator_can_build
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv.10007
+	title = "ancrel.10004.name"
+	desc = "ancrel.10004.affluence_center"
+	picture = GFX_evt_ancient_records
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EXCELLENT"
+
+		hidden_effect = {
+			owner = {
+				change_variable = { which = affluence_center_build_count value = 1 }
+				change_variable = { which = affluence_center_upgrade_count value = 200 }
+				set_country_flag = affluence_center_can_build
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv.10008
+	title = "ancrel.10004.name"
+	desc = "ancrel.10004.nourishment_center"
+	picture = GFX_evt_ancient_records
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EXCELLENT"
+
+		hidden_effect = {
+			owner = {
+				change_variable = { which = nourishment_center_build_count value = 1 }
+				change_variable = { which = nourishment_center_upgrade_count value = 200 }
+				set_country_flag = nourishment_center_can_build
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv.10009
+	title = "ancrel.10004.name"
+	desc = "ancrel.10004.class_4_singularity"
+	picture = GFX_evt_ancient_records
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EXCELLENT"
+
+		hidden_effect = {
+			owner = {
+				change_variable = { which = class_3_singularity_build_count value = 1 }
+				change_variable = { which = class_3_singularity_upgrade_count value = 200 }
+				set_country_flag = class_3_singularity_can_build
+
+				change_variable = { which = class_4_singularity_build_count value = 1 }
+				change_variable = { which = class_4_singularity_upgrade_count value = 200 }
+				set_country_flag = class_4_singularity_can_build
+			}
+		}
+	}
+}
+# These are "new"
+# Drilling
+country_event = {
+	id = hskv.10010
+	title = "ancrel.10004.name"
+	desc = "hskv.10010"
+	picture = GFX_evt_ancient_records
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EXCELLENT"
+
+		hidden_effect = {
+			owner = {
+				change_variable = { which = fe_mine_1_build_count value = 1 }
+				change_variable = { which = fe_mine_1_upgrade_count value = 200 }
+				set_country_flag = fe_mine_1_can_build
+			}
+		}
+	}
+}
+# Galactic Commerce Hub
+country_event = {
+	id = hskv.10011
+	title = "ancrel.10004.name"
+	desc = "hskv.10011"
+	picture = GFX_evt_ancient_records
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EXCELLENT"
+
+		hidden_effect = {
+			owner = {
+				change_variable = { which = fe_market_1_build_count value = 1 }
+				change_variable = { which = fe_market_1_upgrade_count value = 200 }
+				set_country_flag = fe_market_1_can_build
+			}
+		}
+	}
+}
+#  Omnivident or Celestial
+country_event = {
+	id = hskv.10012
+	title = "ancrel.10004.name"
+	desc = {
+ 		trigger = {
+ 			owner = { is_spiritualist = no }
+ 		}
+ 		text = hskv.10012a
+ 	}
+	desc = {
+ 		trigger = {
+ 			owner = { is_spiritualist = yes }
+ 		}
+ 		text = hskv.10012b
+ 	}
+	picture = GFX_evt_ancient_records
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EXCELLENT"
+		hidden_effect = {
+			owner = {
+				change_variable = { which = fe_administration_1_build_count value = 1 }
+				change_variable = { which = fe_administration_1_upgrade_count value = 200 }
+				set_country_flag = fe_administration_1_can_build
+			}
+		}
+	}
+}
+# Shrinkspace
+country_event = {
+	id = hskv.10013
+	title = "ancrel.10004.name"
+	desc = hskv.10013
+	picture = GFX_evt_ancient_records
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EXCELLENT"
+
+		hidden_effect = {
+			owner = {
+				change_variable = { which = fe_silo_1_build_count value = 1 }
+				change_variable = { which = fe_silo_1_upgrade_count value = 200 }
+				set_country_flag = fe_silo_1_can_build
+			}
+		}
+	}
+}
+# Virtual Bliss Plaza
+country_event = {
+	id = hskv.10014
+	title = "ancrel.10004.name"
+	desc = hskv.10014
+	picture = GFX_evt_ancient_records
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EXCELLENT"
+
+		hidden_effect = {
+			owner = {
+				change_variable = { which = fe_entertainment_1_build_count value = 1 }
+				change_variable = { which = fe_entertainment_1_upgrade_count value = 200 }
+				set_country_flag = fe_entertainment_1_can_build
+			}
+		}
+	}
+}
+# Aspis Bastion
+country_event = {
+	id = hskv.10015
+	title = "ancrel.10004.name"
+	desc = hskv.10015
+	picture = GFX_evt_ancient_records
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EXCELLENT"
+
+		hidden_effect = {
+			owner = {
+				change_variable = { which = fe_fortress_build_count value = 1 }
+				change_variable = { which = fe_fortress_upgrade_count value = 200 }
+				set_country_flag = fe_fortress_can_build
+			}
+		}
+	}
+}
+# Nourishment
+country_event = {
+	id = hskv.10016
+	title = "ancrel.10004.name"
+	desc = hskv.10016
+	picture = GFX_evt_ancient_records
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EXCELLENT"
+
+		hidden_effect = {
+			owner = {
+				change_variable = { which = nourishment_complex_build_count value = 1 }
+				change_variable = { which = nourishment_complex_upgrade_count value = 200 }
+				set_country_flag = nourishment_complex_can_build
+			}
+		}
+	}
+}

@@ -1,0 +1,187 @@
+#########################################################################################
+# Thayo Everdawn - The Everdawn Heist
+# Author: TheRingBearer
+#########################################################################################
+
+hskv_situation_thayo_manhunt = {
+	picture = GFX_evt_infiltration_neutral
+	complete_icon_frame = GFX_situation_outcome_frame_blue
+	complete_icon = GFX_situation_outcome_unknown
+	on_progress_complete = {
+		custom_tooltip = hskv_situation_thayo_manhunt_outcome
+		hidden_effect = {
+			situation_event = { id = hskv_hunt.2099 }
+		}
+		set_situation_locked = yes
+	}
+
+	stages = {
+		hskv_thayo_stage_1_desc = {
+			end = 400
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_green
+		}
+		hskv_thayo_stage_2_desc = {
+			end = 575
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_red
+			on_first_enter = {
+				situation_event = { id = hskv_hunt.1050 }
+			}
+		}
+	}
+	# The format of this tooltip in the progress bar could be better, but it contains useful info
+	approach = {
+		name = hskv_situation_thayo_manhunt_frugal
+		icon = GFX_situation_approach_balance_sheet
+		icon_background = GFX_situation_approach_bg_red
+		on_select = {
+			custom_tooltip = hskv_situation_thayo_manhunt_frugal_approach_tt
+		}
+		resources = {
+			category = situations
+			cost = { influence = 200 }
+		}
+		modifier = {
+			country_energy_produces_mult = -0.05
+			country_unity_produces_mult = -0.05
+		}
+	}
+	approach = {
+		name = hskv_situation_thayo_manhunt_regular
+		icon = GFX_situation_approach_balance_sheet
+		icon_background = GFX_situation_approach_bg_yellow
+		default = yes
+		on_select = {
+			custom_tooltip = hskv_situation_thayo_manhunt_regular_approach_tt
+		}
+		
+		modifier = {
+			country_energy_produces_mult = -0.10
+			country_unity_produces_mult = -0.10
+		}
+	}
+	approach = {
+		name = hskv_situation_thayo_manhunt_careful
+		icon = GFX_situation_approach_balance_sheet
+		icon_background = GFX_situation_approach_bg_green
+		on_select = {
+			custom_tooltip = hskv_situation_thayo_manhunt_careful_approach_tt
+		}
+		resources = {
+			category = situations
+			cost = { influence = 100 }
+		}
+		modifier = {
+			planet_jobs_alloys_produces_mult = -0.05
+			country_energy_produces_mult = -0.10
+			country_unity_produces_mult = -0.15
+			country_base_influence_produces_add = -0.5
+
+			planet_traders_produces_mult = -0.05
+			planet_crime_add = -15
+		}
+	}
+	approach = {
+		name = hskv_situation_thayo_manhunt_aggressive
+		icon = GFX_situation_approach_balance_sheet
+		icon_background = GFX_situation_approach_bg_red
+		on_select = {
+			custom_tooltip = hskv_situation_thayo_manhunt_aggressive_approach_tt
+		}
+		resources = {
+			category = situations
+			cost = { influence = 100 }
+		}
+		modifier = {
+			planet_jobs_alloys_produces_mult = -0.10
+			country_energy_produces_mult = -0.15
+			country_unity_produces_mult = -0.20
+			country_base_influence_produces_add = -1
+			diplo_weight_mult = -0.10
+		}
+	}
+
+	on_monthly = {
+		# If you are frgual or Normal these events trigger
+		random_events = {
+			50 = 0
+			1 = hskv_hunt.1010
+		}
+		# If you are careful these events trigger
+		random_events = {
+			60 = 0
+			1 = hskv_hunt.1011
+		}
+		# If you are aggressive these events trigger
+		random_events = {
+			40 = 0
+			1 = hskv_hunt.1012
+		}
+	}
+	monthly_progress = {
+		base = 1.0
+		modifier = {
+			add = 0.6
+			desc = hskv_situation_thayo_manhunt_regular
+			current_situation_approach = hskv_situation_thayo_manhunt_regular
+		}
+		modifier = {
+			add = 1
+			desc = hskv_situation_thayo_manhunt_careful
+			current_situation_approach = hskv_situation_thayo_manhunt_careful
+		}
+		modifier = {
+			add = 2
+			desc = hskv_situation_thayo_manhunt_aggressive
+			current_situation_approach = hskv_situation_thayo_manhunt_aggressive
+		}
+		modifier = {
+			add = 0.4
+			desc = hskv_situation_thayo_manhunt_high_crypto_tt
+			owner = {
+				has_country_flag = hskv_manhunt_high_crypto
+			}
+		}
+	}
+}
+
+hskv_situation_vault = {
+	picture = GFX_evt_enigmatic_fortress
+	complete_icon_frame = GFX_situation_outcome_frame_red
+	complete_icon = GFX_situation_outcome_negative
+
+	category = negative
+	
+	on_progress_complete = {
+		custom_tooltip = hskv_situation_vault_outcome
+		hidden_effect = {
+			situation_event = { id = hskv.4040 } # Out of Time
+		}
+	}
+	start_value = 0
+
+	stages = {
+		hskv_vault_stage_1_desc = {
+			end = 60
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_red
+		}
+	}
+	approach = {
+		name = hskv_situation_vault_exploration
+		icon = GFX_situation_approach_suspicious
+		icon_background = GFX_situation_approach_bg_yellow
+		default = yes
+
+		on_select = {
+			custom_tooltip = hskv_situation_vault_exploration_approach_tt
+		}
+		modifier = {
+		}
+	}
+
+	monthly_progress = {
+		base = 1
+	}
+}

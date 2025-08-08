@@ -1,0 +1,69 @@
+#########################################################################################
+# Thayo Everdawn - The Everdawn Heist
+# Author: TheRingBearer
+#########################################################################################
+
+namespace = hskv_gamestart
+
+event = {
+	id = hskv_gamestart.1
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		hskv_trigger = yes
+	}
+
+	immediate = {
+		random_playable_country = {
+			limit = {
+				is_ai = no
+			}
+			owner = {
+				country_event = {
+					id = hskv_gamestart.2
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hskv_gamestart.2
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		owner = {
+			capital_scope = {
+				solar_system = {
+					random_system = {
+						limit = {
+							distance = {
+								min_jumps = 1
+								max_jumps = 4
+							}
+						}
+						hskv_spawn = yes
+					}
+				}
+			}
+		}
+
+	}
+}
+
+event = {					# set allowed and installed for spawning module
+	id = hskv_gamestart.3
+	is_triggered_only = yes
+	hide_window = yes
+	fire_only_once = yes
+
+	trigger = {}
+
+	immediate = {
+		set_global_flag = hskv_installed
+		set_global_flag = hskv_allowed
+
+	}
+}
