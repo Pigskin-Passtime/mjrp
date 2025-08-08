@@ -1,0 +1,82 @@
+#########################
+#
+# Tiyanki Resurgence Crisis; scripted_effects
+#
+# Written by RegiZero
+#
+#########################
+
+begin_crisis_tiyres = {
+	set_global_flag = mid_game_crisis_happened 			# this must be set and not removed
+	set_timed_global_flag = {							# this must be set and not removed
+		flag = mid_game_crisis_happened_recently
+		years = 12
+	}
+	set_global_flag = tiyres_in_progress 				# must be removed when crisis is resolved
+	set_global_flag = tiyres_fired 						# (optional) only set this flag if you want your crisis to fire only once
+	set_global_flag = midgame_crisis_ongoing			# must be removed when crisis is resolved
+	# BOOM BOOM PEW PEW effects go here
+	# this is in country scope, on global event country
+
+	# Check and spawn if there is no tiyanki graveyard system present
+	if = {
+		limit = {
+			any_system = {
+				has_star_flag = tiyanki_graveyard_system
+			}
+		}
+		every_country = {
+			limit = {
+				is_country_type = default
+			}
+			country_event = {
+				id = tiyres_show_events.1
+			}
+			country_event = {
+				id = tiyres_show_events.2
+				days = 360
+			}
+		}
+		random_system = {
+			limit = {
+				any_system_planet = {
+					has_planet_flag = graveyard_site
+				}
+			}
+			random_system_planet = {
+				limit = {
+					has_planet_flag = graveyard_site
+				}
+				save_global_event_target_as = tiyres_graveyard_site
+			}
+		}
+	}
+	else = {
+		no_scope = {
+			random_system = {
+				limit = {
+					is_capital_system = no
+				}
+				spawn_system = {
+					min_distance = 6
+					max_distance = 8
+					initializer = hostile_init_21
+					hyperlane = yes
+					is_discovered = no
+				}
+			}
+		}
+		every_country = {
+			limit = {
+				is_country_type = default
+			}
+			country_event = {
+				id = tiyres_show_events.1
+			}
+			country_event = {
+				id = tiyres_show_events.2
+				days = 360
+			}
+		}
+	}
+}
