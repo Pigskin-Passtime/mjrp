@@ -1,0 +1,117 @@
+namespace = sw22_on_action_events
+
+#Worm Amuck
+planet_event = {
+	id = sw22_on_action_events.1
+	title = sw22_on_action_events.1.name
+	desc = sw22_on_action_events.1.desc
+	picture = GFX_evt_burning_settlement
+	show_sound = event_ground_battle
+	location = ROOT
+	#hide_window = yes
+	is_triggered_only = yes
+
+
+	trigger = {
+		FromFrom = {
+			has_country_flag = sw22_attack_worms_country
+		}
+	}
+
+	immediate = {
+		planet_event = {
+			id = sw22_on_action_events.3
+			days = 1800
+		}
+	}	
+
+	option = {
+		name = sw22_on_action_events.1.a
+	}
+
+}
+
+#Killed the Worm!
+country_event = {
+	id = sw22_on_action_events.2
+	title = sw22_on_action_events.2.name
+	desc = sw22_on_action_events.2.desc
+	picture = GFX_evt_crisis_defeated
+	show_sound = event_celebration
+	location = FROMFROM
+	#hide_window = yes
+	is_triggered_only = yes
+
+
+	trigger = {
+		has_country_flag = sw22_worm_operation
+		FROMFROM = { has_planet_flag = sw22_attack_worms_planet }
+	}
+
+	immediate = {
+		remove_country_flag = sw22_worm_operation
+		FROMFROM = {
+			remove_planet_flag = sw22_attack_worms_planet
+		}
+	}
+
+	#trigger = {
+	#	FROM = { army_type = worm_army_rogue }
+	#}
+
+	option = {
+		random_country = {
+			limit = {
+				has_relic = sw22_r_worm_mom
+			}
+			save_event_target_as = sw22_worm_attacker		
+		}
+		root = {
+			add_opinion_modifier = { who = event_target:sw22_worm_attacker modifier = opinion_wormed_us }
+		}
+		name = sw22_on_action_events.3.a
+	}
+}
+
+#Planet Killed
+planet_event = {
+	id = sw22_on_action_events.3
+	title = sw22_on_action_events.3.name
+	desc = sw22_on_action_events.3.desc
+	picture = GFX_evt_tomb_world
+	show_sound = event_bad_omen
+	location = ROOT
+	#hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		controller = {
+			count_owned_army = {
+				limit = { army_type = worm_army_rogue }
+				count > 0
+			}
+		}
+	}
+
+	immediate = {
+		destroy_colony = yes
+		change_pc = pc_nuked
+		remove_all_buildings = yes
+		set_planet_flag = nuked_planet_anomalies_disabled
+		add_planet_devastation = 100
+	}	
+
+	option = {
+		name = sw22_on_action_events.3.a
+		random_country = {
+			limit = {
+				has_relic = sw22_r_worm_mom
+			}
+			save_event_target_as = sw22_worm_attacker		
+		}
+		fromfrom = {
+			add_opinion_modifier = { who = event_target:sw22_worm_attacker modifier = opinion_wormed_us }
+		}
+	}
+
+}

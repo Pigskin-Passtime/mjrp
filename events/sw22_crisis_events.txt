@@ -1,0 +1,409 @@
+namespace = sw22_crisis
+
+# Trigger for each empire
+country_event = {
+	id = sw22_crisis.1
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		hidden_effect = {
+			random_owned_planet = { 
+				limit = {
+					is_artificial = no
+				}
+				set_planet_flag = first_worm 
+				#set_planet_flag = sw_22_worm_already_got_this_one
+				planet_event = { id = sw22_crisis.11 }
+			}
+		}
+	}
+
+}
+
+# Seismic Disturbances 
+#1a
+planet_event = {
+	id = sw22_crisis.11
+	title = "sw22_crisis.11.name"
+	desc = "sw22_crisis.11.desc"
+	picture = GFX_evt_burning_settlement
+	show_sound = event_collapsing_ruins
+	is_triggered_only = yes
+	location = root
+
+	# Ignore it, leads to 2a
+	option = {
+		name = sw22_crisis.11.a
+		hidden_effect = {
+			planet_event = { id = sw22_crisis.21 days = 60 }
+		}
+	}
+
+	#Explore more, leads to 3a
+	option = {
+		name = sw22_crisis.11.b
+		hidden_effect = {
+			planet_event = { id = sw22_crisis.31 days = 60 }
+		}
+	}
+}
+
+# The Dirt Turned turned to Ash (Extra Science)
+#2a
+planet_event = {
+	id = sw22_crisis.21 #2a
+	title = "sw22_crisis.21.name"
+	desc = "sw22_crisis.21.desc"
+	picture = GFX_evt_tomb_world
+	show_sound = event_wind_ruins
+	is_triggered_only = yes
+	location = root
+
+	# Add Damage Deposit
+	immediate = {
+		add_deposit = sw22_d_damage_mystery
+		add_planet_devastation = 25
+	}
+
+	# Leads to 2b
+	option = {
+		name = sw22_crisis.21.a
+		hidden_effect = {
+			planet_event = { id = sw22_crisis.22 days = 60 }
+		}
+	}
+}
+
+#2b
+planet_event = {
+	id = sw22_crisis.22
+	title = "sw22_crisis.22.name"
+	desc = "sw22_crisis.22.desc"
+	picture = GFX_evt_in_the_dark
+	show_sound = event_dig_site
+	is_triggered_only = yes
+	location = root
+
+	# Add Damage Deposit
+	immediate = {
+		add_deposit = sw22_d_damage_mystery
+		add_planet_devastation = 25
+	}	
+
+	#Leads to 2c
+	option = {
+		name = sw22_crisis.22.a
+		hidden_effect = {
+			planet_event = { id = sw22_crisis.23 days = 60 }
+		}
+	}
+}
+
+#2c
+planet_event = {
+	id = sw22_crisis.23
+	title = "sw22_crisis.23.name"
+	desc = "sw22_crisis.23.desc"
+	picture = GFX_evt_in_the_dark
+	show_sound = event_dig_site
+	is_triggered_only = yes
+	location = root
+
+	# Add Damage Deposit
+	immediate = {
+		add_deposit = sw22_d_damage_mystery
+		add_planet_devastation = 25
+	}
+
+	#Leads to 4c
+	option = {
+		name = sw22_crisis.23.a
+		hidden_effect = {
+			planet_event = { id = sw22_crisis.41 days = 60 }
+		}
+	}
+}
+
+# Underground Terrorists (Less Damage)
+#3a
+planet_event = {
+	id = sw22_crisis.31 #3a
+	title = "sw22_crisis.31.name"
+	desc = "sw22_crisis.31.desc"
+	picture = GFX_evt_decryption
+	show_sound = event_default
+	is_triggered_only = yes
+	location = root
+
+	# Add Damage Deposit
+	immediate = {
+		add_deposit = sw22_d_damage_mystery
+		add_planet_devastation = 25
+	}
+
+	# Leads to 3b
+	option = {
+		name = sw22_crisis.31.a
+		hidden_effect = {
+			planet_event = { id = sw22_crisis.32 days = 60 }
+		}
+	}
+}
+
+#3b
+planet_event = { 
+	id = sw22_crisis.32
+	title = "sw22_crisis.32.name"
+	desc = "sw22_crisis.32.desc"
+	picture = GFX_evt_in_the_dark
+	show_sound = event_dig_site
+	is_triggered_only = yes
+	location = root
+
+	# Add Damage Deposit
+	immediate = {
+		add_deposit = sw22_d_damage_mystery
+		add_planet_devastation = 25
+	}
+	
+	# Leads to 4a
+	option = {
+		name = sw22_crisis.32.a
+		hidden_effect = {
+			planet_event = { id = sw22_crisis.41 days = 60 }
+		}
+	}
+}
+
+# It couldn't worm its way out of this one.
+#4a
+planet_event = {
+	id = sw22_crisis.41
+	title = "sw22_crisis.41.name"
+	desc = "sw22_crisis.41.desc"
+	picture = GFX_evt_victorious_army
+	show_sound = event_ground_battle
+	is_triggered_only = yes
+	location = root
+
+	# Leads to 5a
+	option = {
+		name = sw22_crisis.41.a
+		hidden_effect = {
+			owner = {
+				country_event = { id = sw22_crisis.51 days = 180	}
+			}
+		}
+	}
+}
+
+# They Hit Everyone
+#5a
+country_event = {
+	id = sw22_crisis.51
+	title = "sw22_crisis.51.name"
+	desc = "sw22_crisis.51.desc"
+	picture = GFX_evt_board_meeting
+	show_sound = event_default
+	is_triggered_only = yes
+	location = root
+
+	trigger = {
+		is_ai = no
+	}
+
+	option = {
+		name = sw22_crisis.51.a
+		hidden_effect = {
+			country_event = { id = sw22_crisis.61  days = 180 }
+		}
+	}
+}
+
+country_event = {
+	id = sw22_crisis.61
+	title = "sw22_crisis.61.name"
+	desc =  "sw22_crisis.61.desc"
+	diplomatic = yes
+	is_triggered_only = yes
+	show_sound = event_radio_chatter
+	title = TRANSMISSION
+
+	trigger = {
+		is_ai = no
+	}
+
+	immediate = {
+		every_galaxy_planet = {
+			limit = {
+				has_deposit = sw22_d_damage_mystery
+			}
+			while = {
+				limit = { has_deposit = sw22_d_damage_mystery }
+				remove_deposit = sw22_d_damage_mystery
+				add_deposit = sw22_d_damage_1
+			}
+		}	
+	}
+
+	picture_event_data = {
+		room = no_video_feed_room
+	}
+
+	option = {
+		name = sw22_crisis.61.a
+		hidden_effect = {
+			country_event = { id = sw22_crisis.62 days = 180 }
+		}
+	}
+
+	option = {
+		name = sw22_crisis.61.b
+		hidden_effect = {
+				country_event = { id = sw22_crisis.62 days = 180 }
+		}
+	}
+}
+
+country_event = {
+	id = sw22_crisis.62
+	title = "sw22_crisis.62.name"
+	desc =  "sw22_crisis.62.desc"
+	picture = GFX_evt_smear_campaign
+	show_sound = event_default
+	is_triggered_only = yes
+	location = root
+
+	trigger = {
+		is_ai = no
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = sw22_crisis.62.a
+		hidden_effect = {
+			country_event = { id = sw22_crisis.63 days = 60	}
+		}	
+	}
+}
+
+country_event = {
+	id = sw22_crisis.63
+	title = "sw22_crisis.63.name"
+	desc =  "sw22_crisis.63.desc"
+	diplomatic = yes
+	is_triggered_only = yes
+	show_sound = event_radio_chatter
+	title = TRANSMISSION
+
+	immediate = {
+	}
+
+	picture_event_data = {
+		room = no_video_feed_room
+	}
+
+	trigger = {
+		is_ai = no
+	}
+
+	option = {
+		name = sw22_crisis.63.a
+		hidden_effect = {
+			country_event = { id = sw22_crisis.71 days = 2 }
+		}	
+	}
+}
+
+country_event = {
+	id = sw22_crisis.71
+	title = "sw22_crisis.71.name"
+	desc =  "sw22_crisis.71.desc"
+	picture = GFX_evt_crisis_declared
+	show_sound = event_announcement
+	#location = root
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+	}
+
+	immediate = {
+		random_galaxy_planet = {
+			limit = {
+				has_owner = yes
+				owner = { 
+					is_ai = yes
+					is_country_type = default
+				}
+				#is_colony = yes 
+				is_artificial = no
+				NOT = { has_planet_flag = sw22_worm_attacked_this_planet }
+			}
+			set_planet_flag = sw22_worm_attacked_this_planet
+			this = { save_event_target_as = sw22_planet_attack_warning }
+			owner = { save_event_target_as = sw22_country_attack_warning }
+			owner = {
+				start_situation = {
+					type = situation_worm_attack
+					target = prev
+				}
+			}
+		}
+	}
+
+	option = {
+		name = sw22_crisis.71.a
+		hidden_effect = {
+			every_country = {
+				country_event = { id = sw22_crisis.72 days = 15 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = sw22_crisis.72
+	title = "sw22_crisis.72.name"
+	desc =  "sw22_crisis.72.desc"
+	picture = GFX_evt_deficit
+	show_sound = event_bad_omen
+	is_triggered_only = yes
+	fire_only_once = yes
+	location = root
+
+	immediate = {
+		every_country = {
+			limit = {
+				is_fallen_empire = no
+				is_primitive = no
+			}
+			start_situation = {
+				type = situation_search_for_the_worm_folk
+				target = root
+			}
+		}
+		set_global_flag = sw22_worm_assult_begin
+	}
+
+	option = {
+		name = sw22_crisis.72.a
+	}
+}
+
+country_event = { # WE ALL WON!
+	id = sw22_crisis.99
+	title = "sw22_crisis.99.name"
+	desc =  "sw22_crisis.99.desc"
+	picture = GFX_evt_crisis_defeated
+	show_sound = event_celebration
+	is_triggered_only = yes
+
+	option = {
+		name = sw22_crisis.99.a
+		owner = { add_research_option = sw22_tech_repair_damage }
+	}
+}
