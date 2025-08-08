@@ -1,14 +1,6 @@
 version="4.0.*"
 tags={
 	"Gameplay"
-	"Leaders"
-	"Galaxy Generation"
-	"Species"
-	"Diplomacy"
-	"Events"
-	"Spaceships"
-	"Technologies"
-	"Military"
 }
-name="ModJam Restoration Project"
+name="ModJam Restoration Project DEV"
 supported_version="v4.0.21"
