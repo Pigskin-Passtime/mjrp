@@ -1,0 +1,68 @@
+#########################
+#
+# Warpeo Legendary Leader - twll_relics.txt
+#
+# Written by RegiZero
+#
+#########################
+
+@triumph_duration_veryshort = 900
+
+r_warpeo_artifice = {
+	activation_duration = @triumph_duration_veryshort
+	portrait = "GFX_relic_warpeo_artifice"
+	# sound = "relic_activation_x"
+
+	resources = {
+		category = relics
+		# Activation cost
+		cost = {
+			energy = 6000
+		}
+	}
+
+	ai_weight = {
+		weight = 100
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			always = yes
+		}
+		ship_speed_mult = 0.1
+		intel_gain_speed = 0.05
+	}
+
+	score = 1000
+
+	active_effect = {
+		custom_tooltip = r_warpeo_artifice_regular_effect
+		custom_tooltip = relic_triumph_cooldown_veryshort
+		hidden_effect = {
+			country_event = {
+				id = twll_events.6
+			}
+			add_modifier = {
+				modifier = "relic_activation_cooldown"
+				days = @triumph_duration_veryshort
+			}
+		}
+	}
+
+	# Possible check for activation
+	possible = {
+		inline_script = {
+			script = relics/activation_checks
+			RELIC = r_warpeo_artifice
+		}
+		custom_tooltip = {
+			fail_text = "warpeo_not_assigned_fail"
+			any_owned_fleet = {
+				exists = leader
+				leader = {
+					has_leader_flag = warpeo
+				}
+			}
+		}
+	}
+}

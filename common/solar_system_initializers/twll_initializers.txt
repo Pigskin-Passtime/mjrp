@@ -1,0 +1,203 @@
+#########################
+#
+# Warpeo Legendary Leader - twll_initializers.txt
+#
+# Written by RegiZero
+#
+#########################
+
+legendary_leader_warpeo_puzzle = {
+	name = "NAME_legendary_puzzle_system"
+	class = "sc_black_hole"
+	usage = misc_system_init
+	spawn_chance = 0
+	usage_odds = {
+		base = 0
+	}
+	max_instances = 1
+	flags = { legendary_leader_warpeo_puzzle_system }
+	init_effect = {
+		create_warpeo_guardian_country = yes
+		random_system_planet = {
+			limit = {
+				is_star = yes
+			}
+			create_ambient_object = {
+				type = extradimensional_1
+				location = this
+			}
+			create_ambient_object = {
+				type = space_storm_1
+				location = this
+				scale = 1.5
+			}
+			add_dark_matter = yes
+		}
+		create_warpeo_guardians = yes
+	}
+
+	planet = {
+		class = star
+		orbit_distance = 0
+
+		init_effect = {
+			prevent_anomaly = yes
+			create_ambient_object = {
+				type = mysterious_space_station_object
+				entity_offset_height = { min = 10 max = 25 }
+				location = this
+				effect = {
+					set_ambient_object_flag = wapreo_abandoned_wormhole_station_flag
+				}
+			}
+			while = {
+				count = 15
+				create_ambient_object = {
+					type = "large_debris_object"
+					entity_offset_height = { min = -0 max = -25 }
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 110
+						angle = random
+					}
+				}
+			}
+			while = {
+				count = 25
+				create_ambient_object = {
+					type = "medium_debris_01_object"
+					entity_offset_height = { min = -0 max = -25 }
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 110
+						angle = random
+					}
+				}
+			}
+			while = {
+				count = 25
+				create_ambient_object = {
+					type = "medium_debris_02_object"
+					entity_offset_height = { min = -0 max = -25 }
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 110
+						angle = random
+					}
+				}
+			}
+			while = {
+				count = 30
+				create_ambient_object = {
+					type = "small_debris_object"
+					entity_offset_height = { min = -0 max = -25 }
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 110
+						angle = random
+					}
+				}
+			}
+		}
+	}
+
+	change_orbit = 100
+
+	planet = {
+		class = "pc_ringworld_tech_damaged"
+		name = "NAME_Ring_Segment_B"
+		orbit_angle = 30
+		orbit_distance = 0
+		init_effect = { prevent_anomaly = yes }
+	}
+	planet = {
+		class = "pc_ringworld_seam_damaged"
+		name = "NAME_Ring_Segment_C"
+		orbit_angle = 130
+		orbit_distance = 0
+
+		init_effect = {
+			create_ambient_object = {
+				type = "medium_debris_01_object"
+				location = THIS
+			}
+			prevent_anomaly = yes
+		}
+	}
+
+	change_orbit = 30
+
+	planet = {
+		class = "pc_barren_cold"
+		size = { min = 10 max = 15 }
+		orbit_distance = 45
+
+		moon = {
+			class = "pc_toxic"
+			size = { min = 9 max = 11 }
+			orbit_distance = 8
+			orbit_angle = { min = 90 max = 270 }
+			has_ring = no
+		}
+		moon = {
+			class = "pc_barren_cold"
+			size = { min = 11 max = 16 }
+			orbit_distance = 6
+			orbit_angle = { min = 90 max = 270 }
+			has_ring = no
+			init_effect = {
+				create_ambient_object = {
+					type = "medium_debris_01_object"
+					location = THIS
+				}
+			}
+		}
+	}
+
+	change_orbit = 20
+
+	planet = {
+		count = { min = 1 max = 3 }
+		class = "pc_barren_cold"
+		orbit_distance = { min = 20 max = 25 }
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 10 max = 20 }
+		has_ring = no
+	}
+
+	planet = {
+		class = "pc_barren_cold"
+		orbit_distance = 25
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 10 max = 20 }
+		has_ring = yes
+		init_effect = {
+			create_ambient_object = {
+				type = "medium_debris_01_object"
+				location = THIS
+			}
+			prevent_anomaly = yes
+		}
+	}
+
+	planet = {
+		count = { min = 1 max = 2 }
+		class = "pc_gas_giant"
+		orbit_distance = 35
+		orbit_angle = { min = 90 max = 270 }
+		size = { min = 10 max = 20 }
+		has_ring = yes
+	}
+}
