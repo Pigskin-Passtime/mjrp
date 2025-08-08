@@ -1,0 +1,1637 @@
+##########################################################################################################
+## viz_raff_events.txt
+## BrettlesSr
+##########################################################################################################
+namespace = viz_raff
+leader_event = {
+	id = viz_raff.1
+	title = viz_raff.1.name
+	desc = viz_raff.1.desc
+	picture = GFX_evt_throne_room
+	show_sound = event_default
+	is_triggered_only = yes
+	trigger = {
+		has_leader_flag = viz_raff
+	}
+	immediate = {
+		save_event_target_as = leader_event_target
+		owner = {
+			set_timed_country_flag = {
+				flag = viz_raff_early_days
+				days = 720
+			}
+			set_variable = {
+				which = viz_raff_power_gained_hidden
+				value = 0
+			}
+			start_situation = {
+				type = situation_viz_raff_accumulating_power
+			}
+		}
+	}
+	event_window_type = leader_story
+	event_picture_background = GFX_leader_recruitment_bg_legendary_viz_raff
+	picture_event_data = {
+		portrait = root
+	}
+	option = {
+		name = viz_raff.1.a		# SIRE
+		hidden_effect = {
+			owner = {
+				set_country_flag = viz_raff_name_sire
+			}
+		}
+	}
+	option = {
+		name = viz_raff.1.b		# MAAM
+		hidden_effect = {
+			owner = {
+				set_country_flag = viz_raff_name_maam
+			}
+		}
+	}
+	option = {
+		name = viz_raff.1.c		# EMPIRE
+		hidden_effect = {
+			owner = {
+				set_country_flag = viz_raff_name_empire
+			}
+		}
+	}
+	option = {
+		name = viz_raff.1.d		# SUPREME ONE
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_authoritarian
+					has_ethic = ethic_fanatic_authoritarian
+				}
+			}
+		}
+		icon = {
+			icon = GFX_ethics_authoritarian
+			text = viz_raff_icon.is_authoritarian
+		}
+		hidden_effect = {
+			owner = {
+				set_country_flag = viz_raff_name_supreme
+			}
+		}
+	}
+	option = {
+		name = viz_raff.1.e		# YOUR HOLINESS
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_spiritualist
+					has_ethic = ethic_fanatic_spiritualist
+				}
+			}
+		}
+		icon = {
+			icon = GFX_ethics_spiritualist
+			text = viz_raff_icon.is_spiritualist
+		}
+		hidden_effect = {
+			owner = {
+				set_country_flag = viz_raff_name_holiness
+			}
+		}
+	}
+	option = {
+		name = viz_raff.1.g		# COMMANDER
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_militarist
+					has_ethic = ethic_fanatic_militarist
+				}
+			}
+		}
+		icon = {
+			icon = GFX_ethics_militarist
+			text = viz_raff_icon.is_militarist
+		}
+		hidden_effect = {
+			owner = {
+				set_country_flag = viz_raff_name_commander
+			}
+		}
+	}
+	option = {
+		name = viz_raff.1.f		# NO TITLE
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_egalitarian
+					has_ethic = ethic_fanatic_egalitarian
+				}
+			}
+		}
+		icon = {
+			icon = GFX_ethics_egalitarian
+			text = viz_raff_icon.is_egalitarian
+		}
+		hidden_effect = {
+			owner = {
+				set_country_flag = viz_raff_name_none
+			}
+		}
+	}
+}
+
+leader_event = {
+	id = viz_raff.2
+	title = viz_raff.2.name
+	desc = viz_raff.2.desc
+	picture = GFX_evt_victorious_army
+	show_sound = event_default
+	is_triggered_only = yes
+	immediate = {
+		save_event_target_as = leader_event_target
+	}
+	event_window_type = leader_story
+	event_picture_background = GFX_leader_recruitment_bg_legendary_viz_raff
+	picture_event_data = {
+		portrait = root
+	}
+	option = {
+		name = viz_raff.2.a
+		custom_tooltip = viz_raff.2.a.tooltip
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = alloys
+					value >= 100
+				}
+				resource_stockpile_compare = {
+					resource = rare_crystals
+					value >= 10
+				}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				increment_viz_raff_hidden_power = yes
+			}
+		}
+		owner = {
+			add_resource = {
+				alloys = -100
+				rare_crystals = -10
+			}
+			hidden_effect = {
+				capital_scope = {
+					while = {
+						count = 8
+						create_army = {
+							owner = root.owner
+							type = viz_raff_hierophant_guard
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = viz_raff.2.b
+	}
+}
+
+leader_event = {
+	id = viz_raff.3
+	title = viz_raff.3.name
+	desc = viz_raff.3.desc
+	picture = GFX_evt_legendary_leader
+	show_sound = event_default
+	is_triggered_only = yes
+	event_window_type = leader_story
+	event_picture_background = GFX_leader_recruitment_bg_legendary_viz_raff
+	picture_event_data = {
+		portrait = root
+	}
+	option = {
+		name = viz_raff.3.a
+		custom_tooltip = viz_raff.3.a.tooltip
+		hidden_effect = {
+			change_variable = {
+				which = viz_raff_vizier_level
+				value = 1
+			}
+			random_list = {
+				1 = {
+					add_trait = {
+						trait = leader_trait_viz_raff_master_of_ceremonies
+					}
+				}
+				1 = {
+					add_trait = {
+						trait = leader_trait_viz_raff_staff_bearer
+					}
+				}
+				1 = {
+					add_trait = {
+						trait = leader_trait_viz_raff_truth_dweller
+					}
+				}
+				1 = {
+					modifier = {
+						factor = 0
+						owner = {
+							country_uses_food = no
+						}
+					}
+					add_trait = {
+						trait = leader_trait_viz_raff_water_bringer
+					}
+				}
+				1 = {
+					add_trait = {
+						trait = leader_trait_viz_raff_supreme_hierophant
+					}
+				}
+				1 = {
+					add_trait = {
+						trait = leader_trait_viz_raff_seal_keeper
+					}
+				}
+				1 = {
+					modifier = {
+						factor = 0
+						owner = {
+							NOT = {
+								has_technology = tech_mega_engineering
+							}
+						}
+					}
+					add_trait = {
+						trait = leader_trait_viz_raff_monument_builder
+					}
+				}
+				1 = {
+					modifier = {
+						factor = 0
+						owner = {
+							NOT = {
+								has_technology = tech_titans
+							}
+						}
+					}
+					add_trait = {
+						trait = leader_trait_viz_raff_constellation_hammer
+					}
+				}
+				1 = {
+					modifier = {
+						factor = 0
+						owner = {
+							is_spiritualist = no
+						}
+					}
+					add_trait = {
+						trait = leader_trait_viz_raff_divine_oracle
+					}
+				}
+			}
+			owner = {
+				increment_viz_raff_hidden_power = yes
+			}
+		}
+	}
+	option = {
+		name = viz_raff.3.b
+		custom_tooltip = viz_raff.3.b.tooltip
+	}
+}
+
+country_event = {
+	id = viz_raff.4
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		any_owned_leader = {
+			is_councilor = yes
+			has_trait = leader_trait_viz_raff_monument_builder
+		}
+		any_owned_megastructure = {
+			NOR = {
+				is_megastructure_type = gateway_ruined
+				is_megastructure_type = gateway_restored
+				is_megastructure_type = gateway_final
+				is_megastructure_type = hyper_relay
+				is_megastructure_type = hyper_relay_restored
+				is_megastructure_type = orbital_ring
+				is_megastructure_type = orbital_ring_ruined
+				is_megastructure_type = orbital_ring_restored
+			}
+			is_upgrading = yes
+		}
+	}
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				has_trait = leader_trait_viz_raff_monument_builder
+			}
+			leader_event = {
+				id = viz_raff.14
+				days = 100
+			}
+		}
+	}
+}
+
+leader_event = {
+	id = viz_raff.5
+	title = viz_raff.5.name
+	desc = {
+		trigger = {
+			is_ruler = yes
+		}
+		text = viz_raff.5.ruler.desc
+	}
+	desc = {
+		trigger = {
+			is_ruler = no
+		}
+		text = viz_raff.5.desc
+	}
+	picture = GFX_evt_coronation
+	show_sound = event_default
+	is_triggered_only = yes
+	trigger = {
+		has_leader_flag = viz_raff
+	}
+	immediate = {
+		owner = {
+			save_event_target_as = viz_raff_coup_target
+		}
+		save_global_event_target_as = viz_raff_off_to_coup
+		exile_leader_as = viz_raff_off_to_coup
+	}
+	event_window_type = leader_story
+	event_picture_background = GFX_leader_recruitment_bg_legendary_viz_raff
+	picture_event_data = {
+		portrait = root
+	}
+	option = {
+		name = viz_raff.5.a		#accept
+		custom_tooltip = viz_raff.5.a.tooltip
+		event_target:viz_raff_coup_target = {
+			ruler = {
+				save_event_target_as = former_ruler
+			}
+			shift_ethic = ethic_fanatic_materialist
+			shift_ethic = ethic_authoritarian
+			change_government = {
+				authority = auth_dictatorial
+				remove_invalid_civics = yes
+			}
+			set_leader = root
+		}
+		set_council_position = councilor_ruler_dictatorial
+		hidden_effect = {
+			leader_event = {
+				id = viz_raff.9
+				days = 7200
+			}
+		}
+	}
+	option = {
+		name = viz_raff.5.b		#resist
+		random_list = {
+			100 = {
+				modifier = {
+					subtract = event_target:viz_raff_coup_target.viz_raff_power_gained_hidden
+					always = yes
+				}
+				hidden_effect = {
+					custom_tooltip = viz_raff_resistance_successful
+					event_target:viz_raff_coup_target = {
+						country_event = {
+							id = viz_raff.6
+							days = 7
+						}
+					}
+				}
+			}
+			0 = {
+				modifier = {
+					add = event_target:viz_raff_coup_target.viz_raff_power_gained_hidden
+					always = yes
+				}
+				hidden_effect = {
+					custom_tooltip = viz_raff_resistance_failed
+					event_target:viz_raff_coup_target = {
+						set_country_flag = viz_raff_resistance_failed
+						country_event = {
+							id = viz_raff.7
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = viz_raff.6
+	title = viz_raff.6.name
+	desc = viz_raff.6.desc
+	picture = GFX_evt_victorious_army
+	is_triggered_only = yes
+	show_sound = event_ship_explosion
+	immediate = {
+		random_situation = {
+			limit = {
+				is_situation_type = situation_viz_raff_accumulating_power
+			}
+			destroy_situation = this
+		}
+		remove_country_flag = viz_raff_present
+	}
+	option = {
+		name = UNFORTUNATE
+		hidden_effect = {
+			if = {
+				limit = {
+					any_neighbor_country = {
+						is_country_type = default
+						is_homicidal = no
+						has_communications = root
+						NOR = {
+							is_at_war_with = root
+							is_country = root
+							has_defensive_pact = root
+							is_in_federation_with = root
+						}
+					}
+				}
+				random_neighbor_country = {
+					limit = {
+						is_country_type = default
+						is_homicidal = no
+						has_communications = root
+						NOR = {
+							is_at_war_with = root
+							is_country = root
+							has_defensive_pact = root
+							is_in_federation_with = root
+						}
+					}
+					save_event_target_as = new_viz_raffar_host
+					set_country_flag = viz_raff_present
+				}
+				clone_leader = {
+					target = event_target:viz_raff_off_to_coup
+					background_planet = event_target:viz_raff_nuked_ruins
+				}
+				last_created_leader = {
+					save_global_event_target_as = viz_raff_leader
+					set_leader_flag = legendary_leader
+					set_leader_flag = viz_raff
+					set_leader_flag = immune_to_negative_traits
+					set_leader_flag = leader_death_events_blocked
+					set_owner = event_target:new_viz_raffar_host
+					set_variable = {
+						which = viz_raff_vizier_level
+						value = 1
+					}
+					leader_event = {
+						id = viz_raff.1
+						days = 30
+					}
+				}
+				country_event = {
+					id = viz_raff.8
+					days = 360
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = viz_raff.7
+	title = viz_raff.7.name
+	desc = viz_raff.7.desc
+	picture = GFX_evt_victorious_army
+	is_triggered_only = yes
+	show_sound = event_ship_explosion
+	immediate = {
+		random_situation = {
+			limit = {
+				is_situation_type = situation_viz_raff_accumulating_power
+			}
+			destroy_situation = this
+		}
+	}
+	option = {
+		name = viz_raff.7.a
+		shift_ethic = ethic_fanatic_materialist
+		shift_ethic = ethic_authoritarian
+		change_government = {
+			authority = auth_dictatorial
+			remove_invalid_civics = yes
+		}
+		ruler = {
+			save_event_target_as = former_ruler
+		}
+		event_target:viz_raff_off_to_coup = {
+			set_owner = root
+			root = {
+				set_leader = event_target:viz_raff_off_to_coup
+			}
+			set_council_position = councilor_ruler_dictatorial
+			leader_event = {
+				id = viz_raff.9
+				days = 7200
+			}
+		}
+	}
+}
+
+country_event = {
+	id = viz_raff.8
+	title = viz_raff.8.name
+	desc = viz_raff.8.desc
+	location = event_target:new_viz_raffar_host
+	diplomatic = yes
+	is_triggered_only = yes
+	trigger = {
+		any_neighbor_country = {
+			any_owned_leader = {
+				has_leader_flag = viz_raff
+			}
+		}
+	}
+	immediate = {
+		random_neighbor_country = {
+			limit = {
+				any_owned_leader = {
+					has_leader_flag = viz_raff
+				}
+			}
+			save_event_target_as = new_viz_raffar_host
+			add_opinion_modifier = {
+				who = root
+				modifier = opinion_viz_raff_lies
+			}
+		}
+	}
+	picture_event_data = {
+		portrait = event_target:new_viz_raffar_host
+		planet_background = event_target:new_viz_raffar_host
+		graphical_culture = event_target:new_viz_raffar_host
+		city_level = event_target:new_viz_raffar_host
+		room = event_target:new_viz_raffar_host.ruler
+	}
+	option = {
+		name = viz_raff.8.a
+		response_text = viz_raff.8.a.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = END_TRANSMISSION
+		default_hide_option = yes
+	}
+}
+
+leader_event = {
+	id = viz_raff.9
+	title = viz_raff.9.name
+	desc = viz_raff.9.desc
+	picture = GFX_evt_announcement
+	show_sound = event_default
+	is_triggered_only = yes
+	trigger = {
+		has_leader_flag = viz_raff
+	}
+	event_window_type = leader_story
+	event_picture_background = GFX_leader_recruitment_bg_legendary_viz_raff
+	picture_event_data = {
+		portrait = root
+	}
+	option = {
+		name = viz_raff.9.a
+		owner = {
+			hidden_effect = {
+				save_event_target_as = viz_raff_great_transformation_owner
+			}
+			enable_special_project = {
+				name = VIZ_RAFF_GREAT_TRANSFORMATION
+				owner = owner
+				location = owner.capital_scope
+			}
+		}
+	}
+}
+
+# The Synthetic Age
+country_event = {
+	id = viz_raff.10
+	title = viz_raff.10.name
+	desc = viz_raff.10.desc
+	picture = GFX_evt_robot_assembly_plant
+	show_sound = event_synthetic_evolution
+	is_triggered_only = yes
+	immediate = {
+		give_technology = {
+			tech = tech_bio_reactor
+			message = no
+		}
+		if = {
+			limit = {
+				has_policy_flag = robots_outlawed
+			}
+			set_policy = {
+				policy = robot_pop_policy
+				option = robot_pops_allowed
+				cooldown = yes
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					has_policy_flag = ai_servitude
+					has_policy_flag = ai_outlawed
+				}
+			}
+			set_policy = {
+				policy = artificial_intelligence_policy
+				option = ai_full_rights
+				cooldown = yes
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					is_active_resolution = "resolution_divinity_silence_the_soulless"
+					is_active_resolution = "resolution_divinity_a_defined_purpose"
+				}
+			}
+			owner = {
+				set_timed_country_flag = {
+					flag = resolution_breached_synthetic_evolution
+					days = 3600
+				}
+			}
+		}
+		create_species = {
+			is_mod = no
+			name = this
+			namelist = this
+			plural = this
+			class = "ROBOT"
+			homeworld = root.species
+			portrait = "lith_machine"
+			traits = {
+				trait = trait_mechanical
+				trait = trait_robot_repurposed_hardware
+				trait = trait_robot_power_drills
+			}
+			effect = {
+				save_event_target_as = new_robotic_species_viz_raff_slaves
+			}
+		}
+		create_species = {
+			is_mod = yes
+			name = this
+			namelist = this
+			plural = this
+			class = "ROBOT"
+			homeworld = root.species
+			portrait = "sd_hum_robot"
+			traits = {
+				trait = trait_mechanical
+				trait = trait_robot_enhanced_memory
+				trait = trait_robot_learning_algorithms
+				trait = trait_robot_luxurious
+			}
+			effect = {
+				rename_species = {
+					prompt_country = root					#If targeted country is a player they will get a popup asking for a name/plural/adjective combo. Otherwise the species will get a random name from the specified name_list
+					name_list = ascension_list
+				}
+				save_event_target_as = new_robotic_species_viz_raff_rulers
+			}
+		}
+		every_owned_pop_group = {
+			limit = {
+				is_being_purged = no
+				is_pop_category = ruler
+				is_robotic_species = no
+				species = {
+					is_livestock = no
+				}
+			}
+			change_species = event_target:new_robotic_species_viz_raff_rulers
+		}
+		every_owned_pop_group = {
+			limit = {
+				is_being_purged = no
+				is_robotic_species = no
+				species = {
+					is_livestock = no
+				}
+			}
+			if = {
+				limit = {
+					is_pop_category = worker
+				}
+				change_species = event_target:new_robotic_species_viz_raff_slaves
+			}
+			else = {
+				change_species = event_target:new_robotic_species_viz_raff_rulers
+			}
+		}
+		every_controlled_ship = {
+			limit = {
+				is_ship_class = shipclass_colonizer
+				species = {
+					is_robotic = no
+					is_livestock = no
+				}
+			}
+			change_species = event_target:new_robotic_species_viz_raff_rulers
+		}
+		every_owned_army = {
+			limit = {
+				exists = species
+				species = {
+					is_robotic = no
+					is_livestock = no
+				}
+				army_type = assault_army
+			}
+			modify_army = {
+				name = random
+				type = "robotic_army"
+				species = event_target:new_robotic_species_viz_raff_slaves
+			}
+		}
+		every_owned_army = {
+			limit = {
+				exists = species
+				exists = planet
+				species = {
+					is_robotic = no
+					is_livestock = no
+				}
+				army_type = defense_army
+			}
+			modify_army = {
+				name = random
+				type = "robotic_defense_army"
+				species = event_target:new_robotic_species_viz_raff_slaves
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				OR = {
+					species = {
+						is_robotic = no
+						is_livestock = no
+					}
+					has_trait = leader_trait_synthetic
+				}
+				NOR = {
+					has_leader_flag = renowned_leader
+					has_leader_flag = legendary_leader
+				}
+			}
+			change_species = event_target:new_robotic_species_viz_raff_rulers
+			change_leader_portrait = species
+		}
+		every_pool_leader = {
+			limit = {
+				OR = {
+					species = {
+						is_robotic = no
+						is_livestock = no
+					}
+					has_trait = leader_trait_synthetic
+				}
+			}
+			change_species = event_target:new_robotic_species_viz_raff_rulers
+			change_leader_portrait = species
+		}
+		change_dominant_species = {
+			species = event_target:new_robotic_species_viz_raff_rulers
+		}
+		event_target:new_robotic_species_viz_raff_slaves = {
+			set_citizenship_type = {
+				type = citizenship_limited
+				country = root
+			}
+			set_military_service_type = {
+				type = military_service_limited
+				country = root
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				species = {
+					has_trait = trait_mechanical
+				}
+				NOR = {
+					has_trait = leader_trait_synthetic
+					has_leader_flag = renowned_leader
+					has_leader_flag = legendary_leader
+				}
+			}
+			add_trait = {
+				trait = leader_trait_synthetic
+				show_message = no
+			}
+			remove_trait = leader_trait_cyborg
+		}
+		create_message = {
+			type = MESSAGE_ALL_GAINED_TRAIT
+			localization = MESSAGE_ALL_GAINED_TRAIT_DESC
+			days = @toast_message_days
+			variable = {
+				type = key
+				value = leader_trait_synthetic
+				localization = TRAIT
+			}
+			variable = {
+				key = TRAIT_KEY
+				value = leader_trait_synthetic
+			}
+			variable = {
+				key = "border"
+				value = "GFX_invisible"
+			}
+		}
+		every_envoy = {
+			limit = {
+				species = {
+					is_robotic = no
+					is_livestock = no
+				}
+			}
+			change_species = event_target:new_robotic_species_viz_raff_rulers
+			change_leader_portrait = species
+		}
+		every_pool_leader = {
+			limit = {
+				species = {
+					has_trait = trait_mechanical
+				}
+				NOT = {
+					has_trait = leader_trait_synthetic
+				}
+			}
+			add_trait = {
+				trait = leader_trait_synthetic
+				show_message = no
+			}
+			remove_trait = leader_trait_cyborg
+		}
+		observer_event = {
+			id = observer.4
+		}
+		every_country = {
+			limit = {
+				is_ai = no
+				NOT = {
+					is_same_value = root
+				}
+				has_communications = root
+			}
+			country_event = {
+				id = utopia.2555
+				days = 5
+			}
+			country_event = {
+				id = utopia.2556
+				days = 10
+			}
+		}
+		if = {
+			limit = {
+				any_country = {
+					OR = {
+						is_country_type = fallen_empire
+						is_country_type = awakened_fallen_empire
+					}
+					has_ethic = ethic_fanatic_spiritualist
+					has_communications = root
+					NOT = {
+						is_same_value = root
+					}
+				}
+			}
+			random_country = {
+				limit = {
+					OR = {
+						is_country_type = fallen_empire
+						is_country_type = awakened_fallen_empire
+					}
+					has_ethic = ethic_fanatic_spiritualist
+					has_communications = root
+					NOT = {
+						is_same_value = root
+					}
+				}
+				country_event = {
+					id = utopia.2557
+					days = 15
+				}
+			}
+		}
+		else = {
+			random_country = {
+				limit = {
+					is_country_type = default
+					has_ethic = ethic_fanatic_spiritualist
+					has_communications = root
+					NOT = {
+						is_same_value = root
+					}
+				}
+				country_event = {
+					id = utopia.2557
+					days = 15
+				}
+			}
+		}
+		ROOT = {
+			set_country_flag = synth_assimilation
+		}
+		if = {
+			limit = {
+				any_planet_within_border = {
+					has_planet_flag = fotd_seperatist_planet@root
+					owner = {
+						has_country_flag = fotd_seperatist_country@root
+					}
+				}
+			}
+			country_event = {
+				id = origin.6100
+				days = 5
+				random = 2
+			}
+		}
+	}
+	option = {
+		trigger = {
+			is_homicidal = no
+		}
+		name = viz_raff.10.a
+		custom_tooltip = SYNTH_ASSIMILATION_CITIZENSHIP_ENABLED
+	}
+	option = {
+		trigger = {
+			is_homicidal = yes
+		}
+		name = viz_raff.10.a
+	}
+}
+
+country_event = {
+	id = viz_raff.11
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		has_country_flag = viz_raff_present
+		any_owned_leader = {
+			has_leader_flag = viz_raff
+			has_trait = leader_trait_viz_raff_truth_dweller
+		}
+	}
+	immediate = {
+		save_event_target_as = viz_raff_country
+		every_neighbor_country = {
+			save_event_target_as = viz_raff_spying_target
+			if = {
+				limit = {
+					any_system_within_border = {
+						any_neighbor_system = {
+							exists = owner
+							owner = {
+								is_same_value = event_target:viz_raff_country
+							}
+							exists = starbase
+							starbase = {
+								OR = {
+									has_starbase_building = listening_post
+									has_starbase_building = dark_matter_listening_post
+								}
+							}
+						}
+					}
+				}
+				#add asset if not exists
+				event_target:viz_raff_country = {
+					random_spynetwork = {
+						limit = {
+							owner = {
+								is_same_value = event_target:viz_raff_country
+							}
+							target = {
+								is_same_value = event_target:viz_raff_spying_target
+							}
+							NOT = {
+								has_espionage_asset = asset_viz_raff_listening_post
+							}
+						}
+						create_espionage_asset = {
+							type = asset_viz_raff_listening_post
+						}
+					}
+				}
+			}
+			else = {
+				#remove asset if exists
+				event_target:viz_raff_country = {
+					random_spynetwork = {
+						limit = {
+							owner = {
+								is_same_value = event_target:viz_raff_country
+							}
+							target = {
+								is_same_value = event_target:viz_raff_spying_target
+							}
+							has_espionage_asset = asset_viz_raff_listening_post
+						}
+						destroy_espionage_asset = asset_viz_raff_listening_post
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = viz_raff.12
+	hide_window = yes
+	is_triggered_only = no
+	mean_time_to_happen = {
+		months = 3
+	}
+	trigger = {
+		any_owned_leader = {
+			has_leader_flag = viz_raff
+		}
+		OR = {
+			resource_stockpile_compare = {
+				resource = rare_crystals
+				value > 0
+			}
+			resource_income_compare = {
+				resource = rare_crystals
+				value > 0
+			}
+			has_country_flag = rare_crystals_found
+		}
+		NOT = {
+			has_country_flag = viz_raff_offered_hierophant_guard
+		}
+		is_at_war = yes
+		any_country = {
+			is_at_war_with = root.owner
+		}
+		count_owned_army = {
+			limit = {
+				is_defensive_army = no
+			}
+			count < 10
+		}
+	}
+	immediate = {
+		set_country_flag = viz_raff_offered_hierophant_guard
+		random_owned_leader = {
+			limit = {
+				has_leader_flag = viz_raff
+			}
+			leader_event = {
+				id = viz_raff.2
+			}
+		}
+	}
+}
+
+country_event = {
+	id = viz_raff.13
+	hide_window = yes
+	is_triggered_only = no
+	mean_time_to_happen = {
+		years = 5
+	}
+	trigger = {
+		any_owned_leader = {
+			has_leader_flag = viz_raff
+			has_base_skill < 10
+			NOT = {
+				check_variable = {
+					which = viz_raff_vizier_level
+					value >= 4
+				}
+			}
+		}
+		NOT = {
+			has_country_flag = viz_raff_offered_trait_for_stage
+		}
+		NOT = {
+			has_country_flag = viz_raff_early_days
+		}
+	}
+	immediate = {
+		set_country_flag = viz_raff_offered_trait_for_stage
+		random_owned_leader = {
+			limit = {
+				has_leader_flag = viz_raff
+			}
+			leader_event = {
+				id = viz_raff.3
+			}
+		}
+	}
+}
+
+leader_event = {
+	id = viz_raff.14
+	is_triggered_only = yes
+	title = viz_raff.14.name
+	desc = viz_raff.14.desc
+	picture = GFX_evt_megastructure_construction
+	event_window_type = leader_story
+	event_picture_background = GFX_leader_recruitment_bg_legendary_viz_raff
+	picture_event_data = {
+		portrait = root
+	}
+	immediate = {
+		owner = {
+			random_owned_megastructure = {
+				limit = {
+					NOR = {
+						is_megastructure_type = gateway_ruined
+						is_megastructure_type = gateway_restored
+						is_megastructure_type = gateway_final
+						is_megastructure_type = hyper_relay
+						is_megastructure_type = hyper_relay_restored
+						is_megastructure_type = orbital_ring
+						is_megastructure_type = orbital_ring_ruined
+						is_megastructure_type = orbital_ring_restored
+					}
+					is_upgrading = yes
+				}
+				save_event_target_as = megastructure_upgrading
+			}
+		}
+	}
+	option = {
+		name = viz_raff.14.a
+		trigger = {
+			owner = {
+				any_owned_pop_group = {
+					is_enslaved = yes
+				}
+			}
+		}
+		while = {
+			count = 3
+			owner = {
+				random_owned_pop_group = {
+					limit = {
+						is_enslaved = yes
+					}
+					kill_single_pop = yes
+				}
+			}
+		}
+		owner = {
+			add_modifier = {
+				modifier = viz_raff_rush_job
+				days = 200
+			}
+		}
+	}
+	option = {
+		name = viz_raff.14.b
+		owner = {
+			enable_special_project = {
+				name = VIZ_RAFF_SCIENCE_RUSH_JOB
+				owner = owner
+				location = event_target:megastructure_upgrading
+			}
+		}
+	}
+	option = {
+		name = viz_raff.14.c
+		trigger = {
+			owner = {
+				NOT = {
+					has_modifier = viz_raff_exhausted_military
+				}
+			}
+		}
+		owner = {
+			add_modifier = {
+				modifier = viz_raff_rush_job
+				days = 400
+			}
+			add_modifier = {
+				modifier = viz_raff_exhausted_military
+				days = 800
+			}
+		}
+	}
+}
+
+country_event = {
+	id = viz_raff.15
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		capital_star = {
+			spawn_viz_raff = yes
+		}
+	}
+}
+
+country_event = {
+	id = viz_raff.16
+	hide_window = yes
+	is_triggered_only = no
+	mean_time_to_happen = {
+		months = 9
+	}
+	trigger = {
+		has_country_flag = viz_raff_grand_vizier_position_enabled
+		any_owned_leader = {
+			has_leader_flag = viz_raff
+			NOT = {
+				is_ruler = yes
+			}
+		}
+		any_owned_leader = {
+			is_councilor_type = councilor_viz_raff_grand_vizier
+			NOT = {
+				has_leader_flag = viz_raff
+			}
+		}
+	}
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				is_councilor_type = councilor_viz_raff_grand_vizier
+				NOT = {
+					has_leader_flag = viz_raff
+				}
+			}
+			save_event_target_as = ill_leader
+			if = {
+				limit = {
+					OR = {
+						has_trait = trait_machine_unit
+						has_trait = trait_mechanical
+					}
+				}
+				add_trait = {
+					trait = leader_trait_viz_raff_mysterious_illness_robot
+				}
+			}
+			else = {
+				add_trait = {
+					trait = leader_trait_viz_raff_mysterious_illness
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = viz_raff.17
+	hide_window = yes
+	is_triggered_only = no
+	mean_time_to_happen = {
+		months = 3
+	}
+	trigger = {
+		has_country_flag = viz_raff_grand_vizier_position_enabled
+		any_owned_leader = {
+			OR = {
+				NOT = {
+					is_councilor_type = councilor_viz_raff_grand_vizier
+				}
+				owner = {
+					NOT = {
+						any_owned_leader = {
+							has_leader_flag = viz_raff
+						}
+					}
+				}
+				owner = {
+					any_owned_leader = {
+						has_leader_flag = viz_raff
+						is_ruler = yes
+					}
+				}
+			}
+			OR = {
+				has_trait = leader_trait_viz_raff_mysterious_illness
+				has_trait = leader_trait_viz_raff_mysterious_illness_robot
+			}
+		}
+	}
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				OR = {
+					NOT = {
+						is_councilor_type = councilor_viz_raff_grand_vizier
+					}
+				}
+				OR = {
+					has_trait = leader_trait_viz_raff_mysterious_illness
+					has_trait = leader_trait_viz_raff_mysterious_illness_robot
+				}
+			}
+			if = {
+				limit = {
+					has_trait = leader_trait_viz_raff_mysterious_illness
+				}
+				remove_trait = leader_trait_viz_raff_mysterious_illness
+			}
+			if = {
+				limit = {
+					has_trait = leader_trait_viz_raff_mysterious_illness_robot
+				}
+				remove_trait = leader_trait_viz_raff_mysterious_illness_robot
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = viz_raff.18
+	title = viz_raff.18.name
+	desc = viz_raff.18.desc
+	picture = GFX_evt_megastructure_construction
+	is_triggered_only = yes
+	option = {
+		name = EXCELLENT
+		owner = {
+			add_modifier = {
+				modifier = viz_raff_rush_job
+				days = 200
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = viz_raff.19
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		owner = {
+			has_policy_flag = viz_raff_ceremonies_inauguration
+		}
+	}
+	immediate = {
+		owner = {
+			add_resource = {
+				unity = 5
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = viz_raff.20
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		owner = {
+			has_policy_flag = viz_raff_ceremonies_inauguration
+		}
+	}
+	immediate = {
+		if = {
+			limit = {
+				NOT = {
+					is_variable_set = viz_raff_counting_pops
+				}
+			}
+			set_variable = {
+				which = viz_raff_counting_pops
+				value = 0
+			}
+		}
+		change_variable = {
+			which = viz_raff_counting_pops
+			value = root.local_pop_amount
+		}
+		while = {
+			limit = {
+				check_variable = {
+					which = viz_raff_counting_pops
+					value > 20
+				}
+			}
+			change_variable = {
+				which = viz_raff_counting_pops
+				value = -20
+			}
+			owner = {
+				add_resource = {
+					unity = 1
+				}
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = viz_raff.21
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		owner = {
+			has_policy_flag = viz_raff_ceremonies_inauguration
+		}
+	}
+	immediate = {
+		owner = {
+			add_resource = {
+				unity = 500
+			}
+		}
+	}
+}
+
+country_event = {
+	id = viz_raff.22
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_policy_flag = viz_raff_ceremonies_remembrance
+	}
+	immediate = {
+		add_resource = {
+			unity = 500
+		}
+	}
+}
+
+country_event = {
+	id = viz_raff.23
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_policy_flag = viz_raff_ceremonies_remembrance
+	}
+	immediate = {
+		add_resource = {
+			unity = 50
+		}
+	}
+}
+
+country_event = {
+	id = viz_raff.24
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_policy_flag = viz_raff_ceremonies_remembrance
+	}
+	immediate = {
+		add_resource = {
+			unity = 1
+		}
+	}
+}
+
+country_event = {
+	id = viz_raff.25
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_policy_flag = viz_raff_ceremonies_advancement
+	}
+	immediate = {
+		add_resource = {
+			unity = 50
+		}
+	}
+}
+
+country_event = {
+	id = viz_raff.26
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		from = {
+			has_leader_flag = viz_raff
+		}
+		any_neighbor_country = {
+			is_country_type = default
+			is_homicidal = no
+			has_communications = root
+			NOR = {
+				is_at_war_with = root
+				is_country = root
+				has_defensive_pact = root
+				is_in_federation_with = root
+			}
+		}
+	}
+	immediate = {
+		remove_country_flag = viz_raff_present
+		random_neighbor_country = {
+			limit = {
+				is_country_type = default
+				is_homicidal = no
+				has_communications = root
+				NOR = {
+					is_at_war_with = root
+					is_country = root
+					has_defensive_pact = root
+					is_in_federation_with = root
+				}
+			}
+			save_event_target_as = new_viz_raffar_host
+			set_country_flag = viz_raff_present
+		}
+		clone_leader = {
+			target = from
+			background_planet = event_target:viz_raff_nuked_ruins
+		}
+		last_created_leader = {
+			save_global_event_target_as = viz_raff_leader
+			set_leader_flag = legendary_leader
+			set_leader_flag = viz_raff
+			set_leader_flag = immune_to_negative_traits
+			set_leader_flag = leader_death_events_blocked
+			set_owner = event_target:new_viz_raffar_host
+			set_variable = {
+				which = viz_raff_vizier_level
+				value = 1
+			}
+			leader_event = {
+				id = viz_raff.1
+				days = 30
+			}
+		}
+		country_event = {
+			id = viz_raff.8
+			days = 360
+		}
+	}
+}
+
+# Testing Events
+country_event = {
+	id = viz_raff.27
+	is_triggered_only = yes
+	hide_window = yes
+	immediate = {
+		random_situation = {
+			limit = {
+				is_situation_type = situation_viz_raff_accumulating_power
+			}
+			add_situation_progress = 50
+		}
+	}
+}
+
+country_event = {
+	id = viz_raff.28
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				has_leader_flag = viz_raff
+			}
+			add_trait = {
+				trait = leader_trait_viz_raff_master_of_ceremonies
+			}
+			add_trait = {
+				trait = leader_trait_viz_raff_staff_bearer
+			}
+		}
+		capital_scope = {
+			create_army = {
+				owner = root.owner
+				type = viz_raff_hierophant_guard
+			}
+		}
+	}
+}
+
+event = {
+	id = viz_raff.29
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_global_flag = viz_raff_allowed
+		set_global_flag = viz_raff_installed
+	}
+}
