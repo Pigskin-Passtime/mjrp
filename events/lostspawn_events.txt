@@ -18,6 +18,7 @@ country_event = {
     }
 
 	immediate = {
+		# set_country_flag = mjrp_lostspawn_empire
 		capital_scope = {
 			create_archaeological_site = lostspawn_home_system_site
 			save_global_event_target_as = lostspawn_begining_site
@@ -74,6 +75,9 @@ ship_event = {
 	
 	
 	immediate = {
+		owner = {
+			set_country_flag = mjrp_lostspawn_god_owner # MJRP: Used to track which empire should receive events related to the god
+		}
 		if = {
 			limit = {
 				solar_system = {
@@ -167,6 +171,9 @@ ship_event = {
 	
 	
 	immediate = {
+		owner = {
+			set_country_flag = mjrp_lostspawn_god_owner # MJRP: Used to track which empire should receive events related to the god
+		}
 		if = {
 			limit = {
 				solar_system = {
@@ -242,7 +249,7 @@ ship_event = {
 }
 
 
-###Mech God Diplomacy#################################################################################################
+# Mech God Diplomacy
 ship_event = {
 	id = lostspawn.1000
 	title = lostspawn.1000.name
@@ -359,26 +366,7 @@ country_event = {
 	}
 }
 
-#country_event = { #mech god becomes hostile
-#	id = lostspawn.1003
-#	hide_window = yes
-#	is_triggered_only = yes
-#	
-#	immediate = {
-#		
-#	}
-#}
-
-#country_event = { #mech god becomes friendly
-#	id = lostspawn.1004
-#	hide_window = yes
-#	is_triggered_only = yes
-#	
-#	immediate = {
-#		
-#	}
-#}
-###Old God Diplomacy##################################################################################################
+# Old God Diplomacy
 ship_event = {
 	id = lostspawn.1010
 	title = lostspawn.1010.name
@@ -497,6 +485,85 @@ country_event = {
 
 ###God Killing#################################################################################################
 
+# God killed GATEKEEPER [MJRP]
+country_event = {
+	id = lostspawn.200
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		from = {
+			OR = {
+				has_country_flag = old_god_country
+				has_country_flag = mechanical_god_country
+			}
+		}
+	}
+
+	immediate = {
+		random_playable_country = {
+			limit = {
+				has_country_flag = mjrp_lostspawn_god_owner
+			}
+			save_event_target_as = mjrp_lostspawn_target
+		}
+
+		if = { # Killer is Lostspawn empire, god is mechanical
+			limit = {
+				is_same_value = event_target:mjrp_lostspawn_target
+				from = { has_country_flag = mechanical_god_country }
+			}
+			event_target:mjrp_lostspawn_target = {
+				country_event = { id = lostspawn.201 }
+			}
+		}
+		else_if = { # Killer is Lostspawn empire, god is organic
+			limit = {
+				is_same_value = event_target:mjrp_lostspawn_target
+				from = { has_country_flag = old_god_country }
+			}
+			event_target:mjrp_lostspawn_target = {
+				country_event = { id = lostspawn.211 }
+			}
+		}
+
+		else_if = { # Killer is NOT Lostspawn empire, god is mechanical
+			limit = {
+				NOT = { is_same_value = event_target:mjrp_lostspawn_target }
+				from = { has_country_flag = mechanical_god_country }
+			}
+			event_target:mjrp_lostspawn_target = {
+				country_event = { id = lostspawn.202 }
+			}
+		}
+		else_if = { # Killer is NOT Lostspawn empire, god is organic [protectors]
+			limit = {
+				NOT = { is_same_value = event_target:mjrp_lostspawn_target }
+				from = { has_country_flag = old_god_country }
+				event_target:mjrp_lostspawn_target = {
+					has_country_flag = old_god_protector_country
+				}
+			}
+			event_target:mjrp_lostspawn_target = {
+				country_event = { id = lostspawn.212 }
+			}
+		}
+		else_if = { # Killer is NOT Lostspawn empire, god is organic [not protectors]
+			limit = {
+				NOT = { is_same_value = event_target:mjrp_lostspawn_target }
+				from = { has_country_flag = old_god_country }
+				event_target:mjrp_lostspawn_target = {
+					NOT = { has_country_flag = old_god_protector_country }
+				}
+			}
+			event_target:mjrp_lostspawn_target = {
+				country_event = { id = lostspawn.213 }
+			}
+		}
+	}
+}
+
 # Mech God killed
 country_event = {
 	id = lostspawn.201
@@ -509,7 +576,7 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		from = { has_country_flag = mechanical_god_country }
+		# from = { has_country_flag = mechanical_god_country }
 	}
 
 	option = {
@@ -527,13 +594,13 @@ country_event = {
  			resource = unity
 			value = 72
 			min = 1000
-			max = 3000
+			max = 5000
   		}
 		add_monthly_resource_mult = {
  			resource = society_research
 			value = 72
 			min = 1000
-			max = 3000
+			max = 5000
   		}
 	}
 }
@@ -551,14 +618,13 @@ country_event = {
 	
 
 	trigger = {
-		from = { has_country_flag = mechanical_god_country }
-		has_country_flag = lostspawn_god_mechanical
-		NOT = { has_country_flag = hostile_to_mechanical_god }
+		# from = { has_country_flag = mechanical_god_country }
+		# has_country_flag = lostspawn_god_mechanical
+		# NOT = { has_country_flag = hostile_to_mechanical_god }
 	}
 	
 	option = {
 		name = lostspawn.202.a
-		
 	}
 }
 
@@ -574,7 +640,7 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		from = { has_country_flag = old_god_country }
+		# from = { has_country_flag = old_god_country }
 	}
 	
 	immediate = {
@@ -614,9 +680,9 @@ country_event = {
 	
 
 	trigger = {
-		from = { has_country_flag = old_god_country }
-		has_country_flag = old_god_protector_country
-		has_country_flag = lostspawn_god_old
+		# from = { has_country_flag = old_god_country }
+		# has_country_flag = old_god_protector_country
+		# has_country_flag = lostspawn_god_old
 	}
 	
 	option = {
@@ -642,18 +708,13 @@ country_event = {
 	
 
 	trigger = {
-		from = { has_country_flag = old_god_country }
-		has_country_flag = lostspawn_god_old
-		NOT = { has_country_flag = old_god_protector_country }
+		# from = { has_country_flag = old_god_country }
+		# has_country_flag = lostspawn_god_old
+		# NOT = { has_country_flag = old_god_protector_country }
 	}
 	
 	option = {
 		name = lostspawn.213.a
-		remove_modifier = lostspawn_old_god_protector
-		add_modifier = {
-			modifier = "lostspawn_old_god_failed_protector"
-			days = -1
-		}
 	}
 }
 
