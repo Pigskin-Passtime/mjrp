@@ -19,26 +19,50 @@ utility_component_template = {
 	icon_frame = 1
 	power = 0
 	
-	scripted_action_button_possible = {
-		event_target:celestial_fleet.owner = {
-			has_resource = { type = energy amount >= 5000 }
-			NOT = { has_modifier = celestial_used_distortion }
-		}
-	}
+	# scripted_action_button_possible = {
+	# 	event_target:celestial_fleet.owner = {
+	# 		has_resource = { type = energy amount >= 5000 }
+	# 		NOT = { has_modifier = celestial_used_distortion }
+	# 	}
+	# }
 	
-	scripted_action_possible = {
-		is_star = yes
-		if = {
-			limit = { exists = space_owner }
-			space_owner = { is_same_value = event_target:celestial_fleet.owner }
-		}
-	}
+	# scripted_action_possible = {
+	# 	is_star = yes
+	# 	if = {
+	# 		limit = { exists = space_owner }
+	# 		space_owner = { is_same_value = event_target:celestial_fleet.owner }
+	# 	}
+	# }
 	
-	scripted_action_icon = GFX_fleet_order_button_special_project
-	scripted_action_name = on_celestial_target_planet_reached
-	scripted_action_tooltip = celestial_ship_button_desc
-	scripted_action_activity_key = celestial_action_activity_key
-	scripted_action_context_menu_name = celestial_context_menu_title
+	# scripted_action_icon = GFX_fleet_order_button_special_project
+	# scripted_action_name = on_celestial_target_planet_reached
+	# scripted_action_tooltip = celestial_ship_button_desc
+	# scripted_action_activity_key = celestial_action_activity_key
+	# scripted_action_context_menu_name = celestial_context_menu_title
+
+	scripted_action = {
+		scope = planet
+
+		possible = {
+			is_star = yes
+		}
+
+		button_clickable = {
+		}
+
+		name = on_celestial_target_isolated
+		tooltip = celestial_ship_button_desc
+		icon = GFX_fleet_order_button_special_project
+		icon_selected = GFX_fleet_order_button_special_project
+
+		activity_key = celestial_action_activity_key
+		context_menu_name = celestial_context_menu_title
+		progress_activity_key = celestial_action_activity_key_progress
+		
+		required_progress = 30
+		cooldown = 1800
+		cost = { energy = 5000 }
+	}
 }
 
 utility_component_template = {

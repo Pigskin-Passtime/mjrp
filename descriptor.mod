@@ -1,6 +1,6 @@
-version="3.10.*"
+version="1.0"
 tags={
-	"Leaders"
+	"Gameplay"
 }
-name="#MODJAM2024 Testing"
-supported_version="3.10.4"
+name="ModJam Restoration Project"
+supported_version="v4.0.*"

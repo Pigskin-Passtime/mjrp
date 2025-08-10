@@ -143,47 +143,47 @@ country_event = {
 	}
 }
 
-# Spatial Distortion Process
-planet_event = {
-	id = celestial_setup.4
-	hide_window = yes
-	location = from
+# REMOVED: pre 4.0, timed effects needed to be triggered separately, but this is now done
+# in the component_templates file itself
+
+# # Spatial Distortion Process
+# planet_event = {
+# 	id = celestial_setup.4
+# 	hide_window = yes
+# 	location = from
 	
-	is_triggered_only = yes
-	trigger = {
-		NOR = {
-			has_planet_flag = celestial_isolation_started
-		}
-	}
+# 	is_triggered_only = yes
+# 	trigger = {
+# 	}
 	
-	immediate = {
-		set_planet_flag = celestial_isolation_started
+# 	immediate = {
+# 		set_planet_flag = celestial_isolation_started
 	
-		event_target:celestial_fleet = {
-			set_event_locked = yes
-			owner = {
-				add_resource = {
-					energy = -5000
-				}
-			}
-		}
-		log = "spatial distortion event lock begin"
-		create_ambient_object = {
-			type = terraforming_ship_beam
-			location = event_target:iss_wayfarer
-			entity_face_object = this
-			use_3d_location = yes
-			entity_scale_to_size = yes
-			scripted_scale = 8
-			# play_animation_once = yes
-		}
-		last_created_ambient_object = {
-			set_ambient_object_flag = celestial_isolating_beam
-		}
+# 		event_target:celestial_fleet = {
+# 			set_event_locked = yes
+# 			owner = {
+# 				add_resource = {
+# 					energy = -5000
+# 				}
+# 			}
+# 		}
+# 		log = "spatial distortion event lock begin"
+# 		create_ambient_object = {
+# 			type = terraforming_ship_beam
+# 			location = event_target:iss_wayfarer
+# 			entity_face_object = this
+# 			use_3d_location = yes
+# 			entity_scale_to_size = yes
+# 			scripted_scale = 8
+# 			# play_animation_once = yes
+# 		}
+# 		last_created_ambient_object = {
+# 			set_ambient_object_flag = celestial_isolating_beam
+# 		}
 		
-		planet_event = { id = celestial_setup.5 days = 20 }
-	}
-}
+# 		planet_event = { id = celestial_setup.5 days = 20 }
+# 	}
+# }
 
 # Spatial Distortion Occurs
 planet_event = {
@@ -195,20 +195,12 @@ planet_event = {
 	}
 	
 	immediate = {
-		remove_planet_flag = celestial_isolation_started
 		add_modifier = {
 			modifier = celestial_isolated_star
-			# days = 1800 # Bug? Timer constantly shows 5 years, does not tick down
+			# days = 1800
 		}
 	
-		event_target:celestial_fleet = {
-			set_event_locked = no
-		}
 		event_target:celestial_fleet.owner = {
-			add_modifier = {
-				modifier = celestial_used_distortion
-				days = 3600
-			}
 			create_message = {
 				type = MESSAGE_STAR_ISOLATED
 				localization = MESSAGE_STAR_ISOLATED
@@ -222,7 +214,6 @@ planet_event = {
 			}
 		}
 		planet_event = { id = celestial_setup.6 days = 1800 }
-		log = "spatial distortion event lock end"
 		create_ambient_object = {
 			type = terraforming_planet_effect
 			location = this
@@ -233,19 +224,6 @@ planet_event = {
 		last_created_ambient_object = {
 			set_ambient_object_flag = celestial_isolating_effect
 		}
-		# create_ambient_object = {
-		# 	type = large_debris_object
-		# 	location = this
-		# 	play_animation_once = yes
-		# }
-		# last_created_ambient_object = {
-		# 	set_ambient_object_flag = celestial_isolating_effect
-		# 	set_location = {
-		# 		target = prev
-		# 		distance = 0
-		# 		angle = random
-		# 	}
-		# }
 		create_ambient_object = {
 			type = explosion_particle_object
 			location = this
@@ -309,7 +287,6 @@ planet_event = {
 			}
 		}
 		
-		log = "spatial distortion ends"
 		solar_system = {
 			every_system_ambient_object = {
 				limit = {
