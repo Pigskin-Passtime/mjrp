@@ -8,9 +8,20 @@
 lbd_dathnak_slave_toiler = {
 	category = worker
 	is_capped_by_modifier = no
-	building_icon = building_crude_huts
-	clothes_texture_index = 3
-	icon = primitive_laborer
+	swappable_data = {
+		default = {
+			building_icon = building_crude_huts
+		}
+	}
+	promotion = {
+		time = @standard_promotion_time
+		effect = {
+			pop_amount_change_category = {
+				CATEGORY = worker
+				AMOUNT = local_pop_amount
+			}
+		}
+	}
 
 	possible_pre_triggers = {
 		has_planet = yes
@@ -44,7 +55,7 @@ lbd_dathnak_slave_toiler = {
 	triggered_planet_modifier = {
 		potential = {
 			exists = owner
-			owner = { is_pleasure_seeker = yes }
+			owner = { is_pleasure_seeker_empire = yes }
 		}
 		planet_amenities_add = 3
 		mult = value:scripted_modifier_mult|MODIFIER|pop_job_amenities_mult|
@@ -56,9 +67,22 @@ lbd_dathnak_slave_toiler = {
 }
 lbd_dathnak_soldier = {
 	category = worker
-	condition_string = SOLDIER_JOB_TRIGGER
-	building_icon = building_stronghold
-	clothes_texture_index = 4
+	swappable_data = {
+		default = {
+			condition_string = SOLDIER_JOB_TRIGGER
+			building_icon = building_stronghold
+		}
+	}
+	promotion = {
+		time = @standard_promotion_time
+		effect = {
+			pop_amount_change_category = {
+				CATEGORY = worker
+				AMOUNT = local_pop_amount
+			}
+		}
+	}
+	
 	country_modifier = {
 		country_naval_cap_add = 2
 	}
@@ -106,20 +130,20 @@ lbd_dathnak_soldier = {
 			country_naval_cap_add = 2
 		}
 	}
-	pop_modifier = {
-		pop_defense_armies_add = 1
+	planet_modifier = {
+		planet_defense_armies_add = 1
 	}
-	triggered_pop_modifier = {
+	triggered_planet_modifier = {
 		potential = {
 			lbd_dathnak_is_lbd_dathnak_pop = yes
 		}
-		pop_defense_armies_add = 1
+		planet_defense_armies_add = 1
 	}
-	triggered_pop_modifier = {
+	triggered_planet_modifier = {
 		potential = {
 			lbd_dathnak_is_lbd_dathnak_planet = yes
 		}
-		pop_defense_armies_add = 1
+		planet_defense_armies_add = 1
 	}
 	triggered_planet_modifier = {
 		modifier = {
@@ -225,9 +249,22 @@ lbd_dathnak_soldier = {
 
 lbd_dathnak_gas_unity_worker = {
 	category = worker
-	condition_string = WORKER_JOB_TRIGGER
-	building_icon = building_gas_extractors
-	clothes_texture_index = 2
+	swappable_data = {
+		default = {
+			condition_string = WORKER_JOB_TRIGGER
+			building_icon = building_gas_extractors
+		}
+	}
+	promotion = {
+		time = @standard_promotion_time
+		effect = {
+			pop_amount_change_category = {
+				CATEGORY = worker
+				AMOUNT = local_pop_amount
+			}
+		}
+	}
+	
 	possible_pre_triggers = {
 		has_owner = yes
 		is_being_purged = no
@@ -264,8 +301,8 @@ lbd_dathnak_gas_unity_worker = {
 		multiplier = value:scripted_modifier_mult|MODIFIER|pop_job_amenities_mult|
 	}
 	triggered_planet_modifier = {
-		trade_value_add = 1
-		multiplier = value:scripted_modifier_mult|MODIFIER|pop_job_trade_mult|
+		planet_jobs_trade_produces_add = 1
+		# multiplier = value:scripted_modifier_mult|MODIFIER|pop_job_trade_mult|
 	}
 	weight = {
 		weight = @worker_job_weight		# Important job
@@ -317,9 +354,22 @@ lbd_dathnak_gas_unity_worker = {
 
 lbd_dathnak_gas_extractor = {
 	category = worker
-	condition_string = WORKER_JOB_TRIGGER
-	building_icon = building_gas_extractors
-	clothes_texture_index = 2
+	swappable_data = {
+		default = {
+			condition_string = WORKER_JOB_TRIGGER
+			building_icon = building_gas_extractors
+		}
+	}
+	promotion = {
+		time = @standard_promotion_time
+		effect = {
+			pop_amount_change_category = {
+				CATEGORY = worker
+				AMOUNT = local_pop_amount
+			}
+		}
+	}
+	
 	possible_pre_triggers = {
 		has_owner = yes
 		is_being_purged = no
@@ -346,9 +396,9 @@ lbd_dathnak_gas_extractor = {
 		}
 	}
 	planet_modifier = {
-		pop_growth_speed = -0.01
+		logistic_growth_mult = -0.01
 		planet_pop_assembly_mult = -0.01
-		LBDDATHNAK_pop_growth_speed = 0.01
+		# LBDDATHNAK_pop_growth_speed = 0.01 # TODO - Not sure what to do with this ...
 	}
 	weight = {
 		weight = @specialist_job_weight		# Important job
@@ -400,9 +450,22 @@ lbd_dathnak_gas_extractor = {
 
 lbd_dathnak_gas_technician = {
 	category = worker
-	condition_string = WORKER_JOB_TRIGGER
-	building_icon = building_lbd_dathnak_energy_nexus
-	clothes_texture_index = 2
+	swappable_data = {
+		default = {
+			condition_string = WORKER_JOB_TRIGGER
+			building_icon = building_lbd_dathnak_energy_nexus
+		}
+	}
+	promotion = {
+		time = @standard_promotion_time
+		effect = {
+			pop_amount_change_category = {
+				CATEGORY = worker
+				AMOUNT = local_pop_amount
+			}
+		}
+	}
+	
 	possible_pre_triggers = {
 		has_owner = yes
 		is_being_purged = no
@@ -411,7 +474,7 @@ lbd_dathnak_gas_technician = {
 	}
 	possible_precalc = can_fill_worker_job
 	planet_modifier = {
-		LBDDATHNAK_pop_growth_speed = 0.02
+		# LBDDATHNAK_pop_growth_speed = 0.02 # TODO - Not sure what to do with this ...
 	}
 	resources = {
 		category = planet_technician
@@ -524,9 +587,21 @@ lbd_dathnak_gas_technician = {
 ########################
 lbd_dathnak_gas_refiner_motes = {
 	category = specialist
-	condition_string = SPECIALIST_JOB_TRIGGER
-	building_icon = building_lbd_dathnak_refinery_motes
-	clothes_texture_index = 3
+	swappable_data = {
+		default = {
+			condition_string = SPECIALIST_JOB_TRIGGER
+			building_icon = building_lbd_dathnak_refinery_motes
+		}
+	}
+	promotion = {
+		time = @standard_promotion_time
+		effect = {
+			pop_amount_change_category = {
+				CATEGORY = worker
+				AMOUNT = local_pop_amount
+			}
+		}
+	}
 	possible_pre_triggers = {
 		has_owner = yes
 		is_being_purged = no
@@ -572,7 +647,10 @@ lbd_dathnak_gas_refiner_motes = {
 		}
 		modifier = {
 			factor = 7
-			has_job = lbd_dathnak_gas_refiner_motes
+			exists = planet
+			planet = {
+				has_available_jobs = lbd_dathnak_gas_refiner_motes
+			}
 		}
 		modifier = {
 			factor = 1.2
@@ -590,9 +668,21 @@ lbd_dathnak_gas_refiner_motes = {
 
 lbd_dathnak_gas_refiner_crystals = {
 	category = specialist
-	condition_string = SPECIALIST_JOB_TRIGGER
-	building_icon = building_lbd_dathnak_refinery_crystals
-	clothes_texture_index = 3
+	swappable_data = {
+		default = {
+			condition_string = SPECIALIST_JOB_TRIGGER
+			building_icon = building_lbd_dathnak_refinery_crystals
+		}
+	}
+	promotion = {
+		time = @standard_promotion_time
+		effect = {
+			pop_amount_change_category = {
+				CATEGORY = worker
+				AMOUNT = local_pop_amount
+			}
+		}
+	}
 	possible_pre_triggers = {
 		has_owner = yes
 		is_being_purged = no
@@ -638,7 +728,10 @@ lbd_dathnak_gas_refiner_crystals = {
 		}
 		modifier = {
 			factor = 7
-			has_job = lbd_dathnak_gas_refiner_crystals
+			exists = planet
+			planet = {
+				has_available_jobs = lbd_dathnak_gas_refiner_crystals
+			}
 		}
 		modifier = {
 			factor = 1.2
@@ -656,9 +749,22 @@ lbd_dathnak_gas_refiner_crystals = {
 
 lbd_dathnak_gas_mineral_transmuter = {
 	category = specialist
-	condition_string = SPECIALIST_JOB_TRIGGER
-	building_icon = building_lbd_dathnak_mineral_processing_plant
-	clothes_texture_index = 2
+	swappable_data = {
+		default = {
+			condition_string = SPECIALIST_JOB_TRIGGER
+			building_icon = building_lbd_dathnak_mineral_processing_plant
+		}
+	}
+	promotion = {
+		time = @standard_promotion_time
+		effect = {
+			pop_amount_change_category = {
+				CATEGORY = worker
+				AMOUNT = local_pop_amount
+			}
+		}
+	}
+	
 	possible_pre_triggers = {
 		has_owner = yes
 		is_being_purged = no
@@ -736,9 +842,21 @@ lbd_dathnak_gas_mineral_transmuter = {
 
 lbd_dathnak_foundry = {
 	category = specialist
-	condition_string = SPECIALIST_JOB_TRIGGER
-	building_icon = building_lbd_dathnak_foundry_1
-	clothes_texture_index = 3
+	swappable_data = {
+		default = {
+			condition_string = SPECIALIST_JOB_TRIGGER
+			building_icon = building_lbd_dathnak_foundry_1
+		}
+	}
+	promotion = {
+		time = @standard_promotion_time
+		effect = {
+			pop_amount_change_category = {
+				CATEGORY = worker
+				AMOUNT = local_pop_amount
+			}
+		}
+	}
 	possible_pre_triggers = {
 		has_owner = yes
 		is_being_purged = no
@@ -805,7 +923,10 @@ lbd_dathnak_foundry = {
 		}
 		modifier = {
 			factor = 5
-			has_job = lbd_dathnak_foundry
+			exists = planet
+			planet = {
+				has_available_jobs = lbd_dathnak_foundry
+			}
 		}
 		modifier = {
 			lbd_dathnak_is_lbd_dathnak_pop = yes
@@ -816,9 +937,21 @@ lbd_dathnak_foundry = {
 
 lbd_dathnak_catalytic_technician = {
 	category = specialist
-	condition_string = SPECIALIST_JOB_TRIGGER
-	building_icon = building_lbd_dathnak_foundry_1
-	clothes_texture_index = 3
+	swappable_data = {
+		default = {
+			condition_string = SPECIALIST_JOB_TRIGGER
+			building_icon = building_lbd_dathnak_foundry_1
+		}
+	}
+	promotion = {
+		time = @standard_promotion_time
+		effect = {
+			pop_amount_change_category = {
+				CATEGORY = worker
+				AMOUNT = local_pop_amount
+			}
+		}
+	}
 	possible_pre_triggers = {
 		has_owner = yes
 		is_being_purged = no
@@ -884,10 +1017,16 @@ lbd_dathnak_catalytic_technician = {
 		}
 		modifier = {
 			factor = 5
-			has_job = lbd_dathnak_catalytic_technician
+			exists = planet
+			planet = {
+				has_available_jobs = lbd_dathnak_catalytic_technician
+			}
 		}
 		modifier = {
-			lbd_dathnak_is_lbd_dathnak_pop = yes
+			exists = species
+			species = {
+				is_archetype = LBDDATHNAK
+			}
 			factor = 2
 		}
 	}
@@ -895,9 +1034,21 @@ lbd_dathnak_catalytic_technician = {
 
 lbd_dathnak_artisan = {
 	category = specialist
-	condition_string = SPECIALIST_JOB_TRIGGER
-	building_icon = building_factory_1
-	clothes_texture_index = 3
+	swappable_data = {
+		default = {
+			condition_string = SPECIALIST_JOB_TRIGGER
+			building_icon = building_factory_1
+		}
+	}
+	promotion = {
+		time = @standard_promotion_time
+		effect = {
+			pop_amount_change_category = {
+				CATEGORY = worker
+				AMOUNT = local_pop_amount
+			}
+		}
+	}
 	possible_pre_triggers = {
 		has_owner = yes
 		is_being_purged = no
@@ -977,7 +1128,10 @@ lbd_dathnak_artisan = {
 		}
 		modifier = {
 			factor = 5
-			has_job = lbd_dathnak_artisan
+			exists = planet
+			planet = {
+				has_available_jobs = lbd_dathnak_artisan
+			}
 		}
 		# low income modifier
 		modifier = {
@@ -1004,9 +1158,21 @@ lbd_dathnak_artisan = {
 
 lbd_dathnak_artificer = {
 	category = specialist
-	condition_string = SPECIALIST_JOB_TRIGGER
-	building_icon = building_factory_1
-	clothes_texture_index = 3
+	swappable_data = {
+		default = {
+			condition_string = SPECIALIST_JOB_TRIGGER
+			building_icon = building_factory_1
+		}
+	}
+	promotion = {
+		time = @standard_promotion_time
+		effect = {
+			pop_amount_change_category = {
+				CATEGORY = worker
+				AMOUNT = local_pop_amount
+			}
+		}
+	}
 	possible_pre_triggers = {
 		has_owner = yes
 		is_being_purged = no
@@ -1017,8 +1183,8 @@ lbd_dathnak_artificer = {
 		potential = {
 			always = yes
 		}
-		trade_value_add = 3
-		mult = value:scripted_modifier_mult|MODIFIER|pop_job_trade_mult|
+		planet_jobs_trade_produces_add = 3
+		# mult = value:scripted_modifier_mult|MODIFIER|pop_job_trade_mult|
 	}
 	resources = {
 		category = planet_artisans
@@ -1086,7 +1252,7 @@ lbd_dathnak_artificer = {
 	weight = {
 		weight = @specialist_job_weight
 		mult = value:job_weights_multiple_resources_modifier|JOB|lbd_dathnak_artificer|RESOURCE1|consumer_goods|WEIGHT1|0.8|RESOURCE2|minerals|WEIGHT2|0.2|
-		mult = value:scripted_modifier_job_weight_mult|MODIFIER|pop_job_trade_mult|
+		# mult = value:scripted_modifier_job_weight_mult|MODIFIER|pop_job_trade_mult|
 		modifier = {
 			factor = 2
 			is_enslaved = yes
@@ -1094,7 +1260,10 @@ lbd_dathnak_artificer = {
 		}
 		modifier = {
 			factor = 5
-			has_job = lbd_dathnak_artificer
+			exists = planet
+			planet = {
+				has_available_jobs = lbd_dathnak_artificer
+			}
 		}
 		modifier = {
 			lbd_dathnak_is_lbd_dathnak_pop = yes
@@ -1108,9 +1277,21 @@ lbd_dathnak_artificer = {
 #####################
 lbd_dathnak_gas_growth_maker = {
 	category = ruler
-	condition_string = RULER_JOB_TRIGGER
-	building_icon = building_lbd_dathnak_growth_inducer
-	clothes_texture_index = 3
+	swappable_data = {
+		default = {
+			condition_string = RULER_JOB_TRIGGER
+			building_icon = building_lbd_dathnak_growth_inducer
+		}
+	}
+	promotion = {
+		time = @standard_promotion_time
+		effect = {
+			pop_amount_change_category = {
+				CATEGORY = worker
+				AMOUNT = local_pop_amount
+			}
+		}
+	}
 	possible_pre_triggers = {
 		has_owner = yes
 		is_being_purged = no
@@ -1126,33 +1307,30 @@ lbd_dathnak_gas_growth_maker = {
 		}
 	}
 	planet_modifier = {
-		pop_growth_speed = 0.1
+		logistic_growth_mult = 0.1
 		planet_pop_assembly_mult = 0.1
-		planet_pop_assembly_organic_mult = 0.1
 	}
 	triggered_planet_modifier = {
 		planet_amenities_add = 2
 		multiplier = value:scripted_modifier_mult|MODIFIER|pop_job_amenities_mult|
 	}
 	triggered_planet_modifier = {
-		trade_value_add = 2
-		multiplier = value:scripted_modifier_mult|MODIFIER|pop_job_trade_mult|
+		planet_jobs_trade_produces_add = 2
+		# multiplier = value:scripted_modifier_mult|MODIFIER|pop_job_trade_mult|
 	}
 	triggered_planet_modifier = {
 		potential = {
 			lbd_dathnak_is_lbd_dathnak_pop = yes
 		}
-		pop_growth_speed = 0.05
+		logistic_growth_mult = 0.05
 		planet_pop_assembly_mult = 0.05
-		planet_pop_assembly_organic_mult = 0.05
 	}
 	triggered_planet_modifier = {
 		potential = {
 			lbd_dathnak_is_lbd_dathnak_planet = yes
 		}
-		pop_growth_speed = 0.05
+		logistic_growth_mult = 0.05
 		planet_pop_assembly_mult = 0.05
-		planet_pop_assembly_organic_mult = 0.05
 	}
 	weight = {
 		weight = @ruler_job_weight
@@ -1166,9 +1344,21 @@ lbd_dathnak_gas_growth_maker = {
 
 lbd_dathnak_scholar = {
 	category = ruler
-	condition_string = RULER_JOB_TRIGGER
-	building_icon = building_dread_encampment
-	clothes_texture_index = 3
+	swappable_data = {
+		default = {
+			condition_string = RULER_JOB_TRIGGER
+			building_icon = building_dread_encampment
+		}
+	}
+	promotion = {
+		time = @standard_promotion_time
+		effect = {
+			pop_amount_change_category = {
+				CATEGORY = worker
+				AMOUNT = local_pop_amount
+			}
+		}
+	}
 	country_modifier = {
 		country_naval_cap_add = 6
 	}
@@ -1188,10 +1378,10 @@ lbd_dathnak_scholar = {
 			country_naval_cap_add = 3
 		}
 	}
-	pop_modifier = {
-		pop_defense_armies_add = 2
+	planet_modifier = {
+		planet_defense_armies_add = 2
 	}
-	triggered_pop_modifier = {
+	triggered_planet_modifier = {
 		potential = {
 			exists = planet
 			planet = {
@@ -1199,7 +1389,7 @@ lbd_dathnak_scholar = {
 			}
 		}
 		modifier = {
-			pop_defense_armies_add = 4
+			planet_defense_armies_add = 4
 		}
 	}
 	resources = {
@@ -1292,8 +1482,21 @@ lbd_dathnak_scholar = {
 ############################
 lbd_dathnak_maintenance_drone = {
 	category = simple_drone
-	condition_string = DRONE_JOB_TRIGGER
-	building_icon = building_maintenance_depot
+	swappable_data = {
+		default = {
+			condition_string = DRONE_JOB_TRIGGER
+			building_icon = building_maintenance_depot
+		}
+	}
+	promotion = {
+		time = @standard_promotion_time
+		effect = {
+			pop_amount_change_category = {
+				CATEGORY = worker
+				AMOUNT = local_pop_amount
+			}
+		}
+	}
 
 	possible_pre_triggers = {
 		has_owner = yes
@@ -1379,16 +1582,16 @@ lbd_dathnak_maintenance_drone = {
 
 		modifier = {
 			factor = 1000 # <- hive mind amenities jobs are non specialist so they have base weight 1 instead of 1000 but we still want them
-			NOT = { has_job = lbd_dathnak_maintenance_drone }
 			planet = {
+				NOT = { has_available_jobs = lbd_dathnak_maintenance_drone }
 				free_amenities < 12
 			}
 		}
 
 		modifier = {
 			factor = 1000 # <- hive mind amenities jobs are non specialist so they have base weight 1 instead of 1000 but we still want them
-			has_job = lbd_dathnak_maintenance_drone
 			planet = {
+				has_available_jobs = lbd_dathnak_maintenance_drone
 				free_amenities < 20
 			}
 		}
@@ -1397,9 +1600,22 @@ lbd_dathnak_maintenance_drone = {
 
 lbd_dathnak_soldier_drone = {
 	category = simple_drone
-	condition_string = DRONE_JOB_TRIGGER
-	building_icon = building_stronghold
-	clothes_texture_index = 4
+	swappable_data = {
+		default = {
+			condition_string = DRONE_JOB_TRIGGER
+			building_icon = building_stronghold
+		}
+	}
+	promotion = {
+		time = @standard_promotion_time
+		effect = {
+			pop_amount_change_category = {
+				CATEGORY = worker
+				AMOUNT = local_pop_amount
+			}
+		}
+	}
+	
 	country_modifier = {
 		country_naval_cap_add = 2
 	}
@@ -1461,20 +1677,20 @@ lbd_dathnak_soldier_drone = {
 			country_naval_cap_add = 2
 		}
 	}
-	pop_modifier = {
-		pop_defense_armies_add = 1
+	planet_modifier = {
+		planet_defense_armies_add = 1
 	}
-	triggered_pop_modifier = {
+	triggered_planet_modifier = {
 		potential = {
 			lbd_dathnak_is_lbd_dathnak_pop = yes
 		}
-		pop_defense_armies_add = 1
+		planet_defense_armies_add = 1
 	}
-	triggered_pop_modifier = {
+	triggered_planet_modifier = {
 		potential = {
 			lbd_dathnak_is_lbd_dathnak_planet = yes
 		}
-		pop_defense_armies_add = 1
+		planet_defense_armies_add = 1
 	}
 	triggered_planet_modifier = {
 		modifier = {
@@ -1550,7 +1766,7 @@ lbd_dathnak_soldier_drone = {
 		}
 		modifier = {
 			factor = 0
-			planet = { num_pops < 12 }
+			planet = { pop_amount < 12 }
 			owner = { is_ai = yes }
 		}
 		modifier = {
@@ -1566,9 +1782,22 @@ lbd_dathnak_soldier_drone = {
 
 lbd_dathnak_gas_unity_worker_drone = {
 	category = simple_drone
-	condition_string = DRONE_JOB_TRIGGER
-	building_icon = building_gas_extractors
-	clothes_texture_index = 2
+	swappable_data = {
+		default = {
+			condition_string = DRONE_JOB_TRIGGER
+			building_icon = building_gas_extractors
+		}
+	}
+	promotion = {
+		time = @standard_promotion_time
+		effect = {
+			pop_amount_change_category = {
+				CATEGORY = worker
+				AMOUNT = local_pop_amount
+			}
+		}
+	}
+	
 	possible_pre_triggers = {
 		has_owner = yes
 		is_being_purged = no
@@ -1659,9 +1888,22 @@ energy = 4
 
 lbd_dathnak_gas_extractor_drone = {
 	category = simple_drone
-	condition_string = DRONE_JOB_TRIGGER
-	building_icon = building_gas_extractors
-	clothes_texture_index = 2
+	swappable_data = {
+		default = {
+			condition_string = DRONE_JOB_TRIGGER
+			building_icon = building_gas_extractors
+		}
+	}
+	promotion = {
+		time = @standard_promotion_time
+		effect = {
+			pop_amount_change_category = {
+				CATEGORY = worker
+				AMOUNT = local_pop_amount
+			}
+		}
+	}
+	
 	possible_pre_triggers = {
 		has_owner = yes
 		is_being_purged = no
@@ -1688,9 +1930,9 @@ lbd_dathnak_gas_extractor_drone = {
 		}
 	}
 	planet_modifier = {
-		pop_growth_speed = -0.01
+		logistic_growth_mult = -0.01
 		planet_pop_assembly_mult = -0.01
-		LBDDATHNAK_pop_growth_speed = 0.01
+		# LBDDATHNAK_pop_growth_speed = 0.01 # TODO - Not sure what to do with this ...
 	}
 	weight = {
 		weight = @complex_drone_job_weight		# Important job
@@ -1742,9 +1984,22 @@ lbd_dathnak_gas_extractor_drone = {
 
 lbd_dathnak_gas_technician_drone = {
 	category = simple_drone
-	condition_string = DRONE_JOB_TRIGGER
-	building_icon = building_lbd_dathnak_energy_nexus
-	clothes_texture_index = 2
+	swappable_data = {
+		default = {
+			condition_string = DRONE_JOB_TRIGGER
+			building_icon = building_lbd_dathnak_energy_nexus
+		}
+	}
+	promotion = {
+		time = @standard_promotion_time
+		effect = {
+			pop_amount_change_category = {
+				CATEGORY = worker
+				AMOUNT = local_pop_amount
+			}
+		}
+	}
+	
 	possible_pre_triggers = {
 		has_owner = yes
 		is_being_purged = no
@@ -1753,7 +2008,7 @@ lbd_dathnak_gas_technician_drone = {
 	}
 	possible_precalc = can_fill_drone_job
 	planet_modifier = {
-		LBDDATHNAK_pop_growth_speed = 0.02
+		# LBDDATHNAK_pop_growth_speed = 0.02 # TODO - Not sure what to do with this ...
 	}
 	resources = {
 		category = planet_technician
@@ -1863,9 +2118,20 @@ lbd_dathnak_gas_technician_drone = {
 lbd_dathnak_slave_toiler_drone = {
 	category = simple_drone
 	is_capped_by_modifier = no
-	building_icon = building_crude_huts
-	clothes_texture_index = 3
-	icon = primitive_laborer
+	swappable_data = {
+		default = {
+			building_icon = building_crude_huts
+		}
+	}
+	promotion = {
+		time = @standard_promotion_time
+		effect = {
+			pop_amount_change_category = {
+				CATEGORY = worker
+				AMOUNT = local_pop_amount
+			}
+		}
+	}
 
 	possible_pre_triggers = {
 		has_planet = yes
@@ -1899,7 +2165,7 @@ lbd_dathnak_slave_toiler_drone = {
 	triggered_planet_modifier = {
 		potential = {
 			exists = owner
-			owner = { is_pleasure_seeker = yes }
+			owner = { is_pleasure_seeker_empire = yes }
 		}
 		planet_amenities_no_happiness_add = 3
 		mult = value:scripted_modifier_mult|MODIFIER|pop_job_amenities_mult|
@@ -1916,9 +2182,21 @@ lbd_dathnak_slave_toiler_drone = {
 
 lbd_dathnak_gas_growth_maker_drone = {
 	category = complex_drone
-	condition_string = DRONE_JOB_TRIGGER
-	building_icon = building_lbd_dathnak_growth_inducer
-	clothes_texture_index = 3
+	swappable_data = {
+		default = {
+			condition_string = DRONE_JOB_TRIGGER
+			building_icon = building_lbd_dathnak_growth_inducer
+		}
+	}
+	promotion = {
+		time = @standard_promotion_time
+		effect = {
+			pop_amount_change_category = {
+				CATEGORY = worker
+				AMOUNT = local_pop_amount
+			}
+		}
+	}
 	possible_pre_triggers = {
 		has_owner = yes
 		is_being_purged = no
@@ -1934,9 +2212,8 @@ lbd_dathnak_gas_growth_maker_drone = {
 		}
 	}
 	planet_modifier = {
-		pop_growth_speed = 0.11
+		logistic_growth_mult = 0.11
 		planet_pop_assembly_mult = 0.11
-		planet_pop_assembly_organic_mult = 0.11
 	}
 	triggered_planet_modifier = {
 		planet_amenities_no_happiness_add = 2.5
@@ -1947,17 +2224,15 @@ lbd_dathnak_gas_growth_maker_drone = {
 		potential = {
 			lbd_dathnak_is_lbd_dathnak_pop = yes
 		}
-		pop_growth_speed = 0.055
+		logistic_growth_mult = 0.055
 		planet_pop_assembly_mult = 0.055
-		planet_pop_assembly_organic_mult = 0.055
 	}
 	triggered_planet_modifier = {
 		potential = {
 			lbd_dathnak_is_lbd_dathnak_planet = yes
 		}
-		pop_growth_speed = 0.055
+		logistic_growth_mult = 0.055
 		planet_pop_assembly_mult = 0.055
-		planet_pop_assembly_organic_mult = 0.055
 	}
 	weight = {
 		weight = @complex_drone_job_weight
@@ -1971,9 +2246,21 @@ lbd_dathnak_gas_growth_maker_drone = {
 
 lbd_dathnak_scholar_drone = {
 	category = complex_drone
-	condition_string = DRONE_JOB_TRIGGER
-	building_icon = building_dread_encampment
-	clothes_texture_index = 3
+	swappable_data = {
+		default = {
+			condition_string = DRONE_JOB_TRIGGER
+			building_icon = building_dread_encampment
+		}
+	}
+	promotion = {
+		time = @standard_promotion_time
+		effect = {
+			pop_amount_change_category = {
+				CATEGORY = worker
+				AMOUNT = local_pop_amount
+			}
+		}
+	}
 	country_modifier = {
 		country_naval_cap_add = 6
 	}
@@ -1993,10 +2280,10 @@ lbd_dathnak_scholar_drone = {
 			country_naval_cap_add = 3
 		}
 	}
-	pop_modifier = {
-		pop_defense_armies_add = 2
+	planet_modifier = {
+		planet_defense_armies_add = 2
 	}
-	triggered_pop_modifier = {
+	triggered_planet_modifier = {
 		potential = {
 			exists = planet
 			planet = {
@@ -2004,7 +2291,7 @@ lbd_dathnak_scholar_drone = {
 			}
 		}
 		modifier = {
-			pop_defense_armies_add = 4
+			planet_defense_armies_add = 4
 		}
 	}
 	resources = {
@@ -2092,9 +2379,21 @@ lbd_dathnak_scholar_drone = {
 }
 lbd_dathnak_scholar_calculator = {
 	category = complex_drone
-	condition_string = DRONE_JOB_TRIGGER
-	building_icon = building_dread_encampment
-	clothes_texture_index = 3
+	swappable_data = {
+		default = {
+			condition_string = DRONE_JOB_TRIGGER
+			building_icon = building_dread_encampment
+		}
+	}
+	promotion = {
+		time = @standard_promotion_time
+		effect = {
+			pop_amount_change_category = {
+				CATEGORY = worker
+				AMOUNT = local_pop_amount
+			}
+		}
+	}
 	country_modifier = {
 		country_naval_cap_add = 5
 	}
@@ -2114,10 +2413,10 @@ lbd_dathnak_scholar_calculator = {
 			country_naval_cap_add = 3
 		}
 	}
-	pop_modifier = {
-		pop_defense_armies_add = 2
+	planet_modifier = {
+		planet_defense_armies_add = 2
 	}
-	triggered_pop_modifier = {
+	triggered_planet_modifier = {
 		potential = {
 			exists = planet
 			planet = {
@@ -2125,7 +2424,7 @@ lbd_dathnak_scholar_calculator = {
 			}
 		}
 		modifier = {
-			pop_defense_armies_add = 4
+			planet_defense_armies_add = 4
 		}
 	}
 	resources = {
@@ -2213,9 +2512,21 @@ lbd_dathnak_scholar_calculator = {
 }
 lbd_dathnak_foundry_drone = {
 	category = complex_drone
-	condition_string = DRONE_JOB_TRIGGER
-	building_icon = building_lbd_dathnak_foundry_1
-	clothes_texture_index = 3
+	swappable_data = {
+		default = {
+			condition_string = DRONE_JOB_TRIGGER
+			building_icon = building_lbd_dathnak_foundry_1
+		}
+	}
+	promotion = {
+		time = @standard_promotion_time
+		effect = {
+			pop_amount_change_category = {
+				CATEGORY = worker
+				AMOUNT = local_pop_amount
+			}
+		}
+	}
 	possible_pre_triggers = {
 		has_owner = yes
 		is_being_purged = no
@@ -2282,7 +2593,10 @@ lbd_dathnak_foundry_drone = {
 		}
 		modifier = {
 			factor = 5
-			has_job = lbd_dathnak_foundry_drone
+			exists = planet
+			planet = {
+				has_available_jobs = lbd_dathnak_foundry_drone
+			}
 		}
 		modifier = {
 			lbd_dathnak_is_lbd_dathnak_pop = yes
@@ -2293,9 +2607,21 @@ lbd_dathnak_foundry_drone = {
 
 lbd_dathnak_catalytic_drone = {
 	category = complex_drone
-	condition_string = DRONE_JOB_TRIGGER
-	building_icon = building_lbd_dathnak_foundry_1
-	clothes_texture_index = 3
+	swappable_data = {
+		default = {
+			condition_string = DRONE_JOB_TRIGGER
+			building_icon = building_lbd_dathnak_foundry_1
+		}
+	}
+	promotion = {
+		time = @standard_promotion_time
+		effect = {
+			pop_amount_change_category = {
+				CATEGORY = worker
+				AMOUNT = local_pop_amount
+			}
+		}
+	}
 	possible_pre_triggers = {
 		has_owner = yes
 		is_being_purged = no
@@ -2361,7 +2687,10 @@ lbd_dathnak_catalytic_drone = {
 		}
 		modifier = {
 			factor = 5
-			has_job = lbd_dathnak_catalytic_drone
+			exists = planet
+			planet = {
+				has_available_jobs = lbd_dathnak_catalytic_drone
+			}
 		}
 		modifier = {
 			lbd_dathnak_is_lbd_dathnak_pop = yes
@@ -2371,9 +2700,21 @@ lbd_dathnak_catalytic_drone = {
 }
 lbd_dathnak_fabricator = {
 	category = complex_drone
-	condition_string = DRONE_JOB_TRIGGER
-	building_icon = building_lbd_dathnak_foundry_1
-	clothes_texture_index = 3
+	swappable_data = {
+		default = {
+			condition_string = DRONE_JOB_TRIGGER
+			building_icon = xxbuilding_lbd_dathnak_foundry_1x
+		}
+	}
+	promotion = {
+		time = @standard_promotion_time
+		effect = {
+			pop_amount_change_category = {
+				CATEGORY = worker
+				AMOUNT = local_pop_amount
+			}
+		}
+	}
 	possible_pre_triggers = {
 		has_owner = yes
 		is_being_purged = no
@@ -2440,7 +2781,10 @@ lbd_dathnak_fabricator = {
 		}
 		modifier = {
 			factor = 5
-			has_job = lbd_dathnak_fabricator
+			exists = planet
+			planet = {
+				has_available_jobs = lbd_dathnak_fabricator
+			}
 		}
 		modifier = {
 			lbd_dathnak_is_lbd_dathnak_pop = yes
@@ -2450,9 +2794,21 @@ lbd_dathnak_fabricator = {
 }
 lbd_dathnak_gas_refiner_drone_motes = {
 	category = complex_drone
-	condition_string = DRONE_JOB_TRIGGER
-	building_icon = building_lbd_dathnak_refinery_motes
-	clothes_texture_index = 3
+	swappable_data = {
+		default = {
+			condition_string = DRONE_JOB_TRIGGER
+			building_icon = building_lbd_dathnak_refinery_motes
+		}
+	}
+	promotion = {
+		time = @standard_promotion_time
+		effect = {
+			pop_amount_change_category = {
+				CATEGORY = worker
+				AMOUNT = local_pop_amount
+			}
+		}
+	}
 	possible_pre_triggers = {
 		has_owner = yes
 		is_being_purged = no
@@ -2498,7 +2854,10 @@ lbd_dathnak_gas_refiner_drone_motes = {
 		}
 		modifier = {
 			factor = 7
-			has_job = lbd_dathnak_gas_refiner_drone_motes
+			exists = planet
+			planet = {
+				has_available_jobs = lbd_dathnak_gas_refiner_drone_motes
+			}
 		}
 		modifier = {
 			factor = 1.2
@@ -2516,9 +2875,21 @@ lbd_dathnak_gas_refiner_drone_motes = {
 
 lbd_dathnak_gas_refiner_drone_crystals = {
 	category = complex_drone
-	condition_string = DRONE_JOB_TRIGGER
-	building_icon = building_lbd_dathnak_refinery_crystals
-	clothes_texture_index = 3
+	swappable_data = {
+		default = {
+			condition_string = DRONE_JOB_TRIGGER
+			building_icon = building_lbd_dathnak_refinery_crystals
+		}
+	}
+	promotion = {
+		time = @standard_promotion_time
+		effect = {
+			pop_amount_change_category = {
+				CATEGORY = worker
+				AMOUNT = local_pop_amount
+			}
+		}
+	}
 	possible_pre_triggers = {
 		has_owner = yes
 		is_being_purged = no
@@ -2575,7 +2946,10 @@ lbd_dathnak_gas_refiner_drone_crystals = {
 		}
 		modifier = {
 			factor = 7
-			has_job = lbd_dathnak_gas_refiner_drone_crystals
+			exists = planet
+			planet = {
+				has_available_jobs = lbd_dathnak_gas_refiner_drone_crystals
+			}
 		}
 		modifier = {
 			factor = 1.2
