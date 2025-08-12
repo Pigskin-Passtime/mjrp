@@ -211,7 +211,12 @@ country_event = {
 						}
 					}
 				}
-				every_owned_pop = { kill_pop = yes }
+				every_owned_pop_group = {
+					kill_pop_group = {
+						pop_group = this
+						percentage = 1.00
+					}
+				}
 				destroy_colony = yes
 				change_pc = rl_narrow_escape_unhabitable_planets
 				set_planet_flag = narrow_escape_homeworld@root
@@ -278,7 +283,7 @@ country_event = {
 				random_list = {
 					2 = {
 						star = {
-							surveyed = { set_surveyed = yes surveyor = root }
+							set_surveyed = { surveyed = yes surveyor = root }
 						}
 						if = {
 							limit = {
@@ -289,7 +294,7 @@ country_event = {
 									is_colonizable = no
 								}
 								random_list = {
-									4 = { surveyed = { set_surveyed = yes surveyor = root } }
+									4 = { set_surveyed = { surveyed = yes surveyor = root } }
 									1 = {}
 								}
 							}
@@ -298,7 +303,7 @@ country_event = {
 					}
 					5 = {
 						star = {
-							surveyed = { set_surveyed = yes surveyor = root }
+							set_surveyed = { surveyed = yes surveyor = root }
 						}
 						# set_star_flag = explored
 					}
@@ -382,8 +387,7 @@ country_event = {
 }
 
 # AI control
-# MJRP: Hard to read through, but it seems like this event is largely telling the AI what to do
-# if they spawn with this origin
+# MJRP: It seems like this event is largely telling the AI what to do if they spawn with this origin
 country_event = {
 	id = narrow_escape.3
 
@@ -469,10 +473,7 @@ country_event = {
 											status = no
 										}
 									}
-									surveyed = {
-										surveyor = root
-										set_surveyed = yes
-									}
+									set_surveyed = { surveyed = yes surveyor = root }
 								}
 								if = {
 									limit = {
@@ -544,9 +545,10 @@ country_event = {
 						}
 						fleet = {
 							NOR = {
-								has_fleet_order = move_to
-								has_fleet_order = move_to_order
-								has_fleet_order = orbit_planet
+								# has_fleet_order = move_to
+								# has_fleet_order = move_to_order
+								has_fleet_order = move_to_system_point_order
+								# has_fleet_order = orbit_planet
 								has_fleet_order = orbit_planet_order
 							}
 						}
@@ -770,7 +772,6 @@ country_event = {
 						any_owned_ship = {
 							has_modifier = narrow_escape_origin_populated_colony_ship
 							OR = {
-								has_fleet_order = orbit_planet
 								has_fleet_order = orbit_planet_order
 								AND = {
 									exists = orbit
@@ -1054,8 +1055,7 @@ fleet_event = {
 		else = {
 			if = {
 				limit = {
-					NOR = {
-						has_fleet_order = orbit_planet
+					NOT = {
 						has_fleet_order = orbit_planet_order
 					}
 				}
@@ -1099,13 +1099,17 @@ planet_event = {
 	hide_window = yes
 
 	trigger = {
-		is_under_colonization = yes
+		OR = {
+			is_under_colonization = yes
+			is_colony = yes
+		}
 	}
 
 	immediate = {
 		if = {
 			limit = {
-				has_colony_progress >= 1
+				is_colony = yes
+				is_under_colonization = no
 			}
 			planet_event = { id = narrow_escape_create_colony.1 }
 		}
@@ -1376,7 +1380,7 @@ country_event = {
 
 		allow = {
 			custom_tooltip = {
-				fail_text = "No ships to consolidate"
+				fail_text = mjrp_narrow_escape_no_ship_to_consolidate
 				check_variable = {
 					which = narrow_escape_origin_second_colony_pops
 					value > 0
@@ -1402,7 +1406,7 @@ country_event = {
 
 		allow = {
 			custom_tooltip = {
-				fail_text = "No ships to deconsolidate"
+				fail_text = mjrp_narrow_escape_no_ships_to_deconsolidate
 				OR = {
 					check_variable = {
 						which = narrow_escape_origin_first_colony_pops
@@ -1445,13 +1449,13 @@ country_event = {
 
 		allow = {
 			custom_tooltip = {
-				fail_text = "Ship doesn't exist!"
+				fail_text = mjrp_narrow_escape_ship_doesnt_exist
 				exists = event_target:narrow_escape_origin_colony_ship_1
 			}
 			if = {
 				limit = { exists = event_target:narrow_escape_origin_colony_ship_1 }
 				custom_tooltip = {
-					fail_text = "No ship to consolidate to!"
+					fail_text = mjrp_narrow_escape_no_ship_to_consolidate_to
 					event_target:narrow_escape_origin_colony_ship_1 = {
 						solar_system = {
 							any_ship_in_system = {
@@ -1472,7 +1476,7 @@ country_event = {
 					}
 				}
 				custom_tooltip = {
-					fail_text = "Cannot consolidate while in combat!"
+					fail_text = mjrp_narrow_escape_cannot_consolidate_combat
 					event_target:narrow_escape_origin_colony_ship_1 = {
 						is_in_combat = no
 					}
@@ -1494,13 +1498,13 @@ country_event = {
 
 		allow = {
 			custom_tooltip = {
-				fail_text = "Ship doesn't exist!"
+				fail_text = mjrp_narrow_escape_ship_doesnt_exist
 				exists = event_target:narrow_escape_origin_colony_ship_2
 			}
 			if = {
 				limit = { exists = event_target:narrow_escape_origin_colony_ship_2 }
 				custom_tooltip = {
-					fail_text = "No ship to consolidate to!"
+					fail_text = mjrp_narrow_escape_no_ship_to_consolidate_to
 					event_target:narrow_escape_origin_colony_ship_2 = {
 						solar_system = {
 							any_ship_in_system = {
@@ -1521,7 +1525,7 @@ country_event = {
 					}
 				}
 				custom_tooltip = {
-					fail_text = "Cannot consolidate while in combat!"
+					fail_text = mjrp_narrow_escape_cannot_consolidate_combat
 					event_target:narrow_escape_origin_colony_ship_2 = {
 						is_in_combat = no
 					}
@@ -1543,13 +1547,13 @@ country_event = {
 
 		allow = {
 			custom_tooltip = {
-				fail_text = "Ship doesn't exist!"
+				fail_text = mjrp_narrow_escape_ship_doesnt_exist
 				exists = event_target:narrow_escape_origin_colony_ship_3
 			}
 			if = {
 				limit = { exists = event_target:narrow_escape_origin_colony_ship_3 }
 				custom_tooltip = {
-					fail_text = "No ship to consolidate to!"
+					fail_text = mjrp_narrow_escape_no_ship_to_consolidate_to
 					event_target:narrow_escape_origin_colony_ship_3 = {
 						solar_system = {
 							any_ship_in_system = {
@@ -1570,7 +1574,7 @@ country_event = {
 					}
 				}
 				custom_tooltip = {
-					fail_text = "Cannot consolidate while in combat!"
+					fail_text = mjrp_narrow_escape_cannot_consolidate_combat
 					event_target:narrow_escape_origin_colony_ship_3 = {
 						is_in_combat = no
 					}
@@ -1630,13 +1634,13 @@ ship_event = {
 
 		allow = {
 			custom_tooltip = {
-				fail_text = "Ship doesn't exist!"
+				fail_text = mjrp_narrow_escape_ship_doesnt_exist
 				exists = root
 			}
 			if = {
 				limit = { exists = root }
 				custom_tooltip = {
-					fail_text = "Not enough pops to consolidate!"
+					fail_text = mjrp_narrow_escape_not_enough_pops_consolidate
 					from = {
 						check_variable = {
 							which = narrow_escape_origin_first_colony_pops
@@ -1649,7 +1653,7 @@ ship_event = {
 					}
 				}
 				custom_tooltip = {
-					fail_text = "No ship to consolidate to!"
+					fail_text = mjrp_narrow_escape_no_ship_to_consolidate_to
 					solar_system = {
 						any_ship_in_system = {
 							OR = {
@@ -1676,7 +1680,7 @@ ship_event = {
 					}
 				}
 				custom_tooltip = {
-					fail_text = "Cannot consolidate while in combat!"
+					fail_text = mjrp_narrow_escape_cannot_consolidate_combat
 					is_in_combat = no
 				}
 			}
@@ -1715,13 +1719,13 @@ ship_event = {
 
 		allow = {
 			custom_tooltip = {
-				fail_text = "Ship doesn't exist!"
+				fail_text = mjrp_narrow_escape_ship_doesnt_exist
 				exists = root
 			}
 			if = {
 				limit = { exists = root }
 				custom_tooltip = {
-					fail_text = "Not enough pops to consolidate!"
+					fail_text = mjrp_narrow_escape_not_enough_pops_consolidate
 					from = {
 						check_variable = {
 							which = narrow_escape_origin_first_colony_pops
@@ -1734,7 +1738,7 @@ ship_event = {
 					}
 				}
 				custom_tooltip = {
-					fail_text = "No ship to consolidate to!"
+					fail_text = mjrp_narrow_escape_no_ship_to_consolidate_to
 					solar_system = {
 						any_ship_in_system = {
 							OR = {
@@ -1761,7 +1765,7 @@ ship_event = {
 					}
 				}
 				custom_tooltip = {
-					fail_text = "Cannot consolidate while in combat!"
+					fail_text = mjrp_narrow_escape_cannot_consolidate_combat
 					is_in_combat = no
 				}
 			}
@@ -1800,13 +1804,13 @@ ship_event = {
 
 		allow = {
 			custom_tooltip = {
-				fail_text = "Ship doesn't exist!"
+				fail_text = mjrp_narrow_escape_ship_doesnt_exist
 				exists = root
 			}
 			if = {
 				limit = { exists = root }
 				custom_tooltip = {
-					fail_text = "Not enough pops to consolidate!"
+					fail_text = mjrp_narrow_escape_not_enough_pops_consolidate
 					from = {
 						check_variable = {
 							which = narrow_escape_origin_first_colony_pops
@@ -1819,7 +1823,7 @@ ship_event = {
 					}
 				}
 				custom_tooltip = {
-					fail_text = "No ship to consolidate to!"
+					fail_text = mjrp_narrow_escape_no_ship_to_consolidate_to
 					solar_system = {
 						any_ship_in_system = {
 							OR = {
@@ -1846,7 +1850,7 @@ ship_event = {
 					}
 				}
 				custom_tooltip = {
-					fail_text = "Cannot consolidate while in combat!"
+					fail_text = mjrp_narrow_escape_cannot_consolidate_combat
 					is_in_combat = no
 				}
 			}
@@ -1889,13 +1893,13 @@ ship_event = {
 
 		allow = {
 			custom_tooltip = {
-				fail_text = "Ship doesn't exist!"
+				fail_text = mjrp_narrow_escape_ship_doesnt_exist
 				exists = root
 			}
 			if = {
 				limit = { exists = root }
 				custom_tooltip = {
-					fail_text = "Not enough pops to consolidate!"
+					fail_text = mjrp_narrow_escape_not_enough_pops_consolidate
 					from = {
 						check_variable = {
 							which = narrow_escape_origin_first_colony_pops
@@ -1908,7 +1912,7 @@ ship_event = {
 					}
 				}
 				custom_tooltip = {
-					fail_text = "No ship to consolidate to!"
+					fail_text = mjrp_narrow_escape_no_ship_to_consolidate_to
 					solar_system = {
 						any_ship_in_system = {
 							OR = {
@@ -1935,7 +1939,7 @@ ship_event = {
 					}
 				}
 				custom_tooltip = {
-					fail_text = "Cannot consolidate while in combat!"
+					fail_text = mjrp_narrow_escape_cannot_consolidate_combat
 					is_in_combat = no
 				}
 			}
@@ -1974,13 +1978,13 @@ ship_event = {
 
 		allow = {
 			custom_tooltip = {
-				fail_text = "Ship doesn't exist!"
+				fail_text = mjrp_narrow_escape_ship_doesnt_exist
 				exists = root
 			}
 			if = {
 				limit = { exists = root }
 				custom_tooltip = {
-					fail_text = "Not enough pops to consolidate!"
+					fail_text = mjrp_narrow_escape_not_enough_pops_consolidate
 					from = {
 						check_variable = {
 							which = narrow_escape_origin_first_colony_pops
@@ -1993,7 +1997,7 @@ ship_event = {
 					}
 				}
 				custom_tooltip = {
-					fail_text = "No ship to consolidate to!"
+					fail_text = mjrp_narrow_escape_no_ship_to_consolidate_to
 					solar_system = {
 						any_ship_in_system = {
 							OR = {
@@ -2020,7 +2024,7 @@ ship_event = {
 					}
 				}
 				custom_tooltip = {
-					fail_text = "Cannot consolidate while in combat!"
+					fail_text = mjrp_narrow_escape_cannot_consolidate_combat
 					is_in_combat = no
 				}
 			}
@@ -2059,13 +2063,13 @@ ship_event = {
 
 		allow = {
 			custom_tooltip = {
-				fail_text = "Ship doesn't exist!"
+				fail_text = mjrp_narrow_escape_ship_doesnt_exist
 				exists = root
 			}
 			if = {
 				limit = { exists = root }
 				custom_tooltip = {
-					fail_text = "Not enough pops to consolidate!"
+					fail_text = mjrp_narrow_escape_not_enough_pops_consolidate
 					from = {
 						check_variable = {
 							which = narrow_escape_origin_second_colony_pops
@@ -2078,7 +2082,7 @@ ship_event = {
 					}
 				}
 				custom_tooltip = {
-					fail_text = "No ship to consolidate to!"
+					fail_text = mjrp_narrow_escape_no_ship_to_consolidate_to
 					solar_system = {
 						any_ship_in_system = {
 							OR = {
@@ -2105,7 +2109,7 @@ ship_event = {
 					}
 				}
 				custom_tooltip = {
-					fail_text = "Cannot consolidate while in combat!"
+					fail_text = mjrp_narrow_escape_cannot_consolidate_combat
 					is_in_combat = no
 				}
 			}
@@ -2144,13 +2148,13 @@ country_event = {
 
 		allow = {
 			custom_tooltip = {
-				fail_text = "Ship doesn't exist!"
+				fail_text = mjrp_narrow_escape_ship_doesnt_exist
 				exists = event_target:narrow_escape_origin_colony_ship_1
 			}
 			if = {
 				limit = { exists = event_target:narrow_escape_origin_colony_ship_1 }
 				custom_tooltip = {
-					fail_text = "Cannot deconsolidate while in combat!"
+					fail_text = mjrp_narrow_escape_cannot_deconsolidate_combat
 					event_target:narrow_escape_origin_colony_ship_1 = {
 						is_in_combat = no
 					}
@@ -2172,13 +2176,13 @@ country_event = {
 
 		allow = {
 			custom_tooltip = {
-				fail_text = "Ship doesn't exist!"
+				fail_text = mjrp_narrow_escape_ship_doesnt_exist
 				exists = event_target:narrow_escape_origin_colony_ship_2
 			}
 			if = {
 				limit = { exists = event_target:narrow_escape_origin_colony_ship_2 }
 				custom_tooltip = {
-					fail_text = "Cannot deconsolidate while in combat!"
+					fail_text = mjrp_narrow_escape_cannot_deconsolidate_combat
 					event_target:narrow_escape_origin_colony_ship_2 = {
 						is_in_combat = no
 					}
@@ -2250,13 +2254,13 @@ ship_event = {
 
 		allow = {
 			custom_tooltip = {
-				fail_text = "Ship doesn't exist!"
+				fail_text = mjrp_narrow_escape_ship_doesnt_exist
 				exists = root
 			}
 			if = {
 				limit = { exists = root }
 				custom_tooltip = {
-					fail_text = "Not enough pops to deconsolidate!"
+					fail_text = mjrp_narrow_escape_not_enough_pops
 					from = {
 						check_variable = {
 							which = narrow_escape_origin_first_colony_pops
@@ -2265,7 +2269,7 @@ ship_event = {
 					}
 				}
 				custom_tooltip = {
-					fail_text = "Cannot deconsolidate while in combat!"
+					fail_text = mjrp_narrow_escape_cannot_deconsolidate_combat
 					is_in_combat = no
 				}
 			}
@@ -2316,13 +2320,13 @@ ship_event = {
 
 		allow = {
 			custom_tooltip = {
-				fail_text = "Ship doesn't exist!"
+				fail_text = mjrp_narrow_escape_ship_doesnt_exist
 				exists = root
 			}
 			if = {
 				limit = { exists = root }
 				custom_tooltip = {
-					fail_text = "Not enough pops to deconsolidate!"
+					fail_text = mjrp_narrow_escape_not_enough_pops
 					from = {
 						check_variable = {
 							which = narrow_escape_origin_first_colony_pops
@@ -2331,7 +2335,7 @@ ship_event = {
 					}
 				}
 				custom_tooltip = {
-					fail_text = "Cannot deconsolidate while in combat!"
+					fail_text = mjrp_narrow_escape_cannot_deconsolidate_combat
 					is_in_combat = no
 				}
 			}
@@ -2382,13 +2386,13 @@ ship_event = {
 
 		allow = {
 			custom_tooltip = {
-				fail_text = "Ship doesn't exist!"
+				fail_text = mjrp_narrow_escape_ship_doesnt_exist
 				exists = root
 			}
 			if = {
 				limit = { exists = root }
 				custom_tooltip = {
-					fail_text = "Not enough pops to deconsolidate!"
+					fail_text = mjrp_narrow_escape_not_enough_pops
 					from = {
 						check_variable = {
 							which = narrow_escape_origin_first_colony_pops
@@ -2397,7 +2401,7 @@ ship_event = {
 					}
 				}
 				custom_tooltip = {
-					fail_text = "Cannot deconsolidate while in combat!"
+					fail_text = mjrp_narrow_escape_cannot_deconsolidate_combat
 					is_in_combat = no
 				}
 			}
@@ -2452,13 +2456,13 @@ ship_event = {
 
 		allow = {
 			custom_tooltip = {
-				fail_text = "Ship doesn't exist!"
+				fail_text = mjrp_narrow_escape_ship_doesnt_exist
 				exists = root
 			}
 			if = {
 				limit = { exists = root }
 				custom_tooltip = {
-					fail_text = "Not enough pops to deconsolidate!"
+					fail_text = mjrp_narrow_escape_not_enough_pops
 					from = {
 						check_variable = {
 							which = narrow_escape_origin_first_colony_pops
@@ -2467,7 +2471,7 @@ ship_event = {
 					}
 				}
 				custom_tooltip = {
-					fail_text = "Cannot deconsolidate while in combat!"
+					fail_text = mjrp_narrow_escape_cannot_deconsolidate_combat
 					is_in_combat = no
 				}
 			}
@@ -2518,13 +2522,13 @@ ship_event = {
 
 		allow = {
 			custom_tooltip = {
-				fail_text = "Ship doesn't exist!"
+				fail_text = mjrp_narrow_escape_ship_doesnt_exist
 				exists = root
 			}
 			if = {
 				limit = { exists = root }
 				custom_tooltip = {
-					fail_text = "Not enough pops to deconsolidate!"
+					fail_text = mjrp_narrow_escape_not_enough_pops
 					from = {
 						check_variable = {
 							which = narrow_escape_origin_first_colony_pops
@@ -2533,7 +2537,7 @@ ship_event = {
 					}
 				}
 				custom_tooltip = {
-					fail_text = "Cannot deconsolidate while in combat!"
+					fail_text = mjrp_narrow_escape_cannot_deconsolidate_combat
 					is_in_combat = no
 				}
 			}
@@ -2584,13 +2588,13 @@ ship_event = {
 
 		allow = {
 			custom_tooltip = {
-				fail_text = "Ship doesn't exist!"
+				fail_text = mjrp_narrow_escape_ship_doesnt_exist
 				exists = root
 			}
 			if = {
 				limit = { exists = root }
 				custom_tooltip = {
-					fail_text = "Not enough pops to deconsolidate!"
+					fail_text = mjrp_narrow_escape_not_enough_pops
 					from = {
 						check_variable = {
 							which = narrow_escape_origin_second_colony_pops
@@ -2599,7 +2603,7 @@ ship_event = {
 					}
 				}
 				custom_tooltip = {
-					fail_text = "Cannot deconsolidate while in combat!"
+					fail_text = mjrp_narrow_escape_cannot_deconsolidate_combat
 					is_in_combat = no
 				}
 			}
@@ -3286,52 +3290,7 @@ planet_event = {
 	hide_window = yes
 
 	trigger = {
-		OR = {
-			has_modifier = narrow_escape_origin_capital_colonization_16
-			has_modifier = narrow_escape_origin_capital_colonization_22
-			has_modifier = narrow_escape_origin_capital_colonization_26
-			has_modifier = narrow_escape_origin_capital_colonization_32
-			has_modifier = narrow_escape_origin_capital_colonization_machine_16
-			has_modifier = narrow_escape_origin_capital_colonization_machine_22
-			has_modifier = narrow_escape_origin_capital_colonization_machine_26
-			has_modifier = narrow_escape_origin_capital_colonization_machine_32
-			has_modifier = narrow_escape_origin_capital_colonization_servitor_16
-			has_modifier = narrow_escape_origin_capital_colonization_servitor_22
-			has_modifier = narrow_escape_origin_capital_colonization_servitor_26
-			has_modifier = narrow_escape_origin_capital_colonization_servitor_32
-			has_modifier = narrow_escape_origin_capital_colonization_megacorp_16
-			has_modifier = narrow_escape_origin_capital_colonization_megacorp_22
-			has_modifier = narrow_escape_origin_capital_colonization_megacorp_26
-			has_modifier = narrow_escape_origin_capital_colonization_megacorp_32
-			has_modifier = narrow_escape_origin_capital_colonization_ap_16
-			has_modifier = narrow_escape_origin_capital_colonization_ap_22
-			has_modifier = narrow_escape_origin_capital_colonization_ap_26
-			has_modifier = narrow_escape_origin_capital_colonization_ap_32
-			has_modifier = narrow_escape_origin_capital_colonization_machine_ap_16
-			has_modifier = narrow_escape_origin_capital_colonization_machine_ap_22
-			has_modifier = narrow_escape_origin_capital_colonization_machine_ap_26
-			has_modifier = narrow_escape_origin_capital_colonization_machine_ap_32
-			has_modifier = narrow_escape_origin_capital_colonization_servitor_ap_16
-			has_modifier = narrow_escape_origin_capital_colonization_servitor_ap_22
-			has_modifier = narrow_escape_origin_capital_colonization_servitor_ap_26
-			has_modifier = narrow_escape_origin_capital_colonization_servitor_ap_32
-			has_modifier = narrow_escape_origin_capital_colonization_megacorp_ap_16
-			has_modifier = narrow_escape_origin_capital_colonization_megacorp_ap_22
-			has_modifier = narrow_escape_origin_capital_colonization_megacorp_ap_26
-			has_modifier = narrow_escape_origin_capital_colonization_megacorp_ap_32
-			has_modifier = narrow_escape_origin_second_colonization_10
-			has_modifier = narrow_escape_origin_second_colonization_16
-			has_modifier = narrow_escape_origin_second_colonization_machine_10
-			has_modifier = narrow_escape_origin_second_colonization_machine_16
-			has_modifier = narrow_escape_origin_second_colonization_ap_10
-			has_modifier = narrow_escape_origin_second_colonization_ap_16
-			has_modifier = narrow_escape_origin_second_colonization_machine_ap_10
-			has_modifier = narrow_escape_origin_second_colonization_machine_ap_16
-			has_modifier = narrow_escape_origin_third_colonization_6
-			has_modifier = narrow_escape_origin_third_colonization_machine_6
-			has_modifier = narrow_escape_origin_third_colonization_ap_6
-			has_modifier = narrow_escape_origin_third_colonization_machine_ap_6
-		}
+		mjrp_narrow_escape_has_any_colony_modifier = yes
 	}
 
 	immediate = {
@@ -3349,1739 +3308,15 @@ planet_event = {
 		}
 		if = {
 			limit = {
-				OR = {
-					has_modifier = narrow_escape_origin_capital_colonization_16
-					has_modifier = narrow_escape_origin_capital_colonization_hive_16
-					has_modifier = narrow_escape_origin_capital_colonization_machine_16
-					has_modifier = narrow_escape_origin_capital_colonization_servitor_16
-					has_modifier = narrow_escape_origin_capital_colonization_megacorp_16
-					has_modifier = narrow_escape_origin_capital_colonization_ap_16
-					has_modifier = narrow_escape_origin_capital_colonization_hive_ap_16
-					has_modifier = narrow_escape_origin_capital_colonization_machine_ap_16
-					has_modifier = narrow_escape_origin_capital_colonization_servitor_ap_16
-					has_modifier = narrow_escape_origin_capital_colonization_megacorp_ap_16
-					has_modifier = narrow_escape_origin_capital_colonization_22
-					has_modifier = narrow_escape_origin_capital_colonization_hive_22
-					has_modifier = narrow_escape_origin_capital_colonization_machine_22
-					has_modifier = narrow_escape_origin_capital_colonization_servitor_22
-					has_modifier = narrow_escape_origin_capital_colonization_megacorp_22
-					has_modifier = narrow_escape_origin_capital_colonization_ap_22
-					has_modifier = narrow_escape_origin_capital_colonization_hive_ap_22
-					has_modifier = narrow_escape_origin_capital_colonization_machine_ap_22
-					has_modifier = narrow_escape_origin_capital_colonization_servitor_ap_22
-					has_modifier = narrow_escape_origin_capital_colonization_megacorp_ap_22
-					has_modifier = narrow_escape_origin_capital_colonization_26
-					has_modifier = narrow_escape_origin_capital_colonization_hive_26
-					has_modifier = narrow_escape_origin_capital_colonization_machine_26
-					has_modifier = narrow_escape_origin_capital_colonization_servitor_26
-					has_modifier = narrow_escape_origin_capital_colonization_megacorp_26
-					has_modifier = narrow_escape_origin_capital_colonization_ap_26
-					has_modifier = narrow_escape_origin_capital_colonization_hive_ap_26
-					has_modifier = narrow_escape_origin_capital_colonization_machine_ap_26
-					has_modifier = narrow_escape_origin_capital_colonization_servitor_ap_26
-					has_modifier = narrow_escape_origin_capital_colonization_megacorp_ap_26
-					has_modifier = narrow_escape_origin_capital_colonization_32
-					has_modifier = narrow_escape_origin_capital_colonization_hive_32
-					has_modifier = narrow_escape_origin_capital_colonization_machine_32
-					has_modifier = narrow_escape_origin_capital_colonization_servitor_32
-					has_modifier = narrow_escape_origin_capital_colonization_megacorp_32
-					has_modifier = narrow_escape_origin_capital_colonization_ap_32
-					has_modifier = narrow_escape_origin_capital_colonization_hive_ap_32
-					has_modifier = narrow_escape_origin_capital_colonization_machine_ap_32
-					has_modifier = narrow_escape_origin_capital_colonization_servitor_ap_32
-					has_modifier = narrow_escape_origin_capital_colonization_megacorp_ap_32
-				}
+				mjrp_narrow_escape_has_1st_colony_modifier = yes
 			}
 			owner = {
 				remove_modifier = narrow_escape_origin_need_capital
 
-				this = {
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = energy
-								value >= 10000000
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_energy
-							value = 10000000
-						}
-						add_resource = { energy = -10000000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = energy
-								value >= 10000
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_energy
-							value = 10000
-						}
-						add_resource = { energy = -10000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = energy
-								value >= 10
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_energy
-							value = 10
-						}
-						add_resource = { energy = -10 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = energy
-								value >= 0.00001
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_energy
-							value = 0.00001
-						}
-						add_resource = { energy = -0.00001 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = minerals
-								value >= 10000000
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_minerals
-							value = 10000000
-						}
-						add_resource = { minerals = -10000000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = minerals
-								value >= 10000
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_minerals
-							value = 10000
-						}
-						add_resource = { minerals = -10000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = minerals
-								value >= 10
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_minerals
-							value = 10
-						}
-						add_resource = { minerals = -10 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = minerals
-								value >= 0.00001
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_minerals
-							value = 0.00001
-						}
-						add_resource = { minerals = -0.00001 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = food
-								value >= 10000000
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_food
-							value = 10000000
-						}
-						add_resource = { food = -10000000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = food
-								value >= 10000
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_food
-							value = 10000
-						}
-						add_resource = { food = -10000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = food
-								value >= 10
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_food
-							value = 10
-						}
-						add_resource = { food = -10 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = food
-								value >= 0.00001
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_food
-							value = 0.00001
-						}
-						add_resource = { food = -0.00001 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = influence
-								value >= 10000000
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_influence
-							value = 10000000
-						}
-						add_resource = { influence = -10000000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = influence
-								value >= 10000
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_influence
-							value = 10000
-						}
-						add_resource = { influence = -10000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = influence
-								value >= 10
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_influence
-							value = 10
-						}
-						add_resource = { influence = -10 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = influence
-								value >= 0.00001
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_influence
-							value = 0.00001
-						}
-						add_resource = { influence = -0.00001 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = unity
-								value >= 10000000
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_unity
-							value = 10000000
-						}
-						add_resource = { unity = -10000000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = unity
-								value >= 10000
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_unity
-							value = 10000
-						}
-						add_resource = { unity = -10000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = unity
-								value >= 10
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_unity
-							value = 10
-						}
-						add_resource = { unity = -10 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = unity
-								value >= 0.00001
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_unity
-							value = 0.00001
-						}
-						add_resource = { unity = -0.00001 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = alloys
-								value >= 10000000
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_alloys
-							value = 10000000
-						}
-						add_resource = { alloys = -10000000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = alloys
-								value >= 10000
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_alloys
-							value = 10000
-						}
-						add_resource = { alloys = -10000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = alloys
-								value >= 10
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_alloys
-							value = 10
-						}
-						add_resource = { alloys = -10 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = alloys
-								value >= 0.00001
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_alloys
-							value = 0.00001
-						}
-						add_resource = { alloys = -0.00001 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = consumer_goods
-								value >= 10000000
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_consumer_goods
-							value = 10000000
-						}
-						add_resource = { consumer_goods = -10000000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = consumer_goods
-								value >= 10000
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_consumer_goods
-							value = 10000
-						}
-						add_resource = { consumer_goods = -10000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = consumer_goods
-								value >= 10
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_consumer_goods
-							value = 10
-						}
-						add_resource = { consumer_goods = -10 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = consumer_goods
-								value >= 0.00001
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_consumer_goods
-							value = 0.00001
-						}
-						add_resource = { consumer_goods = -0.00001 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = volatile_motes
-								value >= 10000000
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_volatile_motes
-							value = 10000000
-						}
-						add_resource = { volatile_motes = -10000000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = volatile_motes
-								value >= 10000
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_volatile_motes
-							value = 10000
-						}
-						add_resource = { volatile_motes = -10000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = volatile_motes
-								value >= 10
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_volatile_motes
-							value = 10
-						}
-						add_resource = { volatile_motes = -10 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = volatile_motes
-								value >= 0.00001
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_volatile_motes
-							value = 0.00001
-						}
-						add_resource = { volatile_motes = -0.00001 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = exotic_gases
-								value >= 10000000
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_exotic_gases
-							value = 10000000
-						}
-						add_resource = { exotic_gases = -10000000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = exotic_gases
-								value >= 10000
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_exotic_gases
-							value = 10000
-						}
-						add_resource = { exotic_gases = -10000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = exotic_gases
-								value >= 10
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_exotic_gases
-							value = 10
-						}
-						add_resource = { exotic_gases = -10 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = exotic_gases
-								value >= 0.00001
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_exotic_gases
-							value = 0.00001
-						}
-						add_resource = { exotic_gases = -0.00001 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = rare_crystals
-								value >= 10000000
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_rare_crystals
-							value = 10000000
-						}
-						add_resource = { rare_crystals = -10000000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = rare_crystals
-								value >= 10000
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_rare_crystals
-							value = 10000
-						}
-						add_resource = { rare_crystals = -10000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = rare_crystals
-								value >= 10
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_rare_crystals
-							value = 10
-						}
-						add_resource = { rare_crystals = -10 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = rare_crystals
-								value >= 0.00001
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_rare_crystals
-							value = 0.00001
-						}
-						add_resource = { rare_crystals = -0.00001 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = sr_living_metal
-								value >= 10000000
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_sr_living_metal
-							value = 10000000
-						}
-						add_resource = { sr_living_metal = -10000000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = sr_living_metal
-								value >= 10000
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_sr_living_metal
-							value = 10000
-						}
-						add_resource = { sr_living_metal = -10000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = sr_living_metal
-								value >= 10
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_sr_living_metal
-							value = 10
-						}
-						add_resource = { sr_living_metal = -10 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = sr_living_metal
-								value >= 0.00001
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_sr_living_metal
-							value = 0.00001
-						}
-						add_resource = { sr_living_metal = -0.00001 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = sr_zro
-								value >= 10000000
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_sr_zro
-							value = 10000000
-						}
-						add_resource = { sr_zro = -10000000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = sr_zro
-								value >= 10000
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_sr_zro
-							value = 10000
-						}
-						add_resource = { sr_zro = -10000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = sr_zro
-								value >= 10
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_sr_zro
-							value = 10
-						}
-						add_resource = { sr_zro = -10 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = sr_zro
-								value >= 0.00001
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_sr_zro
-							value = 0.00001
-						}
-						add_resource = { sr_zro = -0.00001 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = sr_dark_matter
-								value >= 10000000
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_sr_dark_matter
-							value = 10000000
-						}
-						add_resource = { sr_dark_matter = -10000000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = sr_dark_matter
-								value >= 10000
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_sr_dark_matter
-							value = 10000
-						}
-						add_resource = { sr_dark_matter = -10000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = sr_dark_matter
-								value >= 10
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_sr_dark_matter
-							value = 10
-						}
-						add_resource = { sr_dark_matter = -10 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = sr_dark_matter
-								value >= 0.00001
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_sr_dark_matter
-							value = 0.00001
-						}
-						add_resource = { sr_dark_matter = -0.00001 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = nanites
-								value >= 10000000
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_nanites
-							value = 10000000
-						}
-						add_resource = { nanites = -10000000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = nanites
-								value >= 10000
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_nanites
-							value = 10000
-						}
-						add_resource = { nanites = -10000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = nanites
-								value >= 10
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_nanites
-							value = 10
-						}
-						add_resource = { nanites = -10 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = nanites
-								value >= 0.00001
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_nanites
-							value = 0.00001
-						}
-						add_resource = { nanites = -0.00001 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = minor_artifacts
-								value >= 10000000
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_minor_artifacts
-							value = 10000000
-						}
-						add_resource = { minor_artifacts = -10000000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = minor_artifacts
-								value >= 10000
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_minor_artifacts
-							value = 10000
-						}
-						add_resource = { minor_artifacts = -10000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = minor_artifacts
-								value >= 10
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_minor_artifacts
-							value = 10
-						}
-						add_resource = { minor_artifacts = -10 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							resource_stockpile_compare = {
-								resource = minor_artifacts
-								value >= 0.00001
-							}
-						}
-						change_variable = {
-							which = narrow_escape_origin_minor_artifacts
-							value = 0.00001
-						}
-						add_resource = { minor_artifacts = -0.00001 }
-					}
-				}
-
+				# MJRP: Originally, this was 2000+ lines, but thanks to new effects we can shorten this a lot
+				mjrp_narrow_escape_export_stockpiles = yes
 				set_country_type = default
-
-				this = {
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_energy
-								value >= 10000000
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_energy
-							value = 10000000
-						}
-						add_resource = { energy = 10000000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_energy
-								value >= 10000
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_energy
-							value = 10000
-						}
-						add_resource = { energy = 10000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_energy
-								value >= 10
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_energy
-							value = 10
-						}
-						add_resource = { energy = 10 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_energy
-								value >= 0.00001
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_energy
-							value = 0.00001
-						}
-						add_resource = { energy = 0.00001 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_minerals
-								value >= 10000000
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_minerals
-							value = 10000000
-						}
-						add_resource = { minerals = 10000000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_minerals
-								value >= 10000
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_minerals
-							value = 10000
-						}
-						add_resource = { minerals = 10000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_minerals
-								value >= 10
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_minerals
-							value = 10
-						}
-						add_resource = { minerals = 10 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_minerals
-								value >= 0.00001
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_minerals
-							value = 0.00001
-						}
-						add_resource = { minerals = 0.00001 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_food
-								value >= 10000000
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_food
-							value = 10000000
-						}
-						add_resource = { food = 10000000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_food
-								value >= 10000
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_food
-							value = 10000
-						}
-						add_resource = { food = 10000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_food
-								value >= 10
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_food
-							value = 10
-						}
-						add_resource = { food = 10 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_food
-								value >= 0.00001
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_food
-							value = 0.00001
-						}
-						add_resource = { food = 0.00001 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_influence
-								value >= 10000000
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_influence
-							value = 10000000
-						}
-						add_resource = { influence = 10000000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_influence
-								value >= 10000
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_influence
-							value = 10000
-						}
-						add_resource = { influence = 10000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_influence
-								value >= 10
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_influence
-							value = 10
-						}
-						add_resource = { influence = 10 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_influence
-								value >= 0.00001
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_influence
-							value = 0.00001
-						}
-						add_resource = { influence = 0.00001 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_unity
-								value >= 10000000
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_unity
-							value = 10000000
-						}
-						add_resource = { unity = 10000000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_unity
-								value >= 10000
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_unity
-							value = 10000
-						}
-						add_resource = { unity = 10000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_unity
-								value >= 10
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_unity
-							value = 10
-						}
-						add_resource = { unity = 10 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_unity
-								value >= 0.00001
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_unity
-							value = 0.00001
-						}
-						add_resource = { unity = 0.00001 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_alloys
-								value >= 10000000
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_alloys
-							value = 10000000
-						}
-						add_resource = { alloys = 10000000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_alloys
-								value >= 10000
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_alloys
-							value = 10000
-						}
-						add_resource = { alloys = 10000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_alloys
-								value >= 10
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_alloys
-							value = 10
-						}
-						add_resource = { alloys = 10 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_alloys
-								value >= 0.00001
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_alloys
-							value = 0.00001
-						}
-						add_resource = { alloys = 0.00001 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_consumer_goods
-								value >= 10000000
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_consumer_goods
-							value = 10000000
-						}
-						add_resource = { consumer_goods = 10000000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_consumer_goods
-								value >= 10000
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_consumer_goods
-							value = 10000
-						}
-						add_resource = { consumer_goods = 10000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_consumer_goods
-								value >= 10
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_consumer_goods
-							value = 10
-						}
-						add_resource = { consumer_goods = 10 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_consumer_goods
-								value >= 0.00001
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_consumer_goods
-							value = 0.00001
-						}
-						add_resource = { consumer_goods = 0.00001 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_volatile_motes
-								value >= 10000000
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_volatile_motes
-							value = 10000000
-						}
-						add_resource = { volatile_motes = 10000000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_volatile_motes
-								value >= 10000
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_volatile_motes
-							value = 10000
-						}
-						add_resource = { volatile_motes = 10000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_volatile_motes
-								value >= 10
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_volatile_motes
-							value = 10
-						}
-						add_resource = { volatile_motes = 10 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_volatile_motes
-								value >= 0.00001
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_volatile_motes
-							value = 0.00001
-						}
-						add_resource = { volatile_motes = 0.00001 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_exotic_gases
-								value >= 10000000
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_exotic_gases
-							value = 10000000
-						}
-						add_resource = { exotic_gases = 10000000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_exotic_gases
-								value >= 10000
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_exotic_gases
-							value = 10000
-						}
-						add_resource = { exotic_gases = 10000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_exotic_gases
-								value >= 10
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_exotic_gases
-							value = 10
-						}
-						add_resource = { exotic_gases = 10 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_exotic_gases
-								value >= 0.00001
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_exotic_gases
-							value = 0.00001
-						}
-						add_resource = { exotic_gases = 0.00001 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_rare_crystals
-								value >= 10000000
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_rare_crystals
-							value = 10000000
-						}
-						add_resource = { rare_crystals = 10000000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_rare_crystals
-								value >= 10000
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_rare_crystals
-							value = 10000
-						}
-						add_resource = { rare_crystals = 10000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_rare_crystals
-								value >= 10
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_rare_crystals
-							value = 10
-						}
-						add_resource = { rare_crystals = 10 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_rare_crystals
-								value >= 0.00001
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_rare_crystals
-							value = 0.00001
-						}
-						add_resource = { rare_crystals = 0.00001 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_sr_living_metal
-								value >= 10000000
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_sr_living_metal
-							value = 10000000
-						}
-						add_resource = { sr_living_metal = 10000000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_sr_living_metal
-								value >= 10000
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_sr_living_metal
-							value = 10000
-						}
-						add_resource = { sr_living_metal = 10000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_sr_living_metal
-								value >= 10
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_sr_living_metal
-							value = 10
-						}
-						add_resource = { sr_living_metal = 10 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_sr_living_metal
-								value >= 0.00001
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_sr_living_metal
-							value = 0.00001
-						}
-						add_resource = { sr_living_metal = 0.00001 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_sr_zro
-								value >= 10000000
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_sr_zro
-							value = 10000000
-						}
-						add_resource = { sr_zro = 10000000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_sr_zro
-								value >= 10000
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_sr_zro
-							value = 10000
-						}
-						add_resource = { sr_zro = 10000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_sr_zro
-								value >= 10
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_sr_zro
-							value = 10
-						}
-						add_resource = { sr_zro = 10 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_sr_zro
-								value >= 0.00001
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_sr_zro
-							value = 0.00001
-						}
-						add_resource = { sr_zro = 0.00001 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_sr_dark_matter
-								value >= 10000000
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_sr_dark_matter
-							value = 10000000
-						}
-						add_resource = { sr_dark_matter = 10000000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_sr_dark_matter
-								value >= 10000
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_sr_dark_matter
-							value = 10000
-						}
-						add_resource = { sr_dark_matter = 10000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_sr_dark_matter
-								value >= 10
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_sr_dark_matter
-							value = 10
-						}
-						add_resource = { sr_dark_matter = 10 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_sr_dark_matter
-								value >= 0.00001
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_sr_dark_matter
-							value = 0.00001
-						}
-						add_resource = { sr_dark_matter = 0.00001 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_nanites
-								value >= 10000000
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_nanites
-							value = 10000000
-						}
-						add_resource = { nanites = 10000000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_nanites
-								value >= 10000
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_nanites
-							value = 10000
-						}
-						add_resource = { nanites = 10000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_nanites
-								value >= 10
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_nanites
-							value = 10
-						}
-						add_resource = { nanites = 10 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_nanites
-								value >= 0.00001
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_nanites
-							value = 0.00001
-						}
-						add_resource = { nanites = 0.00001 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_minor_artifacts
-								value >= 10000000
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_minor_artifacts
-							value = 10000000
-						}
-						add_resource = { minor_artifacts = 10000000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_minor_artifacts
-								value >= 10000
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_minor_artifacts
-							value = 10000
-						}
-						add_resource = { minor_artifacts = 10000 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_minor_artifacts
-								value >= 10
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_minor_artifacts
-							value = 10
-						}
-						add_resource = { minor_artifacts = 10 }
-					}
-					while = {
-						count = 1000000
-						limit = {
-							check_variable = {
-								which = narrow_escape_origin_minor_artifacts
-								value >= 0.00001
-							}
-						}
-						subtract_variable = {
-							which = narrow_escape_origin_minor_artifacts
-							value = 0.00001
-						}
-						add_resource = { minor_artifacts = 0.00001 }
-					}
-				}
+				mjrp_narrow_escape_import_stockpiles = yes
 
 				every_country = {
 					limit = {
@@ -5131,15 +3366,22 @@ planet_event = {
 			remove_modifier = narrow_escape_origin_capital_colonization_megacorp_ap_16
 			while = {
 				limit = {
-					count_pops = { count > 16 }
+					pop_amount > 1600
 				}
-				random_pop = { kill_pop = yes }
+				random_owned_pop_group = {
+					kill_pop_group = {
+						pop_group = this
+						amount = 100
+					}
+				}
 			}
 			while = {
 				limit = {
-					count_pops = { count < 16 }
+					pop_amount < 1600
 				}
-				create_pop = { species = event_target:narrow_escape_origin_primary_species }
+				create_pop_group = {
+					species = event_target:narrow_escape_origin_primary_species
+				}
 			}
 			if = {
 				limit = {
@@ -5147,7 +3389,9 @@ planet_event = {
 				}
 				while = {
 					count = 4
-					create_pop = { species = event_target:narrow_escape_origin_primary_species }
+					create_pop_group = {
+						species = event_target:narrow_escape_origin_primary_species
+					}
 				}
 			}
 			if = {
@@ -5156,7 +3400,9 @@ planet_event = {
 				}
 				while = {
 					count = 2
-					create_pop = { species = event_target:narrow_escape_origin_primary_species }
+					create_pop_group = {
+						species = event_target:narrow_escape_origin_primary_species
+					}
 				}
 			}
 			if = {
@@ -5168,7 +3414,9 @@ planet_event = {
 				}
 				while = {
 					count = 1
-					create_pop = { species = event_target:narrow_escape_origin_primary_species }
+					create_pop_group = {
+						species = event_target:narrow_escape_origin_primary_species
+					}
 				}
 			}
 			if = {
@@ -5177,11 +3425,18 @@ planet_event = {
 				}
 				while = {
 					count = 5
-					random_pop = { kill_pop = yes }
+					random_owned_pop_group = {
+						kill_pop_group = {
+							pop_group = this
+							amount = 100
+						}
+					}
 				}
 				while = {
 					count = 5
-					create_pop = { species = event_target:narrow_escape_origin_secondary_species }
+					create_pop_group = {
+						species = event_target:narrow_escape_origin_secondary_species
+					}
 				}
 			}
 			if = {
@@ -5190,7 +3445,9 @@ planet_event = {
 				}
 				while = {
 					count = 5
-					create_pop = { species = event_target:narrow_escape_origin_secondary_species }
+					create_pop_group = {
+						species = event_target:narrow_escape_origin_secondary_species
+					}
 				}
 			}
 			planet_event = { id = narrow_escape.34 }
@@ -5279,15 +3536,22 @@ planet_event = {
 			remove_modifier = narrow_escape_origin_capital_colonization_megacorp_ap_22
 			while = {
 				limit = {
-					count_pops = { count > 22 }
+					pop_amount > 2200
 				}
-				random_pop = { kill_pop = yes }
+				random_owned_pop_group = {
+						kill_pop_group = {
+							pop_group = this
+							amount = 100
+						}
+					}
 			}
 			while = {
 				limit = {
-					count_pops = { count < 22 }
+					pop_amount < 2200
 				}
-				create_pop = { species = owner }
+				create_pop_group = {
+					species = owner
+				}
 			}
 			if = {
 				limit = {
@@ -5295,7 +3559,9 @@ planet_event = {
 				}
 				while = {
 					count = 4
-					create_pop = { species = event_target:narrow_escape_origin_primary_species }
+					create_pop_group = {
+						species = event_target:narrow_escape_origin_primary_species
+					}
 				}
 			}
 			if = {
@@ -5304,7 +3570,9 @@ planet_event = {
 				}
 				while = {
 					count = 2
-					create_pop = { species = event_target:narrow_escape_origin_primary_species }
+					create_pop_group = {
+						species = event_target:narrow_escape_origin_primary_species
+					}
 				}
 			}
 			if = {
@@ -5316,7 +3584,9 @@ planet_event = {
 				}
 				while = {
 					count = 1
-					create_pop = { species = event_target:narrow_escape_origin_primary_species }
+					create_pop_group = {
+						species = event_target:narrow_escape_origin_primary_species
+					}
 				}
 			}
 			if = {
@@ -5325,11 +3595,18 @@ planet_event = {
 				}
 				while = {
 					count = 7
-					random_pop = { kill_pop = yes }
+					random_owned_pop_group = {
+						kill_pop_group = {
+							pop_group = this
+							amount = 100
+						}
+					}
 				}
 				while = {
 					count = 7
-					create_pop = { species = event_target:narrow_escape_origin_secondary_species }
+					create_pop_group = {
+						species = event_target:narrow_escape_origin_secondary_species
+					}
 				}
 			}
 			if = {
@@ -5338,7 +3615,9 @@ planet_event = {
 				}
 				while = {
 					count = 5
-					create_pop = { species = event_target:narrow_escape_origin_secondary_species }
+					create_pop_group = {
+						species = event_target:narrow_escape_origin_secondary_species
+					}
 				}
 			}
 			planet_event = { id = narrow_escape.34 }
@@ -5427,15 +3706,22 @@ planet_event = {
 			remove_modifier = narrow_escape_origin_capital_colonization_megacorp_ap_26
 			while = {
 				limit = {
-					count_pops = { count > 26 }
+					pop_amount > 2600
 				}
-				random_pop = { kill_pop = yes }
+				random_owned_pop_group = {
+						kill_pop_group = {
+							pop_group = this
+							amount = 100
+						}
+					}
 			}
 			while = {
 				limit = {
-					count_pops = { count < 26 }
+					pop_amount < 2600
 				}
-				create_pop = { species = owner }
+				create_pop_group = {
+					species = owner
+				}
 			}
 			if = {
 				limit = {
@@ -5443,7 +3729,9 @@ planet_event = {
 				}
 				while = {
 					count = 6
-					create_pop = { species = event_target:narrow_escape_origin_primary_species }
+					create_pop_group = {
+						species = event_target:narrow_escape_origin_primary_species
+					}
 				}
 			}
 			if = {
@@ -5452,7 +3740,9 @@ planet_event = {
 				}
 				while = {
 					count = 2
-					create_pop = { species = event_target:narrow_escape_origin_primary_species }
+					create_pop_group = {
+						species = event_target:narrow_escape_origin_primary_species
+					}
 				}
 			}
 			if = {
@@ -5464,7 +3754,9 @@ planet_event = {
 				}
 				while = {
 					count = 1
-					create_pop = { species = event_target:narrow_escape_origin_primary_species }
+					create_pop_group = {
+						species = event_target:narrow_escape_origin_primary_species
+					}
 				}
 			}
 			if = {
@@ -5473,11 +3765,18 @@ planet_event = {
 				}
 				while = {
 					count = 8
-					random_pop = { kill_pop = yes }
+					random_owned_pop_group = {
+						kill_pop_group = {
+							pop_group = this
+							amount = 100
+						}
+					}
 				}
 				while = {
 					count = 8
-					create_pop = { species = event_target:narrow_escape_origin_secondary_species }
+					create_pop_group = {
+						species = event_target:narrow_escape_origin_secondary_species
+					}
 				}
 			}
 			if = {
@@ -5486,7 +3785,9 @@ planet_event = {
 				}
 				while = {
 					count = 5
-					create_pop = { species = event_target:narrow_escape_origin_secondary_species }
+					create_pop_group = {
+						species = event_target:narrow_escape_origin_secondary_species
+					}
 				}
 			}
 			planet_event = { id = narrow_escape.33 }
@@ -5575,15 +3876,22 @@ planet_event = {
 			remove_modifier = narrow_escape_origin_capital_colonization_megacorp_ap_32
 			while = {
 				limit = {
-					count_pops = { count > 32 }
+					pop_amount > 3200
 				}
-				random_pop = { kill_pop = yes }
+				random_owned_pop_group = {
+						kill_pop_group = {
+							pop_group = this
+							amount = 100
+						}
+					}
 			}
 			while = {
 				limit = {
-					count_pops = { count < 32 }
+					pop_amount < 3200
 				}
-				create_pop = { species = owner }
+				create_pop_group = {
+					species = owner
+				}
 			}
 			if = {
 				limit = {
@@ -5591,7 +3899,9 @@ planet_event = {
 				}
 				while = {
 					count = 6
-					create_pop = { species = event_target:narrow_escape_origin_primary_species }
+					create_pop_group = {
+						species = event_target:narrow_escape_origin_primary_species
+					}
 				}
 			}
 			if = {
@@ -5600,7 +3910,9 @@ planet_event = {
 				}
 				while = {
 					count = 2
-					create_pop = { species = event_target:narrow_escape_origin_primary_species }
+					create_pop_group = {
+						species = event_target:narrow_escape_origin_primary_species
+					}
 				}
 			}
 			if = {
@@ -5612,7 +3924,9 @@ planet_event = {
 				}
 				while = {
 					count = 1
-					create_pop = { species = event_target:narrow_escape_origin_primary_species }
+					create_pop_group = {
+						species = event_target:narrow_escape_origin_primary_species
+					}
 				}
 			}
 			if = {
@@ -5621,11 +3935,18 @@ planet_event = {
 				}
 				while = {
 					count = 10
-					random_pop = { kill_pop = yes }
+					random_owned_pop_group = {
+						kill_pop_group = {
+							pop_group = this
+							amount = 100
+						}
+					}
 				}
 				while = {
 					count = 10
-					create_pop = { species = event_target:narrow_escape_origin_secondary_species }
+					create_pop_group = {
+						species = event_target:narrow_escape_origin_secondary_species
+					}
 				}
 			}
 			if = {
@@ -5634,7 +3955,9 @@ planet_event = {
 				}
 				while = {
 					count = 5
-					create_pop = { species = event_target:narrow_escape_origin_secondary_species }
+					create_pop_group = {
+						species = event_target:narrow_escape_origin_secondary_species
+					}
 				}
 			}
 			planet_event = { id = narrow_escape.33 }
@@ -5704,15 +4027,22 @@ planet_event = {
 			remove_modifier = narrow_escape_origin_second_colonization_machine_ap_10
 			while = {
 				limit = {
-					count_pops = { count > 10 }
+					pop_amount > 1000
 				}
-				random_pop = { kill_pop = yes }
+				random_owned_pop_group = {
+						kill_pop_group = {
+							pop_group = this
+							amount = 100
+						}
+					}
 			}
 			while = {
 				limit = {
-					count_pops = { count < 10 }
+					pop_amount < 1000
 				}
-				create_pop = { species = owner }
+				create_pop_group = {
+					species = owner
+				}
 			}
 			if = {
 				limit = {
@@ -5720,7 +4050,9 @@ planet_event = {
 				}
 				while = {
 					count = 2
-					create_pop = { species = event_target:narrow_escape_origin_primary_species }
+					create_pop_group = {
+						species = event_target:narrow_escape_origin_primary_species
+					}
 				}
 			}
 			if = {
@@ -5729,11 +4061,18 @@ planet_event = {
 				}
 				while = {
 					count = 3
-					random_pop = { kill_pop = yes }
+					random_owned_pop_group = {
+						kill_pop_group = {
+							pop_group = this
+							amount = 100
+						}
+					}
 				}
 				while = {
 					count = 3
-					create_pop = { species = event_target:narrow_escape_origin_secondary_species }
+					create_pop_group = {
+						species = event_target:narrow_escape_origin_secondary_species
+					}
 				}
 			}
 			planet_event = { id = narrow_escape.35 }
@@ -5847,15 +4186,22 @@ planet_event = {
 			remove_modifier = narrow_escape_origin_second_colonization_machine_ap_16
 			while = {
 				limit = {
-					count_pops = { count > 16 }
+					pop_amount > 1600
 				}
-				random_pop = { kill_pop = yes }
+				random_owned_pop_group = {
+						kill_pop_group = {
+							pop_group = this
+							amount = 100
+						}
+					}
 			}
 			while = {
 				limit = {
-					count_pops = { count < 16 }
+					pop_amount < 1600
 				}
-				create_pop = { species = owner }
+				create_pop_group = {
+					species = owner
+				}
 			}
 			if = {
 				limit = {
@@ -5863,7 +4209,9 @@ planet_event = {
 				}
 				while = {
 					count = 2
-					create_pop = { species = event_target:narrow_escape_origin_primary_species }
+					create_pop_group = {
+						species = event_target:narrow_escape_origin_primary_species
+					}
 				}
 			}
 			if = {
@@ -5872,11 +4220,18 @@ planet_event = {
 				}
 				while = {
 					count = 5
-					random_pop = { kill_pop = yes }
+					random_owned_pop_group = {
+						kill_pop_group = {
+							pop_group = this
+							amount = 100
+						}
+					}
 				}
 				while = {
 					count = 5
-					create_pop = { species = event_target:narrow_escape_origin_secondary_species }
+					create_pop_group = {
+						species = event_target:narrow_escape_origin_secondary_species
+					}
 				}
 			}
 			planet_event = { id = narrow_escape.35 }
@@ -5942,15 +4297,22 @@ planet_event = {
 			remove_modifier = narrow_escape_origin_third_colonization_machine_ap_6
 			while = {
 				limit = {
-					count_pops = { count > 6 }
+					pop_amount > 600
 				}
-				random_pop = { kill_pop = yes }
+				random_owned_pop_group = {
+						kill_pop_group = {
+							pop_group = this
+							amount = 100
+						}
+					}
 			}
 			while = {
 				limit = {
-					count_pops = { count < 6 }
+					pop_amount < 600
 				}
-				create_pop = { species = owner }
+				create_pop_group = {
+					species = owner
+				}
 			}
 			if = {
 				limit = {
@@ -5958,11 +4320,18 @@ planet_event = {
 				}
 				while = {
 					count = 2
-					random_pop = { kill_pop = yes }
+					random_owned_pop_group = {
+						kill_pop_group = {
+							pop_group = this
+							amount = 100
+						}
+					}
 				}
 				while = {
 					count = 2
-					create_pop = { species = event_target:narrow_escape_origin_secondary_species }
+					create_pop_group = {
+						species = event_target:narrow_escape_origin_secondary_species
+					}
 				}
 			}
 			# planet_event = { id = narrow_escape.36 }
@@ -6452,7 +4821,7 @@ event = {
 					has_country_flag = country_type_narrow_escape_origin_primary_species@prev
 				}
 				prev = {
-					every_owned_pop = {
+					every_owned_pop_group = {
 						limit = {
 							is_same_species = prevprev.species
 							NOT = { has_trait = trait_narrow_escape_species }
@@ -6468,7 +4837,7 @@ event = {
 					has_country_flag = country_type_narrow_escape_origin_secondary_species@prev
 				}
 				prev = {
-					every_owned_pop = {
+					every_owned_pop_group = {
 						limit = {
 							is_same_species = prevprev.species
 							NOT = { has_trait = trait_narrow_escape_species }
