@@ -1,0 +1,49 @@
+###lbd_dathnak_scripted_effects
+###By Banjomarx
+###By Bread
+begin_crisis_lbd_dathnak = {
+	set_global_flag = mid_game_crisis_happened 			# this must be set and not removed
+	set_timed_global_flag = {							# this must be set and not removed
+		flag = mid_game_crisis_happened_recently
+		years = 12
+	}
+	set_global_flag = lbd_dathnak_in_progress 				# must be removed when crisis is resolved
+	set_global_flag = lbd_dathnak_fired 					# (optional) only set this flag if you want your crisis to fire only once
+	set_global_flag = midgame_crisis_ongoing			# must be removed when crisis is resolved
+	set_global_flag = allow_tech_lbd_dathnak
+	# BOOM BOOM PEW PEW effects go here
+	# this is in country scope, on global event country
+	random_system = {
+		
+		spawn_system = {  min_distance = 20 max_distance = 50 initializer = lbd_dathnak_original_crisis_initializer hyperlane= yes is_discovered= yes }
+
+weights = {
+	base = 0.001
+
+	modifier = {
+		any_system_planet = {
+			is_planet_class = pc_gas_giant
+		}
+		add = 10
+	}
+	modifier = {
+		any_system_planet = {
+			has_planet_flag = baldarak
+		}
+		multiply = 100
+	}
+	modifier = {
+		any_system_planet = {
+			has_planet_flag = new_baldarak
+		}
+		multiply = 100
+	}
+
+}
+
+	}
+}
+
+
+
+

@@ -1,0 +1,289 @@
+###lbd_dathnak_economic_plans 
+###By Banjomarx
+###By Bread
+# Base AI economic plans (these will only be picked by Dathnak Empires)
+@exotic_gases_rare_target = 5
+@rare_resource_target = 3
+@rare_resource_limit = 20
+@exotic_gases_target = 20
+@energy_target = 20
+@minerals_target = 40
+@unity_target = 10
+@alloy_target = 10
+@fleet_cap_alloy_target = 50
+@machine_empire_alloy_target = 15
+@pops_target = 9000
+@food_target = 3
+@food_target_extra = 20
+@consumer_goods_target = 10
+@research_target = 70
+@scaling_research_target = 25
+@scaling_consumer_goods_target = 1
+@scaling_rare_resource_target = 0.20
+
+basic_lbd_dathnak_economy_plan = {
+	income = {
+		energy = @energy_target
+		minerals = @minerals_target
+		exotic_gases = @exotic_gases_rare_target
+	}
+
+	# subplan = {
+	# 	set_name = "lbd base food"
+		
+
+	# 	income = {
+	# 		food = @food_target
+	# 	}
+	# }
+
+	subplan = {
+		set_name = "lbd base science organics"
+		potential = {
+			has_monthly_income = { resource = consumer_goods value > @consumer_goods_target }
+			has_monthly_income = { resource = exotic_gases value > @exotic_gases_target }
+		}
+		income = {
+			physics_research = @research_target
+			society_research = @research_target
+			engineering_research = @research_target
+		}
+	}
+
+
+
+
+
+	# subplan = {
+	# 	set_name = "lbd base unity machine empire"
+
+	# 	income = {
+	# 		unity = @unity_target
+	# 	}
+	# }
+
+	# subplan = {
+	# 	set_name = "lbd extended food"
+	# 	potential = {
+	# 		has_monthly_income = { resource = physics_research value > @research_target }
+	# 		has_monthly_income = { resource = society_research value > @research_target }
+	# 		has_monthly_income = { resource = engineering_research value > @research_target }
+	# 		country_uses_food = yes
+	# 	}
+
+	# 	income = {
+	# 		food = @food_target_extra
+	# 	}
+	# }
+
+	subplan = {
+		set_name = "lbd base consumer goods"
+		potential = {
+			has_monthly_income = { resource = minerals value > @minerals_target }
+			has_monthly_income = { resource = energy value > @energy_target }
+			has_monthly_income = { resource = exotic_gases value > @exotic_gases_target }
+		}
+		income = {
+			consumer_goods = @consumer_goods_target
+		}
+	}
+
+
+	# subplan = {
+	# 	set_name = "machine empire base alloys"
+	# 	potential = {
+	# 		is_machine_empire = yes
+	# 	}
+
+	# 	income = {
+	# 		alloys = @machine_empire_alloy_target
+	# 	}
+	# }
+
+	subplan = {
+		set_name = "base pops"
+		potential = {
+			has_monthly_income = { resource = energy value > @energy_target }
+			has_monthly_income = { resource = minerals value > @minerals_target }
+			has_monthly_income = { resource = physics_research value > @research_target }
+			has_monthly_income = { resource = society_research value > @research_target }
+			has_monthly_income = { resource = engineering_research value > @research_target }
+		}
+		pops = @pops_target
+	}
+
+	#### SCALING SUBPLANS HERE ####
+	# Values in the scaling subplans are added to the base plan each time the AI reaches the target
+	# If base alloys = 10 and the AI reaches +12 per month, and it says alloys = 20 in the scaling subplan, the next target becomes alloys = 30
+	# All scaling subplans are cumulative
+
+	subplan = {
+		scaling = yes
+		set_name = "general scaling"
+		potential = {
+			has_monthly_income = { resource = energy value > @energy_target }
+			has_monthly_income = { resource = minerals value > @minerals_target }
+			has_monthly_income = { resource = exotic_gases value > @exotic_gases_target }
+		}
+
+		income = {
+			alloys = 10
+			minerals = 8
+			energy = 9
+			physics_research = @scaling_research_target
+			society_research = @scaling_research_target
+			engineering_research = @scaling_research_target
+			unity = 10
+			exotic_gases = 5
+		}
+	}
+
+	subplan = {
+		scaling = yes
+		set_name = "naval cap scaling"
+		potential = {
+			num_repeatable_techs > 0 #make sure it isn't messing up the earlier development (this is for the late game)
+			has_monthly_income = { resource = energy value > @energy_target }
+			has_monthly_income = { resource = minerals value > @minerals_target }
+			has_monthly_income = { resource = alloys value > @fleet_cap_alloy_target }
+			has_monthly_income = { resource = exotic_gases value > @exotic_gases_target }
+			used_naval_capacity_percent > 0.95
+			used_starbase_capacity_percent >= 1
+		}
+
+		naval_cap = 50
+	}
+
+	subplan = {
+		scaling = yes
+		set_name = "general CG scaling"
+		potential = {
+			
+			has_monthly_income = { resource = energy value > @energy_target }
+			has_monthly_income = { resource = minerals value > @minerals_target }
+has_monthly_income = { resource = exotic_gases value > @exotic_gases_target }
+		}
+		income = {
+			consumer_goods = @scaling_consumer_goods_target
+		}
+	}
+
+	#### MILITARIST EXTRA ALLOYS ####
+	subplan = {
+		scaling = yes
+		set_name = "Militarist alloys"
+		potential = {
+			
+				is_militarist = yes
+				
+
+			has_monthly_income = { resource = energy value > @energy_target }
+			has_monthly_income = { resource = minerals value > @minerals_target }
+			has_monthly_income = { resource = exotic_gases value > @exotic_gases_target }
+		}
+
+		income = {
+			alloys = 15
+		}
+	}
+
+	#### MATERIALIST SCIENCE ####
+	subplan = {
+		scaling = yes
+		set_name = "Materialist science"
+		potential = {
+			is_materialist = yes
+			has_monthly_income = { resource = energy value > @energy_target }
+			has_monthly_income = { resource = minerals value > @minerals_target }
+			has_monthly_income = { resource = exotic_gases value > @exotic_gases_target }
+		}
+
+		income = {
+			physics_research = 15
+			society_research = 15
+			engineering_research = 15
+		}
+	}
+
+	#### SPIRITUALIST UNITY ####
+	subplan = {
+		scaling = yes
+		set_name = "Spiritualist unity"
+		potential = {
+			is_spiritualist = yes
+			has_monthly_income = { resource = energy value > @energy_target }
+			has_monthly_income = { resource = minerals value > @minerals_target }
+			has_monthly_income = { resource = exotic_gases value > @exotic_gases_target }
+		}
+
+		income = {
+			unity = 15
+		}
+	}
+
+	# Optional subplans don't need to be fulfilled for the other scaling subplans to become active
+	subplan = {
+		optional = yes
+		set_name = "Rare resources"
+		potential = {
+			always = yes
+		}
+
+		income = {
+			exotic_gases = @exotic_gases_rare_target
+			volatile_motes = @rare_resource_target
+			rare_crystals = @rare_resource_target
+		}
+	}
+
+
+	subplan = {
+		optional = yes
+		scaling = yes
+		set_name = "Scaling exotic gases"
+
+		potential = {
+			has_monthly_income = { resource = exotic_gases value < @rare_resource_limit }
+		}
+
+		income = {
+			exotic_gases = @scaling_rare_resource_target
+		}
+	}
+	subplan = {
+		optional = yes
+		scaling = yes
+		set_name = "Scaling volatile motes"
+
+		potential = {
+			has_monthly_income = { resource = volatile_motes value < @rare_resource_limit }
+		}
+
+		income = {
+			volatile_motes = @scaling_rare_resource_target
+		}
+	}
+	subplan = {
+		optional = yes
+		scaling = yes
+		set_name = "Scaling rare crystals"
+
+		potential = {
+			has_monthly_income = { resource = rare_crystals value < @rare_resource_limit }
+		}
+
+		income = {
+			rare_crystals = @scaling_rare_resource_target
+		}
+	}
+
+	ai_weight = {
+		weight = 10000
+		modifier = {
+			
+			not = {has_country_flag = lbd_dathnak_country
+		}
+		factor = 0
+		}
+	}
+}

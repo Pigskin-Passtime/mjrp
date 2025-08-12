@@ -1,0 +1,1133 @@
+###lbd_dathnak_buildings
+###By Banjomarx
+###By Bread
+building_lbd_dathnak_refinery_motes = {
+	base_buildtime = @b2_time
+
+	exempt_from_ai_planet_specialization = no
+	category = manufacturing
+
+	building_sets = {
+		industrial
+		factory
+		foundry
+	}
+
+	potential = {
+		NOR = {
+			has_modifier = resort_colony
+			has_modifier = slave_colony
+			has_modifier = crucible_colony
+		}
+		exists = owner 
+		owner = {
+			or = {
+				is_ai = no
+				has_country_flag = lbd_dathnak_country
+			}
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = { is_gestalt = no }
+		}
+		modifier = {
+			job_lbd_dathnak_gas_refiner_motes_add = 100
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = { is_gestalt = yes }
+		}
+		modifier = {
+			job_lbd_dathnak_gas_refiner_drone_motes_add = 100
+		}
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = 500
+		}
+		upkeep = {
+			energy = 3
+		}
+	}
+
+	prerequisites = {
+		"tech_lbd_dathnak_exotic_gas_refining"
+	}
+
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = { is_gestalt = no }
+		}
+		text = job_lbd_dathnak_gas_refiner_motes_effect_desc 
+	}
+
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = { is_gestalt = yes }
+		}
+		text =  job_lbd_dathnak_gas_refiner_drone_motes_effect_desc 
+	}
+}
+building_lbd_dathnak_refinery_crystals = {
+	base_buildtime = @b2_time
+
+	exempt_from_ai_planet_specialization = no
+	category = manufacturing
+
+	building_sets = {
+		industrial
+		factory
+		foundry
+	}
+
+	potential = {
+		NOR = {
+			has_modifier = resort_colony
+			has_modifier = slave_colony
+			has_modifier = crucible_colony
+		}
+		exists = owner 
+		owner = {
+			or = {
+				is_ai = no
+				has_country_flag = lbd_dathnak_country
+			}
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = { is_gestalt = no }
+		}
+		modifier = {
+			job_lbd_dathnak_gas_refiner_crystals_add = 100
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = { is_gestalt = yes }
+		}
+		modifier = {
+			job_lbd_dathnak_gas_refiner_drone_crystals_add = 100
+		}
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = 500
+		}
+		upkeep = {
+			energy = 3
+		}
+	}
+
+	prerequisites = {
+		"tech_lbd_dathnak_exotic_gas_refining"
+	}
+
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = { is_gestalt = no }
+		}
+		text = job_lbd_dathnak_gas_refiner_crystals_effect_desc 
+	}
+
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = { is_gestalt = yes }
+		}
+		text =  job_lbd_dathnak_gas_refiner_drone_crystals_effect_desc 
+	}
+}
+building_lbd_dathnak_mineral_processing_plant = {
+	base_buildtime = @b3_time
+	planet_limit = 2
+	category = resource
+
+	building_sets = {
+		industrial
+		mining
+	}
+
+	destroy_trigger = {
+		OR = {
+			not = {
+				exists = owner
+			}
+			owner = {
+				not = {
+					has_country_flag = lbd_dathnak_country
+				}
+			}
+		}
+	}
+
+	potential = {
+		exists = owner 
+		owner = {
+			has_country_flag = lbd_dathnak_country
+		}
+	}
+
+	planet_modifier = {
+		country_minerals_produces_mult = 0.1
+		job_lbd_dathnak_gas_mineral_transmuter_add = 300
+	}
+
+	
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = 200
+			exotic_gases = 35
+		}
+		
+		upkeep = {
+			energy = 2
+			exotic_gases = 5
+		}
+	}
+
+
+
+	
+	triggered_desc = {
+		trigger = {
+			NOT = { is_planet_class = pc_shattered_ring_habitable }
+			exists = owner
+			owner = {
+				is_gestalt = no
+				is_fallen_empire_spiritualist = no
+			}
+		}
+		text = job_lbd_dathnak_gas_mineral_transmuter_effect_desc
+	}
+	
+}
+
+building_lbd_dathnak_energy_grid = {
+	base_buildtime = @b2_time
+	planet_limit = 1
+	category = resource
+
+	building_sets = {
+		generator
+	}
+
+	destroy_trigger = {
+		OR = {
+			OR = {
+				has_modifier = resort_colony
+				has_modifier = crucible_colony
+			}
+			AND = {
+				exists = owner
+				owner = {
+					is_ai = yes
+				}
+				has_any_generator_district_or_building = no
+			}
+		}
+		
+	}
+
+	potential = {
+		exists = owner 
+		NOR = {
+			has_modifier = resort_colony
+			has_modifier = crucible_colony
+		}
+		OR = {
+			NOT = { is_planet_class = pc_habitat }
+			AND = {
+				exists = owner
+				owner = { is_gestalt = yes }
+			}
+			has_planet_flag = energy_habitat
+		}
+		OR = {
+			owner = {
+				is_ai = no
+			}
+			has_any_generator_district_or_building = yes
+		}
+		
+		owner = {
+			or = {
+				is_ai = no
+				has_country_flag = lbd_dathnak_country
+			}
+		}
+	}
+
+	planet_modifier = {
+		planet_technician_energy_produces_add = 0.5
+		planet_jobs_energy_produces_mult = 0.05
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				is_regular_empire = yes
+				
+			}
+		}
+		modifier = {
+			job_lbd_dathnak_gas_technician_add = 100
+		}
+	}
+
+	
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = { is_gestalt = yes }
+		}
+		modifier = {
+			job_lbd_dathnak_gas_technician_drone_add = 100
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				is_robot_empire = yes
+			}
+			NOR = {
+				is_planet_class = pc_habitat
+				is_planet_class = pc_machine
+				is_planet_class = pc_hive
+				is_planet_class = pc_city
+			}
+		}
+		modifier = {
+			district_generator_max = 2
+		}
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = @b1_minerals
+			exotic_gases = 50
+		}
+		cost = {
+			trigger = {
+				owner = {
+					is_robot_empire = yes
+				}
+			}
+			minerals = 100
+			alloys = 100
+		}
+		upkeep = {
+			energy = 2
+			exotic_gases = 1
+		}
+	}
+
+	prerequisites = {
+		tech_lbd_dathnak_power_hub_1
+	}
+
+	upgrades = {
+		building_lbd_dathnak_energy_nexus
+	}
+
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = { is_gestalt = yes }
+		}
+		text = job_lbd_dathnak_gas_technician_drone_effect_desc
+	}
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = {
+				is_gestalt = no
+				
+			}
+		}
+		text = job_lbd_dathnak_gas_technician_effect_desc
+	}
+
+}
+
+building_lbd_dathnak_energy_nexus = {
+	base_buildtime = @b3_time
+	can_build = no
+	category = resource
+
+	building_sets = {
+		generator
+	}
+
+	allow = {
+		has_upgraded_capital = yes
+	}
+
+	destroy_trigger = {
+		OR = {
+			has_modifier = resort_colony
+			has_modifier = crucible_colony
+			AND = {
+				exists = owner
+				owner = {
+					is_ai = yes
+				}
+				has_any_generator_district_or_building = no
+			}
+		}
+	}
+
+	planet_modifier = {
+		planet_technician_energy_produces_add = 1
+		planet_jobs_energy_produces_mult = 0.1
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			has_ringworld_output_boost = yes
+		}
+		modifier = {
+			planet_technician_energy_produces_add = 1
+			planet_jobs_energy_produces_mult = 0.1
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				is_regular_empire = yes
+				
+			}
+		}
+		modifier = {
+			job_lbd_dathnak_gas_technician_add = 200
+		}
+	}
+
+	
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = { is_gestalt = yes }
+		}
+		modifier = {
+			job_lbd_dathnak_gas_technician_drone_add = 200
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				is_robot_empire = yes
+			}
+			NOR = {
+				is_planet_class = pc_habitat
+				is_planet_class = pc_machine
+				is_planet_class = pc_hive
+				is_planet_class = pc_city
+			}
+		}
+		modifier = {
+			district_generator_max = 4
+		}
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			trigger = {
+				has_ringworld_output_boost = no
+			}
+			minerals = @b2_minerals
+			exotic_gases = 250
+		}
+		cost = {
+			trigger = {
+				has_ringworld_output_boost = yes
+			}
+			minerals = 900
+			exotic_gases = 300
+		}
+		upkeep = {
+			trigger = {
+				has_ringworld_output_boost = no
+			}
+			energy = 2
+			exotic_gases = 3
+		}
+		upkeep = {
+			trigger = {
+				has_ringworld_output_boost = yes
+			}
+			energy = 5
+			exotic_gases = 7
+		}
+	}
+
+	prerequisites = {
+		tech_lbd_dathnak_power_hub_2
+	}
+
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = { is_gestalt = yes }
+		}
+		text = job_lbd_dathnak_gas_technician_drone_effect_desc
+	}
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = {
+				is_gestalt = no
+				is_fallen_empire_spiritualist = no
+			}
+		}
+		text = job_lbd_dathnak_gas_technician_effect_desc
+	}
+
+}
+
+building_lbd_dathnak_foundry_1 = {
+	base_buildtime = @b2_time
+	planet_limit = 1
+	category = manufacturing
+
+	building_sets = {
+		industrial
+		foundry
+	}
+
+	potential = {
+		NOR = {
+			has_modifier = resort_colony
+			has_modifier = slave_colony
+			has_modifier = crucible_colony
+		}
+		
+		exists = owner 
+		owner = {
+			or = {
+				is_ai = no
+				has_country_flag = lbd_dathnak_country
+			}
+		}
+	}
+
+	destroy_trigger = {
+		OR = {
+			has_modifier = resort_colony
+			has_modifier = slave_colony
+			has_modifier = crucible_colony
+			
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				is_hive_empire = yes
+				is_catalytic_empire = no
+			}
+		}
+		modifier = {
+			job_lbd_dathnak_foundry_drone_add = @b1_jobs
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				is_machine_empire = yes
+				is_catalytic_empire = no
+			}
+		}
+		modifier = {
+			job_lbd_dathnak_fabricator_add = @b1_jobs
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				is_gestalt = yes
+				is_catalytic_empire = yes
+			}
+		}
+		modifier = {
+			job_lbd_dathnak_catalytic_drone_add = @b1_jobs
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				is_regular_empire = yes
+				is_catalytic_empire = no
+			}
+		}
+		modifier = {
+			job_lbd_dathnak_foundry_add = @b1_jobs
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				is_regular_empire = yes
+				is_catalytic_empire = yes
+			}
+		}
+		modifier = {
+			job_lbd_dathnak_catalytic_technician_add = @b1_jobs
+		}
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = @b1_minerals
+		}
+		upkeep = {
+			energy = @b1_upkeep
+		}
+	}
+
+	upgrades = {
+		building_lbd_dathnak_foundry_2
+	}
+
+	prerequisites = {
+		tech_lbd_dathnak_basic_industry
+	}
+
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = {
+				is_regular_empire = yes
+				is_catalytic_empire = no
+			}
+		}
+		text = job_lbd_dathnak_foundry_effect_desc
+	}
+
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = {
+				is_regular_empire = yes
+				is_catalytic_empire = yes
+			}
+		}
+		text = job_lbd_dathnak_catalytic_technician_effect_desc
+	}
+
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = {
+				is_hive_empire = yes
+				is_catalytic_empire = no
+			}
+		}
+		text = job_lbd_dathnak_foundry_drone_effect_desc
+	}
+
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = {
+				is_machine_empire = yes
+				is_catalytic_empire = no
+			}
+		}
+		text = job_lbd_dathnak_fabricator_effect_desc
+	}
+
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = {
+				is_gestalt = yes
+				is_catalytic_empire = yes
+			}
+		}
+		text = job_lbd_dathnak_catalytic_drone_effect_desc
+	}
+}
+
+building_lbd_dathnak_foundry_2 = {
+	base_buildtime = @b3_time
+	can_build = no
+	category = manufacturing
+
+	building_sets = {
+		industrial
+		foundry
+	}
+
+	allow = {
+		has_upgraded_capital = yes
+	}
+
+	destroy_trigger = {
+		OR = {
+			NOT = { exists = owner }
+			has_modifier = resort_colony
+			has_modifier = slave_colony
+			has_modifier = crucible_colony
+
+		}
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = @b2_minerals
+			exotic_gases = 200
+		}
+		upkeep = {
+			energy = @b2_upkeep
+			exotic_gases = 5
+		}
+	}
+
+	upgrades = {
+		building_lbd_dathnak_foundry_3
+	}
+
+	prerequisites = {
+		tech_lbd_dathnak_alloys_1
+	}
+
+	planet_modifier = {
+		planet_metallurgists_alloys_produces_add = 0.5
+		planet_jobs_alloys_produces_mult = 0.1
+		planet_metallurgists_exotic_gases_upkeep_add = 0.1
+	}
+
+	
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				is_regular_empire = yes
+				is_catalytic_empire = no
+			}
+		}
+		modifier = {
+			job_lbd_dathnak_foundry_add = @b1_jobs
+		}
+	}
+
+
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				is_hive_empire = yes
+				is_catalytic_empire = no
+			}
+		}
+		modifier = {
+			job_lbd_dathnak_foundry_drone_add = @b1_jobs
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				is_machine_empire = yes
+				is_catalytic_empire = no
+			}
+		}
+		modifier = {
+			job_lbd_dathnak_fabricator_add = @b1_jobs
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				is_gestalt = yes
+				is_catalytic_empire = yes
+			}
+		}
+		modifier = {
+			planet_metallurgists_food_upkeep_add = 3
+			job_lbd_dathnak_catalytic_drone_add = @b1_jobs
+		}
+	}
+
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = {
+				is_regular_empire = yes
+				is_catalytic_empire = no
+			}
+		}
+		text = job_lbd_dathnak_foundry_effect_desc
+	}
+
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = {
+				is_regular_empire = yes
+				is_catalytic_empire = yes
+			}
+		}
+		text = job_lbd_dathnak_catalytic_technician_effect_desc
+	}
+
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = {
+				is_hive_empire = yes
+				is_catalytic_empire = no
+			}
+		}
+		text = job_lbd_dathnak_foundry_drone_effect_desc
+	}
+
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = {
+				is_machine_empire = yes
+				is_catalytic_empire = no
+			}
+		}
+		text = job_lbd_dathnak_fabricator_effect_desc
+	}
+
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = {
+				is_gestalt = yes
+				is_catalytic_empire = yes
+			}
+		}
+		text = job_lbd_dathnak_catalytic_drone_effect_desc
+	}
+}
+
+building_lbd_dathnak_foundry_3 = {
+	base_buildtime = @b4_time
+	can_build = no
+	category = manufacturing
+
+	building_sets = {
+		industrial
+		foundry
+	}
+
+	allow = {
+		has_major_upgraded_capital = yes
+	}
+
+	destroy_trigger = {
+		OR = {
+			has_modifier = resort_colony
+			has_modifier = slave_colony
+			has_modifier = crucible_colony
+		
+		}
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			trigger = {
+				has_ringworld_output_boost = no
+			}
+			minerals = @b3_minerals
+			exotic_gases = 500
+		}
+		cost = {
+			trigger = {
+				has_ringworld_output_boost = yes
+			}
+			minerals = 1500
+			exotic_gases = 1000
+		}
+		upkeep = {
+			trigger = {
+				has_ringworld_output_boost = no
+			}
+			energy = @b3_upkeep
+			exotic_gases = 6
+		}
+		upkeep = {
+			trigger = {
+				has_ringworld_output_boost = yes
+			}
+			energy = 15
+			exotic_gases = 12
+		}
+	}
+
+	prerequisites = {
+		tech_lbd_dathnak_alloys_2
+	}
+
+	planet_modifier = {
+		planet_metallurgists_alloys_produces_add = 1
+		planet_jobs_alloys_produces_mult = 0.2
+		planet_metallurgists_exotic_gases_upkeep_add = 0.2
+	}
+
+
+
+	
+
+	triggered_planet_modifier = {
+		potential = {
+			has_ringworld_output_boost = yes
+		
+		}
+		modifier = {
+			planet_metallurgists_alloys_produces_add = 1
+			planet_jobs_alloys_produces_mult = 0.2
+			planet_metallurgists_exotic_gases_upkeep_add = 0.2
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				is_regular_empire = yes
+				is_catalytic_empire = no
+			}
+		}
+		modifier = {
+			job_lbd_dathnak_foundry_add = @b1_jobs
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				is_regular_empire = yes
+				is_catalytic_empire = yes
+			}
+		}
+		modifier = {
+			job_lbd_dathnak_catalytic_technician_add = @b1_jobs
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				is_hive_empire = yes
+				is_catalytic_empire = no
+			}
+		}
+		modifier = {
+			job_lbd_dathnak_foundry_drone_add = @b1_jobs
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				is_machine_empire = yes
+				is_catalytic_empire = no
+			}
+		}
+		modifier = {
+			job_lbd_dathnak_fabricator_add = @b1_jobs
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				is_gestalt = yes
+				is_catalytic_empire = yes
+			}
+		}
+		modifier = {
+			job_lbd_dathnak_catalytic_drone_add = @b1_jobs
+		}
+	}
+
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = {
+				is_regular_empire = yes
+				is_catalytic_empire = no
+			}
+		}
+		text = job_lbd_dathnak_foundry_effect_desc
+	}
+
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = {
+				is_regular_empire = yes
+				is_catalytic_empire = yes
+			}
+		}
+		text = job_lbd_dathnak_catalytic_technician_effect_desc
+	}
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = {
+				is_hive_empire = yes
+				is_catalytic_empire = no
+			}
+		}
+		text = job_lbd_dathnak_foundry_drone_effect_desc
+	}
+
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = {
+				is_machine_empire = yes
+				is_catalytic_empire = no
+			}
+		}
+		text = job_lbd_dathnak_fabricator_effect_desc
+	}
+
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = {
+				is_gestalt = yes
+				is_catalytic_empire = yes
+			}
+		}
+		text = job_lbd_dathnak_catalytic_drone_effect_desc
+	}
+}
+
+building_lbd_dathnak_growth_inducer = {
+	base_buildtime = @b3_time
+	planet_limit = 3
+	exempt_from_ai_planet_specialization = no
+	category = pop_assembly
+
+	building_sets = {
+		urban
+	}
+
+	potential = {
+		NOR = {
+			has_modifier = resort_colony
+			has_modifier = slave_colony
+			has_modifier = crucible_colony
+		}
+		exists = owner 
+		owner = {
+			or = {
+				is_ai = no
+				has_country_flag = lbd_dathnak_country
+			}
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = { is_gestalt = no }
+		}
+		modifier = {
+			job_lbd_dathnak_gas_growth_maker_add = @b1_jobs
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = { is_gestalt = yes }
+		}
+		modifier = {
+			job_lbd_dathnak_gas_growth_maker_drone_add = @b1_jobs
+		}
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = 500
+			exotic_gases = 50
+		}
+		upkeep = {
+			energy = 3
+			exotic_gases = 1
+		}
+	}
+
+	prerequisites = {
+		"tech_lbd_dathnak_exotic_gas_growth_induction"
+	}
+
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = { is_gestalt = no }
+		}
+		text = job_lbd_dathnak_gas_growth_maker_effect_desc
+	}
+
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = { is_gestalt = yes }
+		}
+		text =  job_lbd_dathnak_gas_growth_maker_drone_effect_desc 
+	}
+}
+

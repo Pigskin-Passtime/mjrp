@@ -1,0 +1,303 @@
+namespace = lbd_specialist
+###lbd_dathnak_casus_belli
+###By Banjomarx
+###By Bread
+espionage_operation_event = {
+	id = lbd_specialist.1
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_global_flag = lbd_dathnak_fired
+		exists = owner
+		owner = {
+			is_specialist_subject_tier = {
+				TYPE = lbd_dathnak_specialist
+				TIER = 1
+			}
+		}
+	}
+	immediate = {
+		owner = {
+			add_monthly_resource_mult = {
+				resource = minerals
+				value = 0.25
+				min = 500
+			}
+			add_monthly_resource_mult = {
+				resource = alloys
+				value = 0.25
+				min = 500
+			}
+			add_monthly_resource_mult = {
+				resource = energy
+				value = 0.25
+				min = 500
+			}
+			add_monthly_resource_mult = {
+				resource = consumer_goods
+				value = 0.25
+			}
+			add_monthly_resource_mult = {
+				resource = food
+				min = 500
+				value = 0.25
+			}
+			add_monthly_resource_mult = {
+				resource = exotic_gases
+				value = 0.25
+				min = 2
+			}
+			add_monthly_resource_mult = {
+				resource = volatile_motes
+				value = 0.25
+				min = 2
+			}
+			add_monthly_resource_mult = {
+				resource = rare_crystals
+				min = 2
+				value = 0.25
+			}
+			add_monthly_resource_mult = {
+				resource = nanites
+				min = 1
+				value = 0.25
+			}
+			add_monthly_resource_mult = {
+				resource = sr_dark_matter
+				value = 0.25
+				min = 1
+			}
+			add_monthly_resource_mult = {
+				resource = sr_living_metal
+				value = 0.25
+				min = 1
+			}
+			add_monthly_resource_mult = {
+				resource = sr_zro
+				value = 0.25
+				min = 1
+			}
+			add_monthly_resource_mult = {
+				resource = influence
+				value = 0.25
+				min = 20
+			}
+			add_monthly_resource_mult = {
+				resource = unity
+				value = 0.25
+				min = 100
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = 0.25
+				min = 100
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = 0.25
+				min = 100
+			}
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = 0.25
+				min = 100
+			}
+			add_monthly_resource_mult = {
+				resource = menace
+				value = 0.25
+			}
+			add_monthly_resource_mult = {
+				resource = minor_artifacts
+				value = 0.25
+			}
+		}
+		create_message = {
+			type = LBD_DATHNAK_ESPIONAGE_RESOURCES_GAINED
+			localization = LBD_DATHNAK_SPECIALIST_RESOURCE_GAIN
+			days = 90
+			target = owner
+		}
+	}
+}
+
+espionage_operation_event = {
+	id = lbd_specialist.2
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_global_flag = lbd_dathnak_fired
+		exists = owner
+		owner = {
+			is_specialist_subject_tier = {
+				TYPE = lbd_dathnak_specialist
+				TIER = 1
+			}
+		}
+	}
+	immediate = {
+		owner = {
+			save_global_event_target_as = temp_lbd_dathnak_debuff_applier
+		}
+		from = {
+			if = {
+				limit = {
+					has_modifier = lbd_dathnak_specialist_1_annoying_saboteur_debuff
+				}
+				remove_modifier = lbd_dathnak_specialist_1_annoying_saboteur_debuff
+				add_modifier = {
+					modifier = lbd_dathnak_specialist_1_annoying_saboteur_debuff
+					days = 180
+					time_multiplier = value:lbd_dathnak_calculate_time_multiplier_debuff
+				}
+				if = {
+					limit = {
+						has_modifier = lbd_dathnak_specialist_1_annoying_saboteur_debuff_stacking
+					}
+					change_variable = {
+						which = lbd_dathnak_stacking_debuff_counter
+						value = 1
+					}
+					add_modifier = {
+						modifier = lbd_dathnak_specialist_1_annoying_saboteur_debuff_stacking
+						mult = lbd_dathnak_stacking_debuff_counter
+						days = 180
+						time_multiplier = value:lbd_dathnak_calculate_time_multiplier_debuff
+					}
+				}
+				else = {
+					set_variable = {
+						which = lbd_dathnak_stacking_debuff_counter
+						value = 1
+					}
+					add_modifier = {
+						modifier = lbd_dathnak_specialist_1_annoying_saboteur_debuff_stacking
+						mult = lbd_dathnak_stacking_debuff_counter
+						days = 180
+						time_multiplier = value:lbd_dathnak_calculate_time_multiplier_debuff
+					}
+				}
+			}
+			else = {
+				add_modifier = {
+					modifier = lbd_dathnak_specialist_1_annoying_saboteur_debuff
+					days = 180
+					time_multiplier = value:lbd_dathnak_calculate_time_multiplier_debuff
+				}
+			}
+			create_message = {
+				type = LBD_DATHNAK_DEBUFF_APPLIED
+				localization = LBD_DATHNAK_SPECIALIST_DEBUFFED
+				days = 90
+				target = this
+			}
+		}
+	}
+}
+espionage_operation_event = {
+	id = lbd_specialist.3
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_global_flag = lbd_dathnak_fired
+		exists = owner
+		owner = {
+			is_specialist_subject_tier = {
+				TYPE = lbd_dathnak_specialist
+				TIER = 2
+			}
+		}
+		from = {
+			pop_amount > 0
+		}
+	}
+	immediate = {
+		
+		from = {
+			while = {
+				count = 3
+				random_owned_species = {
+					limit = {
+						NOT = {
+							has_trait = trait_lbd_dathnak_base
+						}
+					}
+					mutate_species = yes
+				}
+			}
+			create_message = {
+				type = LBD_DATHNAK_SPECIES_MUTATION_COMPLETE
+				localization = LBD_DATHNAK_SPECIALIST_MUTATIONS
+				days = 90
+				target = this
+			}
+		}
+	}
+}
+espionage_operation_event = {
+	id = lbd_specialist.4
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_global_flag = lbd_dathnak_fired
+		exists = owner
+		owner = {
+			is_specialist_subject_tier = {
+				TYPE = lbd_dathnak_specialist
+				TIER = 3
+			}
+		}
+		from = {
+			pop_amount > 0
+		}
+	}
+	immediate = {
+		
+		from = {
+			create_message = {
+				type = LBD_DATHNAK_DEFICIT_SITUATION_GAINED
+				localization = LBD_DATHNAK_DEFICIT_SITUATION_GAINED_DESC
+				days = 90
+				target = this
+			}
+			random_list = {
+				10 = {
+					start_situation = {
+						type = situation_energy_deficit
+						target = capital_scope
+					}
+				}
+				10 = {
+					start_situation = {
+						type = situation_mineral_deficit
+						target = capital_scope
+					}
+				}
+				6 = {
+					start_situation = {
+						type = situation_alloys_deficit
+						target = capital_scope
+					}
+				}
+				4 = {
+					start_situation = {
+						type = situation_rare_crystals_deficit
+						target = capital_scope
+					}
+				}
+				4 = {
+					start_situation = {
+						type = situation_exotic_gases_deficit
+						target = capital_scope
+					}
+				}
+				4 = {
+					start_situation = {
+						type = situation_volatile_motes_deficit
+						target = capital_scope
+					}
+				}
+			}
+		}
+	}
+}
+
