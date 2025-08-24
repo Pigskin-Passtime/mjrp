@@ -1,0 +1,143 @@
+
+projcrim_infected_pops = {
+	base = 0
+	
+	complex_trigger_modifier = {
+		trigger = count_owned_pop_group
+		trigger_scope = planet
+		
+		parameters = {
+			limit = {
+				pop_group_has_trait = trait_crimson_infected
+			}
+		}
+		
+		mode = add
+	}
+
+	complex_trigger_modifier = {
+		trigger = num_assigned_jobs
+		trigger_scope = planet
+		
+		parameters = {
+			job = projcrim_contained
+		}
+		
+		mode = subtract
+	}
+
+	divide = 100
+	round = yes
+
+}
+
+projcrim_infection_percent = {
+	base = 0
+
+	complex_trigger_modifier = {	# Adds to total infected pops
+		trigger = count_owned_pop_group
+		trigger_scope = planet
+
+		parameters = {
+			limit = {
+				pop_group_has_trait = trait_crimson_infected
+			}
+		}
+
+		mode = add
+	}
+
+	complex_trigger_modifier = {
+		trigger = num_assigned_jobs
+		trigger_scope = planet
+		
+		parameters = {
+			job = projcrim_contained
+		}
+		
+		mode = subtract
+	}
+
+	complex_trigger_modifier = {	# Divides by total pops
+		trigger = count_owned_pop_group
+		trigger_scope = planet
+
+		# parameters = {
+		# 	limit = {
+		# 		pop_amount > 0
+		# 	}
+		# }
+
+		mode = divide
+	}
+
+	mult = 100		# Gets %, rounded to integer
+	round = yes
+}
+
+projcrim_afflicted_pops_local_variable = {
+	base = 0
+
+	complex_trigger_modifier = {
+		trigger = count_owned_pop_group
+		trigger_scope = owner
+
+		parameters = {
+			limit = { pop_group_has_trait = trait_crimson_infected }
+		}
+		
+		mode = add
+	}
+}
+
+projcrim_afflicted_pops_local_variable2 = {
+	base = 0
+
+	complex_trigger_modifier = {
+		trigger = count_owned_pop_group
+		trigger_scope = owner
+
+		parameters = {
+			limit = { pop_group_has_trait = trait_crimson_infected }
+		}
+		
+		mode = subtract
+	}
+}
+
+projcrim_contained_pops = {
+	base = 0
+
+	complex_trigger_modifier = {
+		trigger = count_owned_pop_group
+		trigger_scope = planet
+
+		parameters = {
+			limit = {
+				has_pop_group_flag = projcrim_contained_flag
+			}
+		}
+
+		mode = add
+	}
+}
+
+projcrim_conformity_effect = {
+	# base = 0
+	# add = $BASEVALUE1$
+	# mult = modifier:planet_projcrim_conformity_mult
+	# mult = 100
+	# round = yes
+	# divide = 4
+	# divide = $BASEVALUE2$
+	base = 1
+	add = planet.modifier:planet_projcrim_conformity_mult
+	mult = $WEIGHT$
+	mult = 3
+	round = yes
+}
+
+projcrim_conformity_reduction_effect = {
+	base = 1
+	subtract = planet.modifier:planet_projcrim_conformity_mult
+}
