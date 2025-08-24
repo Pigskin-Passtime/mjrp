@@ -1,0 +1,991 @@
+namespace = zob
+namespace = zob_stage
+#Author : Starchitect
+
+#Manually Spawn Zob System for testing purposes
+country_event = {
+	id = zob.100
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		random_system_within_border = {
+			spawn_zob = yes
+		}
+	}
+}
+
+### Stage 1
+fleet_event = {
+	id = zob_stage.1
+	title = "zob_stage.1.name"
+	desc = "zob_stage.1.desc"
+	picture = GFX_evt_alien_planet_blue
+	show_sound = event_dangerous_animals
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+		leader = {
+			save_event_target_as = stage_1_scientist
+		}
+	}
+
+	after = {
+		from = { set_site_progress_locked = no }
+	}
+
+	option = {
+		name = ACKNOWLEDGED
+		owner = {
+			add_resource = {
+				alloys = 200
+			}
+		}
+	}
+}
+
+### Stage 2
+fleet_event = {
+	id = zob_stage.2
+	title = "zob_stage.2.name"
+	desc = "zob_stage.2.desc"
+	picture = GFX_evt_failed_observation
+	show_sound = event_metal_fatigue
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+		leader = {
+			save_event_target_as = stage_2_scientist
+		}
+	}
+
+	after = {
+		from = { set_site_progress_locked = no }
+	}
+
+	option = {
+		name = CAPTURE_IT
+		leader = {
+			add_trait = leader_trait_science_communicator
+		}
+	}
+}
+
+### Stage 3
+fleet_event = {
+	id = zob_stage.3
+	title = "zob_stage.3.name"
+	desc = "zob_stage.3.desc"
+	picture = GFX_evt_discovered_hidden_door
+	show_sound = event_big_door_opening
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no }
+	}
+
+	option = {
+		name = INTRIGUING
+		medium_artifact_reward = yes
+	}
+}
+
+### Zob Abducts Scientist
+fleet_event = {
+	id = zob_stage.4
+	title = "zob_stage.4.name"
+	desc = "zob_stage.4.desc"
+	picture = GFX_evt_crusher_droid
+	show_sound = event_alien_abduction
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+		leader = {
+			save_event_target_as = collected_scientist
+		}
+	}
+
+	after = {
+		from = { set_site_progress_locked = no }
+		hidden_effect = {
+			event_target:collected_scientist = {
+				exile_leader_as = collected_scientist
+			}
+		}
+	}
+
+	option = {
+		name = TERRIBLE
+		custom_tooltip = zob_stage.4.tooltip
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = zob.8
+					days = 30
+				}
+			}
+		}
+	}
+}
+
+###Our Archeologist Returns... different
+country_event = {
+	id = zob.8
+	title = "zob.8.name"
+	desc = {
+		text = zob.8.desc
+	}
+	picture = GFX_evt_alien_planet_blue
+	location = event_target:zob_planet
+	show_sound = event_alien_signal
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+	}
+
+	immediate = {
+		hidden_effect = {
+			random_galaxy_planet = {
+				limit = { 
+					has_planet_flag = zob_planet
+				}
+				save_global_event_target_as = zob_planet
+			}
+		}		
+	}
+	option = {
+		name = ONSCREEN
+		country_event = {
+			id = zob.10
+		}
+	}
+}
+
+
+###For Testing, this assigns a collected scientist in case you fired this event from console and dont have an event target already. 
+country_event = {
+	id = zob.9
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				NOT = { exists = event_target:collected_scientist }
+			}
+			random_owned_leader = {
+				limit = {
+					leader_class = scientist
+					is_gestalt_node = no
+					is_ruler = no
+					is_heir = no
+				}
+				# add_trait = trait_ruler_charismatic
+				save_event_target_as = collected_scientist
+				exile_leader_as = collected_scientist
+			}
+		}
+		random_galaxy_planet = {
+			limit = { 
+				has_planet_flag = zob_planet
+			}
+			save_global_event_target_as = zob_planet
+		}
+		country_event = {
+			id = zob.10
+		}
+	}
+}
+
+
+### Zob Makes Contact Through Scientist
+country_event = {
+	id = zob.10
+	title = "zob.10.name"
+	desc = {
+		text = zob.10.desc
+	}
+	location = event_target:zob_planet
+	is_triggered_only = yes
+	show_sound = event_radio_chatter
+
+	diplomatic = yes
+	diplomatic_title = BLANK_STRING
+
+	picture_event_data = {
+		portrait = event_target:collected_scientist
+		room = zob_room
+	}
+	picture = GFX_leader_recruitment_bg_renowned
+
+	option = {
+		name = "zob.10.a"
+		is_dialog_only = yes
+		response_text = zob.10.a.response
+	}
+	option = {
+		name = "zob.10.b"
+		is_dialog_only = yes
+		response_text = zob.10.b.response
+	}
+	option = {
+		name = "zob.10.c"
+		is_dialog_only = yes
+		response_text = zob.10.c.response
+	}
+	option = {
+		name = "zob.10.d"
+		country_event = {
+			id = zob.11
+		}
+	}
+}
+
+#Hire Zob
+country_event = {
+	id = zob.11
+	title = "zob.11.name"
+	desc = {
+		trigger = {
+			is_gestalt = no
+		}
+		text = zob.11.desc
+	}
+	desc = {
+		trigger = {
+			is_gestalt = yes
+		}
+		text = zob.11.desc_gestalt
+	}
+	show_sound = par_ship_azaryn_terralize
+	location = event_target:zob_planet
+	is_triggered_only = yes
+
+	trigger = {
+		zob_allowed = yes
+	}
+
+	event_window_type = leader_recruit
+	picture_event_data = {
+		portrait = event_target:zob_leader
+		room = zob_room
+	}
+	picture = GFX_leader_recruitment_bg_renowned
+
+	immediate = {
+		hidden_effect = {
+			create_country = {
+				name = "name_zob_planet"
+				type = global_event
+				auto_delete = yes
+				flag = {
+					icon = {
+						category = "special"
+						file = "unknown.dds"
+					}
+					background = {
+						category = "backgrounds"
+						file = "00_solid.dds"
+					}
+					colors = {
+						"red"
+						"red"
+						"null"
+						"null"
+					}
+				}
+				effect = {
+					save_event_target_as = zob_country
+				}
+			}
+			event_target:zob_country = {
+				create_species = {
+					name = "name_zob_species"
+					class = PARAGON
+					portrait = pla12_zob
+					namelist = "PRT1"
+					traits = {
+						trait = trait_hive_mind
+					}
+					effect = {
+						save_event_target_as = zob_paragon_species
+					}
+				}
+				create_leader = {
+					species = event_target:zob_paragon_species
+					event_leader = yes
+					class = official
+					name = "name_zob"
+					skill = 5
+					randomize_traits = no
+					skip_background_generation = yes
+					background_ethic = ethic_gestalt_consciousness
+					custom_catch_phrase = zob_catch_phrase
+					custom_description = zob_back_story
+					background_planet = event_target:zob_planet
+					traits = {
+						trait = subclass_official_governor
+						trait = leader_trait_zob_mind_collector
+						trait = leader_trait_pop_focused_2
+						trait = leader_trait_gifted
+						trait = leader_trait_zob_severed
+					}
+					gender = indeterminable
+					set_age = 758
+					immortal = yes
+					effect = {
+						save_global_event_target_as = zob_leader
+						set_leader_flag = legendary_leader
+						set_leader_flag = zob
+						set_leader_flag = leader_death_events_blocked
+						set_owner = root
+						exile_leader_as = zob_leader
+					}
+				}
+			}
+		}
+	}
+
+	option = { 
+		name = zob.11.a
+		is_dialog_only = yes
+		response_text = zob.11.a.response
+		trigger = {
+			is_gestalt = no
+		}
+	}
+	option = { 
+		name = zob.11.a_hive
+		is_dialog_only = yes
+		response_text = zob.11.a.response_hive
+		trigger = {
+			is_hive_empire = yes
+		}
+	}
+	option = { 
+		name = zob.11.b
+		is_dialog_only = yes
+		response_text = zob.11.b.response
+	}
+	option = { 
+		name = zob.11.c
+		is_dialog_only = yes
+		response_text = zob.11.c.response
+	}
+	option = { 
+		name = zob.11.d
+		is_dialog_only = yes
+		response_text = zob.11.d.response
+	}
+	option = { 
+		name = zob.11.e
+		is_dialog_only = yes
+		response_text = zob.11.e.response
+		trigger = {
+			is_machine_empire = no
+		}
+	}
+	option = { 
+		name = zob.11.e_machine
+		is_dialog_only = yes
+		response_text = zob.11.e.response_machine
+		trigger = {
+			is_machine_empire = yes
+		}
+	}
+	option = { 
+		name = zob.11.f
+		is_dialog_only = yes
+		response_text = zob.11.f.response
+	}
+	option = { # HIRE
+		name = HIRE
+		tag = hire_leader
+		custom_tooltip = zob.11.custom_tooltip # Zob joins
+		sound = event_alien_abduction
+
+		hidden_effect = {
+			set_country_flag = zob_hired
+			log = "Spawned Zob"
+			track_zob_variables = yes
+			event_target:zob_leader = {
+				set_owner = root
+				set_zob_variables = yes					
+			}
+			create_message = {
+				type = MESSAGE_RECRUITED_LEADER
+				localization =  MESSAGE_RECRUITED_LEADER_DESC
+				days = @toast_message_days
+				target = event_target:zob_leader
+				variable = {
+					type = name
+					localization = LEADER
+					scope = event_target:zob_leader
+				}
+				variable = {
+					key = "border"
+					value = "GFX_border_legendary"
+				}
+			}
+			event_target:collected_scientist = {
+				set_owner = root
+				set_zob_variables = yes
+				update_zob_variables = yes		
+			}
+			event_target:zob_leader = {
+				update_zob_variables = yes					
+			}
+			country_event = {
+				id = zob.30
+				days = 4000
+				random = 1000
+			}
+		}
+		if = {
+			event_target:collected_scientist = {
+				add_trait = leader_trait_zob_collected
+			}
+		}
+	}
+
+	option = { # DISMISS
+		sound = event_alien_abduction
+		name = DISMISS
+		tag = dismiss_leader
+		event_target:collected_scientist = {
+			hidden_effect = {
+				set_owner = root
+			}
+			add_trait = leader_trait_traumatized
+		}
+		event_target:zob_leader = {
+			kill_leader = { show_notification = no }
+		}
+	}
+}
+
+###Trait Variable Tracker refresh, this is on level up, adds a delay so you can pick a new trait.
+country_event = {
+	id = zob.20
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_flag = zob_hired
+		is_ai = no
+		from = {
+			OR = {
+				has_trait = leader_trait_zob_mind_collector
+				has_trait = leader_trait_zob_collected
+			}
+		}
+	}
+
+	immediate = {
+		country_event = {
+			id = zob.21
+			days = 30
+		}		
+	}
+}
+
+###Trait Variable Tracker refresh, this is on yearly pulse, and from zob.20, but only applied if you have Zob.
+country_event = {
+	id = zob.21
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_flag = zob_hired
+		is_ai = no
+	}
+
+	immediate = {
+		every_owned_leader = {
+			limit = {
+				OR = {
+					has_trait = leader_trait_zob_mind_collector
+					has_trait = leader_trait_zob_collected
+				}
+			}
+			update_zob_variables = yes
+		}		
+	}
+}
+
+###Zob adds a mind, Gateway. Cyclical, triggered by hiring Zob. Ends if you lose Zob.
+country_event = {
+	id = zob.30
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_flag = zob_hired
+		is_ai = no
+		# exists = event_target:zob_leader
+	}
+
+	immediate = {
+		count_zob_collective = yes
+		#Option to Uplift once you have Epigenetic Triggers
+		if = {
+			limit = {
+				NOT = { has_country_flag = zob_uplift }
+				has_technology = tech_epigenetic_triggers
+				is_hive_empire = no #Hives can uplift normally?
+			}
+			set_country_flag = zob_uplift
+			country_event = {
+				id = zob.40
+			}
+			country_event = {
+				id = zob.30
+				days = 1000
+				random = 1000
+			}
+		}
+		#Expand the Collective if there is room
+		else_if = {
+			limit = {
+				check_variable = {
+					which = zob_collective_size
+					value < 4
+				}
+				any_owned_leader = {
+					can_be_zob_collected = yes
+				}
+			}
+			country_event = {
+				id = zob.31
+			}
+		}
+		#Check again later
+		else = {
+			country_event = {
+				id = zob.30
+				days = 4000
+				random = 1000
+			}
+		}		
+	}
+}
+
+###Zob Seeks to add to the collective
+country_event = {
+	id = zob.31
+	title = "zob.31.name"
+	desc = {
+		text = zob.31.desc
+	}
+	picture = GFX_evt_necrophage
+	# show_sound = event_alien_signal #Sound repeats since this event has a menu
+	is_triggered_only = yes
+	
+	diplomatic = yes
+	diplomatic_title = "name_zob"
+
+	picture_event_data = {
+		portrait = event_target:zob_leader
+		room = zob_room
+	}
+	picture = GFX_leader_recruitment_bg_renowned
+
+	immediate = {
+		if = {
+			limit = {
+				NOT = { has_country_flag = zob_choose_pending }
+			}
+			set_country_flag = zob_choose_pending
+			hidden_effect = {
+				country_event = {
+					id = zob.30
+					days = 6000
+					random = 1000
+				}
+			}
+		}	
+	}
+
+	after = {
+		hidden_effect = {
+			country_event = {
+				id = zob.21
+			}
+		}
+	}
+
+	#Ask for Volunteers
+	option = {
+		name = "zob.31.d"
+		trigger = {
+			NOT = { has_country_flag = zob_choose_class }
+		}
+		sound = event_evolution_mastery
+		custom_tooltip =  zob.31.d.tooltip
+		hidden_effect = {
+			random_owned_leader = {
+				limit = { 
+					can_be_zob_collected = yes 
+					has_skill < 10
+				}			
+				weights = {
+					base = 1
+					modifier = {
+						has_ethic = ethic_xenophile
+						add = 10
+					}
+					modifier = {
+						has_trait = leader_trait_eager
+						add = 10
+					}
+					modifier = {
+						has_trait = leader_trait_eager_2
+						add = 10
+					}
+					modifier = {
+						has_ethic = ethic_xenophobe
+						mult = 0.25
+					}
+				}
+				add_trait = leader_trait_zob_collected
+				add_skill_without_trait_selection = 1
+				set_zob_variables = yes
+			}
+			remove_country_flag = zob_choose_pending
+		}
+	}
+
+	#Choose the most skilled
+	option = {
+		name = "zob.31.a"
+		trigger = {
+			NOT = { has_country_flag = zob_choose_class }
+		}
+		custom_tooltip =  zob.31.a.tooltip
+		sound = event_evolution_mastery
+		hidden_effect = {
+			ordered_owned_leader = {
+				limit = { can_be_zob_collected = yes }
+				position = 0
+				order_by = value:candidate_level
+				add_trait = leader_trait_zob_collected
+				set_zob_variables = yes
+			}
+			remove_country_flag = zob_choose_pending
+		}
+	}
+
+	#Choose the eldest
+	option = {
+		name = "zob.31.b"
+		trigger = {
+			NOT = { has_country_flag = zob_choose_class }
+		}
+		custom_tooltip =  zob.31.b.tooltip
+		sound = event_evolution_mastery
+		hidden_effect = {
+			ordered_owned_leader = {
+				limit = { can_be_zob_collected = yes }
+				position = 0
+				order_by = value:candidate_age
+				add_trait = leader_trait_zob_collected
+				set_zob_variables = yes
+			}
+			remove_country_flag = zob_choose_pending
+		}
+	}
+
+	#Choose the leader Class
+	option = {
+		name = "zob.31.c"
+		trigger = {
+			NOT = { has_country_flag = zob_choose_class }
+		}
+		custom_tooltip =  zob.31.c.tooltip
+		hidden_effect = {
+			set_country_flag = zob_choose_class
+			country_event = {
+				id = zob.31
+			}
+		}
+	}
+
+	#Choose the leader Class Options
+	#Go Back
+	option = {
+		name = "zob.31.back"
+		trigger = {
+			has_country_flag = zob_choose_class
+		}
+		hidden_effect = {
+			remove_country_flag = zob_choose_class
+			country_event = {
+				id = zob.31
+			}
+		}
+	}
+	option = {
+		name = "zob.31.official"
+		trigger = {
+			has_country_flag = zob_choose_class
+			any_owned_leader = {
+				can_be_zob_collected = yes
+				leader_class = official
+			}
+		}
+		sound = event_evolution_mastery
+		hidden_effect = {
+			remove_country_flag = zob_choose_class
+			random_owned_leader = {
+				limit = { 
+					can_be_zob_collected = yes 
+					leader_class = official
+				}			
+				add_trait = leader_trait_zob_collected
+				set_zob_variables = yes
+			}
+			remove_country_flag = zob_choose_pending
+		}
+	}
+	option = {
+		name = "zob.31.scientist"
+		trigger = {
+			has_country_flag = zob_choose_class
+			any_owned_leader = {
+				can_be_zob_collected = yes
+				leader_class = scientist
+			}
+		}
+		sound = event_evolution_mastery
+		hidden_effect = {
+			remove_country_flag = zob_choose_class
+			random_owned_leader = {
+				limit = { 
+					can_be_zob_collected = yes 
+					leader_class = scientist
+				}			
+				add_trait = leader_trait_zob_collected
+				set_zob_variables = yes
+			}
+			remove_country_flag = zob_choose_pending
+		}
+	}
+	option = {
+		name = "zob.31.commander"
+		trigger = {
+			has_country_flag = zob_choose_class
+			any_owned_leader = {
+				can_be_zob_collected = yes
+				leader_class = commander
+			}
+		}
+		sound = event_evolution_mastery
+		hidden_effect = {
+			remove_country_flag = zob_choose_class
+			random_owned_leader = {
+				limit = { 
+					can_be_zob_collected = yes 
+					leader_class = commander
+				}			
+				add_trait = leader_trait_zob_collected
+				set_zob_variables = yes
+			}
+			remove_country_flag = zob_choose_pending
+		}
+	}
+	# option = { #Add Collector of Minds to Hive Leader. Unecessary as Zob will not be able to collect leaders with councilor traits.
+	# 	name = "zob.31.hive"
+	# 	trigger = {
+	# 		is_hive_empire = yes
+	# 		NOT = { has_country_flag = zob_choose_class }
+	# 		ruler = {
+	# 			NOT = {
+	# 				has_trait = leader_trait_zob_mind_collector
+	# 			}
+	# 		}
+	# 	}
+	# 	sound = event_evolution_mastery
+	# 	custom_tooltip =  zob.31.hive.tooltip
+	# 	hidden_effect = {
+	# 		ruler = {		
+	# 			add_trait = leader_trait_zob_mind_collector
+	# 			set_zob_variables = yes
+	# 		}
+	# 		remove_country_flag = zob_choose_pending
+	# 	}
+	# }
+	option = {
+		name = "zob.31.later"
+		hidden_effect = {
+			remove_country_flag = zob_choose_class
+			remove_country_flag = zob_choose_pending
+		}
+	}
+}
+
+
+###Epigenetic triggers discovered, Zob wants to uplift the Presapients
+country_event = {
+	id = zob.40
+	title = "zob.40.name"
+	desc = {
+		text = zob.40.desc
+	}
+	picture = GFX_evt_scientific_experiments
+	show_sound = event_alien_signal
+	is_triggered_only = yes
+
+	trigger = {	
+		has_country_flag = zob_hired
+		# exists = event_target:zob_leader	
+		is_ai = no
+		any_planet_within_border = {
+			has_planet_flag = zob_planet
+		}	
+		any_galaxy_species = {
+			has_species_flag = zob_species
+		}		
+	}
+	
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_renowned"
+
+	picture_event_data = {
+		portrait = event_target:zob_leader
+	}
+	
+
+	immediate = {
+		if = {
+			limit = {
+				any_owned_leader = {
+					has_trait = leader_trait_zob_collected
+					leader_class = scientist				
+				}
+			}
+			random_owned_leader = {
+				limit = {
+					has_trait = leader_trait_zob_collected
+					leader_class = scientist
+				}
+				save_event_target_as = zob_uplifter
+			}
+		}
+		else = {
+			random_owned_leader = {
+				limit = {
+					leader_class = scientist
+				}
+				save_event_target_as = zob_uplifter
+			}
+		}		
+	}
+
+	option = {
+		name = "zob.40.resposne"
+		enable_special_project = { name = zob_uplift location = event_target:zob_planet }
+	}
+}
+
+ship_event = {
+	id = zob.41
+	title = "zob.41.name"
+	desc = {
+		text = zob.41.desc
+	}
+	picture = GFX_evt_astral_rift_garden_1
+	show_sound = event_alien_signal
+	is_triggered_only = yes
+
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_renowned"
+	picture_event_data = {
+		portrait = event_target:zob_leader
+	}
+	trigger = {
+		any_galaxy_species = {
+			has_species_flag = zob_species
+		}
+	}
+
+	immediate = {
+		random_galaxy_species = {
+			limit = {
+				has_species_flag = zob_species
+			}
+			every_species_pop = {
+				kill_pop = yes
+			}
+		}
+		owner = {
+			log = "Uplifted Zob"
+			create_species = {
+				name = "name_zob_species"
+				class = PLANT
+				portrait = pla12
+				traits = { 
+					trait = trait_zob_uplifted
+					trait = trait_plantoid_budding 
+				}
+				homeworld = event_target:zob_planet
+				sapient = yes
+				# can_be_modified = no
+				immortal = no
+				effect = { 
+					save_event_target_as = zob_species_uplifted 
+					set_species_flag = zob_species
+				}
+			}
+		}				
+		event_target:zob_planet = {			
+			create_colony = {
+				owner = root
+				species = event_target:zob_species_uplifted
+			}
+			set_name = name_zob_planet
+			add_deposit = d_zob_spawning_pool
+			remove_deposit = d_city_ruins
+			add_district = district_farming_uncapped
+			add_district = district_city
+			add_building = building_capital
+			validate_planet_buildings_and_districts = yes
+			while = {
+				count = 9
+				create_pop = { species = event_target:zob_species_uplifted }
+			}
+			assign_leader = event_target:zob_leader
+		}						
+	}
+	option = {
+		name = "zob.41.resposne"
+		custom_tooltip = zob.41.tooltip
+	}
+}

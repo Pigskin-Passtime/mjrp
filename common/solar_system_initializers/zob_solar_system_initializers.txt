@@ -1,0 +1,137 @@
+#Author : Starchitect
+
+@asteroid_distance = 90
+@orbit_distance = 10
+
+# Zob Home Star
+zob_system = {
+	name = "name_zob_system"
+	class = "sc_t"
+	flags = { zob_system pre_sapient_system }
+
+	# Nebula and Effects- Probably would be better to just limit this to starting in an existing nebula, but unsure how to tie that in with the mod wrapper.
+	init_effect = {
+		#Removing the galaxy map nebula since, its not needed and might spawn in weird places.
+		# if = {
+		# 	limit = {
+		# 		is_inside_nebula = no
+		# 	}
+		# 	create_nebula = {
+		# 		radius = 30
+		# 		effect = { nebula_cloaking_effect = yes }
+		# 	}
+		# }
+		create_ambient_object = {
+			type = "nebula_L4_entity"
+			entity_offset_height = -5
+			location = this
+		}
+		last_created_ambient_object = {
+			set_location = {
+				target = prev
+				distance = 0
+				angle = random
+			}
+		}
+	}
+
+	#Star
+	planet = {
+		name = "name_zob_system"
+		class = star
+		orbit_distance = 0
+		orbit_angle = 1
+		size = 40
+		has_ring = no
+	}
+
+	#Zobs Planet
+	planet = {
+		class = pc_hive
+		name = "name_zob_planet"
+		size = 16
+		orbit_distance = 60
+		has_ring = yes
+		orbit_angle = { min = 50 max = 110 }
+		moon = {
+			name = "name_zob_moon"
+			class = "pc_frozen"
+			size = 10
+			orbit_distance = 15
+			orbit_angle = 100
+		}
+		init_effect = {
+			prevent_anomaly = yes
+			set_planet_flag = suppress_archaeological_sites
+			clear_blockers = yes
+			clear_deposits = yes
+			add_deposit = d_wetware_computer
+			add_deposit = d_savage_wildlands
+			###Districts Generate errors
+			while = {
+				count = 5
+				add_deposit = d_city_ruins
+			}
+			while = {
+				count = 3
+				add_deposit = d_forgotten_civilization
+			}
+			while = {
+				count = 3
+				add_deposit = d_assimilators_ruins
+			}			
+			set_planet_flag = pre_sapient_planet
+			set_planet_flag = zob_planet
+			create_species = {
+				name = "name_zob_species"
+				class = PLANT
+				portrait = pla12
+				traits = { 
+					trait = trait_hive_mind
+					trait = trait_presapient_forcefully_devolved 
+					trait = trait_plantoid_budding 
+				}
+				homeworld = this
+				sapient = no
+				effect = { 
+					save_event_target_as = latest_presapient 
+					set_species_flag = zob_species
+				}
+			}
+			while = {
+				count = 10
+				create_pop = { species = event_target:latest_presapient }
+			}
+			create_archaeological_site = site_zob_planet
+		}
+	}
+
+	#Debris Belt
+	asteroid_belt = {
+		type = debris_asteroid_belt
+		radius = @asteroid_distance
+	}	
+	change_orbit = 30
+	planet = {
+		count = 3
+		class = pc_asteroid
+		orbit_angle = { min = 50 max = 110 }
+		orbit_distance = 0
+	}
+
+	change_orbit = 10
+
+	#Rest of System
+	planet = {
+		count = { min = 3 max = 6 }
+		orbit_distance = @orbit_distance
+		orbit_angle = { min = 90 max = 270 }
+		has_ring = no
+		change_orbit = 15
+		moon = {
+			count = { min = 0 max = 1 }
+			orbit_angle = { min = 90 max = 270 }
+			orbit_distance = 5
+		}
+	}
+}
