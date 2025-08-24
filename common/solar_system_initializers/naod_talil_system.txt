@@ -1,0 +1,193 @@
+#####################################
+# naod_talil_system.txt				#
+# Contributor: dredaich				#
+#####################################
+
+naod_talil_system = {
+	name = "naod_system_name"
+	class = "rl_standard_stars"
+	max_instances = 1
+
+	primitive_system = yes	# usage odds modified by primitives setup slider
+	flags = {
+		primitive_system
+	}
+	
+	planet = {
+		count = 1
+		class = star
+		orbit_distance = 0
+		orbit_angle = 1
+		size = {
+			min = 20
+			max = 30
+		}
+		has_ring = no
+	}
+	change_orbit = 20
+	planet = {
+		orbit_distance = 20
+		count = {
+			min = 1
+			max = 3
+		}
+	}
+	
+	change_orbit = 20
+	planet = {
+		class = "pc_continental"
+		orbit_distance = 25
+		orbit_angle = 120
+		size = 17
+		has_ring = yes
+		entity = "naod_talil"
+		deposit_blockers = none
+		modifiers = none
+
+		init_effect = {
+			set_planet_flag = naodeus_planet
+			create_species = {
+				name = naod_Schwiff
+				plural = naod_Schwiff_pl
+				class = "MAM"
+				portrait = "mam3"
+				homeworld = THIS
+				traits = {
+					trait = "trait_ingenious"
+					trait = "trait_thrifty"
+                    trait = "trait_natural_physicists"
+					trait = "trait_psionic"
+				}
+				
+			}
+			last_created_species = {
+				save_global_event_target_as = naod_schwiff
+			}
+			create_species = {
+				name = naod_Feder
+				plural = naod_Feder_pl
+				class = "AVI"
+				portrait = "avi5"
+				homeworld = THIS
+				traits = {
+					trait = "trait_industrious"
+					trait = "trait_charismatic"
+                    trait = "trait_natural_engineers"
+					trait = "trait_psionic"
+				}
+			}
+            last_created_species = {
+				save_global_event_target_as = naod_feder
+			}
+            create_species = {
+				name = naod_Rukh
+				plural = naod_Rukh_pl
+				class = "REP"
+				portrait = "rep2"
+				homeworld = THIS
+				traits = {
+					trait = "trait_agrarian"
+					trait = "trait_rapid_breeders"
+                    trait = "trait_natural_sociologists"
+					trait = "trait_psionic"
+				}
+			}
+            last_created_species = {
+				save_global_event_target_as = naod_rukh
+			}
+			create_country = {
+				name = random
+				authority = random
+				civics = {
+					civic = civic_landed_nobility
+					civic = civic_flat_world_theory
+				}
+				species = event_target:naod_feder
+
+				ethos = {
+					ethic = "ethic_fanatic_xenophile"
+					ethic = "ethic_egalitarian"
+				}
+				origin = origin_default_pre_ftl
+				flag = random
+				day_zero_contact = no
+				type = primitive
+				
+			}
+			last_created_country = {
+				set_graphical_culture = preindustrial_01
+				set_country_flag = late_medieval_age
+				set_pre_ftl_age = late_medieval_age
+				add_modifier = {
+					modifier = naod_psionic_defense
+				}
+			}
+
+			set_owner = last_created_country
+
+			create_pop = {
+					species = event_target:naod_rukh
+				}
+			while = {
+				count = 3
+				create_pop = {
+					species = event_target:naod_schwiff
+				}
+				create_pop = {
+					species = event_target:naod_rukh
+				}
+				create_pop = {
+					species = event_target:naod_feder
+				}
+			}
+			add_building = building_primitive_dwellings
+			add_building = building_primitive_dwellings
+			add_building = building_stone_palace
+
+
+			create_army = {
+				name = "naod_militias"
+				owner = last_created_country
+				species = event_target:naod_schwiff
+				type = "psionic_army"
+			}
+
+			create_army = {
+				name = "naod_militias"
+				owner = last_created_country
+				species = event_target:naod_rukh
+				type = "psionic_army"
+			}
+
+			create_army = {
+				name = "naod_militias"
+				owner = last_created_country
+				species = event_target:naod_feder
+				type = "psionic_army"
+			}
+
+			last_created_country = {
+				capital_scope = { set_name = "naod_planet_name" }
+			}
+			last_created_country = {
+				save_global_event_target_as = naod_talil
+			}
+		}
+		
+		moon = {
+			class = "pc_barren_cold"
+			count = { min = 1 max = 1 }
+			size = 5
+			orbit_distance = 12
+			orbit_angle = 40
+			has_ring = no
+		}
+	}
+	planet = {
+		orbit_distance = 20
+		count = {
+			min = 0
+			max = 4
+		}
+	}
+}

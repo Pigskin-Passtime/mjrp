@@ -1,0 +1,122 @@
+#####################################
+# naod_naodeus_traits.txt			#
+# Contributor: dredaich				#
+#####################################
+leader_trait_manifested_change = {
+    immortal_leaders = yes
+	replace_traits = { "leader_trait_psionic" }
+	inline_script = {
+		script = trait/icon_psionic
+		CLASS = leader
+		ICON = GFX_leader_trait_rift_warped
+		RARITY = common
+		COUNCIL = triggered
+		TIER = none
+	}
+	triggered_planet_modifier = {
+		potential = {
+			is_ruler = no
+			leader_class = official
+		}
+		planet_jobs_consumer_goods_produces_mult = 0.10
+	}
+	triggered_sector_modifier = {
+		potential = {
+			is_ruler = no
+			leader_class = official
+		}
+		planet_jobs_consumer_goods_produces_mult = 0.10
+	}
+	triggered_councilor_modifier = {
+		potential = {
+			is_ruler = yes
+		}
+		country_ruler_influence_produces_add = 0.5
+		category_biology_research_speed_mult = 0.10
+	}
+	leader_class = { official }
+	opposites = {
+		leader_trait_cyborg
+		leader_trait_synthetic
+	}
+	initial = no
+	randomized = no
+	notify_on_gained = no
+}
+
+leader_trait_bringer_of_unrest = {
+    leader_trait_type = negative
+    inline_script = {
+		script = trait/icon_negative_no_tiers
+		ICON = GFX_leader_trait_trickster
+		COUNCIL = yes
+	}
+
+	initial = no
+	randomized = no
+	notify_on_gained = no
+
+    leader_class = { official }
+
+    triggered_planet_modifier = {
+        pop_government_ethic_attraction = -0.25
+    }
+
+    triggered_sector_modifier = {
+        pop_government_ethic_attraction = -0.125
+    }
+
+	triggered_councilor_modifier = {
+		pop_government_ethic_attraction = -0.25
+	}
+}
+
+leader_trait_xeno_integrator = {
+	leader_trait_type = destiny
+
+    inline_script = {
+		script = trait/icon
+		CLASS = leader
+		ICON = GFX_leader_trait_mediator
+		RARITY = paragon
+		COUNCIL = no
+		TIER = none
+	}
+	initial = no
+	randomized = no
+	notify_on_gained = no
+	custom_tooltip = leader_trait_xeno_integrator_effect
+
+    leader_class = { official }
+
+    allowed_ethics = { ethic_xenophile }
+
+    triggered_planet_modifier = {
+		potential = {
+			exists = planet
+		}
+		planet_jobs_produces_mult = 0.005
+		mult = planet.value:species_on_planet
+	}
+	triggered_sector_modifier = {
+		potential = {
+			exists = planet
+		}
+		planet_jobs_produces_mult = 0.0025
+		mult = planet.value:species_on_planet
+	}
+    triggered_planet_modifier = {
+		potential = {
+			exists = planet
+		}
+		planet_jobs_trade_produces_mult = 0.01
+		mult = planet.value:species_on_planet
+	}
+	triggered_sector_modifier = {
+		potential = {
+			exists = planet
+		}
+		planet_jobs_trade_produces_mult = 0.005
+		mult = planet.value:species_on_planet
+	}
+}
