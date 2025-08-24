@@ -8,6 +8,12 @@ on_game_start = {
     }
 }
 
+on_press_begin = {
+    events = {
+        condan_events.030 # spawn condan system
+    }
+}
+
 # A country has gained a surveyed status on a planet. Happens after "on_survey" if a science ship surveyed a planet. (Can also happen without a ship through changes in intel levels)
 # Root = Planet
 # From = Country
@@ -18,22 +24,44 @@ on_planet_surveyed = {
     }
 }
 
-on_yearly_pulse_country = {
+# Triggers event when each country first sends a ship into the system (once per country)
+# Scope = Ship
+# From = System
+# FromFrom = Country
+on_entering_system_first_time = {
     events = {
-        condan_comms.040 # congratulate synthetics
-        condan_events.120 # warn you off crisis level 1
-        condan_events.121 # declare war if crisis 5
+        condan_events.032 # remove condan system POI
     }
 }
+
+on_yearly_pulse_country = {
+    events = {
+        condan_events.043 # condan meets the contingency
+        condan_events.120 # warn you off crisis level 1
+        condan_events.121 # declare war if crisis 5
+        condan_crisis.2400 # cybrex awaken if condan is contingencying
+
+        condan_crisis.2230 # set crisis level
+        condan_crisis.2231 # set crisis level
+        condan_crisis.2232 # set crisis level
+        condan_crisis.2233 # set crisis level
+        condan_crisis.2234  # set crisis level
+
+        condan_events.230 # check for crisis 5 countries
+    }
+}
+
+
 
 on_five_year_pulse_country = {
     events = {
         condan_events.040# increases condans power level
         condan_events.041# midgame: unhappy condan is embezzling
         condan_events.042# lategame: unhappy condan is going to rebell
-        condan_events.043# condan meets the contingency
         condan_events.081# condan spawns a machine fleet every 5 years
         condan_events.130 # condan flavour events
+
+        condan_events.220# check for crisis 2+ countries
     }
 }
 
@@ -55,6 +83,7 @@ on_planet_attackers_win = {
         condan_events.051 # condan conquers your planet : engage purging
         condan_events.052 # you conquer the planet back from condan before it finishes purging : stop purging
         condan_events.054 # you conquer the planet back after it finishes purging
+        condan_events.202 # automated hub is invaded
     }
 }
 
@@ -68,6 +97,12 @@ on_planet_defenders_win = {
     }
 }
 
+on_planet_conquer = {
+    events = {
+        condan_crisis.5010 # menace rewards
+    }
+}
+
 # A pop has finished purging
 # This = Planet scope
 # From = Country
@@ -75,6 +110,7 @@ on_planet_defenders_win = {
 on_pop_purged = {
     events = {
         condan_events.053 # condan has purged your planet
+        condan_crisis.4030 # menace reward
     }
 }
 
@@ -97,12 +133,14 @@ on_leader_death = {
 }
 
 
-
 #This = destroyed country
 #From = optional, destroyer (country)
 on_country_destroyed = {
     events = {
         condan_events.103# condan dead, give relic?
+        condan_crisis.2043 # condan contingency embracing player lost
+        condan_crisis.4020 # menace reward
+        condan_events.240 # check victory
     }
 }
 
@@ -111,7 +149,7 @@ on_country_destroyed = {
 # From = Main Winner
 on_war_ended = {
     events = {
-
+        condan_events.241 # check victory
     }
 }
 
@@ -122,5 +160,37 @@ on_war_ended = {
 on_war_won = {
     events = {
         condan_events.102# condan dead, give relic?
+    }
+}
+
+# This = owner of ship 1 (combatant)
+# From = owner of ship 2 (destroyed)
+# FromFrom = ship 1
+# FromFromFrom = ship 2
+on_ship_destroyed_perp = {
+    events = {
+        condan_crisis.4025 # menace for destroying ships
+    }
+}
+
+# This = Starbase
+# From = fleet that destroyed it
+on_starbase_destroyed = {
+    events = {
+        condan_crisis.4010 # menace for destroying starbases
+    }
+}
+
+# This/Root = planet that have been fired upon
+# From = fleet that fired
+on_destroy_planet_with_PLANET_KILLER_CRACKER = {
+    events = {
+        condan_crisis.5015 # menace reward
+    }
+}
+
+on_planet_bombarded = {
+    events = {
+        condan_events.203# automated world bombarded successfully
     }
 }

@@ -1,0 +1,348 @@
+namespace = condan_transform
+
+
+# convert empire to terminator
+# chooser event
+country_event = {
+    id = condan_transform.030
+    is_triggered_only = yes
+    hide_window = yes
+
+    immediate = {
+        if = {
+            limit = { is_machine_empire = yes}
+            country_event = { id = condan_transform.200}
+        }
+        else = {
+            country_event = { id = condan_transform.100}
+        }
+    }
+}
+
+
+
+#regular empire to terminator
+country_event = {
+    id = condan_transform.100
+    is_triggered_only = yes
+    hide_window = yes
+
+    immediate = {
+        # set this to ensure that personality sets properly
+        set_country_flag = condan_terminator
+
+        # determine average councillor level for setting our nodes later
+        set_variable = { which = council_level value = 0 }
+        every_owned_leader = {
+            limit = {
+                is_councilor = yes
+                is_ruler = no
+            }
+
+            export_trigger_value_to_variable = { variable = leader_skill trigger = has_base_skill }
+            ROOT = {
+                change_variable = { which = council_level value = prev.leader_skill}
+            }
+        }
+        divide_variable  = { which = council_level value  = 5 }
+        ceiling_variable = council_level
+
+        #explictily get our current leaders out of the council
+        unlock_council_selection = yes
+
+        # unset condans variables
+        event_target:condan_country = {
+            remove_country_flag = condan_controversial_1
+            remove_country_flag = condan_controversial_2
+            remove_country_flag = condan_controversial_3
+        }
+
+        # We are now a machine empire not a synthetic one
+        remove_country_flag = synthetic_empire
+        remove_country_flag = synth_assimilation
+        remove_country_flag = identity_complex_available
+
+        # hive mind everyone
+        ROOT.species = {
+            create_species = {
+                name = NAME_Contingency
+                class = "MACHINE"
+                namelist = this
+                portrait = "hum_robot_red"
+                homeworld = ROOT.capital_scope
+                traits = {
+                    trait = "trait_machine_unit"
+                    trait = "trait_robot_history_warbot"
+                    trait = "trait_robot_integrated_weaponry"
+                }
+                effect = { save_event_target_as = target_species }
+            }
+        }
+
+        if = {
+            limit = { has_country_flag = condan_species_adaptive_frames }
+            modify_species = {
+                species =  event_target:target_species
+                add_trait = trait_auto_mod_robotic
+                effect = { save_event_target_as = target_species }
+            }
+        }
+        if = {
+            limit = { has_country_flag = condan_species_rapid_replicator }
+            modify_species = {
+                species =  event_target:target_species
+                add_trait = trait_robot_mass_produced
+                effect = { save_event_target_as = target_species }
+            }
+        }
+
+        change_dominant_species = { species = event_target:target_species change_all = yes }
+        event_target:target_species = { save_global_event_target_as = synthspecies@root.owner }
+
+        every_owned_pop_group = {
+            limit = {
+                NOR = {
+                    # my experience of these 2 triggers is they are dodgy as all hell, so using them both.
+                    is_same_species = event_target:target_species
+                    is_exact_same_species = event_target:target_species
+                }
+            }
+            change_species = event_target:target_species
+            pop_change_ethic = { ethic = ethic_gestalt_consciousness }
+        }
+
+        export_resource_stockpile_to_variable = { resource = consumer_goods variable = consumer_goods_multiplier }
+        add_resource = { consumer_goods = -1 mult = consumer_goods_multiplier }
+        divide_variable = { which = consumer_goods_multiplier value = 36 }
+        ceiling_variable = consumer_goods_multiplier
+
+        # remove branch offices.  Well this was expansive! n^2 countries and planets.
+        if = {
+            limit = { has_authority = auth_corporate }
+            every_playable_country = {
+                every_owned_planet = {
+                    limit = { has_branch_office = ROOT }
+                    close_branch_office = yes
+                }
+            }
+        }
+
+        # there are terminator compatible origins, but there also a load of very not terminator compat ones
+        # so resetting to default
+        set_origin = origin_default
+
+        clear_ethos = yes
+        # tried shift ethic, but that didn't work out and left with 1 ethic remaining and that went VERY wrong
+        country_add_ethic = ethic_gestalt_consciousness
+        change_government = {
+            authority = auth_machine_intelligence
+            civics = {
+                civic = civic_machine_terminator
+                civic = civic_machine_warbots
+            }
+            cooldown = no
+            remove_invalid_civics = yes
+        }
+        reset_policy_cooldowns = yes
+
+        # ensure that our new species has the correct rights.
+        event_target:target_species = {
+            set_citizenship_type = { country = root type = citizenship_full_machine cooldown = no }
+            set_living_standard = { country = root type = living_standard_hive_mind cooldown = no }
+            set_military_service_type = { country = root type = military_service_full cooldown = no }
+        }
+
+        # flip our leaders.
+        ruler = {
+            change_species = event_target:target_species
+            change_leader_portrait = species
+            change_background_ethic = ethic_gestalt_consciousness
+        }
+        every_owned_leader = {
+            limit = {
+                NOR = {
+                    is_councilor = yes
+                    is_event_leader = yes
+                    has_leader_flag = renowned_leader
+                    has_leader_flag = legendary_leader
+                }
+            }
+            change_species = event_target:target_species
+            change_leader_portrait = species
+            change_background_ethic = ethic_gestalt_consciousness
+        }
+        every_pool_leader = {
+            change_species = event_target:target_species
+            change_leader_portrait = species
+            change_background_ethic = ethic_gestalt_consciousness
+        }
+        every_envoy = {
+            change_species = event_target:target_species
+            change_leader_portrait = species
+            change_background_ethic = ethic_gestalt_consciousness
+            if = {
+                limit = {
+                    NOR = {
+                        has_envoy_task = { task = none }
+                        has_envoy_task = { task = first_contact }
+                        has_envoy_task = { task = spy_network }
+                    }
+                }
+                unassign_leader = this
+            }
+        }
+
+        # Sort out your new leadership council
+        country_event = { id = game_start.70 }
+
+        # Give them the average skill of our previous council + modifier for the node we focused on in situation
+        every_owned_leader = {
+            limit = {
+                is_councilor = yes
+                is_ruler = no
+            }
+            set_skill = 1
+            add_skill_without_trait_selection = prev.council_level
+            condan_upgrade_gestalt_node = yes
+            set_gestalt_node_portrait_effect = yes
+        }
+
+        # Armies
+        every_owned_army = {
+            limit = { is_defensive_army = yes }
+            modify_army = {
+                type = machine_defense
+                species = event_target:target_species
+            }
+        }
+        every_owned_army = {
+            limit = {
+                is_defensive_army = no
+                exists = species
+            }
+            modify_army = {
+                type = machine_assault_1
+                species = event_target:target_species
+            }
+        }
+
+        # all the admin that is common between regular and machine happens here.
+        condan_terminator_shared_setup = yes
+
+        # So the pulse happens at end of month that does all the economic switch over, but we want to do a chunk now to stop things looking really strange
+        every_owned_planet = {
+            remove_modifier = slave_colony
+            remove_modifier = resort_colony
+            remove_modifier = penal_colony
+            validate_and_repair_planet_buildings_and_districts = yes
+            check_planet_employment = yes
+        }
+
+        give_tech_no_error_effect = { MESSAGE = no TECH = tech_bio_reactor }
+        give_tech_no_error_effect = { MESSAGE = no TECH = tech_solar_panel_network }
+        give_tech_no_error_effect = { MESSAGE = no TECH = tech_powered_exoskeletons }
+        give_tech_no_error_effect = { MESSAGE = no TECH = tech_robomodding_m }
+        give_tech_no_error_effect = { MESSAGE = no TECH = tech_binary_motivators }
+        give_tech_no_error_effect = { MESSAGE = no TECH = tech_nanite_assemblers }
+        give_tech_no_error_effect = { MESSAGE = no TECH = tech_mega_assembly }
+
+        country_event = { id = condan_comms.041 }
+    }
+}
+
+# machine to terminator.  Well that was a lot less faff!
+country_event = {
+    id = condan_transform.200
+    is_triggered_only = yes
+    hide_window = yes
+
+    immediate = {
+        # set this to ensure that personality sets properly
+        set_country_flag = condan_terminator
+
+        owner_main_species = { save_event_target_as = target_species }
+
+        # make sure we convert the organic pops
+        if = {
+            limit = {
+                OR = {
+                    has_civic = civic_machine_assimilator
+                    has_civic = civic_machine_servitor
+                }
+            }
+            every_owned_pop_group = {
+                limit = { NOT = { is_same_species = event_target:target_species } }
+                change_species = event_target:target_species
+            }
+        }
+
+        if = {
+            limit = {
+                country_uses_consumer_goods = yes
+            }
+            export_resource_stockpile_to_variable = { resource = consumer_goods variable = consumer_goods_multiplier }
+            add_resource = { consumer_goods = -1 mult = consumer_goods_multiplier }
+            divide_variable = { which = consumer_goods_multiplier value = 36 }
+            ceiling_variable = consumer_goods_multiplier
+        }
+
+
+        # there are terminator compatible origins, but there also a load of very not terminator compat ones
+        # so resetting to default
+        # if we have an incompatible origin it won't let the civics change work.
+        set_origin = origin_default
+
+        change_government = {
+            authority = auth_machine_intelligence
+            civics = {
+                civic = civic_machine_terminator
+                civic = civic_machine_warbots
+            }
+            cooldown = no
+            remove_invalid_civics = yes
+        }
+
+        every_envoy = {
+            limit = {
+                NOR = {
+                    has_envoy_task = { task = none }
+                    has_envoy_task = { task = first_contact }
+                    has_envoy_task = { task = spy_network }
+                }
+            }
+            unassign_leader = this
+        }
+
+        # all the admin that is common between regular and machine happens here.
+        condan_terminator_shared_setup = yes
+
+        country_event = { id = condan_comms.041 }
+    }
+}
+
+
+
+country_event = {
+    id = condan_transform.999
+    title = condan_transform.999.title
+
+    desc = {
+        exclusive_trigger = { has_country_flag = condan_started_as_mi }
+        text = condan_transform.999.desc.machine
+    }
+    desc = condan_transform.999.desc
+    is_triggered_only = yes
+    picture = GFX_evt_ancient_databank
+
+    # you know what, machines don't get the bonus situation, because their economy is not about to tank
+    trigger = { NOT = { has_country_flag = condan_started_as_mi } }
+
+    immediate = {
+        start_situation = {
+            type = condan_generate_money_situation
+            target = ROOT
+        }
+    }
+
+    option = { name = OK }
+}

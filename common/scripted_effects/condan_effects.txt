@@ -147,7 +147,7 @@ create_condan_full_hostile_country = {
 create_condan_bot = {
     create_species = {
         name = "NAME_CONDAN"
-        class = "ROBOT"
+        class = "MACHINE"
         namelist = "AI"
         portrait = "hum_robot_red"
         immortal = yes
@@ -183,7 +183,7 @@ create_condan_friendly_robots = {
 create_condan_evil_bot = {
     create_species = {
         name = "NAME_CONDAN"
-        class = "ROBOT"
+        class = "MACHINE"
         namelist = "AI"
         portrait = "ai_crisis_1"
         immortal = yes
@@ -219,10 +219,9 @@ create_condan_leader_official = {
 
             trait = condan_leader_trait_governor
             trait = condan_leader_trait_offical
-            trait = condan_leader_trait_councillor
 
             trait = leader_trait_private_mines_2
-            trait = leader_trait_eager_2
+            trait = leader_trait_eager
 
             trait = condan_leader_trait_govenor_negative
         }
@@ -260,12 +259,12 @@ create_condan_leader_commander = {
             trait = condan_leader_trait_commander_admiral_total_war
             trait = subclass_commander_admiral
 
-            trait = leader_trait_wrecker_3
-            trait = leader_trait_artillerist_3
+            trait = leader_trait_wrecker_2
+            trait = leader_trait_artillerist_2
 
-            trait = leader_trait_aggressive_2
-            trait = leader_trait_unyielding_2
-            trait = leader_trait_engineer_2
+            trait = leader_trait_aggressive
+            trait = leader_trait_unyielding
+            trait = leader_trait_engineer
 
             trait = leader_trait_scout_2# test
 
@@ -346,16 +345,33 @@ condan_switch_to_ruler = {
     }
 }
 
+condan_unset_emblezzlement_traits = {
+    switch = {
+        trigger = has_trait
+        condan_leader_trait_govenor_negative_embezzle = {
+            remove_trait = condan_leader_trait_govenor_negative_embezzle
+            add_trait = { trait = condan_leader_trait_govenor_negative show_message = no  }
+        }
+        condan_leader_trait_admiral_negative_embezzle = {
+            remove_trait = condan_leader_trait_admiral_negative_embezzle
+            add_trait = { trait = condan_leader_trait_admiral_negative show_message = no  }
+        }
+        condan_leader_trait_council_negative_embezzle = {
+            remove_trait = condan_leader_trait_council_negative_embezzle
+            add_trait = { trait = condan_leader_trait_council_negative show_message = no  }
+        }
+    }
+}
 
 condan_set_governor_traits = {
     remove_all_traits = yes
     condan_set_universal_traits = yes
-    add_trait_no_notify = subclass_official_governor
+    add_trait = { trait = subclass_official_governor show_message = no  }
 
-    add_trait_no_notify = condan_leader_trait_official_governor_total_war
+    add_trait = { trait = condan_leader_trait_official_governor_total_war show_message = no  }
 
-    add_trait_no_notify = condan_leader_trait_governor
-    add_trait_no_notify = condan_leader_trait_offical
+    add_trait = { trait = condan_leader_trait_governor show_message = no  }
+    add_trait = { trait = condan_leader_trait_offical show_message = no  }
 
     condan_set_negative_trait = { TRAIT = condan_leader_trait_govenor_negative TRAIT_EMBEZZLE = condan_leader_trait_govenor_negative_embezzle }
 }
@@ -363,12 +379,12 @@ condan_set_governor_traits = {
 condan_set_admiral_traits = {
     remove_all_traits = yes
     condan_set_universal_traits = yes
-    add_trait_no_notify = subclass_commander_admiral
+    add_trait = { trait = subclass_commander_admiral show_message = no  }
 
-    add_trait_no_notify = condan_leader_trait_commander_admiral_total_war
+    add_trait = { trait = condan_leader_trait_commander_admiral_total_war show_message = no  }
 
-    add_trait_no_notify = condan_leader_trait_admiral
-    add_trait_no_notify = condan_leader_trait_commander
+    add_trait = { trait = condan_leader_trait_admiral show_message = no  }
+    add_trait = { trait = condan_leader_trait_commander show_message = no  }
 
     condan_set_negative_trait = { TRAIT = condan_leader_trait_admiral_negative TRAIT_EMBEZZLE = condan_leader_trait_admiral_negative_embezzle }
 }
@@ -376,12 +392,12 @@ condan_set_admiral_traits = {
 condan_set_offical_councilor_traits = {
     remove_all_traits = yes
     condan_set_universal_traits = yes
-    add_trait_no_notify = subclass_official_economy_councilor
+    add_trait = { trait = subclass_official_economy_councilor show_message = no  }
 
-    add_trait_no_notify = condan_leader_trait_official_counciller_total_war
+    add_trait = { trait = condan_leader_trait_official_counciller_total_war show_message = no  }
 
-    add_trait_no_notify = condan_leader_trait_councillor
-    add_trait_no_notify = condan_leader_trait_offical
+    add_trait = { trait = condan_leader_trait_councillor show_message = no  }
+    add_trait = { trait = condan_leader_trait_offical show_message = no  }
 
     condan_set_negative_trait = { TRAIT = condan_leader_trait_council_negative TRAIT_EMBEZZLE = condan_leader_trait_council_negative_embezzle }
 }
@@ -389,12 +405,12 @@ condan_set_offical_councilor_traits = {
 condan_set_commander_councilor_traits = {
     remove_all_traits = yes
     condan_set_universal_traits = yes
-    add_trait_no_notify = subclass_commander_councilor
+    add_trait = { trait = subclass_commander_councilor show_message = no  }
 
-    add_trait_no_notify = condan_leader_trait_commander_councillor_total_war#
+    add_trait = { trait = condan_leader_trait_commander_councillor_total_war show_message = no  }
 
-    add_trait_no_notify = condan_leader_trait_strategist
-    add_trait_no_notify = condan_leader_trait_commander
+    add_trait = { trait = condan_leader_trait_strategist show_message = no  }
+    add_trait = { trait = condan_leader_trait_commander show_message = no  }
 
     condan_set_negative_trait = { TRAIT = condan_leader_trait_council_negative TRAIT_EMBEZZLE = condan_leader_trait_council_negative_embezzle }
 }
@@ -403,38 +419,38 @@ condan_set_ruler_councilor_traits = {
     remove_all_traits = yes
     condan_set_universal_traits = yes
 
-    add_trait_no_notify = leader_trait_ruler_machine_intelligence
+    add_trait = { trait = leader_trait_ruler_machine_intelligence show_message = no  }
     # condan should be admiral, but if has ended up as player ruler by event skulldugery they may be an official
     if = {
         limit = { leader_class = commander }
-        add_trait_no_notify = subclass_commander_councilor
+        add_trait = { trait = subclass_commander_councilor show_message = no  }
     }
-    else = { add_trait_no_notify = subclass_official_economy_councilor}
+    else = { add_trait = { trait = subclass_official_economy_councilor show_message = no  } }
 
-    add_trait_no_notify = condan_leader_trait_ruler_total_war#
+    add_trait = { trait = condan_leader_trait_ruler_total_war show_message = no  }
 
-    add_trait_no_notify = condan_leader_trait_strategist
-    add_trait_no_notify = condan_leader_trait_councillor
+    add_trait = { trait = condan_leader_trait_strategist show_message = no  }
+    add_trait = { trait = condan_leader_trait_councillor show_message = no  }
 
     condan_set_negative_trait = { TRAIT = condan_leader_trait_council_negative TRAIT_EMBEZZLE = condan_leader_trait_council_negative_embezzle }
 }
 
 condan_set_universal_traits = {
-    add_trait_no_notify = leader_trait_synthetic
+    add_trait = { trait = leader_trait_synthetic show_message = no  }
 
     if = {
         limit = { event_target:condan_country = { has_country_flag = condan_controversial_1 } }
-        add_trait_no_notify = condan_leader_trait_controversial
+        add_trait = { trait = condan_leader_trait_controversial show_message = no  }
     }
 
     if = {
         limit = { event_target:condan_country = { has_country_flag = condan_controversial_2 } }
-        add_trait_no_notify = condan_leader_trait_controversial_2
+        add_trait = { trait = condan_leader_trait_controversial_2 show_message = no  }
     }
 
     if = {
         limit = { event_target:condan_country = { has_country_flag = condan_controversial_3 } }
-        add_trait_no_notify = condan_leader_trait_controversial_3
+        add_trait = { trait = condan_leader_trait_controversial_3 show_message = no  }
     }
 }
 
@@ -444,11 +460,11 @@ condan_set_negative_trait = {
             exists = event_target:condan_country
             event_target:condan_country = { check_variable = { which = condan_personal_embezzlement_level value > 0 } }
         }
-        add_trait_no_notify = $TRAIT_EMBEZZLE$
+        add_trait = { trait = $TRAIT_EMBEZZLE$ show_message = no  }
         set_variable = { which = condan_personal_embezzlement_level value = event_target:condan_country.condan_personal_embezzlement_level }
     }
     else = {
-        add_trait_no_notify = $TRAIT$
+        add_trait = { trait = $TRAIT$ show_message = no  }
     }
 }
 
@@ -466,43 +482,21 @@ condan_set_as_ruler = {
     }
 }
 
-
-# country scope
-condan_recruit_army = {
-    add_resource = { sr_living_metal = -300 }
-    add_resource = { alloys = -500 }
-    add_resource = { minerals = -1000 }
-    hidden_effect = {
-        remove_country_flag = condan_enable_army_project
-        set_country_flag = condan_can_recruit_armies
-        event_target:condan_planet = { set_planet_flag = recruit_condan_army}
-    }
-}
-
-# country scope
-condan_build_fleet = {
-    hidden_effect = { set_country_flag = condan_recruiting_fleet }
-    start_situation = {
-        type = condan_build_ships_situation
-        target = event_target:condan_planet
-    }
-}
-
 # scope: condan:leader
 # Because condan gets killed a lot, need to use their country to store state
 condan_set_controversal_1 = {
     switch = {
         trigger = has_trait
         condan_leader_trait_controversial = {
-            add_trait = condan_leader_trait_controversial_2
+            add_trait = { trait = condan_leader_trait_controversial_2 show_message = yes  }
             hidden_effect = { event_target:condan_country = { set_country_flag = condan_controversial_2} }
         }
         condan_leader_trait_controversial_2 = {
-            add_trait = condan_leader_trait_controversial_3
+            add_trait = { trait = condan_leader_trait_controversial_3 show_message = yes  }
             hidden_effect = { event_target:condan_country = { set_country_flag = condan_controversial_3} }
         }
         default = {
-            add_trait = condan_leader_trait_controversial
+            add_trait = { trait = condan_leader_trait_controversial show_message = yes  }
             hidden_effect = { event_target:condan_country = { set_country_flag = condan_controversial_1} }
         }
     }
@@ -512,15 +506,15 @@ condan_set_controversal_2 = {
     switch = {
         trigger = has_trait
         condan_leader_trait_controversial = {
-            add_trait = condan_leader_trait_controversial_3
+            add_trait = { trait = condan_leader_trait_controversial_3 show_message = yes  }
             hidden_effect = { event_target:condan_country = { set_country_flag = condan_controversial_3} }
         }
         condan_leader_trait_controversial_2 = {
-            add_trait = condan_leader_trait_controversial_3
+            add_trait = { trait = condan_leader_trait_controversial_3 show_message = yes  }
             hidden_effect = { event_target:condan_country = { set_country_flag = condan_controversial_3} }
         }
         default = {
-            add_trait = condan_leader_trait_controversial_2
+            add_trait = { trait = condan_leader_trait_controversial_2 show_message = yes  }
             hidden_effect = { event_target:condan_country = { set_country_flag = condan_controversial_2} }
         }
     }
@@ -732,7 +726,7 @@ condan_choose_rebellion_home_planet = {
                     min_jumps > 3
                 }
                 OR = {
-                    num_districts = { type = district_industrial value > 3 }
+                    num_districts = { type = district_city value > 5 }
                     has_building = building_foundry_1
                     has_building = building_foundry_2
                     has_building = building_foundry_3
@@ -747,7 +741,7 @@ condan_choose_rebellion_home_planet = {
                     min_jumps > 3
                 }
                 OR = {
-                    num_districts = { type = district_industrial value > 3 }
+                    num_districts = { type = district_city value > 5 }
                     has_building = building_foundry_1
                     has_building = building_foundry_2
                     has_building = building_foundry_3
@@ -851,8 +845,39 @@ condan_terminator_shared_setup = {
         set_purge_type = {  country = root type = purge_normal cooldown = no }
     }
 
+    # Give them the average skill of our previous council + modifier for the node we focused on in situation
+    every_owned_leader = {
+        limit = {
+            is_councilor = yes
+            is_ruler = no
+        }
+        condan_upgrade_gestalt_node = yes
+        set_gestalt_node_portrait_effect = yes
+    }
+
+    # remove consumer-goods costing leader traits
+    every_owned_leader = {
+        limit = {
+            OR = {
+                has_trait = leader_trait_excessive
+                has_trait = leader_trait_excessive_2
+            }
+        }
+        remove_trait = leader_trait_excessive
+        remove_trait = leader_trait_excessive_2
+    }
+
     # Make Condan our ruler
     condan_set_as_ruler = yes
+
+    if = {
+        limit = {
+            num_tradition_categories < @max_tradition_trees
+            NOT = { has_active_tradition = tr_modularity_adopt}
+        }
+        set_country_flag = modularity_traditions_unlocked
+        add_tradition = tr_modularity_adopt
+    }
 
     # Policies
     # Ugh, tried to one line these, but with intellijs helpful localisation text it was just unreadable.
@@ -928,20 +953,34 @@ condan_terminator_shared_setup = {
         }
     }
 
+
     # Remove enclave leaders
-    # taken form modified enclave.8000
+    # taken from enclave.8000
     every_owned_leader = {
         limit = {
             OR = {
-                has_trait = leader_trait_shroudwalker
-                has_trait = leader_trait_master_salvager
-                has_trait = leader_trait_curator
-                has_trait = leader_trait_xuracorp_liaison
-                has_trait = leader_trait_riggan_liaison
-                has_trait = leader_trait_muutagan_liaison
+                has_leader_flag = shroudwalker_teacher
+                has_leader_flag = master_salvager
+                has_leader_flag = curator_archivist
+                has_leader_flag = trader_leader
             }
         }
         kill_leader = { fire = yes }
+    }
+
+    # The cognative node can get the curator trait.  I don't think any of the others can.
+    every_owned_leader = {
+        limit = {
+            OR = {
+                # has_trait = leader_trait_shroudwalker
+                # has_trait = leader_trait_master_salvager
+                has_trait = leader_trait_curator
+                # has_trait = leader_trait_xuracorp_liaison
+                # has_trait = leader_trait_riggan_liaison
+                # has_trait = leader_trait_muutagan_liaison
+            }
+        }
+        remove_trait = leader_trait_curator
     }
 
     # Mauradurs.  Complex :(
@@ -1045,7 +1084,7 @@ condan_terminator_shared_setup = {
     }
 
     # our own modifiers
-    every_owned_pop = { remove_modifier = condan_pop_unhappy } #theoreticlaly not needed because happiness I cannot feel and love to me is so unreal
+    every_owned_pop_group = { remove_modifier = condan_pop_unhappy } #theoreticlaly not needed because happiness I cannot feel and love to me is so unreal
     remove_modifier = condan_xenophobe_happy
     remove_modifier = condan_materialist_happy
     remove_modifier = condan_spiritualists_unhappy
@@ -1385,9 +1424,144 @@ condan_set_unhappy = {
     }
 }
 
+condan_set_happy = {
+    if = {
+        limit = { exists = event_target:condan_country }
+        event_target:condan_country = { remove_country_flag = condan_unhappy }
+    }
+}
+
 condan_init_variable = {
     if = {
         limit = { NOT = { is_variable_set = $VAR$}}
         set_variable = { which = $VAR$ value = $VAL|0$ }
+    }
+}
+
+condan_set_ai_crisis_targets = {
+    event_target:condan_leader.owner= { save_event_target_as = AI_crisis }
+}
+
+condan_setup_automated_planet = {
+    change_pc = pc_machine
+    reset_planet = yes
+    set_planet_flag = condan_automated_factory
+    clear_blockers = yes
+    remove_all_buildings = yes
+    add_district = district_city # remove all districts on an empty planet crashes the game in 4.0
+    remove_all_districts = yes
+    prevent_anomaly = yes
+    set_planet_flag = colony_event
+    set_planet_flag = forbid_guillis_planet_modifiers
+    add_building = building_condan_automated_capital
+}
+
+condan_setup_continency_planet = {
+    every_owned_pop_group = { kill_all_pop = yes }
+    remove_all_armies = yes
+    change_pc = pc_machine
+    set_name = $NAME$
+    set_owner = event_target:AI_crisis
+    set_controller = event_target:AI_crisis
+    set_planet_flag = condan_automated_factory
+    condan_setup_automated_planet = yes
+    create_pop = { species = event_target:condan_bot }
+
+    create_ai_planet_defense = yes
+    create_ai_fleet = yes
+    create_ai_fleet = yes
+    solar_system = {
+        save_event_target_as = machine_world_system
+        if = {
+            limit = {
+                exists = starbase
+                owner = { NOT = { is_same_value = event_target:AI_crisis } }
+            }
+            starbase = {
+                fleet = {
+                    destroy_fleet = this
+                }
+            }
+        }
+        create_contingency_starbase = yes
+        star = {
+            create_ambient_object = {
+                type = "contingency_1"
+                location = this
+            }
+            last_created_ambient_object = {
+                set_ambient_object_flag = contingency_system_effect
+                set_location = {
+                    target = prev
+                    distance = 0
+                    angle = random
+                }
+            }
+        }
+    }
+}
+
+condan_upgrade_gestalt_node = {
+    switch = {
+        trigger = is_councilor_type
+        councilor_gestalt_legion = {
+            if = {
+                limit = { ROOT = { is_variable_set = condan_legion_node_bonus } }
+                add_skill_without_trait_selection = ROOT.condan_legion_node_bonus
+                ROOT = { set_variable = { which = condan_legion_node_bonus value = 0 } }
+            }
+        }
+        councilor_gestalt_cognitive = {
+            if = {
+                limit = { ROOT = { is_variable_set = condan_cognitive_node_bonus } }
+                add_skill_without_trait_selection = ROOT.condan_cognitive_node_bonus
+                ROOT = { set_variable = { which = condan_cognitive_node_bonus value = 0 } }
+            }
+        }
+        councilor_gestalt_regulatory = {
+            if = {
+                limit = { ROOT = { is_variable_set = condan_regulatory_node_bonus } }
+                add_skill_without_trait_selection = ROOT.condan_regulatory_node_bonus
+                ROOT = { set_variable = { which = condan_regulatory_node_bonus value = 0 } }
+            }
+        }
+        councilor_gestalt_growth = {
+            if = {
+                limit = { ROOT = { is_variable_set = condan_growth_node_bonus } }
+                add_skill_without_trait_selection = ROOT.condan_growth_node_bonus
+                ROOT = { set_variable = { which = condan_growth_node_bonus value = 0 } }
+            }
+        }
+    }
+}
+
+
+create_inital_condan_poi = {
+    root = {
+        if = {
+            limit = { NOT = { has_event_chain = condan_location_chain } }
+            begin_event_chain = {
+                event_chain = condan_location_chain
+                target = this
+            }
+        }
+        create_point_of_interest = {
+            id = condan_location_poi
+            name = condan_location_poi_title
+            desc = condan_location_poi_desc
+            event_chain = condan_location_chain
+            location = event_target:condan_star
+        }
+    }
+}
+
+end_inital_condan_poi = {
+    if = {
+        limit = { has_point_of_interest = { poi = condan_location_poi } }
+        remove_point_of_interest = condan_location_poi
+    }
+    if = {
+        limit = { has_event_chain = condan_location_chain }
+        end_event_chain = condan_location_chain
     }
 }

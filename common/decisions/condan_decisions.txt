@@ -9,18 +9,12 @@ condan_repair_planet = {
     potential = {
         has_modifier = condan_wrecked_planet
         exists = owner
-        owner = {
-            not = {
-                has_authority = auth_hive_mind
-            }
-        }
+        owner = { not = { has_authority = auth_hive_mind } }
     }
 
     allow = {
         exists = owner
-        owner = {
-            has_technology = tech_mine_living_metal
-        }
+        owner = { has_technology = tech_mine_living_metal }
     }
 
     resources = {
@@ -34,6 +28,17 @@ condan_repair_planet = {
         }
     }
 
+    resources = {
+        category = decisions
+
+        cost = {
+            unity = 200
+            energy = 200
+            minerals = 200
+            multiplier = value:condan_planet_damage_mult
+        }
+    }
+
     effect = {
         remove_modifier = condan_wrecked_planet
         remove_modifier = unstable_tectonics
@@ -43,7 +48,111 @@ condan_repair_planet = {
         }
     }
 
-    ai_weight = {
-        weight = 0
+    ai_weight = { weight = 0 }
+}
+
+
+condan_automate_planet = {
+    owned_planets_only = yes
+    enactment_time = 1000
+    icon = decision_drilling_for_gas
+
+    potential = {
+        has_global_flag = condan_in_play
+        exists = owner
+        owner = { has_crisis_level = crisis_condan_level_3 }
+        NOT = { has_planet_flag = condan_automated_factory}
     }
+
+    allow = {
+        is_capital = no
+        is_sector_capital = no
+        planet_size > 10
+        custom_tooltip = {
+            NOT = {  has_planet_flag = condan_planet  }
+            text = condan_condan_automate_planet_cannot_automate_core_hub
+        }
+    }
+
+    resources = {
+        category = decisions
+
+        cost = {
+            unity = 10000
+            minerals = 5000
+            alloys = 1000
+            sr_living_metal = 500
+        }
+    }
+
+    effect = {
+        condan_setup_automated_planet = yes
+        planet_event = { id = condan_events.201  }
+    }
+
+    ai_weight = { weight = 0 }
+}
+
+condan_recruit_admiral = {
+    owned_planets_only = yes
+    enactment_time = 100
+    icon = decision_organic_oppression
+
+    potential = {
+        has_global_flag = condan_in_play
+        exists = owner
+        owner = { has_crisis_level = crisis_condan_level_5 }
+    }
+
+    resources = {
+        category = decisions
+
+        cost = {
+            sr_living_metal = 10
+        }
+
+        cost = {
+            unity = 1
+            multiplier = value:condan_admiral_cost
+        }
+    }
+
+    effect = {
+        owner = {
+            create_leader = {
+                class = commander
+                species = event_target:condan_bot
+                name = random
+                background_planet = event_target:condan_planet
+                skill = 1
+                effect = {
+                    remove_all_traits = yes # removes randomly added extra traits
+                    add_trait = { trait = leader_trait_synthetic show_message = no }
+                    add_trait = { trait = subclass_commander_admiral show_message = no }
+                    add_trait = { trait = leader_trait_aggressive show_message = no }
+                    add_trait = { trait = leader_trait_unyielding show_message = no }
+                    set_skill = 4
+                    set_leader_flag = block_council_traits
+                    set_leader_flag = block_army_traits
+                    set_leader_flag = block_governor_traits
+                    save_event_target_as = condan_new_admiral
+                }
+            }
+            last_created_leader = {
+                create_message = {
+                    type = CONDAN_ADMIRAL_READY
+                    localization = CONDAN_ADMIRAL_READY_MESSAGE
+                    days = 20
+                    target = this
+                    variable = {
+                        type = name
+                        localization = NAME
+                        scope = This
+                    }
+                }
+            }
+        }
+    }
+
+    ai_weight = { weight = 0 }
 }

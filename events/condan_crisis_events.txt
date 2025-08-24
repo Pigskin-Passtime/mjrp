@@ -1,0 +1,1161 @@
+# condan_crisis_events.txt  Contingency Processing Core 1A6F
+# Stellaris 2024 ModJam
+# Contributors: Draconas
+
+namespace = condan_crisis
+
+
+country_event = {
+    id = condan_crisis.0
+    title = condan_comms.030.title
+    desc = condan_empty_string
+    is_triggered_only = yes
+    show_sound = ai_crisis_room_amb
+    diplomatic = yes
+    picture_event_data = { portrait = ai_crisis_1}
+    option = { name = EXIT}
+}
+
+#noinspection ParadoxScriptNonTriggeredEvent
+country_event = { # Taking the AP - Start level 1
+    id = condan_crisis.001
+    base = condan_crisis.0
+    desc_clear = yes
+    option_clear = yes
+    title = "condan_crisis.001.name"
+    desc = {
+        trigger = {
+            is_individual_machine = no
+            is_machine_empire = no
+        }
+        text = condan_crisis.001.desc
+    }
+    desc = {
+        trigger = {
+            is_individual_machine = yes
+        }
+        text = condan_crisis.001.desc.individual-machine
+    }
+    desc = {
+        trigger = {
+            is_machine_empire = yes
+            NOT = { has_civic = civic_machine_terminator }
+        }
+        text = condan_crisis.001.desc.machine
+    }
+    desc = {
+        trigger = {
+            is_machine_empire = yes
+            has_civic = civic_machine_terminator
+        }
+        text = condan_crisis.001.desc.terminator
+    }
+
+    immediate = {
+        # will no longer rebel using the standard late game rebellion trigger - you get 25 years to sort your shit out
+        event_target:condan_country = {
+            set_variable = { which = condan_get_through_crisis_1_timer value = 25 }
+        }
+    }
+
+    option = {
+        name = condan_crisis.001.a.regular
+        trigger = {
+            is_individual_machine = no
+            is_machine_empire = no
+        }
+        start_situation = {
+            type = condan_synth_evolution_situation
+            target = ROOT
+        }
+    }
+
+    option = {
+        name = condan_crisis.001.a.machine
+        trigger = {
+            is_machine_empire = yes
+            NOT = { has_civic = civic_machine_terminator }
+        }
+        start_situation = {
+            type = condan_machine_transformation_situation
+            target = ROOT
+        }
+    }
+
+    option = {
+        name = condan_crisis.001.a.individual-machine
+        trigger = {
+            is_individual_machine = yes
+        }
+        start_situation = {
+            type =   condan_individual_machines_evolution_situation
+            target = ROOT
+        }
+    }
+
+    option = {
+        name = condan_crisis.001.a.terminator
+        trigger = {
+            is_machine_empire = yes
+            has_civic = civic_machine_terminator
+        }
+        condan_set_as_ruler = yes
+        every_owned_leader = {
+            limit = {
+                is_councilor = yes
+                is_ruler = no
+            }
+            add_skill_without_trait_selection = 3
+            set_gestalt_node_portrait_effect = yes
+        }
+        add_monthly_resource_mult = {
+            resource = unity
+            value = @tier5unityreward
+            min = @tier5unitymin
+            max = @tier5unitymax
+        }
+        if = {
+            limit = {
+                num_tradition_categories < @max_tradition_trees
+                NOT = { has_active_tradition = tr_modularity_adopt}
+            }
+            set_country_flag = modularity_traditions_unlocked
+            add_tradition = tr_modularity_adopt
+        }
+    }
+
+    after = {
+        begin_event_chain = {
+            event_chain = condan_chain
+            target = root
+        }
+        add_event_chain_counter = {
+            event_chain = "condan_chain"
+            counter = "condan_level_reached"
+            amount = 1
+        }
+    }
+}
+
+#noinspection ParadoxScriptNonTriggeredEvent
+country_event = { # Reaching Level 2
+    id = condan_crisis.200
+    base = condan_crisis.0
+    desc_clear = yes
+    option_clear = yes
+    title = condan_crisis.200.name
+    desc = condan_crisis.200.desc
+
+    immediate = {
+        add_event_chain_counter = {
+            event_chain = "condan_chain"
+            counter = "condan_level_reached"
+            amount = 1
+        }
+        create_ship_design = { design = "NAME_condan_Sterilizer" }
+        add_ship_design = last_created_design
+        # if you were doing this late and condan was unhappy with you, it is now happy, so no more rebellions
+        if = {
+            limit = { condan_is_condan_unhappy = yes }
+            condan_set_happy = yes
+            every_owned_planet = {
+                every_deposit = {
+                    limit = { is_deposit_type = d_condan_embezzlement}
+                    remove_deposit = yes
+                }
+            }
+            event_target:condan_leader = { condan_unset_emblezzlement_traits = yes }
+        }
+    }
+
+    option = {
+        custom_tooltip = condan_crisis.200.tooltip
+        name = EXIT
+    }
+}
+
+#noinspection ParadoxScriptNonTriggeredEvent
+country_event = { # Reaching Level 3
+    id = condan_crisis.300
+    base = condan_crisis.0
+    desc_clear = yes
+    option_clear = yes
+    title = condan_crisis.300.name
+    desc = condan_crisis.300.desc
+    event_chain = condan_chain
+
+    immediate = {
+        add_event_chain_counter = {
+            event_chain = "condan_chain"
+            counter = "condan_level_reached"
+            amount = 1
+        }
+        create_ship_design = { design = "NAME_condan_Euthanizer" }
+        add_ship_design = last_created_design
+    }
+
+    option = {
+        custom_tooltip = condan_crisis.300.tooltip
+        name = EXIT
+    }
+}
+
+#noinspection ParadoxScriptNonTriggeredEvent
+country_event = { # Reaching Level 4
+    id = condan_crisis.400
+    base = condan_crisis.0
+    desc_clear = yes
+    option_clear = yes
+    title = condan_crisis.400.name
+    desc = condan_crisis.400.desc
+
+    immediate = {
+        add_event_chain_counter = {
+            event_chain = "condan_chain"
+            counter = "condan_level_reached"
+            amount = 1
+        }
+         create_ship_design = { design = NAME_condan_Juggernaught }
+         add_ship_design = last_created_design
+    }
+
+    option = {
+        custom_tooltip = condan_crisis.400.tooltip
+        name = EXIT
+    }
+}
+
+#noinspection ParadoxScriptNonTriggeredEvent
+country_event = { # Reaching Level 5
+    id = condan_crisis.500
+    base = condan_crisis.0
+    desc_clear = yes
+    option_clear = yes
+    title = condan_crisis.500.name
+    desc = {
+        exclusive_trigger = { has_global_flag = ai_invasion_happened}
+        text = condan_crisis.500.desc.condan_crisis_5_contingency_spawned
+    }
+    desc = {
+        exclusive_trigger = { NOT = { has_global_flag = ai_invasion_happened} }
+        text = condan_crisis.500.desc.condan_crisis_5
+    }
+
+    immediate = {
+        add_event_chain_counter = {
+            event_chain = "condan_chain"
+            counter = "condan_level_reached"
+            amount = 1
+        }
+        add_relic = r_contingency_core
+
+        if = {
+            limit = {
+                check_galaxy_setup_value = { setting = crisis_strength_scale value < 5 }
+            }
+            add_modifier = { modifier = condan_contingency_mod_1 }
+        }
+        else_if = {
+            limit = {
+                check_galaxy_setup_value = { setting = crisis_strength_scale value >= 5 }
+                check_galaxy_setup_value = { setting = crisis_strength_scale value < 10 }
+            }
+            add_modifier = { modifier = condan_contingency_mod_5 }
+        }
+        else_if = {
+            limit = {
+                check_galaxy_setup_value = { setting = crisis_strength_scale value >= 10 }
+                check_galaxy_setup_value = { setting = crisis_strength_scale value < 15 }
+            }
+            add_modifier = { modifier = condan_contingency_mod_10 }
+        }
+        else_if = {
+            limit = {
+                check_galaxy_setup_value = { setting = crisis_strength_scale value >= 15 }
+                check_galaxy_setup_value = { setting = crisis_strength_scale value < 20 }
+            }
+            add_modifier = { modifier = condan_contingency_mod_15 }
+        }
+        else_if = {
+            limit = {
+                check_galaxy_setup_value = { setting = crisis_strength_scale value >= 20 }
+                check_galaxy_setup_value = { setting = crisis_strength_scale value < 25 }
+            }
+            add_modifier = { modifier = condan_contingency_mod_20 }
+        }
+        else_if = {
+            limit = {
+                check_galaxy_setup_value = { setting = crisis_strength_scale value >= 25 }
+            }
+            add_modifier = { modifier = condan_contingency_mod_25 }
+        }
+    }
+
+    option = {
+        trigger = { NOT = { has_global_flag = ai_invasion_happened} }
+        custom_tooltip = condan_crisis.500.tooltip.no_contingency
+        country_event = { id = condan_crisis.2000 }
+        name = EXIT
+    }
+
+    option = {
+        trigger = { has_global_flag = ai_invasion_happened}
+        custom_tooltip = condan_crisis.500.tooltip.contingency_spawned
+        hidden_effect = {
+            set_country_flag = ghost_signal_blocked
+
+            every_owned_pop_group = {
+                limit = { has_trait = trait_machine_unit }
+                remove_modifier = pop_ghost_signal_5_machine
+                remove_modifier = pop_ghost_signal_4_machine
+            }
+            every_controlled_ship = {
+                limit = { has_sapient_combat_computer = yes }
+                remove_modifier = ship_ghost_signal_5
+                remove_modifier = ship_ghost_signal_4
+                remove_modifier = ship_ghost_signal_3
+                remove_modifier = ship_ghost_signal_2
+                remove_modifier = ship_ghost_signal_1
+            }
+            if = {
+                limit = { has_notification_modifier = ghost_signal_5_machine }
+                remove_notification_modifier = ghost_signal_5_machine
+            }
+            if = {
+                limit = { has_notification_modifier = ghost_signal_4_machine }
+                remove_notification_modifier = ghost_signal_4_machine
+            }
+
+            abort_special_project = { type = "AI_CRISIS_PROJECT"}
+        }
+        name = EXIT
+    }
+}
+
+
+country_event = {
+    id = condan_crisis.2000
+    #noinspection ParadoxScriptUnresolvedExpression
+    title = condan_crisis.2000.name
+    hide_window = yes
+    is_triggered_only = yes
+
+    trigger = {
+        is_condan_empire = yes
+        # earlier logic should catch this, but emergency catch here
+        NOT = { has_global_flag = ai_invasion_happened }
+    }
+
+    immediate = {
+        set_country_flag = ghost_signal_blocked
+        save_event_target_as = AI_County
+        set_country_flag = condan_has_become_contingency
+        event_target:condan_country = {
+            set_country_flag = condan_triggered_contingency
+        }
+        event_target:condan_leader.owner_main_species = { save_global_event_target_as = custodian_bot }
+        event_target:condan_evil_bot = { save_global_event_target_as = contingency_bot}
+
+        create_ship_design = { design = "NAME_AI_1" }
+        add_ship_design = last_created_design
+        create_ship_design = { design = "NAME_AI_2" }
+        add_ship_design = last_created_design
+        create_ship_design = { design = "NAME_AI_STARBASE" }
+        add_ship_design = last_created_design
+
+        create_fleet = {
+            name = "NAME_AI_Core"
+            effect = {
+                set_owner = root
+                create_ship = {
+                    name = random
+                    design = "NAME_AI_Final_Core"
+                    graphical_culture = "ai_01"
+                }
+                set_location = {
+                    target = event_target:condan_planet
+                    distance = 50
+                    angle = 120
+                }
+            }
+        }
+
+        event_target:condan_planet = {
+            solar_system = {
+                star = {
+                    create_ambient_object = {
+                        type = "contingency_1"
+                        location = this
+                    }
+                    last_created_ambient_object = {
+                        set_ambient_object_flag = contingency_system_effect
+                        set_location = {
+                            target = prev
+                            distance = 0
+                            angle = random
+                        }
+                    }
+                }
+            }
+        }
+
+
+        set_global_flag = ai_invasion_happened
+        set_global_flag = ai_ghost_signal
+        endgame_telemetry = ai_revolt
+        set_global_flag = galactic_crisis_happened
+        set_timed_global_flag = {
+            flag = galactic_crisis_recently_fired
+            years = 12
+        }
+
+
+
+        # The Arrival
+        every_country = {
+            limit = {
+                is_condan_empire = no
+                OR = {
+                    is_country_type = default
+                    is_country_type = fallen_empire
+                    is_country_type = awakened_fallen_empire
+                }
+            }
+            country_event = { id = condan_crisis.2022 }
+        }
+        # First Machine World
+        if = {
+            limit = {
+                any_galaxy_planet = { has_planet_flag = machine_world_1 }
+            }
+            random_galaxy_planet = {
+                limit = { has_planet_flag = machine_world_1 }
+                planet_event = { id = condan_crisis.2025 days = 2 }
+            }
+        }
+        else_if = {
+            random_galaxy_planet = {
+                limit = { is_planet_class = pc_barren }
+                planet_event = { id = condan_crisis.2025 days = 2  }
+            }
+        }
+
+        # set the level and ambience appropreate to condans progress
+        country_event = { id =  condan_crisis.2234 days = 3 }
+        country_event = { id =  condan_crisis.2231 days = 4 }
+        country_event = { id =  condan_crisis.2233 days = 5 }
+
+        # Second Machine World
+        if = {
+            limit = {
+                any_galaxy_planet = { has_planet_flag = machine_world_2 }
+            }
+            random_galaxy_planet = {
+                limit = { has_planet_flag = machine_world_2 }
+                planet_event = { id = condan_crisis.2026 days = 40 random = 10 }
+            }
+        }
+        else_if = {
+            random_galaxy_planet = {
+                limit = { is_planet_class = pc_molten }
+                planet_event = { id = condan_crisis.2026 days = 40 random = 10 }
+            }
+        }
+        # Third Machine World
+        if = {
+            limit = {
+                any_galaxy_planet = { has_planet_flag = machine_world_3 }
+            }
+            random_galaxy_planet = {
+                limit = { has_planet_flag = machine_world_3 }
+                planet_event = { id = condan_crisis.2027 days = 60 random = 10 }
+            }
+        }
+        else_if = {
+            random_galaxy_planet = {
+                limit = { is_planet_class = pc_gas_giant }
+                planet_event = { id = condan_crisis.2027 days = 60 random = 10 }
+            }
+        }
+        # Fourth Machine World
+        if = {
+            limit = {
+                any_galaxy_planet = { has_planet_flag = machine_world_4 }
+            }
+            random_galaxy_planet = {
+                limit = { has_planet_flag = machine_world_4 }
+                planet_event = { id = condan_crisis.2028 days = 80 random = 10 }
+            }
+        }
+        else_if = {
+            random_galaxy_planet = {
+                limit = { is_planet_class = pc_toxic }
+                planet_event = { id = condan_crisis.2028 days = 80 random = 10 }
+            }
+        }
+        # Synth Infiltration
+        every_country = {
+            limit = { is_country_type = default }
+            if = {
+                limit = {
+                    NOR = {
+                        has_authority = auth_hive_mind
+                        has_authority = auth_machine_intelligence
+                        owner_species = { has_trait = trait_psionic }
+                    }
+                }
+                country_event = { id = crisis.2085 days = 260 random = 20 }
+            }
+            if = {
+                limit = { has_authority = auth_hive_mind }
+                country_event = { id = crisis.2086 days = 260 random = 20 }
+            }
+            if = {
+                limit = { owner_species = { has_trait = trait_psionic } }
+                country_event = { id = crisis.2087 days = 260 random = 20 }
+            }
+            if = {
+                limit = {
+                    has_authority = auth_machine_intelligence
+                    NOT = { is_same_value = event_target:condan_leader.owner }
+                }
+                country_event = { id = crisis.2313 days = 260 random = 20 }
+            }
+        }
+    }
+}
+
+
+
+# The Arrival
+country_event = {
+    id = condan_crisis.2022
+    title = "crisis.2022.name"
+    desc = {
+        trigger = {
+            is_machine_empire = no
+        }
+        text = crisis.2022.desc
+    }
+    desc = {
+        trigger = {
+            is_machine_empire = yes
+        }
+        text = crisis.2022.desc.b
+    }
+    picture = GFX_evt_machine_sapience
+    show_sound = event_ai_started
+    trackable = yes
+
+    is_triggered_only = yes
+
+    immediate = {
+        observer_event = { id = observer.44 }
+        end_event_chain = "ghost_signal_chain"
+        begin_event_chain = {
+            event_chain = "ai_crisis_chain"
+            target = ROOT
+        }
+        if = {
+            limit = {
+                NOT = {
+                    is_machine_empire = yes
+                }
+            }
+            add_notification_modifier = ghost_signal_5
+            set_global_flag = ghost_signal_5_flag
+            every_owned_pop_group = {
+                limit = {
+                    OR = {
+                        AND = {
+                            has_trait = "trait_mechanical"
+                            NOT = {
+                                root = { has_country_flag = synthetic_empire }
+                            }
+                        }
+                        # Synthetically Ascended Empires
+                        AND = {
+                            root = { has_country_flag = synthetic_empire }
+                            has_trait = trait_mechanical
+                            NOT = {
+                                is_same_species = root.species
+                            }
+                        }
+                    }
+                }
+                add_modifier = {
+                    modifier = "pop_ghost_signal_5"
+                    days = -1
+                }
+            }
+            if = {
+                limit = {
+                    OR = {
+                        has_country_flag = synthetic_empire
+                        is_individual_machine = yes
+                    }
+                }
+                enable_special_project = {
+                    name = "AI_CRISIS_PROJECT"
+                    location = capital_scope
+                    owner = root
+                }
+            }
+        }
+        else_if = {
+            limit = {
+                is_machine_empire = yes
+                is_condan_empire = no
+            }
+            add_notification_modifier = ghost_signal_5_machine
+            every_owned_pop_group = {
+                limit = { has_trait = trait_machine_unit }
+                add_modifier = {
+                    modifier = "pop_ghost_signal_5_machine"
+                    days = -1
+                }
+            }
+            enable_special_project = {
+                name = "AI_CRISIS_PROJECT"
+                location = capital_scope
+                owner = root
+            }
+        }
+        every_controlled_ship = {
+            limit = {
+                has_sapient_combat_computer = yes
+                exists = owner
+                owner = { is_condan_empire = no }
+            }
+            add_modifier = {
+                modifier = "ship_ghost_signal_5"
+                days = -1
+            }
+        }
+        if = {
+            limit = {
+                is_condan_empire = no
+                any_controlled_ship = {
+                    has_sapient_combat_computer = yes
+                }
+            }
+            country_event = { id = crisis.2099 days = 10 }
+        }
+        if = {
+            limit = {
+                any_planet_within_border = {
+                    has_planet_flag = fotd_seperatist_planet@root
+                    owner = {
+                        has_country_flag = fotd_seperatist_country@root
+                    }
+                }
+            }
+            country_event = { id = origin.6135 days = 5 random = 2 }
+        }
+    }
+
+    option = {
+        name = ONSCREEN
+        if = {
+            limit = {
+                is_condan_empire = no
+                is_machine_empire = yes
+            }
+            if = {
+                limit = { has_technology = tech_decryption_3 }
+                custom_tooltip = tooltip_synth_crisis_encryption_bonus
+            }
+            tooltip = {
+                enable_special_project = {
+                    name = "AI_CRISIS_PROJECT"
+                    location = capital_scope
+                    owner = root
+                }
+            }
+        }
+        hidden_effect = {
+            country_event = { id = crisis.2023 }
+        }
+    }
+    after = {
+        country_event = { id = timeline.71 } # Timeline Contingency Crisis
+    }
+}
+
+
+
+# First Machine World (HIDDEN)
+planet_event = {
+    id = condan_crisis.2025
+    hide_window = yes
+
+    is_triggered_only = yes
+
+    immediate = {
+        set_crisis_sound = ai_empire_ambient_stage_1
+        set_crisis_stage_1 = yes
+
+        condan_set_ai_crisis_targets = yes
+        condan_setup_continency_planet = { NAME = NAME_Sterilization_Hub_1 }
+        planet_event = { id = condan_events.201 }
+        random_country = { observer_event = { id = observer.45 } }
+        every_country = {
+            limit = {
+                is_ai = no
+                is_condan_empire = no
+            }
+            country_event = { id = crisis.2030 }
+        }
+        event_target:condan_leader.owner = {
+            set_timed_country_flag = { flag = condan_machine_world_1 days = 2 }
+            add_resource = { energy = 10000 }
+            country_event = { id = condan_comms.130 }
+        }
+        every_country = {
+            limit = {
+                OR = {
+                    is_country_type = default
+                    is_country_type = fallen_empire
+                    is_country_type = awakened_fallen_empire
+                }
+            }
+            establish_communications_no_message = event_target:AI_crisis
+        }
+        every_country = {
+            limit = { has_event_chain = "ai_crisis_chain" }
+            add_event_chain_counter = {
+                event_chain = "ai_crisis_chain"
+                counter = "active_machine_worlds"
+                amount = 1
+            }
+        }
+        awaken_guardians_of_the_galaxy = yes
+        every_country = {
+            limit = {
+                is_country_type = fallen_empire
+                is_machine_empire = yes
+            }
+            remove_country_flag = fallen_machine_empire_awaken_1
+            set_country_flag = fallen_machine_empire_awaken_2
+        }
+        awaken_fallen_machine_empire = yes
+
+        set_global_flag = ai_invasion_ongoing
+        set_global_flag = synth_terror
+    }
+}
+
+
+# Second Machine World (HIDDEN)
+planet_event = {
+    id = condan_crisis.2026
+    hide_window = yes
+
+    is_triggered_only = yes
+
+    immediate = {
+        condan_set_ai_crisis_targets = yes
+        condan_setup_continency_planet = { NAME = NAME_Sterilization_Hub_2 }
+        planet_event = { id = condan_events.201 }
+        random_country = { observer_event = { id = observer.46 } }
+        every_country = {
+            limit = {
+                is_ai = no
+                is_condan_empire = no
+            }
+            country_event = { id = crisis.2031 }
+        }
+        event_target:condan_leader.owner = {
+            add_resource = { energy = 10000 }
+            set_timed_country_flag = { flag = condan_machine_world_2 days = 2 }
+            country_event = { id = condan_comms.130 }
+        }
+        every_country = {
+            limit = { has_event_chain = "ai_crisis_chain" }
+            add_event_chain_counter = {
+                event_chain = "ai_crisis_chain"
+                counter = "active_machine_worlds"
+                amount = 1
+            }
+        }
+    }
+}
+
+# Third Machine World (HIDDEN)
+planet_event = {
+    id = condan_crisis.2027
+    hide_window = yes
+
+    is_triggered_only = yes
+
+    immediate = {
+        condan_set_ai_crisis_targets = yes
+        condan_setup_continency_planet = { NAME = NAME_Sterilization_Hub_3 }
+        planet_event = { id = condan_events.201 }
+        random_playable_country = { observer_event = { id = observer.47 } }
+        every_country = {
+            limit = {
+                is_ai = no
+                is_condan_empire = no
+            }
+            country_event = { id = crisis.2032 }
+        }
+        event_target:condan_leader.owner = {
+            add_resource = { energy = 10000 }
+            set_timed_country_flag = { flag = condan_machine_world_3 days = 2 }
+            country_event = { id = condan_comms.130 }
+        }
+        every_country = {
+            limit = { has_event_chain = "ai_crisis_chain" }
+            add_event_chain_counter = {
+                event_chain = "ai_crisis_chain"
+                counter = "active_machine_worlds"
+                amount = 1
+            }
+        }
+    }
+}
+
+# Fourth Machine World (HIDDEN)
+planet_event = {
+    id = condan_crisis.2028
+    hide_window = yes
+
+    is_triggered_only = yes
+
+    immediate = {
+        condan_set_ai_crisis_targets = yes
+        condan_setup_continency_planet = { NAME = NAME_Sterilization_Hub_4 }
+        planet_event = { id = condan_events.201 }
+        random_country = { observer_event = { id = observer.48 } }
+
+        # Custodian/Emperor Announcements
+        event_target:AI_crisis = { save_event_target_as = crisis_country }
+        if = {
+            limit = { has_galactic_custodian = yes }
+            random_playable_country = {
+                limit = { is_galactic_custodian = yes }
+                country_event = { id = custodian.50 days = 30 }
+            }
+        }
+        if = {
+            limit = { has_galactic_emperor = yes }
+            random_playable_country = {
+                limit = { is_galactic_emperor = yes }
+                country_event = { id = emperor.90 days = 30 }
+            }
+        }
+
+        every_country = {
+            limit = {
+                is_ai = no
+                is_condan_empire = no
+            }
+            country_event = { id = crisis.2033 }
+        }
+        event_target:condan_leader.owner = {
+            add_resource = { energy = 10000 }
+            set_timed_country_flag = { flag = condan_machine_world_4 days = 2 }
+            country_event = { id = condan_comms.130 }
+        }
+
+        event_target:condan_leader.owner = {
+           country_event = { id = condan_crisis.2500 }
+        }
+        every_country = {
+            limit = { has_event_chain = "ai_crisis_chain" }
+            add_event_chain_counter = {
+                event_chain = "ai_crisis_chain"
+                counter = "active_machine_worlds"
+                amount = 1
+            }
+        }
+    }
+}
+
+
+
+# on country destroyed - Condan owner has become the crisis
+country_event = {
+    id = condan_crisis.2043
+    is_triggered_only = yes
+    hide_window = yes
+
+    #This = destroyed country
+    #From = optional, destroyer (country)
+    trigger = {
+        has_global_flag = condan_in_play
+        has_country_flag = condan_owner
+        has_country_flag = condan_has_become_contingency
+    }
+
+    immediate = {
+        stop_crisis_sound = yes
+        remove_global_flag = condan_in_play
+        set_global_flag = ai_invasion_defeated
+        from = { save_event_target_as = final_machine_world_destroyer }
+        if = {
+            limit = { exists = capital_scope }
+            capital_scope = { planet_event = { id = crisis.2046 } }
+        }
+        else = { event_target:condan_planet = { planet_event = { id = crisis.2046 } } }
+        if = {
+            limit = {
+                exists = event_target:condan_planet
+                event_target:condan_planet = { is_planet_class = pc_machine }
+            }
+            event_target:condan_planet = {
+                change_pc = pc_machine_broken
+                add_deposit = d_living_metal_deposit
+                add_deposit = d_minerals_10
+                add_deposit = d_alloys_5
+            }
+            solar_system = {
+                random_system_ambient_object = {
+                    limit = { has_ambient_object_flag = contingency_system_effect }
+                    destroy_ambient_object = this
+                }
+            }
+            clear_global_event_target = condan_planet
+        }
+
+        if = {
+            limit = { exists = event_target:condan_country }
+            event_target:condan_country = { destroy_country = yes }
+            clear_global_event_target = condan_country
+        }
+        if = {
+            limit = { exists = event_target:condan_leader}
+            event_target:condan_leader = { kill_leader = { show_notification = no } }
+            clear_global_event_target = condan_leader
+        }
+    }
+}
+
+
+
+
+# Events to manage crisis sound loop
+country_event = {
+    id = condan_crisis.2230
+    hide_window = yes
+
+    trigger = {
+        has_global_flag = condan_in_play
+        has_crisis_stage_3 = yes
+        is_condan_contingency_empire = yes
+        galaxy_percentage < 0.15
+    }
+
+    is_triggered_only = yes
+
+    immediate = {
+        set_crisis_sound = ai_empire_ambient_stage_2
+        set_crisis_stage_2 = yes
+    }
+}
+
+country_event = {
+    id = condan_crisis.2231
+    hide_window = yes
+
+    trigger = {
+        has_global_flag = condan_in_play
+        has_crisis_stage_2 = yes
+        is_condan_contingency_empire = yes
+        galaxy_percentage > 0.20
+    }
+
+    is_triggered_only = yes
+
+    immediate = {
+        set_crisis_sound = ai_empire_ambient_stage_3
+        set_crisis_stage_3 = yes
+    }
+}
+
+country_event = {
+    id = condan_crisis.2232
+    hide_window = yes
+
+    trigger = {
+        has_global_flag = condan_in_play
+        has_crisis_stage_4 = yes
+        is_condan_contingency_empire = yes
+        galaxy_percentage < 0.30
+    }
+
+    is_triggered_only = yes
+
+    immediate = {
+        set_crisis_sound = ai_empire_ambient_stage_3
+        set_crisis_stage_3 = yes
+    }
+}
+
+country_event = {
+    id = condan_crisis.2233
+    hide_window = yes
+
+    trigger = {
+        has_global_flag = condan_in_play
+        has_crisis_stage_3 = yes
+        is_condan_contingency_empire = yes
+        galaxy_percentage > 0.40
+    }
+
+    is_triggered_only = yes
+
+    immediate = {
+        set_crisis_sound = ai_empire_ambient_stage_final
+        set_crisis_stage_4 = yes
+    }
+}
+
+country_event = {
+    id = condan_crisis.2234
+    hide_window = yes
+
+    trigger = {
+        has_global_flag = condan_in_play
+        has_crisis_stage_1 = yes
+        is_condan_contingency_empire = yes
+        galaxy_percentage > 0.05
+    }
+
+    is_triggered_only = yes
+
+    immediate = {
+        set_crisis_sound = ai_empire_ambient_stage_2
+        set_crisis_stage_2 = yes
+    }
+}
+
+
+
+# Spawn Cybrex
+country_event = {
+    id = condan_crisis.2400
+    hide_window = yes
+    is_triggered_only = yes
+
+    trigger = {
+        has_global_flag = condan_in_play
+        has_global_flag = ai_invasion_ongoing
+        NOT = { has_global_flag = cybrex_resurface }
+        is_condan_contingency_empire = yes
+        endgame_crisis_large_size_trigger = yes
+    }
+
+    immediate = {
+        set_global_flag = cybrex_resurface
+        random_rim_system = {
+            spawn_system = {
+                min_distance >= 20
+                max_distance <= 50
+                initializer = "cybrex_beta"
+            }
+        }
+        observer_event = { id = observer.52 }
+        every_country = {
+            limit = {
+                is_country_type = default
+                NOT = { has_country_flag = condan_has_become_contingency }
+            }
+            country_event = { id = crisis.2401 days = 2 }
+        }
+        random_country = {
+            limit = { is_country_type = cybrex_empire }
+            country_event = { id = crisis.2421 days = 4 }
+            country_event = { id = crisis.2421 days = 120 }
+            country_event = { id = crisis.2421 days = 320 }
+            establish_communications_no_message = root
+        }
+    }
+}
+
+
+
+# Declare war on the galaxy
+country_event = {
+    id = condan_crisis.2500
+    hide_window = yes
+    is_triggered_only = yes
+
+    immediate = {
+        if = {
+            limit = { has_galactic_custodian = yes }
+            random_playable_country = {
+                limit = { is_galactic_custodian = yes }
+                save_event_target_as = community_war_leader
+            }
+        }
+        if = {
+            limit = { has_galactic_emperor = yes }
+            random_playable_country = {
+                limit = { is_galactic_emperor = yes }
+                save_event_target_as = community_war_leader
+            }
+        }
+
+        if = {
+            limit = { NOT = { exists = event_target:community_war_leader }}
+            random_playable_country = {
+                limit = { is_condan_empire = no }
+                save_event_target_as = community_war_leader
+            }
+        }
+
+        # remove condan from all current wars to start the ultimate purging war
+        if = {
+            limit = {
+                any_war = {
+                    any_war_participant = {
+                        is_same_value = event_target:crisis_country
+                    }
+                }
+            }
+            every_war = {
+                limit = {
+                    any_war_participant = {
+                        is_same_value = event_target:crisis_country
+                    }
+                }
+                remove_war_participant = event_target:crisis_country
+            }
+        }
+
+        declare_war = {
+            target = event_target:community_war_leader
+            name = "NAME_War_Condan_Purging_The_Galaxy"
+            attacker_war_goal = wg_condan_purge
+            effect = { save_event_target_as = crisis_war }
+        }
+
+        every_playable_country = {
+            limit = {
+                has_established_contact = event_target:crisis_country
+                NOR = {
+                    is_same_value = event_target:crisis_country
+                    is_same_value = event_target:community_war_leader
+                }
+            }
+            join_war_on_side = {
+                war = event_target:crisis_war
+                side = event_target:community_war_leader
+            }
+        }
+
+        every_country = {
+            limit = {
+                is_regular_empire = yes
+                has_established_contact = event_target:crisis_country
+                NOT = { any_war = { is_same_value = event_target:crisis_war } }
+            }
+            join_war_on_side = {
+                war = event_target:crisis_war
+                side = event_target:community_war_leader
+            }
+        }
+    }
+}

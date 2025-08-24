@@ -1,0 +1,202 @@
+# AI Small Ship
+condan_small_ship_ai = {
+    graphical_culture = no
+    #graphical_culture = { "ai_01"}
+    entity = "warship_small_entity"
+    max_speed = @speed_default
+    acceleration = 0.3
+    rotation_speed = 0.2
+    collision_radius = @destroyer_collision_radius
+    modifier = {
+        ship_evasion_add = 25
+    }
+    max_hitpoints = 800
+    size_multiplier = 2
+    fleet_slot_size = 2
+    section_slots = { "mid" = { locator = "part1" } }
+    num_target_locators = 0
+    icon = ship_size_military_2
+    is_space_station = no
+    construction_type = starbase_shipyard
+    class = shipclass_military
+    is_designable = no
+    enable_default_design = yes
+    use_shipnames_from = destroyer
+
+    base_buildtime = @destroyer_build_time
+    components_add_to_cost = no
+    can_have_federation_design = no
+    ship_roles = {  brawler }
+
+    potential_country = {
+        has_crisis_level = crisis_condan_level_2
+    }
+
+    resources = {
+        category = ships
+        cost = {
+            alloys = 500
+            sr_living_metal = 0.1
+        }
+    }
+}
+
+
+condan_large_ship_ai = {
+    graphical_culture = no
+    #graphical_culture = { "ai_01"}
+    entity = "warship_large_entity"
+    max_speed = @speed_slow
+    acceleration = 0.2
+    rotation_speed = 0.15
+    collision_radius = @battleship_collision_radius
+    modifier = {
+        ship_evasion_add = 10
+    }
+    max_hitpoints = 2000
+    size_multiplier = 8
+    fleet_slot_size = 4
+    section_slots = { "mid" = { locator = "part1" } }
+    num_target_locators = 0
+    is_space_station = no
+    icon = ship_size_military_8
+
+    is_space_station = no
+    construction_type = starbase_shipyard
+    class = shipclass_military
+    is_designable = no
+    enable_default_design = yes
+    use_shipnames_from = battleship
+
+    base_buildtime = @battleship_build_time
+    components_add_to_cost = no
+    can_have_federation_design = no
+    ship_roles = {  artillery }
+
+    potential_country = {
+        has_crisis_level = crisis_condan_level_3
+    }
+
+    resources = {
+        category = ships
+        cost = {
+            alloys = 1500
+            sr_living_metal = 3
+            exotic_gases = 2
+            rare_crystals = 2
+        }
+    }
+}
+
+
+# AI Core
+condan_ai_juggernaught = {
+    graphical_culture = no
+    # graphical_culture = { "ai_01" }
+    entity = "core_ai_entity"
+    max_speed = @speed_very_slow
+    acceleration = 0.2
+    rotation_speed = 0.15
+    collision_radius = @juggernaut_collision_radius
+    ship_modifier = {
+        ship_weapon_range_mult = 0.20
+    }
+    max_hitpoints = 50000
+    combat_size_multiplier = 50
+    size_multiplier = 32
+    fleet_slot_size = 8
+    section_slots = { "mid" = { locator = "part1" } }
+    num_target_locators = 0
+    is_space_station = no
+    icon = ship_size_military_32
+
+    is_space_station = no
+    construction_type = starbase_shipyard
+    class = shipclass_military
+    is_designable = no
+    enable_default_design = yes
+    use_shipnames_from = juggernaut
+
+    base_buildtime = @juggernaut_build_time
+    components_add_to_cost = no
+    can_have_federation_design = no
+    ship_roles = {  artillery }
+
+    potential_country = {
+        has_crisis_level = crisis_condan_level_4
+    }
+
+    potential_construction = {
+        OR = {
+            AND = {
+                is_scope_type = starbase
+                NOT = {
+                    has_starbase_size = juggernaut
+                }
+            }
+            AND = {
+                is_scope_type = megastructure
+                OR = {
+                    is_megastructure_type = mega_shipyard_3
+                    is_megastructure_type = mega_shipyard_restored
+                }
+            }
+        }
+    }
+
+    possible_construction = {
+        custom_tooltip = {
+            fail_text = starbase_citadel_trigger
+            OR = {
+                AND = {
+                    is_scope_type = megastructure
+                    OR = {
+                        is_megastructure_type = mega_shipyard_3
+                        is_megastructure_type = mega_shipyard_restored
+                    }
+                }
+                AND = {
+                    is_scope_type = starbase
+                    has_starbase_size >= starbase_citadel
+                }
+            }
+        }
+        custom_tooltip = {
+            fail_text = condan_starbase_colossal_yards_trigger
+            OR = {
+                AND = {
+                    is_scope_type = megastructure
+                    OR = {
+                        is_megastructure_type = mega_shipyard_3
+                        is_megastructure_type = mega_shipyard_restored
+                    }
+                }
+                AND = {
+                    is_scope_type = starbase
+                    OR = {
+                        has_starbase_building = colossus_yards
+                        solar_system = {
+                            any_system_planet = {
+                                is_planet_class = pc_machine
+                                OR = {
+                                    has_planet_flag = condan_automated_factory
+                                    has_planet_flag = condan_planet
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    resources = {
+        category = ships
+        cost = {
+            alloys = 4000
+            sr_living_metal = 10
+            exotic_gases = 5
+            rare_crystals = 5
+        }
+    }
+}

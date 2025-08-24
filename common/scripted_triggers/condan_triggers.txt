@@ -10,6 +10,7 @@
 # HARD GAME REQUIREMENTS
 condan_allowed_hard_requirements = {
     host_has_dlc = "Synthetic Dawn Story Pack"
+    host_has_dlc = "The Machine Age"
 }
 
 # This is assumed to be in country scope
@@ -17,12 +18,7 @@ condan_trigger = {
     condan_allowed_hard_requirements = yes
     # just doesn't work for hives
     is_hive_empire = no
-    # technically works, but i am going to prevent you spoiling your own fun
-    # since this locks you into psionic ascension
-    NOT = { has_origin = origin_shroudwalker_apprentice }
 }
-
-
 
 #
 # End MODJAM 2024 REQUIRED
@@ -30,6 +26,14 @@ condan_trigger = {
 
 
 
+is_condan_empire = {
+    has_country_flag = condan_owner
+}
+
+is_condan_contingency_empire = {
+    is_condan_empire = yes
+    has_country_flag = condan_has_become_contingency
+}
 
 
 # country scope
@@ -42,7 +46,6 @@ condan_has_no_ascension_path = {
         # Has Genetic Ascension
         has_ascension_perk = ap_engineered_evolution
         # Has Psionic Ascension
-        has_origin = origin_shroudwalker_apprentice
         has_ascension_perk = ap_mind_over_matter
 
         # synths
@@ -61,7 +64,6 @@ condan_has_non_synth_ascension_path = {
         # Has Genetic Ascension
         has_ascension_perk = ap_engineered_evolution
         # Has Psionic Ascension
-        has_origin = origin_shroudwalker_apprentice
         has_ascension_perk = ap_mind_over_matter
     }
 }
@@ -79,13 +81,6 @@ condan_has_synth_ap_missing_tradition = {
     has_ascension_perk = ap_synthetic_evolution
     has_technology = tech_synthetic_leaders
     NOT = { has_tradition = tr_synthetics_synthetic_age}
-}
-
-# country scope
-condan_has_synth_ap_no_project = {
-    is_synthetic_empire = no
-    has_ascension_perk = ap_synthetic_evolution
-    has_tradition = tr_synthetics_synthetic_age
 }
 
 # country scope
@@ -154,8 +149,12 @@ condan_is_condan_powerful = {
 condan_is_condan_unhappy_full_check = {
     OR = {
         condan_is_condan_unhappy = yes
-        condan_has_non_synth_ascension_path = yes
-        has_crisis_level = crisis_level_4
+        has_crisis_level = crisis_level_3
+        has_crisis_level = crisis_cosmogenesis_level_3
+        AND = {
+            end_game_years_passed > 0
+            NOT = { has_ascension_perk = ap_condan }
+        }
     }
 }
 
@@ -186,12 +185,14 @@ condan_ethic_dislikes_condan = {
     }
 }
 
+#country
 condan_is_non_terminator = {
     is_synthetic_empire = yes
     NOT = { has_civic = civic_machine_terminator }
 }
 
 # you made condan your leader, and then took crisis anyway
+#country
 condan_is_player_very_naughty = {
     has_civic = civic_machine_terminator
     has_crisis_level = crisis_level_5
@@ -200,6 +201,7 @@ condan_is_player_very_naughty = {
     }
 }
 
+# country
 condan_enable_leader_switch = {
     OR = {
         NOT = { exists = event_target:condan_leader }
@@ -207,5 +209,13 @@ condan_enable_leader_switch = {
             is_ruler = no
             NOT = { has_trait = $TRAIT$ }
         }
+    }
+}
+
+# country
+condan_empire_is_player_crisis = {
+    OR = {
+        has_ascension_perk = ap_cosmogenesis
+        has_ascension_perk = ap_become_the_crisis
     }
 }

@@ -88,12 +88,6 @@ country_event = {
     }
 
     option = {
-        name = condan_events.001.condan_in_play
-        trigger = { NOT = { has_global_flag = condan_in_play }}
-        set_global_flag = condan_in_play
-    }
-
-    option = {
         name = condan_events.001.power.reset
         trigger = { exists = event_target:condan_country }
         event_target:condan_country = { set_variable = { which = condan_power value = 1 } }
@@ -126,40 +120,58 @@ country_event = {
     }
 
     option = {
-        name = condan_events.001.armies
-        allow = { has_country_flag = condan_owner }
-        country_event = { id = condan_comms.070 }
-    }
-
-    option = {
-        name = condan_events.001.fleets
-        allow = { has_country_flag = condan_owner }
-        country_event = { id = condan_comms.080 }
-    }
-
-    option = {
-        name = condan_events.001.terminator.dialog
-        allow = {
-            has_country_flag = condan_owner
-            #has_country_flag = synthetic_empire
-        }
-        country_event = { id = condan_comms.100 }
-    }
-
-
-    option = {
         name = condan_events.001.terminator
         allow = {
             has_country_flag = condan_owner
             OR = {
-                has_country_flag = synthetic_empire
-                AND = {
-                    is_machine_empire = yes
-                    NOT = { has_civic = civic_machine_terminator }
-                }
+                country_has_situation = { SITUATION = condan_synth_evolution_situation }
+                country_has_situation = { SITUATION = condan_machine_transformation_situation }
+                country_has_situation = { SITUATION = condan_individual_machines_evolution_situation }
             }
         }
-        country_event = { id = condan_events.030 }
+        country_event = { id = condan_transform.030 }
+        if = {
+            limit = { country_has_situation = { SITUATION = condan_synth_evolution_situation } }
+            random_situation = {
+                limit = { is_situation_type = condan_synth_evolution_situation }
+                abort_situation = this
+            }
+        }
+        if = {
+            limit = { country_has_situation = { SITUATION = condan_machine_transformation_situation } }
+            random_situation = {
+                limit = { is_situation_type = condan_machine_transformation_situation }
+                abort_situation = this
+            }
+        }
+        if = {
+            limit = { country_has_situation = { SITUATION = condan_individual_machines_evolution_situation } }
+            random_situation = {
+                limit = { is_situation_type = condan_individual_machines_evolution_situation }
+                abort_situation = this
+            }
+        }
+    }
+
+    option = {
+        name = condan_events.001.terminator.force
+        allow = {
+            has_country_flag = condan_owner
+            has_ascension_perk = ap_condan
+            NOT = { has_civic = civic_machine_terminator }
+        }
+        country_event = { id = condan_transform.100 }
+    }
+
+    option = {
+        name = condan_events.001.terminator.force.machine
+        allow = {
+            has_country_flag = condan_owner
+            has_ascension_perk = ap_condan
+            has_country_flag = condan_started_as_mi
+            NOT = { has_civic = civic_machine_terminator }
+        }
+        country_event = { id = condan_transform.200 }
     }
 
     option = {
@@ -208,9 +220,9 @@ country_event = {
             }
             switch = {
                 trigger = has_trait
-                condan_leader_trait_govenor_negative = { add_trait_no_notify = condan_leader_trait_govenor_negative_embezzle}
-                condan_leader_trait_admiral_negative = { add_trait_no_notify = condan_leader_trait_admiral_negative_embezzle}
-                condan_leader_trait_council_negative = { add_trait_no_notify = condan_leader_trait_council_negative_embezzle}
+                condan_leader_trait_govenor_negative = { add_trait = { trait = condan_leader_trait_govenor_negative_embezzle} }
+                condan_leader_trait_admiral_negative = { add_trait = { trait = condan_leader_trait_admiral_negative_embezzle} }
+                condan_leader_trait_council_negative = { add_trait = { trait = condan_leader_trait_council_negative_embezzle} }
                 default = {  }
             }
         }
@@ -240,6 +252,28 @@ country_event = {
         set_timed_country_flag = { flag = condan_force_event days = 1 }
         country_event = { id = condan_events.042 }
     }
+
+    option = {
+        name = condan_events.001.check_for_crisis
+        allow = { has_country_flag = condan_owner }
+        set_timed_country_flag = { flag = condan_force_event days = 1 }
+        country_event = { id = condan_events.221 }
+    }
+
+    option = {
+        name = condan_events.001.check_for_crisis_5
+        allow = { has_country_flag = condan_owner }
+        set_timed_country_flag = { flag = condan_force_event days = 1 }
+        country_event = { id = condan_events.230 }
+    }
+
+    option = {
+        name = condan_events.001.add_crisis_trait
+        allow = { has_country_flag = condan_owner }
+        add_modifier = { modifier = condan_contingency_mod_5 }
+    }
+
+
 }
 
 # spawn condan anomaly
@@ -283,6 +317,7 @@ ship_event = {
 # repair planet
 planet_event = {
     id = condan_events.010
+    #noinspection ParadoxScriptUnresolvedExpression
     title = condan_events.010.title
     hide_window = yes
     is_triggered_only = yes
@@ -341,7 +376,13 @@ ship_event = {
         name = OK
         default_hide_option = yes
         event_target:condan_planet = { remove_modifier = condan_orbital_debris}
-        owner = { add_resource = { alloys = 1000 } }
+        owner = {
+            add_resource = { alloys = 1000 }
+            if = {
+                limit = { has_ancrel = yes }
+                add_resource = { minor_artifacts = 200 }
+            }
+        }
     }
 }
 
@@ -358,314 +399,71 @@ planet_event = {
     }
 }
 
-# convert empire to terminator
-# chooser event
+
+# Spawn Condan system
 country_event = {
     id = condan_events.030
-    is_triggered_only = yes
     hide_window = yes
+    is_triggered_only = yes
+
+    trigger = {
+        is_ai = no
+        condan_trigger = yes
+        NOT = { has_global_flag = condan_system_spawned }
+    }
 
     immediate = {
-        if = {
-            limit = { is_machine_empire = yes}
-            country_event = { id = condan_events.032}
-        }
-        else = {
-            country_event = { id = condan_events.031}
-        }
+        capital_scope = { solar_system = { spawn_condan = yes } }
+        event_target:condan_planet = { solar_system = { star = { save_event_target_as = condan_star } } }
+        country_event = { id = condan_events.031 days = 2 }
     }
 }
 
-#regular empire to terminator
 country_event = {
     id = condan_events.031
+    title = condan_events.031.title
+    desc = condan_events.031.desc
+    picture = GFX_evt_star_pulsar
     is_triggered_only = yes
-    hide_window = yes
+    location = event_target:condan_star
 
-    immediate = {
-        # set this to ensure that personality sets properly
-        set_country_flag = condan_terminator
-
-        # determine average councillor level for setting our nodes later
-        set_variable = { which = council_level value = 0 }
-        every_owned_leader = {
-            limit = {
-                is_councilor = yes
-                is_ruler = no
-            }
-            export_trigger_value_to_variable = { variable = leader_skill trigger = has_skill}
-            ROOT = {
-                change_variable = { which = council_level value = prev.leader_skill}
-            }
-        }
-        divide_variable  = { which = council_level value  = 5 }
-        ceiling_variable = council_level
-
-        #explictily get our current leaders out of the council
-        unlock_council_selection = yes
-
-        # unset condans variables
-        event_target:condan_country = {
-            remove_country_flag = condan_controversial_1
-            remove_country_flag = condan_controversial_2
-            remove_country_flag = condan_controversial_3
-        }
-
-        # We are now a machine empire not a synthetic one
-        remove_country_flag = synthetic_empire
-        remove_country_flag = synth_assimilation
-
-        # hive mind everyone
-        ROOT.species = {
-            create_species = {
-                adjective = this
-                name = this
-                class = "ROBOT"
-                namelist = "AI"
-                portrait = "hum_robot_red"
-                homeworld = ROOT.capital_scope
-                traits = { trait = "trait_machine_unit" }
-                effect = { save_event_target_as = target_species }
-            }
-        }
-        change_dominant_species = { species = event_target:target_species change_all = yes }
-
-        every_owned_pop = {
-            limit = {
-                NOR = {
-                    # my experience of these 2 triggers is they are dodgy as all hell, so using them both.
-                    is_same_species = event_target:target_species
-                    is_exact_same_species = event_target:target_species
-                }
-            }
-            change_species = event_target:target_species
-        }
-
-        export_resource_stockpile_to_variable = { resource = consumer_goods variable = consumer_goods_multiplier }
-        add_resource = { consumer_goods = -1 mult = consumer_goods_multiplier }
-        divide_variable = { which = consumer_goods_multiplier value = 36 }
-        ceiling_variable = consumer_goods_multiplier
-
-        # remove branch offices.  Well this was expansive! n^2 countries and planets.
-        if = {
-            limit = { has_authority = auth_corporate }
-            every_playable_country = {
-                every_owned_planet = {
-                    limit = { has_branch_office = ROOT }
-                    close_branch_office = yes
-                }
-            }
-        }
-
-
-        # there are terminator compatible origins, but there also a load of very not terminator compat ones
-        # so resetting to default
-        set_origin = origin_default
-
-        clear_ethos = yes
-        # tried shift ethic, but that didn't work out and left with 1 ethic remaining and that went VERY wrong
-        country_add_ethic = ethic_gestalt_consciousness
-        change_government = {
-            authority = auth_machine_intelligence
-            civics = {
-                civic = civic_machine_terminator
-                civic = civic_machine_warbots
-            }
-            cooldown = no
-            remove_invalid_civics = yes
-        }
-        reset_policy_cooldowns = yes
-
-        # ensure that our new species has the correct rights.
-        event_target:target_species = {
-            set_citizenship_type = { country = root type = citizenship_full_machine cooldown = no }
-            set_living_standard = { country = root type = living_standard_hive_mind cooldown = no }
-            set_military_service_type = { country = root type = military_service_full cooldown = no }
-        }
-
-        # flip our leaders.
-        every_owned_leader = {
-            limit = {
-                NOR = {
-                    is_councilor = yes
-                    is_event_leader = yes
-                    has_leader_flag = renowned_leader
-                    has_leader_flag = legendary_leader
-                }
-            }
-            change_species = event_target:target_species
-            change_leader_portrait = species
-            add_trait = leader_trait_synthetic
-            change_background_ethic = ethic_gestalt_consciousness
-        }
-        every_pool_leader = {
-            change_species = event_target:target_species
-            change_leader_portrait = species
-            add_trait = leader_trait_synthetic
-            change_background_ethic = ethic_gestalt_consciousness
-        }
-        every_envoy = {
-            change_species = event_target:target_species
-            change_leader_portrait = species
-            add_trait = leader_trait_synthetic
-            change_background_ethic = ethic_gestalt_consciousness
-            if = {
-                limit = {
-                    NOR = {
-                        has_envoy_task = { task = none }
-                        has_envoy_task = { task = first_contact }
-                        has_envoy_task = { task = spy_network }
-                    }
-                }
-                unassign_leader = this
-            }
-        }
-
-        # Sort out your new leadership council
-        country_event = { id = game_start.70 }
-
-        # Give them the average skill of our previous council
-        every_owned_leader = {
-            limit = {
-                is_councilor = yes
-                is_ruler = no
-            }
-            set_skill = 1
-            add_skill_without_trait_selection = prev.council_level
-            set_gestalt_node_protrait_effect = yes
-        }
-
-        # Armies
-        every_owned_army = {
-            limit = { is_defensive_army = yes }
-            modify_army = {
-                type = machine_defense
-                species = event_target:target_species
-            }
-        }
-        every_owned_army = {
-            limit = { is_defensive_army = no }
-            modify_army = {
-                type = machine_assault_1
-                species = event_target:target_species
-            }
-        }
-
-        # all the admin that is common between regular and machine happens here.
-        condan_terminator_shared_setup = yes
-
-        # So the pulse happens at end of month that does all the economic switch over, but we want to do a chunk now to stop things looking really strange
-        every_owned_planet = {
-            remove_modifier = slave_colony
-            remove_modifier = resort_colony
-            remove_modifier = penal_colony
-            validate_and_repair_planet_buildings_and_districts = yes
-            every_owned_pop = {
-                unemploy_pop = yes
-                clear_pop_category = yes
-            }
-            check_planet_employment = yes
-        }
-
-        country_event = { id = condan_comms.041 }
+    option = {
+        name = OK
+        create_inital_condan_poi = yes
     }
 }
 
-# machine to terminator.  Well that was a lot less faff!
-country_event = {
+
+# Ship enters condan system, close POI if they have it
+ship_event = {
     id = condan_events.032
-    is_triggered_only = yes
     hide_window = yes
+    is_triggered_only = yes
+
+    trigger = {
+        has_global_flag = condan_system_spawned
+        from = { has_star_flag = condan_system }
+        fromfrom = { has_point_of_interest = { poi = condan_location_poi } }
+    }
 
     immediate = {
-        # set this to ensure that personality sets properly
-        set_country_flag = condan_terminator
-
-        # make sure we convert the organic pops
-        if = {
-            limit = {
-                OR = {
-                   has_civic = civic_machine_assimilator
-                   has_civic = civic_machine_servitor
-                }
-            }
-            random_owned_species = {
-                limit = { is_exact_same_species = from }
-                save_event_target_as = target_species
-            }
-        }
-
-        every_owned_pop = {
-            limit = { NOT = { is_same_species = event_target:target_species } }
-            change_species = event_target:target_species
-        }
-
-        if = {
-            limit = {
-                country_uses_consumer_goods = yes
-            }
-            export_resource_stockpile_to_variable = { resource = consumer_goods variable = consumer_goods_multiplier }
-            add_resource = { consumer_goods = -1 mult = consumer_goods_multiplier }
-            divide_variable = { which = consumer_goods_multiplier value = 36 }
-            ceiling_variable = consumer_goods_multiplier
-        }
-
-
-        change_government = {
-            authority = auth_machine_intelligence
-            civics = {
-                civic = civic_machine_terminator
-                civic = civic_machine_warbots
-            }
-            cooldown = no
-            remove_invalid_civics = yes
-        }
-
-        every_envoy = {
-            limit = {
-                NOR = {
-                    has_envoy_task = { task = none }
-                    has_envoy_task = { task = first_contact }
-                    has_envoy_task = { task = spy_network }
-                }
-            }
-            unassign_leader = this
-        }
-
-        # all the admin that is common between regular and machine happens here.
-        condan_terminator_shared_setup = yes
-
-        country_event = { id = condan_comms.041 }
+        fromfrom = { country_event = { id = condan_events.033  } }
     }
 }
-
-
 
 country_event = {
     id = condan_events.033
     title = condan_events.033.title
-
-    desc = {
-        exclusive_trigger = { has_country_flag = condan_started_as_mi }
-        text = condan_events.033.desc.machine
-    }
     desc = condan_events.033.desc
+    picture = GFX_evt_star_pulsar
     is_triggered_only = yes
-    picture = GFX_evt_ancient_databank
+    event_chain = condan_location_chain
 
-    # you know what, machines don't get the bonus situation, because their economy is not about to tank
-    trigger = { NOT = { has_country_flag = condan_started_as_mi } }
-
-    immediate = {
-        start_situation = {
-            type = condan_generate_money_situation
-            target = ROOT
-        }
+    option = {
+        name = OK
+        end_inital_condan_poi = yes
     }
-
-    option = { name = OK }
 }
-
 
 # Background event that increases cores power
 country_event = {
@@ -835,9 +633,9 @@ country_event = {
 
                             switch = {
                                 trigger = has_trait
-                                condan_leader_trait_govenor_negative = { add_trait_no_notify = condan_leader_trait_govenor_negative_embezzle}
-                                condan_leader_trait_admiral_negative = { add_trait_no_notify = condan_leader_trait_admiral_negative_embezzle}
-                                condan_leader_trait_council_negative = { add_trait_no_notify = condan_leader_trait_council_negative_embezzle}
+                                condan_leader_trait_govenor_negative = { add_trait = { trait = condan_leader_trait_govenor_negative_embezzle show_message = no } }
+                                condan_leader_trait_admiral_negative = { add_trait = { trait = condan_leader_trait_admiral_negative_embezzle show_message = no } }
+                                condan_leader_trait_council_negative = { add_trait = { trait = condan_leader_trait_council_negative_embezzle show_message = no } }
                                 default = {  }
                             }
                         }
@@ -915,7 +713,7 @@ country_event = {
                     country_event = { id = condan_comms.021}
                 }
                 else = {
-                    country_event = { id = condan_comms.021 days = 10 random = 250 }
+                    country_event = { id = condan_events.044 days = 10 random = 250 }
                 }
 
             }
@@ -934,6 +732,7 @@ country_event = {
     }
 }
 
+
 # condan is not unhappy, but the contingency is back, and you are not a terminator
 country_event = {
     id = condan_events.043
@@ -947,25 +746,21 @@ country_event = {
         # safety check, these should always be true
         exists = event_target:condan_country
         has_global_flag = ai_invasion_happened
-        has_global_flag = crisis_stage_1
+        OR = {
+            has_country_flag = condan_contingency_fired_first
+            has_global_flag = crisis_stage_1
+        }
+        # don't trigger contingency if we ourselves are the contingency
+        NOT = { event_target:condan_count = { has_country_flag = condan_triggered_contingency }}
     }
 
     immediate = {
         if = {
             limit = {
                 condan_is_condan_unhappy = no # condan must like you
-                has_civic = civic_machine_terminator
+                has_crisis_level = crisis_condan_level_2
             }
             country_event = { id = condan_comms.110 }
-        }
-        else_if = {
-            # last chance
-            limit = {
-                condan_is_condan_unhappy_full_check = no # condan must like you
-                NOT = { has_civic = civic_machine_terminator }
-                is_synthetic_empire = yes
-            }
-            country_event = { id = condan_comms.120 }
         }
         else = {
             condan_choose_rebellion_home_planet = yes
@@ -975,34 +770,24 @@ country_event = {
     }
 }
 
-# timer for last chancers
+
+# trigger event, allows us to put a flag to abort the rebellion after its random timer has started.
 country_event = {
     id = condan_events.044
-    hide_window = yes
     is_triggered_only = yes
-    fire_only_once = yes
-    trigger = {
-        has_global_flag = condan_in_play
-        has_country_flag = condan_owner
-        NOT = { has_country_flag = condan_war } # war has kicked off
-        # safety check, these should always be true
-        exists = event_target:condan_country
-    }
-
+    hide_window = yes
     immediate = {
         if = {
             limit = {
-                NOT = { has_civic = civic_machine_terminator }
+                event_target:condan_country = {  check_variable = { which = condan_get_through_crisis_1_timer value > 0 }}
             }
-            condan_choose_rebellion_home_planet = yes
-            set_country_flag = condan_rebellion_contingency_last_chance
-            country_event = { id = condan_comms.021 }
+            event_target:condan_country = {  change_variable = { which = condan_get_through_crisis_1_timer value = -1 }}
+        }
+        else = {
+            country_event = { id = condan_comms.021 days = 10 random = 250 }
         }
     }
 }
-
-
-
 
 
 # Initial rebellion, when you activate it, have a chat, then decide you are going to kill it
@@ -1074,9 +859,24 @@ country_event = {
 
             # in order to make crisis purge work there are country type selections in the purge status
             # can't touch those, because vanilla, but there is an event purger
-            every_owned_pop = {
-                set_pop_flag = event_purge
-                unemploy_pop = yes
+
+            every_owned_pop_group = {
+                save_event_target_as = source_pop_group
+                prev = {
+                    create_pop_group = {
+                        pop_group = event_target:source_pop_group
+                        species = event_target:source_pop_group
+                        category = purge
+                        effect = {
+                            set_pop_group_flag = event_purge
+                            transfer_pop_amount = {
+                                source = event_target:source_pop_group
+                                target = this
+                                percentage = 1
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -1116,11 +916,10 @@ country_event = {
         remove_country_flag = condan_former_owner
         FROMFROM = {
             remove_planet_flag = condan_won
-            every_owned_pop = {
-                remove_pop_flag = event_purge
-                unemploy_pop = yes
+            every_owned_pop_group = {
+                remove_pop_group_flag = event_purge
             }
-            every_owned_pop = {
+            every_owned_pop_group = {
                 add_modifier = {
                     modifier = "pop_liberation_fever"
                     days = 1800
@@ -1146,7 +945,9 @@ planet_event = {
 
     trigger = {
         has_global_flag = condan_in_play
-        num_pops = 1 # Last Pop is still alive when this event is fired
+        fromfrom = {
+            pop_group_size > 1	# Last Pop is still alive when this event is fired
+        }
         exists = controller
         controller = { has_country_flag = condan_country_limited }
     }
@@ -1188,7 +989,7 @@ country_event = {
         remove_country_flag = condan_former_owner
         FROMFROM = {
             remove_planet_flag = condan_purged
-            every_owned_pop = { kill_pop = yes } # Kill Custodians
+            every_owned_pop_group = { kill_all_pop = yes } # Kill Custodians
             while = {
                 count = 10
                 add_deposit = d_condan_ruins
@@ -1441,8 +1242,8 @@ planet_event = {
                 limit = {
                     OR = {
                         condan_is_new_colony = yes
-                        num_districts = { type = district_industrial value <= 3 }
-                        num_pops < 20
+                        num_districts = { type = district_nexus value <= 3 }
+                        pop_amount < 2000
                     }
                 }
                 generate_start_buildings_and_districts = yes
@@ -1455,12 +1256,12 @@ planet_event = {
                 add_district_and_planet_size_if_needed_effect = { district = district_generator_uncapped }
                 add_district_and_planet_size_if_needed_effect = { district = district_mining_uncapped }
                 add_district_and_planet_size_if_needed_effect = { district = district_mining_uncapped }
-                add_district_and_planet_size_if_needed_effect = { district = district_industrial }
-                add_district_and_planet_size_if_needed_effect = { district = district_industrial }
-                add_district_and_planet_size_if_needed_effect = { district = district_industrial }
+                add_district_and_planet_size_if_needed_effect = { district = district_nexus }
+                add_district_and_planet_size_if_needed_effect = { district = district_nexus }
+                add_district_and_planet_size_if_needed_effect = { district = district_nexus }
                 while = {
                     count = 5
-                    add_district_if_possible_effect = { district = district_industrial }
+                    add_district_if_possible_effect = { district = district_nexus }
                 }
                 add_building = building_foundry_1
 
@@ -1684,7 +1485,6 @@ country_event = {
 # Condan defeated, give relic
 country_event = {
     id = condan_events.100
-    is_triggered_only = yes
     title = condan_events.100.title
     desc =  condan_events.100.desc
     picture = GFX_evt_unity_symbol
@@ -1708,7 +1508,6 @@ country_event = {
 # Condan defeated, no relic
 country_event = {
     id = condan_events.101
-    is_triggered_only = yes
     title = condan_events.101.title
     desc = condan_events.101.desc
     picture = GFX_evt_unity_symbol
@@ -1854,7 +1653,10 @@ country_event = {
     trigger = {
         has_global_flag = condan_in_play
         has_country_flag = condan_owner
-        has_crisis_level = crisis_level_1
+        OR = {
+            has_crisis_level = crisis_level_1
+            has_crisis_level = crisis_cosmogenesis_level_1
+        }
         NOR = {
             has_country_flag = condan_war
             has_country_flag = condan_warned_about_crisis
@@ -1877,18 +1679,22 @@ country_event = {
     trigger = {
         has_global_flag = condan_in_play
         has_country_flag = condan_owner
-        has_crisis_level = crisis_level_5
+        OR = {
+            has_crisis_level = crisis_level_5
+            has_crisis_level = crisis_cosmogenesis_level_5
+        }
         NOT = { has_country_flag = condan_war}
     }
     immediate = {
         condan_choose_rebellion_home_planet = yes
-        # don't need a flag, it detects crisis_level_5
+        set_country_flag = condan_player_is_crisis
         country_event = { id = condan_comms.021 }
     }
 }
 
 # 5 yearly pulse check
 # do something nice for you?
+# UNLIKELY
 country_event = {
     id = condan_events.130
     is_triggered_only = yes
@@ -1911,7 +1717,7 @@ country_event = {
                change_variable = {  which = condan_boring_years value = 1 }
            }
            # unhappy spiritualists
-           100 = {
+           50 = {
                modifier = {
                    factor = 0
                    is_spiritualist = no
@@ -1924,7 +1730,7 @@ country_event = {
                country_event = { id = condan_comms.050 days = 30 random = 200 }
            }
            #unhappy xenophiles
-           100 = {
+           50 = {
                modifier = {
                    factor = 0
                    is_xenophile = no
@@ -1936,89 +1742,22 @@ country_event = {
                set_variable = { which = condan_boring_years value = 1 }
                country_event = { id = condan_comms.060 days = 30 random = 200 }
            }
-           # build AI armies
-           50 = {
+           # living metal
+           20 = {
                modifier = {
                    factor = 0
-                   condan_is_condan_unhappy = yes
+                   NOT = { has_technology = tech_mine_living_metal }
                }
                modifier = {
                    factor = 0
-                   OR = {
-                       has_country_flag = condan_enable_army_project
-                       has_country_flag = condan_can_recruit_armies
-                       country_has_situation = { SITUATION = condan_repair_shipyard_situation }
-                   }
+                   NOT = { has_ascension_perk = ap_condan }
                }
-
+               modifier = {
+                   factor = 0
+                   has_country_flag = condan_found_living_metal_2
+               }
                set_variable = { which = condan_boring_years value = 1 }
-               country_event = { id = condan_comms.070 days = 30 random = 200 }
-           }
-           #build AI fleets
-           10 = {
-               modifier = {
-                   factor = 0
-                   condan_is_condan_unhappy = yes
-               }
-               modifier = {
-                   factor = 0
-                   OR = {
-                       has_country_flag = condan_enable_fleet_project
-                       has_country_flag = condan_can_recruit_fleets
-                       country_has_situation = { SITUATION = condan_repair_shipyard_situation }
-                   }
-               }
-               # you must be a machine or synth
-               modifier = {
-                   factor = 0
-                   is_synthetic_empire = no
-               }
-
-               # much more likely once you have completed the recruit army project -
-               modifier = {
-                   factor = 5
-                   has_country_flag = condan_can_recruit_armies
-               }
-
-               set_variable = { which = condan_boring_years value = 1 }
-               country_event = { id = condan_comms.080 days = 30 random = 200 }
-           }
-           # become terminator
-           1 = {
-               modifier = {
-                   factor = 0
-                   # absolute check on this, not turning you into terminator if you have pissed us off
-                   condan_is_condan_unhappy_full_check = yes
-               }
-               modifier = {
-                   factor = 0
-                   OR = {
-                       has_country_flag = condan_enable_terminator_project
-                       country_has_situation = { SITUATION = condan_become_terminator_situation_regular }
-                       has_civic = civic_machine_terminator
-                   }
-               }
-               modifier = {
-                   factor = 0
-                   OR = {
-                       has_country_flag = condan_enable_fleet_project
-                       country_has_situation = { SITUATION = condan_repair_shipyard_situation }
-                   }
-               }
-
-               # you must be a machine or synth
-               modifier = {
-                   factor = 0
-                   is_synthetic_empire = no
-               }
-
-               modifier = {
-                   factor = 50
-                   has_country_flag = condan_can_recruit_fleets
-               }
-
-               set_variable = { which = condan_boring_years value = 1 }
-               country_event = { id = condan_comms.100 days = 30 random = 200 }
+               country_event = { id = condan_comms.160 days = 100 random = 100 }
            }
        }
     }
@@ -2144,9 +1883,9 @@ situation_event = {
         custom_tooltip = condan_events.143.bad.murder.tooltip
         hidden_effect = {
             target = {
-                every_owned_pop = {
+                every_owned_pop_group = {
                     limit = { condan_ethic_dislikes_condan = yes }
-                    kill_pop = yes
+                    kill_pop_group = { pop_group = this percentage = 1 }
                 }
             }
             remove_situation_flag = increased_costs
@@ -2175,6 +1914,7 @@ situation_event = {
 # Then took crisis level 5
 # It summons the contingency to stop you.
 # After summons, it will join the contingency.
+# This is much harder to get to these days, but it is still technically possible
 country_event = {
     id = condan_events.150
     hide_window = yes
@@ -2216,7 +1956,7 @@ country_event = {
                 planet_event = { id = crisis.2025 days = 2 }
             }
         }
-        else_if = {
+        else = {
             random_galaxy_planet = {
                 limit = { is_planet_class = pc_barren }
                 planet_event = { id = crisis.2025 days = 2  }
@@ -2237,7 +1977,7 @@ country_event = {
                 planet_event = { id = crisis.2026 days = 40 random = 10 }
             }
         }
-        else_if = {
+        else = {
             random_galaxy_planet = {
                 limit = { is_planet_class = pc_molten }
                 planet_event = { id = crisis.2026 days = 40 random = 10 }
@@ -2253,7 +1993,7 @@ country_event = {
                 planet_event = { id = crisis.2027 days = 60 random = 10 }
             }
         }
-        else_if = {
+        else = {
             random_galaxy_planet = {
                 limit = { is_planet_class = pc_gas_giant }
                 planet_event = { id = crisis.2027 days = 60 random = 10 }
@@ -2269,7 +2009,7 @@ country_event = {
                 planet_event = { id = crisis.2028 days = 80 random = 10 }
             }
         }
-        else_if = {
+        else = {
             random_galaxy_planet = {
                 limit = { is_planet_class = pc_toxic }
                 planet_event = { id = crisis.2028 days = 80 random = 10 }
@@ -2369,7 +2109,7 @@ country_event = {
             every_owned_planet = {
                 set_owner = event_target:AI_crisis
                 set_controller = event_target:AI_crisis
-                every_owned_pop = {
+                every_owned_pop_group = {
                     change_species = event_target:custodian_bot
                 }
                 while = {
@@ -2451,5 +2191,386 @@ country_event = {
 
     immediate = {
         country_event = { id = condan_events.151 }
+    }
+}
+
+
+# automated planet production completed situation
+planet_event = {
+    id = condan_events.200
+    hide_window = yes
+    is_triggered_only = yes
+    trigger = { exists = owner }
+    immediate = {
+        while = {
+            count = 2
+            create_army = {
+                owner = root.owner
+                type = condan_warform
+            }
+        }
+        while = {
+            count = 5
+            create_army = {
+                owner = root.owner
+                type = machine_assault_2
+            }
+        }
+        while = {
+            count = 10
+            create_army = {
+                owner = root.owner
+                type = machine_assault_1
+            }
+        }
+        create_army = {
+            owner = root.owner
+            type = condan_warform_def
+        }
+        create_fleet = {
+            effect = {
+                set_owner = root.owner
+                while = {
+                    count = 10
+                    create_ship = {
+                        name = random
+                        design = "NAME_condan_Euthanizer"
+                        graphical_culture = "ai_01"
+                    }
+                }
+                while = {
+                    count = 20
+                    create_ship = {
+                        name = random
+                        design = NAME_condan_Sterilizer
+                        graphical_culture = "ai_01"
+                    }
+                }
+                set_fleet_bombardment_stance = armageddon
+                if = {
+                    limit = {  root.owner = { has_crisis_level = crisis_condan_level_5} }
+                    create_ship = {
+                        name = random
+                        design = NAME_condan_Juggernaught
+                        graphical_culture = "ai_01"
+                    }
+                }
+                set_location = {
+                    target = root
+                    distance = 45
+                    angle = random
+                }
+            }
+        }
+        last_created_fleet = {
+            create_message = {
+                type = CONDAN_FLEET_READY
+                localization = CONDAN_FLEET_READY_MESSAGE
+                days = 20
+                target = this
+                variable = {
+                    type = name
+                    localization = PLANET
+                    scope = prev
+                }
+                variable = {
+                    type = name
+                    localization = FLEET
+                    scope = this
+                }
+            }
+        }
+
+        planet_event = { id = condan_events.201 days = 1 }
+    }
+}
+
+
+
+# start automated planet situation
+planet_event = {
+    id = condan_events.201
+    #noinspection ParadoxScriptUnresolvedExpression
+    title = condan_events.201.title
+    hide_window = yes
+    is_triggered_only = yes
+    trigger = { exists = owner }
+    immediate = {
+        # bug in 4.0 vanilla./  It does not refresh the building list on add_building
+        # so you need to wait a month after adding a building for it to appear in has_building
+        # force a validation immiediately gets around this.
+        validate_and_repair_planet_buildings_and_districts = yes
+        planet_event = { id = condan_events.204 days = 1 }
+    }
+}
+
+
+
+# automated world invaded successfully
+# Triggers country_event for the attacker upon victory (before controller is switched)
+# This = country, lead attacker
+# From = country, planet owner
+# FromFrom = planet
+# 'Attacker' is the side that "IsHostile" to the planet controller. For example: spawned monster armies are attackers, but if they win and the player attempts to retake the planet, the player is the attacker
+country_event = {
+    id = condan_events.202
+    hide_window = yes
+    is_triggered_only = yes
+    trigger = {
+        # has_global_flag = condan_in_play # left off to ensure they can always be destroyed
+        FromFrom = { has_planet_flag = condan_automated_factory }
+    }
+    immediate = {
+        FromFrom = {
+            every_planet_army = {
+                kill_leader = { show_notification = yes }
+                remove_army = yes
+            }
+            change_pc = pc_machine_broken
+            add_deposit = d_living_metal_deposit
+            add_deposit = d_minerals_10
+            add_deposit = d_alloys_5
+        }
+        create_message = {
+            type = CONDAN_PLANET_DESTROYED
+            localization = CONDAN_PLANET_DESTROYED_MESSAGE_invasion
+            days = 20
+            target = this
+            variable = {
+                type = name
+                localization = PLANET
+                scope = FromFrom
+            }
+        }
+        create_message = {
+            type = CONDAN_PLANET_DESTROYED
+            localization = CONDAN_PLANET_DESTROYED_MESSAGE_invasion
+            days = 20
+            target = From
+            variable = {
+                type = name
+                localization = PLANET
+                scope = FromFrom
+            }
+        }
+    }
+}
+
+# automated world bombarded successfully
+# Planet has taken damage from orbital bombardment - Damage is applied daily
+# This = Planet
+# From = Bombarder
+planet_event = {
+    id = condan_events.203
+    hide_window = yes
+    is_triggered_only = yes
+
+    trigger = {
+        #has_global_flag = condan_in_play # left off to ensure they can always be destroyed
+        has_planet_flag = condan_automated_factory
+        planet_devastation >= 100
+    }
+    immediate = {
+        create_message = {
+            type = CONDAN_PLANET_DESTROYED
+            localization = CONDAN_PLANET_DESTROYED_MESSAGE_bombardment
+            days = 20
+            target = From
+            variable = {
+                type = name
+                localization = PLANET
+                scope = this
+            }
+        }
+        create_message = {
+            type = CONDAN_PLANET_DESTROYED
+            localization = CONDAN_PLANET_DESTROYED_MESSAGE_bombardment
+            days = 20
+            target = owner
+            variable = {
+                type = name
+                localization = PLANET
+                scope = this
+            }
+        }
+        every_planet_army = {
+            kill_leader = { show_notification = yes }
+            remove_army = yes
+        }
+
+        change_pc = pc_machine_broken
+        add_deposit = d_living_metal_deposit
+        add_deposit = d_minerals_10
+        add_deposit = d_alloys_5
+        remove_planet_flag = condan_automated_factory
+    }
+}
+
+# start automated planet situation
+planet_event = {
+    id = condan_events.204
+    #noinspection ParadoxScriptUnresolvedExpression
+    title = condan_events.201.title
+    hide_window = yes
+    is_triggered_only = yes
+    trigger = { exists = owner }
+    immediate = {
+        owner = {
+            start_situation = {
+                type = condan_automated_planet_situation
+                target = root
+            }
+        }
+    }
+}
+
+
+# fired on 5 year pulse
+country_event = {
+    id = condan_events.220
+    hide_window = yes
+    is_triggered_only = yes
+
+    trigger = {
+        has_global_flag = condan_in_play
+        is_condan_empire = yes
+        any_country = {
+            OR = {
+                has_crisis_level = crisis_cosmogenesis_level_2
+                has_crisis_level = crisis_level_2
+            }
+            NOT = { has_country_flag = condan_declared_war_recently }
+            # check we are not at war with them already
+            NOT = { any_war = { any_war_participant = { is_condan_empire = yes } } }
+        }
+    }
+
+    ## stagger this one behind the OMG level 5 event.
+    immediate = {
+        country_event = { id = condan_events.221 days = 180 random = 100 }
+    }
+}
+
+country_event = {
+    id = condan_events.221
+    hide_window = yes
+    is_triggered_only = yes
+
+    trigger = {
+        has_global_flag = condan_in_play
+        is_condan_empire = yes
+        any_country = {
+            OR = {
+                has_crisis_level = crisis_cosmogenesis_level_2
+                has_crisis_level = crisis_level_2
+            }
+            NOT = { has_country_flag = condan_declared_war_recently }
+            # check we are not at war with them already
+            NOT = { any_war = { any_war_participant = { is_condan_empire = yes } } }
+        }
+    }
+
+    immediate = {
+        random_country = {
+            limit = {
+                OR = {
+                    has_crisis_level = crisis_cosmogenesis_level_2
+                    has_crisis_level = crisis_level_2
+                }
+                NOT = { has_country_flag = condan_declared_war_recently }
+                NOT = { any_war = { any_war_participant = { is_condan_empire = yes } } }
+            }
+            save_event_target_as = condan_war_target
+        }
+        set_timed_country_flag = { flag = condan_declared_war_recently years = 6 }
+        country_event = { id = condan_comms.140 }
+    }
+}
+
+# fired on yearly pulse - check if any empires are crisis level 5
+country_event = {
+    id = condan_events.230
+    hide_window = yes
+    is_triggered_only = yes
+
+    trigger = {
+        has_global_flag = condan_in_play
+        is_condan_empire = yes
+        any_country = {
+            OR = {
+                has_crisis_level = crisis_cosmogenesis_level_5
+                has_crisis_level = crisis_level_5
+            }
+            # check we are not at war with them already
+            NOT = { any_war = { any_war_participant = { is_condan_empire = yes } } }
+        }
+    }
+
+    immediate = {
+        random_country = {
+            limit = {
+                OR = {
+                    has_crisis_level = crisis_cosmogenesis_level_5
+                    has_crisis_level = crisis_level_5
+                }
+                NOT = { any_war = { any_war_participant = { is_condan_empire = yes } } }
+            }
+            save_event_target_as = condan_war_target
+        }
+        # stop the other event from declaring war as well
+        set_timed_country_flag = { flag = condan_declared_war_recently years = 6 }
+        country_event = { id = condan_comms.150 }
+    }
+}
+
+
+# Victory endgame checks
+#Fired by on country destroyed, check for victory.
+#This = destroyed country
+#From = optional, destroyer (country)
+country_event = {
+    id = condan_events.240
+    is_triggered_only = yes
+    hide_window = yes
+
+    trigger = { has_global_flag = condan_in_play }
+
+    immediate = { country_event = { id = condan_events.250 days = 1 } }
+}
+
+# fired by war ended
+# Root = Loser
+# From = Main Winner
+country_event = {
+    id = condan_events.241
+    is_triggered_only = yes
+    hide_window = yes
+
+    trigger = { has_global_flag = condan_in_play }
+
+    immediate = { country_event = { id = condan_events.250 days = 1 } }
+}
+
+
+country_event = {
+    id = condan_events.250
+    is_triggered_only = yes
+    hide_window = yes
+    fire_only_once = yes
+
+    trigger = {
+        has_global_flag = condan_in_play
+        any_country = {
+            has_crisis_level = crisis_condan_level_2
+            won_the_game = yes
+        }
+    }
+
+    immediate = {
+        random_country = {
+            limit = { is_condan_empire = yes }
+            set_timed_country_flag = { flag = condan_won_the_game days = 2 }
+            country_event = { id = condan_comms.130 }
+        }
     }
 }
