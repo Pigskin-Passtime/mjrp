@@ -1,0 +1,754 @@
+namespace = condan_synth
+
+
+
+# DIGITIZATION FINAL EVENT
+# Fired by: situation on_progress_complete
+situation_event = { # Digitization - Final hidden event
+    id = condan_synth.2
+    hide_window = yes
+    is_triggered_only = yes
+
+    immediate = {
+        set_situation_flag = digitization_ongoing
+        set_situation_flag = digitization_final
+        owner = {
+            capital_scope = {
+                remove_modifier = synth_mass_demonstrations
+            }
+        }
+        situation_event = { id = synth.3 } # Run digitization again to change remaining people
+        situation_event = { id = condan_synth.4 days = 1 }
+        target = { country_event = { id = condan_transform.030 days = 1 } } # Real final event
+    }
+}
+
+# Fired by: event
+situation_event = { # Final event
+    id = condan_synth.4
+    hide_window = yes
+    is_triggered_only = yes
+    situation = this
+
+    immediate = { destroy_situation = this }
+}
+
+
+situation_event = { # Final event
+    id = condan_synth.10
+    hide_window = yes
+    is_triggered_only = yes
+    situation = this
+
+    immediate = {
+        owner = {
+            capital_scope = {
+                remove_modifier = synth_mass_demonstrations
+            }
+        }
+        situation_event = { id = condan_synth.4 days = 1 }
+        target = { country_event = { id = condan_transform.030 days = 1 } } # Real final event
+    }
+}
+
+
+
+# Fired by: situation on_monthly
+situation_event = { # Stage 4 - Start event
+    id = condan_synth.105
+    title = "condan_synth.105.name"
+    desc = {
+        trigger = { owner = { is_individual_machine = no } }
+        text =  "condan_synth.105.desc"
+    }
+    desc = {
+        trigger = { owner = { is_individual_machine = yes } }
+        text =  "condan_synth.105.desc.individual-machine"
+    }
+    picture = GFX_evt_robot_assembly_plant
+    show_sound = event_administrative_work
+    situation = this
+    is_triggered_only = yes
+
+    trigger = {
+        OR = {
+            AND = {
+                has_situation_flag = synth_105_fire
+                situation_progress >= 100
+            }
+            owner = {
+                is_individual_machine = yes
+            }
+        }
+    }
+
+    immediate = {
+        set_situation_flag = situation_digitization_pause
+    }
+
+    option = {
+        name = "condan_synth.105.rapid-assembly"
+        custom_tooltip = "condan_synth.105.rapid-assembly.tt"
+        hidden_effect = {
+            set_situation_flag = condan_species_rapid_replicator
+            owner = {
+                set_country_flag = condan_species_rapid_replicator
+            }
+        }
+    }
+
+    option = {
+        name = "condan_synth.105.adaptive"
+        custom_tooltip = "condan_synth.105.adaptive.tt"
+        hidden_effect = {
+            set_situation_flag = condan_species_adaptive_frames
+            owner = {
+                set_country_flag = condan_species_adaptive_frames
+            }
+        }
+    }
+
+    option = {
+        name = "condan_synth.105.none"
+    }
+
+
+    after = {
+        set_situation_flag = synth_5_stage_1_fire
+        remove_situation_flag = synth_105_fire
+        remove_situation_flag = situation_digitization_pause
+    }
+}
+
+
+# DIGITIZATION STAGE 2
+# Fired by: situation stage on_first_enter
+situation_event = { # Stage 2 - Start event
+    id = condan_synth.200
+    title = "synth.200.name"
+    desc = {
+        trigger = { owner = { is_individual_machine = no } }
+        text =  "condan_synth.200.desc"
+    }
+    desc = {
+        trigger = { owner = { is_individual_machine = yes } }
+        text =  "condan_synth.200.desc.individual-machine"
+    }
+    picture = GFX_evt_tradedeal
+    show_sound = event_mystic_reveal
+    situation = this
+    is_triggered_only = yes
+
+    immediate = {
+        set_situation_flag = situation_digitization_pause
+        hidden_effect = {
+            owner = {
+                if = {
+                    limit = { is_spiritualist = yes }
+                    change_variable = { which = synth_opposition value = 1 }
+                }
+                if = {
+                    limit = { has_ethic = ethic_fanatic_spiritualist }
+                    change_variable = { which = synth_opposition value = 2 }
+                }
+                if = {
+                    limit = { is_pacifist = yes }
+                    change_variable = { which = synth_opposition value = 1 }
+                }
+                if = {
+                    limit = { has_ethic = ethic_fanatic_pacifist }
+                    change_variable = { which = synth_opposition value = 2 }
+                }
+                if = {
+                    limit = { is_xenophile = yes }
+                    change_variable = { which = synth_opposition value = 1 }
+                }
+                if = {
+                    limit = { has_ethic = ethic_fanatic_xenophile }
+                    change_variable = { which = synth_opposition value = 2 }
+                }
+            }
+        }
+    }
+
+    option = {
+        name = "synth.200.a"
+        custom_tooltip = "synth.200.a.tt"
+        owner = {
+            add_modifier = {
+                modifier = synth_opposition_truth
+                days = 180
+            }
+            hidden_effect = {
+                change_variable = {
+                    which = synth_opposition
+                    value = 1
+                }
+            }
+        }
+        hidden_effect = {
+            situation_event = { id = condan_synth.205 days = 180 random = 30 }
+        }
+    }
+    option = {
+        name = "synth.200.b"
+        custom_tooltip = "synth.200.b.tt"
+        owner = {
+            add_modifier = {
+                modifier = synth_opposition_deception
+                days = 180
+            }
+            hidden_effect = {
+                change_variable = {
+                    which = synth_opposition
+                    value = 2
+                }
+            }
+        }
+        hidden_effect = {
+            situation_event = { id = condan_synth.205 days = 180 random = 30 }
+        }
+    }
+    option = {
+        name = "synth.200.c"
+        custom_tooltip = "synth.200.c.tt"
+        trigger = {
+            owner = { is_materialist = no }
+        }
+        owner = {
+            hidden_effect = {
+                change_variable = {
+                    which = synth_opposition
+                    value = 3
+                }
+            }
+        }
+        hidden_effect = {
+            situation_event = { id = condan_synth.205 days = 180 random = 30 }
+        }
+    }
+    option = {
+        name = "synth.200.c.material"
+        custom_tooltip = "synth.200.c.material.tt"
+        trigger = {
+            owner = { is_materialist = yes }
+        }
+        owner = {
+            add_monthly_resource_mult = {
+                resource = physics_research
+                value = @tier2researchreward
+                min = @tier2researchmin
+                max = @tier2researchmax
+            }
+        }
+        owner = {
+            hidden_effect = {
+                change_variable = {
+                    which = synth_opposition
+                    value = 2
+                }
+            }
+        }
+        hidden_effect = {
+            situation_event = { id = condan_synth.205 days = 180 random = 30 }
+        }
+    }
+
+    after = {
+        remove_situation_flag = situation_digitization_pause
+    }
+}
+
+
+
+# Fired by: situation on_monthly
+situation_event = {
+    id = condan_synth.205
+    title = "synth.205.name"
+    desc = {
+        trigger = { owner = { is_individual_machine = no } }
+        text =  "synth.205.desc"
+    }
+    desc = {
+        trigger = { owner = { is_individual_machine = yes } }
+        text =  "condan_synth.205.desc.individual-machine"
+    }
+    picture = GFX_evt_civil_action
+    show_sound = event_public_unrest
+    situation = this
+    is_triggered_only = yes
+
+    trigger = {
+        NOT = { has_situation_flag = synth_205_happened }
+        situation_progress >= 350
+    }
+
+    immediate = {
+        set_situation_flag = situation_digitization_pause
+        set_situation_flag = synth_205_happened
+    }
+
+    option = {
+        name = "synth.205.a.regular"
+        trigger = { owner = { condan_ethic_dislikes_condan = no } }
+        owner = {
+            add_modifier = {
+                modifier = synth_fund_heritage_sites
+                years = 1
+            }
+        }
+    }
+    option = {
+        name = "synth.205.a.memorialist"
+        trigger = {
+            owner = { is_memorialist_empire = yes }
+        }
+        owner = {
+            add_modifier = {
+                modifier = synth_preserve_the_past
+                years = 1
+            }
+        }
+    }
+    option = {
+        name = "synth.205.b"
+        set_situation_flag = synth_resistance
+        owner.capital_scope = {
+            add_modifier = { modifier = synth_mass_demonstrations }
+        }
+    }
+
+    after = {
+        set_situation_flag = synth_5_stage_2_fire
+        remove_situation_flag = situation_digitization_pause
+    }
+}
+
+
+# DIGITIZATION STAGE 3
+# Fired by: situation stage on_first_enter
+situation_event = { # Stage 3 - Start event
+    id = condan_synth.300
+    title = "synth.300.name"
+    desc = {
+        trigger = { owner = { is_individual_machine = no } }
+        text =  "condan_synth.300.desc"
+    }
+    desc = {
+        trigger = { owner = { is_individual_machine = yes } }
+        text =  "condan_synth.300.desc.individual-machine"
+    }
+
+    picture = {
+        picture = GFX_evt_civil_action
+        trigger = { has_situation_flag = synth_resistance }
+    }
+    picture = {
+        picture = GFX_evt_robot_assembly_plant
+        trigger = { NOT = { has_situation_flag = synth_resistance } }
+    }
+
+    show_sound = event_synthetic_evolution
+    situation = this
+    is_triggered_only = yes
+
+    immediate = {
+        set_situation_flag = situation_digitization_pause
+        owner = {
+            set_country_flag = synthetic_empire
+            set_country_flag = synth_assembly_stopped
+        }
+    }
+
+    option = {
+        name = "condan_synth.300.a"
+        trigger = {
+            NOT = { has_situation_flag = synth_resistance }
+        }
+        custom_tooltip = "condan_synth.300.a.heritage.tt"
+        # When this flag is set, an event is called each month in the situation to digitize pops
+        set_situation_flag = digitization_ongoing
+        hidden_effect = {
+            owner = {
+                while = {
+                    count = value:num_synth_opposition
+                    random_owned_pop_group = {
+                        limit = { is_same_species = owner.species }
+                        kill_single_pop = yes
+                    }
+                }
+                capital_scope = {
+                    add_deposit = d_old_towns
+                    set_planet_flag = old_towns
+                }
+            }
+            situation_event = { id = synth.305 days = 360 random = 30 }
+        }
+    }
+    option = {
+        name = "condan_synth.300.a"
+        trigger = {
+            has_situation_flag = synth_resistance
+            owner = { is_individual_machine = no }
+        }
+        custom_tooltip = "condan_synth.300.a.resistance.tt"
+        # When this flag is set, an event is called each month in the situation to digitize pops
+        set_situation_flag = digitization_ongoing
+        hidden_effect = {
+            owner = {
+                while = {
+                    count = value:num_synth_opposition
+                    random_owned_pop_group = {
+                        limit = { is_same_species = owner.species }
+                        kill_single_pop = yes
+                    }
+                }
+                capital_scope = {
+                    add_deposit = d_biological_enclaves
+                    set_planet_flag = biological_enclaves
+                }
+            }
+            situation_event = { id = condan_synth.310 days = 360 random = 30 }
+        }
+    }
+
+    option = {
+        name = "condan_synth.300.a"
+        trigger = {
+            has_situation_flag = synth_resistance
+            owner = { is_individual_machine = yes }
+        }
+        custom_tooltip = "condan_synth.300.a.resistance.machine.tt"
+        # When this flag is set, an event is called each month in the situation to digitize pops
+        set_situation_flag = digitization_ongoing
+        hidden_effect = {
+            owner = {
+                while = {
+                    count = value:num_synth_opposition
+                    random_owned_pop_group = {
+                        limit = { is_same_species = owner.species }
+                        kill_single_pop = yes
+                    }
+                }
+                capital_scope = {
+                    add_deposit = d_condan_individualist_enclaves
+                    set_planet_flag = biological_enclaves
+                }
+            }
+            situation_event = { id = condan_synth.310 days = 360 random = 30 }
+        }
+    }
+
+    after = {
+        remove_situation_flag = situation_digitization_pause
+    }
+}
+
+
+# Fired by: situation on_monthly
+situation_event = { # Synthetic Tourism
+    id = condan_synth.305
+    title = "synth.305.name"
+    desc = "condan_synth.305.desc"
+    picture = GFX_evt_obelisk_tourists
+    show_sound = event_vote
+    situation = this
+    is_triggered_only = yes
+
+    trigger = {
+        NOT = { has_situation_flag = synth_305_happened }
+        situation_progress >= 600
+        owner.capital_scope = {
+            any_deposit = {
+                is_deposit_type = d_old_towns
+            }
+        }
+    }
+
+    immediate = {
+        set_situation_flag = situation_digitization_pause
+        set_situation_flag = synth_305_happened
+    }
+
+    option = {
+        name = synth.305.a
+        owner = {
+            add_monthly_resource_mult = {
+                resource = unity
+                value = @tier3unityreward
+                min = @tier3unitymin
+                max = @tier3unitymax
+            }
+        }
+    }
+    option = {
+        name = synth.305.b
+        trigger = {
+            owner = {
+                has_corporate_government = yes
+            }
+        }
+        owner = {
+            add_monthly_resource_mult = {
+                resource = energy
+                value = @tier3materialreward
+                min = @tier3materialmin
+                max = @tier3materialmax
+            }
+        }
+    }
+    option = {
+        name = synth.305.c
+        owner = {
+            add_monthly_resource_mult = {
+                resource = society_research
+                value = @tier3researchreward
+                min = @tier3researchmin
+                max = @tier3researchmax
+            }
+        }
+    }
+    option = {
+        name = synth.305.d
+        trigger = {
+            owner = {
+                is_xenophile = yes
+            }
+        }
+        owner = {
+            add_modifier = {
+                modifier = synth_cultural_exchange
+                months = 12
+            }
+        }
+    }
+
+    after = {
+        set_situation_flag = synth_5_stage_3_fire
+        remove_situation_flag = situation_digitization_pause
+    }
+}
+
+
+# Fired by: situation on_monthly
+situation_event = { # The Resistance
+    id = condan_synth.310
+    title = "synth.310.name"
+    desc = "synth.310.desc"
+    picture = GFX_evt_night_raid
+    show_sound = event_burning_city
+    situation = this
+    is_triggered_only = yes
+
+    trigger = {
+        NOT = { has_situation_flag = synth_310_happened }
+        situation_progress >= 600
+        owner.capital_scope = {
+            any_deposit = {
+                is_deposit_type = d_biological_enclaves
+            }
+        }
+    }
+
+    immediate = {
+        set_situation_flag = situation_digitization_pause
+        set_situation_flag = synth_310_happened
+    }
+
+    option = {
+        name = synth.310.a
+        custom_tooltip = "condan_synth.310.a.tt"
+        set_timed_situation_flag = {
+            flag = synth_resistance_fight
+            months = 12
+        }
+        owner = {
+            capital_scope = {
+                remove_modifier = synth_mass_demonstrations
+            }
+            add_modifier = {
+                modifier = synth_resistance_fight
+                months = 12
+            }
+        }
+    }
+    option = {
+        name = synth.310.b
+        custom_tooltip = "synth.310.b.tt"
+        set_timed_situation_flag = {
+            flag = synth_resistance_diplomacy
+            months = 24
+        }
+        owner = {
+            add_modifier = {
+                modifier = synth_resistance_diplomacy
+                months = 24
+            }
+        }
+    }
+    option = {
+        name = condan_synth.310.bad.murder
+        custom_tooltip = "condan_synth.310.bad.murder.tooltip"
+        set_situation_flag = synth_resistance_murder
+        hidden_effect = {
+            owner = {
+                capital_scope = {
+                    remove_modifier = synth_mass_demonstrations
+                }
+                every_owned_pop_group = {
+                    limit = { condan_ethic_dislikes_condan = yes }
+                    kill_pop_group = { pop_group = this percentage = 1 }
+                }
+            }
+            add_situation_progress = 100
+        }
+    }
+
+    after = {
+        set_situation_flag = synth_5_stage_3_fire
+        remove_situation_flag = situation_digitization_pause
+    }
+}
+
+situation_event = { # Stage 4 - Start event
+    id = condan_synth.400
+    title = "condan_synth.400.name"
+    desc = "condan_synth.400.desc"
+    picture = GFX_evt_physics_research
+    show_sound = event_administrative_work
+    situation = this
+    is_triggered_only = yes
+
+    immediate = {
+        set_situation_flag = situation_digitization_pause
+        owner = {
+            set_variable = { which = condan_growth_node_bonus value = 0 }
+            set_variable = { which = condan_regulatory_node_bonus value = 0 }
+            set_variable = { which = condan_cognitive_node_bonus value = 0 }
+            set_variable = { which = condan_legion_node_bonus value = 0 }
+        }
+    }
+
+    option = {
+        name = "condan_synth.400.growth"
+        custom_tooltip = "condan_synth.400.growth.tt"
+        hidden_effect = {  owner = { set_variable = { which = condan_growth_node_bonus value = 3 } } }
+    }
+
+    option = {
+        name = "condan_synth.400.regulatory"
+        custom_tooltip = "condan_synth.400.regulatory.tt"
+        hidden_effect = {  owner = { set_variable = { which = condan_regulatory_node_bonus value = 3 } } }
+    }
+
+    option = {
+        name = "condan_synth.400.cognitive"
+        custom_tooltip = "condan_synth.400.cognitive.tt"
+        hidden_effect = {  owner = { set_variable = { which = condan_cognitive_node_bonus value = 3 } } }
+    }
+
+    option = {
+        name = "condan_synth.400.legion"
+        custom_tooltip = "condan_synth.400.legion.tt"
+        hidden_effect = { owner = { set_variable = { which = condan_legion_node_bonus value = 3 } } }
+}
+
+    after = {
+        remove_situation_flag = situation_digitization_pause
+        owner = {
+            remove_country_flag = synth_assembly_stopped
+            remove_country_flag = identity_designer_converter
+        }
+    }
+}
+
+
+
+
+# end of the machine transformation
+situation_event = { # Digitization - Final hidden event
+    id = condan_synth.4020
+    hide_window = yes
+    is_triggered_only = yes
+
+    immediate = {
+        situation_event = { id = condan_synth.4 days = 1 }
+        target = { country_event = { id = condan_transform.030 days = 1 } } # Real final event
+    }
+}
+
+situation_event = {
+    id = condan_synth.4100
+    title = "condan_synth.4100.name"
+    desc = "condan_synth.4100.desc"
+    picture = GFX_evt_machine_sapience
+    show_sound = event_laboratory_sound
+    situation = this
+    is_triggered_only = yes
+
+    immediate = {
+        set_situation_flag = situation_transformation_pause
+    }
+
+    option = {
+        name = OK
+    }
+
+    after = {
+        hidden_effect = { add_situation_progress = 250 }
+        remove_situation_flag = situation_transformation_pause
+    }
+}
+
+
+
+situation_event = { # Stage 3 - Start event - Nodes
+    id = condan_synth.4400
+    title = "condan_synth.4400.name"
+    desc = "condan_synth.4400.desc"
+    picture = GFX_evt_physics_research
+    show_sound = event_administrative_work
+    situation = this
+    is_triggered_only = yes
+
+    immediate = {
+        set_situation_flag = situation_transformation_pause
+        owner = {
+            set_variable = { which = condan_growth_node_bonus value = 1 }
+            set_variable = { which = condan_regulatory_node_bonus value = 1 }
+            set_variable = { which = condan_cognitive_node_bonus value = 1 }
+            set_variable = { which = condan_legion_node_bonus value = 1 }
+        }
+    }
+
+    option = {
+        name = "condan_synth.400.growth"
+        custom_tooltip = "condan_synth.400.growth.tt"
+        hidden_effect = {  owner = { set_variable = { which = condan_growth_node_bonus value = 3 } } }
+    }
+
+    option = {
+        name = "condan_synth.400.regulatory"
+        custom_tooltip = "condan_synth.400.regulatory.tt"
+        hidden_effect = {  owner = { set_variable = { which = condan_regulatory_node_bonus value = 3 } } }
+    }
+
+    option = {
+        name = "condan_synth.400.cognitive"
+        custom_tooltip = "condan_synth.400.cognitive.tt"
+        hidden_effect = {  owner = { set_variable = { which = condan_cognitive_node_bonus value = 3 } } }
+    }
+
+    option = {
+        name = "condan_synth.400.legion"
+        custom_tooltip = "condan_synth.400.legion.tt"
+        hidden_effect = { owner = { set_variable = { which = condan_legion_node_bonus value = 3 } } }
+    }
+
+    after = {
+        remove_situation_flag = situation_transformation_pause
+    }
+}
+
+
+

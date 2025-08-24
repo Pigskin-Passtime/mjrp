@@ -1,0 +1,142 @@
+# condan_deposits.txt  Contingency Processing Core 1A6F
+# Stellaris 2024 ModJam
+# Contributors: Draconas
+
+
+d_condan_metal_2 = {
+    icon = "d_mining_tunnels"
+    is_for_colonizable = yes
+    category = deposit_cat_rare
+
+    potential = { always = no }
+
+    resources = {
+        category = orbital_research_deposits
+        produces = {
+            trigger = {
+                exists = owner
+                owner = { has_technology = tech_mine_living_metal }
+            }
+            sr_living_metal = 2
+        }
+    }
+
+    drop_weight = {
+        weight = 0
+    }
+}
+
+d_condan_ruins = {
+    icon = d_metal_boneyard
+    time = 200
+    is_for_colonizable = yes
+    category = deposit_cat_blockers
+
+    potential = { always = no }
+
+    planet_modifier = {
+        planet_max_districts_add = -1
+    }
+
+    resources = {
+        category = deposit_blockers
+        cost = {
+            energy = 200
+            minerals = 200
+        }
+    }
+}
+
+d_condan_embezzlement = {
+    icon = d_glitchy_matrix
+    time = 365
+    is_for_colonizable = yes
+    category = deposit_cat_blockers
+
+    potential = { always = no }
+
+    planet_modifier = {
+        planet_jobs_alloys_produces_mult = -0.05
+        planet_jobs_upkeep_mult = 0.05
+        planet_districts_upkeep_mult = 0.05
+        planet_buildings_upkeep_mult = 0.05
+    }
+
+    on_cleared = {
+        hidden_effect = {
+            if = {
+                limit = {
+                    exists = owner
+                    owner = {
+                        is_condan_empire = yes # non condan empires just clear them
+                        NOT = { has_crisis_level = crisis_condan_level_2 } #condan that has passed level 2 clears them.
+                    }
+                }
+                owner = { country_event = { id = condan_events.111 } }
+            }
+        }
+    }
+
+    resources = {
+        category = deposit_blockers
+        cost = { unity = 1000 }
+    }
+}
+
+
+
+# Biological Enclaves created during the Digitization situation.
+# It assumes the existence of event_target:synthspecies@root.owner and
+# the variable owner.synth_opposition in value:num_synth_opposition.
+d_condan_individualist_enclaves = {
+    icon = d_metal_boneyard
+    time = 360
+
+    is_for_colonizable = yes
+    category = deposit_cat_blockers
+
+    potential = { always = no }
+
+    planet_modifier = {
+        planet_max_districts_add = -1
+    }
+
+    triggered_planet_modifier = {
+        planet_crime_add = 5
+        planet_stability_add = -5
+        mult = value:num_synth_opposition
+    }
+
+    can_be_cleared = {
+        hidden_trigger = {
+            exists = owner
+            owner = { has_country_flag = condan_terminator }
+            exists = event_target:synthspecies@root.owner
+        }
+        custom_tooltip = condan_must_finish_situation_tt
+    }
+
+    on_cleared = {
+        hidden_effect = {
+            root = {
+                while = {
+                    count = value:num_synth_opposition
+                    create_pop = {
+                        species = event_target:synthspecies@root.owner
+                    }
+                }
+            }
+        }
+        custom_tooltip = d_biological_enclaves_custom_tooltip
+    }
+
+    inline_script = deposits/ai_weight_pop_creating_blocker
+
+    resources = {
+        category = deposit_blockers
+        cost = {
+            alloys = 1000
+            mult = value:num_synth_opposition
+        }
+    }
+}

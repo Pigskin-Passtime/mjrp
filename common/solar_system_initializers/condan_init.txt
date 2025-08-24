@@ -1,0 +1,371 @@
+# condan_init.txt  Contingency Processing Core 1A6F
+# Stellaris 2024 ModJam
+# Contributors: Draconas
+
+condan_system = {
+    class = "sc_pulsar"
+    name = "NAME_CONDAN_SYSTEM"
+    asteroid_belt = {
+        type = rocky_asteroid_belt
+        radius = 185
+    }
+    asteroid_belt = {
+        type = icy_asteroid_belt
+        radius = 335
+    }
+
+    usage = misc_system_init
+    usage_odds = 0
+    max_instances = 1
+
+    flags = { condan_system crisis_spawn_exclude }
+
+    planet = {
+        class = star
+        orbit_distance = 0
+
+        init_effect = {
+            prevent_anomaly = yes
+            clear_deposits = yes
+            set_deposit = d_energy_5
+
+            create_ambient_object = {
+                type = "unused_large_equipment_1"
+                scale = 0.5
+                base_angle_towards = root
+                effect = {
+                    set_location = {
+                        target = prev
+                        distance = 15
+                        angle = random
+                    }
+                }
+            }
+            create_ambient_object = {
+                type = "unused_large_equipment_2"
+                scale = 0.75
+                base_angle_towards = root
+                effect = {
+                    set_location = {
+                        target = prev
+                        distance = 30
+                        angle = random
+                    }
+                }
+            }
+
+            create_ambient_object = {
+                type = "large_debris_object"
+                entity_offset_height = { min = -0 max = -25 }
+                location = this
+            }
+            last_created_ambient_object = {
+                set_location = {
+                    target = prev
+                    distance = 15
+                    angle = random
+                }
+            }
+            create_ambient_object = {
+                type = "medium_debris_01_object"
+                entity_offset_height = { min = -0 max = -25 }
+                location = this
+            }
+            last_created_ambient_object = {
+                set_location = {
+                    target = prev
+                    distance = 15
+                    angle = random
+                }
+            }
+        }
+    }
+    planet = {
+        orbit_distance = 135
+        class = pc_machine
+        orbit_angle = 50
+        size = 25
+        name = "NAME_CONDAN_PLANET"
+        flags = { condan_planet forbid_guillis_planet_modifiers }
+        init_effect = {
+            prevent_anomaly = yes
+            clear_deposits = yes
+            while = {
+                count = 15
+                add_deposit = d_condan_ruins
+            }
+            add_modifier = { modifier = "condan_wrecked_planet" days = -1 }
+            add_modifier = { modifier = "condan_orbital_debris" days = -1 }
+            add_modifier = { modifier = "unstable_tectonics" days = -1 }
+            save_global_event_target_as = condan_planet
+
+            create_ambient_object = {
+                type = "large_debris_object"
+                entity_offset_height = { min = -0 max = -25 }
+                location = this
+            }
+            last_created_ambient_object = {
+                set_location = {
+                    target = prev
+                    distance = 15
+                    angle = random
+                }
+            }
+            create_ambient_object = {
+                type = "medium_debris_01_object"
+                entity_offset_height = { min = -0 max = -25 }
+                location = this
+            }
+            last_created_ambient_object = {
+                set_location = {
+                    target = prev
+                    distance = 15
+                    angle = random
+                }
+            }
+            create_ambient_object = {
+                type = "medium_debris_02_object"
+                entity_offset_height = { min = -0 max = -25 }
+                location = this
+            }
+            last_created_ambient_object = {
+                set_location = {
+                    target = prev
+                    distance = 15
+                    angle = random
+                }
+            }
+            create_ambient_object = {
+                type = "small_debris_object"
+                entity_offset_height = { min = -0 max = -25 }
+                location = this
+            }
+            last_created_ambient_object = {
+                set_location = {
+                    target = prev
+                    distance = 15
+                    angle = random
+                }
+            }
+
+            create_ambient_object = {
+                type = "unused_large_equipment_1"
+                scale = 0.5
+                base_angle_towards = root
+                effect = {
+                    set_location = {
+                        target = prev
+                        distance = 5
+                        angle = random
+                    }
+                }
+            }
+            create_ambient_object = {
+                type = "unused_large_equipment_2"
+                scale = 0.75
+                base_angle_towards = root
+                effect = {
+                    set_location = {
+                        target = prev
+                        distance = 25
+                        angle = random
+                    }
+                }
+            }
+        }
+        change_orbit = 15
+        moon = {
+            count = 1
+            orbit_angle = 0
+            orbit_distance = 0
+            size = 8
+            class = pc_machine_broken
+            name = "NAME_CONDAN_MOON_0"
+            flags = { condan_moon condan_moon_0 }
+            init_effect = {
+                clear_deposits = yes
+                prevent_anomaly = yes
+                add_deposit = d_minerals_5
+                add_deposit = d_alloys_2
+
+                create_ambient_object = {
+                    type = "large_debris_object"
+                    entity_offset_height = { min = -0 max = -25 }
+                    location = this
+                }
+                last_created_ambient_object = {
+                    set_location = {
+                        target = prev
+                        distance = 15
+                        angle = random
+                    }
+                }
+                create_ambient_object = {
+                    type = "medium_debris_01_object"
+                    entity_offset_height = { min = -0 max = -25 }
+                    location = this
+                }
+                last_created_ambient_object = {
+                    set_location = {
+                        target = prev
+                        distance = 15
+                        angle = random
+                    }
+                }
+            }
+        }
+        moon = {
+            count = 1
+            orbit_angle = 120
+            orbit_distance = 0
+            size = 8
+            class = pc_machine_broken
+            flags = { condan_moon condan_moon_1 }
+            name = "NAME_CONDAN_MOON_1"
+            init_effect = {
+                clear_deposits = yes
+                prevent_anomaly = yes
+                add_deposit = d_minerals_5
+                add_deposit = d_alloys_2
+
+                create_ambient_object = {
+                    type = "large_debris_object"
+                    entity_offset_height = { min = -0 max = -25 }
+                    location = this
+                }
+                last_created_ambient_object = {
+                    set_location = {
+                        target = prev
+                        distance = 15
+                        angle = random
+                    }
+                }
+                create_ambient_object = {
+                    type = "medium_debris_01_object"
+                    entity_offset_height = { min = -0 max = -25 }
+                    location = this
+                }
+                last_created_ambient_object = {
+                    set_location = {
+                        target = prev
+                        distance = 15
+                        angle = random
+                    }
+                }
+            }
+        }
+        moon = {
+            count = 1
+            orbit_angle = 120
+            orbit_distance = 0
+            size = 8
+            class = pc_machine_broken
+            name = "NAME_CONDAN_MOON_2"
+            flags = { condan_moon condan_moon_2 }
+            init_effect = {
+                clear_deposits = yes
+                prevent_anomaly = yes
+                add_deposit = d_minerals_5
+                add_deposit = d_alloys_2
+
+                create_ambient_object = {
+                    type = "large_debris_object"
+                    entity_offset_height = { min = -0 max = -25 }
+                    location = this
+                }
+                last_created_ambient_object = {
+                    set_location = {
+                        target = prev
+                        distance = 15
+                        angle = random
+                    }
+                }
+                create_ambient_object = {
+                    type = "medium_debris_01_object"
+                    entity_offset_height = { min = -0 max = -25 }
+                    location = this
+                }
+                last_created_ambient_object = {
+                    set_location = {
+                        target = prev
+                        distance = 15
+                        angle = random
+                    }
+                }
+            }
+        }
+    }
+
+    change_orbit = 50
+    planet = {
+        class = pc_asteroid
+        orbit_distance = 0
+        orbit_angle = { min = 33 max = 90 }
+        init_effect = {
+            prevent_anomaly = yes
+            clear_deposits = yes
+            set_deposit = d_volatile_motes_2
+        }
+    }
+    planet = {
+        count = 3
+        class = pc_asteroid
+        orbit_distance = 0
+        orbit_angle = { min = 33 max = 90 }
+        init_effect = {
+            prevent_anomaly = yes
+            clear_deposits = yes
+            set_deposit = d_minerals_2
+        }
+    }
+
+    planet = {
+        class = pc_gas_giant
+        orbit_distance = 75
+        orbit_angle = { min = 35 max = 325 }
+        init_effect = {
+            prevent_anomaly = yes
+            clear_deposits = yes
+            set_deposit = d_exotic_gases_2
+
+        }
+        moon = {
+            orbit_angle = 60
+            orbit_distance = 15
+            size = { min = 10 max = 16 }
+            class = pc_molten
+            init_effect = {
+                prevent_anomaly = yes
+                clear_deposits = yes
+                set_deposit = d_minerals_2
+            }
+        }
+    }
+
+    change_orbit = 75
+    planet = {
+        class = pc_ice_asteroid
+        orbit_distance = 0
+        orbit_angle = { min = 33 max = 90 }
+        init_effect = {
+            prevent_anomaly = yes
+            clear_deposits = yes
+            set_deposit = d_rare_crystals_2
+        }
+    }
+    planet = {
+        count = 4
+        class = pc_ice_asteroid
+        orbit_distance = 0
+        orbit_angle = { min = 33 max = 90 }
+        init_effect = {
+            prevent_anomaly = yes
+            clear_deposits = yes
+            set_deposit = d_minerals_2
+        }
+    }
+
+    init_effect = {
+
+    }
+}

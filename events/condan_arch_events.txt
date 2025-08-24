@@ -1,0 +1,157 @@
+# condan_arch_events.txt Contingency Processing Core 1A6F
+# Stellaris 2024 ModJam
+# Contributors: Draconas
+namespace = condan_arch
+
+
+fleet_event = {
+    id = condan_arch.10
+    title = condan_arch.10.name
+    desc = condan_arch.10.desc
+    picture = GFX_evt_ai_planet
+    show_sound = event_default
+    location = from
+
+    archaeology = yes
+    is_triggered_only = yes
+
+    immediate = {
+    }
+
+    option = {
+        name = condan_arch.10.option.a
+        owner = {
+            add_monthly_resource_mult = {
+                resource = alloys
+                value = @tier2materialreward
+                min = @tier2materialmin
+                max = @tier2materialmax
+            }
+            add_monthly_resource_mult = {
+                resource = minerals
+                value = @tier3materialreward
+                min = @tier3materialmin
+                max = @tier3materialmax
+            }
+        }
+    }
+}
+
+
+fleet_event = {
+    id = condan_arch.20
+    title = condan_arch.20.name
+    desc = condan_arch.20.desc
+    picture = GFX_evt_ai_planet
+    show_sound = event_machinery
+    location = from
+
+    archaeology = yes
+    is_triggered_only = yes
+
+    immediate = {
+    }
+
+    option = {
+        name = condan_arch.20.option.a
+        owner = {
+            add_monthly_resource_mult = {
+                resource = engineering_research
+                value = @tier3researchreward
+                min = @tier3researchmin
+                max = @tier3researchmax
+            }
+        }
+    }
+}
+
+
+fleet_event = {
+    id = condan_arch.30
+    title = condan_arch.30.name
+    desc = condan_arch.30.desc
+    picture = GFX_evt_ai_planet
+    show_sound = event_machinery
+    location = from
+
+    archaeology = yes
+    is_triggered_only = yes
+
+    immediate = {
+    }
+
+    option = {
+        trigger = {
+            owner = {
+                NOR = {
+                    has_policy_flag = robots_outlawed
+                    has_policy_flag = ai_outlawed
+                }
+                is_hive_empire = no
+            }
+        }
+        name = condan_arch.30.option.a
+        owner = {
+            add_monthly_resource_mult = {
+                resource = engineering_research
+                value = @tier3researchreward
+                min = @tier3researchmin
+                max = @tier3researchmax
+            }
+            country_event = { id = condan_comms.001 }
+            hidden_effect = { set_global_flag = condan_in_play }
+        }
+    }
+
+    option = {
+        trigger = {
+            owner = {
+                NOR = {
+                    is_hive_empire = yes
+                    has_policy_flag = ai_outlawed
+                    has_policy_flag = robots_outlawed
+                    has_ethic = ethic_fanatic_spiritualist
+                    has_ethic = ethic_spiritualist
+                }
+            }
+        }
+        name = condan_arch.30.option.b
+        custom_tooltip = condan_arch.30.option.b.tooltip
+        owner = {
+            add_monthly_resource_mult = {
+                resource = unity
+                value = @tier3unityreward
+                min = @tier3unitymin
+                max = @tier3unitymax
+            }
+        }
+    }
+
+    option = {
+        trigger = {
+            owner = {
+                OR = {
+                    is_hive_empire = yes
+                    has_policy_flag = ai_outlawed
+                    has_policy_flag = robots_outlawed
+                    has_ethic = ethic_fanatic_spiritualist
+                    has_ethic = ethic_spiritualist
+                }
+            }
+        }
+        name = condan_arch.30.option.c
+        custom_tooltip = condan_arch.30.option.b.tooltip
+        owner = {
+            add_monthly_resource_mult = {
+                resource = unity
+                value = @tier3unityreward
+                min = @tier3unitymin
+                max = @tier3unitymax
+            }
+        }
+    }
+
+    after = {
+        from = { expire_site_event = condan_arch.30 }
+    }
+}

@@ -1,0 +1,33 @@
+namespace = action
+
+# Planet is turned into tomb world by Armageddon bombing stance (bombarder)
+country_event = {
+    id = action.83
+    title = "action.82.name"
+    picture = GFX_evt_nuclear_explosion
+    desc = action.83.desc
+    show_sound = event_super_explosion
+    location = from
+
+    is_triggered_only = yes
+
+    immediate = {
+        if = {
+            limit = {
+                has_ascension_perk = ap_become_the_crisis
+            }
+            complete_crisis_objective = crisobj_destroy_worlds
+        }
+        if = {
+            limit = {
+                has_ascension_perk = ap_condan
+            }
+            complete_crisis_objective = crisobj_condan_destroy_worlds
+        }
+    }
+
+    option = {
+        name = EXCELLENT
+        custom_tooltip = bombed_to_tomb_world
+    }
+}

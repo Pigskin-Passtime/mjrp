@@ -1,0 +1,122 @@
+crisobj_condan_destroy_empires = {
+	reward = {
+		base = 500
+		complex_trigger_modifier = { #subtract 25 for each playable country that exists
+			trigger = count_playable_country
+			mode = subtract
+			mult = 25
+		}
+		round_to = 50 	#we want a solid number
+		min = 100 		#and we don't want less than 100
+	}
+}
+
+crisobj_condan_destroy_crisis_empires = {
+	reward = {
+		base = 500
+		complex_trigger_modifier = { #subtract 25 for each playable country that exists
+			trigger = count_playable_country
+			mode = subtract
+			mult = 25
+		}
+		round_to = 50 	#we want a solid number
+		min = 100 		#and we don't want less than 100
+		mult = 2
+	}
+}
+
+crisobj_condan_destroy_enemy_ships = {
+	reward = {
+		base = 3000
+		divide = trigger:num_galaxy_systems 	#on huge, this is 3. On smallest, it is 15
+		round = yes 							#we don't want 3.124 menace
+		min = 3									#just in case
+	}
+}
+
+crisobj_condan_destroy_crisis_ships = {
+	reward = {
+		base = 3000
+		divide = trigger:num_galaxy_systems 	#on huge, this is 3. On smallest, it is 15
+		round = yes 							#we don't want 3.124 menace
+		min = 3									#just in case
+		mult = 2
+	}
+}
+
+# each of the unique crsis ships (star eater, horizon needle) is worth a lot
+crisobj_condan_destroy_super_crisis_ships = {
+	reward = {
+		base = 3000
+		divide = trigger:num_galaxy_systems 	#on huge, this is 3. On smallest, it is 15
+		round = yes 							#we don't want 3.124 menace
+		min = 3									#just in case
+		mult = 10
+	}
+}
+
+crisobj_condan_destroy_starbases = {
+	reward = {
+		base = 3000
+		divide = trigger:num_galaxy_systems 	#on huge, this is 3. On smallest, it is 15
+		round = yes 							#we don't want 3.124 menace
+		min = 3									#just in case
+	}
+}
+
+crisobj_condan_purge_pops = {
+	reward = {
+		base = 3000
+		divide = trigger:num_galaxy_systems 	#on huge, this is 3. On smallest, it is 15
+		complex_trigger_modifier = { 			#fewer worlds => more menace from purging
+			trigger = check_galaxy_setup_value
+			parameters = { setting = habitable_worlds_scale }
+			mode = divide
+		}
+		round = yes 							#we don't want 3.124 menace
+		min = 3									#just in case
+	}
+}
+
+crisobj_condan_destroy_worlds = {
+	reward = {
+		base = 100000
+		divide = trigger:num_galaxy_systems 	#on huge, this is 100. On smallest, it is 500
+		complex_trigger_modifier = { 			#fewer worlds => more menace from destroying one
+			trigger = check_galaxy_setup_value
+			parameters = { setting = habitable_worlds_scale }
+			mode = divide
+		}
+		round_to = 50 								#we don't want 127.5 menace
+		min = 100									#just in case
+	}
+}
+
+crisobj_condan_conquer_worlds = {
+	reward = {
+		base = 150000
+		divide = trigger:num_galaxy_systems 	#on huge, this is 150. On smallest, it is 750
+		complex_trigger_modifier = { 			#fewer worlds => more menace from taking one
+			trigger = check_galaxy_setup_value
+			parameters = { setting = habitable_worlds_scale }
+			mode = divide
+		}
+		round_to = 50 								#we don't want 127.5 menace
+		min = 150									#just in case
+	}
+}
+
+crisobj_condan_destroy_lathe = {
+	reward = {
+		base = 100000
+		divide = trigger:num_galaxy_systems 	#on huge, this is 100. On smallest, it is 500
+		complex_trigger_modifier = { 			#fewer worlds => more menace from destroying one
+			trigger = check_galaxy_setup_value
+			parameters = { setting = habitable_worlds_scale }
+			mode = divide
+		}
+		round_to = 50 								#we don't want 127.5 menace
+		min = 100									#just in case
+		mult = 2
+	}
+}

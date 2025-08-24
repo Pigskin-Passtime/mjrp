@@ -1,0 +1,221 @@
+# condan_triggers.txt  Contingency Processing Core 1A6F
+# Stellaris 2024 ModJam
+# Contributors: Draconas
+
+
+#
+# MODJAM 2024 REQUIRED
+#
+
+# HARD GAME REQUIREMENTS
+condan_allowed_hard_requirements = {
+    host_has_dlc = "Synthetic Dawn Story Pack"
+    host_has_dlc = "The Machine Age"
+}
+
+# This is assumed to be in country scope
+condan_trigger = {
+    condan_allowed_hard_requirements = yes
+    # just doesn't work for hives
+    is_hive_empire = no
+}
+
+#
+# End MODJAM 2024 REQUIRED
+#
+
+
+
+is_condan_empire = {
+    has_country_flag = condan_owner
+}
+
+is_condan_contingency_empire = {
+    is_condan_empire = yes
+    has_country_flag = condan_has_become_contingency
+}
+
+
+# country scope
+condan_has_no_ascension_path = {
+    is_synthetic_empire = no
+    NOR = {
+        # Has Cybernetic Ascension
+        has_ascension_perk = ap_the_flesh_is_weak
+        has_ascension_perk = ap_organo_machine_interfacing
+        # Has Genetic Ascension
+        has_ascension_perk = ap_engineered_evolution
+        # Has Psionic Ascension
+        has_ascension_perk = ap_mind_over_matter
+
+        # synths
+        has_ascension_perk = ap_synthetic_age
+        has_ascension_perk = ap_synthetic_evolution
+    }
+}
+
+# country scope
+condan_has_non_synth_ascension_path = {
+    is_synthetic_empire = no
+    OR = {
+        # Has Cybernetic Ascension
+        has_ascension_perk = ap_the_flesh_is_weak
+        has_ascension_perk = ap_organo_machine_interfacing
+        # Has Genetic Ascension
+        has_ascension_perk = ap_engineered_evolution
+        # Has Psionic Ascension
+        has_ascension_perk = ap_mind_over_matter
+    }
+}
+
+# country scope
+condan_has_synth_ap_missing_tech = {
+    is_synthetic_empire = no
+    has_ascension_perk = ap_synthetic_evolution
+    NOT = { has_technology = tech_synthetic_leaders}
+}
+
+# country scope
+condan_has_synth_ap_missing_tradition = {
+    is_synthetic_empire = no
+    has_ascension_perk = ap_synthetic_evolution
+    has_technology = tech_synthetic_leaders
+    NOT = { has_tradition = tr_synthetics_synthetic_age}
+}
+
+# country scope
+condan_can_afford_recruit_army_project = {
+    resource_stockpile_compare = { resource = sr_living_metal value >= 300 }
+    resource_stockpile_compare = { resource = alloys value >= 750 }
+    resource_stockpile_compare = { resource = minerals value >= 1000 }
+}
+
+# scope condan country
+condan_should_give_relic = {
+    check_variable = { which = condan_power value > 10 }
+}
+
+#scope country that may own the world.
+condan_owns_world = {
+    exists = event_target:condan_planet
+    event_target:condan_planet = {
+        exists = owner
+        owner =  { is_same_value = prevprev }
+    }
+}
+
+#scope country that may own the world.
+condan_owns_world_with_error = {
+    custom_tooltip_fail = {
+        text = condan_trigger_fail_must_own_planet
+        condan_owns_world = yes
+    }
+}
+
+#planet
+condan_is_new_colony = {
+    OR = {
+        has_building = building_colony_shelter
+        has_building = building_deployment_post
+    }
+}
+
+#planet
+condan_is_weird_planet = {
+    OR = {
+        has_building = building_resort_capital
+        has_building = building_slave_capital
+    }
+}
+
+#planet
+condan_can_be_embezzlement_target = {
+    condan_is_new_colony = no
+    condan_is_weird_planet = no
+}
+
+# scope country
+condan_is_condan_unhappy = {
+    exists = event_target:condan_country
+    event_target:condan_country = { has_country_flag = condan_unhappy}
+}
+
+condan_is_condan_powerful = {
+    exists = event_target:condan_country
+    event_target:condan_country = { check_variable = { which = condan_power value > 100 } }
+}
+
+# country
+condan_is_condan_unhappy_full_check = {
+    OR = {
+        condan_is_condan_unhappy = yes
+        has_crisis_level = crisis_level_3
+        has_crisis_level = crisis_cosmogenesis_level_3
+        AND = {
+            end_game_years_passed > 0
+            NOT = { has_ascension_perk = ap_condan }
+        }
+    }
+}
+
+#country
+condan_ethic_likes_condan = {
+    OR = {
+        is_materialist = yes
+        is_xenophobe = yes
+        is_militarist = yes
+    }
+}
+
+#country
+conan_ethic_really_likes_condan = {
+    OR = {
+        has_ethic = ethic_fanatic_materialist
+        has_ethic = ethic_fanatic_xenophobe
+        has_ethic = ethic_fanatic_militarist
+    }
+}
+
+#country
+condan_ethic_dislikes_condan = {
+    OR = {
+        is_spiritualist = yes
+        is_xenophile = yes
+        is_pacifist = yes
+    }
+}
+
+#country
+condan_is_non_terminator = {
+    is_synthetic_empire = yes
+    NOT = { has_civic = civic_machine_terminator }
+}
+
+# you made condan your leader, and then took crisis anyway
+#country
+condan_is_player_very_naughty = {
+    has_civic = civic_machine_terminator
+    has_crisis_level = crisis_level_5
+    ROOT = {
+        ruler = { has_leader_flag = condan }
+    }
+}
+
+# country
+condan_enable_leader_switch = {
+    OR = {
+        NOT = { exists = event_target:condan_leader }
+        event_target:condan_leader = {
+            is_ruler = no
+            NOT = { has_trait = $TRAIT$ }
+        }
+    }
+}
+
+# country
+condan_empire_is_player_crisis = {
+    OR = {
+        has_ascension_perk = ap_cosmogenesis
+        has_ascension_perk = ap_become_the_crisis
+    }
+}

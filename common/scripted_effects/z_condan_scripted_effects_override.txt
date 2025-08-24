@@ -1,0 +1,67 @@
+
+spawn_lathe_cracker_effect = {
+    create_ambient_object = {
+        location = this
+        type = habitat_cracker_object
+        play_animation_once = yes
+        duration = 5
+
+        use_3d_location = yes
+        base_angle_towards = star
+        entity_face_object = star
+
+        entity_offset = { min = 0 max = 0 }
+
+        entity_scale_to_size = yes
+        scale = 0.10
+    }
+    save_event_target_as = target_lathe
+    solar_system = {
+        spawn_megastructure = {
+            type = cosmogenesis_world_ruined
+            owner = this.owner
+            coords_from = PREV
+        }
+        random_system_planet = {
+            limit = {
+                has_planet_flag = has_cosmogenesis_world
+            }
+            remove_planet_flag = has_cosmogenesis_world
+            remove_planet_flag = has_megastructure
+        }
+    }
+    remove_planet = yes
+    random_country = {
+        limit = {
+            has_country_flag = cosmogenesis_world_built
+            NOT = {
+                any_owned_planet = {
+                    is_planet_class = pc_cosmogenesis_world
+                }
+            }
+        }
+        remove_country_flag = cosmogenesis_world_built
+    }
+
+    # gonnna make an approximation here that if condan was here and being the crisis that they blew up the lathe
+    if = {
+        limit = {
+            has_global_flag = condan_in_play
+            solar_system = {
+                any_fleet_in_system = {
+                    exists = owner
+                    owner = {
+                        is_condan_empire = yes
+                    }
+                }
+            }
+        }
+        random_country = {
+            limit = {
+                is_condan_empire = yes
+                has_ascension_perk = ap_condan
+            }
+            complete_crisis_objective = crisobj_condan_destroy_lathe
+        }
+    }
+}
