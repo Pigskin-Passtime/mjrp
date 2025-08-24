@@ -1,21 +1,6 @@
 # this = leader
 can_leader_get_council_trait = {
-	OR = {
-		NAND = {
-			exists = owner
-			owner = { is_gestalt = yes }
-			is_councilor = no
-		}
-		has_leader_flag = restored_node
-	}
-	if = {
-		limit = {
-			exists = owner
-		}
-		owner = {
-			is_crisis_faction = no
-		}
-	}
+	can_leader_get_council_trait_trigger = yes
 	NOT = {
 		has_leader_flag = no_council_traits				# mod jam overwrite
 	}
@@ -33,11 +18,13 @@ can_leader_get_normal_trait = {
 			}
 		}
 		AND = {
+			has_global_flag = game_started
 			is_ruler = yes
 			exists = owner
 			owner = {
 				is_autocracy = yes
 			}
+			NOT = { has_leader_flag = ignore_autocracy_ruler_trait_restriction }
 		}
 		is_heir = yes
 	}
