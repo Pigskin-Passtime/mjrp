@@ -1,6 +1,5 @@
 # Stellaris Modjam 2020 - Caretaker
 # AlphaAsh, NHunter, Rough, GwenBlanketKnight
-
 ### remove caretaker core [planet scope]
 caretaker_core_clean_up = {
 	remove_deposit = d_caretaker_core
@@ -65,22 +64,38 @@ caretaker_set_mood_to_angry = {
 caretaker_set_current_mood = {
 	# caretaker is pleased
 	if = {
-		limit = { owner = { caretaker_mood_is_pleased_check = yes } }
+		limit = {
+			owner = {
+				caretaker_mood_is_pleased_check = yes
+			}
+		}
 		caretaker_set_mood_to_pleased = yes
 	}
 	# caretaker is content
 	if = {
-		limit = { owner = { caretaker_mood_is_content_check = yes } }
+		limit = {
+			owner = {
+				caretaker_mood_is_content_check = yes
+			}
+		}
 		caretaker_set_mood_to_content = yes
 	}
 	# caretaker is annoyed
 	if = {
-		limit = { owner = { caretaker_mood_is_annoyed_check = yes } }
+		limit = {
+			owner = {
+				caretaker_mood_is_annoyed_check = yes
+			}
+		}
 		caretaker_set_mood_to_annoyed = yes
 	}
 	# caretaker is angry
 	if = {
-		limit = { owner = { caretaker_mood_is_angry_check = yes } }
+		limit = {
+			owner = {
+				caretaker_mood_is_angry_check = yes
+			}
+		}
 		caretaker_set_mood_to_angry = yes
 	}
 }
@@ -88,28 +103,36 @@ caretaker_set_current_mood = {
 ### Request cooldown depending on current mood [empire scope]
 caretaker_set_request_cooldown = {
 	if = {
-		limit = { caretaker_mood_is_pleased_check = yes }
+		limit = {
+			caretaker_mood_is_pleased_check = yes
+		}
 		set_timed_country_flag = {
 			flag = caretaker_resource_request_cooldown
 			days = 180
 		}
 	}
 	else_if = {
-		limit = { caretaker_mood_is_content_check = yes }
+		limit = {
+			caretaker_mood_is_content_check = yes
+		}
 		set_timed_country_flag = {
 			flag = caretaker_resource_request_cooldown
 			days = 360
 		}
 	}
 	else_if = {
-		limit = { caretaker_mood_is_annoyed_check = yes }
+		limit = {
+			caretaker_mood_is_annoyed_check = yes
+		}
 		set_timed_country_flag = {
 			flag = caretaker_resource_request_cooldown
 			days = 720
 		}
 	}
 	else_if = {
-		limit = { caretaker_mood_is_angry_check = yes }
+		limit = {
+			caretaker_mood_is_angry_check = yes
+		}
 		set_timed_country_flag = {
 			flag = caretaker_resource_request_cooldown
 			days = 1800
@@ -127,12 +150,18 @@ caretaker_set_request_cooldown = {
 caretaker_update_mood_migration_treaties = {
 	if = {
 		limit = {
-			NOT = { has_country_flag = caretaker_migration_treaties_check_cooldown }
-			NOT = { has_valid_civic = civic_love_the_alien }
+			NOT = {
+				has_country_flag = caretaker_migration_treaties_check_cooldown
+			}
+			NOT = {
+				has_valid_civic = civic_love_the_alien
+			}
 		}
 		if = {
 			limit = {
-				NOT = { has_country_flag = caretaker_migration_treaties_first_check }
+				NOT = {
+					has_country_flag = caretaker_migration_treaties_first_check
+				}
 			}
 			set_variable = {
 				which = migration_treaties
@@ -140,7 +169,6 @@ caretaker_update_mood_migration_treaties = {
 			}
 			set_country_flag = caretaker_migration_treaties_first_check
 		}
-
 		# count number of countries we have currently have migration treaties with
 		set_variable = {
 			which = updated_migration_treaties
@@ -148,11 +176,13 @@ caretaker_update_mood_migration_treaties = {
 		}
 		# Ash - Limit is never reached - re-worked
 		every_country = {
-            limit = {
+			limit = {
 				is_country_type = default
-                NOT = { is_country = root }
-                has_migration_access = root
-            }
+				NOT = {
+					is_country = root
+				}
+				has_migration_access = root
+			}
 			# log = "Found a migration treaty"
 			root = {
 				change_variable = {
@@ -161,23 +191,24 @@ caretaker_update_mood_migration_treaties = {
 				}
 			}
 		}
-
 		# give +1 mood for each old migration treaty and -1 for each new migration treaty
-        change_variable = {
-            which = caretaker_mood
-            value = migration_treaties
-        }
-        subtract_variable = {
-            which = caretaker_mood
-            value = updated_migration_treaties
+		change_variable = {
+			which = caretaker_mood
+			value = migration_treaties
+		}
+		subtract_variable = {
+			which = caretaker_mood
+			value = updated_migration_treaties
 		}
 		# save new count for migration treaties
-        set_variable = {
-            which = migration_treaties
-            value = updated_migration_treaties
-        }
-
-		set_timed_country_flag = { flag = caretaker_migration_treaties_check_cooldown days = 179 }
+		set_variable = {
+			which = migration_treaties
+			value = updated_migration_treaties
+		}
+		set_timed_country_flag = {
+			flag = caretaker_migration_treaties_check_cooldown
+			days = 179
+		}
 	}
 }
 
@@ -201,18 +232,23 @@ create_pci_species_mod = {
 		}
 		save_event_target_as = changing_species
 	}
-
 	owner = {
-		every_owned_pop = {
-			limit = { is_exact_same_species = event_target:changing_species }
+		every_owned_pop_group = {
+			limit = {
+				is_exact_same_species = event_target:changing_species
+			}
 			change_species = last_created_species
 		}
 		every_owned_leader = {
-			limit = { is_exact_same_species = event_target:changing_species }
+			limit = {
+				is_exact_same_species = event_target:changing_species
+			}
 			change_species = last_created_species
 		}
 		every_pool_leader = {
-			limit = { is_exact_same_species = event_target:changing_species }
+			limit = {
+				is_exact_same_species = event_target:changing_species
+			}
 			change_species = last_created_species
 		}
 		every_owned_army = {
@@ -236,102 +272,258 @@ create_pci_species_mod = {
 # PARENT_EMPIRE = empire from which Caretaker is seceding
 caretaker_seceded_empire_setup_technology = {
 	# give all technology that source country has and ensure the Caretaker has other key techs even if parent country didn't
-	copy_techs_from = { target = $PARENT_EMPIRE$ }
+	copy_techs_from = {
+		target = $PARENT_EMPIRE$
+	}
 	# ship sizes
 	if = {
-		limit = { NOT = { has_technology = tech_destroyers } }
-		give_technology = { tech = tech_destroyers message = no }
+		limit = {
+			NOT = {
+				has_technology = tech_destroyers
+			}
+		}
+		give_technology = {
+			tech = tech_destroyers
+			message = no
+		}
 	}
 	if = {
-		limit = { NOT = { has_technology = tech_cruisers } }
-		give_technology = { tech = tech_cruisers message = no }
+		limit = {
+			NOT = {
+				has_technology = tech_cruisers
+			}
+		}
+		give_technology = {
+			tech = tech_cruisers
+			message = no
+		}
 	}
 	if = {
-		limit = { NOT = { has_technology = tech_battleships } }
-		give_technology = { tech = tech_battleships message = no }
+		limit = {
+			NOT = {
+				has_technology = tech_battleships
+			}
+		}
+		give_technology = {
+			tech = tech_battleships
+			message = no
+		}
 	}
 	# starbase sizes
 	if = {
-		limit = { NOT = { has_technology = tech_starbase_3 } }
-		give_technology = { tech = tech_starbase_3 message = no }
+		limit = {
+			NOT = {
+				has_technology = tech_starbase_3
+			}
+		}
+		give_technology = {
+			tech = tech_starbase_3
+			message = no
+		}
 	}
 	if = {
-		limit = { NOT = { has_technology = tech_starbase_4 } }
-		give_technology = { tech = tech_starbase_4 message = no }
+		limit = {
+			NOT = {
+				has_technology = tech_starbase_4
+			}
+		}
+		give_technology = {
+			tech = tech_starbase_4
+			message = no
+		}
 	}
 	if = {
-		limit = { NOT = { has_technology = tech_starbase_5 } }
-		give_technology = { tech = tech_starbase_5 message = no }
+		limit = {
+			NOT = {
+				has_technology = tech_starbase_5
+			}
+		}
+		give_technology = {
+			tech = tech_starbase_5
+			message = no
+		}
 	}
 	# habitats
 	if = {
-		limit = { NOT = { has_technology = tech_habitat_1 } }
-		give_technology = { tech = tech_habitat_1 message = no }
+		limit = {
+			NOT = {
+				has_technology = tech_habitat_1
+			}
+		}
+		give_technology = {
+			tech = tech_habitat_1
+			message = no
+		}
 	}
 	if = {
-		limit = { NOT = { has_technology = tech_habitat_2 } }
-		give_technology = { tech = tech_habitat_2 message = no }
+		limit = {
+			NOT = {
+				has_technology = tech_habitat_2
+			}
+		}
+		give_technology = {
+			tech = tech_habitat_2
+			message = no
+		}
 	}
 	# metallurgy
 	if = {
-		limit = { NOT = { has_technology = tech_alloys_1 } }
-		give_technology = { tech = tech_alloys_1 message = no }
+		limit = {
+			NOT = {
+				has_technology = tech_alloys_1
+			}
+		}
+		give_technology = {
+			tech = tech_alloys_1
+			message = no
+		}
 	}
 	if = {
-		limit = { NOT = { has_technology = tech_alloys_2 } }
-		give_technology = { tech = tech_alloys_2 message = no }
+		limit = {
+			NOT = {
+				has_technology = tech_alloys_2
+			}
+		}
+		give_technology = {
+			tech = tech_alloys_2
+			message = no
+		}
 	}
 	if = {
-		limit = { NOT = { has_technology = tech_advanced_metallurgy_1 } }
-		give_technology = { tech = tech_advanced_metallurgy_1 message = no }
+		limit = {
+			NOT = {
+				has_technology = tech_advanced_metallurgy_1
+			}
+		}
+		give_technology = {
+			tech = tech_advanced_metallurgy_1
+			message = no
+		}
 	}
 	if = {
-		limit = { NOT = { has_technology = tech_advanced_metallurgy_2 } }
-		give_technology = { tech = tech_advanced_metallurgy_2 message = no }
+		limit = {
+			NOT = {
+				has_technology = tech_advanced_metallurgy_2
+			}
+		}
+		give_technology = {
+			tech = tech_advanced_metallurgy_2
+			message = no
+		}
 	}
 	# consumer goods
 	if = {
-		limit = { NOT = { has_technology = tech_luxuries_1 } }
-		give_technology = { tech = tech_luxuries_1 message = no }
+		limit = {
+			NOT = {
+				has_technology = tech_luxuries_1
+			}
+		}
+		give_technology = {
+			tech = tech_luxuries_1
+			message = no
+		}
 	}
 	if = {
-		limit = { NOT = { has_technology = tech_luxuries_2 } }
-		give_technology = { tech = tech_luxuries_2 message = no }
+		limit = {
+			NOT = {
+				has_technology = tech_luxuries_2
+			}
+		}
+		give_technology = {
+			tech = tech_luxuries_2
+			message = no
+		}
 	}
 	# hydroponics
 	if = {
-		limit = { NOT = { has_technology = tech_hydroponics } }
-		give_technology = { tech = tech_hydroponics message = no }
+		limit = {
+			NOT = {
+				has_technology = tech_hydroponics
+			}
+		}
+		give_technology = {
+			tech = tech_hydroponics
+			message = no
+		}
 	}
 	# strategic resources
 	if = {
-		limit = { NOT = { has_technology = tech_mine_rare_crystals } }
-		give_technology = { tech = tech_mine_rare_crystals message = no }
+		limit = {
+			NOT = {
+				has_technology = tech_mine_rare_crystals
+			}
+		}
+		give_technology = {
+			tech = tech_mine_rare_crystals
+			message = no
+		}
 	}
 	if = {
-		limit = { NOT = { has_technology = tech_mine_exotic_gases } }
-		give_technology = { tech = tech_mine_exotic_gases message = no }
+		limit = {
+			NOT = {
+				has_technology = tech_mine_exotic_gases
+			}
+		}
+		give_technology = {
+			tech = tech_mine_exotic_gases
+			message = no
+		}
 	}
 	if = {
-		limit = { NOT = { has_technology = tech_mine_volatile_motes } }
-		give_technology = { tech = tech_mine_volatile_motes message = no }
+		limit = {
+			NOT = {
+				has_technology = tech_mine_volatile_motes
+			}
+		}
+		give_technology = {
+			tech = tech_mine_volatile_motes
+			message = no
+		}
 	}
 	if = {
-		limit = { NOT = { has_technology = tech_rare_crystals } }
-		give_technology = { tech = tech_rare_crystals message = no }
+		limit = {
+			NOT = {
+				has_technology = tech_rare_crystals
+			}
+		}
+		give_technology = {
+			tech = tech_rare_crystals
+			message = no
+		}
 	}
 	if = {
-		limit = { NOT = { has_technology = tech_exotic_gases } }
-		give_technology = { tech = tech_exotic_gases message = no }
+		limit = {
+			NOT = {
+				has_technology = tech_exotic_gases
+			}
+		}
+		give_technology = {
+			tech = tech_exotic_gases
+			message = no
+		}
 	}
 	if = {
-		limit = { NOT = { has_technology = tech_volatile_motes } }
-		give_technology = { tech = tech_volatile_motes message = no }
+		limit = {
+			NOT = {
+				has_technology = tech_volatile_motes
+			}
+		}
+		give_technology = {
+			tech = tech_volatile_motes
+			message = no
+		}
 	}
 	# organic paradise
 	if = {
-		limit = { NOT = { has_technology = tech_paradise_dome } }
-		give_technology = { tech = tech_paradise_dome message = no }
+		limit = {
+			NOT = {
+				has_technology = tech_paradise_dome
+			}
+		}
+		give_technology = {
+			tech = tech_paradise_dome
+			message = no
+		}
 	}
 }
 
@@ -341,31 +533,38 @@ caretaker_seceded_empire_setup_technology = {
 # <!!!> this effect should run before 'caretaker_seceded_empire_setup_capital' to avoid ruined buildins
 caretaker_seceded_empire_setup_initial_population = {
 	# kill all robots - we'll recreate them as $CARETAKER_SPECIES$ drones
-	every_owned_pop = {
+	every_owned_pop_group = {
 		limit = {
 			OR = {
 				has_trait = trait_machine_unit
 				has_trait = trait_mechanical
 			}
 		}
-		kill_pop = yes
+		kill_all_pop = yes
+		
 	}
 	# remove extra biological pops
 	while = {
-		limit = { num_pops > 40 }
-		random_owned_pop = {
-			kill_pop = yes
+		limit = {
+			pop_amount > 400
 		}
+		kill_single_pop = yes
 	}
 	# if we don't have enough bio pops, add them
 	while = {
-		limit = { num_pops < 40 }
-		create_pop = { species = $PARENT_EMPIRE_SPECIES$ }
+		limit = {
+			pop_amount < 400
+		}
+		create_pop = {
+			species = $PARENT_EMPIRE_SPECIES$
+		}
 	}
 	# add RS drones
 	while = {
 		count = 70
-		create_pop = { species = $CARETAKER_SPECIES$ }
+		create_pop = {
+			species = $CARETAKER_SPECIES$
+		}
 	}
 }
 
@@ -373,76 +572,145 @@ caretaker_seceded_empire_setup_initial_population = {
 caretaker_seceded_empire_setup_capital = {
 	# grow planet if it is too small
 	while = {
-		limit = { planet_size < 20 }
+		limit = {
+			planet_size < 20
+		}
 		change_planet_size = 1
 	}
-	# rebuild planet : clear current deposits and buildings
-	clear_deposits = yes
-	remove_all_buildings = yes
-	# rebuild planet : add new resource deposits
-	add_deposit = d_hot_springs
-	add_deposit = d_geothermal_vent
-	add_deposit = d_underwater_vent
-	add_deposit = d_tempestous_mountain
-	add_deposit = d_mineral_fields
-	add_deposit = d_mineral_fields
-	add_deposit = d_ore_rich_caverns
-	add_deposit = d_fungal_caves
-	add_deposit = d_fertile_lands
-	# rebuild planet : add new buildings
-	add_building = building_machine_system_capital
-	add_building = building_machine_assembly_plant
-	add_building = building_foundry_2
-	add_building = building_organic_sanctuary
-	add_building = building_organic_sanctuary
-	add_building = building_organic_sanctuary
-	add_building = building_energy_grid
-	add_building = building_sentinel_posts
-	add_building = building_food_processing_facility
-	add_building = building_chemical_plant
-	add_building = building_mineral_purification_plant
-	add_building = building_crystal_plant
-	add_building = building_refinery
-	add_building = building_factory_1
+	# This will break every update, trust me
+	# # rebuild planet : clear current deposits and buildings
+	# clear_deposits = yes
+	# remove_all_buildings = yes
+	# # rebuild planet : add new resource deposits
+	# add_deposit = d_hot_springs
+	# add_deposit = d_geothermal_vent
+	# add_deposit = d_underwater_vent
+	# add_deposit = d_tempestous_mountain
+	# add_deposit = d_mineral_fields
+	# add_deposit = d_mineral_fields
+	# add_deposit = d_ore_rich_caverns
+	# add_deposit = d_fungal_caves
+	# add_deposit = d_fertile_lands
+	# # rebuild planet : add new buildings
+	# add_building = building_machine_system_capital
+	# add_building = building_machine_assembly_plant
+	# add_building = building_foundry_2
+	# add_building = building_organic_sanctuary
+	# add_building = building_organic_sanctuary
+	# add_building = building_organic_sanctuary
+	# add_building = building_energy_grid
+	# add_building = building_sentinel_posts
+	# add_building = building_food_processing_facility
+	# add_building = building_chemical_plant
+	# add_building = building_mineral_purification_plant
+	# add_building = building_crystal_plant
+	# add_building = building_refinery
+	# add_building = building_factory_1
 }
 
 ### setups the starbase for the seceded Caretaker's capital [starbase scope]
 caretaker_seceded_empire_setup_starbase = {
 	# since people might be playing with NSC / Starbases Extended, make sure that we're not downgrading starbase
 	if = {
-		limit = { has_starbase_size < starbase_citadel }
+		limit = {
+			has_starbase_size < starbase_citadel
+		}
 		set_starbase_size = starbase_citadel
 		# setup citadel
-		set_starbase_module = { slot = 1 module = shipyard }
-		set_starbase_module = { slot = 2 module = shipyard }
-		set_starbase_module = { slot = 3 module = anchorage }
-		set_starbase_module = { slot = 4 module = anchorage }
-		set_starbase_module = { slot = 5 module = gun_battery }
-		set_starbase_module = { slot = 6 module = gun_battery }
-		set_starbase_building = { slot = 1 building = crew_quarters }
-		set_starbase_building = { slot = 2 building = fleet_academy }
-		set_starbase_building = { slot = 3 building = titan_yards }
-		set_starbase_building = { slot = 4 building = command_center }
+		set_starbase_module = {
+			slot = 1
+			module = shipyard
+		}
+		set_starbase_module = {
+			slot = 2
+			module = shipyard
+		}
+		set_starbase_module = {
+			slot = 3
+			module = anchorage
+		}
+		set_starbase_module = {
+			slot = 4
+			module = anchorage
+		}
+		set_starbase_module = {
+			slot = 5
+			module = gun_battery
+		}
+		set_starbase_module = {
+			slot = 6
+			module = gun_battery
+		}
+		set_starbase_building = {
+			slot = 1
+			building = crew_quarters
+		}
+		set_starbase_building = {
+			slot = 2
+			building = fleet_academy
+		}
+		set_starbase_building = {
+			slot = 3
+			building = titan_yards
+		}
+		set_starbase_building = {
+			slot = 4
+			building = command_center
+		}
 	}
 	# make sure all necessary components are there
 	else = {
 		if = {
-			limit = { NOT = { has_starbase_module = shipyard } }
-			set_starbase_module = { slot = 1 module = shipyard }
-			set_starbase_module = { slot = 2 module = shipyard }
+			limit = {
+				NOT = {
+					has_starbase_module = shipyard
+				}
+			}
+			set_starbase_module = {
+				slot = 1
+				module = shipyard
+			}
+			set_starbase_module = {
+				slot = 2
+				module = shipyard
+			}
 		}
 		if = {
-			limit = { NOT = { has_starbase_module = anchorage } }
-			set_starbase_module = { slot = 3 module = anchorage }
-			set_starbase_module = { slot = 4 module = anchorage }
+			limit = {
+				NOT = {
+					has_starbase_module = anchorage
+				}
+			}
+			set_starbase_module = {
+				slot = 3
+				module = anchorage
+			}
+			set_starbase_module = {
+				slot = 4
+				module = anchorage
+			}
 		}
 		if = {
-			limit = { NOT = { has_starbase_building = crew_quarters } }
-			set_starbase_building = { slot = 1 building = crew_quarters }
+			limit = {
+				NOT = {
+					has_starbase_building = crew_quarters
+				}
+			}
+			set_starbase_building = {
+				slot = 1
+				building = crew_quarters
+			}
 		}
 		if = {
-			limit = { NOT = { has_starbase_building = fleet_academy } }
-			set_starbase_building = { slot = 2 building = fleet_academy }
+			limit = {
+				NOT = {
+					has_starbase_building = fleet_academy
+				}
+			}
+			set_starbase_building = {
+				slot = 2
+				building = fleet_academy
+			}
 		}
 	}
 }
@@ -490,7 +758,6 @@ caretaker_seceded_empire_create_starting_fleet = {
 					prefix = no
 				}
 			}
-
 			set_location = $FLEET_TARGET$
 		}
 	}
@@ -499,42 +766,49 @@ caretaker_seceded_empire_create_starting_fleet = {
 ### removes caretaker deposits/modifiers and 'takes away' some pops [planet scope]
 caretaker_secession_planets_clean_up = {
 	if = {
-		limit = { caretaker_presence_on_planet = yes }
+		limit = {
+			caretaker_presence_on_planet = yes
+		}
 		caretaker_core_clean_up = yes
 		caretaker_hub_clean_up = yes
-
 		if = {
-			limit = { num_pops > 100 }
+			limit = {
+				pop_amount > 1000
+			}
 			while = {
 				count = 5
-				random_owned_pop = { kill_pop = yes }
+				kill_single_pop = yes
 			}
 		}
 		else_if = {
-			limit = { num_pops > 80 }
+			limit = {
+				pop_amount > 800
+			}
 			while = {
 				count = 4
-				random_owned_pop = { kill_pop = yes }
+				kill_single_pop = yes
 			}
 		}
 		else_if = {
-			limit = { num_pops > 60 }
+			limit = {
+				pop_amount > 600
+			}
 			while = {
 				count = 3
-				random_owned_pop = { kill_pop = yes }
+				kill_single_pop = yes
 			}
 		}
 		else_if = {
-			limit = { num_pops > 40 }
+			limit = {
+				pop_amount > 400
+			}
 			while = {
 				count = 2
-				random_owned_pop = { kill_pop = yes }
+				kill_single_pop = yes
 			}
 		}
 		else = {
-			random_owned_pop = {
-				kill_pop = yes
-			}
+			kill_single_pop = yes
 		}
 	}
 }

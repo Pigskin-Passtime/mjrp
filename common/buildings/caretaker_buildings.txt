@@ -8,7 +8,6 @@ building_monitor_station_1 = {
 
 	potential = {
 		exists = owner
-		building_basic_income_check = yes
 		owner = {
 			has_origin = origin_caretaker
 		}
@@ -56,14 +55,10 @@ building_monitor_station_1 = {
 	triggered_planet_modifier = {
 		potential = {
 			exists = owner
-			owner = {
-				has_monthly_income = { resource = minerals value > 25 }
-				has_monthly_income = { resource = energy value > 25 }
-			}
-			num_pops > 10
+			pop_amount > 1000
 			not = { has_planet_flag = caretaker_disallow_any_wards_flag }
 		}
-		job_caretaker_ward_add = 1
+		job_caretaker_ward_add = 100
 	}
 
 	#prerequisites = {
@@ -119,7 +114,6 @@ building_monitor_station_2 = {
 
 	allow = {
 		has_upgraded_capital = yes
-		buildings_upgrade_allow = yes
 	}
 
 	destroy_trigger = {
@@ -162,27 +156,20 @@ building_monitor_station_2 = {
 	triggered_planet_modifier = {
 		potential = {
 			exists = owner
-			owner = {
-				has_monthly_income = { resource = minerals value > 25 }
-				has_monthly_income = { resource = energy value > 25 }
-			}
-			num_pops > 10
+			pop_amount > 1000
 			not = { has_planet_flag = caretaker_disallow_any_wards_flag }
 		}
-		job_caretaker_ward_add = 1
+		job_caretaker_ward_add = 100
 	}
 	
 	triggered_planet_modifier = {
 		potential = {
 			exists = owner
-			owner = {
-				has_monthly_income = { resource = minerals value > 50 }
-				has_monthly_income = { resource = energy value > 50 }
-			}
-			num_pops > 25
+		
+			pop_amount > 2500
 			not = { has_planet_flag = caretaker_disallow_any_wards_flag }
 		}
-		job_caretaker_ward_add = 1
+		job_caretaker_ward_add = 100
 	}
 
 	#prerequisites = {
@@ -236,8 +223,7 @@ building_monitor_station_3 = {
 	}
 
 	allow = {
-		has_major_upgraded_capital = yes
-		buildings_upgrade_allow = yes
+		has_major_upgraded_capital = yes		
 	}
 
 	destroy_trigger = {
@@ -279,41 +265,30 @@ building_monitor_station_3 = {
 	
 	triggered_planet_modifier = {
 		potential = {
-			exists = owner
-			owner = {
-				has_monthly_income = { resource = minerals value > 25 }
-				has_monthly_income = { resource = energy value > 25 }
-			}
-			num_pops > 10
+			exists = owner			
+			pop_amount > 1000			
 			not = { has_planet_flag = caretaker_disallow_any_wards_flag }
 		}
-		job_caretaker_ward_add = 1
+		job_caretaker_ward_add = 100
 	}
 	
 	triggered_planet_modifier = {
 		potential = {
 			exists = owner
-			owner = {
-				has_monthly_income = { resource = minerals value > 50 }
-				has_monthly_income = { resource = energy value > 50 }
-			}
-			num_pops > 25
+			
+			pop_amount > 2000
 			not = { has_planet_flag = caretaker_disallow_any_wards_flag }
 		}
-		job_caretaker_ward_add = 1
+		job_caretaker_ward_add = 100
 	}
 	
 	triggered_planet_modifier = {
 		potential = {
 			exists = owner
-			owner = {
-				has_monthly_income = { resource = minerals value > 100 }
-				has_monthly_income = { resource = energy value > 100 }
-			}
-			num_pops > 50
+			pop_amount > 5000
 			not = { has_planet_flag = caretaker_disallow_any_wards_flag }
 		}
-		job_caretaker_ward_add = 1
+		job_caretaker_ward_add = 100
 	}
 
 	#prerequisites = {
@@ -347,8 +322,8 @@ building_monitor_station_3 = {
 
 building_caretaker_outreach = {
 	base_buildtime = @b2_time
-
-	branch_office_building = yes
+	owner_type = corporate
+	# branch_office_building = yes
 
 	potential = {
 		has_branch_office = yes
@@ -356,10 +331,10 @@ building_caretaker_outreach = {
 	}
 
 	planet_modifier = {
-		planet_amenities_add = 10
-		planet_emigration_push_add = -20
+		planet_amenities_add = 1000
+		# planet_emigration_push_add = -20 # makes less sense with auto resettle 
 	}
-	
+	# TODO isnt this just ethic attraction in the end?
 	triggered_planet_modifier = {
 		potential = {
 			exists = owner

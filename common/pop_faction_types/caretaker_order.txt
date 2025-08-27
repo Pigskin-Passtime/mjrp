@@ -19,20 +19,49 @@ monitororder = {
 		}
 	}
 
+	extortion_resource = {
+		category = pop_factions
+		produces = {
+			trigger = {
+				owner = {
+					NOR = {
+						has_civic = civic_crowdsourcing
+						has_civic = civic_corporate_crowdsourcing
+					}
+				}
+			}
+			physics_research = @faction_base_output
+			mult = @faction_extortion_research_ratio
+		}
+		produces = {
+			trigger = {
+				owner = {
+					OR = {
+						has_civic = civic_crowdsourcing
+						has_civic = civic_corporate_crowdsourcing
+					}
+				}
+			}
+			physics_research = @faction_major_output
+			engineering_research = @faction_minor_output
+			mult = @faction_extortion_crowdsourcing_ratio
+		}
+	}
+
 	is_potential = {
 		years_passed > 5
 		has_origin = origin_caretaker
 		NOT = { has_ethic = ethic_gestalt_consciousness }
 		not = { has_country_flag = caretaker_break_up }
-		count_owned_pops = {
-			count >= 2
-			limit = {
-				or = {
-					has_job = high_monitor
-					has_job = monitor
-				}
-			}
-		}
+		# count_owned_pops = {
+		# 	count >= 2
+		# 	limit = {
+		# 		or = {
+		# 			has_job = high_monitor
+		# 			has_job = monitor
+		# 		}
+		# 	}
+		# }
 	}
 
 	parameters = {
@@ -50,24 +79,13 @@ monitororder = {
 	}
 
 	can_join_faction = {
-		or = {
-			has_job = monitor
-			has_job = high_monitor
-			has_job = enforcer
-			has_job = soldier
-		}
+	
 		not = { has_ethic = ethic_spiritualist }
 	}
 
 	attraction = {
 		base = 110
-		modifier = {
-			factor = 5.0
-			OR = {
-				has_job = monitor
-				has_job = high_monitor
-			}
-		}
+	
 		modifier = {
 			factor = 0
 			NOT = { is_same_species = owner_species }
@@ -78,12 +96,9 @@ monitororder = {
 		base = 100
 		modifier = {
 			factor = 2.0
-			leader_class = ruler
+			leader_class = official
 		}
-		modifier = {
-			factor = 1.5
-			leader_class = governor
-		}
+	
 		modifier = {
 			factor = 0.1
 			leader_class = scientist
@@ -110,7 +125,8 @@ monitororder = {
 			exists = owner
 			owner = {
 				num_communications > 2
-				pop_percentage = {
+				
+				pop_amount_percentage = {
 					percentage > 0.09
 					limit = { pop_has_ethic = ethic_pacifist }
 				}
