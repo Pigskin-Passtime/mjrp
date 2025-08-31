@@ -1,33 +1,42 @@
 # Stellaris Modjam 2020 - Caretaker
 # AlphaAsh, NHunter, Rough, GwenBlanketKnight
-
 building_monitor_station_1 = {
 	base_buildtime = @b1_time
-
 	category = amenity
-
 	potential = {
 		exists = owner
 		owner = {
 			has_origin = origin_caretaker
 		}
 	}
-	
-	allow = {
-		caretaker_presence_on_planet = yes	
+		building_sets = {
+		government
+		urban
+		entertainment
+		resort
+		unity
 	}
-
+	allow = {
+		caretaker_presence_on_planet = yes
+	}
 	destroy_trigger = {
 		exists = owner
 		or = {
-			owner = { not = { has_origin = origin_caretaker }}
+			owner = {
+				not = {
+					has_origin = origin_caretaker
+				}
+			}
 			and = {
-				owner = { has_origin = origin_caretaker }
-				owner = { has_country_flag = caretaker_break_up }
+				owner = {
+					has_origin = origin_caretaker
+				}
+				owner = {
+					has_country_flag = caretaker_break_up
+				}
 			}
 		}
 	}
-
 	convert_to = {
 		building_temple
 		building_hive_node
@@ -36,7 +45,6 @@ building_monitor_station_1 = {
 		building_galactic_memorial_1
 		building_autochthon_monument
 	}
-
 	resources = {
 		category = planet_buildings
 		cost = {
@@ -46,39 +54,34 @@ building_monitor_station_1 = {
 			energy = @b1_upkeep
 		}
 	}
-
 	planet_modifier = {
 		job_monitor_add = @b1_jobs
 		planet_crime_add = -10
 	}
-	
-	triggered_planet_modifier = {
-		potential = {
-			exists = owner
-			pop_amount > 1000
-			not = { has_planet_flag = caretaker_disallow_any_wards_flag }
-		}
-		job_caretaker_ward_add = 100
-	}
-
 	#prerequisites = {
 	#	"tech_cultural_heritage"
 	#}
-
 	upgrades = {
 		building_monitor_station_2
 	}
-
 	#show_tech_unlock_if = {
 	#	is_gestalt = no
 	#	is_spiritualist = no
 	#	is_megacorp = no
 	#}
-
-	triggered_desc = {
-		text = job_monitor_effect_desc
+	# triggered_desc = {
+	# 	text = job_monitor_effect_desc
+	# }
+	on_built = {
+		planet_event = {
+			id = caretaker_origin_event.1200
+		}
 	}
-
+	on_destroy = {
+		planet_event = {
+			id = caretaker_origin_event.1210
+		}
+	}
 	ai_weight = {
 		weight = 0
 		modifier = {
@@ -101,32 +104,54 @@ building_monitor_station_1 = {
 building_monitor_station_2 = {
 	base_buildtime = @b2_time
 	can_build = no
-
 	category = amenity
-
 	potential = {
 		exists = owner
 		owner = {
 			has_origin = origin_caretaker
-			has_technology = tech_rare_crystals
 		}
 	}
-
+		building_sets = {
+		government
+		urban
+		entertainment
+		resort
+		unity
+	}
+	prerequisites = {
+		tech_colonial_bureaucracy
+	}
 	allow = {
 		has_upgraded_capital = yes
 	}
-
 	destroy_trigger = {
 		exists = owner
 		or = {
-			owner = { not = { has_origin = origin_caretaker }}
+			owner = {
+				not = {
+					has_origin = origin_caretaker
+				}
+			}
 			and = {
-				owner = { has_origin = origin_caretaker }
-				owner = { has_country_flag = caretaker_break_up }
+				owner = {
+					has_origin = origin_caretaker
+				}
+				owner = {
+					has_country_flag = caretaker_break_up
+				}
 			}
 		}
 	}
-
+	on_built = {
+		planet_event = {
+			id = caretaker_origin_event.1200
+		}
+	}
+	on_destroy = {
+		planet_event = {
+			id = caretaker_origin_event.1210
+		}
+	}
 	convert_to = {
 		building_holotemple
 		building_simulation_2
@@ -135,61 +160,35 @@ building_monitor_station_2 = {
 		building_galactic_memorial_2
 		building_heritage_site
 	}
-
 	resources = {
 		category = planet_buildings
 		cost = {
 			minerals = @b2_minerals
-			rare_crystals = @b2_rare_cost
+			#rare_crystals = @b2_rare_cost
 		}
 		upkeep = {
 			energy = @b2_upkeep
-			rare_crystals = @b2_rare_upkeep
+			#rare_crystals = @b2_rare_upkeep
 		}
 	}
-
 	planet_modifier = {
 		job_monitor_add = @b2_jobs
 		planet_crime_add = -20
 	}
-	
-	triggered_planet_modifier = {
-		potential = {
-			exists = owner
-			pop_amount > 1000
-			not = { has_planet_flag = caretaker_disallow_any_wards_flag }
-		}
-		job_caretaker_ward_add = 100
-	}
-	
-	triggered_planet_modifier = {
-		potential = {
-			exists = owner
-		
-			pop_amount > 2500
-			not = { has_planet_flag = caretaker_disallow_any_wards_flag }
-		}
-		job_caretaker_ward_add = 100
-	}
-
 	#prerequisites = {
 	#	"tech_heritage_site"
 	#}
-
 	#show_tech_unlock_if = {
 	#	is_gestalt = no
 	#	is_spiritualist = no
 	#	is_megacorp = no
 	#}
-
 	upgrades = {
 		building_monitor_station_3
 	}
-
-	triggered_desc = {
-		text = job_monitor_effect_desc
-	}
-
+	# triggered_desc = {
+	# 	text = job_monitor_effect_desc
+	# }
 	ai_weight = {
 		weight = 1
 		modifier = {
@@ -211,100 +210,88 @@ building_monitor_station_2 = {
 building_monitor_station_3 = {
 	base_buildtime = @b3_time
 	can_build = no
-
 	category = amenity
-
 	potential = {
 		exists = owner
 		owner = {
 			has_origin = origin_caretaker
-			has_technology = tech_rare_crystals
 		}
 	}
-
-	allow = {
-		has_major_upgraded_capital = yes		
+	building_sets = {
+		government
+		urban
+		entertainment
+		resort
+		unity
 	}
-
+	allow = {
+		has_major_upgraded_capital = yes
+	}
+	prerequisites = {
+		tech_galactic_administration
+	}
 	destroy_trigger = {
 		exists = owner
 		or = {
-			owner = { not = { has_origin = origin_caretaker }}
+			owner = {
+				not = {
+					has_origin = origin_caretaker
+				}
+			}
 			and = {
-				owner = { has_origin = origin_caretaker }
-				owner = { has_country_flag = caretaker_break_up }
+				owner = {
+					has_origin = origin_caretaker
+				}
+				owner = {
+					has_country_flag = caretaker_break_up
+				}
 			}
 		}
 	}
-
+	on_built = {
+		planet_event = {
+			id = caretaker_origin_event.1200
+		}
+	}
+	on_destroy = {
+		planet_event = {
+			id = caretaker_origin_event.1210
+		}
+	}
 	convert_to = {
 		building_sacred_nexus
 		building_hive_confluence
 		building_simulation_3
 		building_corporate_forum
 		building_galactic_memorial_3
-		building_hypercomms_forum 
+		building_hypercomms_forum
 	}
-
 	resources = {
 		category = planet_buildings
 		cost = {
 			minerals = @b3_minerals
-			rare_crystals = @b3_rare_cost
+			#rare_crystals = @b3_rare_cost
 		}
 		upkeep = {
 			energy = @b3_upkeep
-			rare_crystals = @b3_rare_upkeep
+			#rare_crystals = @b3_rare_upkeep
 		}
 	}
-
 	planet_modifier = {
 		job_monitor_add = @b3_jobs
 		planet_crime_add = -30
 	}
-	
-	triggered_planet_modifier = {
-		potential = {
-			exists = owner			
-			pop_amount > 1000			
-			not = { has_planet_flag = caretaker_disallow_any_wards_flag }
-		}
-		job_caretaker_ward_add = 100
-	}
-	
-	triggered_planet_modifier = {
-		potential = {
-			exists = owner
-			
-			pop_amount > 2000
-			not = { has_planet_flag = caretaker_disallow_any_wards_flag }
-		}
-		job_caretaker_ward_add = 100
-	}
-	
-	triggered_planet_modifier = {
-		potential = {
-			exists = owner
-			pop_amount > 5000
-			not = { has_planet_flag = caretaker_disallow_any_wards_flag }
-		}
-		job_caretaker_ward_add = 100
-	}
-
 	#prerequisites = {
 	#	"tech_hypercomms_forum"
 	#}
-
 	#show_tech_unlock_if = {
 	#	is_gestalt = no
 	#	is_spiritualist = no
 	#	is_megacorp = no
 	#}
-
-	triggered_desc = {
-		text = job_monitor_effect_desc
-	}
-
+	# triggered_desc = {
+	# 	text = job_monitor_effect_desc
+	# }
 	ai_weight = {
 		weight = 0
 		modifier = {
@@ -320,16 +307,18 @@ building_monitor_station_3 = {
 	}
 }
 
+# TODO make on par with branch buildings update
 building_caretaker_outreach = {
 	base_buildtime = @b2_time
 	owner_type = corporate
+	category = government
 	# branch_office_building = yes
-
 	potential = {
 		has_branch_office = yes
-		branch_office_owner = { has_origin = origin_caretaker }
+		branch_office_owner = {
+			has_origin = origin_caretaker
+		}
 	}
-
 	planet_modifier = {
 		planet_amenities_add = 1000
 		# planet_emigration_push_add = -20 # makes less sense with auto resettle 
@@ -407,20 +396,22 @@ building_caretaker_outreach = {
 		}
 		pop_ethic_pacifist_attraction_mult = 0.25
 	}
-	
 	destroy_trigger = {
 		exists = branch_office_owner
 		or = {
-			branch_office_owner = { not = { has_origin = origin_caretaker }}
-			and = {
-				branch_office_owner = { 
+			branch_office_owner = {
+				not = {
 					has_origin = origin_caretaker
-					has_country_flag = caretaker_break_up 
+				}
+			}
+			and = {
+				branch_office_owner = {
+					has_origin = origin_caretaker
+					has_country_flag = caretaker_break_up
 				}
 			}
 		}
 	}
-
 	resources = {
 		category = planet_branch_office_buildings
 		cost = {
@@ -433,7 +424,6 @@ building_caretaker_outreach = {
 			consumer_goods = 2
 		}
 	}
-
 	ai_weight = {
 		weight = 0
 	}

@@ -1,6 +1,6 @@
 # Stellaris Modjam 2020 - Caretaker
 # AlphaAsh, NHunter, Rough, GwenBlanketKnight
-# TODO rework into situation
+# TODO rework into situation, this adds a hub on a planet, the hub gives high monitor jobs, I feel like this could be a building?
 ### Add a caretaker hub to the planet
 caretaker_add_hub = {
 	owned_planets_only = yes
@@ -125,715 +125,715 @@ caretaker_remove_hub = {
 
 
 ### Request additional pop from the Caretaker
-caretaker_make_request_pop = {
-	owned_planets_only = yes
-	sound = event_administrative_work
+# caretaker_make_request_pop = {
+# 	owned_planets_only = yes
+# 	sound = event_administrative_work
 
-	resources = {
-		category = decisions
-		cost = {
-			# influence = 10
-			# energy = 500
-			unity = 50
-		}
-		cost = {
-			trigger = { owner = { is_lithoid = yes } }
-			minerals = 500
-		}
-		cost = {
-			trigger = { 
-				owner = { 
-					is_lithoid = yes 
-					resource_stockpile_compare = { resource = minerals value > 2000 }
-				} 
-			}
-			minerals = 500
-		}
-		cost = {
-			trigger = { 
-				owner = { 
-					is_lithoid = yes 
-					resource_stockpile_compare = { resource = minerals value > 5000 }
-				} 
-			}
-			minerals = 1000
-		}
-		cost = {
-			trigger = { owner = { is_lithoid = no } }
-			food = 500
-		}
-		cost = {
-			trigger = { 
-				owner = { 
-					is_lithoid = no
-					resource_stockpile_compare = { resource = food value > 2000 }
-				} 
-			}
-			food = 500
-		}
-		cost = {
-			trigger = { 
-				owner = { 
-					is_lithoid = no
-					resource_stockpile_compare = { resource = food value > 5000 }
-				} 
-			}
-			food = 1000
-		}
-		cost = {
-			trigger = { pop_amount > 1000 }
-			unity = 50
-		}
-		cost = {
-			trigger = { pop_amount > 1500 }
-			unity = 100
-		}
-		cost = {
-			trigger = { pop_amount > 3300 }
-			unity = 200
-		}
-		cost = {
-			trigger = { pop_amount > 4000 }
-			unity = 500
-		}
-	}
+# 	resources = {
+# 		category = decisions
+# 		cost = {
+# 			# influence = 10
+# 			# energy = 500
+# 			unity = 50
+# 		}
+# 		cost = {
+# 			trigger = { owner = { is_lithoid = yes } }
+# 			minerals = 500
+# 		}
+# 		cost = {
+# 			trigger = { 
+# 				owner = { 
+# 					is_lithoid = yes 
+# 					resource_stockpile_compare = { resource = minerals value > 2000 }
+# 				} 
+# 			}
+# 			minerals = 500
+# 		}
+# 		cost = {
+# 			trigger = { 
+# 				owner = { 
+# 					is_lithoid = yes 
+# 					resource_stockpile_compare = { resource = minerals value > 5000 }
+# 				} 
+# 			}
+# 			minerals = 1000
+# 		}
+# 		cost = {
+# 			trigger = { owner = { is_lithoid = no } }
+# 			food = 500
+# 		}
+# 		cost = {
+# 			trigger = { 
+# 				owner = { 
+# 					is_lithoid = no
+# 					resource_stockpile_compare = { resource = food value > 2000 }
+# 				} 
+# 			}
+# 			food = 500
+# 		}
+# 		cost = {
+# 			trigger = { 
+# 				owner = { 
+# 					is_lithoid = no
+# 					resource_stockpile_compare = { resource = food value > 5000 }
+# 				} 
+# 			}
+# 			food = 1000
+# 		}
+# 		cost = {
+# 			trigger = { pop_amount > 1000 }
+# 			unity = 50
+# 		}
+# 		cost = {
+# 			trigger = { pop_amount > 1500 }
+# 			unity = 100
+# 		}
+# 		cost = {
+# 			trigger = { pop_amount > 3300 }
+# 			unity = 200
+# 		}
+# 		cost = {
+# 			trigger = { pop_amount > 4000 }
+# 			unity = 500
+# 		}
+# 	}
 
-	potential = {
-		caretaker_presence_on_planet = yes
-		NOT = { has_planet_flag = caretaker_pop_creation_cooldown }
-		exists = owner
-		owner = {
-			has_origin = origin_caretaker
-			NOT = { has_country_flag = caretaker_break_up }
-			caretaker_mood_is_angry_check = no
-		}
-		or = {
-			pop_amount < 500
-			and = {
-				has_building = building_monitor_station_1
-				pop_amount < 1100
-			}
-			and = {
-				has_building = building_monitor_station_2
-				pop_amount < 1600
-			}
-			and = {
-				has_building = building_monitor_station_3
-				pop_amount < 2100
-			}
-			and = {
-				is_capital = yes
-				pop_amount < 4000
-			}
-		}
-	}
+# 	potential = {
+# 		caretaker_presence_on_planet = yes
+# 		NOT = { has_planet_flag = caretaker_pop_creation_cooldown }
+# 		exists = owner
+# 		owner = {
+# 			has_origin = origin_caretaker
+# 			NOT = { has_country_flag = caretaker_break_up }
+# 			caretaker_mood_is_angry_check = no
+# 		}
+# 		or = {
+# 			pop_amount < 500
+# 			and = {
+# 				has_building = building_monitor_station_1
+# 				pop_amount < 1100
+# 			}
+# 			and = {
+# 				has_building = building_monitor_station_2
+# 				pop_amount < 1600
+# 			}
+# 			and = {
+# 				has_building = building_monitor_station_3
+# 				pop_amount < 2100
+# 			}
+# 			and = {
+# 				is_capital = yes
+# 				pop_amount < 4000
+# 			}
+# 		}
+# 	}
 
-	allow = {
-		free_housing > 0
-		free_jobs > 0
-	}
+# 	allow = {
+# 		free_housing > 0
+# 		free_jobs > 0
+# 	}
 
-	effect = {
-		custom_tooltip = caretaker_make_request_pop_custom
-		hidden_effect = {
-			if = {
-				limit = {
-					owner = { caretaker_mood_is_annoyed_check = yes }
-				}
-				random_list = {
-					1 = {
-						set_timed_planet_flag = {
-							flag = caretaker_pop_creation_cooldown
-							days = 1080
-						}
-					}
-					2 = {
-						set_timed_planet_flag = {
-							flag = caretaker_pop_creation_cooldown
-							days = 1800
-						}
-					}
-				}
-			}
-			else_if = {
-				limit = {
-					owner = { caretaker_mood_is_content_check = yes }
-				}
-				random_list = {
-					1 = {
-						set_timed_planet_flag = {
-							flag = caretaker_pop_creation_cooldown
-							days = 720
-						}
-					}
-					2 = {
-						set_timed_planet_flag = {
-							flag = caretaker_pop_creation_cooldown
-							days = 1080
-						}
-					}
-				}			
-			}
-			else = {
-				random_list = {
-					1 = {
-						set_timed_planet_flag = {
-							flag = caretaker_pop_creation_cooldown
-							days = 360
-						}
-					}
-					1 = {
-						set_timed_planet_flag = {
-							flag = caretaker_pop_creation_cooldown
-							days = 720
-						}
-					}
-				}			
-			}
+# 	effect = {
+# 		custom_tooltip = caretaker_make_request_pop_custom
+# 		hidden_effect = {
+# 			if = {
+# 				limit = {
+# 					owner = { caretaker_mood_is_annoyed_check = yes }
+# 				}
+# 				random_list = {
+# 					1 = {
+# 						set_timed_planet_flag = {
+# 							flag = caretaker_pop_creation_cooldown
+# 							days = 1080
+# 						}
+# 					}
+# 					2 = {
+# 						set_timed_planet_flag = {
+# 							flag = caretaker_pop_creation_cooldown
+# 							days = 1800
+# 						}
+# 					}
+# 				}
+# 			}
+# 			else_if = {
+# 				limit = {
+# 					owner = { caretaker_mood_is_content_check = yes }
+# 				}
+# 				random_list = {
+# 					1 = {
+# 						set_timed_planet_flag = {
+# 							flag = caretaker_pop_creation_cooldown
+# 							days = 720
+# 						}
+# 					}
+# 					2 = {
+# 						set_timed_planet_flag = {
+# 							flag = caretaker_pop_creation_cooldown
+# 							days = 1080
+# 						}
+# 					}
+# 				}			
+# 			}
+# 			else = {
+# 				random_list = {
+# 					1 = {
+# 						set_timed_planet_flag = {
+# 							flag = caretaker_pop_creation_cooldown
+# 							days = 360
+# 						}
+# 					}
+# 					1 = {
+# 						set_timed_planet_flag = {
+# 							flag = caretaker_pop_creation_cooldown
+# 							days = 720
+# 						}
+# 					}
+# 				}			
+# 			}
 			
-			planet_event = { id = caretaker_origin_event.20100 }
-		}
-	}
+# 			planet_event = { id = caretaker_origin_event.20100 }
+# 		}
+# 	}
 
-	ai_weight = {
-		weight = 0
-	}
-}
+# 	ai_weight = {
+# 		weight = 0
+# 	}
+# }
 
 ########### Resource requests #######################
 
 ### Disabled restoration decision #####
-caretaker_in_restoration_mode = {
-	owned_planets_only = yes
+# caretaker_in_restoration_mode = {
+# 	owned_planets_only = yes
 	
-	resources = {
-		category = decisions
-	}
+# 	resources = {
+# 		category = decisions
+# 	}
 	
-	potential = {
-		is_capital = yes
-		caretaker_presence_on_planet = yes
-		exists = owner
-		owner = {
-			has_origin = origin_caretaker
-			has_country_flag = caretaker_resource_request_cooldown
-			NOT = { has_country_flag = caretaker_break_up }
-			caretaker_mood_is_angry_check = no
-		}
-	}
+# 	potential = {
+# 		is_capital = yes
+# 		caretaker_presence_on_planet = yes
+# 		exists = owner
+# 		owner = {
+# 			has_origin = origin_caretaker
+# 			has_country_flag = caretaker_resource_request_cooldown
+# 			NOT = { has_country_flag = caretaker_break_up }
+# 			caretaker_mood_is_angry_check = no
+# 		}
+# 	}
 	
-	allow = {
-		always = yes
-	}
+# 	allow = {
+# 		always = yes
+# 	}
 	
-	effect = {
-		custom_tooltip = caretaker_in_restoration_mode_effect
-	}
+# 	effect = {
+# 		custom_tooltip = caretaker_in_restoration_mode_effect
+# 	}
 	
-	ai_weight = {
-		weight = 0
-	}
-}
+# 	ai_weight = {
+# 		weight = 0
+# 	}
+# }
 
 ### Disabled angry decision #####
-caretaker_is_angry_mode = {
-	owned_planets_only = yes
+# caretaker_is_angry_mode = {
+# 	owned_planets_only = yes
 	
-	resources = {
-		category = decisions
-	}
+# 	resources = {
+# 		category = decisions
+# 	}
 	
-	potential = {
-		caretaker_presence_on_planet = yes
-		exists = owner
-		owner = {
-			has_origin = origin_caretaker
-			NOT = { has_country_flag = caretaker_break_up }
-			caretaker_mood_is_angry_check = yes
-		}
-	}
+# 	potential = {
+# 		caretaker_presence_on_planet = yes
+# 		exists = owner
+# 		owner = {
+# 			has_origin = origin_caretaker
+# 			NOT = { has_country_flag = caretaker_break_up }
+# 			caretaker_mood_is_angry_check = yes
+# 		}
+# 	}
 	
-	allow = {
-		always = yes
-	}
+# 	allow = {
+# 		always = yes
+# 	}
 	
-	effect = {
-		custom_tooltip = caretaker_is_angry_mode_effect
-	}
+# 	effect = {
+# 		custom_tooltip = caretaker_is_angry_mode_effect
+# 	}
 	
-	ai_weight = {
-		weight = 0
-	}
-}
+# 	ai_weight = {
+# 		weight = 0
+# 	}
+# }
 
 ### Disabled healthy economy decision #####
-caretaker_is_redundant_mode = {
-	owned_planets_only = yes
+# caretaker_is_redundant_mode = {
+# 	owned_planets_only = yes
 	
-	resources = {
-		category = decisions
-	}
+# 	resources = {
+# 		category = decisions
+# 	}
 	
-	potential = {
-		is_capital = yes
-		caretaker_presence_on_planet = yes
-		exists = owner
-		owner = {
-			has_origin = origin_caretaker
-			NOT = { has_country_flag = caretaker_break_up }
-			NOT = { has_country_flag = caretaker_resource_request_cooldown }
-			caretaker_mood_is_angry_check = no
-			or = {
-			has_monthly_income = { resource = food value >= 20 }
-			resource_stockpile_compare = { resource = food value >= 500 }
-			}
-			or = {
-			has_monthly_income = { resource = minerals value >= 100 }
-			resource_stockpile_compare = { resource = minerals value >= 500 }
-			}
-			or = {
-			has_monthly_income = { resource = energy value >= 50 }
-			resource_stockpile_compare = { resource = energy value >= 500 }
-			}
-			or = {
-			has_monthly_income = { resource = consumer_goods value >= 20 }
-			resource_stockpile_compare = { resource = consumer_goods value >= 250 }
-			}
-			or = {
-			has_monthly_income = { resource = alloys value >= 100 }
-			resource_stockpile_compare = { resource = alloys value >= 200 }
-			}
-		}
-	}
+# 	potential = {
+# 		is_capital = yes
+# 		caretaker_presence_on_planet = yes
+# 		exists = owner
+# 		owner = {
+# 			has_origin = origin_caretaker
+# 			NOT = { has_country_flag = caretaker_break_up }
+# 			NOT = { has_country_flag = caretaker_resource_request_cooldown }
+# 			caretaker_mood_is_angry_check = no
+# 			or = {
+# 			has_monthly_income = { resource = food value >= 20 }
+# 			resource_stockpile_compare = { resource = food value >= 500 }
+# 			}
+# 			or = {
+# 			has_monthly_income = { resource = minerals value >= 100 }
+# 			resource_stockpile_compare = { resource = minerals value >= 500 }
+# 			}
+# 			or = {
+# 			has_monthly_income = { resource = energy value >= 50 }
+# 			resource_stockpile_compare = { resource = energy value >= 500 }
+# 			}
+# 			or = {
+# 			has_monthly_income = { resource = consumer_goods value >= 20 }
+# 			resource_stockpile_compare = { resource = consumer_goods value >= 250 }
+# 			}
+# 			or = {
+# 			has_monthly_income = { resource = alloys value >= 100 }
+# 			resource_stockpile_compare = { resource = alloys value >= 200 }
+# 			}
+# 		}
+# 	}
 	
-	allow = {
-		always = yes
-	}
+# 	allow = {
+# 		always = yes
+# 	}
 	
-	effect = {
-		custom_tooltip = caretaker_is_redundant_mode_effect
-	}
+# 	effect = {
+# 		custom_tooltip = caretaker_is_redundant_mode_effect
+# 	}
 	
-	ai_weight = {
-		weight = 0
-	}
-}
+# 	ai_weight = {
+# 		weight = 0
+# 	}
+# }
 
 
 ### Request some food from the Caretaker
-caretaker_make_request_food = {
-	owned_planets_only = yes
-	sound = event_administrative_work
+# caretaker_make_request_food = {
+# 	owned_planets_only = yes
+# 	sound = event_administrative_work
 
-	resources = {
-		category = decisions
-		cost = {
-			unity = 50
-		}
-	}
+# 	resources = {
+# 		category = decisions
+# 		cost = {
+# 			unity = 50
+# 		}
+# 	}
 
-	potential = {
-		is_capital = yes
-		caretaker_presence_on_planet = yes
-		exists = owner
-		owner = {
-			has_origin = origin_caretaker
-			NOR = {
-				has_country_flag = caretaker_resource_request_cooldown
-				has_country_flag = caretaker_break_up
-			}
-			has_monthly_income = { resource = food value < 20 }
-			resource_stockpile_compare = { resource = food value < 500 }
-			caretaker_mood_is_angry_check = no
-		}
-	}
+# 	potential = {
+# 		is_capital = yes
+# 		caretaker_presence_on_planet = yes
+# 		exists = owner
+# 		owner = {
+# 			has_origin = origin_caretaker
+# 			NOR = {
+# 				has_country_flag = caretaker_resource_request_cooldown
+# 				has_country_flag = caretaker_break_up
+# 			}
+# 			has_monthly_income = { resource = food value < 20 }
+# 			resource_stockpile_compare = { resource = food value < 500 }
+# 			caretaker_mood_is_angry_check = no
+# 		}
+# 	}
 
-	allow = {
-		always = yes
-	}
+# 	allow = {
+# 		always = yes
+# 	}
 
-	effect = {
-		custom_tooltip = caretaker_make_request_food_custom
-		hidden_effect = {
-			owner = {
-				add_resource = {
-					food = 500
-				}
-			}
-			planet_event = { id = caretaker_origin_event.20200 }
-			owner = { caretaker_set_request_cooldown = yes }
-		 }
-	}
+# 	effect = {
+# 		custom_tooltip = caretaker_make_request_food_custom
+# 		hidden_effect = {
+# 			owner = {
+# 				add_resource = {
+# 					food = 500
+# 				}
+# 			}
+# 			planet_event = { id = caretaker_origin_event.20200 }
+# 			owner = { caretaker_set_request_cooldown = yes }
+# 		 }
+# 	}
 
-	ai_weight = {
-		weight = 0
-	}
-}
+# 	ai_weight = {
+# 		weight = 0
+# 	}
+# }
 
 ### Request some minerals from the Caretaker
-caretaker_make_request_minerals = {
-	owned_planets_only = yes
-	sound = event_administrative_work
+# caretaker_make_request_minerals = {
+# 	owned_planets_only = yes
+# 	sound = event_administrative_work
 
-	resources = {
-		category = decisions
-		cost = {
-			unity = 100
-		}
-	}
+# 	resources = {
+# 		category = decisions
+# 		cost = {
+# 			unity = 100
+# 		}
+# 	}
 
-	potential = {
-		is_capital = yes
-		caretaker_presence_on_planet = yes
-		exists = owner
-		owner = {
-			has_origin = origin_caretaker
-			NOR = {
-				has_country_flag = caretaker_resource_request_cooldown
-				has_country_flag = caretaker_break_up
-			}
-			has_monthly_income = { resource = minerals value < 100 }
-			resource_stockpile_compare = { resource = minerals value < 500 }
-			caretaker_mood_is_angry_check = no
-		}
-	}
+# 	potential = {
+# 		is_capital = yes
+# 		caretaker_presence_on_planet = yes
+# 		exists = owner
+# 		owner = {
+# 			has_origin = origin_caretaker
+# 			NOR = {
+# 				has_country_flag = caretaker_resource_request_cooldown
+# 				has_country_flag = caretaker_break_up
+# 			}
+# 			has_monthly_income = { resource = minerals value < 100 }
+# 			resource_stockpile_compare = { resource = minerals value < 500 }
+# 			caretaker_mood_is_angry_check = no
+# 		}
+# 	}
 
-	allow = {
-		always = yes
-	}
+# 	allow = {
+# 		always = yes
+# 	}
 
-	effect = {
-		custom_tooltip = caretaker_make_request_minerals_custom
-		hidden_effect = {
-			owner = {
-				add_resource = {
-					minerals = 500
-				}
-			}
-			planet_event = { id = caretaker_origin_event.20200 }
-			owner = { caretaker_set_request_cooldown = yes }
-		 }
-	}
+# 	effect = {
+# 		custom_tooltip = caretaker_make_request_minerals_custom
+# 		hidden_effect = {
+# 			owner = {
+# 				add_resource = {
+# 					minerals = 500
+# 				}
+# 			}
+# 			planet_event = { id = caretaker_origin_event.20200 }
+# 			owner = { caretaker_set_request_cooldown = yes }
+# 		 }
+# 	}
 
-	ai_weight = {
-		weight = 0
-	}
-}
+# 	ai_weight = {
+# 		weight = 0
+# 	}
+# }
 
 ### Request some energy from the Caretaker
-caretaker_make_request_energy = {
-	owned_planets_only = yes
-	sound = event_administrative_work
+# caretaker_make_request_energy = {
+# 	owned_planets_only = yes
+# 	sound = event_administrative_work
 
-	resources = {
-		category = decisions
-		cost = {
-			unity = 50
-		}
-	}
+# 	resources = {
+# 		category = decisions
+# 		cost = {
+# 			unity = 50
+# 		}
+# 	}
 
-	potential = {
-		is_capital = yes
-		caretaker_presence_on_planet = yes
-		exists = owner
-		owner = {
-			has_origin = origin_caretaker
-			NOR = {
-				has_country_flag = caretaker_resource_request_cooldown
-				has_country_flag = caretaker_break_up
-			}
-			has_monthly_income = { resource = energy value < 50 }
-			resource_stockpile_compare = { resource = energy value < 500 }
-			caretaker_mood_is_angry_check = no
-		}
-	}
+# 	potential = {
+# 		is_capital = yes
+# 		caretaker_presence_on_planet = yes
+# 		exists = owner
+# 		owner = {
+# 			has_origin = origin_caretaker
+# 			NOR = {
+# 				has_country_flag = caretaker_resource_request_cooldown
+# 				has_country_flag = caretaker_break_up
+# 			}
+# 			has_monthly_income = { resource = energy value < 50 }
+# 			resource_stockpile_compare = { resource = energy value < 500 }
+# 			caretaker_mood_is_angry_check = no
+# 		}
+# 	}
 
-	effect = {
-		custom_tooltip = caretaker_make_request_energy_custom
-		hidden_effect = {
-			owner = {
-				add_resource = {
-					energy = 500
-				}
-			}
-			planet_event = { id = caretaker_origin_event.20200 }
-			owner = { caretaker_set_request_cooldown = yes }
-		 }
-	}
+# 	effect = {
+# 		custom_tooltip = caretaker_make_request_energy_custom
+# 		hidden_effect = {
+# 			owner = {
+# 				add_resource = {
+# 					energy = 500
+# 				}
+# 			}
+# 			planet_event = { id = caretaker_origin_event.20200 }
+# 			owner = { caretaker_set_request_cooldown = yes }
+# 		 }
+# 	}
 
-	ai_weight = {
-		weight = 0
-	}
-}
+# 	ai_weight = {
+# 		weight = 0
+# 	}
+# }
 
 ### Request some consumer goods from the Caretaker
-caretaker_make_request_consumer_goods = {
-	owned_planets_only = yes
-	sound = event_administrative_work
+# caretaker_make_request_consumer_goods = {
+# 	owned_planets_only = yes
+# 	sound = event_administrative_work
 
-	resources = {
-		category = decisions
-		cost = {
-			unity = 150
-		}
-	}
+# 	resources = {
+# 		category = decisions
+# 		cost = {
+# 			unity = 150
+# 		}
+# 	}
 
-	potential = {
-		is_capital = yes
-		caretaker_presence_on_planet = yes
-		exists = owner
-		owner = {
-			has_origin = origin_caretaker
-			NOR = {
-				has_country_flag = caretaker_resource_request_cooldown
-				has_country_flag = caretaker_break_up
-			}
-			has_monthly_income = { resource = consumer_goods value < 20 }
-			resource_stockpile_compare = { resource = consumer_goods value < 250 }
-			caretaker_mood_is_angry_check = no
-		}
-	}
+# 	potential = {
+# 		is_capital = yes
+# 		caretaker_presence_on_planet = yes
+# 		exists = owner
+# 		owner = {
+# 			has_origin = origin_caretaker
+# 			NOR = {
+# 				has_country_flag = caretaker_resource_request_cooldown
+# 				has_country_flag = caretaker_break_up
+# 			}
+# 			has_monthly_income = { resource = consumer_goods value < 20 }
+# 			resource_stockpile_compare = { resource = consumer_goods value < 250 }
+# 			caretaker_mood_is_angry_check = no
+# 		}
+# 	}
 
-	allow = {
-		always = yes
-	}
+# 	allow = {
+# 		always = yes
+# 	}
 
-	effect = {
-		custom_tooltip = caretaker_make_request_consumer_goods_custom
-		hidden_effect = {
-			owner = {
-				add_resource = {
-					consumer_goods = 250
-				}
-			}
-			planet_event = { id = caretaker_origin_event.20200 }
-			owner = { caretaker_set_request_cooldown = yes }
-		 }
-	}
+# 	effect = {
+# 		custom_tooltip = caretaker_make_request_consumer_goods_custom
+# 		hidden_effect = {
+# 			owner = {
+# 				add_resource = {
+# 					consumer_goods = 250
+# 				}
+# 			}
+# 			planet_event = { id = caretaker_origin_event.20200 }
+# 			owner = { caretaker_set_request_cooldown = yes }
+# 		 }
+# 	}
 
-	ai_weight = {
-		weight = 0
-	}
-}
+# 	ai_weight = {
+# 		weight = 0
+# 	}
+# }
 
-### Request some alloys from the Caretaker
-caretaker_make_request_alloys = {
-	owned_planets_only = yes
-	sound = event_administrative_work
+# ### Request some alloys from the Caretaker
+# caretaker_make_request_alloys = {
+# 	owned_planets_only = yes
+# 	sound = event_administrative_work
 
-	resources = {
-		category = decisions
-		cost = {
-			unity = 100
-		}
-	}
+# 	resources = {
+# 		category = decisions
+# 		cost = {
+# 			unity = 100
+# 		}
+# 	}
 
-	potential = {
-		is_capital = yes
-		caretaker_presence_on_planet = yes
-		exists = owner
-		owner = {
-			has_origin = origin_caretaker
-			NOR = {
-				has_country_flag = caretaker_resource_request_cooldown
-				has_country_flag = caretaker_break_up
-			}
-			has_monthly_income = { resource = alloys value < 100 }
-			resource_stockpile_compare = { resource = alloys value < 200 }
-			caretaker_mood_is_angry_check = no
-		}
-	}
+# 	potential = {
+# 		is_capital = yes
+# 		caretaker_presence_on_planet = yes
+# 		exists = owner
+# 		owner = {
+# 			has_origin = origin_caretaker
+# 			NOR = {
+# 				has_country_flag = caretaker_resource_request_cooldown
+# 				has_country_flag = caretaker_break_up
+# 			}
+# 			has_monthly_income = { resource = alloys value < 100 }
+# 			resource_stockpile_compare = { resource = alloys value < 200 }
+# 			caretaker_mood_is_angry_check = no
+# 		}
+# 	}
 
-	allow = {
-		always = yes
-	}
+# 	allow = {
+# 		always = yes
+# 	}
 
-	effect = {
-		custom_tooltip = caretaker_make_request_alloys_custom
-		hidden_effect = {
-			owner = {
-				add_resource = {
-					alloys = 200
-				}
-			}
-			planet_event = { id = caretaker_origin_event.20200 }
-			owner = { caretaker_set_request_cooldown = yes }
-		 }
-	}
+# 	effect = {
+# 		custom_tooltip = caretaker_make_request_alloys_custom
+# 		hidden_effect = {
+# 			owner = {
+# 				add_resource = {
+# 					alloys = 200
+# 				}
+# 			}
+# 			planet_event = { id = caretaker_origin_event.20200 }
+# 			owner = { caretaker_set_request_cooldown = yes }
+# 		 }
+# 	}
 
-	ai_weight = {
-		weight = 0
-	}
-}
+# 	ai_weight = {
+# 		weight = 0
+# 	}
+# }
 
 ### Request some strategic resources from the Caretaker
-caretaker_make_request_strategic = {
-	owned_planets_only = yes
-	sound = event_administrative_work
+# caretaker_make_request_strategic = {
+# 	owned_planets_only = yes
+# 	sound = event_administrative_work
 
-	resources = {
-		category = decisions
-		cost = {
-			unity = 250
-		}
-	}
+# 	resources = {
+# 		category = decisions
+# 		cost = {
+# 			unity = 250
+# 		}
+# 	}
 
-	potential = {
-		is_capital = yes
-		caretaker_presence_on_planet = yes
-		exists = owner
-		owner = {
-			has_origin = origin_caretaker
-			NOR = {
-				has_country_flag = caretaker_resource_request_cooldown
-				has_country_flag = caretaker_break_up
-			}
-			caretaker_mood_is_angry_check = no
-			or = {
-				and = {
-					has_technology = tech_volatile_motes
-					resource_stockpile_compare = { resource = volatile_motes value < 15 }
-				}
-				and = {
-					has_technology = tech_exotic_gases
-					resource_stockpile_compare = { resource = exotic_gases value < 15 }
-				}
-				and = {
-					has_technology = tech_rare_crystals
-					resource_stockpile_compare = { resource = rare_crystals value < 15 }
-				}
-			}
-		}
-	}
+# 	potential = {
+# 		is_capital = yes
+# 		caretaker_presence_on_planet = yes
+# 		exists = owner
+# 		owner = {
+# 			has_origin = origin_caretaker
+# 			NOR = {
+# 				has_country_flag = caretaker_resource_request_cooldown
+# 				has_country_flag = caretaker_break_up
+# 			}
+# 			caretaker_mood_is_angry_check = no
+# 			or = {
+# 				and = {
+# 					has_technology = tech_volatile_motes
+# 					resource_stockpile_compare = { resource = volatile_motes value < 15 }
+# 				}
+# 				and = {
+# 					has_technology = tech_exotic_gases
+# 					resource_stockpile_compare = { resource = exotic_gases value < 15 }
+# 				}
+# 				and = {
+# 					has_technology = tech_rare_crystals
+# 					resource_stockpile_compare = { resource = rare_crystals value < 15 }
+# 				}
+# 			}
+# 		}
+# 	}
 
-	allow = {
-		always = yes
-	}
+# 	allow = {
+# 		always = yes
+# 	}
 
-	effect = {
-		custom_tooltip = caretaker_make_request_strategic_custom
-		hidden_effect = {
-			owner = {
-				if = { 
-					limit = {
-						has_technology = tech_volatile_motes
-						resource_stockpile_compare = { resource = volatile_motes value < 15 }					
-					}
-					add_resource = { volatile_motes = 15 }
-				}
-				if = { 
-					limit = {
-						has_technology = tech_exotic_gases
-						resource_stockpile_compare = { resource = exotic_gases value < 15 }					
-					}
-					add_resource = { exotic_gases = 15 }
-				}
-				if = { 
-					limit = {
-						has_technology = tech_rare_crystals
-						resource_stockpile_compare = { resource = rare_crystals value < 15 }					
-					}
-					add_resource = { rare_crystals = 15 }
-				}
-			}
-			planet_event = { id = caretaker_origin_event.20200 }
-			owner = { caretaker_set_request_cooldown = yes }
-		 }
-	}
+# 	effect = {
+# 		custom_tooltip = caretaker_make_request_strategic_custom
+# 		hidden_effect = {
+# 			owner = {
+# 				if = { 
+# 					limit = {
+# 						has_technology = tech_volatile_motes
+# 						resource_stockpile_compare = { resource = volatile_motes value < 15 }					
+# 					}
+# 					add_resource = { volatile_motes = 15 }
+# 				}
+# 				if = { 
+# 					limit = {
+# 						has_technology = tech_exotic_gases
+# 						resource_stockpile_compare = { resource = exotic_gases value < 15 }					
+# 					}
+# 					add_resource = { exotic_gases = 15 }
+# 				}
+# 				if = { 
+# 					limit = {
+# 						has_technology = tech_rare_crystals
+# 						resource_stockpile_compare = { resource = rare_crystals value < 15 }					
+# 					}
+# 					add_resource = { rare_crystals = 15 }
+# 				}
+# 			}
+# 			planet_event = { id = caretaker_origin_event.20200 }
+# 			owner = { caretaker_set_request_cooldown = yes }
+# 		 }
+# 	}
 
-	ai_weight = {
-		weight = 0
-	}
-}
+# 	ai_weight = {
+# 		weight = 0
+# 	}
+# }
 
-caretaker_allow_xenos_wards = {
-	owned_planets_only = yes
-	sound = event_administrative_work
+# caretaker_allow_xenos_wards = {
+# 	owned_planets_only = yes
+# 	sound = event_administrative_work
 
-	resources = {
-		category = decisions
-		cost = {
-			unity = 500
-		}
-	}
+# 	resources = {
+# 		category = decisions
+# 		cost = {
+# 			unity = 500
+# 		}
+# 	}
 
-	potential = {
-		has_designation = col_wardworld
-		has_deposit = d_caretaker_hub
-		not = { has_planet_flag = caretaker_allow_xenos_wards_flag }
-		exists = owner
-		owner = {
-			has_origin = origin_caretaker
-			NOT = { has_country_flag = caretaker_break_up }
-			NOT = { has_valid_civic = civic_love_the_alien }
-		}
-	}
+# 	potential = {
+# 		has_designation = col_wardworld
+# 		has_deposit = d_caretaker_hub
+# 		not = { has_planet_flag = caretaker_allow_xenos_wards_flag }
+# 		exists = owner
+# 		owner = {
+# 			has_origin = origin_caretaker
+# 			NOT = { has_country_flag = caretaker_break_up }
+# 			NOT = { has_valid_civic = civic_love_the_alien }
+# 		}
+# 	}
 
-	allow = {
-		always = yes
-	}
+# 	allow = {
+# 		always = yes
+# 	}
 
-	effect = {
-		custom_tooltip = caretaker_allow_xenos_wards_effect
-		set_planet_flag = caretaker_allow_xenos_wards_flag
-		custom_tooltip = caretaker_mood_worsened_tooltip
-		hidden_effect = {
-			owner = {
-				change_variable = {
-					which = caretaker_mood
-					value = -2
-				}
-			}		
-		}
-	}
+# 	effect = {
+# 		custom_tooltip = caretaker_allow_xenos_wards_effect
+# 		set_planet_flag = caretaker_allow_xenos_wards_flag
+# 		custom_tooltip = caretaker_mood_worsened_tooltip
+# 		hidden_effect = {
+# 			owner = {
+# 				change_variable = {
+# 					which = caretaker_mood
+# 					value = -2
+# 				}
+# 			}		
+# 		}
+# 	}
 	
-	ai_weight = {
-		weight = 0
-	}
-}
+# 	ai_weight = {
+# 		weight = 0
+# 	}
+# }
 
-caretaker_disallow_xenos_wards = {
-	owned_planets_only = yes
-	sound = event_administrative_work
+# caretaker_disallow_xenos_wards = {
+# 	owned_planets_only = yes
+# 	sound = event_administrative_work
 
-	resources = {
-		category = decisions
-		cost = {
-			energy = 500
-		}
-	}
+# 	resources = {
+# 		category = decisions
+# 		cost = {
+# 			energy = 500
+# 		}
+# 	}
 
-	potential = {
-		has_planet_flag = caretaker_allow_xenos_wards_flag
-		exists = owner
-	}
+# 	potential = {
+# 		has_planet_flag = caretaker_allow_xenos_wards_flag
+# 		exists = owner
+# 	}
 
-	allow = {
-		always = yes
-	}
+# 	allow = {
+# 		always = yes
+# 	}
 
-	effect = {
-		custom_tooltip = caretaker_disallow_xenos_wards_effect
-		remove_planet_flag = caretaker_allow_xenos_wards_flag
-		hidden_effect = {
-			owner = {
-				if = {
-					limit = {
-						has_origin = origin_caretaker
-					}
-					change_variable = {
-						which = caretaker_mood
-						value = 1
-					}
-				}
-			}		
-		}
-	}
+# 	effect = {
+# 		custom_tooltip = caretaker_disallow_xenos_wards_effect
+# 		remove_planet_flag = caretaker_allow_xenos_wards_flag
+# 		hidden_effect = {
+# 			owner = {
+# 				if = {
+# 					limit = {
+# 						has_origin = origin_caretaker
+# 					}
+# 					change_variable = {
+# 						which = caretaker_mood
+# 						value = 1
+# 					}
+# 				}
+# 			}		
+# 		}
+# 	}
 	
-	ai_weight = {
-		weight = 1000
-	}
-}
+# 	ai_weight = {
+# 		weight = 1000
+# 	}
+# }
 
 ### Request a corvette wing from the Caretaker
 #caretaker_make_request_ships = {

@@ -2,11 +2,11 @@
 # AlphaAsh, NHunter, Rough, GwenBlanketKnight
 ### remove caretaker core [planet scope]
 caretaker_core_clean_up = {
-	remove_deposit = d_caretaker_core
-	remove_deposit = d_caretaker_core_pleased
-	remove_deposit = d_caretaker_core_content
-	remove_deposit = d_caretaker_core_annoyed
-	remove_deposit = d_caretaker_core_angry
+	# remove_deposit = d_caretaker_core
+	# remove_deposit = d_caretaker_core_pleased
+	# remove_deposit = d_caretaker_core_content
+	# remove_deposit = d_caretaker_core_annoyed
+	# remove_deposit = d_caretaker_core_angry
 	remove_modifier = pm_caretaker_core_pleased
 	remove_modifier = pm_caretaker_core_content
 	remove_modifier = pm_caretaker_core_annoyed
@@ -22,7 +22,7 @@ caretaker_hub_clean_up = {
 ### replace current caretaker core with pleased [planet scope]
 caretaker_set_mood_to_pleased = {
 	caretaker_core_clean_up = yes
-	add_deposit = d_caretaker_core_pleased
+	# add_deposit = d_caretaker_core_pleased
 	add_modifier = {
 		modifier = pm_caretaker_core_pleased
 		days = -1
@@ -32,7 +32,7 @@ caretaker_set_mood_to_pleased = {
 ### replace current caretaker core with content [planet scope]
 caretaker_set_mood_to_content = {
 	caretaker_core_clean_up = yes
-	add_deposit = d_caretaker_core_content
+	# add_deposit = d_caretaker_core_content
 	add_modifier = {
 		modifier = pm_caretaker_core_content
 		days = -1
@@ -42,7 +42,7 @@ caretaker_set_mood_to_content = {
 ### replace current caretaker core with annoyed [planet scope]
 caretaker_set_mood_to_annoyed = {
 	caretaker_core_clean_up = yes
-	add_deposit = d_caretaker_core_annoyed
+	# add_deposit = d_caretaker_core_annoyed
 	add_modifier = {
 		modifier = pm_caretaker_core_annoyed
 		days = -1
@@ -52,7 +52,7 @@ caretaker_set_mood_to_annoyed = {
 ### replace current caretaker core with angry [planet scope]
 caretaker_set_mood_to_angry = {
 	caretaker_core_clean_up = yes
-	add_deposit = d_caretaker_core_angry
+	# add_deposit = d_caretaker_core_angry
 	add_modifier = {
 		modifier = pm_caretaker_core_angry
 		days = -1
@@ -147,70 +147,70 @@ caretaker_set_request_cooldown = {
 }
 
 ### Caretaker mood update based on number of migration treaties
-caretaker_update_mood_migration_treaties = {
-	if = {
-		limit = {
-			NOT = {
-				has_country_flag = caretaker_migration_treaties_check_cooldown
-			}
-			NOT = {
-				has_valid_civic = civic_love_the_alien
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					has_country_flag = caretaker_migration_treaties_first_check
-				}
-			}
-			set_variable = {
-				which = migration_treaties
-				value = 0
-			}
-			set_country_flag = caretaker_migration_treaties_first_check
-		}
-		# count number of countries we have currently have migration treaties with
-		set_variable = {
-			which = updated_migration_treaties
-			value = 0
-		}
-		# Ash - Limit is never reached - re-worked
-		every_country = {
-			limit = {
-				is_country_type = default
-				NOT = {
-					is_country = root
-				}
-				has_migration_access = root
-			}
-			# log = "Found a migration treaty"
-			root = {
-				change_variable = {
-					which = updated_migration_treaties
-					value = 1
-				}
-			}
-		}
-		# give +1 mood for each old migration treaty and -1 for each new migration treaty
-		change_variable = {
-			which = caretaker_mood
-			value = migration_treaties
-		}
-		subtract_variable = {
-			which = caretaker_mood
-			value = updated_migration_treaties
-		}
-		# save new count for migration treaties
-		set_variable = {
-			which = migration_treaties
-			value = updated_migration_treaties
-		}
-		set_timed_country_flag = {
-			flag = caretaker_migration_treaties_check_cooldown
-			days = 179
-		}
-	}
-}
+# caretaker_update_mood_migration_treaties = {
+# 	if = {
+# 		limit = {
+# 			NOT = {
+# 				has_country_flag = caretaker_migration_treaties_check_cooldown
+# 			}
+# 			NOT = {
+# 				has_valid_civic = civic_love_the_alien
+# 			}
+# 		}
+# 		if = {
+# 			limit = {
+# 				NOT = {
+# 					has_country_flag = caretaker_migration_treaties_first_check
+# 				}
+# 			}
+# 			set_variable = {
+# 				which = migration_treaties
+# 				value = 0
+# 			}
+# 			set_country_flag = caretaker_migration_treaties_first_check
+# 		}
+# 		# count number of countries we have currently have migration treaties with
+# 		set_variable = {
+# 			which = updated_migration_treaties
+# 			value = 0
+# 		}
+# 		# Ash - Limit is never reached - re-worked
+# 		every_country = {
+# 			limit = {
+# 				is_country_type = default
+# 				NOT = {
+# 					is_country = root
+# 				}
+# 				has_migration_access = root
+# 			}
+# 			# log = "Found a migration treaty"
+# 			root = {
+# 				change_variable = {
+# 					which = updated_migration_treaties
+# 					value = 1
+# 				}
+# 			}
+# 		}
+# 		# give +1 mood for each old migration treaty and -1 for each new migration treaty
+# 		change_variable = {
+# 			which = caretaker_mood
+# 			value = migration_treaties
+# 		}
+# 		subtract_variable = {
+# 			which = caretaker_mood
+# 			value = updated_migration_treaties
+# 		}
+# 		# save new count for migration treaties
+# 		set_variable = {
+# 			which = migration_treaties
+# 			value = updated_migration_treaties
+# 		}
+# 		set_timed_country_flag = {
+# 			flag = caretaker_migration_treaties_check_cooldown
+# 			days = 179
+# 		}
+# 	}
+# }
 
 # Given a species, create a mod with trait_personal_caretaker and apply to all pops, leaders
 # and armies that have the original species and the same owner as the scope object.
@@ -541,7 +541,6 @@ caretaker_seceded_empire_setup_initial_population = {
 			}
 		}
 		kill_all_pop = yes
-		
 	}
 	# remove extra biological pops
 	while = {
@@ -811,4 +810,62 @@ caretaker_secession_planets_clean_up = {
 			kill_single_pop = yes
 		}
 	}
+}
+
+caretaker_change_mood = {
+	hidden_effect = {
+		if = {
+			limit = {
+				any_situation = {
+					is_situation_type = caretaker_mood_situation
+				}
+			}
+			random_situation = {
+				limit = {
+					is_situation_type = caretaker_mood_situation
+				}
+
+				while = {
+					count = $VALUE$				
+					if = {
+						limit = {
+							situation_progress < 120
+							
+						}
+						add_situation_progress = 1
+					}
+				}
+			}
+		}
+	}
+	# thsi wont be synced but looks better than situation stuff
+	add_resource = {
+		caretaker_mood = $VALUE$
+	}
+}
+
+caretaker_go_berserk = {
+	random_list = {
+				33 = {
+					country_event = {
+						id = caretaker_origin_event.4000
+						days = 150
+						random = 15
+					}
+				}
+				33 = {
+					country_event = {
+						id = caretaker_origin_event.4000
+						days = 180
+						random = 15
+					}
+				}
+				33 = {
+					country_event = {
+						id = caretaker_origin_event.4000
+						days = 210
+						random = 15
+					}
+				}
+			}
 }

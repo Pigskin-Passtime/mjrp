@@ -1,9 +1,7 @@
 # Stellaris Modjam 2020 - Caretaker
 # Writer/Scripter NHunter
 # Reviewer/Editor AphaAsh
-
 # trees TODOs: resettle pop group effects looks weird
-
 namespace = caretaker_origin_event
 # country flags index:
 #
@@ -71,25 +69,25 @@ country_event = {
 		has_origin = origin_caretaker
 	}
 	immediate = {
-		capital_scope = {
-			# add modifier to show that we're about to start
-			add_modifier = {
-				modifier = pm_caretaker_core_restarting
-				days = -1
-			}
-			# save current planet as target for caretaker core updates
-			save_global_event_target_as = caretaker_core_planet@root
-		}
+		# capital_scope = {
+		# 	# add modifier to show that we're about to start
+		# 	add_modifier = {
+		# 		modifier = pm_caretaker_core_restarting
+		# 		days = -1
+		# 	}
+		# 	# save current planet as target for caretaker core updates
+		# 	save_global_event_target_as = caretaker_core_planet@root
+		# }
 		# base caretaker mood = country_level variable
-		set_variable = {
-			which = caretaker_mood
-			value = 0
-		}
-		# keep track of the number of migration treaties
-		set_variable = {
-			which = migration_treaties
-			value = 0
-		}
+		# set_variable = {
+		# 	which = caretaker_mood
+		# 	value = 0
+		# }
+		# # keep track of the number of migration treaties
+		# set_variable = {
+		# 	which = migration_treaties
+		# 	value = 0
+		# }
 		# roll for the glitch event chain
 		random_list = {
 			50 = {
@@ -99,7 +97,8 @@ country_event = {
 				country_event = {
 					id = caretaker_origin_event.2000
 					days = 18000
-				}				# 50 years
+				}
+				# 50 years
 			}
 		}
 		# roll for the abandoned vault event 'chain'
@@ -119,8 +118,9 @@ country_event = {
 				set_country_flag = caretaker_hacked_hub
 				country_event = {
 					id = caretaker_origin_event.2600
-					days = 21600
-				}				# 60 years
+					days = 11000
+				}
+				# ~30 years
 			}
 		}
 		# roll for the downshifters event 'chain'
@@ -131,133 +131,140 @@ country_event = {
 				set_country_flag = caretaker_downshifters
 				country_event = {
 					id = caretaker_origin_event.2700
-					days = 19800
-				}				# 55 years
+					days = 9000
+				}
+				# ~25 years
 			}
 		}
+		# start mood 
+		start_situation = {
+			type = caretaker_mood_situation
+			target = root
+		}
 		# give bonus techs etc from civics
+		# TODO tooltip
 		give_technology = {
 			message = no
 			tech = tech_planetary_unification
 		}
-		if = {
-			limit = {
-				has_civic = civic_drone_culture
+		# TODO event with civic choice
+		# if = {
+		# 	limit = {
+		# 		has_civic = civic_drone_culture
+		# 	}
+		# 	give_technology = {
+		# 		message = no
+		# 		tech = tech_powered_exoskeletons
+		# 	}
+		# 	give_technology = {
+		# 		message = no
+		# 		tech = tech_robotic_workers
+		# 	}
+		# 	create_built_robot_species = yes
+		# 	modify_species = {
+		# 		species = last_created_species
+		# 		add_trait = trait_robot_caretaker_directives
+		# 		# add_traits_at_start_of_list = yes
+		# 	}
+		# 	last_created_species = {
+		# 		save_event_target_as = last_created_species
+		# 	}
+		# 	capital_scope = {
+		# 		create_pop = {
+		# 			species = last_created_species
+		# 		}
+		# 		create_pop = {
+		# 			species = last_created_species
+		# 		}
+		# 		add_building = building_robot_assembly_plant
+		# 	}
+		# }
+		capital_scope = {
+			create_pop = {
+				species = ROOT
 			}
-			give_technology = {
-				message = no
-				tech = tech_powered_exoskeletons
+			create_pop = {
+				species = ROOT
 			}
-			give_technology = {
-				message = no
-				tech = tech_robotic_workers
-			}
-			create_built_robot_species = yes
-			modify_species = {
-				species = last_created_species
-				add_trait = trait_robot_caretaker_directives
-				# add_traits_at_start_of_list = yes
-			}
-			last_created_species = {
-				save_event_target_as = last_created_species
-			}
-			capital_scope = {
-				create_pop = {
-					species = last_created_species
-				}
-				create_pop = {
-					species = last_created_species
-				}
-				add_building = building_robot_assembly_plant
-			}
-		}
-		else = {
-			capital_scope = {
-				create_pop = {
-					species = ROOT
-				}
-				create_pop = {
-					species = ROOT
-				}
-				add_building = building_monitor_station_1
-			}
+			add_building = building_monitor_station_1
 		}
 		#	if = {
 		#		limit = { has_civic = civic_care_crusade }
 		#		give_technology = { message = no tech = tech_centralized_command }
 		#	}
-		if = {
-			limit = {
-				has_civic = civic_love_the_alien
-			}
-			give_technology = {
-				message = no
-				tech = tech_neural_implants
-			}
-		}
+		# TODO event with civic choice
+		# if = {
+		# 	limit = {
+		# 		has_civic = civic_love_the_alien
+		# 	}
+		# 	give_technology = {
+		# 		message = no
+		# 		tech = tech_neural_implants
+		# 	}
+		# }
 		### add the Caretaker Core with a 1 day delay to avoid other mods deleting it at the game start
-		country_event = {
-			id = caretaker_origin_event.2
-			days = 1
-		}
+		# country_event = {
+		# 	id = caretaker_origin_event.2
+		# 	days = 1
+		# }
 	}
 }
 
 ### add the Caretaker Core with a 1 day delay to avoid other mods deleting it at the game start
-country_event = {
-	id = caretaker_origin_event.2
-	is_triggered_only = yes
-	hide_window = yes
-	trigger = {
-		has_origin = origin_caretaker
-	}
-	immediate = {
-		### check that previous core planet is still valid - if so, update core there
-		if = {
-			limit = {
-				event_target:caretaker_core_planet@root = {
-					is_owned_by = root
-					is_colony = yes
-					pop_amount > 0
-				}
-			}
-			event_target:caretaker_core_planet@root = {
-				# remove temporary planet modifier and set a proper one
-				remove_modifier = pm_caretaker_core_restarting
-				caretaker_set_current_mood = yes
-				# remove decrepit dwellings blocker and add a pop that it would've created
-				remove_deposit = d_decrepit_dwellings
-				create_pop = {
-					species = ROOT
-				}
-			}
-		}
-		### scope to (new) capital and setup core there
-		else = {
-			# remove core deposit from old event target as it no longer works for our purposes
-			event_target:caretaker_core_planet@root = {
-				caretaker_core_clean_up = yes
-			}
-			# move core to the current capital and save it as new event target for core mood updates
-			capital_scope = {
-				save_global_event_target_as = caretaker_core_planet@root
-				# remove temporary planet modifier and set a proper one
-				remove_modifier = pm_caretaker_core_restarting
-				caretaker_set_current_mood = yes
-				# remove decrepit dwellings blocker and add a pop that it would've created
-				remove_deposit = d_decrepit_dwellings
-				create_pop = {
-					species = ROOT
-				}
-			}
-		}
-	}
-}
+# country_event = {
+# 	id = caretaker_origin_event.2
+# 	is_triggered_only = yes
+# 	hide_window = yes
+# 	trigger = {
+# 		has_origin = origin_caretaker
+# 	}
+# 	immediate = {
+# 		### check that previous core planet is still valid - if so, update core there
+# 		if = {
+# 			limit = {
+# 				event_target:caretaker_core_planet@root = {
+# 					is_owned_by = root
+# 					is_colony = yes
+# 					pop_amount > 0
+# 				}
+# 			}
+# 			event_target:caretaker_core_planet@root = {
+# 				# remove temporary planet modifier and set a proper one
+# 				remove_modifier = pm_caretaker_core_restarting
+# 				caretaker_set_current_mood = yes
+# 				# remove decrepit dwellings blocker and add a pop that it would've created
+# 				remove_deposit = d_decrepit_dwellings
+# 				create_pop = {
+# 					species = ROOT
+# 				}
+# 			}
+# 		}
+# 		### scope to (new) capital and setup core there
+# 		else = {
+# 			# remove core deposit from old event target as it no longer works for our purposes
+# 			event_target:caretaker_core_planet@root = {
+# 				caretaker_core_clean_up = yes
+# 			}
+# 			# move core to the current capital and save it as new event target for core mood updates
+# 			capital_scope = {
+# 				save_global_event_target_as = caretaker_core_planet@root
+# 				# remove temporary planet modifier and set a proper one
+# 				remove_modifier = pm_caretaker_core_restarting
+# 				caretaker_set_current_mood = yes
+# 				# remove decrepit dwellings blocker and add a pop that it would've created
+# 				remove_deposit = d_decrepit_dwellings
+# 				create_pop = {
+# 					species = ROOT
+# 				}
+# 			}
+# 		}
+# 	}
+# }
 
 ## ##################################################### ##
 ## Managing Caretaker deposits when planet change owners ##
 ## ##################################################### ##
-### if colony with caretaker deposit changes owner, remove it
+## if colony with caretaker deposit changes owner, remove it
 planet_event = {
 	id = caretaker_origin_event.10
 	is_triggered_only = yes
@@ -383,8 +390,402 @@ planet_event = {
 ##               Updating caretaker's mood               ##
 ## ##################################################### ##
 ### evaluate variable storing The Caretaker's mood and update deposit on the capital world to reflect current mood
+# country_event = {
+# 	id = caretaker_origin_event.500
+# 	is_triggered_only = yes
+# 	hide_window = yes
+# 	trigger = {
+# 		has_origin = origin_caretaker
+# 		NOT = {
+# 			has_country_flag = caretaker_break_up
+# 		}
+# 	}
+# 	immediate = {
+# 		### update mood if empire took 'Expansion : A new life' tradition
+# 		if = {
+# 			limit = {
+# 				NOT = {
+# 					has_country_flag = caretaker_tr_a_new_life_logged
+# 				}
+# 				has_tradition = tr_expansion_a_new_life
+# 			}
+# 			set_country_flag = caretaker_tr_a_new_life_logged
+# 			change_variable = {
+# 				which = caretaker_mood
+# 				value = -2				# FIXME
+# 			}
+# 		}
+# 		### update mood if empire took 'Xeno-Compatilibility' AP
+# 		if = {
+# 			limit = {
+# 				NOT = {
+# 					has_country_flag = caretaker_ap_xenocompatilibility_logged
+# 				}
+# 				has_ascension_perk = ap_xeno_compatibility
+# 			}
+# 			set_country_flag = caretaker_ap_xenocompatilibility_logged
+# 			change_variable = {
+# 				which = caretaker_mood
+# 				value = -10				# FIXME
+# 			}
+# 			country_event = {
+# 				id = caretaker_origin_event.510
+# 				days = 2
+# 				random = 3
+# 			}
+# 		}
+# 		### update mood if empire took 'Nihilistic Acquisition' AP
+# 		if = {
+# 			limit = {
+# 				NOT = {
+# 					has_country_flag = caretaker_ap_nihilistic_acquisition_logged
+# 				}
+# 				has_ascension_perk = ap_nihilistic_acquisition
+# 			}
+# 			set_country_flag = caretaker_ap_nihilistic_acquisition_logged
+# 			change_variable = {
+# 				which = caretaker_mood
+# 				value = -8				# FIXME
+# 			}
+# 			country_event = {
+# 				id = caretaker_origin_event.511
+# 				days = 2
+# 				random = 3
+# 			}
+# 		}
+# 		### update mood if empire took 'The Flesh Is Weak' AP
+# 		if = {
+# 			limit = {
+# 				NOT = {
+# 					has_country_flag = caretaker_ap_flesh_is_weak_logged
+# 				}
+# 				has_ascension_perk = ap_the_flesh_is_weak
+# 			}
+# 			set_country_flag = caretaker_ap_flesh_is_weak_logged
+# 			change_variable = {
+# 				which = caretaker_mood
+# 				value = -25				# FIXME
+# 			}
+# 			country_event = {
+# 				id = caretaker_origin_event.512
+# 				days = 2
+# 				random = 3
+# 			}
+# 		}
+# 		### update mood if empire took 'Mind Over Matter' AP
+# 		if = {
+# 			limit = {
+# 				NOT = {
+# 					has_country_flag = caretaker_ap_mind_over_matter_logged
+# 				}
+# 				has_ascension_perk = ap_mind_over_matter
+# 			}
+# 			set_country_flag = caretaker_ap_mind_over_matter_logged
+# 			change_variable = {
+# 				which = caretaker_mood
+# 				value = -25				# FIXME
+# 			}
+# 			country_event = {
+# 				id = caretaker_origin_event.513
+# 				days = 2
+# 				random = 3
+# 			}
+# 		}
+# 		### update mood if empire took 'Engineered Evolution' AP
+# 		if = {
+# 			limit = {
+# 				NOT = {
+# 					has_country_flag = caretaker_ap_engineered_evolution_logged
+# 				}
+# 				has_ascension_perk = ap_engineered_evolution
+# 			}
+# 			set_country_flag = caretaker_ap_engineered_evolution_logged
+# 			change_variable = {
+# 				which = caretaker_mood
+# 				value = -25				# FIXME
+# 			}
+# 			country_event = {
+# 				id = caretaker_origin_event.514
+# 				days = 2
+# 				random = 3
+# 			}
+# 		}
+# 		### update mood if empire took 'Synthetic Evolution' AP
+# 		if = {
+# 			limit = {
+# 				NOT = {
+# 					has_country_flag = caretaker_ap_synthetic_evolution_logged
+# 				}
+# 				has_ascension_perk = ap_synthetic_evolution
+# 			}
+# 			set_country_flag = caretaker_ap_synthetic_evolution_logged
+# 			change_variable = {
+# 				which = caretaker_mood
+# 				value = -250				# FIXME
+# 			}
+# 			country_event = {
+# 				id = caretaker_origin_event.515
+# 				days = 2
+# 				random = 3
+# 			}
+# 			random_list = {
+# 				33 = {
+# 					country_event = {
+# 						id = caretaker_origin_event.4000
+# 						days = 150
+# 						random = 15
+# 					}
+# 				}
+# 				33 = {
+# 					country_event = {
+# 						id = caretaker_origin_event.4000
+# 						days = 180
+# 						random = 15
+# 					}
+# 				}
+# 				33 = {
+# 					country_event = {
+# 						id = caretaker_origin_event.4000
+# 						days = 210
+# 						random = 15
+# 					}
+# 				}
+# 			}
+# 		}
+# 		### update mood if empire took 'Transcendence' AP
+# 		if = {
+# 			limit = {
+# 				NOT = {
+# 					has_country_flag = caretaker_ap_transcendence_logged
+# 				}
+# 				has_ascension_perk = ap_transcendence
+# 			}
+# 			set_country_flag = caretaker_ap_transcendence_logged
+# 			change_variable = {
+# 				which = caretaker_mood
+# 				value = -250				# FIXME
+# 			}
+# 			country_event = {
+# 				id = caretaker_origin_event.516
+# 				days = 2
+# 				random = 3
+# 			}
+# 			random_list = {
+# 				33 = {
+# 					country_event = {
+# 						id = caretaker_origin_event.4000
+# 						days = 150
+# 						random = 15
+# 					}
+# 				}
+# 				33 = {
+# 					country_event = {
+# 						id = caretaker_origin_event.4000
+# 						days = 180
+# 						random = 15
+# 					}
+# 				}
+# 				33 = {
+# 					country_event = {
+# 						id = caretaker_origin_event.4000
+# 						days = 210
+# 						random = 15
+# 					}
+# 				}
+# 			}
+# 		}
+# 		### update mood if empire took 'Evolutionary Mastery' AP
+# 		if = {
+# 			limit = {
+# 				NOT = {
+# 					has_country_flag = caretaker_ap_evolutionary_master_logged
+# 				}
+# 				has_ascension_perk = ap_evolutionary_mastery
+# 			}
+# 			set_country_flag = caretaker_ap_evolutionary_master_logged
+# 			change_variable = {
+# 				which = caretaker_mood
+# 				value = -250				# FIXME
+# 			}
+# 			country_event = {
+# 				id = caretaker_origin_event.517
+# 				days = 2
+# 				random = 3
+# 			}
+# 			random_list = {
+# 				33 = {
+# 					country_event = {
+# 						id = caretaker_origin_event.4000
+# 						days = 150
+# 						random = 15
+# 					}
+# 				}
+# 				33 = {
+# 					country_event = {
+# 						id = caretaker_origin_event.4000
+# 						days = 180
+# 						random = 15
+# 					}
+# 				}
+# 				33 = {
+# 					country_event = {
+# 						id = caretaker_origin_event.4000
+# 						days = 210
+# 						random = 15
+# 					}
+# 				}
+# 			}
+# 		}
+# 		### update mood if empire took 'Eternal Vigilance' AP
+# 		if = {
+# 			limit = {
+# 				NOT = {
+# 					has_country_flag = caretaker_ap_eternal_vigilance_logged
+# 				}
+# 				has_ascension_perk = ap_eternal_vigilance
+# 			}
+# 			set_country_flag = caretaker_ap_eternal_vigilance_logged
+# 			change_variable = {
+# 				which = caretaker_mood
+# 				value = 5				# FIXME
+# 			}
+# 			country_event = {
+# 				id = caretaker_origin_event.520
+# 				days = 2
+# 				random = 3
+# 			}
+# 		}
+# 		### update mood if empire took 'One Vision' AP
+# 		if = {
+# 			limit = {
+# 				NOT = {
+# 					has_country_flag = caretaker_ap_one_vision_logged
+# 				}
+# 				has_ascension_perk = ap_one_vision
+# 			}
+# 			set_country_flag = caretaker_ap_one_vision_logged
+# 			change_variable = {
+# 				which = caretaker_mood
+# 				value = 8				# FIXME
+# 			}
+# 			country_event = {
+# 				id = caretaker_origin_event.521
+# 				days = 2
+# 				random = 3
+# 			}
+# 		}
+# 		### update mood if empire took 'Enigmatic Engineering' AP
+# 		if = {
+# 			limit = {
+# 				NOT = {
+# 					has_country_flag = caretaker_ap_enigmatic_engineering_logged
+# 				}
+# 				has_ascension_perk = ap_enigmatic_engineering
+# 			}
+# 			set_country_flag = caretaker_ap_enigmatic_engineering_logged
+# 			change_variable = {
+# 				which = caretaker_mood
+# 				value = 5				# FIXME
+# 			}
+# 			country_event = {
+# 				id = caretaker_origin_event.522
+# 				days = 2
+# 				random = 3
+# 			}
+# 		}
+# 		### update mood if empire took 'Defender of the Galaxy' AP
+# 		if = {
+# 			limit = {
+# 				NOT = {
+# 					has_country_flag = caretaker_ap_defender_of_the_galaxy_logged
+# 				}
+# 				has_ascension_perk = ap_defender_of_the_galaxy
+# 			}
+# 			set_country_flag = caretaker_ap_defender_of_the_galaxy_logged
+# 			change_variable = {
+# 				which = caretaker_mood
+# 				value = 8				# FIXME
+# 			}
+# 			country_event = {
+# 				id = caretaker_origin_event.523
+# 				days = 2
+# 				random = 3
+# 			}
+# 		}
+# 		### update mood if empire took 'Personal Care' AP
+# 		if = {
+# 			limit = {
+# 				NOT = {
+# 					has_country_flag = caretaker_ap_personal_care_logged
+# 				}
+# 				has_ascension_perk = ap_caretaker_personal_care
+# 			}
+# 			set_country_flag = caretaker_ap_personal_care_logged
+# 			change_variable = {
+# 				which = caretaker_mood
+# 				value = 20				# FIXME
+# 			}
+# 			country_event = {
+# 				id = caretaker_origin_event.524
+# 				days = 2
+# 				random = 3
+# 			}
+# 		}
+# 		### update mood if empire took 'Monitor Directive' AP
+# 		if = {
+# 			limit = {
+# 				NOT = {
+# 					has_country_flag = caretaker_ap_monitor_directive_logged
+# 				}
+# 				has_ascension_perk = ap_caretaker_monitor_control
+# 			}
+# 			set_country_flag = caretaker_ap_monitor_directive_logged
+# 			change_variable = {
+# 				which = caretaker_mood
+# 				value = 60				# FIXME
+# 			}
+# 			country_event = {
+# 				id = caretaker_origin_event.525
+# 				days = 2
+# 				random = 3
+# 			}
+# 		}
+# 		### migration treaties
+# 		# caretaker_update_mood_migration_treaties = yes
+# 		### check that previous core planet is still valid - if so, update core there
+# 		# if = {
+# 		# 	limit = {
+# 		# 		event_target:caretaker_core_planet@root = {
+# 		# 			is_owned_by = root
+# 		# 			is_colony = yes
+# 		# 			pop_amount  > 0
+# 		# 		}
+# 		# 	}
+# 		# 	event_target:caretaker_core_planet@root = {
+# 		# 		caretaker_set_current_mood = yes
+# 		# 	}
+# 		# 	log = "Updated core at event target"
+# 		# }
+# 		# ### scope to (new) capital and setup core there
+# 		# else = {
+# 		# 	# remove core deposit from old event target as it no longer works for our purposes
+# 		# 	event_target:caretaker_core_planet@root = {
+# 		# 		caretaker_core_clean_up = yes
+# 		# 	}
+# 		# 	# move core to the current capital and save it as new event target for core mood updates
+# 		# 	capital_scope = {
+# 		# 		caretaker_hub_clean_up = yes
+# 		# 		caretaker_set_current_mood = yes
+# 		# 		save_global_event_target_as = caretaker_core_planet@root
+# 		# 	}
+# 		# 	log = "Updated core at empire capital"
+# 		# }
+# 	}
+# }
+
+# on AP picked, new mood update
 country_event = {
-	id = caretaker_origin_event.500
+	id = caretaker_origin_event.501
 	is_triggered_only = yes
 	hide_window = yes
 	trigger = {
@@ -394,20 +795,6 @@ country_event = {
 		}
 	}
 	immediate = {
-		### update mood if empire took 'Expansion : A new life' tradition
-		if = {
-			limit = {
-				NOT = {
-					has_country_flag = caretaker_tr_a_new_life_logged
-				}
-				has_tradition = tr_expansion_a_new_life
-			}
-			set_country_flag = caretaker_tr_a_new_life_logged
-			change_variable = {
-				which = caretaker_mood
-				value = -2				# FIXME
-			}
-		}
 		### update mood if empire took 'Xeno-Compatilibility' AP
 		if = {
 			limit = {
@@ -447,6 +834,7 @@ country_event = {
 			}
 		}
 		### update mood if empire took 'The Flesh Is Weak' AP
+		# cyborg we love to see it
 		if = {
 			limit = {
 				NOT = {
@@ -514,120 +902,36 @@ country_event = {
 			set_country_flag = caretaker_ap_synthetic_evolution_logged
 			change_variable = {
 				which = caretaker_mood
-				value = -250				# FIXME
+				value = -25				# FIXME
 			}
 			country_event = {
 				id = caretaker_origin_event.515
 				days = 2
 				random = 3
 			}
-			random_list = {
-				33 = {
-					country_event = {
-						id = caretaker_origin_event.4000
-						days = 150
-						random = 15
-					}
-				}
-				33 = {
-					country_event = {
-						id = caretaker_origin_event.4000
-						days = 180
-						random = 15
-					}
-				}
-				33 = {
-					country_event = {
-						id = caretaker_origin_event.4000
-						days = 210
-						random = 15
-					}
-				}
-			}
-		}
-		### update mood if empire took 'Transcendence' AP
-		if = {
-			limit = {
-				NOT = {
-					has_country_flag = caretaker_ap_transcendence_logged
-				}
-				has_ascension_perk = ap_transcendence
-			}
-			set_country_flag = caretaker_ap_transcendence_logged
-			change_variable = {
-				which = caretaker_mood
-				value = -250				# FIXME
-			}
-			country_event = {
-				id = caretaker_origin_event.516
-				days = 2
-				random = 3
-			}
-			random_list = {
-				33 = {
-					country_event = {
-						id = caretaker_origin_event.4000
-						days = 150
-						random = 15
-					}
-				}
-				33 = {
-					country_event = {
-						id = caretaker_origin_event.4000
-						days = 180
-						random = 15
-					}
-				}
-				33 = {
-					country_event = {
-						id = caretaker_origin_event.4000
-						days = 210
-						random = 15
-					}
-				}
-			}
-		}
-		### update mood if empire took 'Evolutionary Mastery' AP
-		if = {
-			limit = {
-				NOT = {
-					has_country_flag = caretaker_ap_evolutionary_master_logged
-				}
-				has_ascension_perk = ap_evolutionary_mastery
-			}
-			set_country_flag = caretaker_ap_evolutionary_master_logged
-			change_variable = {
-				which = caretaker_mood
-				value = -250				# FIXME
-			}
-			country_event = {
-				id = caretaker_origin_event.517
-				days = 2
-				random = 3
-			}
-			random_list = {
-				33 = {
-					country_event = {
-						id = caretaker_origin_event.4000
-						days = 150
-						random = 15
-					}
-				}
-				33 = {
-					country_event = {
-						id = caretaker_origin_event.4000
-						days = 180
-						random = 15
-					}
-				}
-				33 = {
-					country_event = {
-						id = caretaker_origin_event.4000
-						days = 210
-						random = 15
-					}
-				}
-			}
+			# random_list = {
+			# 	33 = {
+			# 		country_event = {
+			# 			id = caretaker_origin_event.4000
+			# 			days = 150
+			# 			random = 15
+			# 		}
+			# 	}
+			# 	33 = {
+			# 		country_event = {
+			# 			id = caretaker_origin_event.4000
+			# 			days = 180
+			# 			random = 15
+			# 		}
+			# 	}
+			# 	33 = {
+			# 		country_event = {
+			# 			id = caretaker_origin_event.4000
+			# 			days = 210
+			# 			random = 15
+			# 		}
+			# 	}
+			# }
 		}
 		### update mood if empire took 'Eternal Vigilance' AP
 		if = {
@@ -705,73 +1009,139 @@ country_event = {
 				random = 3
 			}
 		}
-		### update mood if empire took 'Personal Care' AP
+		# TODO find ways to have this still around
+		# ### update mood if empire took 'Personal Care' AP
+		# if = {
+		# 	limit = {
+		# 		NOT = {
+		# 			has_country_flag = caretaker_ap_personal_care_logged
+		# 		}
+		# 		has_ascension_perk = ap_caretaker_personal_care
+		# 	}
+		# 	set_country_flag = caretaker_ap_personal_care_logged
+		# 	change_variable = {
+		# 		which = caretaker_mood
+		# 		value = 20				# FIXME
+		# 	}
+		# 	country_event = {
+		# 		id = caretaker_origin_event.524
+		# 		days = 2
+		# 		random = 3
+		# 	}
+		# }
+		# ### update mood if empire took 'Monitor Directive' AP
+		# if = {
+		# 	limit = {
+		# 		NOT = {
+		# 			has_country_flag = caretaker_ap_monitor_directive_logged
+		# 		}
+		# 		has_ascension_perk = ap_caretaker_monitor_control
+		# 	}
+		# 	set_country_flag = caretaker_ap_monitor_directive_logged
+		# 	change_variable = {
+		# 		which = caretaker_mood
+		# 		value = 60				# FIXME
+		# 	}
+		# 	country_event = {
+		# 		id = caretaker_origin_event.525
+		# 		days = 2
+		# 		random = 3
+		# 	}
+		# }
+	}
+}
+
+# on actions for traditions picks
+country_event = {
+	id = caretaker_origin_event.502
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_origin = origin_caretaker
+		NOT = {
+			has_country_flag = caretaker_break_up
+		}
+	}
+	immediate = {
+		### update mood if empire took 'Expansion : A new life' tradition
+		# This doesnt give pops anymore
+		# if = {
+		# 	limit = {
+		# 		NOT = {
+		# 			has_country_flag = caretaker_tr_a_new_life_logged
+		# 		}
+		# 		has_tradition = tr_expansion_a_new_life
+		# 	}
+		# 	set_country_flag = caretaker_tr_a_new_life_logged
+		# 	change_variable = {
+		# 		which = caretaker_mood
+		# 		value = -2				# FIXME
+		# 	}
+		# }
+		### update mood if empire took 'Synthetic Evolution' AP
 		if = {
 			limit = {
 				NOT = {
-					has_country_flag = caretaker_ap_personal_care_logged
+					has_country_flag = caretaker_ap_synthetic_evolution_logged
 				}
-				has_ascension_perk = ap_caretaker_personal_care
+				has_tradition = tr_synthetics_finish
 			}
-			set_country_flag = caretaker_ap_personal_care_logged
+			set_country_flag = caretaker_ap_synthetic_evolution_logged
 			change_variable = {
 				which = caretaker_mood
-				value = 20				# FIXME
+				value = -250				# FIXME
 			}
 			country_event = {
-				id = caretaker_origin_event.524
+				id = caretaker_origin_event.515
 				days = 2
 				random = 3
 			}
+			#caretaker_go_berserk = yes
 		}
-		### update mood if empire took 'Monitor Directive' AP
+		### update mood if empire took 'Transcendence' AP
 		if = {
 			limit = {
 				NOT = {
-					has_country_flag = caretaker_ap_monitor_directive_logged
+					has_country_flag = caretaker_ap_transcendence_logged
 				}
-				has_ascension_perk = ap_caretaker_monitor_control
+				has_tradition = tr_psionics_finish
 			}
-			set_country_flag = caretaker_ap_monitor_directive_logged
+			set_country_flag = caretaker_ap_transcendence_logged
 			change_variable = {
 				which = caretaker_mood
-				value = 60				# FIXME
+				value = -250				# FIXME
 			}
 			country_event = {
-				id = caretaker_origin_event.525
+				id = caretaker_origin_event.516
 				days = 2
 				random = 3
 			}
+			#caretaker_go_berserk = yes
 		}
-		### migration treaties
-		caretaker_update_mood_migration_treaties = yes
-		### check that previous core planet is still valid - if so, update core there
+		### update mood if empire took 'Evolutionary Mastery' AP
 		if = {
 			limit = {
-				event_target:caretaker_core_planet@root = {
-					is_owned_by = root
-					is_colony = yes
-					pop_amount  > 0
+				NOT = {
+					has_country_flag = caretaker_ap_evolutionary_master_logged
+				}
+				OR = {
+					has_tradition = tr_genetics_finish					# non dlc tradition lol
+					has_tradition = tr_cloning_finish
+					has_tradition = tr_purity_finish
+					has_tradition = tr_mutation_finish
 				}
 			}
-			event_target:caretaker_core_planet@root = {
-				caretaker_set_current_mood = yes
+			set_country_flag = caretaker_ap_evolutionary_master_logged
+			change_variable = {
+				which = caretaker_mood
+				value = -250				# FIXME
 			}
-			log = "Updated core at event target"
-		}
-		### scope to (new) capital and setup core there
-		else = {
-			# remove core deposit from old event target as it no longer works for our purposes
-			event_target:caretaker_core_planet@root = {
-				caretaker_core_clean_up = yes
+			country_event = {
+				id = caretaker_origin_event.517
+				days = 2
+				random = 3
 			}
-			# move core to the current capital and save it as new event target for core mood updates
-			capital_scope = {
-				caretaker_hub_clean_up = yes
-				caretaker_set_current_mood = yes
-				save_global_event_target_as = caretaker_core_planet@root
-			}
-			log = "Updated core at empire capital"
+			#caretaker_go_berserk = yes
 		}
 	}
 }
@@ -896,6 +1266,7 @@ country_event = {
 }
 
 ### Angry message from the Caretaker for taking 'The Flesh Is Weak' AP
+# TODO new option to explain why you did this in faith of coming closer
 country_event = {
 	id = caretaker_origin_event.512
 	is_triggered_only = yes
@@ -1650,6 +2021,7 @@ planet_event = {
 		}
 	}
 }
+
 ### built building_clinic - angrier
 ### upgraded to building_hospital or built building_clone_vats - angrier
 planet_event = {
@@ -2083,7 +2455,7 @@ planet_event = {
 				is_being_assimilated = no
 				is_being_purged = no
 			}
-			kill_pop = yes
+			kill_single_pop = yes
 		}
 		# trigger replace-with-native pop event
 		planet_event = {
@@ -2180,7 +2552,7 @@ planet_event = {
 			limit = {
 				is_robot_pop = no
 			}
-			kill_pop = yes
+			kill_single_pop = yes
 		}
 		# schedule notification about strange occurence on targeted planet
 		planet_event = {
@@ -2431,7 +2803,7 @@ planet_event = {
 				limit = {
 					is_robot_pop = no
 				}
-				kill_pop = yes
+				kill_single_pop = yes
 			}
 		}
 	}
@@ -2453,7 +2825,7 @@ country_event = {
 		}
 	}
 	immediate = {
-		event_target:caretaker_core_planet@root = {
+		capital_scope = {
 			# randomly delay the event again so that it doesn't coinside with other events triggered at mid-game
 			random_list = {
 				25 = {
@@ -2794,7 +3166,7 @@ country_event = {
 			random_owned_planet = {
 				limit = {
 					is_capital = no
-					pop_amount  > 2000
+					pop_amount > 2000
 					has_deposit = d_caretaker_hub
 				}
 				save_global_event_target_as = caretaker_hacked_hub_planet@root
@@ -3542,7 +3914,6 @@ planet_event = {
 				species = owner
 			}
 			# TODO
-			
 			# last_created_pop = {
 			# 	add_modifier = {
 			# 		modifier = caretaker_unhappy_settler
@@ -4447,9 +4818,7 @@ country_event = {
 			}
 			while = {
 				count = 3
-				
 				random_owned_pop_group = {
-					
 					resettle_pop_group = {
 						#group = THIS
 						planet = event_target:resettlement_target_planet
@@ -4697,7 +5066,6 @@ country_event = {
 			while = {
 				count = 3
 				random_owned_pop_group = {
-					
 					resettle_pop_group = {
 						#pop = THIS
 						planet = event_target:resettlement_target_planet
@@ -4831,7 +5199,7 @@ country_event = {
 			}
 			clear_global_event_target = caretaker_vault_explorer@root
 		}
-		event_target:caretaker_core_planet@root = {
+		capital_scope = {
 			random_list = {
 				33 = {
 					planet_event = {
@@ -5158,9 +5526,9 @@ country_event = {
 			remove_deposit = d_caretaker_free_settlements
 			remove_modifier = pm_caretaker_free_settler_discord
 			# Caretaker starts purging pops on the planet it takes over
-			every_owned_pop_group = {
-				set_pop_flag = event_purge
-				unemploy_pop = yes
+			every_owned_pop_group = {				
+				# unemploy_pop = yes
+				set_pop_group_flag = event_purge
 			}
 		}
 		# schedule Caretaker trying to take over hub worlds
@@ -5220,8 +5588,8 @@ country_event = {
 			remove_planet_flag = caretaker_core_planet_take_over_success
 			set_owner = ROOT
 			every_owned_pop_group = {
-				remove_pop_flag = event_purge
-				unemploy_pop = yes
+				remove_pop_group_flag = event_purge
+				# unemploy_pop = yes
 			}
 			every_owned_pop_group = {
 				remove_modifier = "pop_recently_conquered"
@@ -5282,8 +5650,8 @@ country_event = {
 			remove_planet_flag = caretaker_core_planet_take_over_success
 			set_owner = ROOT
 			every_owned_pop_group = {
-				remove_pop_flag = event_purge
-				unemploy_pop = yes
+				remove_pop_group_flag = event_purge
+				# unemploy_pop = yes
 			}
 			every_owned_pop_group = {
 				remove_modifier = "pop_recently_conquered"
@@ -5476,7 +5844,7 @@ country_event = {
 				root = {
 					set_country_flag = caretaker_destoryed
 				}
-				clear_global_event_target = caretaker_core_planet@root
+				# clear_global_event_target = caretaker_core_planet@root
 				clear_global_event_target = caretaker_exterminatus_faction@root
 				destroy_country = yes
 			}
@@ -5579,8 +5947,8 @@ country_event = {
 			remove_modifier = pm_caretaker_free_settler_discord
 			# Caretaker starts purging pops on the planet it takes over
 			every_owned_pop_group = {
-				set_pop_flag = event_purge
-				unemploy_pop = yes
+				set_pop_group_flag = event_purge
+				# unemploy_pop = yes
 			}
 		}
 	}
@@ -5619,8 +5987,8 @@ country_event = {
 			remove_planet_flag = caretaker_hub_planet_take_over_success
 			set_owner = ROOT
 			every_owned_pop_group = {
-				remove_pop_flag = event_purge
-				unemploy_pop = yes
+				remove_pop_group_flag = event_purge
+				 # unemploy_pop = yes
 			}
 			every_owned_pop_group = {
 				remove_modifier = "pop_recently_conquered"
@@ -5767,7 +6135,7 @@ country_event = {
 		name = caretaker_origin_event.4203.option.a
 		custom_tooltip = caretaker_origin_event.4203.option.a.tooltip
 		trigger = {
-			has_ascension_perk = ap_evolutionary_mastery
+			has_genetic_ascension = yes
 		}
 		hidden_effect = {
 			add_modifier = {
@@ -5789,7 +6157,7 @@ country_event = {
 		name = caretaker_origin_event.4203.option.b
 		custom_tooltip = caretaker_origin_event.4203.option.b.tooltip
 		trigger = {
-			has_ascension_perk = ap_transcendence
+			has_psionic_ascension = yes
 			has_country_flag = shroud_intro
 		}
 		hidden_effect = {
@@ -5812,7 +6180,7 @@ country_event = {
 		name = caretaker_origin_event.4203.option.c
 		custom_tooltip = caretaker_origin_event.4203.option.c.tooltip
 		trigger = {
-			has_ascension_perk = ap_transcendence
+			has_psionic_ascension = yes
 			has_country_flag = shroud_intro
 		}
 		hidden_effect = {
@@ -5831,7 +6199,7 @@ country_event = {
 		name = caretaker_origin_event.4203.option.d
 		custom_tooltip = caretaker_origin_event.4203.option.d.tooltip
 		trigger = {
-			has_ascension_perk = ap_synthetic_evolution
+			has_synthetic_ascension = yes
 			has_country_flag = synthetic_empire
 		}
 		hidden_effect = {
@@ -5846,7 +6214,7 @@ country_event = {
 		name = caretaker_origin_event.4203.option.e
 		custom_tooltip = caretaker_origin_event.4203.option.e.tooltip
 		trigger = {
-			has_ascension_perk = ap_synthetic_evolution
+			has_synthetic_ascension = yes
 			NOT = {
 				has_country_flag = synthetic_empire
 			}
