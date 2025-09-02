@@ -232,3 +232,34 @@ planet_event = {
 		}
 	}
 }
+
+
+# Menace Objective - Create Tomb World
+# Planet is turned into tomb world by special bombing stance
+# copy of action.81 done this way for vanilla compat reasons.
+planet_event = {
+    id = condan_crisis.5020
+    hide_window = yes
+
+    is_triggered_only = yes
+
+    trigger = {
+        OR = {
+            has_orbital_bombardment_stance = armageddon
+            has_orbital_bombardment_stance = pox
+        }
+        from = {
+            has_ascension_perk = ap_condan
+        }
+        habitable_planet = yes
+        count_owned_pop_amount = {
+            count <= 50
+        }
+    }
+
+    immediate = {
+        from = {
+            complete_crisis_objective = crisobj_condan_destroy_worlds
+        }
+    }
+}
