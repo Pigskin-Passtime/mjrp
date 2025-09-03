@@ -1,99 +1,99 @@
 # Stellaris Modjam 2020 - Caretaker
 # AlphaAsh, NHunter, Rough, GwenBlanketKnight
-# TODO rework into situation, this adds a hub on a planet, the hub gives high monitor jobs, I feel like this could be a building?
+# rework into situation, this adds a hub on a planet, the hub gives high monitor jobs, I feel like this could be a building?
 ### Add a caretaker hub to the planet
-caretaker_add_hub = {
-	owned_planets_only = yes
-	sound = event_administrative_work
+# caretaker_add_hub = {
+# 	owned_planets_only = yes
+# 	sound = event_administrative_work
 
-	resources = {
-		category = decisions
-		cost = {
-			unity = 50
-			minerals = 500
-		}
-	}
+# 	resources = {
+# 		category = decisions
+# 		cost = {
+# 			unity = 50
+# 			minerals = 500
+# 		}
+# 	}
 
-	potential = {
-		is_homeworld = no
-		# is_capital = no
-		caretaker_presence_on_planet = no
-		exists = owner
-		owner = {
-			has_origin = origin_caretaker
-			NOT = { has_country_flag = caretaker_break_up }
-		}
-	}
+# 	potential = {
+# 		is_homeworld = no
+# 		# is_capital = no
+# 		caretaker_presence_on_planet = no
+# 		exists = owner
+# 		owner = {
+# 			has_origin = origin_caretaker
+# 			NOT = { has_country_flag = caretaker_break_up }
+# 		}
+# 	}
 
-	allow = {
-		always = yes
-	}
+# 	allow = {
+# 		always = yes
+# 	}
 
-	effect = {
-		add_deposit = d_caretaker_hub
-		# Make Caretaker happier
-		hidden_effect = {
-			set_planet_flag = caretaker_planet_hub_has_been_built
-			if = {
-				limit = { NOT = { has_planet_flag = caretaker_origin_reminded_to_build_caretaker_hub } }
-				owner = {
-					change_variable = {
-						which = caretaker_mood
-						value = 2 # FIXME
-					}
-				}
-			}
-		}
-	}
+# 	effect = {
+# 		add_deposit = d_caretaker_hub
+# 		# Make Caretaker happier
+# 		hidden_effect = {
+# 			set_planet_flag = caretaker_planet_hub_has_been_built
+# 			if = {
+# 				limit = { NOT = { has_planet_flag = caretaker_origin_reminded_to_build_caretaker_hub } }
+# 				owner = {
+# 					change_variable = {
+# 						which = caretaker_mood
+# 						value = 2 # FIXME
+# 					}
+# 				}
+# 			}
+# 		}
+# 	}
 
-	ai_weight = {
-		weight = 0
-	}
-}
+# 	ai_weight = {
+# 		weight = 0
+# 	}
+# }
 
-### Remove a caretaker hub from the planet
-caretaker_remove_hub = {
-	owned_planets_only = yes
-	sound = event_administrative_work
+# ### Remove a caretaker hub from the planet
+# caretaker_remove_hub = {
+# 	owned_planets_only = yes
+# 	sound = event_administrative_work
 
-	resources = {
-		category = decisions
-		cost = {
-			energy = 500
-		}
-	}
+# 	resources = {
+# 		category = decisions
+# 		cost = {
+# 			energy = 500
+# 		}
+# 	}
 
-	potential = {
-		has_deposit = d_caretaker_hub
-		exists = owner
-		owner = {
-			has_origin = origin_caretaker
-			has_country_flag = caretaker_break_up
-		}
-	}
+# 	potential = {
+# 		has_building = building_caretaker_outreach
+# 		exists = owner
+# 		owner = {
+# 			has_origin = origin_caretaker
+# 			has_country_flag = caretaker_break_up
+# 		}
+# 	}
 
-	allow = {
-		always = yes
-	}
+# 	allow = {
+# 		always = yes
+# 	}
 
-	effect = {
-		remove_deposit = d_caretaker_hub
+# 	effect = {
+# 		remove_deposit = d_caretaker_hub
 
-		hidden_effect = {
-			remove_planet_flag = caretaker_planet_hub_has_been_built
-			if = {
-				limit = { has_deposit = d_caretaker_free_settlements }
-				remove_deposit = d_caretaker_free_settlements
-				create_pop = { species = owner }
-				create_pop = { species = owner }
-			}
-		}
-	}
+# 		hidden_effect = {
+# 			remove_planet_flag = caretaker_planet_hub_has_been_built
+# 			if = {
+# 				limit = { has_deposit = d_caretaker_free_settlements }
+# 				remove_deposit = d_caretaker_free_settlements
+# 				create_pop = { species = owner }
+# 				create_pop = { species = owner }
+# 			}
+# 		}
+# 	}
 
-	ai_weight = {
-		weight = 1000
-	}
-}
+# 	ai_weight = {
+# 		weight = 1000
+# 	}
+# }
 
 ## ##################################################### ##
 ##                Request to the Caretaker               ##
@@ -759,7 +759,7 @@ caretaker_remove_hub = {
 
 # 	potential = {
 # 		has_designation = col_wardworld
-# 		has_deposit = d_caretaker_hub
+# 		has_building = building_caretaker_outreach
 # 		not = { has_planet_flag = caretaker_allow_xenos_wards_flag }
 # 		exists = owner
 # 		owner = {

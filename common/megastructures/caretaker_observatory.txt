@@ -1,29 +1,29 @@
 # Stellaris Modjam 2020 - Caretaker
 # AlphaAsh, NHunter, Rough, GwenBlanketKnight
-
 caretaker_observatory_0 = {
 	entity = "construction_platform_entity"
 	construction_entity = "construction_platform_entity"
 	portrait = GFX_megastructure_eye_of_caretaker_background
 	place_entity_on_planet_plane = no
-	entity_offset = { x = -29 y = -29 }
+	entity_offset = {
+		x = -29
+		y = -29
+	}
 	build_time = 720
 	# build_time = 29
 	resources = {
 		category = megastructures
 		cost = {
 			alloys = 5000
-			# alloys = 5
 			influence = 300
 		}
-
 		upkeep = {
 			energy = 5
 		}
 	}
-
-	prerequisites = { "tech_caretaker_observatory" }
-
+	prerequisites = {
+		"tech_caretaker_observatory"
+	}
 	possible = {
 		exists = starbase
 		custom_tooltip = {
@@ -48,14 +48,21 @@ caretaker_observatory_0 = {
 		}
 		custom_tooltip = {
 			fail_text = "requires_no_existing_caretaker_observatory"
-			from = { NOT = { has_country_flag = built_caretaker_observatory_site } }
+			from = {
+				NOT = {
+					has_country_flag = built_caretaker_observatory_site
+				}
+			}
 		}
 		custom_tooltip = {
 			fail_text = "requires_not_broken_from_caretaker"
-			from = { NOT = { has_country_flag = caretaker_break_up }}
+			from = {
+				NOT = {
+					has_country_flag = caretaker_break_up
+				}
+			}
 		}
 	}
-
 	placement_rules = {
 		planet_possible = {
 			custom_tooltip = {
@@ -65,11 +72,12 @@ caretaker_observatory_0 = {
 					status = yes
 				}
 				is_colonizable = no
-				
 			}
 			custom_tooltip = {
 				fail_text = "requires_no_anomaly"
-				NOT = { has_anomaly = yes }
+				NOT = {
+					has_anomaly = yes
+				}
 			}
 			custom_tooltip = {
 				fail_text = "requires_not_minor_planetary_body"
@@ -88,17 +96,22 @@ caretaker_observatory_0 = {
 			}
 		}
 	}
-
 	# root = system
 	# from = country
 	ai_weight = {
 		factor = 0
 	}
-
-	on_build_start = {}
-	on_build_cancel = {}
+	on_build_start = {
+	}
+	on_build_cancel = {
+	}
 	on_build_complete = {
-		from = { set_country_flag = built_caretaker_observatory_site }
+		from = {
+			set_country_flag = built_caretaker_observatory_site
+			caretaker_change_mood = {
+				VALUE = 10
+			}
+		}
 	}
 }
 
@@ -107,48 +120,55 @@ caretaker_observatory_1 = {
 	construction_entity = "interstellar_assembly_stage_1_entity"
 	portrait = GFX_megastructure_eye_of_caretaker_background
 	place_entity_on_planet_plane = no
-	entity_offset = { x = -29 y = -29 }
-    build_time = 720
+	entity_offset = {
+		x = -29
+		y = -29
+	}
+	build_time = 720
 	# build_time = 29
 	resources = {
 		category = megastructures
 		cost = {
 			alloys = 10000
-			# alloys = 10
 		}
-
 		upkeep = {
 			energy = 5
 		}
 	}
-
 	upgrade_from = {
 		caretaker_observatory_0
 	}
-	
 	sensor_range = 5
 	hyperlane_range = 10
-	
 	possible = {
 		custom_tooltip = {
 			fail_text = "requires_caretaker_origin"
-			from = { has_origin = origin_caretaker }
+			from = {
+				has_origin = origin_caretaker
+			}
 		}
 		custom_tooltip = {
 			fail_text = "requires_not_broken_from_caretaker"
-			from = { NOT = { has_country_flag = caretaker_break_up }}
+			from = {
+				NOT = {
+					has_country_flag = caretaker_break_up
+				}
+			}
 		}
 	}
-
-	prerequisites = { "tech_caretaker_observatory" }
-
+	prerequisites = {
+		"tech_caretaker_observatory"
+	}
 	country_modifier = {
 		empire_size_mult = -0.15
 	}
-
 	on_build_complete = {
 		# Ash May need a re-work
-		# from = { country_event = { id = mega.9006 } }
+		from = {
+			caretaker_change_mood = {
+				VALUE = 10
+			}
+		}
 	}
 }
 
@@ -157,48 +177,55 @@ caretaker_observatory_2 = {
 	construction_entity = "interstellar_assembly_stage_2_entity"
 	portrait = GFX_megastructure_eye_of_caretaker_background
 	place_entity_on_planet_plane = no
-	entity_offset = { x = -29 y = -29 }
+	entity_offset = {
+		x = -29
+		y = -29
+	}
 	# build_time = 29
 	build_time = 1080
 	resources = {
 		category = megastructures
 		cost = {
-			# alloys = 10
-			alloys = 10000
+			alloys = 15000
 		}
-
 		upkeep = {
 			energy = 10
 		}
 	}
-
 	upgrade_from = {
 		caretaker_observatory_1
 	}
-	
 	sensor_range = 10
 	hyperlane_range = 20
-	
 	possible = {
 		custom_tooltip = {
 			fail_text = "requires_caretaker_origin"
-			from = { has_origin = origin_caretaker }
+			from = {
+				has_origin = origin_caretaker
+			}
 		}
 		custom_tooltip = {
 			fail_text = "requires_not_broken_from_caretaker"
-			from = { NOT = { has_country_flag = caretaker_break_up }}
+			from = {
+				NOT = {
+					has_country_flag = caretaker_break_up
+				}
+			}
 		}
 	}
-
-	prerequisites = { "tech_caretaker_observatory" }
-
-	country_modifier = {
-		empire_size_mult = -0.25
+	prerequisites = {
+		"tech_caretaker_observatory"
 	}
-
+	country_modifier = {
+		empire_size_mult = -0.2
+	}
 	on_build_complete = {
 		# Ash May need a re-work
-		# from = { country_event = { id = mega.9007 } }
+		from = {
+			caretaker_change_mood = {
+				VALUE = 15
+			}
+		}
 	}
 }
 
@@ -207,48 +234,55 @@ caretaker_observatory_3 = {
 	construction_entity = "interstellar_assembly_stage_3_entity"
 	portrait = GFX_megastructure_eye_of_caretaker_background
 	place_entity_on_planet_plane = no
-	entity_offset = { x = -29 y = -29 }
+	entity_offset = {
+		x = -29
+		y = -29
+	}
 	# build_time = 29
 	build_time = 1800
 	resources = {
 		category = megastructures
 		cost = {
-			# alloys = 10
-			alloys = 10000
+			alloys = 20000
 		}
-
 		upkeep = {
 			energy = 15
 		}
 	}
-
 	upgrade_from = {
 		caretaker_observatory_2
 	}
-	
 	sensor_range = 15
 	hyperlane_range = 30
-	
 	possible = {
 		custom_tooltip = {
 			fail_text = "requires_caretaker_origin"
-			from = { has_origin = origin_caretaker }
+			from = {
+				has_origin = origin_caretaker
+			}
 		}
 		custom_tooltip = {
 			fail_text = "requires_not_broken_from_caretaker"
-			from = { NOT = { has_country_flag = caretaker_break_up }}
+			from = {
+				NOT = {
+					has_country_flag = caretaker_break_up
+				}
+			}
 		}
 	}
-
-	prerequisites = { "tech_caretaker_observatory" }
-
-	country_modifier = {
-		country_admin_cap_mult = 0.75
+	prerequisites = {
+		"tech_caretaker_observatory"
 	}
-
+	country_modifier = {
+		empire_size_mult = -0.25
+	}
 	on_build_complete = {
 		# Ash May need a re-work
-		# from = { country_event = { id = mega.9008 } }
+		from = {
+			caretaker_change_mood = {
+				VALUE = 20
+			}
+		}
 	}
 }
 
@@ -257,52 +291,57 @@ caretaker_observatory_4 = {
 	construction_entity = "interstellar_assembly_stage_4_entity"
 	portrait = GFX_megastructure_eye_of_caretaker_background
 	place_entity_on_planet_plane = no
-	entity_offset = { x = -29 y = -29 }
+	entity_offset = {
+		x = -29
+		y = -29
+	}
 	# build_time = 29
 	build_time = 1800
 	resources = {
 		category = megastructures
 		cost = {
-			# alloys = 10
-			alloys = 10000
+			alloys = 25000
 		}
-
 		upkeep = {
 			energy = 20
 		}
 	}
-	
 	possible = {
 		custom_tooltip = {
 			fail_text = "requires_caretaker_origin"
-			from = { has_origin = origin_caretaker }
+			from = {
+				has_origin = origin_caretaker
+			}
 		}
 		custom_tooltip = {
 			fail_text = "requires_not_broken_from_caretaker"
-			from = { NOT = { has_country_flag = caretaker_break_up }}
+			from = {
+				NOT = {
+					has_country_flag = caretaker_break_up
+				}
+			}
 		}
 	}
-
 	upgrade_from = {
 		caretaker_observatory_3
 	}
-	
 	sensor_range = 20
 	hyperlane_range = 40
-
-	prerequisites = { "tech_caretaker_observatory" }
-	show_prereqs = yes
-
-	country_modifier = {
-		empire_size_mult = -0.5
+	prerequisites = {
+		"tech_caretaker_observatory"
 	}
-
+	show_prereqs = yes
+	country_modifier = {
+		empire_size_mult = -0.3
+	}
 	on_build_complete = {
 		set_star_flag = caretaker_observatory_built
 		from = {
 			# Ash May need a re-work
 			set_country_flag = has_built_or_repaired_megastructure
-			# country_event = { id = mega.9009 }
+			caretaker_change_mood = {
+				VALUE = 20
+			}
 		}
 	}
 }

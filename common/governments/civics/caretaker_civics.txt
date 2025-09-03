@@ -2,13 +2,15 @@
 # AlphaAsh, NHunter, Rough, GwenBlanketKnight
 
 # Authoritarian
+# Monitor cult ap incorparate?, higher upkeep
 civic_monitor_cult = {
-	description = "civic_tooltip_monitor_cult_effects"
+	# description = "civic_tooltip_monitor_cult_effects"
 	potential = {
 		civics = {
 			value = civic_monitor_cult # Added via event - this trigger prevents the civic from being picked by others
 		}
 	}
+	modification = no
 	# possible = {
 	# 	authority = {
 	# 		value = auth_imperial
@@ -24,15 +26,20 @@ civic_monitor_cult = {
 	# 		not = { value = civic_imperial_cult }
 	# 	}
 	# }
+	description = civic_monitor_cult_tt # high monitors will produce influence, wards will increase efficienfy of monitors
 	random_weight = { base = 0 }
 	modifier = {
+		councilor_caretaker_first_monitor_exp_gain = 0.5
+		# planet_caretaker_monitors_unity_produces_mult = 0.2
 		edicts_cost_mult = -0.25
+		country_government_civic_points_add = 1
 	}
 }
 
 # Egalitarian
+# Assembly from , higher wards upkeep
 civic_one_big_family = {
-	description = "civic_tooltip_one_big_family_effects"
+	# description = "civic_tooltip_one_big_family_effects"
 	modification = no
 	
 	potential = {
@@ -40,6 +47,7 @@ civic_one_big_family = {
 			value = civic_one_big_family # Added via event - this trigger prevents the civic from being picked by others
 		}
 	}
+	modification = no
 	# possible = {
 	# 	ethics = {
 	# 		OR = {
@@ -56,9 +64,12 @@ civic_one_big_family = {
 	# 		NOT = { value = civic_free_haven }
 	# 	}
 	# }
+	description = civic_one_big_family_tt
 	modifier = {
 		#job_caretaker_ward_per_pop = 0.05
+		planet_civilians_trade_produces_add = 1
 		pop_demotion_time_mult = -0.25
+		country_government_civic_points_add = 1
 	}
 	random_weight = {
 		base = 0
@@ -66,14 +77,16 @@ civic_one_big_family = {
 }
 
 # Militarist
-# TODO
+# free alloys from caretaker request, only influence upkeep
+
 civic_care_crusade = {
-	description = "civic_tooltip_care_crusade_effects"
+	# description = "civic_tooltip_care_crusade_effects"
 	potential = {
 		civics = {
 			value = civic_care_crusade # Added via event - this trigger prevents the civic from being picked by others
 		}
 	}
+	modification = no
 	# possible = {
 	# 	ethics = {
 	# 		OR = {
@@ -87,26 +100,33 @@ civic_care_crusade = {
 	# 		not = { value = civic_warrior_culture }
 	# 	}
 	# }
+	description = civic_care_crusade_tt # alloys no longer cost influence and always availible, approbvalon win
 	random_weight = { base = 0 }
 	modifier = {
-		army_damage_mult = 0.1
-		country_war_exhaustion_mult = -0.1
+		# commander_exp_gain = 0.2
+		planet_civilians_alloys_produces_add = 1
+		country_war_exhaustion_mult = -0.2
+		country_government_civic_points_add = 1
 	}
 }
 
 # Pacifist
+# Defense =/ pacifism, maybe something with emprie size or happiness?
+# peace makes him happy and our people, higher claim costs
 civic_protected = {
-	description = "civic_tooltip_protected_effects"
+	# description = "civic_tooltip_protected_effects"
 	potential = {
 		civics = {
 			value = civic_protected # Added via event - this trigger prevents the civic from being picked by others
 		}
 	}
 	modifier = {
-		ship_home_territory_fire_rate_mult = 0.1
-		shipclass_starbase_damage_mult = 0.15
+		ship_home_territory_fire_rate_mult = 0.1		
 		ship_military_station_small_cost_mult = -0.25
+		country_government_civic_points_add = 1
 	}
+	description = civic_care_crusade_tt # starbase building give extra platform cap, peace time gives happiness
+	modification = no
 	# possible = {
 	# 	ethics = {
 	# 		OR = {
@@ -120,13 +140,15 @@ civic_protected = {
 }
 
 # Materialist
+# robots ok for caretaker, u start with tech and get some drones
 civic_drone_culture = {
-	description = "civic_tooltip_drone_culture_effects"
+	# description = "civic_tooltip_drone_culture_effects"
 	potential = {
 		civics = {
 			value = civic_drone_culture # Added via event - this trigger prevents the civic from being picked by others
 		}
 	}
+	modification = no
 	# possible = {
 	# 	ethics = {
 	# 		OR = {
@@ -139,20 +161,24 @@ civic_drone_culture = {
 	# 		not = { value = civic_technocracy }
 	# 	}
 	# }
+	description = civic_drone_culture_tt # robots ok for caretaker, u start with tech and get some drones, special trait + job
 	modifier = {
-		planet_pops_robotics_upkeep_mult = -0.05
+		planet_civilians_engineering_research_produces_add = 2
+		country_government_civic_points_add = 1
 	}
 	random_weight = { base = 0 }
 }
 
 # Xenophobe
+# aliens ok for caretaker, you get some prmitive on your planet
 civic_love_the_alien = {
-	description = "civic_tooltip_love_the_alien_effects"
+	# description = "civic_tooltip_love_the_alien_effects"
 	potential = {
 		civics = {
 			value = civic_love_the_alien # Added via event - this trigger prevents the civic from being picked by others
 		}
 	}
+	modification = no
 	# possible = {
 	# 	ethics = {
 	# 		OR = {
@@ -170,35 +196,39 @@ civic_love_the_alien = {
 	# 		not = { value = civic_slaver_guilds }
 	# 	}
 	# }
+	description = civic_drone_culture_tt  # aliens ok for caretaker
 	random_weight = { base = 0 }
 	modifier = {
 		# planet_jobs_xenos_upkeep_mult = -0.1
 		# planet_jobs_slave_upkeep_mult = -0.1
-		country_pop_enslaved_mult = 0.25
+		planet_jobs_slave_produces_mult = 0.2	
+		pop_cat_slave_happiness = -0.1
+		country_government_civic_points_add = 1
 	}
 }
-# TODO
+
 # Xenophile
-civic_polyamorous = {
-	description = "civic_tooltip_polyamorous_effects"
-	modification = no
-	potential = {
-		civics = {
-			value = civic_polyamorous # Added via event - this trigger prevents the civic from being picked by others
-		}
-	}
-	# possible = {
-	# 	ethics = {
-	# 		OR = {
-	# 			value = ethic_xenophile
-	# 			value = ethic_fanatic_xenophile
-	# 			value = ethic_egalitarian
-	# 			value = ethic_fanatic_egalitarian
-	# 		}
-	# 	}
-	# }
-	modifier = {
-	#	pop_growth_speed = 0.1
-	}
-	random_weight = { base = 0 }
-}
+# Aliens can be wards, migration ok?, does that veen make sense, - governing attraction
+# civic_polyamorous = {
+# 	# description = "civic_tooltip_polyamorous_effects"
+# 	modification = no
+# 	potential = {
+# 		civics = {
+# 			value = civic_polyamorous # Added via event - this trigger prevents the civic from being picked by others
+# 		}
+# 	}
+# 	# possible = {
+# 	# 	ethics = {
+# 	# 		OR = {
+# 	# 			value = ethic_xenophile
+# 	# 			value = ethic_fanatic_xenophile
+# 	# 			value = ethic_egalitarian
+# 	# 			value = ethic_fanatic_egalitarian
+# 	# 		}
+# 	# 	}
+# 	# }
+# 	modifier = {
+# 	#	pop_growth_speed = 0.1
+# 	}
+# 	random_weight = { base = 0 }
+# }

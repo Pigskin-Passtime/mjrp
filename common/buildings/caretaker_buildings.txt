@@ -3,13 +3,14 @@
 building_monitor_station_1 = {
 	base_buildtime = @b1_time
 	category = amenity
+	planet_limit = 1
 	potential = {
 		exists = owner
 		owner = {
 			has_origin = origin_caretaker
 		}
 	}
-		building_sets = {
+	building_sets = {
 		government
 		urban
 		entertainment
@@ -56,7 +57,9 @@ building_monitor_station_1 = {
 	}
 	planet_modifier = {
 		job_monitor_add = @b1_jobs
-		planet_crime_add = -10
+		planet_crime_mult = -0.1
+		planet_entertainers_upkeep_mult = -0.05
+		planet_bureaucrats_upkeep_mult = -0.05
 	}
 	#prerequisites = {
 	#	"tech_cultural_heritage"
@@ -104,6 +107,7 @@ building_monitor_station_1 = {
 building_monitor_station_2 = {
 	base_buildtime = @b2_time
 	can_build = no
+	planet_limit = 1
 	category = amenity
 	potential = {
 		exists = owner
@@ -111,7 +115,7 @@ building_monitor_station_2 = {
 			has_origin = origin_caretaker
 		}
 	}
-		building_sets = {
+	building_sets = {
 		government
 		urban
 		entertainment
@@ -173,7 +177,9 @@ building_monitor_station_2 = {
 	}
 	planet_modifier = {
 		job_monitor_add = @b2_jobs
-		planet_crime_add = -20
+		planet_crime_mult = -0.2
+		planet_entertainers_upkeep_mult = -0.1
+		planet_bureaucrats_upkeep_mult = -0.1
 	}
 	#prerequisites = {
 	#	"tech_heritage_site"
@@ -210,6 +216,7 @@ building_monitor_station_2 = {
 building_monitor_station_3 = {
 	base_buildtime = @b3_time
 	can_build = no
+	planet_limit = 1
 	category = amenity
 	potential = {
 		exists = owner
@@ -279,7 +286,9 @@ building_monitor_station_3 = {
 	}
 	planet_modifier = {
 		job_monitor_add = @b3_jobs
-		planet_crime_add = -30
+		planet_crime_mult = -0.3
+		planet_entertainers_upkeep_mult = -0.15
+		planet_bureaucrats_upkeep_mult = -0.15
 	}
 	#prerequisites = {
 	#	"tech_hypercomms_forum"
@@ -307,124 +316,87 @@ building_monitor_station_3 = {
 	}
 }
 
-# TODO make on par with branch buildings update
+#  caretaker hub 
 building_caretaker_outreach = {
-	base_buildtime = @b2_time
-	owner_type = corporate
-	category = government
-	# branch_office_building = yes
+	base_buildtime = @b1_time
+	category = amenity
+	planet_limit = 1
 	potential = {
-		has_branch_office = yes
-		branch_office_owner = {
+		exists = owner
+		owner = {
 			has_origin = origin_caretaker
 		}
 	}
-	planet_modifier = {
-		planet_amenities_add = 1000
-		# planet_emigration_push_add = -20 # makes less sense with auto resettle 
+	building_sets = {
+		government
+		urban
+		entertainment
+		resort
+		unity
 	}
-	# TODO isnt this just ethic attraction in the end?
-	triggered_planet_modifier = {
-		potential = {
-			exists = owner
-			owner = {
-				or = {
-					has_ethic = ethic_spiritualist
-					has_ethic = ethic_fanatic_spiritualist
-				}
-			}
-		}
-		pop_ethic_materialist_attraction_mult = 0.25
-	}
-	triggered_planet_modifier = {
-		potential = {
-			exists = owner
-			owner = {
-				or = {
-					has_ethic = ethic_xenophile
-					has_ethic = ethic_fanatic_xenophile
-				}
-			}
-		}
-		pop_ethic_xenophobe_attraction_mult = 0.25
-	}
-	triggered_planet_modifier = {
-		potential = {
-			exists = owner
-			owner = {
-				or = {
-					has_ethic = ethic_militarist
-					has_ethic = ethic_fanatic_militarist
-				}
-			}
-		}
-		pop_ethic_pacifist_attraction_mult = 0.25
-	}
-	triggered_planet_modifier = {
-		potential = {
-			exists = owner
-			owner = {
-				or = {
-					has_ethic = ethic_egalitarian
-					has_ethic = ethic_fanatic_egalitarian
-				}
-			}
-		}
-		pop_ethic_authoritarian_attraction_mult = 0.25
-	}
-	triggered_planet_modifier = {
-		potential = {
-			exists = owner
-			owner = {
-				or = {
-					has_ethic = ethic_authoritarian
-					has_ethic = ethic_fanatic_authoritarian
-				}
-			}
-		}
-		pop_ethic_pacifist_attraction_mult = 0.25
-	}
-	triggered_planet_modifier = {
-		potential = {
-			exists = owner
-			owner = {
-				or = {
-					has_ethic = ethic_materialist
-					has_ethic = ethic_fanatic_materialist
-				}
-			}
-		}
-		pop_ethic_pacifist_attraction_mult = 0.25
-	}
+	# allow = {
+	# 	caretaker_presence_on_planet = yes
+	# }
 	destroy_trigger = {
-		exists = branch_office_owner
+		exists = owner
 		or = {
-			branch_office_owner = {
+			owner = {
 				not = {
 					has_origin = origin_caretaker
 				}
 			}
 			and = {
-				branch_office_owner = {
+				owner = {
 					has_origin = origin_caretaker
+				}
+				owner = {
 					has_country_flag = caretaker_break_up
 				}
 			}
 		}
 	}
+	convert_to = {
+		building_temple
+		building_hive_node
+		building_simulation_1
+		building_corporate_monument
+		building_galactic_memorial_1
+		building_autochthon_monument
+	}
 	resources = {
-		category = planet_branch_office_buildings
+		category = planet_buildings
 		cost = {
-			minerals = @b2_minerals
-		}
-		produces = {
-			energy = 10
+			minerals = @b1_minerals
 		}
 		upkeep = {
-			consumer_goods = 2
+			energy = @b1_upkeep
+		}
+	}
+	planet_modifier = {
+		job_high_monitor_add = 1
+		# # fake_pop_growth_mod = 0.1
+	}
+	# TODO desc that it enables wards
+	on_built = {
+		planet_event = {
+			id = caretaker_origin_event.1200
+		}
+	}
+	on_destroy = {
+		planet_event = {
+			id = caretaker_origin_event.1210
 		}
 	}
 	ai_weight = {
 		weight = 0
+		modifier = {
+			weight = 5
+			owner = {
+				has_monthly_income = {
+					resource = consumer_goods
+					value > 10
+				}
+			}
+		}
 	}
 }

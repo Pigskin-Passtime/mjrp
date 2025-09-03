@@ -1,22 +1,18 @@
 caretaker_mood_situation = {
-	picture = GFX_evt_caretaker_content
 	picture = {
 		trigger = {
 			OR = {
 				current_stage = caretaker_mood_stage_1
 			}
-			
 		}
 		picture = GFX_evt_caretaker_angry
 	}
 	picture = {
 		trigger = {
 			OR = {
-				
 				current_stage = caretaker_mood_stage_2
 				current_stage = caretaker_mood_stage_3
 			}
-			
 		}
 		picture = GFX_evt_caretaker_annoyed
 	}
@@ -25,7 +21,6 @@ caretaker_mood_situation = {
 			OR = {
 				current_stage = caretaker_mood_stage_4
 			}
-			
 		}
 		picture = GFX_evt_caretaker_content
 	}
@@ -35,20 +30,18 @@ caretaker_mood_situation = {
 				current_stage = caretaker_mood_stage_5
 				current_stage = caretaker_mood_stage_6
 			}
-			
 		}
 		picture = GFX_evt_caretaker_pleased
 	}
-
-
+	picture = GFX_evt_caretaker_content
 	complete_icon_frame = GFX_situation_outcome_frame_blue
 	complete_icon = GFX_situation_outcome_unknown
 	fail_icon_frame = GFX_situation_outcome_frame_red
-	fail_icon = GFX_situation_outcome_unknown
+	fail_icon = GFX_situation_outcome_negative
 	on_progress_complete = {
 		custom_tooltip = situation_unknown_outcome_approach
 		hidden_effect = {
-			# TODO can i block it from finishing?
+			# can i block it from finishing?
 		}
 	}
 	on_fail = {
@@ -59,6 +52,15 @@ caretaker_mood_situation = {
 				caretaker_go_berserk = yes
 			}
 		}
+	}
+	triggered_modifier = {
+		potential = {
+			owner = {
+				has_valid_civic = civic_protected
+				is_at_war = no
+			}
+		}
+		pop_happiness = 0.1
 	}
 	#start_value = 60
 	initial_progress = 60
@@ -96,7 +98,7 @@ caretaker_mood_situation = {
 			icon_background = GFX_situation_stage_frame_gray
 			end = 75
 			modifier = {
-				planet_amenities_mult = -0.05
+				planet_amenities_mult = 0.01
 			}
 		}
 		caretaker_mood_stage_5 = {
@@ -106,7 +108,15 @@ caretaker_mood_situation = {
 			end = 100
 			# custom_tooltip = stage_unknown_effects
 			modifier = {
-				planet_amenities_mult = 0.05
+				planet_amenities_mult = 0.1
+			}
+			on_first_enter = {
+				owner = {
+					country_event = {
+						id = caretaker_origin_event.3
+						days = 60
+					}
+				}
 			}
 		}
 		caretaker_mood_stage_6 = {
@@ -116,19 +126,21 @@ caretaker_mood_situation = {
 			# set_situation_locked  lock on 49 
 			end = 125
 			modifier = {
-				planet_amenities_mult = 0.1
+				planet_amenities_mult = 0.15
 				planet_stability_add = 5
+				# fake_pop_growth_mod = 0.2
+				bonus_pop_growth = 0.2
 			}
 		}
 	}
 	approach = {
 		name = situation_caretaker_mood_appraoch_basic
-		icon = GFX_situation_approach_fist
-		icon_background = GFX_situation_approach_bg_yellow
+		icon = GFX_situation_approach_discurage_conversation
+		icon_background = GFX_situation_approach_bg_green
 		default = yes
-		# 		modifier = {
-		# 	planet_stability_add = 5
-		# }
+		modifier = {
+			planet_stability_add = 2
+		}
 		# triggered_modifier = {
 		# 	potential = {
 		# 		NOT = {
@@ -140,24 +152,47 @@ caretaker_mood_situation = {
 		# 	}
 		# }
 	}
-	# TODO caretaker didnt give you shit when you look good, i feel like ihave to respect that
+	approach = {
+		name = situation_caretaker_mood_appraoch_pops
+		icon = GFX_situation_approach_pop
+		icon_background = GFX_situation_approach_bg_yellow
+		allow = {
+			caretaker_takes_request = yes
+		}
+		on_select = {
+			custom_tooltip = approach_outcome_tooltip
+		}
+		resources = {
+			category = situations
+			# test this
+			upkeep = {
+				influence = 1
+				#mult = owner.trigger:num_owned_planets
+			}
+		}
+		modifier = {
+			# fake_pop_growth_mod = 1.5
+			bonus_pop_growth = 1.5
+		}
+	}
+	# caretaker didnt give you shit when you look good, i feel like ihave to respect that
 	approach = {
 		name = situation_caretaker_mood_appraoch_minerals
-		icon = GFX_situation_approach_fist
-		icon_background = GFX_situation_approach_bg_green
+		icon = GFX_situation_approach_minerals
+		icon_background = GFX_situation_approach_bg_yellow
 		potential = {
-			owner = {
-				resource_income_compare = {
-					resource = minerals
-					value < 10
+			OR = {
+				owner = {
+					resource_income_compare = {
+						resource = minerals
+						value < 10
+					}
 				}
+				current_situation_approach = situation_caretaker_mood_appraoch_minerals
 			}
 		}
 		allow = {
-			OR = {
-				current_stage = stage_6
-				current_stage = stage_5
-			}
+			caretaker_takes_request = yes
 			# custom_tooltip = {
 			# 	fail_text = too_late_to_change_approach
 			# 	OR = {
@@ -173,144 +208,130 @@ caretaker_mood_situation = {
 		}
 		resources = {
 			category = situations
-			# TODO test this
+			# test this
 			produces = {
-				minerals = 10
+				minerals = 15
 				mult = owner.trigger:num_owned_planets
 			}
 			upkeep = {
-				influence = 0.1
-				multiplier = owner.trigger:num_owned_planets
+				influence = 1
+				#mult = owner.trigger:num_owned_planets
 			}
 		}
 	}
 	approach = {
 		name = situation_caretaker_mood_appraoch_food
-		icon = GFX_situation_approach_fist
-		icon_background = GFX_situation_approach_bg_green
+		icon = GFX_situation_approach_digestion
+		icon_background = GFX_situation_approach_bg_yellow
 		potential = {
-			owner = {
-				is_lithoid_empire = no
-				resource_income_compare = {
-					resource = food
-					value < 10
+			OR = {
+				owner = {
+					# if you dont use bioships as lithoids, you wont get food. makes sense?
+					NAND = {
+						is_lithoid_empire = yes
+						country_uses_bio_ships = no
+					}
+					resource_income_compare = {
+						resource = food
+						value < 10
+					}
 				}
+				current_situation_approach = situation_caretaker_mood_appraoch_food
 			}
 		}
 		allow = {
-			OR = {
-				current_stage = stage_6
-				current_stage = stage_5
-			}
+			caretaker_takes_request = yes
 		}
 		on_select = {
 			custom_tooltip = approach_outcome_tooltip
 		}
 		resources = {
 			category = situations
-			# TODO test this
+			# test this
 			produces = {
 				food = 10
 				mult = owner.trigger:num_owned_planets
 			}
 			upkeep = {
-				influence = 0.1
-				multiplier = owner.trigger:num_owned_planets
+				influence = 1
+				#mult = owner.trigger:num_owned_planets
 			}
 		}
 	}
 	approach = {
 		name = situation_caretaker_mood_appraoch_cg
-		icon = GFX_situation_approach_fist
-		icon_background = GFX_situation_approach_bg_green
+		icon = GFX_situation_approach_research
+		icon_background = GFX_situation_approach_bg_yellow
 		potential = {
-			owner = {
-				resource_income_compare = {
-					resource = consumer_goods
-					value < 10
+			OR = {
+				current_situation_approach = situation_caretaker_mood_appraoch_cg
+				owner = {
+					resource_income_compare = {
+						resource = consumer_goods
+						value < 10
+					}
 				}
 			}
 		}
 		allow = {
-			OR = {
-				current_stage = stage_6
-				current_stage = stage_5
-			}
+			caretaker_takes_request = yes
 		}
 		on_select = {
 			custom_tooltip = approach_outcome_tooltip
 		}
 		resources = {
 			category = situations
-			# TODO test this
+			# test this
 			produces = {
 				consumer_goods = 10
 				mult = owner.trigger:num_owned_planets
 			}
 			upkeep = {
-				influence = 0.15
-				multiplier = owner.trigger:num_owned_planets
+				influence = 1
+				#mult = owner.trigger:num_owned_planets
 			}
 		}
 	}
 	approach = {
 		name = situation_caretaker_mood_appraoch_alloys
-		icon = GFX_situation_approach_fist
-		icon_background = GFX_situation_approach_bg_green
+		icon = GFX_situation_approach_alloys
+		icon_background = GFX_situation_approach_bg_yellow
 		potential = {
-			owner = {
-				resource_income_compare = {
-					resource = alloys
-					value < 10
+			OR = {
+				owner = {
+					resource_income_compare = {
+						resource = alloys
+						value < 10
+					}
+					has_valid_civic = civic_care_crusade
 				}
+				current_situation_approach = situation_caretaker_mood_appraoch_alloys
 			}
 		}
 		allow = {
-			OR = {
-				current_stage = stage_6
-				current_stage = stage_5
-			}
+			caretaker_takes_request = yes
 		}
 		on_select = {
 			custom_tooltip = approach_outcome_tooltip
 		}
 		resources = {
 			category = situations
-			# TODO test this
+			# test this
 			produces = {
 				alloys = 2
 				mult = owner.trigger:controlled_systems
 			}
 			upkeep = {
-				influence = 0.05
-				multiplier = owner.trigger:controlled_systems
+				trigger = {
+					owner = {
+						NOT = {
+							has_valid_civic = civic_care_crusade
+						}
+					}
+				}
+				influence = 1
+				#mult = owner.trigger:controlled_systems
 			}
-		}
-	}
-	approach = {
-		name = situation_caretaker_mood_appraoch_pops
-		icon = GFX_situation_approach_fist
-		icon_background = GFX_situation_approach_bg_green
-		allow = {
-			OR = {
-				current_stage = stage_6
-				current_stage = stage_5
-			}
-		}
-		on_select = {
-			custom_tooltip = approach_outcome_tooltip
-		}
-		resources = {
-			category = situations
-			# TODO test this
-			upkeep = {
-				influence = 0.2
-				multiplier = owner.trigger:num_owned_planets
-			}
-		}
-		modifier = {
-			fake_pop_growth_mod = 1.5
-			
 		}
 	}
 	on_monthly = {
@@ -331,22 +352,23 @@ caretaker_mood_situation = {
 				current_stage = caretaker_mood_stage_2
 				check_variable_arithmetic = {
 					which = value:caretaker_migration_treaties
-					value > 0 
+					value > 0
 				}
 			}
 			desc = situation_caretaker_mood_migration_treaties
 		}
 		modifier = {
-			add = 0.01
+			add = 0.1
 			# passive increase
-			NOT = {
+			NOR = {
 				current_stage = caretaker_mood_stage_6
+				current_stage = caretaker_mood_stage_5
 			}
 			current_situation_approach = situation_caretaker_mood_appraoch_basic
 			desc = situation_caretaker_mood_passive
 		}
 		modifier = {
-			add = -0.02
+			add = -0.2
 			# passive increase
 			NOT = {
 				current_stage = caretaker_mood_stage_6
@@ -356,14 +378,21 @@ caretaker_mood_situation = {
 			}
 			desc = situation_caretaker_mood_requesting_aid
 		}
+		# Punish pops harder than resources?
+		# modifier = {
+		# 	add = -0.1
+		# 	# passive increase
+		# 	NOT = {
+		# 		current_stage = caretaker_mood_stage_6
+		# 	}
+		# 	current_situation_approach = situation_caretaker_mood_appraoch_pops
+		# 	desc = situation_caretaker_mood_pops
+		# }
 		modifier = {
-			add = -0.01
-			# passive increase
-			NOT = {
-				current_stage = caretaker_mood_stage_6
-			}
-			current_situation_approach = situation_caretaker_mood_appraoch_pops
-			desc = situation_caretaker_mood_passive
+			add = -0.1
+			# passive increase, trickle it down slowly
+			current_stage = caretaker_mood_stage_6
+			desc = situation_caretaker_mood_love_us
 		}
 		# modifier = {
 		# 	add = 5

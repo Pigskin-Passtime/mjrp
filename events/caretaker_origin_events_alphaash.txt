@@ -6,121 +6,121 @@ namespace = caretaker_origin_event
 ##            Caretaker decisions processing             ##
 ## ##################################################### ##
 ### Pop request granted
-planet_event = {
-	id = caretaker_origin_event.20100
-	is_triggered_only = yes
-	title = caretaker_origin_event.20100.name
-	desc = caretaker_origin_event.20100.desc
-	picture = GFX_evt_caretaker_pleased
-	trigger = {
-		exists = owner
-		owner = {
-			has_origin = origin_caretaker
-		}
-	}
-	immediate = {
-		owner = {
-			change_variable = {
-				which = caretaker_mood
-				value = 1				# FIXME ?
-			}
-		}
-	}
-	option = {
-		name = caretaker_origin_event.20100.option.a
-		custom_tooltip = caretaker_origin_event.20100.option.a.tooltip
-		hidden_effect = {
-			create_pop = {
-				species = owner
-			}
-		}
-	}
-}
-
+# planet_event = {
+# 	id = caretaker_origin_event.20100
+# 	is_triggered_only = yes
+# 	title = caretaker_origin_event.20100.name
+# 	desc = caretaker_origin_event.20100.desc
+# 	picture = GFX_evt_caretaker_pleased
+# 	trigger = {
+# 		exists = owner
+# 		owner = {
+# 			has_origin = origin_caretaker
+# 		}
+# 	}
+# 	immediate = {
+# 		owner = {
+# 			change_variable = {
+# 				which = caretaker_mood
+# 				value = 1				# FIXME ?
+# 			}
+# 		}
+# 	}
+# 	option = {
+# 		name = caretaker_origin_event.20100.option.a
+# 		custom_tooltip = caretaker_origin_event.20100.option.a.tooltip
+# 		hidden_effect = {
+# 			create_pop = {
+# 				species = owner
+# 			}
+# 		}
+# 	}
+# }
 ### Resource request granted
-planet_event = {
-	id = caretaker_origin_event.20200
-	is_triggered_only = yes
-	title = caretaker_origin_event.20200.name
-	desc = caretaker_origin_event.20200.desc
-	picture = GFX_evt_caretaker_pleased
-	trigger = {
-		exists = owner
-		owner = {
-			has_origin = origin_caretaker
-		}
-	}
-	option = {
-		name = caretaker_origin_event.20200.option.a
-		hidden_effect = {
-			owner = {
-				change_variable = {
-					which = caretaker_mood
-					value = 1					# FIXME ?
-				}
-			}
-		}
-	}
-	option = {
-		name = caretaker_origin_event.20200.option.b
-	}
-	option = {
-		name = caretaker_origin_event.20200.option.c
-		trigger = {
-			owner = {
-				OR = {
-					has_ethic = ethic_militarist
-					has_ethic = ethic_fanatic_militarist
-					has_ethic = ethic_authoritarian
-					has_ethic = ethic_fanatic_authoritarian
-				}
-			}
-		}
-		hidden_effect = {
-			owner = {
-				add_resource = {
-					unity = 50
-				}
-				change_variable = {
-					which = caretaker_mood
-					value = -2					# FIXME ?
-				}
-			}
-		}
-	}
-	option = {
-		name = caretaker_origin_event.20200.option.d
-		trigger = {
-			owner = {
-				NOR = {
-					has_ethic = ethic_pacifist
-					has_ethic = ethic_fanatic_pacifist
-				}
-			}
-		}
-		hidden_effect = {
-			owner = {
-				change_variable = {
-					which = caretaker_mood
-					value = -1					# FIXME ?
-				}
-			}
-		}
-	}
-}
-
+# planet_event = {
+# 	id = caretaker_origin_event.20200
+# 	is_triggered_only = yes
+# 	title = caretaker_origin_event.20200.name
+# 	desc = caretaker_origin_event.20200.desc
+# 	picture = GFX_evt_caretaker_pleased
+# 	trigger = {
+# 		exists = owner
+# 		owner = {
+# 			has_origin = origin_caretaker
+# 		}
+# 	}
+# 	option = {
+# 		name = caretaker_origin_event.20200.option.a
+# 		hidden_effect = {
+# 			owner = {
+# 				change_variable = {
+# 					which = caretaker_mood
+# 					value = 1					# FIXME ?
+# 				}
+# 			}
+# 		}
+# 	}
+# 	option = {
+# 		name = caretaker_origin_event.20200.option.b
+# 	}
+# 	option = {
+# 		name = caretaker_origin_event.20200.option.c
+# 		trigger = {
+# 			owner = {
+# 				OR = {
+# 					has_ethic = ethic_militarist
+# 					has_ethic = ethic_fanatic_militarist
+# 					has_ethic = ethic_authoritarian
+# 					has_ethic = ethic_fanatic_authoritarian
+# 				}
+# 			}
+# 		}
+# 		hidden_effect = {
+# 			owner = {
+# 				add_resource = {
+# 					unity = 50
+# 				}
+# 				change_variable = {
+# 					which = caretaker_mood
+# 					value = -2					# FIXME ?
+# 				}
+# 			}
+# 		}
+# 	}
+# 	option = {
+# 		name = caretaker_origin_event.20200.option.d
+# 		trigger = {
+# 			owner = {
+# 				NOR = {
+# 					has_ethic = ethic_pacifist
+# 					has_ethic = ethic_fanatic_pacifist
+# 				}
+# 			}
+# 		}
+# 		hidden_effect = {
+# 			owner = {
+# 				change_variable = {
+# 					which = caretaker_mood
+# 					value = -1					# FIXME ?
+# 				}
+# 			}
+# 		}
+# 	}
+# }
 ## ##################################################### ##
 ##            Caretaker gifts generation                 ##
 ## ##################################################### ##
 ### Gateway for gifts of pop or resources
-country_event = {
+situation_event = {
 	id = caretaker_origin_event.20300
 	is_triggered_only = yes
 	hide_window = yes
 	trigger = {
-		has_origin = origin_caretaker
-		NOT = {
-			has_country_flag = caretaker_break_up
+		owner = {
+			has_origin = origin_caretaker
+			NOT = {
+				has_country_flag = caretaker_break_up
+			}
 		}
 	}
 	immediate = {
@@ -137,7 +137,7 @@ country_event = {
 		# 			is_homeworld = no
 		# 			has_planet_flag = caretaker_planet_hub_has_been_built
 		# 			not = {
-		# 				has_deposit = d_caretaker_hub
+		# 				has_building = building_caretaker_outreach
 		# 			}
 		# 			pop_amount > 0
 		# 		}
@@ -157,190 +157,192 @@ country_event = {
 		# 		trait = leader_trait_ruler_firstmonitor
 		# 	}
 		# }
-		# Chance of gift if Caretaker is not in a bad mood
-		if = {
-			limit = {
-				caretaker_mood_is_not_bad_check = yes
-			}
-			random_list = {
-				48 = {
+		owner = {
+			# Chance of gift if Caretaker is not in a bad mood
+			if = {
+				limit = {
+					caretaker_mood_is_not_bad_check = yes
 				}
-				1 = {
-					if = {
-						limit = {
-							not = {
-								has_country_flag = caretaker_resource_gift_cooldown
-							}
-							resource_stockpile_compare = {
-								resource = food
-								value < 1000
-							}
-							country_uses_food = yes
-						}
-						set_timed_country_flag = {
-							flag = caretaker_resource_gift_cooldown
-							days = 1800
-						}
-						set_country_flag = caretaker_gifting_food
-						country_event = {
-							id = caretaker_origin_event.20500
-							days = 10
-						}
+				random_list = {
+					48 = {
 					}
-				}
-				1 = {
-					if = {
-						limit = {
-							not = {
-								has_country_flag = caretaker_resource_gift_cooldown
-							}
-							resource_stockpile_compare = {
-								resource = minerals
-								value < 1000
-							}
-						}
-						set_timed_country_flag = {
-							flag = caretaker_resource_gift_cooldown
-							days = 1800
-						}
-						set_country_flag = caretaker_gifting_minerals
-						country_event = {
-							id = caretaker_origin_event.20500
-							days = 15
-						}
-					}
-				}
-				1 = {
-					if = {
-						limit = {
-							not = {
-								has_country_flag = caretaker_resource_gift_cooldown
-							}
-							resource_stockpile_compare = {
-								resource = alloys
-								value < 500
-							}
-						}
-						set_timed_country_flag = {
-							flag = caretaker_resource_gift_cooldown
-							days = 1800
-						}
-						set_country_flag = caretaker_gifting_alloys
-						country_event = {
-							id = caretaker_origin_event.20500
-							days = 20
-						}
-					}
-				}
-				1 = {
-					if = {
-						limit = {
-							not = {
-								has_country_flag = caretaker_resource_gift_cooldown
-							}
-							resource_stockpile_compare = {
-								resource = consumer_goods
-								value < 250
-							}
-							country_uses_consumer_goods = yes
-						}
-						set_timed_country_flag = {
-							flag = caretaker_resource_gift_cooldown
-							days = 1800
-						}
-						set_country_flag = caretaker_gifting_goods
-						country_event = {
-							id = caretaker_origin_event.20500
-							days = 25
-						}
-					}
-				}
-				1 = {
-					random_owned_planet = {
-						limit = {
-							caretaker_presence_on_planet = yes
-							is_homeworld = yes
-							NOT = {
-								has_planet_flag = caretaker_pop_creation_cooldown
-							}
-							pop_amount > 0
-							pop_amount < 35
-						}
+					1 = {
 						if = {
-							set_timed_planet_flag = {
-								flag = caretaker_pop_creation_cooldown
-								days = 180								# FIXME?
+							limit = {
+								not = {
+									has_country_flag = caretaker_resource_gift_cooldown
+								}
+								resource_stockpile_compare = {
+									resource = food
+									value < 1000
+								}
+								country_uses_food = yes
 							}
-							planet_event = {
-								id = caretaker_origin_event.20400
-								days = 90
+							set_timed_country_flag = {
+								flag = caretaker_resource_gift_cooldown
+								days = 1800
 							}
-						}
-					}
-				}
-				1 = {
-					random_owned_planet = {
-						limit = {
-							caretaker_presence_on_planet = yes
-							is_homeworld = yes
-							NOT = {
-								has_planet_flag = caretaker_pop_creation_cooldown
-							}
-							pop_amount > 0
-							pop_amount < 4000
-						}
-						if = {
-							set_timed_planet_flag = {
-								flag = caretaker_pop_creation_cooldown
-								days = 360								# FIXME?
-							}
-							planet_event = {
-								id = caretaker_origin_event.20400
-								days = 90
+							set_country_flag = caretaker_gifting_food
+							country_event = {
+								id = caretaker_origin_event.20500
+								days = 10
 							}
 						}
 					}
-				}
-				1 = {
-					random_owned_planet = {
-						limit = {
-							has_deposit = d_caretaker_hub
-							NOT = {
-								has_planet_flag = caretaker_pop_creation_cooldown
-							}
-							pop_amount > 0
-							pop_amount < 2000
-						}
+					1 = {
 						if = {
-							set_timed_planet_flag = {
-								flag = caretaker_pop_creation_cooldown
-								days = 720								# FIXME?
+							limit = {
+								not = {
+									has_country_flag = caretaker_resource_gift_cooldown
+								}
+								resource_stockpile_compare = {
+									resource = minerals
+									value < 1000
+								}
 							}
-							planet_event = {
-								id = caretaker_origin_event.20400
-								days = 90
+							set_timed_country_flag = {
+								flag = caretaker_resource_gift_cooldown
+								days = 1800
+							}
+							set_country_flag = caretaker_gifting_minerals
+							country_event = {
+								id = caretaker_origin_event.20500
+								days = 15
 							}
 						}
 					}
-				}
-				1 = {
-					random_owned_planet = {
-						limit = {
-							has_deposit = d_caretaker_hub
-							NOT = {
-								has_planet_flag = caretaker_pop_creation_cooldown
-							}
-							pop_amount > 0
-							pop_amount < 1000
-						}
+					1 = {
 						if = {
-							set_timed_planet_flag = {
-								flag = caretaker_pop_creation_cooldown
-								days = 360								# FIXME?
+							limit = {
+								not = {
+									has_country_flag = caretaker_resource_gift_cooldown
+								}
+								resource_stockpile_compare = {
+									resource = alloys
+									value < 500
+								}
 							}
-							planet_event = {
-								id = caretaker_origin_event.20400
-								days = 180
+							set_timed_country_flag = {
+								flag = caretaker_resource_gift_cooldown
+								days = 1800
+							}
+							set_country_flag = caretaker_gifting_alloys
+							country_event = {
+								id = caretaker_origin_event.20500
+								days = 20
+							}
+						}
+					}
+					1 = {
+						if = {
+							limit = {
+								not = {
+									has_country_flag = caretaker_resource_gift_cooldown
+								}
+								resource_stockpile_compare = {
+									resource = consumer_goods
+									value < 250
+								}
+								country_uses_consumer_goods = yes
+							}
+							set_timed_country_flag = {
+								flag = caretaker_resource_gift_cooldown
+								days = 1800
+							}
+							set_country_flag = caretaker_gifting_goods
+							country_event = {
+								id = caretaker_origin_event.20500
+								days = 25
+							}
+						}
+					}
+					1 = {
+						random_owned_planet = {
+							if = {
+								limit = {
+									caretaker_presence_on_planet = yes
+									is_homeworld = yes
+									NOT = {
+										has_planet_flag = caretaker_pop_creation_cooldown
+									}
+									pop_amount > 0
+									pop_amount < 3500
+								}
+								set_timed_planet_flag = {
+									flag = caretaker_pop_creation_cooldown
+									days = 180									# FIXME?
+								}
+								planet_event = {
+									id = caretaker_origin_event.20400
+									days = 90
+								}
+							}
+						}
+					}
+					1 = {
+						random_owned_planet = {
+							if = {
+								limit = {
+									caretaker_presence_on_planet = yes
+									is_homeworld = yes
+									NOT = {
+										has_planet_flag = caretaker_pop_creation_cooldown
+									}
+									pop_amount > 0
+									pop_amount < 4000
+								}
+								set_timed_planet_flag = {
+									flag = caretaker_pop_creation_cooldown
+									days = 360									# FIXME?
+								}
+								planet_event = {
+									id = caretaker_origin_event.20400
+									days = 90
+								}
+							}
+						}
+					}
+					1 = {
+						random_owned_planet = {
+							if = {
+								limit = {
+									has_building = building_caretaker_outreach
+									NOT = {
+										has_planet_flag = caretaker_pop_creation_cooldown
+									}
+									pop_amount > 0
+									pop_amount < 2000
+								}
+								set_timed_planet_flag = {
+									flag = caretaker_pop_creation_cooldown
+									days = 720									# FIXME?
+								}
+								planet_event = {
+									id = caretaker_origin_event.20400
+									days = 90
+								}
+							}
+						}
+					}
+					1 = {
+						random_owned_planet = {
+							if = {
+								limit = {
+									has_building = building_caretaker_outreach
+									NOT = {
+										has_planet_flag = caretaker_pop_creation_cooldown
+									}
+									pop_amount > 0
+									pop_amount < 1000
+								}
+								set_timed_planet_flag = {
+									flag = caretaker_pop_creation_cooldown
+									days = 360									# FIXME?
+								}
+								planet_event = {
+									id = caretaker_origin_event.20400
+									days = 180
+								}
 							}
 						}
 					}
@@ -504,11 +506,10 @@ country_event = {
 	option = {
 		name = caretaker_origin_event.20500.option.c
 		custom_tooltip = caretaker_origin_event.20500.option.c.tooltip
+		caretaker_change_mood = {
+			VALUE = -1
+		}
 		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = -1				# FIXME ?
-			}
 			if = {
 				limit = {
 					not = {
@@ -529,43 +530,41 @@ country_event = {
 ##            Ruler Trait Handling                       ##
 ## ##################################################### ##
 # Give rulers First Monitor trait
-country_event = {
-	id = caretaker_origin_event.21000
-	is_triggered_only = yes
-	hide_window = yes
-	trigger = {
-		has_origin = origin_caretaker
-		NOT = {
-			has_country_flag = caretaker_break_up
-		}
-	}
-	immediate = {
-		ruler = {
-			add_trait = {
-				trait = leader_trait_ruler_firstmonitor
-			}
-		}
-	}
-}
-
+# country_event = {
+# 	id = caretaker_origin_event.21000
+# 	is_triggered_only = yes
+# 	hide_window = yes
+# 	trigger = {
+# 		has_origin = origin_caretaker
+# 		NOT = {
+# 			has_country_flag = caretaker_break_up
+# 		}
+# 	}
+# 	immediate = {
+# 		ruler = {
+# 			add_trait = {
+# 				trait = leader_trait_ruler_firstmonitor
+# 			}
+# 		}
+# 	}
+# }
 # Remove First Monitor Trait from ruler
-country_event = {
-	id = caretaker_origin_event.22000
-	is_triggered_only = yes
-	hide_window = yes
-	trigger = {
-		has_origin = origin_caretaker
-		NOT = {
-			has_country_flag = caretaker_break_up
-		}
-	}
-	immediate = {
-		from = {
-			remove_trait = leader_trait_ruler_firstmonitor
-		}
-	}
-}
-
+# country_event = {
+# 	id = caretaker_origin_event.22000
+# 	is_triggered_only = yes
+# 	hide_window = yes
+# 	trigger = {
+# 		has_origin = origin_caretaker
+# 		NOT = {
+# 			has_country_flag = caretaker_break_up
+# 		}
+# 	}
+# 	immediate = {
+# 		from = {
+# 			remove_trait = leader_trait_ruler_firstmonitor
+# 		}
+# 	}
+# }
 ## ##################################################### ##
 ##            Ascension Handling                         ##
 ## ##################################################### ##
@@ -713,17 +712,16 @@ country_event = {
 			if = {
 				limit = {
 					not = {
-							not = {
-						is_ruler = yes
-						
-					}
+						not = {
+							is_ruler = yes
+						}
 					}
 				}
 				remove_trait = leader_trait_personal_caretaker
 			}
-			else = {
-				remove_trait = leader_trait_ruler_firstmonitor
-			}
+			# else = {
+			# 	remove_trait = leader_trait_ruler_firstmonitor
+			# }
 		}
 		every_pool_leader = {
 			limit = {
@@ -788,7 +786,9 @@ country_event = {
 				}
 			}
 			# log = "This Leader here sir"
-			add_trait = { trait = leader_trait_personal_caretaker }
+			add_trait = {
+				trait = leader_trait_personal_caretaker
+			}
 		}
 	}
 }
@@ -796,7 +796,6 @@ country_event = {
 ## ##################################################### ##
 ##            Civics Handling                            ##
 ## ##################################################### ##
-
 # TODO change modifier
 # planet_event = {
 # 	id = caretaker_origin_event.27000
@@ -819,7 +818,6 @@ country_event = {
 # 		}
 # 	}
 # }
-
 ## ##################################################### ##
 ##            Caretaker Quirkiness                       ##
 ## ##################################################### ##
@@ -873,7 +871,6 @@ planet_event = {
 		}
 		caretaker_presence_on_planet = yes
 		pop_amount > 0
-		
 		has_building = building_medical_1
 	}
 	immediate = {

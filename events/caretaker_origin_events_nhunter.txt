@@ -147,37 +147,8 @@ country_event = {
 			message = no
 			tech = tech_planetary_unification
 		}
-		# TODO event with civic choice
-		# if = {
-		# 	limit = {
-		# 		has_civic = civic_drone_culture
-		# 	}
-		# 	give_technology = {
-		# 		message = no
-		# 		tech = tech_powered_exoskeletons
-		# 	}
-		# 	give_technology = {
-		# 		message = no
-		# 		tech = tech_robotic_workers
-		# 	}
-		# 	create_built_robot_species = yes
-		# 	modify_species = {
-		# 		species = last_created_species
-		# 		add_trait = trait_robot_caretaker_directives
-		# 		# add_traits_at_start_of_list = yes
-		# 	}
-		# 	last_created_species = {
-		# 		save_event_target_as = last_created_species
-		# 	}
-		# 	capital_scope = {
-		# 		create_pop = {
-		# 			species = last_created_species
-		# 		}
-		# 		create_pop = {
-		# 			species = last_created_species
-		# 		}
-		# 		add_building = building_robot_assembly_plant
-		# 	}
+		# country_event = {
+		# 	id = caretaker_origin_event.21000
 		# }
 		capital_scope = {
 			create_pop = {
@@ -186,13 +157,14 @@ country_event = {
 			create_pop = {
 				species = ROOT
 			}
+			add_building = building_caretaker_outreach
 			add_building = building_monitor_station_1
 		}
 		#	if = {
 		#		limit = { has_civic = civic_care_crusade }
 		#		give_technology = { message = no tech = tech_centralized_command }
 		#	}
-		# TODO event with civic choice
+		# event with civic choice
 		# if = {
 		# 	limit = {
 		# 		has_civic = civic_love_the_alien
@@ -260,6 +232,119 @@ country_event = {
 # 		}
 # 	}
 # }
+### Pick a civic event
+# 
+country_event = {
+	id = caretaker_origin_event.3
+	is_triggered_only = yes
+	title = caretaker_origin_event.3.name
+	desc = caretaker_origin_event.3.desc
+	picture = GFX_evt_caretaker_pleased
+	trigger = {
+		has_origin = origin_caretaker
+	}
+	option = {
+		name = caretaker_origin_event.3.option.a
+		trigger = {
+			OR = {
+				is_militarist = yes
+				is_xenophobe = yes
+			}
+		}
+		hidden_effect = {
+			force_add_civic = civic_care_crusade
+		}
+		custom_tooltip = caretaker_origin_event.3.option.a.tt
+		give_technology = {
+			tech = tech_centralized_command
+		}
+		# caretaker_change_mood = {
+		# 	VALUE = 4
+		# }
+	}
+	option = {
+		name = caretaker_origin_event.3.option.b
+		hidden_effect = {
+			force_add_civic = civic_monitor_cult
+		}
+		custom_tooltip = caretaker_origin_event.3.option.b.tt
+	}
+	option = {
+		name = caretaker_origin_event.3.option.c
+		trigger = {
+			OR = {
+				is_egalitarian = yes
+				is_xenophile = yes
+			}
+		}
+		hidden_effect = {
+			force_add_civic = civic_one_big_family
+		}
+		custom_tooltip = caretaker_origin_event.3.option.c.tt
+	}
+	option = {
+		name = caretaker_origin_event.3.option.d
+		trigger = {
+			OR = {
+				is_pacifist = yes
+				is_xenophile = yes
+			}
+		}
+		hidden_effect = {
+			force_add_civic = civic_protected
+		}
+		custom_tooltip = caretaker_origin_event.3.option.d.tt
+	}
+	option = {
+		name = caretaker_origin_event.3.option.e
+		trigger = {
+			is_materialist = yes
+		}
+		hidden_effect = {
+			force_add_civic = civic_drone_culture
+		}
+		custom_tooltip = caretaker_origin_event.3.option.e.tt
+		give_technology = {
+			tech = tech_droid_workers
+		}
+	}
+	option = {
+		name = caretaker_origin_event.3.option.f
+		trigger = {
+			OR = {
+				is_authoritarian = yes
+				is_xenophobe = yes
+			}
+		}
+		hidden_effect = {
+			force_add_civic = civic_love_the_alien
+		}
+		custom_tooltip = caretaker_origin_event.3.option.f.tt
+		give_technology = {
+			message = no
+			tech = tech_neural_implants
+		}
+	}
+	after = {
+		custom_tooltip = caretaker_origin_event.3.unlock_councilor_tt
+	}
+}
+
+# Care crusade civic - on action
+country_event = {
+	id = caretaker_origin_event.4
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_origin = origin_caretaker
+		has_valid_civic = civic_care_crusade
+	}
+	immediate = {
+		caretaker_change_mood = {
+			VALUE = 4
+		}
+	}
+}
 
 ## ##################################################### ##
 ## Managing Caretaker deposits when planet change owners ##
@@ -310,18 +395,20 @@ planet_event = {
 			# planet has a caretaker core -> change it into caretaker hub
 			if = {
 				limit = {
-					caretaker_core_exists_on_planet = yes
+					caretaker_presence_on_planet = yes
 				}
 				caretaker_core_clean_up = yes
-				add_deposit = d_caretaker_hub
+				# add_deposit = d_caretaker_hub
+				add_building = building_caretaker_outreach
 			}
 			# planet doesn't have caretaker core -> schedule event for checking if the core was built
 			else_if = {
 				limit = {
 					NOT = {
-						has_deposit = d_caretaker_hub
+						has_building = building_caretaker_outreach
 					}
 				}
+				# TODO policy here
 				planet_event = {
 					id = caretaker_origin_event.1110
 					days = 360
@@ -782,7 +869,6 @@ planet_event = {
 # 		# }
 # 	}
 # }
-
 # on AP picked, new mood update
 country_event = {
 	id = caretaker_origin_event.501
@@ -804,10 +890,6 @@ country_event = {
 				has_ascension_perk = ap_xeno_compatibility
 			}
 			set_country_flag = caretaker_ap_xenocompatilibility_logged
-			change_variable = {
-				which = caretaker_mood
-				value = -10				# FIXME
-			}
 			country_event = {
 				id = caretaker_origin_event.510
 				days = 2
@@ -823,10 +905,6 @@ country_event = {
 				has_ascension_perk = ap_nihilistic_acquisition
 			}
 			set_country_flag = caretaker_ap_nihilistic_acquisition_logged
-			change_variable = {
-				which = caretaker_mood
-				value = -8				# FIXME
-			}
 			country_event = {
 				id = caretaker_origin_event.511
 				days = 2
@@ -843,10 +921,6 @@ country_event = {
 				has_ascension_perk = ap_the_flesh_is_weak
 			}
 			set_country_flag = caretaker_ap_flesh_is_weak_logged
-			change_variable = {
-				which = caretaker_mood
-				value = -25				# FIXME
-			}
 			country_event = {
 				id = caretaker_origin_event.512
 				days = 2
@@ -862,10 +936,6 @@ country_event = {
 				has_ascension_perk = ap_mind_over_matter
 			}
 			set_country_flag = caretaker_ap_mind_over_matter_logged
-			change_variable = {
-				which = caretaker_mood
-				value = -25				# FIXME
-			}
 			country_event = {
 				id = caretaker_origin_event.513
 				days = 2
@@ -881,10 +951,6 @@ country_event = {
 				has_ascension_perk = ap_engineered_evolution
 			}
 			set_country_flag = caretaker_ap_engineered_evolution_logged
-			change_variable = {
-				which = caretaker_mood
-				value = -25				# FIXME
-			}
 			country_event = {
 				id = caretaker_origin_event.514
 				days = 2
@@ -900,38 +966,11 @@ country_event = {
 				has_ascension_perk = ap_synthetic_evolution
 			}
 			set_country_flag = caretaker_ap_synthetic_evolution_logged
-			change_variable = {
-				which = caretaker_mood
-				value = -25				# FIXME
-			}
 			country_event = {
 				id = caretaker_origin_event.515
 				days = 2
 				random = 3
 			}
-			# random_list = {
-			# 	33 = {
-			# 		country_event = {
-			# 			id = caretaker_origin_event.4000
-			# 			days = 150
-			# 			random = 15
-			# 		}
-			# 	}
-			# 	33 = {
-			# 		country_event = {
-			# 			id = caretaker_origin_event.4000
-			# 			days = 180
-			# 			random = 15
-			# 		}
-			# 	}
-			# 	33 = {
-			# 		country_event = {
-			# 			id = caretaker_origin_event.4000
-			# 			days = 210
-			# 			random = 15
-			# 		}
-			# 	}
-			# }
 		}
 		### update mood if empire took 'Eternal Vigilance' AP
 		if = {
@@ -942,10 +981,6 @@ country_event = {
 				has_ascension_perk = ap_eternal_vigilance
 			}
 			set_country_flag = caretaker_ap_eternal_vigilance_logged
-			change_variable = {
-				which = caretaker_mood
-				value = 5				# FIXME
-			}
 			country_event = {
 				id = caretaker_origin_event.520
 				days = 2
@@ -961,10 +996,6 @@ country_event = {
 				has_ascension_perk = ap_one_vision
 			}
 			set_country_flag = caretaker_ap_one_vision_logged
-			change_variable = {
-				which = caretaker_mood
-				value = 8				# FIXME
-			}
 			country_event = {
 				id = caretaker_origin_event.521
 				days = 2
@@ -980,10 +1011,6 @@ country_event = {
 				has_ascension_perk = ap_enigmatic_engineering
 			}
 			set_country_flag = caretaker_ap_enigmatic_engineering_logged
-			change_variable = {
-				which = caretaker_mood
-				value = 5				# FIXME
-			}
 			country_event = {
 				id = caretaker_origin_event.522
 				days = 2
@@ -999,17 +1026,13 @@ country_event = {
 				has_ascension_perk = ap_defender_of_the_galaxy
 			}
 			set_country_flag = caretaker_ap_defender_of_the_galaxy_logged
-			change_variable = {
-				which = caretaker_mood
-				value = 8				# FIXME
-			}
 			country_event = {
 				id = caretaker_origin_event.523
 				days = 2
 				random = 3
 			}
 		}
-		# TODO find ways to have this still around
+		# find ways to have this still around
 		# ### update mood if empire took 'Personal Care' AP
 		# if = {
 		# 	limit = {
@@ -1087,10 +1110,6 @@ country_event = {
 				has_tradition = tr_synthetics_finish
 			}
 			set_country_flag = caretaker_ap_synthetic_evolution_logged
-			change_variable = {
-				which = caretaker_mood
-				value = -250				# FIXME
-			}
 			country_event = {
 				id = caretaker_origin_event.515
 				days = 2
@@ -1107,10 +1126,6 @@ country_event = {
 				has_tradition = tr_psionics_finish
 			}
 			set_country_flag = caretaker_ap_transcendence_logged
-			change_variable = {
-				which = caretaker_mood
-				value = -250				# FIXME
-			}
 			country_event = {
 				id = caretaker_origin_event.516
 				days = 2
@@ -1132,10 +1147,6 @@ country_event = {
 				}
 			}
 			set_country_flag = caretaker_ap_evolutionary_master_logged
-			change_variable = {
-				which = caretaker_mood
-				value = -250				# FIXME
-			}
 			country_event = {
 				id = caretaker_origin_event.517
 				days = 2
@@ -1162,20 +1173,14 @@ country_event = {
 	}
 	option = {
 		name = caretaker_origin_event.510.option.a
-		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = 1				# FIXME?
-			}
+		caretaker_change_mood = {
+			VALUE = 4
 		}
 	}
 	option = {
 		name = caretaker_origin_event.510.option.b
-		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = -2				# FIXME?
-			}
+		caretaker_change_mood = {
+			VALUE = -7
 		}
 	}
 	option = {
@@ -1186,11 +1191,8 @@ country_event = {
 				has_ethic = ethic_fanatic_xenophile
 			}
 		}
-		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = -2				# FIXME?
-			}
+		caretaker_change_mood = {
+			VALUE = -7
 		}
 	}
 	# option = {
@@ -1217,20 +1219,14 @@ country_event = {
 	}
 	option = {
 		name = caretaker_origin_event.511.option.a
-		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = 1				# FIXME?
-			}
+		caretaker_change_mood = {
+			VALUE = -7
 		}
 	}
 	option = {
 		name = caretaker_origin_event.511.option.b
-		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = -2				# FIXME?
-			}
+		caretaker_change_mood = {
+			VALUE = -10
 		}
 	}
 	option = {
@@ -1241,11 +1237,8 @@ country_event = {
 				has_ethic = ethic_fanatic_authoritarian
 			}
 		}
-		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = -1				# FIXME?
-			}
+		caretaker_change_mood = {
+			VALUE = -9
 		}
 	}
 	option = {
@@ -1256,11 +1249,8 @@ country_event = {
 				has_ethic = ethic_fanatic_xenophobe
 			}
 		}
-		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = -2				# FIXME?
-			}
+		caretaker_change_mood = {
+			VALUE = -10
 		}
 	}
 }
@@ -1279,20 +1269,14 @@ country_event = {
 	}
 	option = {
 		name = caretaker_origin_event.512.option.a
-		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = 1				# FIXME?
-			}
+		caretaker_change_mood = {
+			VALUE = -24
 		}
 	}
 	option = {
 		name = caretaker_origin_event.512.option.b
-		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = -2				# FIXME?
-			}
+		caretaker_change_mood = {
+			VALUE = -27
 		}
 	}
 	option = {
@@ -1303,10 +1287,23 @@ country_event = {
 				has_ethic = ethic_fanatic_materialist
 			}
 		}
+		caretaker_change_mood = {
+			VALUE = -27
+		}
+	}
+	option = {
+		name = caretaker_origin_event.512.option.d
+		trigger = {
+			has_origin = origin_caretaker
+		}
+		caretaker_change_mood = {
+			VALUE = 20
+		}
 		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = -3				# FIXME?
+			country_event = {
+				id = caretaker_origin_event.524
+				days = 2
+				random = 3
 			}
 		}
 	}
@@ -1325,20 +1322,14 @@ country_event = {
 	}
 	option = {
 		name = caretaker_origin_event.513.option.a
-		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = 1				# FIXME?
-			}
+		caretaker_change_mood = {
+			VALUE = -24
 		}
 	}
 	option = {
 		name = caretaker_origin_event.513.option.b
-		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = -2				# FIXME?
-			}
+		caretaker_change_mood = {
+			VALUE = -27
 		}
 	}
 	option = {
@@ -1349,11 +1340,8 @@ country_event = {
 				has_ethic = ethic_fanatic_spiritualist
 			}
 		}
-		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = -3				# FIXME?
-			}
+		caretaker_change_mood = {
+			VALUE = -28
 		}
 	}
 }
@@ -1371,20 +1359,14 @@ country_event = {
 	}
 	option = {
 		name = caretaker_origin_event.514.option.a
-		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = 1				# FIXME?
-			}
+		caretaker_change_mood = {
+			VALUE = -24
 		}
 	}
 	option = {
 		name = caretaker_origin_event.514.option.b
-		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = -2				# FIXME?
-			}
+		caretaker_change_mood = {
+			VALUE = -27
 		}
 	}
 	option = {
@@ -1395,11 +1377,8 @@ country_event = {
 				has_ethic = ethic_fanatic_materialist
 			}
 		}
-		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = -3				# FIXME?
-			}
+		caretaker_change_mood = {
+			VALUE = -28
 		}
 	}
 	option = {
@@ -1410,16 +1389,14 @@ country_event = {
 				has_ethic = ethic_fanatic_xenophile
 			}
 		}
-		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = -2				# FIXME?
-			}
+		caretaker_change_mood = {
+			VALUE = -27
 		}
 	}
 }
 
 ### Angry message from the Caretaker for taking 'Synthetic Evolution' AP
+# TODO this is shown double 
 country_event = {
 	id = caretaker_origin_event.515
 	is_triggered_only = yes
@@ -1432,20 +1409,14 @@ country_event = {
 	}
 	option = {
 		name = caretaker_origin_event.515.option.a
-		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = -1				# FIXME?
-			}
+		caretaker_change_mood = {
+			VALUE = -26
 		}
 	}
 	option = {
 		name = caretaker_origin_event.515.option.b
-		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = -2				# FIXME?
-			}
+		caretaker_change_mood = {
+			VALUE = -27
 		}
 	}
 	option = {
@@ -1456,10 +1427,17 @@ country_event = {
 				has_ethic = ethic_fanatic_materialist
 			}
 		}
-		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = -3				# FIXME?
+		caretaker_change_mood = {
+			VALUE = -28
+		}
+	}
+	after = {
+		if = {
+			limit = {
+				has_tradition = tr_synthetics_finish
+			}
+			caretaker_change_mood = {
+				VALUE = -250
 			}
 		}
 	}
@@ -1478,20 +1456,14 @@ country_event = {
 	}
 	option = {
 		name = caretaker_origin_event.516.option.a
-		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = -1				# FIXME?
-			}
+		caretaker_change_mood = {
+			VALUE = -251
 		}
 	}
 	option = {
 		name = caretaker_origin_event.516.option.b
-		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = -2				# FIXME?
-			}
+		caretaker_change_mood = {
+			VALUE = -252
 		}
 	}
 	option = {
@@ -1502,11 +1474,8 @@ country_event = {
 				has_ethic = ethic_fanatic_spiritualist
 			}
 		}
-		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = -3				# FIXME?
-			}
+		caretaker_change_mood = {
+			VALUE = -253
 		}
 	}
 }
@@ -1524,20 +1493,14 @@ country_event = {
 	}
 	option = {
 		name = caretaker_origin_event.517.option.a
-		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = -1				# FIXME?
-			}
+		caretaker_change_mood = {
+			VALUE = -251
 		}
 	}
 	option = {
 		name = caretaker_origin_event.517.option.b
-		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = -2				# FIXME?
-			}
+		caretaker_change_mood = {
+			VALUE = -252
 		}
 	}
 	option = {
@@ -1548,11 +1511,8 @@ country_event = {
 				has_ethic = ethic_fanatic_materialist
 			}
 		}
-		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = -3				# FIXME?
-			}
+		caretaker_change_mood = {
+			VALUE = -253
 		}
 	}
 	option = {
@@ -1563,11 +1523,8 @@ country_event = {
 				has_ethic = ethic_fanatic_xenophile
 			}
 		}
-		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = -2				# FIXME?
-			}
+		caretaker_change_mood = {
+			VALUE = -252
 		}
 	}
 }
@@ -1588,6 +1545,9 @@ country_event = {
 	}
 	option = {
 		name = caretaker_origin_event.520.option.a
+		caretaker_change_mood = {
+			VALUE = 5
+		}
 	}
 	option = {
 		name = caretaker_origin_event.520.option.b
@@ -1597,11 +1557,8 @@ country_event = {
 				has_ethic = ethic_fanatic_pacifist
 			}
 		}
-		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = 1				# FIXME?
-			}
+		caretaker_change_mood = {
+			VALUE = 6
 		}
 	}
 	option = {
@@ -1612,11 +1569,8 @@ country_event = {
 				has_ethic = ethic_fanatic_xenophobe
 			}
 		}
-		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = 1				# FIXME?
-			}
+		caretaker_change_mood = {
+			VALUE = 6
 		}
 	}
 }
@@ -1634,6 +1588,9 @@ country_event = {
 	}
 	option = {
 		name = caretaker_origin_event.521.option.a
+		caretaker_change_mood = {
+			VALUE = 8
+		}
 	}
 	option = {
 		name = caretaker_origin_event.521.option.b
@@ -1643,11 +1600,8 @@ country_event = {
 				has_ethic = ethic_fanatic_authoritarian
 			}
 		}
-		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = 1				# FIXME?
-			}
+		caretaker_change_mood = {
+			VALUE = 9
 		}
 	}
 	option = {
@@ -1657,6 +1611,9 @@ country_event = {
 				has_ethic = ethic_spiritualist
 				has_ethic = ethic_fanatic_spiritualist
 			}
+		}
+		caretaker_change_mood = {
+			VALUE = 8
 		}
 	}
 }
@@ -1674,6 +1631,9 @@ country_event = {
 	}
 	option = {
 		name = caretaker_origin_event.522.option.a
+		caretaker_change_mood = {
+			VALUE = 5
+		}
 	}
 	option = {
 		name = caretaker_origin_event.522.option.b
@@ -1682,6 +1642,9 @@ country_event = {
 				has_ethic = ethic_materialist
 				has_ethic = ethic_fanatic_materialist
 			}
+		}
+		caretaker_change_mood = {
+			VALUE = 5
 		}
 	}
 	option = {
@@ -1692,11 +1655,8 @@ country_event = {
 				has_ethic = ethic_fanatic_xenophobe
 			}
 		}
-		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = 1				# FIXME?
-			}
+		caretaker_change_mood = {
+			VALUE = 6
 		}
 	}
 }
@@ -1714,6 +1674,9 @@ country_event = {
 	}
 	option = {
 		name = caretaker_origin_event.523.option.a
+		caretaker_change_mood = {
+			VALUE = 8
+		}
 	}
 	option = {
 		name = caretaker_origin_event.523.option.b
@@ -1723,11 +1686,8 @@ country_event = {
 				has_ethic = ethic_fanatic_militarist
 			}
 		}
-		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = 1				# FIXME?
-			}
+		caretaker_change_mood = {
+			VALUE = 9
 		}
 	}
 	option = {
@@ -1738,16 +1698,13 @@ country_event = {
 				has_ethic = ethic_fanatic_xenophile
 			}
 		}
-		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = 1				# FIXME?
-			}
+		caretaker_change_mood = {
+			VALUE = 9
 		}
 	}
 }
 
-### Praise from the Caretaker for taking 'Personal Care' AP
+### Praise from the Caretaker for taking 'Personal Care' choice while ascending
 country_event = {
 	id = caretaker_origin_event.524
 	is_triggered_only = yes
@@ -1760,6 +1717,9 @@ country_event = {
 	}
 	option = {
 		name = caretaker_origin_event.524.option.a
+		country_event = {
+			id = caretaker_origin_event.23000
+		}
 	}
 }
 
@@ -1834,7 +1794,7 @@ planet_event = {
 		if = {
 			limit = {
 				is_colony = yes
-				#pop_amount > 0
+				pop_amount > 0
 			}
 			log = "Colony has been established; Remind to build a Caretaker hub in 360 days."
 			planet_event = {
@@ -1888,12 +1848,9 @@ planet_event = {
 				has_country_flag = caretaker_break_up
 			}
 		}
-		hidden_effect = {
-			owner = {
-				change_variable = {
-					which = caretaker_mood
-					value = -2					# FIXME?
-				}
+		owner = {
+			caretaker_change_mood = {
+				VALUE = -2
 			}
 		}
 	}
@@ -1924,9 +1881,8 @@ planet_event = {
 	}
 	immediate = {
 		owner = {
-			change_variable = {
-				which = caretaker_mood
-				value = -2				# FIXME?
+			caretaker_change_mood = {
+				VALUE = -2
 			}
 		}
 		# explain what's going on
@@ -1977,12 +1933,9 @@ planet_event = {
 				has_country_flag = caretaker_experiment_scrapped
 			}
 		}
-		hidden_effect = {
-			owner = {
-				change_variable = {
-					which = caretaker_mood
-					value = -2					# FIXME?
-				}
+		owner = {
+			caretaker_change_mood = {
+				VALUE = -2
 			}
 		}
 	}
@@ -2014,9 +1967,8 @@ planet_event = {
 	### cumulatively adds +1 mood point every time you build or upgrade monitor station -- change?
 	immediate = {
 		owner = {
-			change_variable = {
-				which = caretaker_mood
-				value = 1				# FIXME ?
+			caretaker_change_mood = {
+				VALUE = 1
 			}
 		}
 	}
@@ -2046,9 +1998,8 @@ planet_event = {
 				}
 			}
 			owner = {
-				change_variable = {
-					which = caretaker_mood
-					value = -2					# FIXME ?
+				caretaker_change_mood = {
+					VALUE = -2
 				}
 			}
 			if = {
@@ -2100,9 +2051,8 @@ planet_event = {
 				last_building_changed = building_clone_vats
 			}
 			owner = {
-				change_variable = {
-					which = caretaker_mood
-					value = -4					# FIXME ?
+				caretaker_change_mood = {
+					VALUE = -4
 				}
 			}
 			if = {
@@ -2172,9 +2122,8 @@ planet_event = {
 				last_building_changed = building_monitor_station_1
 			}
 			owner = {
-				change_variable = {
-					which = caretaker_mood
-					value = -2					# FIXME ?
+				caretaker_change_mood = {
+					VALUE = -2
 				}
 			}
 		}
@@ -2183,9 +2132,8 @@ planet_event = {
 				last_building_changed = building_monitor_station_2
 			}
 			owner = {
-				change_variable = {
-					which = caretaker_mood
-					value = -2					# FIXME ?
+				caretaker_change_mood = {
+					VALUE = -2
 				}
 			}
 		}
@@ -2194,9 +2142,8 @@ planet_event = {
 				last_building_changed = building_monitor_station_3
 			}
 			owner = {
-				change_variable = {
-					which = caretaker_mood
-					value = -4					# FIXME ?
+				caretaker_change_mood = {
+					VALUE = -4
 				}
 			}
 		}
@@ -2223,9 +2170,8 @@ planet_event = {
 				last_building_changed = building_medical_1
 			}
 			owner = {
-				change_variable = {
-					which = caretaker_mood
-					value = 1					# FIXME ?
+				caretaker_change_mood = {
+					VALUE = 1
 				}
 			}
 		}
@@ -2237,9 +2183,8 @@ planet_event = {
 				}
 			}
 			owner = {
-				change_variable = {
-					which = caretaker_mood
-					value = 2					# FIXME ?
+				caretaker_change_mood = {
+					VALUE = 2
 				}
 			}
 		}
@@ -2264,9 +2209,8 @@ country_event = {
 		}
 	}
 	immediate = {
-		change_variable = {
-			which = caretaker_mood
-			value = -2			# FIXME ?
+		caretaker_change_mood = {
+			VALUE = -3
 		}
 	}
 }
@@ -2286,9 +2230,8 @@ country_event = {
 		}
 	}
 	immediate = {
-		change_variable = {
-			which = caretaker_mood
-			value = -3			# FIXME ?
+		caretaker_change_mood = {
+			VALUE = -5
 		}
 	}
 }
@@ -2310,9 +2253,8 @@ country_event = {
 		}
 	}
 	immediate = {
-		change_variable = {
-			which = caretaker_mood
-			value = -2			# FIXME ?
+		caretaker_change_mood = {
+			VALUE = -4
 		}
 	}
 }
@@ -2698,9 +2640,8 @@ country_event = {
 		hidden_effect = {
 			remove_country_flag = caretaker_killer_glitch
 			remove_country_flag = caretaker_killer_glitch_persists
-			set_variable = {
-				which = caretaker_mood
-				value = 10
+			caretaker_change_mood = {
+				VALUE = 10
 			}
 			add_resource = {
 				physics_research = 5000
@@ -2726,10 +2667,6 @@ country_event = {
 				modifier = caretaker_overclocked_cloning_vats
 				days = -1
 			}
-			set_variable = {
-				which = caretaker_mood
-				value = 10
-			}
 			add_resource = {
 				physics_research = 5000
 				unity = 5000
@@ -2740,6 +2677,9 @@ country_event = {
 				days = 3240
 				random = 2160
 			}
+		}
+		caretaker_change_mood = {
+			VALUE = 10
 		}
 	}
 }
@@ -2891,16 +2831,12 @@ planet_event = {
 	}
 	option = {
 		name = caretaker_origin_event.2501.option.b
-		custom_tooltip = caretaker_origin_event.2501.option.b.tooltip
-		hidden_effect = {
-			owner = {
-				add_resource = {
-					society_research = 1000
-				}
-				change_variable = {
-					which = caretaker_mood
-					value = 1
-				}
+		owner = {
+			add_resource = {
+				society_research = 1000
+			}
+			caretaker_change_mood = {
+				VALUE = 1
 			}
 		}
 	}
@@ -2930,10 +2866,6 @@ planet_event = {
 		custom_tooltip = caretaker_origin_event.2502.option.a.tooltip
 		hidden_effect = {
 			owner = {
-				change_variable = {
-					which = caretaker_mood
-					value = -2
-				}
 				# issue special project to open the ancient vault
 				save_global_event_target_as = caretaker_vault_explorer@root
 				capital_scope = {
@@ -2945,19 +2877,20 @@ planet_event = {
 				}
 			}
 		}
+		owner = {
+			caretaker_change_mood = {
+				VALUE = -2
+			}
+		}
 	}
 	option = {
 		name = caretaker_origin_event.2502.option.b
-		custom_tooltip = caretaker_origin_event.2502.option.b.tooltip
-		hidden_effect = {
-			owner = {
-				add_resource = {
-					society_research = 1000
-				}
-				change_variable = {
-					which = caretaker_mood
-					value = 1
-				}
+		owner = {
+			add_resource = {
+				society_research = 1000
+			}
+			caretaker_change_mood = {
+				VALUE = 1
 			}
 		}
 	}
@@ -2993,15 +2926,14 @@ country_event = {
 	option = {
 		name = caretaker_origin_event.2503.option.b
 		custom_tooltip = caretaker_origin_event.2503.option.b.tooltip
-		hidden_effect = {
-			add_resource = {
-				engineering_research = 1000
-			}
-			change_variable = {
-				which = caretaker_mood
-				value = 1
-			}
+		#hidden_effect = {
+		add_resource = {
+			engineering_research = 1000
 		}
+		caretaker_change_mood = {
+			VALUE = 1
+		}
+		#}
 	}
 }
 
@@ -3025,36 +2957,28 @@ country_event = {
 	}
 	option = {
 		name = caretaker_origin_event.2504.option.a
-		custom_tooltip = caretaker_origin_event.2504.option.a.tooltip
-		hidden_effect = {
-			owner = {
-				change_variable = {
-					which = caretaker_mood
-					value = -2
-				}
-				# issue special project to open the ancient vault
-				capital_scope = {
-					enable_special_project = {
-						name = CARETAKER_ANCIENT_VAULT_DATA_ANALYSIS
-						location = this
-						owner = event_target:caretaker_vault_explorer@root
-					}
+		owner = {
+			caretaker_change_mood = {
+				VALUE = -2
+			}
+			# issue special project to open the ancient vault
+			capital_scope = {
+				enable_special_project = {
+					name = CARETAKER_ANCIENT_VAULT_DATA_ANALYSIS
+					location = this
+					owner = event_target:caretaker_vault_explorer@root
 				}
 			}
 		}
 	}
 	option = {
 		name = caretaker_origin_event.2504.option.b
-		custom_tooltip = caretaker_origin_event.2504.option.b.tooltip
-		hidden_effect = {
-			owner = {
-				add_resource = {
-					engineering_research = 1000
-				}
-				change_variable = {
-					which = caretaker_mood
-					value = 1
-				}
+		owner = {
+			add_resource = {
+				engineering_research = 1000
+			}
+			caretaker_change_mood = {
+				VALUE = 1
 			}
 		}
 	}
@@ -3118,20 +3042,14 @@ country_event = {
 	}
 	option = {
 		name = caretaker_origin_event.2506.option.a
-		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = 7
-			}
+		caretaker_change_mood = {
+			VALUE = 7
 		}
 	}
 	option = {
 		name = caretaker_origin_event.2506.option.b
-		hidden_effect = {
-			change_variable = {
-				which = caretaker_mood
-				value = -3
-			}
+		caretaker_change_mood = {
+			VALUE = -3
 		}
 	}
 }
@@ -3160,14 +3078,14 @@ country_event = {
 				any_owned_planet = {
 					is_capital = no
 					pop_amount > 2000
-					has_deposit = d_caretaker_hub
+					has_building = building_caretaker_outreach
 				}
 			}
 			random_owned_planet = {
 				limit = {
 					is_capital = no
 					pop_amount > 2000
-					has_deposit = d_caretaker_hub
+					has_building = building_caretaker_outreach
 				}
 				save_global_event_target_as = caretaker_hacked_hub_planet@root
 				planet_event = {
@@ -3192,7 +3110,7 @@ planet_event = {
 	is_triggered_only = yes
 	hide_window = yes
 	trigger = {
-		has_deposit = d_caretaker_hub
+		has_building = building_caretaker_outreach
 		exists = owner
 		owner = {
 			has_origin = origin_caretaker
@@ -3286,7 +3204,7 @@ planet_event = {
 	is_triggered_only = yes
 	hide_window = yes
 	trigger = {
-		has_deposit = d_caretaker_hub
+		has_building = building_caretaker_outreach
 		exists = owner
 		owner = {
 			has_origin = origin_caretaker
@@ -3380,7 +3298,7 @@ planet_event = {
 	is_triggered_only = yes
 	hide_window = yes
 	trigger = {
-		has_deposit = d_caretaker_hub
+		has_building = building_caretaker_outreach
 		exists = owner
 		owner = {
 			has_origin = origin_caretaker
@@ -3445,11 +3363,10 @@ planet_event = {
 				id = caretaker_origin_event.2610
 				days = 60
 			}
-			owner = {
-				change_variable = {
-					which = caretaker_mood
-					value = 3
-				}
+		}
+		owner = {
+			caretaker_change_mood = {
+				VALUE = 3
 			}
 		}
 	}
@@ -3460,11 +3377,10 @@ planet_event = {
 				id = caretaker_origin_event.2610
 				days = 120
 			}
-			owner = {
-				change_variable = {
-					which = caretaker_mood
-					value = -2
-				}
+		}
+		owner = {
+			caretaker_change_mood = {
+				VALUE = -2
 			}
 		}
 	}
@@ -3498,9 +3414,8 @@ planet_event = {
 				days = 60
 			}
 			owner = {
-				change_variable = {
-					which = caretaker_mood
-					value = 3
+				caretaker_change_mood = {
+					VALUE = 3
 				}
 			}
 		}
@@ -3513,9 +3428,8 @@ planet_event = {
 				days = 120
 			}
 			owner = {
-				change_variable = {
-					which = caretaker_mood
-					value = -2
+				caretaker_change_mood = {
+					VALUE = -2
 				}
 			}
 		}
@@ -3551,11 +3465,10 @@ planet_event = {
 		hidden_effect = {
 			remove_modifier = caretaker_hacked_hub_3a
 			remove_modifier = caretaker_hacked_hub_3b
-			owner = {
-				change_variable = {
-					which = caretaker_mood
-					value = 3
-				}
+		}
+		owner = {
+			caretaker_change_mood = {
+				VALUE = 3
 			}
 		}
 	}
@@ -3566,9 +3479,8 @@ planet_event = {
 			remove_modifier = caretaker_hacked_hub_3a
 			remove_modifier = caretaker_hacked_hub_3b
 			owner = {
-				change_variable = {
-					which = caretaker_mood
-					value = -3
+				caretaker_change_mood = {
+					VALUE = -3
 				}
 				# create a scientist
 				create_leader = {
@@ -3580,6 +3492,8 @@ planet_event = {
 				last_created_leader = {
 					add_trait = {
 						trait = leader_trait_spark_of_genius
+					}
+					add_trait = {
 						trait = leader_trait_expertise_computing
 					}
 				}
@@ -3591,11 +3505,10 @@ planet_event = {
 		custom_tooltip = caretaker_origin_event.2610.option.c.tooltip
 		hidden_effect = {
 			set_planet_flag = caretaker_hub_hack_preserved
-			owner = {
-				change_variable = {
-					which = caretaker_mood
-					value = -7
-				}
+		}
+		owner = {
+			caretaker_change_mood = {
+				VALUE = -7
 			}
 		}
 	}
@@ -3719,22 +3632,18 @@ planet_event = {
 	}
 	option = {
 		name = caretaker_origin_event.2702.option.b
-		custom_tooltip = caretaker_origin_event.2702.option.b.tooltip
-		hidden_effect = {
-			add_deposit = d_caretaker_free_settlements
-			owner = {
-				if = {
-					limit = {
-						NOR = {
-							has_country_flag = caretaker_break_up
-							has_country_flag = caretaker_secession
-							has_country_flag = caretaker_experiment_scrapped
-						}
+		add_deposit = d_caretaker_free_settlements
+		owner = {
+			if = {
+				limit = {
+					NOR = {
+						has_country_flag = caretaker_break_up
+						has_country_flag = caretaker_secession
+						has_country_flag = caretaker_experiment_scrapped
 					}
-					change_variable = {
-						which = caretaker_mood
-						value = -1
-					}
+				}
+				caretaker_change_mood = {
+					VALUE = -1
 				}
 			}
 		}
@@ -3774,11 +3683,10 @@ planet_event = {
 				id = caretaker_origin_event.2710
 				days = 1
 			}
-			owner = {
-				change_variable = {
-					which = caretaker_mood
-					value = 1
-				}
+		}
+		owner = {
+			caretaker_change_mood = {
+				VALUE = 1
 			}
 		}
 	}
@@ -3825,24 +3733,23 @@ planet_event = {
 	option = {
 		name = caretaker_origin_event.2703.option.d
 		custom_tooltip = caretaker_origin_event.2703.option.d.tooltip
-		hidden_effect = {
-			add_deposit = d_caretaker_free_settlements
-			owner = {
-				if = {
-					limit = {
-						NOR = {
-							has_country_flag = caretaker_break_up
-							has_country_flag = caretaker_secession
-							has_country_flag = caretaker_experiment_scrapped
-						}
+		#hidden_effect = {
+		add_deposit = d_caretaker_free_settlements
+		owner = {
+			if = {
+				limit = {
+					NOR = {
+						has_country_flag = caretaker_break_up
+						has_country_flag = caretaker_secession
+						has_country_flag = caretaker_experiment_scrapped
 					}
-					change_variable = {
-						which = caretaker_mood
-						value = -1
-					}
+				}
+				caretaker_change_mood = {
+					VALUE = -1
 				}
 			}
 		}
+		#}
 	}
 }
 
@@ -3870,25 +3777,20 @@ planet_event = {
 				id = caretaker_origin_event.2710
 				days = 1
 			}
-			owner = {
-				change_variable = {
-					which = caretaker_mood
-					value = 1
-				}
+		}
+		owner = {
+			caretaker_change_mood = {
+				VALUE = 1
 			}
 		}
 	}
 	# let the free settlers be
 	option = {
 		name = caretaker_origin_event.2704.option.b
-		custom_tooltip = caretaker_origin_event.2704.option.b.tooltip
-		hidden_effect = {
-			add_deposit = d_caretaker_free_settlements
-			owner = {
-				change_variable = {
-					which = caretaker_mood
-					value = -1
-				}
+		add_deposit = d_caretaker_free_settlements
+		owner = {
+			caretaker_change_mood = {
+				VALUE = -1
 			}
 		}
 	}
@@ -4265,16 +4167,17 @@ planet_event = {
 		custom_tooltip = caretaker_origin_event.3003.option.c.tooltip
 		hidden_effect = {
 			owner = {
-				change_variable = {
-					which = caretaker_mood
-					value = -5
-				}
 				set_country_flag = caretaker_secession_denied
 				# call event that decides what the Caretaker will do next
 				country_event = {
 					id = caretaker_origin_event.3004
 					days = 0
 				}
+			}
+		}
+		owner = {
+			caretaker_change_mood = {
+				VALUE = -5
 			}
 		}
 	}
@@ -5030,13 +4933,13 @@ country_event = {
 	}
 	option = {
 		name = caretaker_origin_event.3203.option.a
-		custom_tooltip = caretaker_origin_event.3203.option.a.tooltip
-		hidden_effect = {
-			add_resource = {
-				energy = 5000
-				minerals = 5000
-			}
+		#custom_tooltip = caretaker_origin_event.3203.option.a.tooltip
+		#hidden_effect = {
+		add_resource = {
+			energy = 5000
+			minerals = 5000
 		}
+		#}
 	}
 }
 
@@ -5315,7 +5218,7 @@ planet_event = {
 			has_origin = origin_caretaker
 			has_country_flag = caretaker_experiment_scrapped
 		}
-		caretaker_core_exists_on_planet = yes		# should be fine
+		caretaker_presence_on_planet = yes		# should be fine
 	}
 	immediate = {
 		set_planet_flag = caretaker_core_planet_take_over_attempt
@@ -5526,7 +5429,7 @@ country_event = {
 			remove_deposit = d_caretaker_free_settlements
 			remove_modifier = pm_caretaker_free_settler_discord
 			# Caretaker starts purging pops on the planet it takes over
-			every_owned_pop_group = {				
+			every_owned_pop_group = {
 				# unemploy_pop = yes
 				set_pop_group_flag = event_purge
 			}
@@ -5716,7 +5619,7 @@ planet_event = {
 			has_origin = origin_caretaker
 			has_country_flag = caretaker_experiment_scrapped
 		}
-		has_deposit = d_caretaker_hub
+		has_building = building_caretaker_outreach
 	}
 	immediate = {
 		# caretaker faction should still exist so we don't need to create a new one
@@ -5988,7 +5891,7 @@ country_event = {
 			set_owner = ROOT
 			every_owned_pop_group = {
 				remove_pop_group_flag = event_purge
-				 # unemploy_pop = yes
+				# unemploy_pop = yes
 			}
 			every_owned_pop_group = {
 				remove_modifier = "pop_recently_conquered"
@@ -6301,16 +6204,16 @@ country_event = {
 	# keep the infertility trait for much larger unity bonus
 	option = {
 		name = caretaker_origin_event.4203.option.h
-		custom_tooltip = caretaker_origin_event.4203.option.h.tooltip
-		hidden_effect = {
-			add_modifier = {
-				modifier = caretaker_fortitude
-				days = -1
-			}
-			add_resource = {
-				influence = 250
-			}
+		#custom_tooltip = caretaker_origin_event.4203.option.h.tooltip
+		#hidden_effect = {
+		add_modifier = {
+			modifier = caretaker_fortitude
+			days = -1
 		}
+		add_resource = {
+			influence = 250
+		}
+		#}
 	}
 }
 

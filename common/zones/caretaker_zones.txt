@@ -1,0 +1,87 @@
+zone_caretaker_monitor = {
+	inline_script = {
+		script = caretaker/shared_zones
+		AMOUNT = @scaling_district_1_job
+	}
+	zone_sets = {
+		urban
+		habitat_urban
+	}
+	inline_script = {
+		script = zones/shared_city_non_urban_zone_modifiers
+	}
+	ai_weight_coefficient = 1.2
+}
+
+zone_caretaker_monitor_arcology = {
+	inline_script = {
+		script = caretaker/shared_zones
+		AMOUNT = @doubled_scaling_district_1_job
+	}
+
+	
+	swap_type = district_arcology_leisure
+	swap_type_weight = 5
+	zone_sets = {
+		arcology
+	}
+	inline_script = {
+		script = zones/shared_arcology_zone_modifiers
+	}
+}
+
+# TODO
+zone_resort_caretaker = {
+	icon = GFX_job_xeno_zoo_animal
+	base_buildtime = @zone_buildtime
+	potential = {
+		# planet scope
+		exists = owner
+		owner = {
+			has_technology = tech_alien_life_studies
+			is_wilderness_empire = no
+		}
+		has_modifier = resort_colony
+		NOT = {
+			has_zone = {
+				zone = zone_resort_zoo
+			}
+		}
+	}
+	planet_limit = {
+		base = 1
+	}
+	swap_type = district_resort_zoo
+	swap_type_weight = 5
+	unlock = {
+		# planet scope
+		has_modifier = resort_colony
+	}
+	resources = {
+		category = planet_zones
+		cost = {
+			minerals = @zone_cost
+		}
+	}
+	zone_sets = {
+		resort_attraction
+	}
+	included_building_sets = {
+		zoo
+	}
+	inline_script = {
+		script = jobs/zone_biologists_add
+		LARGE_AMOUNT = @doubled_scaling_district_1_job
+	}
+	inline_script = {
+		script = zones/shared_city_non_urban_zone_modifiers
+	}
+	max_buildings = 1
+	triggered_desc = {
+		trigger = {
+			always = yes
+		}
+		text = zone_trade_triggered_desc
+	}
+	ai_priority = 10
+}
