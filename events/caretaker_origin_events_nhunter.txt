@@ -1,7 +1,6 @@
 # Stellaris Modjam 2020 - Caretaker
 # Writer/Scripter NHunter
 # Reviewer/Editor AphaAsh
-# trees TODOs: resettle pop group effects looks weird
 namespace = caretaker_origin_event
 # country flags index:
 #
@@ -142,11 +141,11 @@ country_event = {
 			target = root
 		}
 		# give bonus techs etc from civics
-		# TODO tooltip
-		give_technology = {
-			message = no
-			tech = tech_planetary_unification
-		}
+		# tooltip
+		# give_technology = {
+		# 	message = no
+		# 	tech = tech_planetary_unification
+		# }
 		# country_event = {
 		# 	id = caretaker_origin_event.21000
 		# }
@@ -157,8 +156,26 @@ country_event = {
 			create_pop = {
 				species = ROOT
 			}
-			add_building = building_caretaker_outreach
-			add_building = building_monitor_station_1
+			add_zone = {
+				district = 0
+				zone = zone_caretaker_monitor
+				zone_slot = 1
+				replace = yes
+			}
+			add_building = {
+				district = district_city
+				zone = zone_caretaker_monitor
+				building = building_caretaker_outreach
+			}
+			add_building = {
+				district = district_city
+				zone = zone_caretaker_monitor
+				building = building_monitor_station_1
+			}
+			add_building = building_research_lab_1
+			# add_building = building_caretaker_outreach
+			# add_building = building_monitor_station_1
+			add_district = district_city
 		}
 		#	if = {
 		#		limit = { has_civic = civic_care_crusade }
@@ -244,6 +261,13 @@ country_event = {
 		has_origin = origin_caretaker
 	}
 	option = {
+		name = caretaker_origin_event.3.option.b
+		hidden_effect = {
+			force_add_civic = civic_monitor_cult
+		}
+		custom_tooltip = caretaker_origin_event.3.option.b.tt
+	}
+	option = {
 		name = caretaker_origin_event.3.option.a
 		trigger = {
 			OR = {
@@ -263,13 +287,6 @@ country_event = {
 		# }
 	}
 	option = {
-		name = caretaker_origin_event.3.option.b
-		hidden_effect = {
-			force_add_civic = civic_monitor_cult
-		}
-		custom_tooltip = caretaker_origin_event.3.option.b.tt
-	}
-	option = {
 		name = caretaker_origin_event.3.option.c
 		trigger = {
 			OR = {
@@ -279,6 +296,10 @@ country_event = {
 		}
 		hidden_effect = {
 			force_add_civic = civic_one_big_family
+		}
+		give_technology = {
+			tech = tech_resort_colonies
+			message = no
 		}
 		custom_tooltip = caretaker_origin_event.3.option.c.tt
 	}
