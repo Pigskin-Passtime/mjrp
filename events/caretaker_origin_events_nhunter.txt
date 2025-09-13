@@ -149,6 +149,14 @@ country_event = {
 		# country_event = {
 		# 	id = caretaker_origin_event.21000
 		# }
+		set_policy = {
+			policy = caretaker_policy
+			option = caretaker_policy_ignore
+		}
+		country_event = {
+			id = caretaker_origin_event.1100
+			days = 30
+		}
 		capital_scope = {
 			create_pop = {
 				species = ROOT
@@ -321,13 +329,38 @@ country_event = {
 		trigger = {
 			is_materialist = yes
 		}
-		hidden_effect = {
-			force_add_civic = civic_drone_culture
+		give_technology = {
+			tech = tech_robotic_workers
 		}
 		custom_tooltip = caretaker_origin_event.3.option.e.tt
-		give_technology = {
-			tech = tech_droid_workers
+		hidden_effect = {
+			force_add_civic = civic_drone_culture
+			create_species = {
+				name = "Caretaker Drone"
+				plural = "Caretaker Drones"
+				class = MACHINE
+				# portrait = <random/portrait id>/this
+				homeworld = root.capital_scope
+				traits = {
+					trait = trait_mechanical
+					trait = trait_robot_caretaker_directives
+				}
+				# sapient = yes/no, determines if species is sapient (default: yes)
+				is_mod = no
+				immortal = no
+				gender = not_set
+				namelist = root
+				effect = {
+					save_event_target_as = caretaker_drones
+				}
+			}
+			capital_scope = {
+				create_pop = {
+					species = event_target:caretaker_drones
+				}
+			}
 		}
+		
 	}
 	option = {
 		name = caretaker_origin_event.3.option.f
@@ -363,6 +396,25 @@ country_event = {
 	immediate = {
 		caretaker_change_mood = {
 			VALUE = 4
+		}
+	}
+}
+
+# you made him very happy, get tech
+country_event = {
+	id = caretaker_origin_event.5
+	is_triggered_only = yes
+	title = caretaker_origin_event.5.name
+	desc = caretaker_origin_event.5.desc
+	picture = GFX_evt_caretaker_pleased
+	trigger = {
+		has_origin = origin_caretaker
+	}
+	option = {
+		name = caretaker_origin_event.5.option.a
+		add_research_option = tech_caretaker_observatory
+		give_technology = {
+			tech = caretaker_tech_combat_computers
 		}
 	}
 }
@@ -429,7 +481,6 @@ planet_event = {
 						has_building = building_caretaker_outreach
 					}
 				}
-				# TODO policy here
 				planet_event = {
 					id = caretaker_origin_event.1110
 					days = 360
@@ -1126,11 +1177,16 @@ country_event = {
 		if = {
 			limit = {
 				NOT = {
-					has_country_flag = caretaker_ap_synthetic_evolution_logged
+					has_country_flag = caretaker_ap_synthetic_evolution_logged_tradition
 				}
-				has_tradition = tr_synthetics_finish
+				OR = {
+					any_situation = {
+						is_situation_type = situation_digitization
+					}
+					has_tradition = tr_synthetics_maintenance_protocols
+				}
 			}
-			set_country_flag = caretaker_ap_synthetic_evolution_logged
+			set_country_flag = caretaker_ap_synthetic_evolution_logged_tradition
 			country_event = {
 				id = caretaker_origin_event.515
 				days = 2
@@ -1139,12 +1195,13 @@ country_event = {
 			#caretaker_go_berserk = yes
 		}
 		### update mood if empire took 'Transcendence' AP
+		# TODO update once dlc
 		if = {
 			limit = {
 				NOT = {
 					has_country_flag = caretaker_ap_transcendence_logged
 				}
-				has_tradition = tr_psionics_finish
+				has_tradition = tr_psionics_breach_shroud
 			}
 			set_country_flag = caretaker_ap_transcendence_logged
 			country_event = {
@@ -1161,10 +1218,13 @@ country_event = {
 					has_country_flag = caretaker_ap_evolutionary_master_logged
 				}
 				OR = {
-					has_tradition = tr_genetics_finish					# non dlc tradition lol
-					has_tradition = tr_cloning_finish
-					has_tradition = tr_purity_finish
-					has_tradition = tr_mutation_finish
+					any_situation = {
+						is_situation_type = genetic_ascension_situation
+					}
+					has_tradition = tr_genetics_efficient_cloning					# non dlc tradition lol
+					has_tradition = tr_cloning_stage_1_swap
+					has_tradition = tr_purity_stage_3_swap
+					has_tradition = tr_mutation_stage_2_swap
 				}
 			}
 			set_country_flag = caretaker_ap_evolutionary_master_logged
@@ -1277,7 +1337,7 @@ country_event = {
 }
 
 ### Angry message from the Caretaker for taking 'The Flesh Is Weak' AP
-# TODO new option to explain why you did this in faith of coming closer
+# new option to explain why you did this in faith of coming closer
 country_event = {
 	id = caretaker_origin_event.512
 	is_triggered_only = yes
@@ -1417,7 +1477,7 @@ country_event = {
 }
 
 ### Angry message from the Caretaker for taking 'Synthetic Evolution' AP
-# TODO this is shown double 
+# this is shown double 
 country_event = {
 	id = caretaker_origin_event.515
 	is_triggered_only = yes
@@ -1430,12 +1490,22 @@ country_event = {
 	}
 	option = {
 		name = caretaker_origin_event.515.option.a
+		trigger = {
+			NOT = {
+				has_country_flag = caretaker_ap_synthetic_evolution_logged
+			}
+		}
 		caretaker_change_mood = {
 			VALUE = -26
 		}
 	}
 	option = {
 		name = caretaker_origin_event.515.option.b
+		trigger = {
+			NOT = {
+				has_country_flag = caretaker_ap_synthetic_evolution_logged
+			}
+		}
 		caretaker_change_mood = {
 			VALUE = -27
 		}
@@ -1443,6 +1513,9 @@ country_event = {
 	option = {
 		name = caretaker_origin_event.515.option.c
 		trigger = {
+			NOT = {
+				has_country_flag = caretaker_ap_synthetic_evolution_logged
+			}
 			OR = {
 				has_ethic = ethic_materialist
 				has_ethic = ethic_fanatic_materialist
@@ -1452,14 +1525,13 @@ country_event = {
 			VALUE = -28
 		}
 	}
-	after = {
-		if = {
-			limit = {
-				has_tradition = tr_synthetics_finish
-			}
-			caretaker_change_mood = {
-				VALUE = -250
-			}
+	option = {
+		name = caretaker_origin_event.515.option.d
+		trigger = {
+			has_country_flag = caretaker_ap_synthetic_evolution_logged
+		}
+		caretaker_change_mood = {
+			VALUE = -250
 		}
 	}
 }
@@ -1763,31 +1835,40 @@ country_event = {
 ## ##################################################### ##
 ##             Caretaker hubs on colonies                ##
 ## ##################################################### ##
-### When a colony ship is built, explain that Caretaker hubs need to be established on colonies
-ship_event = {
+### Done via policy unlock, remind user
+country_event = {
 	id = caretaker_origin_event.1100
 	is_triggered_only = yes
 	title = caretaker_origin_event.1100.name
 	desc = caretaker_origin_event.1100.desc
 	picture = GFX_evt_caretaker_content
-	trigger = {
-		owner = {
-			has_origin = origin_caretaker
-			NOR = {
-				has_country_flag = caretaker_break_up
-				has_country_flag = caretaker_secession
-				has_country_flag = caretaker_experiment_scrapped
-				has_country_flag = caretaker_hubs_on_colonies_explained
-			}
-		}
-	}
-	immediate = {
-		owner = {
-			set_country_flag = caretaker_hubs_on_colonies_explained
-		}
-	}
+	#	trigger = {
+	# owner = {
+	# 	has_origin = origin_caretaker
+	# 	NOR = {
+	# 		has_country_flag = caretaker_break_up
+	# 		has_country_flag = caretaker_secession
+	# 		has_country_flag = caretaker_experiment_scrapped
+	# 	}
+	# }
+	# NOT = {
+	# }
+	# has_country_flag = caretaker_hubs_on_colonies_explained
+	#}
+	# immediate = {
+	# 	owner = {
+	# 		set_country_flag = caretaker_hubs_on_colonies_explained
+	# 	}
+	# }
 	option = {
 		name = caretaker_origin_event.1100.option.a
+	}
+	option = {
+		name = caretaker_origin_event.1100.option.b
+		set_policy = {
+			policy = caretaker_policy
+			option = caretaker_policy_assemble
+		}
 	}
 }
 
@@ -1816,12 +1897,27 @@ planet_event = {
 			limit = {
 				is_colony = yes
 				pop_amount > 0
+				NOT = {
+					owner = {
+						has_policy_flag = caretaker_policy_autobuild
+					}
+				}
 			}
 			log = "Colony has been established; Remind to build a Caretaker hub in 360 days."
 			planet_event = {
 				id = caretaker_origin_event.1111
 				days = 360
 			}
+		}
+		else_if = {
+			limit = {
+				is_colony = yes
+				pop_amount > 0
+				owner = {
+					has_policy_flag = caretaker_policy_autobuild
+				}
+			}
+			add_building = building_caretaker_outreach
 		}
 		else = {
 			log = "Colonization is still in progress, try later..."
@@ -1989,7 +2085,7 @@ planet_event = {
 	immediate = {
 		owner = {
 			caretaker_change_mood = {
-				VALUE = 1
+				VALUE = 3
 			}
 		}
 	}
@@ -2020,7 +2116,7 @@ planet_event = {
 			}
 			owner = {
 				caretaker_change_mood = {
-					VALUE = -2
+					VALUE = -4
 				}
 			}
 			if = {
@@ -2073,7 +2169,7 @@ planet_event = {
 			}
 			owner = {
 				caretaker_change_mood = {
-					VALUE = -4
+					VALUE = -8
 				}
 			}
 			if = {
@@ -2144,7 +2240,7 @@ planet_event = {
 			}
 			owner = {
 				caretaker_change_mood = {
-					VALUE = -2
+					VALUE = -4
 				}
 			}
 		}
@@ -2154,7 +2250,7 @@ planet_event = {
 			}
 			owner = {
 				caretaker_change_mood = {
-					VALUE = -2
+					VALUE = -4
 				}
 			}
 		}
@@ -2164,7 +2260,7 @@ planet_event = {
 			}
 			owner = {
 				caretaker_change_mood = {
-					VALUE = -4
+					VALUE = -8
 				}
 			}
 		}
@@ -2192,7 +2288,7 @@ planet_event = {
 			}
 			owner = {
 				caretaker_change_mood = {
-					VALUE = 1
+					VALUE = 2
 				}
 			}
 		}
@@ -2205,7 +2301,7 @@ planet_event = {
 			}
 			owner = {
 				caretaker_change_mood = {
-					VALUE = 2
+					VALUE = 4
 				}
 			}
 		}
@@ -2231,7 +2327,7 @@ country_event = {
 	}
 	immediate = {
 		caretaker_change_mood = {
-			VALUE = -3
+			VALUE = -6
 		}
 	}
 }
@@ -2252,7 +2348,7 @@ country_event = {
 	}
 	immediate = {
 		caretaker_change_mood = {
-			VALUE = -5
+			VALUE = -10
 		}
 	}
 }
@@ -2275,7 +2371,7 @@ country_event = {
 	}
 	immediate = {
 		caretaker_change_mood = {
-			VALUE = -4
+			VALUE = -8
 		}
 	}
 }
@@ -3836,7 +3932,7 @@ planet_event = {
 			create_pop = {
 				species = owner
 			}
-			# TODO
+			# 
 			# last_created_pop = {
 			# 	add_modifier = {
 			# 		modifier = caretaker_unhappy_settler
@@ -5275,7 +5371,7 @@ planet_event = {
 		}
 		# spawn armies : base armies
 		while = {
-			count = 16
+			count = 20
 			create_army = {
 				name = "NAME_CARETAKER_SMALL_ARMY"
 				owner = event_target:caretaker_exterminatus_faction@root
@@ -5288,7 +5384,7 @@ planet_event = {
 				has_building = building_monitor_station_3
 			}
 			while = {
-				count = 9
+				count = 12
 				create_army = {
 					name = "NAME_CARETAKER_SMALL_ARMY"
 					owner = event_target:caretaker_exterminatus_faction@root
@@ -5301,7 +5397,7 @@ planet_event = {
 				has_building = building_monitor_station_2
 			}
 			while = {
-				count = 6
+				count = 9
 				create_army = {
 					name = "NAME_CARETAKER_SMALL_ARMY"
 					owner = event_target:caretaker_exterminatus_faction@root
@@ -5314,7 +5410,7 @@ planet_event = {
 				has_building = building_monitor_station_1
 			}
 			while = {
-				count = 3
+				count = 6
 				create_army = {
 					name = "NAME_CARETAKER_SMALL_ARMY"
 					owner = event_target:caretaker_exterminatus_faction@root
@@ -5337,6 +5433,7 @@ country_event = {
 		has_origin = origin_caretaker
 		has_country_flag = caretaker_break_up
 		has_country_flag = caretaker_experiment_scrapped
+		exists = event_target:caretaker_exterminatus_faction@root
 		FROM = {
 			is_country = event_target:caretaker_exterminatus_faction@root
 		}
@@ -5400,11 +5497,11 @@ country_event = {
 	}
 	option = {
 		name = caretaker_origin_event.4010.option.a
-		hidden_effect = {
-			add_resource = {
-				unity = 5000
-			}
+		#hidden_effect = {
+		add_resource = {
+			unity = 5000
 		}
+		#}
 	}
 	option = {
 		name = caretaker_origin_event.4010.option.b
@@ -5414,11 +5511,11 @@ country_event = {
 				has_ethic = ethic_fanatic_militarist
 			}
 		}
-		hidden_effect = {
-			add_resource = {
-				unity = 5000
-			}
+		#hidden_effect = {
+		add_resource = {
+			unity = 5000
 		}
+		#}
 	}
 }
 
@@ -5434,6 +5531,7 @@ country_event = {
 		has_origin = origin_caretaker
 		has_country_flag = caretaker_break_up
 		has_country_flag = caretaker_experiment_scrapped
+		exists = event_target:caretaker_exterminatus_faction@root
 		FROM = {
 			is_country = event_target:caretaker_exterminatus_faction@root
 		}
@@ -5445,7 +5543,8 @@ country_event = {
 		FROMFROM = {
 			remove_planet_flag = caretaker_core_planet_take_over_attempt
 			set_planet_flag = caretaker_core_planet_take_over_success
-			set_owner = this
+			set_owner = root
+			# set_controller = root
 			caretaker_core_clean_up = yes
 			remove_deposit = d_caretaker_free_settlements
 			remove_modifier = pm_caretaker_free_settler_discord
@@ -5495,6 +5594,7 @@ country_event = {
 		has_country_flag = caretaker_break_up
 		has_country_flag = caretaker_experiment_scrapped
 		FROMFROM = {
+			exists = event_target:caretaker_exterminatus_faction@root
 			controller = {
 				is_country = event_target:caretaker_exterminatus_faction@root
 			}
@@ -5554,6 +5654,7 @@ country_event = {
 			has_country_flag = caretaker_experiment_scrapped
 		}
 		FROMFROM = {
+			exists = event_target:caretaker_exterminatus_faction@root
 			controller = {
 				is_country = event_target:caretaker_exterminatus_faction@root
 			}
@@ -5754,6 +5855,7 @@ country_event = {
 		NOT = {
 			has_country_flag = caretaker_destoryed
 		}
+		exists = event_target:caretaker_exterminatus_faction@root
 	}
 	immediate = {
 		# switch to the Caretaker faction
@@ -5797,6 +5899,7 @@ country_event = {
 		has_origin = origin_caretaker
 		has_country_flag = caretaker_break_up
 		has_country_flag = caretaker_experiment_scrapped
+		exists = event_target:caretaker_exterminatus_faction@root
 		FROM = {
 			is_country = event_target:caretaker_exterminatus_faction@root
 		}
@@ -5855,6 +5958,7 @@ country_event = {
 		has_origin = origin_caretaker
 		has_country_flag = caretaker_break_up
 		has_country_flag = caretaker_experiment_scrapped
+		exists = event_target:caretaker_exterminatus_faction@root
 		FROM = {
 			is_country = event_target:caretaker_exterminatus_faction@root
 		}
@@ -5894,6 +5998,7 @@ country_event = {
 		has_country_flag = caretaker_break_up
 		has_country_flag = caretaker_experiment_scrapped
 		FROMFROM = {
+			exists = event_target:caretaker_exterminatus_faction@root
 			controller = {
 				is_country = event_target:caretaker_exterminatus_faction@root
 			}

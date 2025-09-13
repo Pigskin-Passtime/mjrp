@@ -3,6 +3,17 @@ zone_caretaker_monitor = {
 		script = caretaker/shared_zones
 		AMOUNT = @scaling_district_1_job
 	}
+	triggered_district_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				is_regular_empire = yes
+			}
+			planet_is_ecu_equivalent = yes
+		}
+		job_monitor_add = @scaling_district_1_job
+		multiplier = 2
+	}
 	zone_sets = {
 		urban
 		habitat_urban
@@ -18,8 +29,8 @@ zone_caretaker_monitor_arcology = {
 		script = caretaker/shared_zones
 		AMOUNT = @doubled_scaling_district_1_job
 	}
-
-	
+	triggered_planet_modifier = {
+	}
 	swap_type = district_arcology_leisure
 	swap_type_weight = 5
 	zone_sets = {
@@ -30,28 +41,30 @@ zone_caretaker_monitor_arcology = {
 	}
 }
 
-# TODO
+# make it special - tbh all others arent special either? ... like bru just spam main dsitricts
 zone_resort_caretaker = {
-	icon = GFX_job_xeno_zoo_animal
+	icon = GFX_job_entertainer
 	base_buildtime = @zone_buildtime
 	potential = {
 		# planet scope
 		exists = owner
 		owner = {
-			has_technology = tech_alien_life_studies
-			is_wilderness_empire = no
+			has_origin = origin_caretaker
+			NOT = {
+				has_country_flag = caretaker_break_up
+			}
 		}
 		has_modifier = resort_colony
 		NOT = {
 			has_zone = {
-				zone = zone_resort_zoo
+				zone = zone_resort_caretaker
 			}
 		}
 	}
 	planet_limit = {
 		base = 1
 	}
-	swap_type = district_resort_zoo
+	swap_type = district_resort_spiritual_retreat
 	swap_type_weight = 5
 	unlock = {
 		# planet scope
@@ -67,11 +80,14 @@ zone_resort_caretaker = {
 		resort_attraction
 	}
 	included_building_sets = {
-		zoo
+		unity
+		urban_automation
+		origin
+		resort
 	}
 	inline_script = {
-		script = jobs/zone_biologists_add
-		LARGE_AMOUNT = @doubled_scaling_district_1_job
+		script = caretaker/monitor_add
+		AMOUNT = @doubled_scaling_district_1_job
 	}
 	inline_script = {
 		script = zones/shared_city_non_urban_zone_modifiers

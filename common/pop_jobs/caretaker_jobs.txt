@@ -39,7 +39,6 @@ high_monitor = {
 			unity = 700
 		}
 	}
-	
 	triggered_country_modifier = {
 		potential = {
 			exists = owner
@@ -158,6 +157,30 @@ monitor = {
 	# 		planet_jobs_worker_produces_mult = 0.02
 	# 	}
 	# }
+	weight = {
+		weight = @specialist_job_weight
+		mult = value:job_weights_modifier|JOB|politician|RESOURCE|unity|
+		mult = value:scripted_modifier_job_weight_mult|MODIFIER|pop_job_amenities_mult|
+		modifier = {
+			factor = 0.1
+			has_citizenship_rights = no
+			NOT = {
+				has_trait = trait_mechanical
+			}
+		}
+		# crisis purge
+		modifier = {
+			factor = 0.01
+			exists = planet
+			exists = planet.controller
+			planet.controller = {
+				OR = {
+					is_country_type = swarm
+					is_country_type = ai_empire
+				}
+			}
+		}
+	}
 	inline_script = "jobs/automodding_priority_charisma"
 	promotion = {
 		time = @standard_promotion_time
@@ -201,13 +224,11 @@ caretaker_ward = {
 		exists = owner
 		owner = {
 			has_origin = origin_caretaker
-			
 		}
 		exists = planet
 		planet = {
 			has_building = building_caretaker_outreach
 		}
-		
 		# TODO test
 		or = {
 			species = {
@@ -221,7 +242,7 @@ caretaker_ward = {
 	resources = {
 		category = planet_civilians
 		produces = {
-			unity = 1
+			unity = 2
 		}
 		# produces = {
 		# 	trigger = {
@@ -258,7 +279,7 @@ caretaker_ward = {
 		}
 	}
 	triggered_country_modifier = {
-			potential = {
+		potential = {
 			exists = owner
 			owner = {
 				has_valid_civic = civic_monitor_cult
