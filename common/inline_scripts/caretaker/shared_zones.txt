@@ -1,0 +1,62 @@
+icon = GFX_district_specialization_unity
+base_buildtime = @zone_buildtime
+potential = {
+	# planet scope
+	hidden_trigger = {
+		exists = owner
+	}
+	owner = {
+		has_origin = origin_caretaker
+		NOT = {
+			has_country_flag = caretaker_break_up
+		}
+	}
+	# has caretaker hubn building 
+}
+
+unlock = {
+	# planet scope
+	exists = owner
+	owner = {
+		has_origin = origin_caretaker
+	}
+}
+
+resources = {
+	category = planet_zones
+	cost = {
+		minerals = @zone_cost
+	}
+}
+
+included_building_sets = {
+	unity
+	urban_automation
+	origin
+	resort
+	entertainment
+}
+
+inline_script = {
+	script = caretaker/monitor_add
+	AMOUNT = $AMOUNT$
+}
+
+planet_modifier = {
+	zone_building_slots_add = 3
+}
+
+ai_resource_production = {
+	unity = 15
+	trigger = {
+		has_any_unity_zone = yes
+	}
+}
+
+on_built = {
+	planet_event = {
+		id = caretaker_origin_event.1200
+	}
+}
+
+ai_priority = 10
