@@ -856,6 +856,7 @@ country_event = {
         FROMFROM = {
             set_controller = root
             set_planet_flag = condan_won
+            set_planet_purge_type = purge_normal
 
             # in order to make crisis purge work there are country type selections in the purge status
             # can't touch those, because vanilla, but there is an event purger
@@ -914,6 +915,7 @@ country_event = {
     immediate = {
         log = "condan_events.052 - retake pre-purge"
         remove_country_flag = condan_former_owner
+        clear_planet_purge_type = yes
         FROMFROM = {
             remove_planet_flag = condan_won
             every_owned_pop_group = {
@@ -955,6 +957,7 @@ planet_event = {
     immediate = {
         set_owner = controller
         remove_planet_flag = condan_won
+        clear_planet_purge_type = yes
 
         create_pop = { species = event_target:condan_bot }
         condan_secure_planet = yes
@@ -987,6 +990,7 @@ country_event = {
     immediate = {
         log = "condan_events.052 - retake post purge"
         remove_country_flag = condan_former_owner
+        clear_planet_purge_type = yes
         FROMFROM = {
             remove_planet_flag = condan_purged
             every_owned_pop_group = { kill_all_pop = yes } # Kill Custodians
@@ -1706,60 +1710,60 @@ country_event = {
         exists = event_target:condan_country
     }
     immediate = {
-       if = {
-           limit = { NOT = { is_variable_set = condan_boring_years}}
-           set_variable = { which = condan_boring_years value = 1 }
-       }
-       random_list = {
-           150 = {
-               modifier = { factor = value:condan_interesting_times_factor }
-               # Do nothing.
-               change_variable = {  which = condan_boring_years value = 1 }
-           }
-           # unhappy spiritualists
-           50 = {
-               modifier = {
-                   factor = 0
-                   is_spiritualist = no
-               }
-               modifier = {
-                   factor = 0
-                   has_country_flag = condan_spiritualist_event
-               }
-               set_variable = { which = condan_boring_years value = 1 }
-               country_event = { id = condan_comms.050 days = 30 random = 200 }
-           }
-           #unhappy xenophiles
-           50 = {
-               modifier = {
-                   factor = 0
-                   is_xenophile = no
-               }
-               modifier = {
-                   factor = 0
-                   has_country_flag = condan_xenophile_event
-               }
-               set_variable = { which = condan_boring_years value = 1 }
-               country_event = { id = condan_comms.060 days = 30 random = 200 }
-           }
-           # living metal
-           20 = {
-               modifier = {
-                   factor = 0
-                   NOT = { has_technology = tech_mine_living_metal }
-               }
-               modifier = {
-                   factor = 0
-                   NOT = { has_ascension_perk = ap_condan }
-               }
-               modifier = {
-                   factor = 0
-                   has_country_flag = condan_found_living_metal_2
-               }
-               set_variable = { which = condan_boring_years value = 1 }
-               country_event = { id = condan_comms.160 days = 100 random = 100 }
-           }
-       }
+        if = {
+            limit = { NOT = { is_variable_set = condan_boring_years}}
+            set_variable = { which = condan_boring_years value = 1 }
+        }
+        random_list = {
+            150 = {
+                modifier = { factor = value:condan_interesting_times_factor }
+                # Do nothing.
+                change_variable = {  which = condan_boring_years value = 1 }
+            }
+            # unhappy spiritualists
+            50 = {
+                modifier = {
+                    factor = 0
+                    is_spiritualist = no
+                }
+                modifier = {
+                    factor = 0
+                    has_country_flag = condan_spiritualist_event
+                }
+                set_variable = { which = condan_boring_years value = 1 }
+                country_event = { id = condan_comms.050 days = 30 random = 200 }
+            }
+            #unhappy xenophiles
+            50 = {
+                modifier = {
+                    factor = 0
+                    is_xenophile = no
+                }
+                modifier = {
+                    factor = 0
+                    has_country_flag = condan_xenophile_event
+                }
+                set_variable = { which = condan_boring_years value = 1 }
+                country_event = { id = condan_comms.060 days = 30 random = 200 }
+            }
+            # living metal
+            20 = {
+                modifier = {
+                    factor = 0
+                    NOT = { has_technology = tech_mine_living_metal }
+                }
+                modifier = {
+                    factor = 0
+                    NOT = { has_ascension_perk = ap_condan }
+                }
+                modifier = {
+                    factor = 0
+                    has_country_flag = condan_found_living_metal_2
+                }
+                set_variable = { which = condan_boring_years value = 1 }
+                country_event = { id = condan_comms.160 days = 100 random = 100 }
+            }
+        }
     }
 }
 
@@ -2459,14 +2463,17 @@ country_event = {
     trigger = {
         has_global_flag = condan_in_play
         is_condan_empire = yes
+        NOT = { has_country_flag = condan_declared_war_recently }
+
         any_country = {
+            is_condan_empire = no
             OR = {
                 has_crisis_level = crisis_cosmogenesis_level_2
                 has_crisis_level = crisis_level_2
             }
-            NOT = { has_country_flag = condan_declared_war_recently }
+
             # check we are not at war with them already
-            NOT = { any_war = { any_war_participant = { is_condan_empire = yes } } }
+            NOT = { any_war = { is_war_participant = { who = ROOT } } }
         }
     }
 
@@ -2477,8 +2484,7 @@ country_event = {
                     has_crisis_level = crisis_cosmogenesis_level_2
                     has_crisis_level = crisis_level_2
                 }
-                NOT = { has_country_flag = condan_declared_war_recently }
-                NOT = { any_war = { any_war_participant = { is_condan_empire = yes } } }
+                NOT = { any_war = { is_war_participant = { who = ROOT } } }
             }
             save_event_target_as = condan_war_target
         }
@@ -2502,7 +2508,7 @@ country_event = {
                 has_crisis_level = crisis_level_5
             }
             # check we are not at war with them already
-            NOT = { any_war = { any_war_participant = { is_condan_empire = yes } } }
+            NOT = { any_war = { is_war_participant = { who = ROOT } } }
         }
     }
 
@@ -2513,7 +2519,7 @@ country_event = {
                     has_crisis_level = crisis_cosmogenesis_level_5
                     has_crisis_level = crisis_level_5
                 }
-                NOT = { any_war = { any_war_participant = { is_condan_empire = yes } } }
+                NOT = { any_war = { is_war_participant = { who = ROOT } } }
             }
             save_event_target_as = condan_war_target
         }
