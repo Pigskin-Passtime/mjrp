@@ -1,0 +1,40 @@
+#Srcipting: Blade Thompson
+#Artwork: Ashley Thompson
+#Writing: EgoInvicta
+
+@base_ethic_agenda_cost = 7000
+sab_agenda_pre_filled_paperwork = {
+	agenda_cost = @base_ethic_agenda_cost
+	potential = {
+		is_gestalt = no
+		is_megacorp = yes
+		has_global_flag = sab_system_spawned
+	}
+	allow = {
+		custom_tooltip = {
+			owner = {
+				AND = {
+					has_country_flag = sab_hired_1
+					has_country_flag = sab_agenda_yes
+				}
+			}
+			NOR = {
+				has_country_flag = sab_agenda_pre_filled_paperwork_done
+				has_country_flag = sab_ralph_dead_yes
+			}
+		}
+	}
+	modifier = {
+		country_trust_cap_add = 20
+		country_trust_growth = 10
+	}
+#	finish_modifier = sab_agenda_pre_filled_paperwork_finish
+	effect = {
+		hidden_effect = {
+			give_technology = {
+				tech = tech_secret_comercial_pacts
+			}
+		}
+		set_country_flag = sab_agenda_pre_filled_paperwork_done
+	}
+}

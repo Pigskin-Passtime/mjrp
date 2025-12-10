@@ -1,0 +1,305 @@
+#Srcipting: Blade Thompson
+#Artwork: Ashley Thompson
+#Writing: EgoInvicta
+
+namespace = sab_first_event
+
+ship_event = {
+	id = sab_first_event.1
+	title = "sab_message_testing_1"
+	desc = "sab_desc_testing_1"
+	picture = GFX_evt_sab_tomb_world_one
+	show_sound = event_ship_bridge
+
+	is_triggered_only = yes
+
+	option = {
+		name = sab_first_event.1.a
+		trigger = {
+			owner = {
+				is_megacorp = yes
+			}
+		}
+	}
+
+	option = {
+		name = sab_first_event.1.b
+		trigger = {
+			owner = {
+				is_megacorp = no
+			}
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				owner = {
+					is_megacorp = yes
+				}
+			}
+			owner = { 
+				country_event = { 
+					id = sab_ralph.01 
+					days = 400
+				} 
+			}
+		}
+	}
+}
+
+namespace = sab_buisness_ventures
+
+country_event = { #opens cafe#
+	id = sab_buisness_ventures.2
+	title = "sab_opening_cafe_one"
+	desc = "sab_opening_cafe_one_desc"
+	picture = GFX_evt_sab_cafe_one
+	show_sound = event_ship_bridge
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = {
+			has_country_flag = sab_ralph_dead_yes
+		}
+	}
+
+	option = {
+		name = sab_buisness_ventures.2.a
+		owner = {
+			hidden_effect = {
+				give_technology = {
+					tech = sab_spy_cafe
+				}
+			}
+		}
+		hidden_effect = {
+			country_event = { 
+				id = sab_spy_buildings.1
+				days = 365		
+			}
+		}
+	}
+}
+
+country_event = { #opens theme park#
+	id = sab_buisness_ventures.3
+	title = "sab_opening_theme_park"
+	desc = "sab_opening_theme_park_desc"
+	picture = GFX_evt_sab_theme_park_one
+	show_sound = event_ship_bridge
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = {
+			has_country_flag = sab_ralph_dead_yes
+		}
+	}
+
+	option = {
+		name = sab_buisness_ventures.3.a
+		owner = {
+			hidden_effect = {
+				give_technology = {
+					tech = sab_spy_theme_park
+				}
+			}
+		}
+		hidden_effect = {
+			country_event = { 
+				id = sab_spy_buildings.1
+				days = 365		
+			}
+		}
+	}
+}
+
+namespace = sab_casino
+
+country_event = { #opens casino#
+	id = sab_casino.2
+	title = "sab_opening_the_casino_one"
+	desc = "sab_opening_the_casino_one_desc"
+	picture = GFX_evt_sab_casino_event
+	show_sound = event_ship_bridge
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = {
+			has_country_flag = sab_ralph_dead_yes
+		}
+	}
+
+	option = {
+		name = sab_casino.2.a
+		owner = {
+			hidden_effect = {
+				give_technology = {
+					tech = sab_spy_casino
+				}
+			}
+		}
+		hidden_effect = {
+			country_event = { 
+				id = sab_spy_buildings.1
+				days = 365		
+			}
+		}
+	}
+}
+
+namespace = sab_spy_buildings
+
+country_event = {
+	id = sab_spy_buildings.1
+	title = "sab_spy_buildings"	
+	desc = {
+		text = sab_all_3_buildings
+		trigger = {
+			NOR = {
+				has_country_flag = sab_cafe_yes
+				has_country_flag = sab_casino_yes
+				has_country_flag = sab_theme_park_yes
+			}
+		}
+	}
+	desc = {
+		text = sab_only_cafe_and_casino
+		trigger = {
+			has_country_flag = sab_theme_park_yes
+			NAND = {
+				has_country_flag = sab_casino_yes
+				has_country_flag = sab_cafe_yes
+			}
+		}
+	}
+	desc = {
+		text = sab_only_cafe_and_theme_park
+		trigger = {
+			has_country_flag = sab_casino_yes
+			NAND = {
+				has_country_flag = sab_cafe_yes
+				has_country_flag = sab_theme_park_yes
+			}
+		}
+	}
+	desc = {
+		text = sab_only_casino_and_theme_park
+		trigger = {
+			has_country_flag = sab_cafe_yes
+			NAND = {
+				has_country_flag = sab_casino_yes
+				has_country_flag = sab_theme_park_yes
+			}
+		}
+	}
+	desc = {
+		text = sab_cafe_only
+		trigger = {
+			AND = {
+				has_country_flag = sab_casino_yes
+				has_country_flag = sab_theme_park_yes
+			}
+			NOT = {
+				has_country_flag = sab_cafe_yes
+			}
+		}
+	}
+	desc = {
+		text = sab_casino_only
+		trigger = {
+			AND = {
+				has_country_flag = sab_cafe_yes
+				has_country_flag = sab_theme_park_yes
+			}
+			NOT = {
+				has_country_flag = sab_casino_yes
+			}
+		}
+	}
+	desc = {
+		text = sab_theme_park_only
+		trigger = {
+			AND = {
+				has_country_flag = sab_casino_yes
+				has_country_flag = sab_cafe_yes
+			}
+			NOT = {
+				has_country_flag = sab_theme_park_yes
+			}
+		}
+	}
+	picture = GFX_evt_sab_office_two
+	show_sound = event_ship_bridge
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = {
+			has_country_flag = sab_ralph_dead_yes
+		}
+		NAND = {
+			has_country_flag = sab_cafe_yes
+			has_country_flag = sab_casino_yes
+			has_country_flag = sab_theme_park_yes
+		}
+	}
+
+	option = {
+		name = "sab_buisness_ventures.1.a"
+		trigger = {
+			NOT = {
+				has_country_flag = sab_cafe_yes
+			}
+		}
+		hidden_effect = {
+			country_event = { 
+				id = sab_buisness_ventures.2 
+				days = 548
+			}
+			set_country_flag = sab_cafe_yes
+		}
+	}
+
+	option = {
+		name = "sab_buisness_ventures.1.b"
+		trigger = {
+			NOT = {
+				has_country_flag = sab_theme_park_yes
+			}
+		}
+		hidden_effect = {
+			country_event = { 
+				id = sab_buisness_ventures.3 
+				days = 1825
+			}
+			set_country_flag = sab_theme_park_yes
+		}
+	}
+
+	option = {
+		name = "sab_casino.1.a"
+		trigger = {
+			NOT = {
+				has_country_flag = sab_casino_yes
+			}
+		}
+		hidden_effect = {
+			country_event = { 
+				id = sab_casino.2 
+				days = 1101		
+			}
+			set_country_flag = sab_casino_yes
+		}
+	}
+	
+	immediate = {
+		country_event = {
+			id = sab_agenda.1
+			days = 6578
+		}
+	}
+}

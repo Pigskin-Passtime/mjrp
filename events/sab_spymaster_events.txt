@@ -1,0 +1,137 @@
+ #Srcipting: Blade Thompson
+ #Artwork: Ashley Thompson
+ #Writing: EgoInvicta
+
+ namespace = sab_ralph 
+
+country_event = {
+	id = sab_ralph.01
+	title = "sab_ralph.01.name"
+	desc = "sab_ralph.01.desc"
+	show_sound = par_portrait_08
+	is_triggered_only = yes
+
+	picture = GFX_leader_recruitment_bg_renowned
+	auto_opens = no
+	event_window_type = leader_recruit
+	notification_event_icon = "GFX_message_sab_leader_recruitment_ralph_fasmid"
+
+	immediate = {
+		ethic_leader_creator = {
+			SPECIES_CLASS = random_non_machine
+			LEADER_PORTRAIT = sab_par_01
+			CLASS = commander
+			TIER = leader_tier_legendary
+			NAME = "sab_ralph.01.name.1"
+			LEVEL = 4
+			GENDER = male
+			IMMORTAL = no
+			ETHIC = xenophile
+			DESC = xenophile1
+			CATCH_PHRASE = xenophile1_catch_phrase
+		}
+		last_created_leader = {
+			add_trait = {
+				trait = subclass_commander_councilor
+			} 
+			add_trait = {
+				trait = sab_spy_intel
+			}
+			add_trait = {
+				trait = sab_spy_intel_2
+			}
+			add_trait = {
+				trait = leader_trait_trickster
+			}
+			add_trait = {
+				trait = leader_trait_artillerist
+			}
+			set_age = 26
+		}
+	}
+
+	picture_event_data = {
+		portrait = event_target:ethic_leader
+		room = ethic_spaceship_room
+	}
+
+	option = {
+		name = DISMISS
+		tag = dismiss_leader
+		hidden_effect = {
+			remove_global_flag = xenophile_leader_1
+			ethic_leader_kill_effect = yes
+			set_country_flag = dismissed_xenophile_leader_1
+		}
+	}
+	option = {
+		name = sab_ralph.01.a
+		response_text = sab_ralph.01.a.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = sab_ralph.01.b
+		response_text = sab_ralph.01.b.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = sab_ralph.01.c
+		response_text = sab_ralph.01.c.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = sab_ralph.01.d
+		response_text = sab_ralph.01.d.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = sab_ralph.01.e
+		trigger = {
+			NOT = {
+				owner = {
+					is_megacorp = yes
+				}
+			}
+		}
+		response_text = sab_ralph.01.e.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = HIRE
+		tag = hire_leader
+		custom_tooltip = sab_ralph.01.hire_custom_tooltip
+		hidden_effect = {
+			ethic_leader_hire_effect = {
+				GLOBAL_EVENT_TARGET = renowned_xenophile1
+			}
+			country_event = {
+				id = sab_spy_buildings.1
+				days = 600
+			}
+			country_event = {
+				id = sab_stolen_ships.1
+				days = 365
+			}
+		set_country_flag = sab_hired_1
+		}
+	}
+}
+
+country_event = { #if ralph dies/dismissed#
+	id = sab_ralph.02
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		from = {
+			has_trait = sab_spy_intel
+		}
+	}
+
+	immediate = {
+		owner = {
+			set_country_flag = sab_ralph_dead_yes
+		}
+	}
+}
