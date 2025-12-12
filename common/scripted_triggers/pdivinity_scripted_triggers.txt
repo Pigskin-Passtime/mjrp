@@ -1,0 +1,78 @@
+###################################
+### pdivinity_scripted_triggers ###
+###                             ###
+###   by daniellm               ###
+###################################
+
+ship_uses_pdivinity_cloud_components = {
+    is_ship_size = pdivinity_psionic_cloud
+}
+
+ship_uses_pdivinity_avatar_components = {
+    is_ship_size = pdivinity_psionic_avatar
+}
+
+ship_uses_pdivinity_tearer_components = {
+        is_ship_size = pdivinity_dimensional_tearer
+}
+
+ship_uses_pdivinity_architect_components = {
+        is_ship_size = pdivinity_the_architect_of_fate
+}
+
+ship_uses_pdivinity_swarm_role = {
+        is_ship_size = pdivinity_psionic_cloud
+}
+
+ship_uses_pdivinity_line_role = {
+    or = {
+        is_ship_size = pdivinity_psionic_cloud
+        is_ship_size = pdivinity_psionic_avatar
+    }
+}
+
+ship_uses_pdivinity_titan_components = {
+    or = {
+        is_ship_size = pdivinity_dimensional_tearer
+        is_ship_size = pdivinity_the_architect_of_fate
+    }
+}
+
+ship_uses_pdivinity_artillery_role = {
+    or = {
+        is_ship_size = pdivinity_psionic_avatar
+        is_ship_size = pdivinity_dimensional_tearer
+    }
+}
+
+can_destroy_planet_with_PDIVINITY_STAR_RIFTER = {
+    custom_tooltip = {
+        fail_text = pdivinity_is_not_possible_rift
+        OR = {
+            is_planet_class = pc_black_hole
+            is_planet_class = pc_pulsar
+            is_planet_class = pc_a_star
+        }
+    }
+
+    custom_tooltip = {
+        fail_text = star_owner_is_not_hostile
+        OR = {
+            NOT = { exists = space_owner }
+            space_owner = { is_hostile = from.owner }
+            space_owner = { is_same_value = from.owner }
+        }
+    }
+}
+
+pdivinity_has_shrine = {
+    any_owned_planet = {
+        has_building = building_pdivinity_architect_shrine
+    }
+}
+
+pdivinity_has_shroud_phased_planet = {
+    any_owned_planet = {
+        has_modifier = pdivinity_shroud_phased_modifier
+    }
+}

@@ -1,0 +1,1015 @@
+#############################
+### pdivinity_cult_events ###
+###                       ###
+###       by daniellm     ###
+#############################
+
+namespace = pdivinity_cults
+
+########################
+### opinion modifier ###
+########################
+
+planet_event = {
+    id = pdivinity_cults.100
+
+    hide_window = yes
+
+    is_triggered_only = yes
+
+    trigger = {
+        exists = fromfrom
+        FROMFROM = {
+            is_robot_pop_group = no
+            is_sapient = yes
+            NOT = { has_trait = "trait_hive_mind" }
+            has_purge_type = { country = from type = purge_pdivinity_sacrifice }
+        }
+        is_controlled_by = FROM
+    }
+
+    immediate = {
+        every_country = {
+            limit = {
+                has_communications = FROM
+                NOT = { is_country = FROM }
+                is_subject = yes
+                from = {
+                    has_ascension_perk = ap_pdivinity
+                }
+            }
+            while = {
+                count = root.local_pop_amount
+                add_opinion_modifier = { who = FROM modifier = opinion_pdivinity_sacrifices }
+            }
+        }
+    }
+}
+
+###########################
+### changing government ###
+###########################
+
+country_event = {
+    id = pdivinity_cults.0
+    title = pdivinity_cults.0.name
+    desc = pdivinity_cults.0.desc
+    picture = GFX_evt_alien_propaganda
+    show_sound = event_planetary_riot
+
+    is_triggered_only = yes
+
+    trigger = {
+        overlord = {
+            has_menace_perk = menp_pdivinity_divine_crusade
+        }
+        is_gestalt = no
+    }
+
+    option = {
+        name = pdivinity_cults.0.a
+        create_leader = {
+            class = official
+            species = event_target:pdivinity_avatar_species
+            name = random
+            skill = 5
+            traits = {
+                trait = leader_trait_psionic
+                trait = leader_trait_pdivinity_chosen_by_the_eye
+                # maybe random
+            }
+        }
+        random_owned_leader = {
+            limit = {
+                has_trait = leader_trait_pdivinity_chosen_by_the_eye
+            }
+            save_event_target_as = pdivinity_chosen_by_the_eye
+        }
+        shift_ethic = "ethic_fanatic_spiritualist"
+        change_government = {
+            authority = auth_oligarchic
+            cooldown = no
+            remove_invalid_civics = yes
+        }
+        #force_add_civic = civic_pdivinity_acolyte # placeholder
+        set_government_cooldown = no
+        ruler = {
+            exile_leader_as = destituted_ruler_chosen_one
+        }
+        set_leader = event_target:pdivinity_chosen_by_the_eye
+        join_war = event_target:pdivinity_crisis_empire
+    }
+}
+
+## espionage stuff
+
+###############
+### stage 1 ### finding candidates
+###############
+
+espionage_operation_event = {
+    id = pdivinity_cults.1
+    title = pdivinity_cults.1.name
+    desc = pdivinity_cults.1.desc
+    espionage_operation = yes
+    picture = GFX_evt_acquire_asset
+    show_sound = event_default
+    is_triggered_only = yes
+
+    option = {
+        name = pdivinity_cults.1.a
+    }
+}
+
+###############
+### stage 2 ### getting members
+###############
+
+espionage_operation_event = {
+    id = pdivinity_cults.2
+    title = pdivinity_cults.2.name
+    desc = pdivinity_cults.2.desc
+    espionage_operation = yes
+    picture = GFX_evt_hive_mind
+    show_sound = event_default
+    is_triggered_only = yes
+
+    option = {
+        name = pdivinity_cults.2.a
+    }
+}
+
+###############
+### stage 3 ### establishing empire wide cells
+###############
+
+espionage_operation_event = {
+    id = pdivinity_cults.3
+    title = pdivinity_cults.3.name
+    desc = pdivinity_cults.3.desc
+    espionage_operation = yes
+    picture = GFX_evt_hive_mind
+    show_sound = event_default
+    is_triggered_only = yes
+
+    option = {
+        name = pdivinity_cults.3.a
+    }
+}
+
+########################
+### finish operation ### launching operation
+########################
+
+espionage_operation_event = {
+    id = pdivinity_cults.4
+    title = pdivinity_cults.4.name
+    desc = pdivinity_cults.4.desc
+    espionage_operation = yes
+    picture = GFX_evt_shroudwalker_enclave
+    show_sound = event_default
+    is_triggered_only = yes
+
+    immediate = {
+    }
+
+    option = {
+        name = pdivinity_cults.4.a
+        hidden_effect = {
+            owner = {
+                complete_crisis_objective = crisobj_pdivinity_establish_cult
+            }
+            target = {
+                start_situation = {
+                    type = situation_pdivinity_cult_uprising
+                    target = root.owner
+                }
+            }
+            destroy_espionage_operation = this
+        }
+    }
+}
+
+
+#### actual cult situation
+
+################
+### too late ### stage 5
+################
+
+situation_event = {
+    id = pdivinity_cults.5
+    title = pdivinity_cults.5.name
+    desc = pdivinity_cults.5.desc
+    picture = GFX_evt_enclave_overlord
+    show_sound = event_psionic
+    is_triggered_only = yes
+
+    option = {
+        name = pdivinity_cults.5.a
+    }
+}
+
+######################
+### monthly spread ###
+######################
+
+situation_event = {
+    id = pdivinity_cults.10
+    hide_window = yes
+    is_triggered_only = yes
+
+    trigger = {
+        exists = owner
+        situation_progress <= 1200
+    }
+
+    immediate = {
+        owner = {
+            random_owned_pop_group = {
+                limit = {
+                    happiness <= 0.6
+                }
+                planet = {
+                    ordered_owned_pop_group = {
+                        limit = {
+                            happiness <= 0.6
+                            NOT = {
+                                has_pop_group_flag = pdivinity_cultist_member
+                            }
+                        }
+                        position = 0
+                        order_by = trigger:happiness
+                        inverse = yes
+                        set_pop_group_flag = pdivinity_cultist_member
+                    }
+                }
+            }
+        }
+    }
+}
+
+#########################
+### monthly crackdown ###
+#########################
+
+situation_event = {
+    id = pdivinity_cults.11
+    hide_window = yes
+    is_triggered_only = yes
+
+    trigger = {
+        exists = owner
+        situation_progress <= 1200
+    }
+
+    immediate = {
+        owner = {
+            random_owned_pop_group = {
+                limit = {
+                    happiness > 0.6
+                    has_pop_group_flag = pdivinity_cultist_member
+                }
+                planet = {
+                    ordered_owned_pop_group = {
+                        limit = {
+                            happiness >= 0.6
+                            has_pop_group_flag = pdivinity_cultist_member
+                        }
+                        position = 0
+                        order_by = trigger:happiness
+                        remove_pop_group_flag = pdivinity_cultist_member
+                    }
+                }
+            }
+        }
+    }
+}
+#########################
+##### random events #####
+#########################
+
+##################
+### cult grows ###
+##################
+
+situation_event = {
+    id = pdivinity_cults.12
+    title = pdivinity_cults.12.name
+    desc = pdivinity_cults.12.desc
+    picture = GFX_evt_conclave
+    show_sound = event_psionic
+    is_triggered_only = yes
+
+    trigger = {
+        owner = {
+            NOT = {
+                any_situation = {
+                    is_situation_type = situation_pdivinity_cult_uprising
+                    situation_progress >= 1200
+                }
+            }
+        }
+    }
+
+    immediate = {
+        owner = {
+            random_situation = {
+                limit = {
+                    is_situation_type = situation_pdivinity_cult_uprising
+                }
+                add_situation_progress = 100
+            }
+        }
+    }
+
+    option = {
+        name = pdivinity_cults.12.a
+    }
+}
+
+#####################
+### terror attack ###
+#####################
+
+situation_event = {
+    id = pdivinity_cults.13
+    title = pdivinity_cults.13.name
+    desc = pdivinity_cults.13.desc
+    picture = GFX_evt_night_raid
+    show_sound = event_wind_ruins
+    is_triggered_only = yes
+
+    trigger = {
+        owner = {
+            NOT = {
+                any_situation = {
+                    is_situation_type = situation_pdivinity_cult_uprising
+                    situation_progress >= 1200
+                }
+            }
+            capital_scope = {
+                not = {
+                    has_modifier = pdivinity_cult_attack
+                }
+            }
+        }
+    }
+
+    immediate = {
+        owner = {
+            capital_scope = {
+                add_planet_devastation = 20
+                add_modifier = {
+                    modifier = pdivinity_cult_attack
+                    days = 1080
+                }
+            }
+        }
+    }
+
+    option = {
+        name = pdivinity_cults.13.a
+    }
+}
+
+#######################
+### cultists killed ###
+#######################
+
+situation_event = {
+    id = pdivinity_cults.14
+    title = pdivinity_cults.14.name
+    desc = pdivinity_cults.14.desc
+    picture = GFX_evt_interior_battle
+    show_sound = event_ground_battle
+    is_triggered_only = yes
+
+    trigger = {
+        owner = {
+            nor = {
+                has_country_flag = pdivinity_cultists_killed
+                any_situation = {
+                    is_situation_type = situation_pdivinity_cult_uprising
+                    situation_progress >= 1200
+                }
+            }
+        }
+    }
+
+    immediate = {
+        owner = {
+            set_timed_country_flag = {
+                flag = pdivinity_cultists_killed
+                days = 360
+            }
+        }
+    }
+
+    option = {
+        name = pdivinity_cults.14.a
+    }
+}
+
+#############################
+##### situation results #####
+#############################
+
+#########################
+### cultists defeated ###
+#########################
+
+country_event = {
+    id = pdivinity_cults.15
+    title = pdivinity_cults.15.name
+    desc = pdivinity_cults.15.desc
+    picture = GFX_evt_alien_propaganda
+    show_sound = event_celebration
+    is_triggered_only = yes
+
+    option = {
+        name = pdivinity_cults.15.a
+    }
+}
+
+####################
+### cultists win ###
+####################
+
+country_event = {
+    id = pdivinity_cults.16
+    hide_window = yes
+    is_triggered_only = yes
+
+    immediate = {
+        owner = {
+            if = {
+                limit = {
+                    any_owned_planet = {
+                        pop_amount_percentage = {
+                            percentage > 0.7
+                            limit = {
+                                has_pop_group_flag = pdivinity_cultist_member
+                            }
+                        }
+                    }
+                }
+                set_country_flag = pdivinity_cultists_70_percent
+            }
+
+            else_if = {
+                limit = {
+                    any_owned_planet = {
+                        pop_amount_percentage = {
+                            percentage > 0.6
+                            limit = {
+                                has_pop_group_flag = pdivinity_cultist_member
+                            }
+                        }
+                    }
+                }
+                set_country_flag = pdivinity_cultists_60_percent
+            }
+
+            else_if = {
+                limit = {
+                    any_owned_planet = {
+                        pop_amount_percentage = {
+                            percentage > 0.5
+                            limit = {
+                                has_pop_group_flag = pdivinity_cultist_member
+                            }
+                        }
+                    }
+                }
+                set_country_flag = pdivinity_cultists_50_percent
+            }
+
+            else_if = {
+                limit = {
+                    any_owned_planet = {
+                        pop_amount_percentage = {
+                            percentage > 0.4
+                            limit = {
+                                has_pop_group_flag = pdivinity_cultist_member
+                            }
+                        }
+                    }
+                }
+                set_country_flag = pdivinity_cultists_40_percent
+            }
+
+            else_if = {
+                limit = {
+                    any_owned_planet = {
+                        pop_amount_percentage = {
+                            percentage > 0.3
+                            limit = {
+                                has_pop_group_flag = pdivinity_cultist_member
+                            }
+                        }
+                    }
+                }
+                set_country_flag = pdivinity_cultists_30_percent
+            }
+
+            else_if = {
+                limit = {
+                    any_owned_planet = {
+                        pop_amount_percentage = {
+                            percentage > 0.2
+                            limit = {
+                                has_pop_group_flag = pdivinity_cultist_member
+                            }
+                        }
+                    }
+                }
+                set_country_flag = pdivinity_cultists_20_percent
+            }
+
+            else_if = {
+                limit = {
+                    any_owned_planet = {
+                        pop_amount_percentage = {
+                            percentage > 0.1
+                            limit = {
+                                has_pop_group_flag = pdivinity_cultist_member
+                            }
+                        }
+                    }
+                }
+                set_country_flag = pdivinity_cultists_10_percent
+            }
+            else = {
+                set_country_flag = pdivinity_cultists_5_percent
+            }
+            country_event = { id = pdivinity_cults.17 days = 3 }
+        }
+    }
+}
+
+#####################
+### diplo message ###
+#####################
+
+country_event = {
+    id = pdivinity_cults.17
+    title = pdivinity_cults.17.name
+    desc = pdivinity_cults.17.desc
+    is_triggered_only = yes
+    diplomatic = yes
+    diplomatic_title = BLANK_STRING
+    force_open = yes
+
+    picture_event_data = {
+        portrait = event_target:pdivinity_avatar_species
+        room = owner
+        planet_background = owner
+        city_level = owner
+        graphical_culture = owner
+    }
+
+    immediate = {
+        save_event_target_as = pdivinity_cult_defender
+    }
+
+
+    ## surrender to the crisis
+    option = {
+        name = pdivinity_cults.17.a
+        custom_tooltip = pdivinity_surrender
+        hidden_effect = {
+            set_subject_of = {
+                who = event_target:pdivinity_crisis_empire
+                preset = preset_pdivinity_acolyte
+            }
+            event_target:pdivinity_crisis_empire = {
+                country_event = { id = pdivinity_cults.32 days = 20 }
+            }
+        }
+        ai_chance = {
+            factor = 33
+            modifier = {
+                factor = 0
+                any_country = {
+                    has_ascension_perk = ap_pdivinity
+                    relative_power = {
+                        who = prev
+                        category = fleet
+                        value < equivalent
+                    }
+                }
+            }
+        }
+    }
+
+    option = {
+        name = pdivinity_cults.17.b
+        custom_tooltip = pdivinity_fight
+        hidden_effect = {
+            event_target:pdivinity_crisis_empire = {
+                country_event = { id = pdivinity_cults.31 days = 20 }
+            }
+        }
+        ai_chance = {
+            factor = 100
+        }
+    }
+}
+
+####################################################################
+### crisis empire receives message from cultists after rejection ###
+####################################################################
+
+country_event = {
+    id = pdivinity_cults.31
+    title = pdivinity_cults.31.name
+    desc = pdivinity_cults.31.desc
+    is_triggered_only = yes
+    diplomatic = yes
+    diplomatic_title = BLANK_STRING
+    force_open = yes
+
+    picture_event_data = {
+        portrait = event_target:pdivinity_avatar_species
+        room = prev
+        planet_background = prev
+        city_level = prev
+        graphical_culture = prev
+    }
+
+    option = {
+        name = pdivinity_cults.31.b
+        custom_tooltip = pdivinity_declare_war
+        hidden_effect = {
+            declare_war = {
+                target = event_target:pdivinity_cult_defender
+                attacker_war_goal = wg_pdivinity_acolyte
+            }
+            event_target:pdivinity_cult_defender = {
+                country_event = { id = pdivinity_cults.18 days = 5 }
+            }
+        }
+    }
+}
+
+######################################################################
+### crisis empire receives message from cultists after subjugation ###
+######################################################################
+
+country_event = {
+    id = pdivinity_cults.32
+    title = pdivinity_cults.32.name
+    desc = pdivinity_cults.32.desc
+    is_triggered_only = yes
+    diplomatic = yes
+    diplomatic_title = BLANK_STRING
+    force_open = yes
+
+    picture_event_data = {
+        portrait = event_target:pdivinity_avatar_species
+        room = prev
+        planet_background = prev
+        city_level = prev
+        graphical_culture = prev
+    }
+
+    option = {
+        name = pdivinity_cults.32.a
+        custom_tooltip = pdivinity_cult_surrender
+    }
+}
+
+#######################
+### invasion begins ###
+#######################
+
+country_event = {
+    id = pdivinity_cults.18
+    hide_window = yes
+    is_triggered_only = yes
+
+    immediate = {
+        if = {
+            limit = {
+                any_neighbor_country = {
+                    is_same_value = event_target:pdivinity_crisis_empire
+                }
+            }
+            random_system_within_border = {
+                limit = {
+                    any_country_neighbor_to_system = {
+                        is_same_value = event_target:pdivinity_crisis_empire
+                    }
+                }
+                save_event_target_as = pdivinity_closest_system
+            }
+        }
+        else = {
+            random_system_within_border = {
+                weights = {
+                    base = 1
+                    modifier = {
+                        add = 100
+                        distance_to_empire = {
+                            who = event_target:pdivinity_crisis_empire
+                            distance = 2
+                            use_bypasses = yes
+                            type = hyperlane
+                        }
+                    }
+                    modifier = {
+                        add = 20
+                        distance_to_empire = {
+                            who = event_target:pdivinity_crisis_empire
+                            distance = 3
+                            use_bypasses = yes
+                            type = hyperlane
+                        }
+                    }
+                    modifier = {
+                        add = 10
+                        distance_to_empire = {
+                            who = event_target:pdivinity_crisis_empire
+                            distance = 4
+                            use_bypasses = yes
+                            type = hyperlane
+                        }
+                    }
+                    modifier = {
+                        add = 5
+                        distance_to_empire = {
+                            who = event_target:pdivinity_crisis_empire
+                            distance = 5
+                            use_bypasses = yes
+                            type = hyperlane
+                        }
+                    }
+                    modifier = {
+                        add = 2.5
+                        distance_to_empire = {
+                            who = event_target:pdivinity_crisis_empire
+                            distance = 10
+                            use_bypasses = yes
+                            type = hyperlane
+                        }
+                    }
+                    modifier = {
+                        add = 1
+                        distance_to_empire = {
+                            who = event_target:pdivinity_crisis_empire
+                            distance = 20
+                            use_bypasses = yes
+                            type = hyperlane
+                        }
+                    }
+                }
+                save_event_target_as = pdivinity_closest_system
+            }
+        }
+        switch = {
+            trigger = has_country_flag
+            pdivinity_cultists_5_percent = {
+                while = {
+                    count = value:pdivinity_5_percent_systems
+                    pdivinity_cult_star_flags = yes
+                }
+            }
+            pdivinity_cultists_10_percent = {
+                while = {
+                    count = value:pdivinity_10_percent_systems
+                    pdivinity_cult_star_flags = yes
+                }
+            }
+            pdivinity_cultists_20_percent = {
+                while = {
+                    count = value:pdivinity_20_percent_systems
+                    pdivinity_cult_star_flags = yes
+                }
+            }
+            pdivinity_cultists_30_percent = {
+                while = {
+                    count = value:pdivinity_30_percent_systems
+                    pdivinity_cult_star_flags = yes
+                }
+            }
+            pdivinity_cultists_40_percent = {
+                while = {
+                    count = value:pdivinity_40_percent_systems
+                    pdivinity_cult_star_flags = yes
+                }
+            }
+            pdivinity_cultists_50_percent = {
+                while = {
+                    count = value:pdivinity_50_percent_systems
+                    pdivinity_cult_star_flags = yes
+                }
+            }
+            pdivinity_cultists_60_percent = {
+                while = {
+                    count = value:pdivinity_60_percent_systems
+                    pdivinity_cult_star_flags = yes
+                }
+            }
+            pdivinity_cultists_70_percent = {
+                while = {
+                    count = value:pdivinity_70_percent_systems
+                    pdivinity_cult_star_flags = yes
+                }
+            }
+        }
+        every_system_within_border = {
+            limit = {
+                has_star_flag = pdivinity_cult_star
+            }
+            starbase.fleet = {
+                set_controller = event_target:pdivinity_crisis_empire
+            }
+            every_system_colony = {
+                create_fleet = {
+                    settings = {
+                        uses_naval_capacity = no
+                        spawn_debris = no
+                        can_change_leader = no
+                    }
+                    effect = {
+                        set_owner = event_target:pdivinity_crisis_empire
+                        create_ship = {
+                            name = random
+                            design = "NAME_pdivinity_psionic_avatar"
+                        }
+                        assign_leader = last_created_leader
+                        while = {
+                            count = 8
+                            create_ship = {
+                                name = random
+                                design = "NAME_pdivinity_lesser_avatar"
+                            }
+                        }
+                        set_location = {
+                            target = root
+                            distance = 5
+                            angle = random
+                        }
+                        set_fleet_stance = aggressive
+                        set_aggro_range = 500
+                        set_aggro_range_measure_from = self
+                        set_fleet_bombardment_stance = pdivinity_psionic_rupture_bombardment
+                    }
+                }
+                while = {
+                    count = 20
+                    create_army = {
+                        name = "NAME_pdivinity_demons"
+                        owner = event_target:pdivinity_crisis_empire
+                        species = event_target:pdivinity_crisis_empire
+                        type = "pdivinitiy_psionic_army"
+                    }
+                }
+            }
+        }
+    }
+}
+
+##################
+### fund cults ###
+##################
+
+espionage_operation_event = {
+    id = pdivinity_cults.19
+    title = pdivinity_cults.19.name
+    desc = pdivinity_cults.19.desc
+    espionage_operation = yes
+    picture = GFX_evt_acquire_asset
+    show_sound = event_default
+    is_triggered_only = yes
+
+    option = {
+        name = pdivinity_cults.19.a
+    }
+}
+
+espionage_operation_event = {
+    id = pdivinity_cults.20
+    title = pdivinity_cults.20.name
+    desc = pdivinity_cults.20.desc
+    espionage_operation = yes
+    picture = GFX_evt_acquire_asset
+    show_sound = event_default
+    is_triggered_only = yes
+
+    option = {
+        name = pdivinity_cults.20.a
+    }
+}
+
+espionage_operation_event = {
+    id = pdivinity_cults.21
+    title = pdivinity_cults.21.name
+    desc = pdivinity_cults.21.desc
+    espionage_operation = yes
+    picture = GFX_evt_acquire_asset
+    show_sound = event_default
+    is_triggered_only = yes
+
+    option = {
+        name = pdivinity_cults.21.a
+        owner = {
+            set_timed_country_flag = {
+                flag = pdivinity_pause_funding
+                days = 720
+            }
+        }
+        target = {
+            set_timed_country_flag = {
+                flag = pdivinity_cultist_funding
+                days = 720
+            }
+        }
+    }
+}
+
+
+###################
+### pause cults ###
+###################
+
+espionage_operation_event = {
+    id = pdivinity_cults.22
+    title = pdivinity_cults.22.name
+    desc = pdivinity_cults.22.desc
+    espionage_operation = yes
+    picture = GFX_evt_acquire_asset
+    show_sound = event_default
+    is_triggered_only = yes
+
+    option = {
+        name = pdivinity_cults.22.a
+    }
+}
+
+espionage_operation_event = {
+    id = pdivinity_cults.23
+    title = pdivinity_cults.23.name
+    desc = pdivinity_cults.23.desc
+    espionage_operation = yes
+    picture = GFX_evt_acquire_asset
+    show_sound = event_default
+    is_triggered_only = yes
+
+    option = {
+        name = pdivinity_cults.23.a
+    }
+}
+
+espionage_operation_event = {
+    id = pdivinity_cults.24
+    title = pdivinity_cults.24.name
+    desc = pdivinity_cults.24.desc
+    espionage_operation = yes
+    picture = GFX_evt_acquire_asset
+    show_sound = event_default
+    is_triggered_only = yes
+
+    option = {
+        name = pdivinity_cults.24.a
+        owner = {
+            set_timed_country_flag = {
+                flag = pdivinity_pause_locating
+                days = 720
+            }
+            random_situation = {
+                limit = {
+                    is_situation_type = situation_pdivinity_cult_uprising
+                }
+                add_situation_progress = -120
+            }
+        }
+    }
+}
+
+#######################
+### abort situation ###
+#######################
+
+country_event = {
+    id = pdivinity_cults.30
+    title = pdivinity_cults.30.name
+    desc = pdivinity_cults.30.desc
+    is_triggered_only = yes
+    diplomatic = yes
+    diplomatic_title = BLANK_STRING
+    force_open = yes
+
+    picture_event_data = {
+        portrait = event_target:pdivinity_avatar_species
+        room = owner
+        planet_background = owner
+        city_level = owner
+        graphical_culture = owner
+    }
+
+    option = {
+        name = pdivinity_cults.30.a
+    }
+}

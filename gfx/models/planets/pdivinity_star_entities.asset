@@ -1,0 +1,191 @@
+###############################
+### pdivinity_star_entities ###
+###                         ###
+###     by daniellm         ###
+###############################
+
+######################
+### shrouded world ###
+######################
+
+entity = {
+	name = "pdivinity_shroud_planet_01_entity"
+	pdxmesh = "planet_clouded_mesh"
+
+	meshsettings = {
+		name = "planet_geosphereShape"
+		texture_diffuse = "toxic_01_purple_diffuse.dds"
+		texture_normal = "toxic_01_normal.dds"
+		texture_specular = "toxic_01_spec.dds"
+	}
+
+	##pole texture override
+	meshsettings = {
+		name = "polesShape"
+		texture_diffuse = "poles_1_diffuse.dds"
+		texture_normal = "poles_1_normal.dds"
+		texture_specular = "poles_1_specular.dds"
+	}
+
+	##cloud texture override
+	meshsettings = {
+		name = "clouds_geosphereShape"
+		texture_diffuse = "toxic_clouds_purple_diffuse.dds"
+		texture_normal = "toxic_clouds_normal.dds"
+		texture_specular = "toxic_clouds_specular.dds"
+	}
+
+	##cloud shadow texture override
+	meshsettings = {
+		name = "clouds_shadow_geosphereShape"
+		texture_diffuse = "toxic_cloud_shadow_diffuse.dds"
+		texture_normal = "nonormal.dds"
+		texture_specular = "nospec.dds"
+	}
+
+	default_state = "idle"
+	state = { name = "idle" animation = "idle"
+		#		event = { time = 0 node = "flash_01" particle = "planet_lightning_particle" keep_particle = yes }
+		#		event = { time = 2 node = "flash_02" particle = "planet_lightning_particle" keep_particle = yes }
+		#		event = { time = 0.7 node = "flash_03" particle = "planet_lightning_particle" keep_particle = yes }
+		#		event = { time = 2.7 node = "flash_04" particle = "planet_lightning_particle" keep_particle = yes }
+		#		event = { time = 3 node = "flash_05" particle = "planet_lightning_particle" keep_particle = yes }
+		#		event = { time = 4.3 node = "flash_06" particle = "planet_lightning_particle" keep_particle = yes }
+		#		event = { time = 7 node = "flash_07" particle = "planet_lightning_particle" keep_particle = yes }
+		#		event = { time = 5 node = "flash_08" particle = "planet_lightning_particle" keep_particle = yes }
+		#		event = { time = 5.1 node = "flash_09" particle = "planet_lightning_particle" keep_particle = yes }
+		#		event = { time = 6.5 node = "flash_10" particle = "planet_lightning_particle" keep_particle = yes }
+		start_event = { trigger_once = yes sound = { soundeffect = "amb_toxic_world_a" } }
+		start_event = { trigger_once = yes sound = { soundeffect = "amb_toxic_world_b" } }
+	}
+}
+
+#####################
+### weapon effect ###
+#####################
+
+entity = { 
+	name = "pdivinity_shrouding_star_entity"
+	pdxmesh = "system_plane_collision_mesh"
+	
+	default_state = "explode"
+	state = { name = "explode" state_time = 30 looping = no 
+	#next_state = "wait"
+	#	event = { time = 0.0 	particle = "star_explosion_1_effect"  keep_particle = yes trigger_once = no }
+		event = { time = 0.0 	particle = "pdivinity_shrouding_star_effect"  keep_particle = yes trigger_once = no }
+	#	event = { time = .0 	particle = "star_explosion_shockwave_effect"  keep_particle = yes trigger_once = no }
+		event = { trigger_once = yes sound = { soundeffect = "sfx_star_eater_weapon_hit" } }	
+		event = { trigger_once = yes sound = { soundeffect = "sfx_star_eater_weapon_hit_distance" } }
+	
+	}
+
+	scale = 15
+}
+
+###########################
+### shrouded star class ###
+###########################
+
+entity = {
+	name = "pdivinity_shrouded_hole_entity"
+	pdxmesh = "pdivinity_shrouded_hole_mesh"
+
+	scale = 1
+	default_state = "idle"
+	state = { name = "idle" state_time = 5
+		event = { time = 0 particle = "pdivinity_shrouded_hole_particle" trigger_once = yes keep_particle = yes }
+		event = { trigger_once = yes sound = { soundeffect = "blackhole_hum_idle" } }
+	}
+	locator = { name = "planet" }
+	attach = { "planet" = "pdivinity_shrouded_hole_rings_entity" }
+	attach = { "planet" = "pdivinity_shrouded_hole_grav_lens_entity" }
+	attach = { "planet" = "pdivinity_shrouded_hole_grav_animation_entity" }
+
+	game_data = {
+		size = 1.0
+		bloom_factor = 5
+	}
+	cull_radius = 700
+}
+
+#######################################
+### shrouded star class ring entity ###
+#######################################
+
+entity = {
+	name = "pdivinity_shrouded_hole_rings_entity"
+	pdxmesh = "pdivinity_shrouded_hole_rings_mesh"
+
+	default_state = "idle"
+	state = { name = "idle" state_time = 5
+	}
+
+	scale = 2.0
+
+	game_data = {
+		uv_animation_speed   = -0.025
+		uv_animation_direction  = { 0.4 0.4 }
+	}
+}
+
+#####################################
+### shrouded star class grav lens ###
+#####################################
+
+entity = {
+	name = "pdivinity_shrouded_hole_grav_lens_entity"
+	pdxmesh = "pdivinity_shrouded_hole_grav_lens_mesh"
+
+	default_state = "idle"
+	state = { name = "idle" state_time = 5
+	}
+
+	scale = 2.0
+
+}
+
+##########################################
+### shrouded star class grav animation ###
+##########################################
+
+entity = {
+	name = "pdivinity_shrouded_hole_grav_animation_entity"
+	pdxmesh = "pdivinity_shrouded_hole_grav_animation_mesh"
+
+	default_state = "idle"
+	state = { name = "idle" state_time = 5
+	}
+
+	scale = 2.0
+
+	game_data = {
+		uv_animation_speed   = 0.15
+		uv_animation_direction  = { 0.0 0.4 }
+	}
+	cull_radius = 1
+}
+
+##########################
+### dimensional portal ###
+##########################
+
+entity = {
+	name = "pdivinity_extradimensional_portal_system_effect_entity"
+	locator = { name = "core" position = { 0 -15 0 } rotation = { -5 0 5} }
+	scale = 40
+	erosion_in = 0.5
+	erosion_out = 3
+	attach = { core = "extra_dimensional_cracks_entity" } # okay
+	attach = { core = "extra_dimensional_lights_entity" } # okay
+	attach = { core = "pdivinity_extradimensional_color_entity" } # done
+	attach = { core = "extra_dimensional_stars_entity" }
+	attach = { core = "pdivinity_dimensional_rift_sides_entity" }
+	attach = { core = "pdivinity_dimensional_rift_sides_2_entity" }
+
+	default_state = "idle"
+	state = {         name = "idle" state_time = 15 looping = yes
+		start_event = { 	trigger_once = yes 		sound = { soundeffect = "sfx_amb_crisis_extradimensional" } }
+
+	}
+	cull_radius = 20000
+}

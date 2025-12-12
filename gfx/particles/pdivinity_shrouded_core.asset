@@ -1,0 +1,277 @@
+particle={
+	name="pdivinity_shrouded_core"
+	subsystem={
+		name="Smoke"
+		max_amount=100
+		slave_particles=0
+		sort="age"
+		emitter_type="sphere"
+		sphere_emitter_radius={ 350 70 }
+		sphere_emitter_yaw={ 0 180 }
+		sphere_emitter_pitch={ 0 5 }
+		invert=no
+		trail=no
+		local_space=yes
+		billboard=yes
+		hide=no
+		texture={
+			file="gfx/particles/cloud_6.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=156
+			y=82
+			z=170
+			alpha={ 100,AlphaFade 30 }
+		}
+		position={
+			y=-100
+		}
+		start=6
+		duration=-1
+		velocity_pitch={ 0 180 }
+		velocity_yaw={ 0 180 }
+		velocity=2
+		life={ 7 3 }
+		emission=5000
+		size={ 500,Size_Grow 40 }
+		rotation={ 0 180 }
+		mass=1.4
+		force=vortex,rotate,push
+	}
+	subsystem={
+		name="glow"
+		max_amount=20
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 600 200 }
+		sphere_emitter_yaw={ 60 150 }
+		sphere_emitter_pitch={ 0 5 }
+		invert=no
+		trail=no
+		local_space=yes
+		billboard=yes
+		hide=no
+		texture={
+			file="gfx/particles/fire05.dds"
+			x=2
+			y=2
+			shader="ParticleAdditive"
+		}
+		color={
+			x=156
+			y=82
+			z=170
+			alpha=255,glow_fade
+		}
+		position={
+			y=-220
+		}
+		duration=-1
+		velocity_pitch={ 0 180 }
+		velocity_yaw={ 0 0 }
+		velocity={ 15 6 }
+		life={ 8 2 }
+		emission=5
+		size={ 6,glow_size 2 }
+		rotation={ 0 180 }
+		rotation_speed={ 7 3 }
+		mass={ 2 0.5 }
+		force=vortex,rotate,push
+	}
+	subsystem={
+		name="Smoke_outer"
+		max_amount=75
+		slave_particles=0
+		sort="age"
+		emitter_type="sphere"
+		sphere_emitter_radius={ 1000 20 }
+		sphere_emitter_yaw={ 0 180 }
+		sphere_emitter_pitch={ 0 2 }
+		invert=no
+		trail=no
+		local_space=yes
+		billboard=no
+		hide=no
+		texture={
+			file="gfx/particles/cloud_low_alpha.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=156
+			y=82
+			z=170
+			alpha=255,smoke_alpha
+		}
+		position={
+			y=-400
+		}
+		start=4
+		duration=-1
+		velocity_pitch={ 0 180 }
+		velocity_yaw={ 0 180 }
+		velocity=2
+		life={ 9 3 }
+		emission=10000
+		size={ 2300,Size_Grow 100 }
+		particle_yaw={ 0 180 }
+		particle_pitch={ 90 20 }
+		rotation={ 0 180 }
+		mass=1.4
+		force=vortex,rotate,push
+	}
+	subsystem={
+		name="Smoke_mid"
+		max_amount=60
+		slave_particles=0
+		sort="age"
+		emitter_type="sphere"
+		sphere_emitter_radius={ 150 10 }
+		sphere_emitter_yaw={ 0 180 }
+		sphere_emitter_pitch={ 0 4 }
+		invert=no
+		trail=no
+		local_space=yes
+		billboard=yes
+		hide=no
+		texture={
+			file="gfx/particles/cloud_low_alpha.dds"
+			x=1
+			y=1
+			shader="ParticleAlphaBlend"
+		}
+		color={
+			x=156
+			y=82
+			z=170
+			alpha=220,smoke_alpha
+		}
+		position={
+			y=-50
+		}
+		start=2.8
+		duration=-1
+		velocity_pitch={ 0 180 }
+		velocity_yaw={ 0 180 }
+		velocity=2
+		life={ 7 4 }
+		emission=10000
+		size={ 190,Size_Grow 40 }
+		particle_pitch=90
+		rotation={ 0 180 }
+		rotation_speed=5
+		mass=3
+		force=vortex,rotate,push
+	}
+	animation={
+		name="AlphaFade"
+		start=0
+		duration=1
+		repeat=no
+		minValue=0
+		maxValue=1
+		curve={
+			0 0 0.45 0.32813 1 0 
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="Size_Grow"
+		start=0
+		duration=1
+		repeat=no
+		minValue=0
+		maxValue=1
+		curve={
+			0 0.758 0.559 0.828 1 1 
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="glow_fade"
+		start=0
+		duration=1
+		repeat=no
+		minValue=0
+		maxValue=1
+		curve={
+			0 0 0.159 0.789 0.385 0.953 0.468 0.32 0.603 0.234 0.771 0.984 1 0.023 
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="glow_size"
+		start=0
+		duration=1
+		repeat=no
+		minValue=0
+		maxValue=1
+		curve={
+			0 0.047 0.165 0.367 0.456 0.766 1 0.273 
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="smoke_alpha"
+		start=0
+		duration=1
+		repeat=no
+		minValue=0
+		maxValue=1
+		curve={
+			0 0 0.215 0.969 1 0 
+		}
+		op="MUL"
+		time="life"
+	}
+	force={
+		type="vortex"
+		name="vortex"
+		position={
+			0 0 0 
+		}
+		direction={
+			0 1 0 
+		}
+		local_force=yes
+		yaw=0
+		division=16
+		amount=4
+	}
+	force={
+		type="point"
+		name="push"
+		position={
+			0 0 0 
+		}
+		direction={
+			0 1 0 
+		}
+		local_force=yes
+		yaw=0
+		division=16
+		amount=3
+	}
+	force={
+		type="spin"
+		name="rotate"
+		position={
+			0 0 0 
+		}
+		direction={
+			0 1 0 
+		}
+		local_force=yes
+		yaw=0
+		division=16
+		amount=0.02
+	}
+}

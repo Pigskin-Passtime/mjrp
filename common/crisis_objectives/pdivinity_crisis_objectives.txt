@@ -1,0 +1,138 @@
+#####################################
+#### pdivinity_crisis_objectives  ###
+###                               ###
+###     by Aurora cattus          ###
+#####################################
+
+crisobj_pdivinity_establish_cult = {
+    reward = {
+        base = 500
+        complex_trigger_modifier = { #subtract 30 for each playable country that exists
+            trigger = count_playable_country
+            mode = subtract
+            mult = 30
+        }
+        round_to = 5	#we want a solid number
+        min = 200		#and we don't want less than 2++
+    }
+}
+
+crisobj_pdivinity_retain_vassals = {
+    reward = {
+        base = 100
+        complex_trigger_modifier = { #subtract 5 for each playable country that exists
+            trigger = count_playable_country
+            mode = subtract
+            mult = 5
+        }
+        round_to = 5 	#we want a solid number
+        min = 30 		#and we don't want less than 30
+    }
+    recurring = yes
+}
+
+crisobj_pdivinity_vassalize_empire = {
+    reward = {
+        base = 500
+        complex_trigger_modifier = { #subtract 25 for each playable country that exists
+            trigger = count_playable_country
+            mode = subtract
+            mult = 25
+        }
+        round_to = 50 	#we want a solid number
+        min = 200 		#and we don't want less than 200
+    }
+}
+
+crisobj_pdivinity_research_psionic_technology = {
+    reward = {
+        base = 200
+        complex_trigger_modifier = { #subtract 10 for each playable country that exists
+            trigger = count_playable_country
+            mode = subtract
+            mult = 10
+        }
+        round_to = 5	#we want a solid number
+        min = 50		#and we don't want less than 50
+    }
+}
+
+crisobj_pdivinity_shroud_phase_planets = {
+    reward = {
+        base = 150000
+        divide = trigger:num_galaxy_systems 	#on huge, this is 300. On smallest, it is 1500
+        complex_trigger_modifier = {
+            trigger = check_galaxy_setup_value
+            parameters = { setting = habitable_worlds_scale }
+            mode = divide
+        }
+        round_to = 50
+        min = 150
+    }
+}
+
+
+crisobj_pdivinity_sacrifice_population = {
+    reward = {
+        base = 3000
+        divide = trigger:num_galaxy_systems
+        complex_trigger_modifier = {
+            trigger = check_galaxy_setup_value
+            parameters = { setting = habitable_worlds_scale }
+            mode = divide
+        }
+        round = yes
+        min = 3
+    }
+}
+
+crisobj_pdivinity_control_shroud_enclave = {
+    reward = {
+        base = 120
+        complex_trigger_modifier = { #subtract 5 for each playable country that exists
+            trigger = count_playable_country
+            mode = subtract
+            mult = 5
+        }
+        round_to = 5
+        min = 30
+    }
+    recurring = yes
+}
+
+crisobj_pdivinity_summon_psionic_ships = {
+    reward = {
+        base = 50
+        complex_trigger_modifier = {
+            trigger = count_playable_country
+            mode = subtract
+            mult = 0.5
+        }
+        round_to = 5
+        min = 10
+    }
+}
+
+crisobj_pdivinity_shroud_enemy_planets = {
+    reward = {
+        base = 150000
+        divide = trigger:num_galaxy_systems 	#on huge, this is 300. On smallest, it is 1500
+        complex_trigger_modifier = {
+            trigger = check_galaxy_setup_value
+            parameters = { setting = habitable_worlds_scale }
+            mode = divide
+        }
+        round_to = 50
+        min = 150
+    }
+}
+
+crisobj_pdivinity_employ_telepaths = {
+    reward = {
+        base = 0
+        add = pdivinity_telepath_jobs
+        round = yes 							#we don't want 3.124 menace
+        min = 0								#just in case
+    }
+    recurring = yes
+}

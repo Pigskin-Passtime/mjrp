@@ -1,0 +1,236 @@
+#################################
+### pdivinity_cult_operations ###
+###                           ###
+###     by daniellm           ###
+#################################
+
+@diff_t0 = 4
+@diff_t1 = 5
+@diff_t2 = 6
+@diff_t3 = 7
+@diff_t4 = 8
+@diff_t5 = 9
+@diff_t6 = 10
+@diff_t7 = 11
+@diff_t8 = 12
+@diff_t9 = 13
+
+#########################
+### establishing cult ###
+#########################
+
+operation_pdivinity_establish_cult = {
+    target = none
+    categories = { op_cat_subterfuge op_cat_government }
+    picture = GFX_evt_hive_mind
+    desc = operation_pdivinity_establish_cult_desc
+    stages = 4
+
+    spy_power_cost = 50
+
+    resources = {
+        category = operations
+        cost = {
+            influence = 200
+        }
+        upkeep = {
+            energy = 6
+        }
+    }
+    potential = {
+        owner = {
+            has_crisis_perk =  menp_pdivinity_cult_espionage
+        }
+        target = {
+            is_country_type = default
+            NOR = {
+                is_gestalt = yes
+                any_situation = {
+                    is_situation_type = situation_pdivinity_cult_uprising
+                }
+            }
+        }
+    }
+    allow = {
+        #custom_tooltip = {
+        #    fail_text = operation_pdivinity_establish_cult_dont_stack_this
+        #    NOT = {
+        #        has_modifier = operation_pdivinity_establish_cult_success } #I.e. don't try to stack this
+        #}
+        custom_tooltip = {
+            is_running_espionage_operation = no
+            fail_text = operation_one_at_a_time
+        }
+    }
+    stage = {
+        difficulty = @diff_t2
+        icon = GFX_espionage_chapter_icon_surveillance
+        event = pdivinity_cults.1
+    }
+    stage = {
+        difficulty = @diff_t3
+        icon = GFX_espionage_chapter_icon_motion
+        event = pdivinity_cults.2
+    }
+    stage = {
+        difficulty = @diff_t4
+        icon = GFX_espionage_chapter_icon_target
+        event = pdivinity_cults.3
+    }
+    stage = {
+        difficulty = @diff_t4
+        icon = GFX_espionage_chapter_icon_target
+        event = pdivinity_cults.4
+    }
+    on_roll_failed = {
+        standard_espionage_operation_on_roll_failed = { RANDOM_EVENTS = operation_random_events_generic }
+    }
+    on_create = {
+    }
+}
+
+
+#####################
+### funding cults ###
+#####################
+
+operation_pdivinity_accelerate_cult = {
+    target = none
+    categories = { op_cat_subterfuge op_cat_government }
+    picture = GFX_evt_hive_mind
+    desc = operation_pdivinity_accelerate_cult_desc
+    stages = 3
+
+    spy_power_cost = 30
+
+    resources = {
+        category = operations
+        cost = {
+            influence = 100
+            pdivinity_psionic_strength = 300
+        }
+        upkeep = {
+            energy = 6
+        }
+    }
+    potential = {
+        owner = {
+            has_crisis_perk =  menp_pdivinity_cult_espionage
+        }
+        target = {
+            is_country_type = default
+            any_situation = {
+                is_situation_type = situation_pdivinity_cult_uprising
+            }
+            NOT = {
+                is_gestalt = yes
+            }
+        }
+    }
+    allow = {
+        custom_tooltip = {
+            fail_text = operation_pdivinity_fund_cults_pause # operation_sleeper_cells_dont_stack_this
+            owner = {
+                NOT = {
+                    has_country_flag = pdivinity_pause_funding
+                }
+            }
+        }
+        custom_tooltip = {
+            is_running_espionage_operation = no
+            fail_text = operation_one_at_a_time
+        }
+    }
+    stage = {
+        difficulty = @diff_t2
+        icon = GFX_espionage_chapter_icon_surveillance
+        event = pdivinity_cults.19
+    }
+    stage = {
+        difficulty = @diff_t3
+        icon = GFX_espionage_chapter_icon_motion
+        event = pdivinity_cults.20
+    }
+    stage = {
+        difficulty = @diff_t4
+        icon = GFX_espionage_chapter_icon_target
+        event = pdivinity_cults.21
+    }
+    on_roll_failed = {
+        standard_espionage_operation_on_roll_failed = { RANDOM_EVENTS = operation_random_events_generic }
+    }
+    on_create = {
+    }
+}
+
+######################
+### root out cults ###
+######################
+
+operation_pdivinity_locate_cult = {
+    target = none
+    categories = { op_cat_subterfuge op_cat_government }
+    picture = GFX_evt_hive_mind
+    desc = operation_pdivinity_locate_cult_desc
+    stages = 3
+
+    spy_power_cost = 30
+
+    resources = {
+        category = operations
+        cost = {
+            influence = 200
+        }
+        upkeep = {
+            energy = 6
+        }
+    }
+    potential = {
+        owner = {
+            any_situation = {
+                is_situation_type = situation_pdivinity_cult_uprising
+                NOT = {
+                    situation_progress >= 1200
+                }
+            }
+        }
+
+        target = {
+            has_ascension_perk = ap_pdivinity
+        }
+    }
+    allow = {
+        custom_tooltip = {
+            fail_text = operation_pdivinity_locate_cults_pause # operation_sleeper_cells_dont_stack_this
+            owner = {
+                not = {
+                    has_country_flag = pdivinity_pause_locating
+                }
+            }
+        }
+        custom_tooltip = {
+            is_running_espionage_operation = no
+            fail_text = operation_one_at_a_time
+        }
+    }
+    stage = {
+        difficulty = @diff_t2
+        icon = GFX_espionage_chapter_icon_surveillance
+        event = pdivinity_cults.22
+    }
+    stage = {
+        difficulty = @diff_t3
+        icon = GFX_espionage_chapter_icon_motion
+        event = pdivinity_cults.23
+    }
+    stage = {
+        difficulty = @diff_t4
+        icon = GFX_espionage_chapter_icon_target
+        event = pdivinity_cults.24
+    }
+    on_roll_failed = {
+        standard_espionage_operation_on_roll_failed = { RANDOM_EVENTS = operation_random_events_generic }
+    }
+    on_create = {
+    }
+}

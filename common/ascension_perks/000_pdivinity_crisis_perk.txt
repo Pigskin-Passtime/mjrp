@@ -1,0 +1,54 @@
+##############################
+#### pdivinity_crisis_perk ###
+###                        ###
+###     by Aurora cattus   ###
+##############################
+
+ap_pdivinity = {
+    potential = {
+        has_utopia = yes
+        has_overlord_dlc = yes
+        has_nemesis = yes
+        NOR = {
+            has_country_flag = player_crisis_chosen
+            any_playable_country = {
+                has_ascension_perk = ap_pdivinity
+            }
+        }
+        is_ai = no
+    }
+
+    possible = {
+        custom_tooltip = {
+            fail_text = "requires_ascension_perks_3"
+            num_ascension_perks > 2
+        }
+        custom_tooltip = {
+            fail_text = "requires_independence"
+            is_subject = no
+        }
+        custom_tooltip = {
+            fail_text = "must_be_psionic"
+            has_tradition = tr_psionics_finish
+        }
+        custom_tooltip = {
+            fail_text = "must_not_be_custodian"
+            is_galactic_custodian = no
+        }
+        custom_tooltip = {
+            fail_text = "must_not_be_emperor"
+            is_galactic_emperor = no
+        }
+        custom_tooltip = {
+            fail_text = "must_not_be_homicidal"
+            is_homicidal = no
+        }
+    }
+
+    on_enabled = {
+        hidden_effect = {
+		    set_country_flag = player_crisis_chosen
+            country_event = { id = pdivinity_crisis.0 }
+        }
+    }
+}

@@ -1,0 +1,182 @@
+##########################
+### pdivinity_pop_jobs ###
+###                    ###
+###     by daniellm    ###
+##########################
+
+#####################
+### zro harvester ###
+#####################
+
+pdivinity_zro_harvester = {
+    category = specialist
+
+    swappable_data = {
+        default = {
+            condition_string = SPECIALIST_JOB_TRIGGER
+            building_icon = building_pdivinity_shroud_harvester
+        }
+    }
+
+    tags = { strategic_resource }
+
+    possible_pre_triggers = {
+        has_owner = yes
+        is_being_purged = no
+        is_being_assimilated = no
+        is_sapient = yes
+    }
+
+    possible_precalc = can_fill_specialist_job
+
+    resources = {
+        category = planet_jobs_productive
+        produces = {
+            trigger = {
+                exists = owner
+                owner = {
+                    is_catalytic_empire = no
+                }
+            }
+            sr_zro = 5
+        }
+        produces = {
+            trigger = {
+                exists = owner
+                owner = {
+                    is_catalytic_empire = yes
+                }
+            }
+            sr_zro = 6
+        }
+        upkeep = {
+            trigger = {
+                exists = owner
+                owner = {
+                    is_catalytic_empire = no
+                }
+            }
+            minerals = 10
+        }
+        upkeep = {
+            trigger = {
+                exists = owner
+                owner = {
+                    is_catalytic_empire = yes
+                }
+            }
+            food = 15
+        }
+    }
+
+    weight = {
+        weight = @specialist_job_weight
+        mult = value:job_weights_modifier|JOB|chemist|RESOURCE|sr_zro|
+        modifier = {
+            factor = 0.2
+            has_citizenship_rights = no
+            NOT = { has_trait = trait_mechanical }
+        }
+        modifier = {
+            factor = 0.1
+            can_take_servant_job = yes
+        }
+    }
+
+    promotion = {
+        time = @standard_promotion_time
+        effect = {
+            pop_amount_change_category = {
+                CATEGORY = specialist
+                AMOUNT = local_pop_amount
+            }
+        }
+    }
+}
+
+#################
+### purge job ###
+#################
+
+purge_pdivinity_sacrifice_job = {
+    category = purge
+    first_come_first_served = yes
+    is_capped_by_modifier = no
+
+    demotion = {
+        time = 0
+        effect = {
+            pop_amount_change_category = {
+                CATEGORY = purge
+                AMOUNT = local_pop_amount
+            }
+        }
+    }
+
+    ignores_sapience = yes
+
+    possible_pre_triggers = {
+        has_owner = yes
+        is_being_purged = yes
+    }
+
+    possible = {
+        OR = {
+            has_purge_type = { type = purge_pdivinity_sacrifice country = owner }
+            has_pop_group_flag = event_purge
+        }
+    }
+
+    resources = {
+        category = pop_category_purge
+        produces = {
+            unity = 10
+            pdivinity_psionic_strength = 1
+        }
+    }
+
+    triggered_planet_modifier = {
+        potential = {
+            exists = owner
+            owner = { has_origin = origin_evolutionary_predators }
+        }
+        custom_tooltip = evolutionary_predators_pops_tt
+    }
+
+    weight = {
+        weight = @special_job_weight
+
+        modifier = {
+            factor = 200 # brings @special_job_weight up to 2
+            exists = planet
+            exists = planet.controller
+            OR = {
+                has_pop_group_flag = event_purge
+                planet.controller = {
+                    OR = {
+                        is_country_type = swarm
+                        is_country_type = ai_empire
+                    }
+                }
+            }
+        }
+
+        modifier = {
+            factor = 9999 # u die when flagged
+            has_pop_group_flag = event_purge
+        }
+
+        modifier = {
+            factor = 9999 # u die when crisis'd
+            exists = planet
+            exists = planet.controller
+            planet.controller = {
+                OR = {
+                    is_country_type = swarm
+                    is_country_type = ai_empire
+                    # extradimensionals just bombard you
+                }
+            }
+        }
+    }
+}

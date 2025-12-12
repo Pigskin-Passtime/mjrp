@@ -1,0 +1,346 @@
+###################################
+###  pdivinity_crisis_structure ###
+###                             ###
+###        by daniellm          ###
+###################################
+
+######################
+### ruined stage 1 ###
+######################
+
+pdivinity_shroud_needle_1_ruined = {
+    entity = "pdivinity_shroud_needle_stage_1_ruined_entity"
+    portrait = "GFX_megastructure_construction_background"
+
+    potential = {
+        always = no
+    }
+}
+
+######################
+### ruined stage 2 ###
+######################
+
+pdivinity_shroud_needle_2_ruined = {
+    entity = "pdivinity_shroud_needle_stage_2_ruined_entity"
+    portrait = "GFX_megastructure_construction_background"
+
+    potential = {
+        always = no
+    }
+}
+
+######################
+### ruined stage 3 ###
+######################
+
+pdivinity_shroud_needle_3_ruined = {
+    entity = "pdivinity_shroud_needle_stage_3_ruined_entity"
+    portrait = "GFX_megastructure_construction_background"
+
+    potential = {
+        always = no
+    }
+}
+
+######################
+### ruined stage 4 ###
+######################
+
+pdivinity_shroud_needle_4_ruined = {
+    entity = "pdivinity_shroud_needle_stage_4_ruined_entity"
+    portrait = "GFX_megastructure_construction_background"
+
+    potential = {
+        always = no
+    }
+
+    #on_build_complete = {
+    #    fromfrom = {
+    #        create_ambient_object = {
+    #            type = "large_debris_object"
+    #            location = fromfrom
+    #        }
+    #    }
+    #}
+}
+
+
+###############
+### stage 1 ###
+###############
+
+pdivinity_shroud_needle_1 = {
+    entity = "pdivinity_shroud_needle_stage_1_entity"
+    construction_entity = ""
+    portrait = "GFX_pdivinity_mega_stage_1_background"
+    build_time = 3600
+    victory_score = 2500
+    resources = {
+        category = megastructures
+        cost = {
+            energy = 5000
+            sr_zro = 1000
+        }
+    }
+
+    potential = {
+        has_ascension_perk = ap_pdivinity
+    }
+
+    country_modifier = {
+        # unsure what else
+        country_sr_zro_produces_mult = 0.1
+        weapon_type_pdivinity_psionic_weapon_damage_mult = 0.1
+        country_resource_max_energy_add = 10000
+        country_resource_max_sr_zro_add = 5000
+    }
+
+    upgrade_from = {
+        pdivinity_shroud_needle_1_ruined
+        pdivinity_shroud_needle_2_ruined
+        pdivinity_shroud_needle_3_ruined
+        pdivinity_shroud_needle_4_ruined
+    }
+
+    on_build_complete = {
+        fromfrom = {
+            set_megastructure_flag = pdivinity_shroud_needle_flag_stage_1
+        }
+        from = {
+            country_event = { id = pdivinity_needle.1 }
+        }
+    }
+}
+
+
+###############
+### stage 2 ###
+###############
+
+pdivinity_shroud_needle_2 = {
+    entity = "pdivinity_shroud_needle_stage_2_entity"
+    construction_entity = "pdivinity_shroud_needle_stage_2_construction_entity"
+    portrait = "GFX_pdivinity_mega_stage_2_background"
+    build_time = 3600
+    victory_score = 2500
+    resources = {
+        category = megastructures
+        cost = {
+            energy = 10000
+            sr_zro = 5000
+        }
+    }
+
+    country_modifier = {
+        # unsure what else
+        country_sr_zro_produces_mult = 0.25
+        weapon_type_pdivinity_psionic_weapon_damage_mult = 0.2
+        country_resource_max_energy_add = 25000
+        country_resource_max_sr_zro_add = 10000
+    }
+
+    potential = {
+        has_ascension_perk = ap_pdivinity
+    }
+
+    upgrade_from = {
+        pdivinity_shroud_needle_1
+    }
+
+    on_build_complete = {
+        fromfrom = {
+            set_megastructure_flag = pdivinity_shroud_needle_flag_stage_2
+            remove_megastructure_flag = pdivinity_shroud_needle_flag_stage_1
+            create_ambient_object = {
+                type = "psi_storm_1"
+                location = fromfrom
+            }
+            last_created_ambient_object = {
+                set_ambient_object_flag = pdivinity_megastructure_psi_storm_1
+                set_location = {
+                    target = prev
+                    distance = 0
+                    angle = random
+                }
+            }
+        }
+        from = {
+            country_event = { id = pdivinity_needle.2 }
+        }
+    }
+}
+
+###############
+### stage 3 ###
+###############
+
+pdivinity_shroud_needle_3 = {
+    entity = "pdivinity_shroud_needle_stage_3_entity"
+    construction_entity = "pdivinity_shroud_needle_stage_3_construction_entity"
+    portrait = "GFX_pdivinity_mega_stage_3_background"
+    build_time = 3600
+    victory_score = 5000
+    resources = {
+        category = megastructures
+        cost = {
+            energy = 25000
+            sr_zro = 10000
+        }
+    }
+
+    potential = {
+        has_ascension_perk = ap_pdivinity
+    }
+
+    country_modifier = {
+        # unsure what else
+        country_sr_zro_produces_mult = 0.5
+        weapon_type_pdivinity_psionic_weapon_damage_mult = 0.3
+        country_resource_max_energy_add = 100000
+        country_resource_max_sr_zro_add = 20000
+    }
+
+    upgrade_from = {
+        pdivinity_shroud_needle_2
+    }
+
+    on_build_complete = {
+        this = {
+            random_system_ambient_object = {
+                limit = { has_ambient_object_flag = pdivinity_megastructure_psi_storm_1 }
+                destroy_ambient_object = this
+            }
+        }
+        fromfrom = {
+            set_megastructure_flag = pdivinity_shroud_needle_flag_stage_3
+            remove_megastructure_flag = pdivinity_shroud_needle_flag_stage_2
+
+            create_ambient_object = {
+                type = "pdivinity_psi_storm_2"
+                location = fromfrom
+            }
+            last_created_ambient_object = {
+                set_ambient_object_flag = pdivinity_megastructure_psi_storm_2
+                set_location = {
+                    target = prev
+                    distance = 0
+                    angle = random
+                }
+            }
+        }
+        from = {
+            country_event = { id = pdivinity_needle.3 }
+        }
+    }
+}
+
+###############
+### stage 4 ###
+###############
+
+pdivinity_shroud_needle_4 = {
+    entity = "pdivinity_shroud_needle_stage_4_entity"
+    construction_entity = "pdivinity_shroud_needle_stage_4_construction_entity"
+    portrait = "GFX_pdivinity_mega_stage_4_background"
+    build_time = 3600
+    victory_score = 10000
+    resources = {
+        category = megastructures
+        cost = {
+            energy = 100000
+            sr_zro = 20000
+        }
+    }
+
+    country_modifier = {
+        # unsure what else
+        country_sr_zro_produces_mult = 1.0
+        weapon_type_pdivinity_psionic_weapon_damage_mult = 0.5
+        country_resource_max_energy_add = 250000
+        country_resource_max_sr_zro_add = 50000
+    }
+
+    possible = {
+        owner = {
+            has_crisis_level = crisis_pdivinity_project_divinity_level_5
+        }
+    }
+
+    upgrade_from = {
+        pdivinity_shroud_needle_3
+    }
+
+    on_build_complete = {
+        this = {
+            random_system_ambient_object = {
+                limit = { has_ambient_object_flag = pdivinity_megastructure_psi_storm_2 }
+                destroy_ambient_object = this
+            }
+        }
+        fromfrom = {
+            set_megastructure_flag = pdivinity_shroud_needle_flag_stage_4
+            remove_megastructure_flag = pdivinity_shroud_needle_flag_stage_3
+
+            create_ambient_object = {
+                type = "pdivinity_psi_storm_3"
+                location = fromfrom
+            }
+            last_created_ambient_object = {
+                set_ambient_object_flag = pdivinity_megastructure_psi_storm_3
+                set_location = {
+                    target = prev
+                    distance = 0
+                    angle = random
+                }
+            }
+        }
+        from = {
+            country_event = { id = pdivinity_needle.5 }
+        }
+    }
+}
+
+#########################
+### spawning your god ###
+#########################
+
+pdivinity_shroud_needle_5 = {
+    entity = "pdivinity_shroud_needle_stage_5_entity"
+    construction_entity = "pdivinity_shroud_needle_stage_4_construction_entity"
+    portrait = "GFX_pdivinity_mega_stage_4_background"
+    build_time = 5400
+    victory_score = 10000
+    resources = {
+        category = megastructures
+        cost = {
+            energy = 250000
+            sr_zro = 50000
+            pdivinity_psionic_strength = 50000
+        }
+    }
+
+    country_modifier = {
+        # unsure what else
+        country_sr_zro_produces_mult = 1.0
+        ship_shield_mult = 5
+        ship_shield_hardening_add =  1
+        weapon_type_pdivinity_psionic_weapon_damage_mult = 1.0
+        country_resource_max_energy_add = 250000
+        country_resource_max_sr_zro_add = 50000
+    }
+
+    potential = {
+        has_ascension_perk = ap_pdivinity
+    }
+
+    upgrade_from = {
+        pdivinity_shroud_needle_4
+    }
+
+    on_build_complete = {
+        from = {
+            country_event = { id = pdivinity_needle.7 }
+        }
+    }
+}

@@ -1,0 +1,92 @@
+###########################
+### pdivinity_decisions ###
+###                     ###
+###    by daniellm      ###
+###########################
+
+decision_pdivinity_shroud_phasing = {
+    icon = decision_pdivinity_shroud_phased
+    owned_planets_only = yes
+    enactment_time = 1800
+
+    potential = {
+        owner = {
+            has_menace_perk = menp_pdivinity_shroud_phasing
+        }
+        NOT = {
+            has_modifier = pdivinity_shroud_phased_modifier
+        }
+    }
+
+    resources = {
+        category = decisions
+        cost = {
+            energy = 1500
+            sr_zro = 1000
+        }
+    }
+
+    allow = {
+    }
+
+
+    effect = {
+        custom_tooltip = pdivinity_shroud_phasing_tooltip
+        hidden_effect = {
+            owner = {
+                complete_crisis_objective = crisobj_pdivinity_shroud_phase_planets
+            }
+            if = {
+                limit = {
+                    is_ringworld = yes
+                }
+                add_modifier = {
+                    modifier = pdivinity_shroud_phased_modifier
+                    days = -1
+                }
+                set_planet_entity = {
+                    picture = pc_pdivinity_shroudringworld
+                }
+            }
+            else_if = {
+                limit = {
+                    is_planet_class = pc_habitat
+                }
+                add_modifier = {
+                    modifier = pdivinity_shroud_phased_modifier
+                    days = -1
+                }
+                set_planet_entity = {
+                    picture = pc_pdivinity_shroudhabitat
+                }
+            }
+            else_if = {
+                limit = {
+                    is_artificial = yes
+                    NOR = {
+                        is_ringworld = yes
+                        is_planet_class = pc_habitat
+                    }
+                }
+                add_modifier = {
+                    modifier = pdivinity_shroud_phased_modifier
+                    days = -1
+                }
+            }
+            else = {
+                add_modifier = {
+                    modifier = pdivinity_shroud_phased_modifier
+                    days = -1
+                }
+                set_planet_entity = {
+                    picture = pc_pdivinity_shroud
+                    entity = shroud_planet_01_entity
+                }
+            }
+        }
+    }
+
+    ai_weight = {
+        weight = 30
+    }
+}

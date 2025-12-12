@@ -1,0 +1,70 @@
+#############################
+### pdivinity_dust_clouds ###
+###                       ###
+###    by daniellm        ###
+#############################
+
+pdivinity_galatic_storm = {
+    textures = {
+        opacity_texture = "gfx/map/pdivinity_storm_map_alpha.dds"
+        diffuse_texture = "gfx/map/pdivinity_galaxy_map.dds"
+        lightning_texture_atlas = "gfx/map/synth_queen/noalpha.dds"
+        lightning_horisontal_tiles = 2
+        lightning_vertical_tiles = 2
+    }
+
+    parameters = {
+        min_size = 55.0
+        max_size = 75.0
+        size_change_speed = 0.1
+        rotation_speed = 0.05
+        counter_rotation_speed = 0.02
+        min_opacity = 0.7
+        max_opacity = 0.8
+        opacity_change_speed = 0.05
+        lightning_intencity_min = 0.9
+        lightning_intencity_max = 1.0
+        lightning_duration_min = 0.8
+        lightning_duration_max = 1.2
+        lightning_switch_interval_min = 0.50
+        lightning_switch_interval_max = 1.0
+        size_change_reversion = yes
+        opacity_change_reversion = yes
+    }
+
+    ambient_object = {
+    #    type = synth_queen_tempest
+    #    scale = 3.0
+    #    # If yes, the ambient object is placed at the center of the system.
+    #    # In other case the object is placed at a random position.
+    #    centric = yes
+    }
+
+    # Effect firing when a new galactic object is covered with fog
+    # This = galactic object
+    # From = Country owning the galactic object
+    on_system_added = {
+        create_ambient_object = {
+                type = "pdivinity_galactic_storm"
+                location = fromfrom
+        }
+        last_created_ambient_object = {
+             set_ambient_object_flag = pdivinity_galactic_storm
+             set_location = {
+                target = prev
+                distance = 0
+                   angle = random
+            }
+        }
+    }
+
+    # Effect firing when a galactic object is uncovered from fog
+    # This = galactic object
+    # From = Country owning the galactic object
+    on_system_removed = {
+        random_system_ambient_object = {
+            limit = { has_ambient_object_flag = pdivinity_galactic_storm }
+            destroy_ambient_object = this
+        }
+    }
+}

@@ -1,0 +1,242 @@
+#####################################
+### pdivinity_crisis_point_events ###
+###                               ###
+###         by daniellm           ###
+#####################################
+
+namespace = pdivinity_crisis_point
+
+### retain acolyte vassal
+
+event = {
+    id = pdivinity_crisis_point.1
+    hide_window = yes
+    is_triggered_only = yes
+
+    trigger = {
+        any_country = {
+            has_ascension_perk = ap_pdivinity
+            is_overlord = yes
+        }
+    }
+
+    immediate = {
+        every_playable_country = {
+            if = {
+                limit = {
+                    has_ascension_perk = ap_become_the_crisis
+                    is_overlord = yes
+                }
+                every_subject = {
+                    limit = {
+                        any_agreement = {
+                            has_active_specialization = specialist_pdivinity_acolyte
+                        }
+                    }
+                    prev = {
+                        complete_crisis_objective = crisobj_pdivinity_retain_vassals
+                    }
+                }
+            }
+        }
+    }
+}
+
+### research psionic tech
+
+country_event = {
+    id = pdivinity_crisis_point.2
+    hide_window = yes
+    is_triggered_only = yes
+
+    trigger = {
+        has_ascension_perk = ap_pdivinity
+        OR = {
+            last_increased_tech = tech_pdivinity_psionic_jump_drive
+            last_increased_tech = tech_pdivinity_psionic_reactor
+            last_increased_tech = tech_pdivinity_psionic_thrusters
+            last_increased_tech = tech_pdivinity_psionic_sensors
+            last_increased_tech = tech_pdivinity_psionic_precog
+            last_increased_tech = tech_pdivinity_psionic_laser
+            last_increased_tech = tech_pdivinity_psionic_lance
+            last_increased_tech = tech_pdivinity_psionic_lightning
+            last_increased_tech = tech_pdivinity_psionic_titan_lance
+            last_increased_tech = tech_pdivinity_psionic_strikecraft
+            last_increased_tech = tech_pdivinity_psionic_artillery
+            last_increased_tech = tech_pdivinity_psionic_shields
+            last_increased_tech = tech_pdivinity_shroud_harvester
+            last_increased_tech = tech_pdivinity_psionic_torpedo
+            # vanilla
+            last_increased_tech = tech_pk_godray
+            last_increased_tech = tech_cloaking_psi
+            last_increased_tech = tech_psionic_theory
+            last_increased_tech = tech_telepathy
+            last_increased_tech = tech_precognition_interface
+            last_increased_tech = tech_thought_enforcement
+            last_increased_tech = tech_psi_jump_drive_1
+            last_increased_tech = tech_psionic_barrier
+            last_increased_tech = tech_psionic_shield
+            last_increased_tech = tech_covenant_composer
+            last_increased_tech = tech_covenant_eater
+            last_increased_tech = tech_covenant_instrument
+            last_increased_tech = tech_covenant_whisperers
+            last_increased_tech = tech_mine_zro
+        }
+
+    }
+
+    immediate = {
+        complete_crisis_objective = crisobj_pdivinity_research_psionic_technology
+    }
+}
+
+#### sacrifice pops
+
+planet_event = {
+    id = pdivinity_crisis_point.3
+    hide_window = yes
+    is_triggered_only = yes
+
+    # This = Planet scope
+    # From = Country
+    # FromFrom = Pop
+
+    trigger = {
+        from = {
+            has_ascension_perk = ap_pdivinity
+        }
+        fromfrom = {
+            has_purge_type = { country = from type = purge_pdivinity_sacrifice }
+        }
+    }
+
+    immediate = {
+        while = {
+            count = value:per_100_local_pop_amount
+            from = {
+                complete_crisis_objective = crisobj_pdivinity_sacrifice_population
+            }
+        }
+    }
+}
+
+## shroudwalker enclaves
+
+event = {
+    id = pdivinity_crisis_point.4
+    hide_window = yes
+    is_triggered_only = yes
+
+    trigger = {
+        any_country = {
+            has_ascension_perk = ap_pdivinity
+            any_system_within_border = {
+                any_fleet_in_system = {
+                    is_ship_size = enclave_shroudwalker_station
+                }
+            }
+        }
+    }
+
+    immediate = {
+        every_playable_country = {
+            if = {
+                limit = {
+                    has_ascension_perk = ap_pdivinity
+                }
+                every_system_within_border = {
+                    limit = {
+                        any_fleet_in_system = {
+                            is_ship_size = enclave_shroudwalker_station
+                        }
+                    }
+                    prev = {
+                        complete_crisis_objective = crisobj_pdivinity_control_shroud_enclave
+                    }
+                }
+            }
+        }
+    }
+}
+
+### build psionic ship
+
+ship_event = {
+    id = pdivinity_crisis_point.5
+    hide_window = yes
+    is_triggered_only = yes
+
+    trigger = {
+        owner = {
+            has_ascension_perk = ap_pdivinity
+        }
+        OR = {
+            is_ship_size = pdivinity_psionic_cloud
+            is_ship_size = pdivinity_psionic_avatar
+            is_ship_size = pdivinity_dimensional_tearer
+        }
+    }
+
+    immediate = {
+        while = {
+            count = trigger:ship_size_multiplier
+            owner = {
+                    complete_crisis_objective = crisobj_pdivinity_summon_psionic_ships
+            }
+        }
+    }
+}
+
+# vassalize empire
+
+country_event = {
+    id = pdivinity_crisis_point.6
+    hide_window = yes
+    is_triggered_only = yes
+
+    trigger = {
+        overlord = {
+            has_ascension_perk = ap_pdivinity
+        }
+    }
+
+    immediate = {
+        event_target:pdivinity_crisis_empire = {
+            complete_crisis_objective = crisobj_pdivinity_vassalize_empire
+        }
+    }
+}
+
+### employ telepaths
+
+event = {
+    id = pdivinity_crisis_point.7
+    hide_window = yes
+    is_triggered_only = yes
+
+    trigger = {
+        any_playable_country = {
+            has_ascension_perk = ap_pdivinity
+        }
+    }
+
+    immediate = {
+        every_playable_country = {
+            limit = {
+                has_ascension_perk = ap_pdivinity
+            }
+            export_resource_income_to_variable = {
+                resource = pdivinity_psionic_strength
+                variable = pdivinity_telepath_jobs
+            }
+            complete_crisis_objective = crisobj_pdivinity_employ_telepaths
+            # prevent double
+            add_resource = {
+                pdivinity_psionic_strength = -1
+                multiplier = pdivinity_telepath_jobs
+            }
+        }
+    }
+}
+
+

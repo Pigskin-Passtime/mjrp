@@ -1,0 +1,50 @@
+#############################purge_labor_camps
+### pdivinity_purge_types ###
+###                       ###
+###      by daniellm      ###
+#############################
+
+purge_pdivinity_sacrifice = {
+    pop_escape_chance = 0.10
+    pop_decline_rate = 25
+
+    pop_group_modifier = {
+        pop_happiness = -0.5
+    }
+
+    potential = {
+        exists = from
+        is_disconnected_drone_pop = no
+        from = {
+            has_menace_perk = menp_pdivinity_ritual_sacrifice
+        }
+    }
+
+    allow = {
+        hidden_trigger = { exists = from }
+        custom_tooltip = {
+            fail_text = "lonely_hive_mind_pops_kill_themselves_purge_type"
+            is_lonely_hive_mind_pop = no
+        }
+        custom_tooltip = {
+            fail_text = "disconnected_machine_pops_kill_themselves_citizenship"
+            is_disconnected_machine_pop = no
+        }
+    }
+    ai_will_do = {
+        factor = 5
+        modifier = {
+            factor = 0
+            from = { allows_slavery = no }
+        }
+        modifier = {
+            factor = 0
+            from = {
+                has_valid_ai_personality = yes
+                NOT = {
+                    has_ai_personality_behaviour = purger
+                }
+            }
+        }
+    }
+}

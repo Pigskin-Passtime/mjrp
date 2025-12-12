@@ -1,0 +1,336 @@
+namespace = pdivinity_tearer
+
+#################################
+### firing dimensional tearer ###
+#################################
+
+planet_event = {
+    id = pdivinity_tearer.1
+    hide_window = yes
+
+    is_triggered_only = yes
+
+    immediate = {
+        add_threat = { who = from.owner amount = 10 }
+        from = {
+            owner = {
+                if = {
+                    limit = {
+                        NOT = { has_country_flag = pdivinity_rifited_first_system }
+                    }
+                    set_country_flag = pdivinity_rifited_first_system
+                }
+            }
+        }
+        solar_system = { save_event_target_as = destroyed_system }
+        every_playable_country = {
+            limit = {
+                is_ai = no
+                has_communications = event_target:pdivinity_crisis_empire
+                NOR = {
+                    is_same_value = event_target:pdivinity_crisis_empire
+                    has_country_flag = dimensional_tearer__alert@event_target:pdivinity_crisis_empire
+                }
+                intel_level = {
+                    system = event_target:destroyed_system
+                    level > none
+                }
+            }
+            country_event = { id = pdivinity_tearer.8 } ### notification every other system
+        }
+        every_playable_country = {
+            limit = {
+                has_communications = event_target:pdivinity_crisis_empire
+                NOR = {
+                    has_opinion_modifier = {
+                        who = event_target:pdivinity_crisis_empire
+                        modifier = opinion_breaking_the_veil ## opinion_destroying_systems
+                    }
+                    has_overlord = event_target:pdivinity_crisis_empire
+                }
+            }
+            add_opinion_modifier = {
+                who = event_target:pdivinity_crisis_empire
+                modifier = opinion_breaking_the_veil
+            }
+        }
+        solar_system = {
+            random_system_planet = {
+                limit = { has_modifier = holy_planet }
+                planet_event = { id = planet_destruction.605 }
+            }
+            pdivinity_shroud_star_system = yes
+        }
+        event_target:pdivinity_crisis_empire = {
+            country_event = { id = pdivinity_tearer.9 }
+        }
+    }
+}
+
+########################
+### portal destroyed ###
+########################
+
+country_event = {
+    id = pdivinity_tearer.2
+    hide_window = yes
+
+    fire_only_once = yes
+    is_triggered_only = yes
+
+    trigger = {
+        FROMFROM = { is_ship_size = pdivinity_dimensional_portal }
+    }
+
+    immediate = {
+        random_system = {
+            limit = {
+                has_star_flag = pdivinity_star_shrouded
+                NOT = {
+                    any_ship_in_system = {
+                        is_ship_size = pdivinity_dimensional_portal
+                    }
+                }
+            }
+            random_system_ambient_object = {
+                limit = { has_ambient_object_flag = pdivinity_extradimensional_portal_effect }
+                destroy_ambient_object = this
+            }
+        }
+        from = {
+            country_event = { id = pdivinity_tearer.3 }
+        }
+        this = {
+            country_event = { id = pdivinity_tearer.6 }
+        }
+    }
+}
+
+#####################################
+### portal destroyed notification ###
+#####################################
+
+# killer
+country_event = {
+    id = pdivinity_tearer.3
+    title = pdivinity_tearer.3.name
+    desc = pdivinity_tearer.3.desc
+    picture = GFX_evt_wormhole
+    show_sound = event_super_explosion
+    is_triggered_only = yes
+
+    option = {
+        name = pdivinity_tearer.3.a
+    }
+}
+
+# victim
+
+country_event = {
+    id = pdivinity_tearer.6
+    title = pdivinity_tearer.6.name
+    desc = pdivinity_tearer.6.desc
+    picture = GFX_evt_wormhole
+    show_sound = event_super_explosion
+    is_triggered_only = yes
+
+    option = {
+        name = pdivinity_tearer.6.a
+    }
+}
+
+
+
+
+##################################
+### reinforcements from portal ###
+##################################
+
+fleet_event = {
+    id = pdivinity_tearer.4
+    hide_window = yes
+
+    is_triggered_only = yes
+
+    immediate = {
+        event_target:pdivinity_crisis_empire = {
+            create_leader = {
+                class = commander
+                hide_leader = yes
+                can_assign_to_council = no
+                randomize_traits = no
+                species = event_target:pdivinity_avatar_species
+                name = random
+                skill = 3
+                traits = {
+                    trait = leader_trait_ethereal
+                    trait = leader_trait_psionic
+                    trait = leader_trait_admiral_mind_wipe_01
+                }
+            }
+            last_created_leader = {
+                set_leader_flag = pdivinity_shrouded_commander
+            }
+            create_fleet = {
+                settings = {
+                    uses_naval_capacity = no
+                    spawn_debris = no
+                    can_change_leader = no
+                }
+                effect = {
+                    set_owner = event_target:pdivinity_crisis_empire
+                    create_ship = {
+                        name = random
+                        design = "NAME_pdivinity_psionic_avatar"
+                    }
+                    assign_leader = last_created_leader
+                    while = {
+                        count = 8
+                        create_ship = {
+                            name = random
+                            design = "NAME_pdivinity_lesser_avatar"
+                        }
+                    }
+                    set_location = {
+                        target = root
+                        distance = 5
+                        angle = random
+                    }
+                    set_fleet_stance = aggressive
+                    set_aggro_range = 500
+                    set_aggro_range_measure_from = self
+                    set_fleet_bombardment_stance = pdivinity_psionic_rupture_bombardment
+                }
+            }
+        }
+    }
+}
+
+###########################
+### reinforcement cycle ###
+###########################
+
+fleet_event = {
+    id = pdivinity_tearer.5
+    hide_window = yes
+
+    is_triggered_only = yes
+
+    immediate = {
+        event_target:pdivinity_crisis_empire = {
+            create_leader = {
+                class = commander
+                hide_leader = yes
+                can_assign_to_council = no
+                randomize_traits = no
+                species = event_target:pdivinity_avatar_species
+                name = random
+                skill = 3
+                traits = {
+                    trait = leader_trait_ethereal
+                    trait = leader_trait_psionic
+                    trait = leader_trait_admiral_mind_wipe_01
+                }
+            }
+            create_fleet = {
+                settings = {
+                    uses_naval_capacity = no
+                    spawn_debris = no
+                    can_change_leader = no
+                }
+                effect = {
+                    set_owner = event_target:pdivinity_crisis_empire
+                    create_ship = {
+                        name = random
+                        design = "NAME_pdivinity_psionic_avatar"
+                    }
+                    assign_leader = last_created_leader
+                    while = {
+                        count = 8
+                        create_ship = {
+                            name = random
+                            design = "NAME_pdivinity_lesser_avatar"
+                        }
+                    }
+                    set_location = {
+                        target = root
+                        distance = 5
+                        angle = random
+                    }
+                    set_fleet_stance = aggressive
+                    set_aggro_range = 500
+                    set_aggro_range_measure_from = self
+                    set_fleet_bombardment_stance = pdivinity_psionic_rupture_bombardment
+                }
+            }
+        }
+        fleet_event = { id = pdivinity_tearer.5 days = 720 }
+    }
+}
+
+###########################################
+### notification for system destruction ###
+###########################################
+
+# galaxy notification
+country_event = {
+    id = pdivinity_tearer.8
+    title = pdivinity_tearer.8.name
+    desc = pdivinity_tearer.8.desc
+    picture = GFX_evt_wormhole
+    show_sound = event_super_explosion
+    is_triggered_only = yes
+
+    option = {
+        name = pdivinity_tearer.8.a
+    }
+}
+
+##########################################
+### notification for destroying system ###
+##########################################
+
+# your notification
+country_event = {
+    id = pdivinity_tearer.9
+    title = pdivinity_tearer.9.name
+    desc = pdivinity_tearer.9.desc
+    picture = GFX_evt_wormhole
+    show_sound = event_super_explosion
+    is_triggered_only = yes
+
+    option = {
+        name = pdivinity_tearer.9.a
+    }
+}
+
+#############################
+### delete unused leaders ###
+#############################
+
+country_event = {
+    id = pdivinity_tearer.10
+    hide_window = yes
+    is_triggered_only = yes
+
+    trigger = {
+        has_ascension_perk = ap_pdivinity
+        any_owned_leader = {
+            has_leader_flag = pdivinity_shrouded_commander
+        }
+    }
+
+    immediate = {
+        every_owned_leader = {
+            limit = {
+                has_leader_flag = pdivinity_shrouded_commander
+                NOT = {
+                    exists = fleet
+                }
+            }
+            kill_leader = {
+                show_notification = no
+            }
+        }
+    }
+}

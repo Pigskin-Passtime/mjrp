@@ -1,0 +1,625 @@
+######################################
+### pdivinity_shroud_needle_events ###
+###                                ###
+###         by daniellm            ###
+######################################
+
+namespace = pdivinity_needle
+
+###############
+### stage 1 ### crisis_sphere_system < check for destroy needle event
+###############
+
+country_event = {
+    id = pdivinity_needle.1
+    title = pdivinity_needle.1.name
+    desc = pdivinity_needle.1.desc
+    picture = GFX_evt_surreal_visions
+    show_sound = event_default
+
+    is_triggered_only = yes
+
+
+    option = {
+        name = pdivinity_needle.1.a
+    }
+}
+
+###############
+### stage 2 ### system effects start here
+###############
+
+country_event = {
+    id = pdivinity_needle.2
+    title = pdivinity_needle.2.name
+    desc = pdivinity_needle.2.desc
+    picture = GFX_evt_astral_rift_vortex
+    show_sound = event_default
+
+    is_triggered_only = yes
+
+    immediate = {
+        random_system = {
+            limit = { has_star_flag = pdivinity_shroud_needle_system@root }
+            save_event_target_as = pdivinity_shroud_needle_system
+        }
+    }
+
+    option = {
+        name = pdivinity_needle.2.a
+    }
+}
+
+
+###############
+### stage 3 ### spawns dimensional tearer
+###############
+
+country_event = {
+    id = pdivinity_needle.3
+    title = pdivinity_needle.3.name
+    desc = pdivinity_needle.3.desc
+    picture = GFX_evt_surreal_visions
+    show_sound = event_default
+
+    is_triggered_only = yes
+
+    immediate = {
+        random_system = {
+            limit = { has_star_flag = pdivinity_shroud_needle_system@root }
+            save_event_target_as = pdivinity_shroud_needle_system
+        }
+        every_playable_country = {
+            limit = {
+                is_ai = no
+                NOT = { is_same_value = root }
+            }
+            country_event = { id = pdivinity_needle.4 }
+        }
+        set_country_flag = pdivinity_tearer_backup
+        event_target:pdivinity_crisis_empire = {
+            capital_scope = {
+                create_fleet = {
+                    settings = {
+                        uses_naval_capacity = no
+                        spawn_debris = no
+                        can_change_leader = no
+                    }
+                    effect = {
+                        set_owner = event_target:pdivinity_crisis_empire
+                        create_ship = {
+                            name = "NAME_pdivinity_dimensional_tearer_name"
+                            design = "NAME_pdivinity_dimensional_tearer"
+                        }
+                        set_location = {
+                            target = prev
+                            distance = 10
+                            angle = random
+                        }
+                        set_fleet_flag = pdivinity_tearer_backup
+                        set_fleet_bombardment_stance = pdivinity_psionic_rupture_bombardment
+                    }
+                }
+            }
+        }
+    }
+
+
+    option = {
+        name = pdivinity_needle.3.a
+    }
+}
+
+###########################
+### the shroud trembles ### notification
+###########################
+
+country_event = {
+    id = pdivinity_needle.4
+    title = pdivinity_needle.4.name
+    desc = pdivinity_needle.4.desc
+    picture = GFX_evt_surreal_visions
+    show_sound = event_default
+
+    is_triggered_only = yes
+
+
+    option = {
+        name = pdivinity_needle.4.a
+    }
+}
+
+###############
+### stage 4 ### last stage before spawning the eye
+###############
+
+country_event = {
+    id = pdivinity_needle.5
+    title = pdivinity_needle.5.name
+    desc = pdivinity_needle.5.desc
+    picture = GFX_evt_crystal_sphere
+    show_sound = event_default
+
+    is_triggered_only = yes
+
+    immediate = {
+        random_system = {
+            limit = { has_star_flag = pdivinity_shroud_needle_system@root }
+            save_event_target_as = pdivinity_shroud_needle_system
+        }
+        every_playable_country = {
+            limit = {
+                is_country_type = default
+                NOR = {
+                    is_same_value = event_target:pdivinity_crisis_empire
+                    has_ethic = ethic_gestalt_consciousness
+                    has_country_flag = pdivinity_cultist_empire
+                    has_overlord = event_target:pdivinity_crisis_empire
+                }
+            }
+            start_situation = {
+                type = situation_pdivinity_cult_uprising
+                target = root.owner
+            }
+            country_event = { id = pdivinity_needle.6  } # cult uprising notification
+        }
+    }
+
+
+    option = {
+        name = pdivinity_needle.5.a
+    }
+}
+
+#########################
+### cult notification ###
+#########################
+
+country_event = {
+    id = pdivinity_needle.6
+    title = pdivinity_needle.6.name
+    desc = pdivinity_needle.6.desc
+    picture = GFX_evt_crystal_sphere
+    show_sound = event_default
+    is_triggered_only = yes
+
+    option = {
+        name = pdivinity_needle.4.a
+    }
+}
+
+##############################
+### spawning the great eye ###
+##############################
+
+country_event = {
+    id = pdivinity_needle.7
+    title = pdivinity_needle.7.name
+    desc = pdivinity_needle.7.desc
+    picture = GFX_evt_pdivinity_architect
+    show_sound = event_psionic
+
+    is_triggered_only = yes
+
+    immediate = {
+        event_target:pdivinity_crisis_empire = {
+            set_country_flag = pdivinity_architect_backup
+            capital_scope = {
+                create_fleet = {
+                    settings = {
+                        is_boss = yes
+                        uses_naval_capacity = no
+                        spawn_debris = no
+                        can_change_leader = no
+                        can_change_composition = no
+                        can_disband = no
+                        can_upgrade = no
+                    }
+                    effect = {
+                        set_owner = event_target:pdivinity_crisis_empire
+                        create_ship = {
+                            name = "NAME_pdivinity_the_great_eye_name"
+                            design = "NAME_pdivinity_architect_of_fate"
+                        }
+                        set_location = {
+                            target = prev
+                            distance = 10
+                            angle = random
+                        }
+                        set_fleet_flag = pdivinity_architect_backup
+                        set_fleet_bombardment_stance = pdivinity_psionic_rupture_bombardment
+                    }
+                }
+            }
+        }
+    }
+
+    option = {
+        name = pdivinity_needle.7.a
+        tooltip = { win = yes }
+        hidden_effect = {
+            country_event = { id = pdivinity_needle.8 days = 1 }
+        }
+    }
+}
+
+#####################
+### wins the game ###
+#####################
+
+country_event = {
+    id = pdivinity_needle.8
+    hide_window = yes
+    is_triggered_only = yes
+
+    immediate = {
+        win = yes
+
+        if = {
+            limit = {
+                galaxy_size = tiny
+            }
+            while = {
+                count = 9
+                random_system = {
+                    limit = {
+                        NOT = {
+                            is_star_class = sc_pdivinity_shrouded_hole
+                            any_system_planet = {
+                                pop_amount > 0
+                            }
+                        }
+                    }
+                    pdivinity_shroud_star_system = yes
+                }
+            }
+        }
+
+        else_if = {
+            limit = {
+                galaxy_size = small
+            }
+            while = {
+                count = 18
+                random_system = {
+                    limit = {
+                        NOT = {
+                            is_star_class = sc_pdivinity_shrouded_hole
+                            any_system_planet = {
+                                pop_amount > 0
+                            }
+                        }
+                    }
+                    pdivinity_shroud_star_system = yes
+                }
+            }
+        }
+
+        else_if = {
+            limit = {
+                galaxy_size = medium
+            }
+            while = {
+                count = 26
+                random_system = {
+                    limit = {
+                        NOT = {
+                            is_star_class = sc_pdivinity_shrouded_hole
+                            any_system_planet = {
+                                pop_amount > 0
+                            }
+                        }
+                    }
+                    pdivinity_shroud_star_system = yes
+                }
+            }
+        }
+
+        else_if = {
+            limit = {
+                galaxy_size = large
+            }
+            while = {
+                count = 35
+                random_system = {
+                    limit = {
+                        NOT = {
+                            is_star_class = sc_pdivinity_shrouded_hole
+                            any_system_planet = {
+                                pop_amount > 0
+                            }
+                        }
+                    }
+                    pdivinity_shroud_star_system = yes
+                }
+            }
+        }
+
+        else_if = {
+            limit = {
+                galaxy_size = huge
+            }
+            while = {
+                count = 44
+                random_system = {
+                    limit = {
+                        NOT = {
+                            is_star_class = sc_pdivinity_shrouded_hole
+                            any_system_planet = {
+                                pop_amount > 0
+                            }
+                        }
+                    }
+                    pdivinity_shroud_star_system = yes
+                }
+            }
+        }
+
+        every_playable_country = {
+            limit = {
+                NOT = {
+                    is_same_value = root
+                }
+            }
+            country_event = { id = pdivinity_needle.9 days = 1 }
+        }
+    }
+}
+
+#####################################
+### notification for every empire ###
+#####################################
+
+country_event = {
+    id = pdivinity_needle.9
+    title = pdivinity_needle.9.name
+    desc = pdivinity_needle.9.desc
+    picture = GFX_evt_surreal_visions
+    show_sound = event_default
+    is_triggered_only = yes
+
+    option = {
+        name = pdivinity_needle.9.a
+    }
+}
+
+#############################
+### destroy megastructure ### crisis destroys your starbase
+#############################
+
+starbase_event = {
+    id = pdivinity_needle.10
+    hide_window = yes
+
+    is_triggered_only = yes
+
+    trigger = {
+        exists = from
+        from.owner = {
+            OR = {
+                is_country_type = swarm
+                is_country_type = extradimensional
+                is_country_type = extradimensional_2
+                is_country_type = extradimensional_3
+                is_country_type = ai_empire
+                is_country_type = gray_goo
+            }
+        }
+        solar_system = {
+            has_star_flag = pdivinity_shroud_needle_system
+            any_system_megastructure = {
+                OR = {
+                    has_megastructure_flag = pdivinity_shroud_needle_flag_stage_1
+                    has_megastructure_flag = pdivinity_shroud_needle_flag_stage_2
+                    has_megastructure_flag = pdivinity_shroud_needle_flag_stage_3
+                    has_megastructure_flag = pdivinity_shroud_needle_flag_stage_4
+                }
+            }
+        }
+    }
+
+    immediate = {
+        solar_system = {
+            system_event = { id = pdivinity_needle.11 scopes = { from = root.owner } }
+        }
+    }
+}
+
+##########################
+### ruin megastructure ###
+##########################
+
+system_event = {
+    id = pdivinity_needle.11
+    hide_window = yes
+
+    is_triggered_only = yes
+
+    trigger = {
+        any_system_megastructure = {
+            OR = {
+                has_megastructure_flag = pdivinity_shroud_needle_flag_stage_1
+                has_megastructure_flag = pdivinity_shroud_needle_flag_stage_2
+                has_megastructure_flag = pdivinity_shroud_needle_flag_stage_3
+                has_megastructure_flag = pdivinity_shroud_needle_flag_stage_4
+            }
+        }
+    }
+
+    immediate = {
+        save_event_target_as = pdivinity_shroud_needle_system
+
+        random_system_megastructure = {
+            limit = {
+                OR = {
+                    has_megastructure_flag = pdivinity_shroud_needle_flag_stage_1
+                    has_megastructure_flag = pdivinity_shroud_needle_flag_stage_2
+                    has_megastructure_flag = pdivinity_shroud_needle_flag_stage_3
+                    has_megastructure_flag = pdivinity_shroud_needle_flag_stage_4
+                }
+            }
+            if = {
+                limit = {
+                    has_megastructure_flag = pdivinity_shroud_needle_flag_stage_1
+                }
+                prev = {
+                    spawn_megastructure = {
+                        type = pdivinity_shroud_needle_1_ruined
+                        coords_from = prev
+                        init_effect = {
+                            if = {
+                                limit = { exists = fromfrom }
+                                set_megastructure_flag = pdivinity_shroud_needle_ruined@fromfrom
+                            }
+                        }
+                    }
+                }
+                remove_megastructure = this
+            }
+            else_if = {
+                limit = {
+                    has_megastructure_flag = pdivinity_shroud_needle_flag_stage_2
+                }
+                prev = {
+                    spawn_megastructure = {
+                        type = pdivinity_shroud_needle_2_ruined
+                        coords_from = prev
+                        init_effect = {
+                            if = {
+                                limit = { exists = fromfrom }
+                                set_megastructure_flag = pdivinity_shroud_needle_ruined@fromfrom
+                            }
+                        }
+                    }
+                }
+                remove_megastructure = this
+            }
+            else_if = {
+                limit = {
+                    has_megastructure_flag = pdivinity_shroud_needle_flag_stage_3
+                }
+                prev = {
+                    spawn_megastructure = {
+                        type = pdivinity_shroud_needle_3_ruined
+                        coords_from = prev
+                        init_effect = {
+                            if = {
+                                limit = { exists = fromfrom }
+                                set_megastructure_flag = pdivinity_shroud_needle_ruined@fromfrom
+                            }
+                        }
+                    }
+                }
+                remove_megastructure = this
+            }
+            else_if = {
+                limit = {
+                    has_megastructure_flag = pdivinity_shroud_needle_flag_stage_4
+                }
+                prev = {
+                    spawn_megastructure = {
+                        type = pdivinity_shroud_needle_4_ruined
+                        coords_from = prev
+                        init_effect = {
+                            if = {
+                                limit = { exists = fromfrom }
+                                set_megastructure_flag = pdivinity_shroud_needle_ruined@fromfrom
+                            }
+                        }
+                    }
+                }
+                remove_megastructure = this
+            }
+        }
+        random_system_ambient_object = {
+            limit = {
+                has_ambient_object_flag = pdivinity_megastructure_psi_storm_1
+            }
+            destroy_ambient_object = this
+        }
+        random_system_ambient_object = {
+            limit = {
+                has_ambient_object_flag = pdivinity_megastructure_psi_storm_2
+            }
+            destroy_ambient_object = this
+        }
+        random_system_ambient_object = {
+            limit = {
+                has_ambient_object_flag = pdivinity_megastructure_psi_storm_3
+            }
+            destroy_ambient_object = this
+        }
+        from = { save_event_target_as = pdivinity_shroud_needle_destroyers }
+        fromfrom = { save_event_target_as = pdivinity_shroud_needle_builders }
+        from = { country_event = { id = pdivinity_needle.12 } }
+        fromfrom = { country_event = { id = pdivinity_needle.13 } }
+        every_playable_country = {
+            limit = {
+                is_ai = no
+                NOR = {
+                    is_same_value = from
+                    is_same_value = fromfrom
+                }
+            }
+            country_event = { id = pdivinity_needle.14 } #crisis.6103
+        }
+    }
+}
+
+######################################
+### notification for the destroyer ### crisis.6102
+######################################
+
+country_event = {
+    id = pdivinity_needle.12
+    title = pdivinity_needle.12.name
+    desc = pdivinity_needle.12.desc
+    picture = GFX_evt_surreal_visions
+    show_sound = event_default
+
+    is_triggered_only = yes
+
+
+    option = {
+        name = pdivinity_needle.12.a
+    }
+}
+
+####################################
+### notification for the builder ### this should cause some planets to get shrouded
+####################################
+
+country_event = {
+    id = pdivinity_needle.13
+    title = pdivinity_needle.13.name
+    desc = pdivinity_needle.13.desc
+    picture = GFX_evt_surreal_visions
+    show_sound = event_default
+
+    is_triggered_only = yes
+
+
+    option = {
+        name = pdivinity_needle.13.a
+        custom_tooltip = pdivinity_needle.13.a.tt
+    }
+}
+
+###################################
+### notification for the galaxy ###
+###################################
+
+country_event = {
+    id = pdivinity_needle.14
+    title = pdivinity_needle.14.name
+    desc = pdivinity_needle.14.desc
+    picture = GFX_evt_surreal_visions
+    show_sound = event_default
+
+    is_triggered_only = yes
+
+
+    option = {
+        name = pdivinity_needle.14.a
+    }
+}

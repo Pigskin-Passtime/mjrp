@@ -1,0 +1,539 @@
+###############################
+### pdivinity_crisis_events ###
+###                         ###
+###      by daniellm        ###
+###############################
+
+
+namespace = pdivinity_crisis
+
+################################
+### the shroud calls for you ###
+################################
+
+country_event = {
+    id = pdivinity_crisis.0
+    title = pdivinity_crisis.0.name
+    desc = pdivinity_crisis.0.desc
+    diplomatic = yes
+    diplomatic_title = BLANK_STRING
+    force_open = yes
+
+    picture_event_data = {
+        portrait = shroud1
+        room = shroud_room
+    }
+
+    is_triggered_only = yes
+
+    option = {
+        name = pdivinity_crisis.0.a
+        begin_event_chain = {
+            event_chain = project_divinity_crisis_chain
+            target = root
+        }
+        hidden_effect = {
+            set_variable = {
+                which = pdivinity_telepath_jobs
+                value = 0
+            }
+            modify_species = {
+                species = this
+                add_trait = trait_pdivinity_shroud_touched
+            }
+            change_dominant_species = {
+                species = last_created_species
+            }
+            while = {
+                limit = {
+                    any_owned_pop_group = {
+                        is_subspecies = root
+                        NOT = { has_trait = trait_pdivinity_shroud_touched }
+                    }
+                }
+                weighted_random_owned_pop_group = {
+                    limit = {
+                        is_subspecies = root
+                        NOT = { has_trait = trait_pdivinity_shroud_touched }
+                    }
+                    root = {
+                        modify_species = {
+                            species = prev.species
+                            add_trait = trait_pdivinity_shroud_touched
+                        }
+                    }
+                }
+            }
+            create_species = {
+                name = "NAME_pdivinity_Shroudpriests"
+                class = SHROUDWALKER
+                namelist = NECROID1
+                portrait = random
+                traits = {
+                    trait = random_traits
+                }
+            }
+            last_created_species = {
+                save_global_event_target_as = pdivinity_avatar_species
+            }
+            save_global_event_target_as = pdivinity_crisis_empire
+        }
+        activate_crisis_progression = project_divinity_ascension_path
+        shift_ethic = "ethic_fanatic_spiritualist"
+    }
+}
+
+##########################
+### unlock crisis perk ###
+##########################
+
+country_event = {
+    id = pdivinity_crisis.1
+    title = pdivinity_crisis.1.name
+    desc = pdivinity_crisis.1.desc
+    picture = GFX_evt_enclave_overlord
+    show_sound = event_factions
+    is_triggered_only = yes
+    event_chain = project_divinity_crisis_chain
+
+    option = {
+        name = pdivinity_crisis.1.a
+        hidden_effect = {
+            give_technology = { tech = tech_pdivinity_shroud_harvester }
+        }
+    }
+}
+
+######################
+### unlock stage 2 ###
+######################
+
+country_event = {
+    id = pdivinity_crisis.2
+    title = pdivinity_crisis.2.name
+    desc = pdivinity_crisis.2.desc
+    picture = GFX_evt_hostile_infiltration
+    show_sound = event_criminal_activity
+    is_triggered_only = yes
+    event_chain = project_divinity_crisis_chain
+
+    option = {
+        name = pdivinity_crisis.2.a
+    }
+}
+
+######################
+### unlock stage 3 ###
+######################
+
+country_event = {
+    id = pdivinity_crisis.3
+    title = pdivinity_crisis.3.name
+    desc = pdivinity_crisis.3.desc
+    picture = GFX_evt_shrouded_planet
+    show_sound = event_psionic
+    is_triggered_only = yes
+    event_chain = project_divinity_crisis_chain
+
+    immediate = {
+        set_country_flag = pdivinity_psionic_cloud_unlock
+    }
+
+    option = {
+        name = pdivinity_crisis.3.a
+        hidden_effect = {
+            give_technology = { tech = tech_pdivinity_psionic_cloud message = no }
+            add_research_option = null_void_beam
+            capital_scope = {
+                create_archaeological_site = pdivinity_catacombs_digsite
+            }
+        }
+    }
+}
+
+######################
+### unlock stage 4 ###
+######################
+
+country_event = {
+    id = pdivinity_crisis.4
+    title = pdivinity_crisis.4.name
+    desc = pdivinity_crisis.4.desc
+    picture = GFX_evt_astral_rift_microverse
+    show_sound = event_solar_fusion
+    is_triggered_only = yes
+    event_chain = project_divinity_crisis_chain
+
+    immediate = {
+        set_country_flag = pdivinity_psionic_avatar_unlock
+        capital_scope = {
+            solar_system = {
+                set_star_flag = pdivinity_shroud_needle_system
+                save_event_target_as = pdivinity_crisis_system
+                spawn_megastructure = {
+                    type = "pdivinity_shroud_needle_1"
+                    planet = star
+                    owner = root
+                    graphical_culture = fallen_empire_04
+                }
+                pdivinity_shroud_home_system = yes
+            }
+        }
+        every_playable_country = {
+            limit = {
+                has_communications = event_target:pdivinity_crisis_empire
+                NOT = {
+                    is_same_value = event_target:pdivinity_crisis_empire
+                }
+            }
+            country_event = { id = pdivinity_crisis.6 days = 2 } ### notification every other system
+        }
+        activate_fog_machine = pdivinity_galatic_storm
+        fog_machine_auto_tracking = yes
+        every_owned_starbase = {
+            limit = { is_normal_starbase = yes }
+            pdivinity_add_shroud_storm_array = yes
+        }
+        every_system_within_border = {
+            create_ambient_object = {
+                type = "pdivinity_galactic_storm"
+                location = fromfrom
+            }
+            last_created_ambient_object = {
+                set_ambient_object_flag = pdivinity_galactic_storm
+                set_location = {
+                    target = prev
+                    distance = 0
+                    angle = random
+                }
+            }
+        }
+    }
+
+    option = {
+        name = pdivinity_crisis.4.a
+        remove_country_flag = pdivinity_tearer_backup
+        hidden_effect = {
+            give_technology = { tech = tech_pdivinity_psionic_avatar message = no }
+        }
+    }
+}
+
+######################
+### unlock stage 5 ###
+######################
+
+country_event = {
+    id = pdivinity_crisis.5
+    title = pdivinity_crisis.5.name
+    desc = pdivinity_crisis.5.desc
+    picture = GFX_evt_shroudwalker_enclave
+    show_sound = event_psionic
+    is_triggered_only = yes
+    event_chain = project_divinity_crisis_chain
+
+    immediate = {
+        set_country_flag = pdivinity_dimensional_tearer_unlock
+    }
+
+    option = {
+        name = pdivinity_crisis.5.a
+        hidden_effect = {
+            give_technology = { tech = tech_pdivinity_dimensional_tearer message = no }
+        }
+    }
+}
+
+##############################################
+### notification for the galaxy on stage 4 ###
+##############################################
+
+country_event = {
+    id = pdivinity_crisis.6
+    title = pdivinity_crisis.6.name
+    desc = pdivinity_crisis.6.desc
+    picture = GFX_evt_wormhole
+    show_sound = event_super_explosion
+    is_triggered_only = yes
+
+    option = {
+        name = pdivinity_crisis.6.a
+    }
+}
+
+## test event
+
+country_event = {
+    id = pdivinity_crisis.7
+    hide_window = yes
+    is_triggered_only = yes
+
+    immediate = {
+        owner = {
+            tooltip = {
+                if = {
+                    limit = {
+                        is_galactic_community_formed = yes
+                        is_galactic_community_member = yes
+                    }
+                    remove_from_galactic_community = yes
+                }
+            }
+            declare_crisis_effect = yes
+        }
+    }
+}
+
+#####################
+### backup tearer ###
+#####################
+
+country_event = {
+    id = pdivinity_crisis.10
+    title = pdivinity_crisis.10.name
+    desc = pdivinity_crisis.10.desc
+    picture = GFX_evt_physics_research
+    show_sound = event_solar_fusion
+    is_triggered_only = yes
+
+    trigger = {
+        has_country_flag = pdivinity_tearer_backup
+        NOT = {
+            any_owned_fleet = {
+                has_fleet_flag = pdivinity_tearer_backup
+            }
+        }
+    }
+
+    option = {
+        name = pdivinity_crisis.10.a
+        hidden_effect = {
+            capital_scope = {
+                create_fleet = {
+                    settings = {
+                        uses_naval_capacity = no
+                        spawn_debris = no
+                        can_change_leader = no
+                    }
+                    effect = {
+                        set_owner = event_target:pdivinity_crisis_empire
+                        create_ship = {
+                            name = "NAME_pdivinity_dimensional_tearer_name"
+                            design = "NAME_pdivinity_dimensional_tearer"
+                        }
+                        set_location = {
+                            target = prev
+                            distance = 0
+                            angle = random
+                        }
+                        set_fleet_flag = pdivinity_tearer_backup
+                        set_fleet_bombardment_stance = pdivinity_psionic_rupture_bombardment
+                    }
+                }
+            }
+        }
+    }
+}
+
+########################
+### backup architect ###
+########################
+
+country_event = {
+    id = pdivinity_crisis.11
+    title = pdivinity_crisis.11.name
+    desc = pdivinity_crisis.11.desc
+    picture = GFX_evt_physics_research
+    show_sound = event_solar_fusion
+    is_triggered_only = yes
+
+    trigger = {
+        has_country_flag = pdivinity_architect_backup
+        NOT = {
+            any_owned_fleet = {
+                has_fleet_flag = pdivinity_architect_backup
+            }
+        }
+    }
+
+    option = {
+        name = pdivinity_crisis.11.a
+        hidden_effect = {
+            create_fleet = {
+                settings = {
+                    is_boss = yes
+                    uses_naval_capacity = no
+                    spawn_debris = no
+                    can_change_leader = no
+                    can_change_composition = no
+                    can_disband = no
+                    can_upgrade = no
+                }
+                effect = {
+                    set_owner = event_target:pdivinity_crisis_empire
+                    create_ship = {
+                        name = "NAME_pdivinity_the_great_eye_name"
+                        design = "NAME_pdivinity_architect_of_fate"
+                    }
+                    set_location = {
+                        target = root.capital_scope
+                        distance = 0
+                        angle = random
+                    }
+                    set_fleet_flag = pdivinity_architect_backup
+                    set_fleet_bombardment_stance = pdivinity_psionic_rupture_bombardment
+                }
+            }
+        }
+    }
+}
+
+
+########################
+### add storm array  ###
+########################
+
+country_event = {
+    id = pdivinity_crisis.100
+    hide_window = yes
+    is_triggered_only = yes
+
+    trigger = {
+        any_playable_country = {
+            has_ascension_perk = ap_pdivinity
+        }
+    }
+
+    immediate = {
+        if = {
+            limit = { is_specialist_subject_type = { TYPE = pdivinity_acolyte } }
+            FROM = {
+                if = {
+                    limit = { exists = starbase }
+                    starbase = { pdivinity_add_shroud_storm_vassal_array = yes }
+                }
+            }
+        }
+        if = {
+            limit = {
+                has_ascension_perk = ap_pdivinity
+                has_menace_perk = menp_pdivinity_beyond_the_rifts
+            }
+            FROM = {
+                if = {
+                    limit = { exists = starbase }
+                    starbase = { pdivinity_add_shroud_storm_array = yes }
+                }
+            }
+        }
+    }
+}
+
+###########################
+### remove storm vassal ###
+###########################
+
+country_event = {
+    id = pdivinity_crisis.101
+    hide_window = yes
+    is_triggered_only = yes
+
+    trigger = {
+        any_playable_country = {
+            has_ascension_perk = ap_pdivinity
+        }
+    }
+
+    immediate = {
+        if = { # checks if a new owner exists
+            limit = { exists = FROMFROM }
+            if = {
+                limit = {
+                    is_specialist_subject_type = { TYPE = pdivinity_acolyte }
+                    FROMFROM = { NOT = { is_specialist_subject_type = { TYPE = pdivinity_acolyte } } }
+                }
+                FROM = {
+                    if = {
+                        limit = { exists = starbase }
+                        starbase = { pdivinity_remove_shroud_storm_vassal_array = yes }
+                        if = {
+                            limit = { ROOT = { any_agreement = { specialist_tier >= 2 } } }
+                            starbase = { pdivinity_remove_shroud_storm_vassal_array = yes }
+                        }
+                    }
+                }
+            }
+            else_if = {
+                limit = {
+                    is_specialist_subject_tier = { TYPE = pdivinity_acolyte TIER = 2 }
+                    FROMFROM = {
+                        is_specialist_subject_type = { TYPE = pdivinity_acolyte }
+                        NOT = { any_agreement = { specialist_tier = 2 } }
+                    }
+                }
+                FROM = {
+                    if = {
+                        limit = { exists = starbase }
+                        starbase = {
+                            pdivinity_remove_shroud_storm_vassal_array = yes
+                        }
+                    }
+                }
+            }
+        }
+        else = { # if no new owner, always remove the disintegrator field (just a failsafe, systems with no onwer shouldn't have a starbase)
+            FROM = {
+                if = {
+                    limit = { exists = starbase }
+                    starbase = {
+                        pdivinity_remove_shroud_storm_vassal_array = yes
+                    }
+                }
+            }
+        }
+    }
+}
+
+###########################
+### remove storm normal ###
+###########################
+
+country_event = {
+    id = pdivinity_crisis.102
+    hide_window = yes
+    is_triggered_only = yes
+
+    trigger = {
+        any_playable_country = {
+            has_ascension_perk = ap_pdivinity
+        }
+    }
+
+    immediate = {
+        if = { # checks if a new owner exists
+            limit = { exists = FROMFROM }
+            if = {
+                limit = {
+                    has_menace_perk = menp_pdivinity_beyond_the_rifts
+                    FROMFROM = { NOT = { has_menace_perk = menp_pdivinity_beyond_the_rifts } }
+                }
+                FROM = {
+                    if = {
+                        limit = { exists = starbase }
+                        starbase = { pdivinity_remove_shroud_storm_array = yes }
+                    }
+                }
+            }
+        }
+        else = { # if no new owner, always remove the disintegrator field (just a failsafe, systems with no onwer shouldn't have a starbase)
+            FROM = {
+                if = {
+                    limit = { exists = starbase }
+                    starbase = {
+                        pdivinity_remove_shroud_storm_vassal_array = yes
+                    }
+                }
+            }
+        }
+    }
+}

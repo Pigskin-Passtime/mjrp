@@ -1,0 +1,265 @@
+#################################
+### pdivinity_cult_situations ###
+###                           ### situation_civstrife_faction_sep_nat in vsc
+###     by daniellm           ###
+#################################
+
+situation_pdivinity_cult_uprising = {
+    picture = GFX_evt_hive_mind
+    complete_icon_frame = GFX_situation_outcome_frame_red
+    complete_icon = GFX_situation_outcome_revolt
+    category = negative
+    start_value = 0
+
+    on_start = {
+    }
+
+    on_progress_complete = {
+        custom_tooltip = situation_pdivinity_cult_uprising_success_tt
+        hidden_effect = {
+            owner = {
+                country_event = {
+                    id = pdivinity_cults.16
+                }
+            }
+            destroy_situation = this
+        }
+    }
+
+    abort_trigger = {
+        OR = {
+            NOT = {
+                exists = owner
+            }
+            owner = {
+                is_subject = yes
+                AND = {
+                    overlord = {
+                        is_same_value = event_target:pdivinity_crisis_empire
+                    }
+                }
+            }
+        }
+    }
+
+    on_abort = {
+        hidden_effect = {
+            owner = {
+
+            }
+        }
+        destroy_situation = this
+    }
+
+    on_fail = {
+        custom_tooltip = situation_pdivinity_cult_uprising_failed_tt
+        hidden_effect = {
+            owner = {
+                country_event = {
+                    id = pdivinity_cults.15
+                }
+            }
+            destroy_situation = this
+        }
+    }
+
+    stages = {
+        stage_1 = {
+            icon = GFX_situation_stage_1
+            icon_background = GFX_situation_stage_frame_blue
+            end = 300
+            modifier = {
+                pop_ethic_spiritualist_attraction_mult = 0.1
+
+            }
+        }
+        stage_2 = {
+            icon = GFX_situation_stage_2
+            icon_background = GFX_situation_stage_frame_blue
+            end = 600
+            modifier = {
+                pop_ethic_spiritualist_attraction_mult = 0.2
+                pop_happiness = -0.1
+            }
+        }
+        stage_3 = {
+            icon = GFX_situation_stage_3
+            icon_background = GFX_situation_stage_frame_blue
+            end = 900
+            modifier = {
+                pop_ethic_spiritualist_attraction_mult = 0.25
+                pop_ethics_shift_speed_mult = 0.25
+                pop_happiness = -0.15
+            }
+        }
+        stage_4 = {
+            icon = GFX_situation_stage_4
+            icon_background = GFX_situation_stage_frame_blue # might not need first enter events on every one of them
+            end = 1200
+            modifier = {
+                pop_ethic_spiritualist_attraction_mult = 0.5
+                pop_ethics_shift_speed_mult = 0.5
+                pop_happiness = -0.25
+                planet_stability_add = -5
+            }
+        }
+        stage_5 = {
+            icon = GFX_situation_stage_5
+            icon_background = GFX_situation_stage_frame_blue
+            on_first_enter = {
+                situation_event = { id = pdivinity_cults.5 }
+            }
+            modifier = {
+                pop_ethic_spiritualist_attraction_mult = 1
+                pop_ethics_shift_speed_mult = 1
+                pop_happiness = -0.25
+                planet_stability_add = -15
+            }
+            end = 1350
+        }
+    }
+
+    ### leave the cults alone
+    approach = {
+        name = situation_pdivinity_cult_uprising_approach_1
+        icon = GFX_situation_approach_kneel
+        icon_background = GFX_situation_approach_bg_red
+        on_select = {
+            custom_tooltip = situation_pdivinity_cult_uprising_approach_1_tt
+        }
+        default = yes
+        modifier = {
+            pop_ethic_spiritualist_attraction_mult = 0.5
+            pop_ethics_shift_speed_mult = 0.5
+
+        }
+        ai_weight = {
+            base = 10
+        }
+    }
+
+    ### educate the masses
+    approach = {
+        name = situation_pdivinity_cult_uprising_approach_2
+        icon = GFX_situation_approach_encurage_conversation
+        icon_background = GFX_situation_approach_bg_yellow
+        on_select = {
+            custom_tooltip = situation_pdivinity_cult_uprising_approach_2_tt
+        }
+        resources = {
+            category = situations
+            upkeep = {
+                energy = 0.005
+                multiplier = owner.trigger:sapient_pop_amount
+            }
+        }
+        modifier = {
+            pop_government_ethic_attraction = 1
+            planet_stability_add = 5
+
+        }
+        ai_weight = {
+            base = 20
+        }
+        potential = {
+            situation_progress >= 300
+            NOT = {
+                situation_progress <= 1200
+            }
+        }
+    }
+
+    ### supress the cults
+    approach = {
+        name = situation_pdivinity_cult_uprising_approach_3
+        icon = GFX_situation_approach_encurage_conversation
+        icon_background = GFX_situation_approach_bg_yellow
+        on_select = {
+            custom_tooltip = situation_pdivinity_cult_uprising_approach_3_tt
+        }
+        resources = {
+            category = situations
+            upkeep = {
+                energy = 0.02
+                multiplier = owner.trigger:sapient_pop_amount
+            }
+        }
+        modifier = {
+            pop_happiness = -0.2
+            planet_crime_add = 15
+            planet_stability_add = 10
+        }
+        ai_weight = {
+            base = 20
+        }
+        potential = {
+            situation_progress >= 300
+            NOT = {
+                situation_progress <= 1200
+            }
+        }
+    }
+
+
+    on_monthly = {
+        events = {
+            pdivinity_cults.10 # cult spreading
+            pdivinity_cults.11 # cult crackdown
+        }
+        random_events = {
+            94 = 0
+            2 = pdivinity_cults.12
+            2 = pdivinity_cults.13
+            2 = pdivinity_cults.14
+        }
+    }
+
+
+    ### to do below
+
+    monthly_progress = {
+        base = 10
+        #modifier = {
+        #    mult = owner.value:situation_pdivinity_cult_uprising_empire_size
+        #    desc = situation_pdivinity_cult_uprising_empire_size_tt
+        #}
+        modifier = {
+            desc = pdivinity_call_of_the_eye_tt
+            add = 10
+            event_target:pdivinity_crisis_empire = {
+                has_menace_perk = menp_pdivinity_call_of_the_eye
+            }
+        }
+        modifier = {
+            desc = pdivinity_cultists_killed_tt
+            multiply = 0
+            owner = {
+                has_country_flag = pdivinity_cultists_killed
+            }
+        }
+        modifier = {
+            desc = pdivinity_stop_cultist_spread_tt
+            add = -15
+            owner = {
+                has_country_flag = pdivinity_pause_locating
+            }
+        }
+        modifier = {
+            desc = pdivinity_accelerate_cultists_tt
+            add = 10
+            owner = {
+                has_country_flag = pdivinity_cultist_funding
+            }
+        }
+        modifier = {
+            desc = pdivinity_educate_the_masses_tt
+            add = -2.5
+            current_situation_approach = situation_pdivinity_cult_uprising_approach_2
+        }
+        modifier = {
+            desc = pdivinity_supress_the_cults_tt
+            add = -5
+            current_situation_approach = situation_pdivinity_cult_uprising_approach_3
+        }
+    }
+}

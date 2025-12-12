@@ -1,0 +1,179 @@
+crisis_pdivinity_project_divinity_level_1 = {
+    # REQUIREMENTS
+    required_crisis_currency = 0
+
+    # REWARDS
+    perks = {
+        menp_pdivinity_resource
+        menp_pdivinity_ethic_attraction
+        menp_pdivinity_psionic_armies
+        menp_pdivinity_zro_building
+    }
+
+    on_unlock = {
+        add_pdivinity_level_1_perks = yes
+        hidden_effect = {
+            owner = {
+                country_event = { id = pdivinity_crisis.1 days = 10 }
+            }
+        }
+    }
+}
+
+crisis_pdivinity_project_divinity_level_2 = {
+    # REQUIREMENTS
+    allow = {
+        custom_tooltip = {
+            success_text = pdivinity_level_2_req_clear_tooltip
+            fail_text =	pdivinity_level_2_req_tooltip
+            pdivinity_has_shrine = yes
+        }
+        is_subject = no
+    }
+    required_crisis_currency = 2000
+
+    # REWARDS
+    perks = {
+        menp_pdivinity_shroud_phasing
+        menp_pdivinity_ritual_sacrifice
+        menp_pdivinity_cult_espionage
+        menp_pdivinity_divine_crusade
+    }
+
+    on_unlock = {
+        hidden_effect = {
+            owner = {
+                add_event_chain_counter = {
+                    event_chain = "project_divinity_crisis_chain"
+                    counter = "crisis_level_reached"
+                    amount = 1
+                }
+                country_event = { id = pdivinity_crisis.2 days = 10 }
+            }
+        }
+    }
+}
+
+crisis_pdivinity_project_divinity_level_3 = {
+    # REQUIREMENTS
+    allow = {
+        custom_tooltip = {
+            success_text = pdivinity_level_3_req_clear_tooltip
+            fail_text =	pdivinity_level_3_req_tooltip
+            pdivinity_has_shroud_phased_planet = yes
+        }
+        is_subject = no
+        hidden_trigger = {
+            NOT = {
+                has_active_event = {
+                    crisis.4125
+                }
+            }
+        }
+    }
+    required_crisis_currency = 5000
+
+    # REWARDS
+    perks = {
+        menp_pdivinity_psionic_avatar
+        menp_pdivinity_psionic_rupture
+        menp_pdivinity_psionic_potential
+        menp_pdivinity_gifts_from_beyond
+    }
+
+    on_unlock = {
+        add_pdivinity_level_3_perks = yes
+        hidden_effect = {
+            owner = {
+                add_event_chain_counter = {
+                    event_chain = "project_divinity_crisis_chain"
+                    counter = "crisis_level_reached"
+                    amount = 1
+                }
+                country_event = { id = pdivinity_crisis.3 days = 3 }
+            }
+        }
+    }
+}
+
+crisis_pdivinity_project_divinity_level_4 = {
+    # REQUIREMENTS
+    allow = {
+        custom_tooltip = {
+            success_text = pdivinity_level_4_req_clear_tooltip
+            fail_text =	pdivinity_level_4_req_tooltip
+            has_country_flag = pdivinity_finished_digsite
+        }
+        is_subject = no
+    }
+    required_crisis_currency = 20000
+
+    # REWARDS
+    perks = {
+        menp_pdivinity_astral_tear
+        menp_pdivinity_beyond_the_rifts
+        menp_pdivinity_divine_insight
+        menp_pdivinity_hyperdimensional_shielding
+    }
+
+    on_unlock = {
+        hidden_effect = {
+            owner = {
+                add_event_chain_counter = {
+                    event_chain = "project_divinity_crisis_chain"
+                    counter = "crisis_level_reached"
+                    amount = 1
+                }
+                country_event = { id = pdivinity_crisis.4 days = 3 }
+            }
+        }
+    }
+}
+
+crisis_pdivinity_project_divinity_level_5 = {
+    # REQUIREMENTS
+    allow = {
+        custom_tooltip = {
+            success_text = pdivinity_level_5_req_clear_tooltip
+            fail_text =	pdivinity_level_5_req_tooltip
+            has_megastructure = pdivinity_shroud_needle_3
+        }
+        custom_tooltip = {
+            success_text = pdivinity_level_5_req_clear_tooltip_2
+            fail_text =	pdivinity_level_5_req_tooltip_2
+            has_country_flag = pdivinity_rifited_first_system
+        }
+        is_subject = no
+    }
+    required_crisis_currency = 45000
+
+    # REWARDS
+    perks = {
+        menp_pdivinity_dimensional_tearer
+        menp_pdivinity_call_of_the_eye
+        menp_pdivinity_psionic_mastery
+        menp_pdivinity_beyond_the_Shroud
+    }
+
+    ### placeholder for now
+
+    on_unlock = {
+        owner = {
+            tooltip = {
+                if = {
+                    limit = {
+                        is_galactic_community_formed = yes
+                        is_galactic_community_member = yes
+                    }
+                    remove_from_galactic_community = yes
+                }
+            }
+        }
+        hidden_effect = {
+            # force Declare Crisis resolution through an appropriate party
+            declare_crisis_effect = yes
+            end_event_chain = project_divinity_crisis_chain
+            country_event = { id = pdivinity_crisis.5 days = 5 }
+        }
+    }
+}

@@ -1,0 +1,186 @@
+###########################
+### pdivinity_buildings ###
+###                     ###
+###     by daniellm     ###
+###########################
+
+building_pdivinity_architect_shrine = {
+    base_buildtime = @b3_time
+
+    category = government
+
+    building_sets = {
+        government
+        unity
+    }
+
+    empire_limit = {
+        base = 1
+    }
+
+    potential = {
+        exists = owner
+        owner = {
+            has_crisis_level = crisis_pdivinity_project_divinity_level_1
+        }
+        exists = planet
+        planet = { is_capital = yes }
+        NOR = {
+            has_modifier = resort_colony
+            has_modifier = slave_colony
+        }
+    }
+
+    allow = {
+        has_major_upgraded_capital = yes
+    }
+
+    destroy_trigger = {
+        exists = owner
+        NOT = {
+            owner = { has_crisis_level = crisis_pdivinity_project_divinity_level_1 }
+        }
+    }
+
+    planet_modifier = {
+        job_telepath_add = 500
+    }
+
+    country_modifier = {
+        envoys_add = 3
+        spy_network_daily_value_mult = 0.1
+    }
+
+    triggered_desc = {
+        trigger = {
+            has_first_contact_dlc = yes
+        }
+        text = covenant_detection_first_contact_effect
+    }
+
+    on_built = {
+        planet.owner = {
+            set_country_flag = pdivinity_shrine_built
+        }
+    }
+
+    resources = {
+        category = planet_buildings
+        cost = {
+            minerals = @b3_minerals
+            exotic_gases = @b3_rare_cost
+        }
+        upkeep = {
+            energy = @b3_upkeep
+            exotic_gases = @b3_rare_upkeep
+        }
+    }
+
+    triggered_desc = {
+        text = job_telepath_effect_desc
+    }
+}
+
+
+building_pdivinity_shroud_harvester_building = {
+    base_buildtime = @b2_time
+    planet_limit = 4
+    can_build = yes
+    can_demolish = yes
+    icon = building_pdivinity_shroud_harvester
+
+    category = resource
+
+    building_sets = {
+        industrial
+        factory
+        foundry
+    }
+
+    potential = {
+        exists = owner
+        owner = {
+            has_technology = tech_pdivinity_shroud_harvester
+        }
+        NOR = {
+            has_modifier = resort_colony
+            has_modifier = slave_colony
+            has_modifier = penal_colony
+        }
+    }
+
+
+    destroy_trigger = {
+        always = no
+    }
+
+    resources = {
+        category = planet_buildings
+        cost = {
+            minerals = @b2_minerals
+        }
+        produces = {
+            trigger = {
+                has_modifier = pdivinity_shroud_phased_modifier
+            }
+            sr_zro = 20
+        }
+        upkeep = {
+            energy = 5
+        }
+        upkeep = {
+            trigger = {
+                has_modifier = pdivinity_shroud_phased_modifier
+            }
+            energy = 10
+        }
+    }
+
+    triggered_planet_modifier = {
+        potential = {
+            exists = owner
+            owner = { is_gestalt = no }
+        }
+        modifier = {
+            job_pdivinity_zro_harvester_add = 200
+        }
+    }
+
+    triggered_planet_modifier = {
+        potential = {
+            exists = owner
+            has_modifier = pdivinity_shroud_phased_modifier
+        }
+        modifier = {
+            job_pdivinity_zro_harvester_add = 300
+            job_telepath_add = 100
+        }
+    }
+
+    triggered_planet_modifier = {
+        potential = {
+            exists = owner
+            has_modifier = pdivinity_shroud_phased_modifier
+        }
+        planet_biologists_sr_zro_produces_add = 0.5
+        planet_bureaucrats_sr_zro_produces_add = 0.5
+    }
+
+    triggered_planet_modifier = {
+        potential = {
+            has_modifier = pdivinity_shroud_phased_modifier
+        }
+        planet_biologists_energy_upkeep_add = 2
+        planet_bureaucrats_energy_upkeep_add = 2
+    }
+
+    triggered_desc = {
+        trigger = {
+            exists = owner
+            owner = { is_gestalt = no }
+        }
+        text = job_pdivinity_zro_harvester_effect_desc
+    }
+
+    show_in_tech = tech_pdivinity_shroud_harvester
+}

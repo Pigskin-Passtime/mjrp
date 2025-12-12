@@ -1,0 +1,49 @@
+#####################################
+### pdivinity_bombardment_stances ###
+###                               ### # on_pop_bombed_to_death
+###      by daniellm              ###
+#####################################
+
+pdivinity_psionic_rupture_bombardment = {
+    trigger = {
+        owner = {
+            has_menace_perk = menp_pdivinity_psionic_rupture
+            OR = {
+                has_policy_flag = orbital_bombardment_indiscriminate
+                has_policy_flag = orbital_bombardment_armageddon
+            }
+        }
+    }
+
+    default = no
+
+    stop_when_armies_dead = no
+    abduct_pops = no
+
+    planet_damage = 2
+    army_damage = 2.5
+
+    kill_pop_chance = {
+        base = 1.5
+    }
+    min_pops_to_kill_pop = 0
+
+    # root = fleet
+    # from = planet
+    ai_weight = {
+        weight = 15
+        modifier = {
+            factor = 0.01
+            exists = from
+            from = {
+                owner = { NOT = { is_hostile = root.owner } }
+                NAND = {
+                    controller = { is_crisis_faction = yes }
+                    planet_garrison_strength > 0
+                }
+            }
+            exists = owner
+            owner = { is_crisis_faction = no }
+        }
+    }
+}

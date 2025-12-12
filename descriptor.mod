@@ -1,0 +1,16 @@
+version="4.0*"
+tags={
+	"Balance"
+	"Events"
+	"Diplomacy"
+	"Gameplay"
+	"Military"
+	"Technologies"
+	"Spaceships"
+	"Graphics"
+	"Buildings"
+	"Economy"
+}
+name="Project divinity"
+supported_version="v4.0.21"
+remote_file_id="3528274704"
