@@ -1,0 +1,177 @@
+##########
+# SPREAD WHISPERS
+scripted_action = {
+	scope = planet
+
+	possible = {
+		custom_tooltip = {
+			fail_text = MJ25_WH_must_be_colonised
+			AND = { # colony
+				exists = owner
+				NOT = { is_under_colonization = yes }
+			}
+		}
+		custom_tooltip = {
+			fail_text = MJ25_WH_cant_target_own_colony
+			AND = { # colony
+				exists = owner
+				owner = { NOT = { is_same_value = root.from.owner } }
+			}
+		}
+		custom_tooltip = {
+			fail_text = is_shielded
+			NOR = {
+				is_planet_class = pc_shielded
+				is_planet_class = pc_ringworld_shielded
+				is_planet_class = pc_habitat_shielded
+			}
+		}
+	}
+
+	button_visible = {
+		always = yes
+	}
+
+	button_clickable = {
+		custom_tooltip = {
+			fail_text = MJ25_WH_animate_star_combat_fail_tt
+			is_in_combat = no
+		}
+	}
+
+	name = on_destroy_planet_with_MJ25_WH_CONDUCTOR_DEVICE
+	tooltip = MJ25_WH_conductor_spread_whispers_button
+	icon = GFX_fleet_action_button_MJ25_WH_spread_whispers
+	icon_selected = GFX_fleet_action_button_MJ25_WH_spread_whispers
+	activity_key = MJ25_WH_conductor_spread_whispers_activity_key
+	context_menu_name = MJ25_WH_conductor_spread_whispers_menu_title
+	progress_activity_key = MJ25_WH_conductor_spread_whispers_progress_activity_key
+	required_progress = @MJ25_WH_spread_whispers_progress
+	cooldown = @MJ25_WH_spread_whispers_cooldown
+
+	cost = {
+		MJ25_WH_void_whispers = @MJ25_WH_spread_whispers_cost
+	}
+}
+
+##########
+# SUMMON AURAL STARMASS
+scripted_action = {
+	scope = planet
+
+	possible = {
+		custom_tooltip = {
+			fail_text = MJ25_WH_animate_star_requires_star_tt
+			is_star = yes
+		}
+		custom_tooltip = {
+			fail_text = MJ25_WH_animate_star_not_black_hole_tt
+			NOT = { is_planet_class = pc_black_hole }
+		}
+		custom_tooltip = {
+			fail_text = "requires_no_anomaly"
+			NOT = { has_anomaly = yes }
+		}
+		custom_tooltip = {
+			fail_text = MJ25_WH_animate_star_not_megastructure_tt
+			NOT = { has_planet_flag = has_megastructure }
+		}
+	}
+
+	button_visible = {
+		owner = {
+			has_crisis_perk = MJ25_WH_menp_stars_scream
+		}
+	}
+
+	button_clickable = {
+		custom_tooltip = {
+			fail_text = MJ25_WH_animate_star_combat_fail_tt
+			owner = {
+				has_crisis_perk = MJ25_WH_menp_stars_scream
+			}
+		}
+		custom_tooltip = {
+			fail_text = MJ25_WH_animate_star_combat_fail_tt
+			is_in_combat = no
+		}
+	}
+
+	name = on_MJ25_WH_conductor_animate_star
+	tooltip = MJ25_WH_conductor_animate_star_button
+	icon = GFX_fleet_action_button_MJ25_WH_summon_starmass
+	icon_selected = GFX_fleet_action_button_MJ25_WH_summon_starmass
+	activity_key = MJ25_WH_conductor_animate_star_activity_key
+	context_menu_name = MJ25_WH_conductor_animate_star_menu_title
+	progress_activity_key = MJ25_WH_conductor_animate_star_progress_activity_key
+	required_progress = @MJ25_WH_animate_star_progress
+	cooldown = @MJ25_WH_animate_star_cooldown
+
+	cost = {
+		MJ25_WH_void_whispers = @MJ25_WH_animate_star_cost
+	}
+}
+
+#########################
+# CREATE STORM
+scripted_action = {
+	scope = self
+
+	button_visible = {
+		always = yes
+	}
+
+	button_clickable = {
+		custom_tooltip = {
+			always = yes
+		}
+	}
+
+	name = on_MJ25_WH_conductor_create_storm
+	tooltip = MJ25_WH_conductor_create_storm_button
+	icon = GFX_fleet_action_button_MJ25_WH_create_storm
+	icon_selected = GFX_fleet_action_button_MJ25_WH_create_storm
+	activity_key = MJ25_WH_conductor_create_storm_activity_key
+	context_menu_name = MJ25_WH_conductor_create_storm_menu_title
+	progress_activity_key = MJ25_WH_conductor_create_storm_progress_activity_key
+	required_progress = @MJ25_WH_create_storm_progress
+	cooldown = @MJ25_WH_create_storm_cooldown
+
+	wait = no
+
+	cost = {
+		MJ25_WH_void_whispers = @MJ25_WH_create_storm_cost
+	}
+}
+
+#########################
+# CONFUSION
+scripted_action = {
+	scope = self
+
+	button_visible = {
+		always = yes
+	}
+
+	button_clickable = {
+		custom_tooltip = {
+			always = yes
+		}
+	}
+
+	name = on_MJ25_WH_conductor_confusion
+	tooltip = MJ25_WH_conductor_confusion_button
+	icon = GFX_fleet_action_button_MJ25_WH_confusion
+	icon_selected = GFX_fleet_action_button_MJ25_WH_confusion
+	activity_key = MJ25_WH_conductor_confusion_activity_key
+	context_menu_name = MJ25_WH_conductor_confusion_menu_title
+	progress_activity_key = MJ25_WH_conductor_confusion_progress_activity_key
+	required_progress = @MJ25_WH_confusion_progress
+	cooldown = @MJ25_WH_confusion_cooldown
+
+	wait = no
+
+	cost = {
+		MJ25_WH_void_whispers = @MJ25_WH_confusion_cost
+	}
+}

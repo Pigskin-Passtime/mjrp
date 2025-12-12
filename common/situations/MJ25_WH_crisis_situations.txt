@@ -1,0 +1,385 @@
+MJ25_WH_hue_situation = {
+	picture = GFX_evt_situation_the_seal
+	complete_icon_frame = GFX_MJ25_WH_situation_outcome_frame
+	complete_icon = GFX_MJ25_WH_situation_outcome_icon_hue
+	category = positive
+	initial_progress = 0
+
+	on_progress_complete = {
+		custom_tooltip = MJ25_WH_hue_situation_outcome
+		hidden_effect = {
+			situation_event = { id = MJ25_WH_whispers.100 }
+			owner = {
+				set_country_flag = MJ25_WH_finished_hue_situation
+				if = {
+					limit = {
+						NOT = { is_variable_set = MJ25_WH_voices_counter }
+					}
+					set_variable = { which = MJ25_WH_voices_counter value = 0 }
+				}
+				change_variable = { which = MJ25_WH_voices_counter value = 2000 }
+				if = {
+					limit = {
+						has_country_flag = MJ25_WH_crisis_site_4_complete
+					}
+					abort_special_project = {
+						type = MJ25_WH_sp_crisis_unleash_our_song_unready
+					}
+					enable_special_project = {
+						name = MJ25_WH_sp_crisis_unleash_our_song
+					}
+				}
+			}
+		}
+	}
+
+	stages = {
+		stage_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_blue
+			end = 90
+			custom_tooltip = "MJ25_WH_stage_hue_effects_1"
+		}
+
+		stage_2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_blue
+			end = 180
+			custom_tooltip = "MJ25_WH_stage_hue_effects_2"
+			on_first_enter = {
+				situation_event = { id = MJ25_WH_whispers.110 days = 3 }
+			}
+		}
+
+		stage_3 = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_blue
+			end = 270
+			custom_tooltip = "MJ25_WH_stage_hue_effects_3"
+			on_first_enter = {
+				situation_event = { id = MJ25_WH_whispers.120 days = 3 }
+			}
+		}
+
+		stage_4 = {
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_blue
+			end = 360
+			custom_tooltip = "MJ25_WH_stage_hue_effects_4"
+			on_first_enter = {
+				situation_event = { id = MJ25_WH_whispers.130 days = 3 }
+			}
+		}
+	}
+
+	monthly_progress = {
+		add = 1
+		modifier = {
+			add = 1
+			desc = MJ25_WH_approach_encourage
+			current_situation_approach = MJ25_WH_hue_encourage
+		}
+		modifier = {
+			add = 3
+			desc = MJ25_WH_approach_overload
+			current_situation_approach = MJ25_WH_hue_overload
+		}
+	}
+
+	approach = { 
+		name = MJ25_WH_hue_harness
+		icon = GFX_MJ25_WH_situation_approach_starsong
+		icon_background = GFX_MJ25_WH_situation_approach_bg
+		resources = {
+			produces = {
+				MJ25_WH_void_whispers = 25
+			}
+		}
+		modifier = {
+			planet_stability_add = 10
+		}
+	}
+
+	approach = { 
+		name = MJ25_WH_hue_encourage
+		icon = GFX_situation_approach_kneel
+		icon_background = GFX_MJ25_WH_situation_approach_bg
+		default = yes
+		modifier = {
+			planet_stability_add = 5
+		}
+		on_select = {
+			custom_tooltip = MJ25_WH_approach_encourage_tooltip
+		}
+	}
+
+	approach = { 
+		name = MJ25_WH_hue_overload
+		icon = GFX_situation_approach_amenities
+		icon_background = GFX_MJ25_WH_situation_approach_bg
+		resources = {
+			cost = {
+				MJ25_WH_void_whispers = 250
+			}
+			upkeep = {
+				MJ25_WH_void_whispers = 100
+			}
+		}
+		modifier = {
+			planet_stability_add = -10
+			species_leader_exp_gain = 0.3
+		}
+		on_select = {
+			custom_tooltip = MJ25_WH_approach_overload_tooltip
+		}
+	}
+}
+
+MJ25_WH_massa_situation = {
+	picture = GFX_MJ25_WH_event_massa
+	complete_icon_frame = GFX_MJ25_WH_situation_outcome_frame
+	complete_icon = GFX_MJ25_WH_situation_outcome_icon_massa
+	category = positive
+	initial_progress = 0
+
+	on_progress_complete = {
+		custom_tooltip = MJ25_WH_massa_situation_outcome
+		situation_event = { id = MJ25_WH_whispers.210 }
+		hidden_effect = {
+			owner = {
+				set_country_flag = MJ25_WH_finished_massa_situation
+				enable_special_project = {
+					name = MJ25_WH_sp_victory
+				}
+			}
+		}
+	}
+
+	stages = {
+		stage_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_blue
+			end = 200
+			custom_tooltip = "MJ25_WH_massa_tooltip_1"
+		}
+		stage_2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_blue
+			end = 400
+			on_first_enter = {
+				situation_event = { id = MJ25_WH_whispers.201 }
+			}
+			custom_tooltip = "MJ25_WH_massa_tooltip_2"
+		}
+		stage_3 = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_blue
+			end = 600
+			on_first_enter = {
+				situation_event = { id = MJ25_WH_whispers.201 }
+			}
+			custom_tooltip = "MJ25_WH_massa_tooltip_3"
+		}
+		stage_4 = {
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_blue
+			end = 800
+			on_first_enter = {
+				situation_event = { id = MJ25_WH_whispers.201 }
+			}
+			custom_tooltip = "MJ25_WH_massa_tooltip_4"
+		}
+		stage_5 = {
+			icon = GFX_situation_stage_5
+			icon_background = GFX_situation_stage_frame_blue
+			end = 1000
+			on_first_enter = {
+				situation_event = { id = MJ25_WH_whispers.201 }
+			}
+			custom_tooltip = "MJ25_WH_massa_tooltip_5"
+		}
+		stage_6 = {
+			icon = GFX_situation_stage_6
+			icon_background = GFX_situation_stage_frame_blue
+			end = 1200
+			on_first_enter = {
+				situation_event = { id = MJ25_WH_whispers.201 }
+			}
+			custom_tooltip = "MJ25_WH_massa_tooltip_6"
+		}
+		stage_7 = {
+			icon = GFX_situation_stage_7
+			icon_background = GFX_situation_stage_frame_blue
+			end = 1400
+			on_first_enter = {
+				situation_event = { id = MJ25_WH_whispers.201 }
+			}
+			custom_tooltip = "MJ25_WH_massa_tooltip_7"
+		}
+		stage_8 = {
+			icon = GFX_situation_stage_8
+			icon_background = GFX_situation_stage_frame_blue
+			end = 1600
+			on_first_enter = {
+				situation_event = { id = MJ25_WH_whispers.201 }
+			}
+			custom_tooltip = "MJ25_WH_massa_tooltip_8"
+		}
+	}
+
+	monthly_progress = {
+		base = 0
+		modifier = {
+			add = 1
+			desc = MJ25_WH_approach_fervor
+			current_situation_approach = MJ25_WH_fervor
+		}
+		modifier = {
+			add = owner.capital_scope.leader.value:MJ25_WH_massa_leader_level
+			desc = MJ25_WH_massa_leader_level_desc
+			owner = {
+				any_owned_planet = {
+					has_modifier = MJ25_WH_oratorium
+					exists = leader
+				}
+			}
+		}
+		modifier = {
+			add = owner.value:MJ25_WH_massa_songflares
+			desc = MJ25_WH_massa_songflares_desc
+		}
+		modifier = {
+			add = owner.value:MJ25_WH_massa_voices
+			desc = MJ25_WH_massa_voices_desc
+		}
+		modifier = {
+			mult = 0
+			desc = "MJ25_WH_leader_thoughtsick_desc"
+			owner = {
+				any_owned_planet = {
+					has_modifier = MJ25_WH_oratorium
+					exists = leader
+					if = {
+						limit = {
+							exists = leader
+						}
+						leader = { 
+							OR = {
+								has_trait = MJ25_WH_leader_trait_thoughtsickness 
+								has_trait = MJ25_WH_leader_trait_thoughtsickness_2 
+							}
+						}
+					}
+				}
+			}
+		}
+		modifier = {
+			mult = 0
+			desc = "MJ25_WH_leader_needed_desc"
+			owner = {
+				NOT = {
+					any_owned_planet = {
+						has_modifier = MJ25_WH_oratorium
+						exists = leader
+					}
+				}
+			}
+		}
+		modifier = {
+			mult = 0
+			desc = "MJ25_WH_capital_needed_desc"
+			owner = {
+				NOT = {
+					any_owned_planet = {
+						has_modifier = MJ25_WH_oratorium
+					}
+				}
+			}
+		}
+	}
+
+	triggered_blocked_desc = {
+		trigger = {
+			owner = {
+				any_owned_planet = {
+					has_modifier = MJ25_WH_oratorium
+					exists = leader
+					if = {
+						limit = {
+							exists = leader
+						}
+						leader = { 
+							OR = {
+								has_trait = MJ25_WH_leader_trait_thoughtsickness 
+								has_trait = MJ25_WH_leader_trait_thoughtsickness_2 
+							}
+						}
+					}
+				}
+			}
+		}
+		text = "MJ25_WH_leader_thoughtsick_desc"
+	}
+
+	triggered_blocked_desc = {
+		trigger = {
+			owner = {
+				NOT = {
+					any_owned_planet = {
+						has_modifier = MJ25_WH_oratorium
+						exists = leader
+					}
+				}
+			}
+		}
+		text = "MJ25_WH_leader_needed_desc"
+	}
+
+	triggered_blocked_desc = {
+		trigger = {
+			owner = {
+				NOT = {
+					any_owned_planet = {
+						has_modifier = MJ25_WH_oratorium
+					}
+				}
+			}
+		}
+		text = "MJ25_WH_capital_needed_desc"
+	}
+
+	approach = { 
+		name = MJ25_WH_faith
+		icon = GFX_situation_approach_kneel
+		icon_background = GFX_MJ25_WH_situation_approach_bg
+		default = yes
+		resources = {
+			produces = {
+				MJ25_WH_void_whispers = 10
+			}
+		}
+		on_select = {
+			custom_tooltip = MJ25_WH_faith_tooltip
+		}
+	}
+
+	approach = { 
+		name = MJ25_WH_fervor
+		icon = GFX_MJ25_WH_situation_approach_starsong
+		icon_background = GFX_MJ25_WH_situation_approach_bg
+		modifier = {
+			country_unity_produces_mult = 0.1
+		}
+		resources = {
+			cost = {
+				MJ25_WH_void_whispers = 1000
+			}
+			upkeep = { 
+				MJ25_WH_void_whispers = 500
+			}
+		}
+		on_select = {
+			custom_tooltip = MJ25_WH_fervor_tooltip
+		}
+	}
+}

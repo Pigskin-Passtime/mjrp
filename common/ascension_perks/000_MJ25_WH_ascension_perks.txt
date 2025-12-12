@@ -1,0 +1,82 @@
+MJ25_WH_ap_whispers = {
+	potential = {
+		OR = {
+			has_biogenesis_dlc = yes
+			has_nemesis = yes
+			has_machine_age_dlc = yes
+		}
+		NOR = {
+			has_ascension_perk = ap_become_the_crisis
+			has_ascension_perk = ap_cosmogenesis
+			has_ascension_perk = ap_behemoths
+			has_ascension_perk = ap_defender_of_the_galaxy
+			has_country_flag = player_crisis_chosen
+			is_wilderness_empire = yes
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_ascension_perks_3"
+			num_ascension_perks > 2
+		}
+		custom_tooltip = {
+			fail_text = "requires_independence"
+			is_subject = no
+		}
+		custom_tooltip = {
+			fail_text = "must_not_be_custodian"
+			is_galactic_custodian = no
+		}
+		custom_tooltip = {
+			fail_text = "must_not_be_emperor"
+			is_galactic_emperor = no
+		}
+		NOR = {
+			has_ethic = ethic_fanatic_materialist
+			has_origin = origin_payback
+			has_origin = origin_clone_army
+			has_origin = origin_riftworld
+			has_origin = origin_broken_shackles
+		}
+	}
+
+	on_enabled = {
+		activate_crisis_progression = MJ25_WH_path
+		set_country_flag = player_crisis_chosen
+	}
+
+	ai_weight = {
+		factor = 7.5
+		modifier = {
+			factor = 0
+			is_materialist = yes
+		}
+		modifier = {
+			factor = 2
+			is_spiritualist = yes
+		}
+
+		modifier = {
+			factor = 4
+			is_homicidal = yes
+		}
+
+		modifier = {
+			factor = 2
+			has_tradition = tr_enmity_finish
+		}
+		modifier = {
+			factor = 2
+			has_ascension_perk = ap_nihilistic_acquisition
+		}
+		modifier = {
+			factor = 0
+			galaxy_percentage < 0.1
+		}
+		modifier = {
+			factor = 2
+			galaxy_percentage > 0.2
+		}
+	}
+}

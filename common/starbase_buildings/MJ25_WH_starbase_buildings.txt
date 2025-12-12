@@ -1,0 +1,210 @@
+MJ25_WH_thrumming_choirhall = {
+	icon = "GFX_spaceport_building_MJ25_WH_thrumming_choirhall"
+	construction_days = 720
+
+	potential = {
+		exists = owner
+		owner = {
+			has_menace_perk = MJ25_WH_menp_echoic
+		}
+		is_normal_starbase = yes
+	}
+
+	abort_construction_trigger = {
+		exists = owner
+		NOT = {
+			owner = {
+				has_country_flag = MJ25_WH_can_have_choirhall
+			}
+		}
+	}
+
+	destroy_trigger = {
+		exists = owner
+		NOT = {
+			owner = {
+				has_country_flag = MJ25_WH_can_have_choirhall
+			}
+		}
+	}
+
+	resources = {
+		category = starbase_buildings
+		cost = {
+			alloys = 500
+			MJ25_WH_void_whispers = 360
+		}
+
+		produces = {
+			MJ25_WH_void_whispers = 15
+		}
+
+		upkeep = {
+			energy = 5
+		}
+	}
+
+	equipped_component = "MJ25_WH_STARBASE_AURA_FIRE_RATE"
+
+	ai_weight = {
+		weight = 100
+	}
+
+	on_finished = {
+		starbase_event = { id = MJ25_WH_whispers.300 days = 90 }
+		set_timed_starbase_flag = {
+			flag = MJ25_WH_thrumming_active
+			days = 89
+		}	
+		if = {
+			limit = {
+				solar_system = {
+					NOT = {
+						has_star_flag = MJ25_WH_songflare_system
+					}
+				}
+			}
+			solar_system = {
+				set_star_flag = MJ25_WH_songflare_system
+				set_star_flag = MJ25_WH_songflare_system@root.owner
+				every_system_planet = {
+					limit = { is_a_habitable_planet_megastructure = yes }
+					set_planet_flag = MJ25_WH_songflare_planet@root.owner
+				}
+				system_event = { id = MJ25_WH_whispers.332 }
+			}
+		}
+	}
+
+	on_destroyed = {
+		solar_system = { 
+			system_event = { id = MJ25_WH_whispers.320 days = 60 }
+		}
+	}
+}
+
+MJ25_WH_auracular_listening_post = {
+	icon = "GFX_spaceport_building_MJ25_WH_auracular_listening_post"
+	construction_days = 360
+
+	potential = {
+		exists = owner
+		owner = { 
+			OR = {
+				has_crisis_perk = MJ25_WH_menp_attuned_arrays  
+				has_country_flag = MJ25_WH_perk_testing
+			}
+		}
+		OR = {
+			is_normal_starbase = yes
+			is_space_citadel = yes
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_starport"
+			OR = {
+				has_starbase_size >= starbase_starport
+				is_space_citadel = yes
+			}
+		}
+		custom_tooltip = {
+			fail_text = "requires_colonized_planet"
+			solar_system = {
+				any_system_colony = {
+					is_owned_by = from
+				}
+			}
+		}
+	}
+
+	resources = {
+		category = starbase_buildings
+		cost = {
+			alloys = 100
+		}
+
+		produces = {
+			trigger = {
+				hidden_trigger = { 
+					exists = this 
+					exists = owner
+					owner = {
+						OR = {
+							has_crisis_perk = MJ25_WH_menp_attuned_arrays 
+							has_country_flag = MJ25_WH_perk_testing
+						}
+					}
+				}
+				has_starbase_module = MJ25_WH_augury_array
+			}
+			MJ25_WH_void_whispers = 1
+			mult = value:num_starbase_modules_of_type|TYPE|MJ25_WH_augury_array|
+		}
+
+		upkeep = {
+			energy = 2
+		}
+	}
+
+	triggered_system_modifier = {
+		potential = {
+			exists = owner
+			owner = { 
+				is_gestalt = yes 
+				OR = {
+					has_crisis_perk = MJ25_WH_menp_attuned_arrays 
+					has_country_flag = MJ25_WH_perk_testing
+				}
+			}
+		}
+		job_MJ25_WH_listener_drone_add = 100
+	}
+
+	triggered_system_modifier = {
+		potential = {
+			exists = owner
+			owner = { 
+				is_gestalt = no 
+				OR = {
+					has_crisis_perk = MJ25_WH_menp_attuned_arrays 
+					has_country_flag = MJ25_WH_perk_testing
+				}
+			}
+		}
+		job_MJ25_WH_listener_add = 100
+	}
+
+	on_finished = {
+		if = {
+			limit = {
+				owner = {
+					NOT = { has_country_flag = MJ25_WH_augury_array_event_happened }
+				}
+			}
+			owner = {
+				set_country_flag = MJ25_WH_augury_array_event_happened
+				country_event = { id = MJ25_WH_whispers.4 days = 30 random = 180}
+			}
+		}
+		if = {
+			limit = {
+				solar_system = {
+					is_star_class = sc_black_hole
+				}
+				owner = {
+					NOT = { has_country_flag = MJ25_WH_black_hole_event_happened }
+				}
+			}
+			owner = {
+				set_country_flag = MJ25_WH_black_hole_event_happened
+				country_event = { id = MJ25_WH_whispers.2009 }
+			}
+		}
+	}
+
+	ai_weight = {
+		weight = 100 #use same weight here - ai weighting is done in starbase_types.txt
+	}
+}

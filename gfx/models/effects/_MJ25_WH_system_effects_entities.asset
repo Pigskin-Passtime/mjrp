@@ -1,0 +1,104 @@
+entity = {
+	name = "MJ25_WH_turbulent_storm_1_entity"
+	pdxmesh = "system_lightning_locations_mesh"
+	scale = 1
+	locator = {		name = "root"	}
+	locator = {		name = "lightning_core_1"	position = { 0 -200 -200 }		 rotation = { 0	0	0}}
+	locator = {		name = "lightning_core_2"	position = { -50 300 -300 }	 rotation = { 50 50 120 }}
+
+#	attach = { "root" = "nebula_core_entity" }
+	attach = { "root" = "MJ25_WH_turbulent_storm_1_base_entity" }
+	attach = { "root" = "MJ25_WH_turbulent_storm_2_entity" }
+#	attach = { "root" = "system_lightning_combined_ani_2_entity" }
+	
+#	default_state = "idle"
+#	state = {		name = "idle"		state_time = 20 looping = yes
+#		event = {	time = 0 	particle = "nebula_core_3_particle"		trigger_once = yes		keep_particle = yes		}
+#		event = {	time = 0 	node = "lightning_core_1" entity = "system_lightning_combined_ani_2_entity"	life = 60 }
+#		event = {	time = 10 	node = "lightning_core_2" entity = "system_lightning_combined_ani_1_entity"	life = 60 }
+#	}
+	
+	default_state = "idle"
+	state = {		name = "idle"		state_time = 35 looping = yes
+		event = {	time = 0 		node = "lightning_01" 	entity = "system_lightning_ani_1_entity"	life = 30	}
+		event = {	time = 4 		node = "lightning_02" 	entity = "system_lightning_ani_2_entity"	life = 30	}
+		event = {	time = 8 		node = "lightning_03" 	entity = "system_lightning_ani_3_entity"	life = 30	}
+		event = {	time = 12 		node = "lightning_04" 	entity = "system_lightning_ani_4_entity"	life = 30	}
+		event = {	time = 17		node = "lightning_05" 	entity = "system_lightning_ani_3_entity"	life = 30	}
+		event = {	time = 21 		node = "lightning_06" 	entity = "system_lightning_ani_1_entity"	life = 30	}
+		event = {	time = 25		node = "lightning_07" 	entity = "system_lightning_ani_3_entity"	life = 30	}
+		event = {	time = 30		node = "lightning_08" 	entity = "system_lightning_ani_2_entity"	life = 30	}
+		event = {	time = 36		node = "lightning_09" 	entity = "system_lightning_ani_3_entity"	life = 30	}
+		event = {	time = 44		node = "lightning_10" 	entity = "system_lightning_ani_1_entity"	life = 30	}
+		event = {	time = 48		node = "lightning_11" 	entity = "system_lightning_ani_3_entity"	life = 30	}
+		event = {	time = 55		node = "lightning_12" 	entity = "system_lightning_ani_4_entity"	life = 30	}
+																											   
+		event = {	time = 1 		node = "lightning_03" 	entity = "system_lightning_ani_1_entity"	life = 30	}
+		event = {	time = 6 		node = "lightning_01" 	entity = "system_lightning_ani_2_entity"	life = 30	}
+		event = {	time = 7 		node = "lightning_02" 	entity = "system_lightning_ani_3_entity"	life = 30	}
+		event = {	time = 11 		node = "lightning_07" 	entity = "system_lightning_ani_4_entity"	life = 30	}
+		event = {	time = 15		node = "lightning_06" 	entity = "system_lightning_ani_3_entity"	life = 30	}
+		event = {	time = 20 		node = "lightning_05" 	entity = "system_lightning_ani_1_entity"	life = 30	}
+		event = {	time = 27		node = "lightning_04" 	entity = "system_lightning_ani_3_entity"	life = 30	}
+		event = {	time = 33		node = "lightning_09" 	entity = "system_lightning_ani_2_entity"	life = 30	}
+		event = {	time = 38		node = "lightning_10" 	entity = "system_lightning_ani_3_entity"	life = 30	}
+		event = {	time = 49		node = "lightning_08" 	entity = "system_lightning_ani_1_entity"	life = 30	}
+		event = {	time = 52		node = "lightning_12" 	entity = "system_lightning_ani_3_entity"	life = 30	}
+		event = {	time = 59		node = "lightning_11" 	entity = "system_lightning_ani_4_entity"	life = 30	}
+
+		start_event = {		trigger_once = yes		sound = { soundeffect = MJ25_WH_songflare_ambient } }
+	
+	}
+	cull_radius = 2000
+}
+
+entity = {
+	name = "MJ25_WH_turbulent_storm_1_base_entity"
+	pdxmesh = "MJ25_WH_turbulent_storm_mesh"
+	locator = { name = "root" }
+	scale = 0.8
+	
+	default_state = "idle"
+	state = {		name = "idle"		state_time = 10 looping = yes
+#		event = {	time = 0 	particle = "nebula_core_3_particle"		trigger_once = yes		keep_particle = yes		}
+	}		
+		game_data = {
+		bloom_factor			= 0.65
+		uv_animation_speed 		= 0.3
+		uv_animation_direction 	= { 0.02 0.00 }
+		}
+}
+
+entity = {
+	name = "MJ25_WH_turbulent_storm_2_entity"
+	locator = { name = "core" position = { 0 -5 0 }}
+	scale = 20
+
+	default_state = "idle"
+	state = { name = "idle" 		state_time = 5
+		event = { time = 0 node = "core" particle = "MJ25_WH_turbulent_storm_2_effect" keep_particle = yes trigger_once = yes }
+		# start_event = { 
+		# 	trigger_once = yes 
+		# 	sound = { soundeffect = "sfx_amb_space_storm_1" } 
+        #     }
+        }
+	
+	cull_radius = 20000
+}
+
+entity = { 
+	name = "MJ25_WH_starmass_explosion_entity"
+	pdxmesh = "system_plane_collision_mesh"
+	
+	default_state = "explode"
+	state = { name = "explode" state_time = 30 looping = no 
+	#next_state = "wait"
+	#	event = { time = 0.0 	particle = "star_explosion_1_effect"  keep_particle = yes trigger_once = no }
+		event = { time = 0.0 	particle = "MJ25_WH_aural_starmass_explosion_effect"  keep_particle = yes trigger_once = no }
+	#	event = { time = .0 	particle = "star_explosion_shockwave_effect"  keep_particle = yes trigger_once = no }
+		event = { trigger_once = yes sound = { soundeffect = "MJ25_starmass_death" } }
+	
+	}
+
+	scale = 15
+}

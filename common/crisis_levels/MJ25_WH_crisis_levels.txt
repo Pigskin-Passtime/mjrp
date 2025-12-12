@@ -1,0 +1,194 @@
+MJ25_WH_crisis_whispers_level_1 = {
+
+	required_crisis_currency = 0
+
+	perks = {
+		MJ25_WH_menp_sound
+		MJ25_WH_menp_attuned_arrays
+		MJ25_WH_menp_congregational
+		MJ25_WH_menp_translators
+	}
+
+	on_unlock = {
+		hidden_effect = {
+			owner = {
+				begin_event_chain = { event_chain = MJ25_WH_whispers_crisis_chain target = this }
+				add_event_chain_counter = {
+					event_chain = "MJ25_WH_whispers_crisis_chain"
+					counter = "crisis_level_reached"
+					amount = 1
+				}
+				country_event = { id = MJ25_WH_whispers.1 days = 3 }
+				country_event = { id = MJ25_WH_whispers.2000 days = 180 random = 360 }
+			}
+		}
+	}
+
+}
+
+MJ25_WH_crisis_whispers_level_2 = {
+
+	required_crisis_currency = 3200
+
+	allow = {
+		custom_tooltip = {
+			success_text = MJ25_WH_site_1_done
+			fail_text = MJ25_WH_site_1_required
+			has_country_flag = MJ25_WH_crisis_site_1_complete
+		}
+	}
+
+	perks = {
+		MJ25_WH_menp_ordo_silencium
+		MJ25_WH_menp_witness
+		MJ25_WH_menp_truthseekers
+	}
+
+	on_unlock = {
+		hidden_effect = {
+			owner = {
+				add_event_chain_counter = {
+					event_chain = "MJ25_WH_whispers_crisis_chain"
+					counter = "crisis_level_reached"
+					amount = 1
+				}
+				country_event = { id = MJ25_WH_whispers.10 days = 3 }
+				enable_special_project = {
+					name = MJ25_WH_sp_shroud_investigation
+				}
+				if = {
+					limit = {
+						has_origin = origin_evolutionary_predators
+					}
+					country_event = { id = MJ25_WH_whispers.3000 }
+				}
+			}
+		}
+	}
+
+}
+
+MJ25_WH_crisis_whispers_level_3 = {
+
+	required_crisis_currency = 8400
+
+	allow = {
+		custom_tooltip = {
+			success_text = MJ25_WH_site_2_done
+			fail_text = MJ25_WH_site_2_required
+			has_country_flag = MJ25_WH_crisis_site_2_complete
+		}
+	}
+
+	perks = {
+		MJ25_WH_menp_auditor
+		MJ25_WH_menp_praetorian
+		MJ25_WH_menp_cloaking
+	}
+
+	on_unlock = {
+		hidden_effect = {
+			owner = {
+				add_event_chain_counter = {
+					event_chain = "MJ25_WH_whispers_crisis_chain"
+					counter = "crisis_level_reached"
+					amount = 1
+				}
+				country_event = { id = MJ25_WH_whispers.20 days = 3 }
+				# add_research_option = tech_MJ25_WH_songflare_lance
+				add_research_option = tech_MJ25_WH_echo_drive
+        # add_research_option = tech_MJ25_WH_whisper_cloak
+				# country_event = { id = MJ25_WH.1160 days = 15 }
+			}
+		}
+	}
+
+}
+
+MJ25_WH_crisis_whispers_level_4 = {
+
+	required_crisis_currency = 21600
+
+	perks = {
+		MJ25_WH_menp_hue
+		MJ25_WH_menp_conductor
+		MJ25_WH_menp_echoic
+		MJ25_WH_menp_deliquescent
+	}
+
+	allow = {
+		custom_tooltip = {
+			success_text = MJ25_WH_site_3_done
+			fail_text = MJ25_WH_site_3_required
+			has_country_flag = MJ25_WH_crisis_site_3_complete
+		}
+	}
+
+	on_unlock = {
+		hidden_effect = {
+			owner = {
+				add_event_chain_counter = {
+					event_chain = "MJ25_WH_whispers_crisis_chain"
+					counter = "crisis_level_reached"
+					amount = 1
+				}
+				country_event = { id = MJ25_WH_whispers.30 days = 3 }
+				# country_event = { id = MJ25_WH.1160 days = 15 }
+				country_event = { id = MJ25_WH_whispers.2021 days = 360 random = 360 }
+			}
+		}
+	}
+}
+
+MJ25_WH_crisis_whispers_level_5 = {
+
+	required_crisis_currency = 47200
+
+	perks = {
+		MJ25_WH_menp_we_are
+		MJ25_WH_menp_stars_scream
+		MJ25_WH_menp_starsong_tide
+		MJ25_WH_menp_massa
+	}
+
+	allow = {
+		custom_tooltip = {
+			success_text = MJ25_WH_site_4_done
+			fail_text = MJ25_WH_site_4_required
+			AND = {
+				has_country_flag = MJ25_WH_crisis_site_4_project_complete
+				has_country_flag = MJ25_WH_finished_hue_situation
+			}
+		}
+	}
+
+	on_unlock = {
+		hidden_effect = {
+			declare_crisis_effect = yes
+			every_playable_country = {
+				limit = {
+					is_galactic_community_member = no
+					NOR = {
+						is_same_value = owner
+						is_at_war_with = owner
+					}
+				}
+				join_war_on_side = {
+					war = event_target:crisis_war
+					side = event_target:community_war_leader
+				}
+			}
+			owner = {
+				add_event_chain_counter = {
+					event_chain = "MJ25_WH_whispers_crisis_chain"
+					counter = "crisis_level_reached"
+					amount = 1
+				}
+				country_event = { id = MJ25_WH_whispers.40 days = 3 }
+				# country_event = { id = MJ25_WH.1160 days = 15 }
+				country_event = { id = MJ25_WH.1120 }
+			}
+		}
+	}
+
+}

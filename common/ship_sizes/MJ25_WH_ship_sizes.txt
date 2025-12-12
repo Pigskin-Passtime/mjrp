@@ -1,0 +1,384 @@
+#reloadable with 'reload stats'
+# This file is where you start when you want to configure something new, then go to sections
+
+####################
+# NOTE FOR MODDERS #
+####################
+# modifier = { } For non-starbase ships, only takes the following modifiers:
+#	hull, shield & armor add/mult and regen add perc/static
+#	evasion add/mult
+#	speed/base speed mult
+#	weapon damage mult
+#	upkeep mult
+#	For other modifiers, use ship_modifier = { }
+# use_shipnames_from = other_size # allows a ship size to use names from another size
+# icon = ship_size_military_1
+		#ship_size_military_1 is default. The following sprite keys are generated from it:
+			#GFX_text_<key>
+			#GFX_<key>
+			#GFX_<key>_top
+			#GFX_<key>_top_damaged
+# icon_frame: now only used for starbases. Value of 2 or more means it shows up on the galaxy map, 1-5 denote which icon it uses on starbase sprite sheets (e.g. gfx/interface/icons/starbase_ship_sizes.dds)
+# ai_ship_data = {					#For determining how many ships the AI wants. Ships it can't recruit (i.e. missing tech prereqs or fails potential_country or possible_country) are pre-filtered out.
+# 	fraction = { }					#As standard, base, modifier = { factor }, etc. The AI will want this divided by the total fraction it is able to recruit. Note: it is the fraction of the naval cap, so the final value is divided by size_multiplier
+#									#Note: if the fraction is > 0, the following lines will not be applied
+#	min = 1							#Sets a minimum absolute number the country will aim to have
+#	system_mult/planet_mult = 0.1	#Adds this amount for each system/planet the country owns. I.e. min + ( num planets * planet_mult ) + ( num systems * system_mult )
+#	max = 5							#Sets a maximum absolute number the country will aim to have. Note that it will still want only the minimum unless you define a system_mult or planet_mult
+#}
+# ship_roles = { name1 name2 } # Show up as selectable roles in the ship designer
+# never_lost = <yes/no> # Removes the chance for the ship size to instantly get killed by emergency ftl. It can still be killed by the random Emergency FTL damage effect.
+# triggered_ship_roles = { { name = test1 trigger = {} } { name = test1 trigger = {} } } # List of triggered ship roles, show up in the ship designer when the trigger is true, executes on country scope
+# evaluation_resource = food # strategic resource to evaluate the cost of a ship design associated with this size
+							 # default is energy
+							 # this is used to determine if a ship design is more advanced than another:
+							 #  the one that costs more is considered an upgrade compared to the cheaper one
+#
+# is_bio_ship = yes					# this indicates that this ship uses bioship mechanic
+# upgrades_to = mauler_stage_2		# the next stage of the bioship growth
+#
+# bioship_growth_progress_required  = 150	# for bioships: growth threshold at which the ship will grow into its next stage
+#                                 			# for hero ships that are NOT bioships: if > 0 this activates the manual growth interface. threshold at which the manual growth is enabled
+#
+# is_hero_ship = yes		 # If yes, ship can't be merged or disbanded, and has a special UI that splits its potential orders into two bars
+#							 # If its combat computer allows it to unlock from combat, it also exposes its actions during combat in the combat view
+#							 # default: no
+#
+# hero_ship_fleet_background = "GFX_fleet_view_behemoth_stage_4"	# Name of sprite to use as a background for Fleet UI for single-ship hero-ship fleets.
+#																	# default: empty (uses default background)
+#
+# custom_state_loc_prefix = "STATUS_LOC_KEY_PREFIX" # for single-ship fleets with a single hero ship, if not empty this activates the status bar on the fleet UI
+#													# the status bar consists of two scripted localization driven strings (scope: selected fleet)
+#													# the localization keys for those two strings result from appending to this prefix "_title" or "_value"
+#													# (in this example, "STATUS_LOC_KEY_PREFIX_title" and "STATUS_LOC_KEY_PREFIX_value")
+#
+# on_click_sound = "sound_clip_name"	# Sound clip to play when selecting a single fleet that contains exclusively a single ship of this size
+# family_name = "bioship_family"		# root for the name used to described the whole set (so "mauler" for bantam mauler, absolute mauler, etc). This is also used to localize the variant (ie mauler_cap, mauler_pluralized, etc) through localization
+# growth_stage_descriptor = "ship_growth_stage_1"	# localization for the growth stage of the current ship size (so "bantam", "absolute", etc.)
+
+
+####################
+
+############
+# STANDARD #
+############
+
+MJ25_WH_silent_witness = {
+	graphical_culture = no
+	formation_priority = @corvette_formation_priority
+	max_speed = @speed_very_fast
+	acceleration = 0.35
+	rotation_speed = 0.1
+	collision_radius = @corvette_collision_radius
+	max_hitpoints = @MJ25_WH_silent_witness_hp
+	modifier = {
+		ship_evasion_add = @MJ25_WH_silent_witness_evasion
+		#ship_piracy_suppression_add = 10
+	}
+	size_multiplier = 1
+	fleet_slot_size = 1
+	section_slots = { "mid" = { locator = "part1" } }
+	num_target_locators = 0
+	is_space_station = no
+	can_have_federation_design = no
+	icon = ship_size_MJ25_WH_witness
+	base_buildtime = @MJ25_WH_silent_witness_build_time
+
+	enable_default_design = yes
+	use_shipnames_from = corvette
+
+	role_background = "GFX_role_selection_corvette"
+	ship_roles = { screen gunship artillery brawler }
+	triggered_ship_roles = {
+		{
+			name = brawler_stealth
+			trigger = { has_technology = tech_cloaking_1 }
+		}
+	}
+
+	default_behavior = swarm
+
+	potential_country = {
+		has_crisis_perk = MJ25_WH_menp_witness
+	}
+
+	combat_disengage_chance = 1.50
+
+	class = shipclass_military
+	construction_type = starbase_shipyard
+	required_component_set = "power_core"
+	required_component_set = "ftl_components"
+	required_component_set = "thruster_components"
+	required_component_set = "sensor_components"
+	required_component_set = "combat_computers"
+	required_component_set = "MJ25_WH_silent_witness_components"
+
+	resources = {
+		category = ships
+		upkeep = {
+			energy = @corvette_upkeep_energy
+			alloys = @corvette_upkeep_alloys
+		}
+		logistics = {
+			trade = @corvette_logistic_upkeep_trade
+		}
+	}
+
+	available_to_everyone = yes
+
+	ai_ship_data = {
+		fraction = 33
+	}
+}
+
+MJ25_WH_conductor = {
+	graphical_culture = no
+	formation_priority = @cruiser_formation_priority
+	max_speed = @speed_fast
+	acceleration = 0.25
+	rotation_speed = 0.175
+	collision_radius = @cruiser_collision_radius
+	max_hitpoints = @MJ25_WH_conductor_hp
+	modifier = {
+		ship_evasion_add = @MJ25_WH_conductor_evasion
+		#ship_piracy_suppression_add = 10
+	}
+	size_multiplier = 8
+	fleet_slot_size = 8
+	section_slots = { "mid" = { locator = "part1" } }
+	num_target_locators = 0
+	is_space_station = no
+	can_have_federation_design = no
+	base_buildtime = @MJ25_WH_conductor_build_time
+
+	enable_default_design = yes
+	use_shipnames_from = battleship
+
+	role_background = "GFX_role_selection_battleship"
+	ship_roles = { artillery carrier gunship }
+
+	default_behavior = artillery
+
+	potential_country = {
+		OR = {
+			has_crisis_perk = MJ25_WH_menp_conductor
+			has_country_flag = MJ25_WH_perk_testing
+		}
+	}
+
+	combat_disengage_chance = 3.00
+
+	class = shipclass_military_special
+	# is_hero_ship = yes
+	custom_state_loc_prefix = "HANGER_STATE"
+	hero_ship_fleet_background = "GFX_fleet_view_MJ25_WH_conductor"
+
+	icon = ship_size_MJ25_WH_conductor
+	on_click_sound = "MJ25_WH_conductor_click_sound"
+	ship_class_icon_frame = 3
+	map_icon_override = {
+		normal = GFX_fleet_presence_MJ25_WH_conductor_icons
+		mixed = GFX_fleet_presence_MJ25_WH_conductor_icons_mixed
+		cloaked = GFX_fleet_presence_MJ25_WH_conductor_icons_cloaked
+	}
+
+	construction_type = starbase_shipyard
+	required_component_set = "power_core"
+	required_component_set = "ftl_components"
+	required_component_set = "thruster_components"
+	required_component_set = "sensor_components"
+	required_component_set = "combat_computers"
+	required_component_set = "MJ25_WH_conductor_components"
+
+	resources = {
+		category = ships
+		upkeep = {
+			energy = @battleship_upkeep_energy
+			alloys = @battleship_upkeep_alloys
+		}
+		logistics = {
+			trade = @battleship_logistic_upkeep_trade
+		}
+	}
+
+	available_to_everyone = yes
+
+	ai_ship_data = {
+		fraction = 33
+	}
+}
+
+MJ25_WH_battlecruiser = {
+	graphical_culture = no
+	formation_priority = @battleship_formation_priority
+	max_speed = @speed_fast
+	acceleration = 0.25
+	rotation_speed = 0.175
+	collision_radius = @battleship_collision_radius
+	max_hitpoints = @MJ25_WH_battlecruiser_hp
+	modifier = {
+		ship_evasion_add = @MJ25_WH_battlecruiser_evasion
+		#ship_piracy_suppression_add = 10
+	}
+	size_multiplier = 4
+	fleet_slot_size = 4
+	section_slots = { "mid" = { locator = "part1" } }
+	num_target_locators = 0
+	is_space_station = no
+	can_have_federation_design = no
+	icon = ship_size_MJ25_WH_praetorian
+	base_buildtime = @MJ25_WH_battlecruiser_build_time
+
+	enable_default_design = yes
+	use_shipnames_from = cruiser
+
+	role_background = "GFX_role_selection_cruiser"
+	ship_roles = { artillery carrier gunship }
+
+	default_behavior = artillery
+
+	potential_country = {
+		has_crisis_perk = MJ25_WH_menp_praetorian
+	}
+
+	combat_disengage_chance = 2.00
+
+	class = shipclass_military
+
+	construction_type = starbase_shipyard
+	required_component_set = "power_core"
+	required_component_set = "ftl_components"
+	required_component_set = "thruster_components"
+	required_component_set = "sensor_components"
+	required_component_set = "combat_computers"
+	required_component_set = "MJ25_WH_battlecruiser_components"
+
+	resources = {
+		category = ships
+		upkeep = {
+			energy = @cruiser_upkeep_energy
+			alloys = @cruiser_upkeep_alloys
+		}
+		logistics = {
+			trade = @cruiser_logistic_upkeep_trade
+		}
+	}
+
+	available_to_everyone = yes
+
+	ai_ship_data = {
+		fraction = 33
+	}
+}
+
+MJ25_WH_aural_starmass = {
+	graphical_culture = no
+	can_be_inspected = no
+	max_speed = @speed_slow
+	acceleration = 0.2
+	rotation_speed = 0.05
+	collision_radius = @titan_collision_radius
+	max_hitpoints = @MJ25_WH_aural_starmass_hp
+	modifier = {
+		ship_evasion_add = @MJ25_WH_aural_starmass_evasion
+		ship_shield_add = @MJ25_WH_aural_starmass_shields
+		ship_shield_regen_add_perc = 0.05
+	}
+	ship_modifier = {
+		ship_weapon_damage = 2
+		ship_fire_rate_mult = 1
+		ship_weapon_range_mult = 0.25
+		ship_tracking_add = 15
+		ship_orbital_bombardment_mult = 10
+	}
+	size_multiplier = 32
+	fleet_slot_size = 8
+	section_slots = { "mid" = { locator = "part1" } }
+	num_target_locators = 0
+	is_space_station = no
+	is_designable = no
+
+	combat_disengage_chance = 0.0
+
+	class = shipclass_military_special
+	icon = ship_size_space_monster
+
+	resources = {
+		category = ships
+		upkeep = {
+			MJ25_WH_void_whispers = 30
+		}
+		logistics = {
+			trade = @colossus_logistic_upkeep_trade
+		}
+	}
+}
+
+MJ25_WH_void_echo = {
+	graphical_culture = no
+	can_be_inspected = no
+	max_speed = @speed_very_fast
+	acceleration = 0.3
+	rotation_speed = 0.25
+	collision_radius = @corvette_collision_radius
+	max_hitpoints = @MJ25_WH_void_echo_hp
+	modifier = {
+		ship_evasion_add = @MJ25_WH_void_echo_evasion
+		ship_shield_add = @MJ25_WH_void_echo_shields
+		ship_shield_regen_add_perc = 0.15
+	}
+	ship_modifier = {
+		ship_weapon_damage = 1.1
+		ship_weapon_range_mult = 0.2
+		ship_tracking_add = 15
+		ship_speed_mult = 0.5
+		ships_upkeep_mult = -1
+		mod_ship_naval_cap_usage_mult = -1
+	}
+	size_multiplier = 1
+	fleet_slot_size = 1
+	section_slots = { "mid" = { locator = "part1" } }
+	num_target_locators = 0
+	is_space_station = no
+	is_designable = no
+
+	combat_disengage_chance = 0.0
+
+	class = shipclass_military
+	icon = ship_size_space_monster
+
+	resources = {
+		category = ships
+		upkeep = {
+			energy = 0.5
+		}
+	}
+}
+
+MJ25_WH_storm_spreader = {
+	graphical_culture = no
+	entity = space_cloud_entity
+	max_speed = 0.0
+	acceleration = 0.0
+	rotation_speed = 0.0
+
+	max_hitpoints = 1000000
+	base_buildtime = 720
+	fleet_slot_size = 2
+	is_designable = no
+	num_target_locators = 0
+	is_space_station = no
+	can_have_federation_design = no
+	is_civilian = no
+	components_add_to_cost = no
+	is_listed = no
+	can_disable = no
+
+	enable_default_design = no	#if yes, countries will have an auto-generated design at start
+	class = shipclass_starbase
+
+	icon_frame = -1
+	icon = ship_size_military_station
+
+	
+}

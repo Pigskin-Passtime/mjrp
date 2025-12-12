@@ -1,0 +1,94 @@
+namespace = grand_archive
+
+system_event = {
+	id = grand_archive.4550
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_system_megastructure = {
+			is_megastructure_type = grand_archive_0
+		}
+		exists = from
+		exists = fromfrom
+		from = { # Subject integration is handled in grand_archive.4570
+			NOT = { is_same_value = root.fromfrom }
+		}
+		##########################
+		# MJ25 WH Songflares, please don't delete my GA...
+		# Kalisalos and Evereal
+		##########################
+		NOT = { has_star_flag = MJ25_WH_no_delete_GA }
+	}
+
+	immediate = {
+		every_system_megastructure = {
+			limit = { is_megastructure_type = grand_archive_0 }
+			if = {
+				limit = { exists = planet }
+				planet = {
+					remove_planet_flag = has_megastructure
+					save_event_target_as = grand_archive_location
+				}
+			}
+			else = {
+				prev = { save_event_target_as = grand_archive_location }
+			}
+			remove_megastructure = this
+		}
+		fromfrom = {
+			# Cleanup
+			remove_country_flag = ga_destroyed_contains_specimen
+			remove_country_flag = ga_destroyed_contains_space_fauna
+
+			if = {
+				limit = { any_exhibit = { contains_specimen = yes } }
+				set_country_flag = ga_destroyed_contains_specimen
+			}
+			if = {
+				limit = { num_vivarium_slots > 0 }
+				set_country_flag = ga_destroyed_contains_space_fauna
+			}
+			set_country_flag = grand_archive_destroyed
+		}
+		if = {
+			limit = {
+				fromfrom = { has_country_flag = grand_archive_system_disabled }
+			}
+			fromfrom = {
+				if = {
+					limit = { has_country_flag = ga_destroyed_contains_space_fauna }
+					release_all_vivarium_fauna = { LOCATION = event_target:grand_archive_location }
+				}
+			}
+			from = {
+				country_event = {
+					id = grand_archive.4505
+					scopes = {
+						from = root.fromfrom
+						fromfrom = root
+					}
+				}
+			}
+		}
+		else = {
+			from = {
+				country_event = {
+					id = grand_archive.4555
+					scopes = {
+						from = root.fromfrom
+						fromfrom = root
+					}
+				}
+			}
+			fromfrom = {
+				country_event = {
+					id = grand_archive.4560
+					scopes = {
+						from = root
+					}
+				}
+			}
+		}
+	}
+}

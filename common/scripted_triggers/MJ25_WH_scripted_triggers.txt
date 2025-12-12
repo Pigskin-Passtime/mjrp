@@ -1,0 +1,81 @@
+can_destroy_planet_with_MJ25_WH_CONDUCTOR_DEVICE = {
+    custom_tooltip = {
+        fail_text = MJ25_WH_must_be_colonised
+        AND = { # colony
+            exists = owner
+            NOT = { is_under_colonization = yes }
+        }
+    }
+    custom_tooltip = {
+		fail_text = is_shielded
+		NOR = {
+			is_planet_class = pc_shielded
+			is_planet_class = pc_ringworld_shielded
+			is_planet_class = pc_habitat_shielded
+		}
+	}
+    custom_tooltip = {
+		fail_text = lathe_cant_colossus
+		NOT = { is_planet_class = pc_cosmogenesis_world }
+	}
+    custom_tooltip = {
+		fail_text = fotd_cant_collossus
+		NOT = { has_planet_flag = fotd_seperatist_planet@from.owner }
+		exists = from.owner
+		from.owner = { 
+			NOT = { has_country_flag = fotd_seperatist_country@from.owner }
+		}
+	}
+	custom_tooltip = {
+		fail_text = MJ25_WH_cant_target_own_colony
+		NAND = {
+			exists = owner
+			owner = {
+				is_same_value = from.owner
+			}
+		}
+	}
+}
+
+has_truthcursed_trait = {
+	has_trait = MJ25_WH_trait_truthcursed
+}
+
+has_anchor_trait = {
+	OR = {
+		has_trait = MJ25_WH_leader_trait_resolute_anchor
+		has_trait = MJ25_WH_leader_trait_songblessed_anchor
+		has_trait = MJ25_WH_leader_trait_errant_anchor
+	}
+}
+
+has_wordbearer_trait = {
+	OR = {
+		has_trait = MJ25_WH_word_bearer
+		has_trait = MJ25_WH_word_bearer_gestalt
+	}
+}
+
+has_wordbearer_leader_trait = {
+	has_trait = MJ25_WH_leader_trait_thoughtsickness
+}
+
+has_starsongvessel_trait = {
+	OR = {
+		has_trait = MJ25_WH_trait_starsong_vessel_gestalt
+		has_trait = MJ25_WH_trait_starsong_vessel
+	}
+}
+
+has_starsongvessel_leader_trait = {
+	OR = {
+		has_trait = MJ25_WH_leader_trait_songtouched
+		owner = {
+			has_crisis_level = MJ25_WH_crisis_whispers_level_5
+		}
+	}
+}
+
+has_thoughtsickness2_trait = {
+	has_trait = MJ25_WH_leader_trait_thoughtsickness_2
+}

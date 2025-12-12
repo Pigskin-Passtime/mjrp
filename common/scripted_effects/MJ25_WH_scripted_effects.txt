@@ -1,0 +1,1780 @@
+#	Example:
+#
+#	example_effect = {
+#		add_resource = { energy = -100 }
+#	}
+#
+#
+#	In a script file:
+#
+#	effect = {
+#		example_effect = yes
+#	}
+#
+
+MJ25_WH_create_storm = {
+	add_modifier = {
+		modifier = nebula_cloaking
+		days = -1
+	}
+	star = {
+		create_ambient_object = {
+			type = "MJ25_WH_space_storm_1"
+			location = this
+			duration = -1
+		}
+	}
+}
+
+MJ25_WH_remove_storm = {
+	every_system_ambient_object = {
+		limit = {
+			is_ambient_object_type = MJ25_WH_space_storm_1
+		}
+		destroy_ambient_object = this
+	}
+	if = {
+		limit = { has_modifier = nebula_cloaking }
+		remove_modifier = nebula_cloaking
+	}
+}
+
+MJ25_WH_create_timed_hostile_storm = {
+	add_modifier = {
+		modifier = MJ25_WH_storm_hostile_debuff
+		days = 300
+	}
+	star = {
+		create_ambient_object = {
+			type = "MJ25_WH_space_storm_1"
+			location = this
+			duration = 300
+		}
+	}
+}
+
+MJ25_WH_delete_planet_absorb_pops = {
+	save_event_target_as = MJ25_WH_target_temp
+	export_trigger_value_to_variable = {
+		trigger = count_owned_pop_amount
+		variable = MJ25_WH_absorbed_pops
+		rounded = yes
+	}
+	every_playable_country = {
+		limit = { has_country_flag = MJ25_WH_crisis_site_4_complete }
+
+		#Additional check to keep values of absorbed pops per empire
+		if = {
+			limit = {
+				root = {
+					has_planet_flag = MJ25_WH_songflare_planet@prev
+				}
+			}
+			if = {
+				limit = {
+					NOT = { is_variable_set = MJ25_WH_voices_counter }
+				}
+				set_variable = { which = MJ25_WH_voices_counter value = 0 }
+			}
+			change_variable = { which = MJ25_WH_voices_counter value = prev.MJ25_WH_absorbed_pops }
+			if = {
+				limit = {
+					NOT = {
+						has_country_flag = MJ25_WH_planet_collapsed_initiator_event_seen
+					}
+				}
+				set_country_flag = MJ25_WH_planet_collapsed_initiator_event_seen
+				country_event = { id = MJ25_WH_whispers.2007 }
+			}
+			create_message = {
+				type = MJ25_WH_POPS_ABSORBED
+				localization =  MJ25_WH_POPS_ABSORBED_DESC
+				days = @toast_message_days
+				target = root
+				variable = {
+					type = variable
+					varname = MJ25_WH_absorbed_pops
+					localization = VALUE
+					scope = prev
+				}
+			}
+		}
+	}
+	owner = {
+		create_message = {
+			type = MJ25_WH_PLANET_DISAPPEARED
+			localization = MJ25_WH_PLANET_DISAPPEARED_DESC
+			days = 30
+			target = event_target:MJ25_WH_target_temp
+			variable = {
+				type = name
+				localization = SYSTEM
+				scope = event_target:MJ25_WH_target_temp
+			}
+		}
+		if = {
+			limit = {
+				NOR = { 
+					has_country_flag = MJ25_WH_planet_collapsed_event_seen
+					has_ascension_perk = MJ25_WH_ap_whispers
+				}
+			}
+			set_country_flag = MJ25_WH_planet_collapsed_event_seen
+			prev = {
+				planet_event = { id = MJ25_WH_whispers.2008 }
+			}
+		}
+	}
+	if = {
+		limit = {
+			exists = orbital_defence
+		}
+		destroy_fleet = orbital_defence
+	}
+	if = {
+		limit = {
+			exists = orbital_station
+		}
+		orbital_station = { dismantle = yes }
+	}
+	clear_deposits = yes
+	clear_planet_modifiers = yes
+	prevent_anomaly = yes
+	remove_all_buildings = yes
+	destroy_colony = yes
+	change_pc = pc_MJ25_WH_missing_planet
+	#remove_planet = yes
+}
+
+MJ25_WH_site_howling_fen_random_events = {
+	random_list = {
+		3 = { fleet_event = { id = MJ25_WH_sites.360 }}
+		5 = { fleet_event = { id = MJ25_WH_sites.361 }}
+		7 = { fleet_event = { id = MJ25_WH_sites.362 }}
+	}
+}
+
+MJ25_WH_site_starsong_cradle_random_events = {
+	random_list = {
+		3 = { fleet_event = { id = MJ25_WH_sites.460 }}
+		5 = { fleet_event = { id = MJ25_WH_sites.461 }}
+		5 = { fleet_event = { id = MJ25_WH_sites.462 }}
+		7 = { fleet_event = { id = MJ25_WH_sites.463 }}
+	}
+}
+
+MJ25_WH_mutate_pops_word_bearer = {
+
+	save_event_target_as = MJ25_WH_planet
+	root = { 
+		set_variable = { which = MJ25_WH_num_mutated_pops_message value = 0 }
+	}
+	set_variable = { which = MJ25_WH_num_counter value = $NUM_POPS$ }
+	
+
+	export_trigger_value_to_variable = {
+		trigger = count_owned_pop_amount
+		parameters = {
+			limit = {
+				is_sapient = yes
+				NOT = { pop_group_has_trait = MJ25_WH_word_bearer }
+				NOT = { pop_group_has_trait = MJ25_WH_trait_truthcursed }
+			}
+		}
+		variable = MJ25_WH_num_pops_temp
+		rounded = yes
+	}
+
+	if = {
+		limit = {
+			check_variable = {
+				which = MJ25_WH_num_pops_temp
+				value > This.MJ25_WH_num_counter
+			}
+		}
+
+		while = {
+			limit = {
+				check_variable = {
+					which = MJ25_WH_num_counter
+					value > 0
+				}
+			}
+			weighted_random_owned_pop_group = {
+				limit = {
+					NOT = { pop_group_has_trait = MJ25_WH_word_bearer }
+					NOT = { pop_group_has_trait = MJ25_WH_trait_truthcursed }
+				}
+				save_event_target_as = MJ25_WH_og_group
+			}
+			if = {
+				limit = {
+					any_owned_pop_group = {
+						has_pop_group_flag = MJ25_WH_wordbearer@event_target:MJ25_WH_og_group.species
+					}
+				}
+				random_owned_pop_group = {
+					limit = {
+						has_pop_group_flag = MJ25_WH_wordbearer@event_target:MJ25_WH_og_group.species
+					}
+					save_event_target_as = MJ25_WH_group_to_mutate
+				}
+			}
+			else = {
+				create_pop_group = {
+					species = event_target:MJ25_WH_og_group.species
+					size = 0
+					effect = {
+						set_pop_group_flag = MJ25_WH_wordbearer@event_target:MJ25_WH_og_group.species
+						save_event_target_as = MJ25_WH_group_to_mutate
+						# species = {
+						# 	set_species_flag = cannot_think
+						# }
+						if = {
+							limit = { pop_has_happiness = yes }
+							modify_species = {
+								add_trait = MJ25_WH_word_bearer
+							}
+						}
+						else = {
+							modify_species = {
+								add_trait = MJ25_WH_word_bearer_gestalt
+							}
+						}
+						
+					}
+				}
+			}
+
+			export_trigger_value_to_variable = {
+				trigger = count_owned_pop_amount
+				parameters = {
+					limit = {
+						is_same_value = event_target:MJ25_WH_og_group
+					}
+				}
+				variable = MJ25_WH_num_pops_temp
+				rounded = yes
+			}
+
+			event_target:MJ25_WH_group_to_mutate = {
+
+				set_variable = { which = MJ25_WH_num_pops value = prev.MJ25_WH_num_pops_temp }
+				if = {
+					limit = {
+						check_variable = { which = MJ25_WH_num_pops value > prev.MJ25_WH_num_counter }
+					}
+					set_variable = { which = MJ25_WH_num_pops value = prev.MJ25_WH_num_counter }
+				}
+
+				
+				root = {
+					change_variable = { which = MJ25_WH_num_mutated_pops_message value = prev.MJ25_WH_num_pops }
+				}
+				
+
+
+				transfer_pop_amount = {
+					source = event_target:MJ25_WH_og_group
+					target = event_target:MJ25_WH_group_to_mutate
+					amount = MJ25_WH_num_pops
+				}
+
+				prev = {
+					subtract_variable = { which = MJ25_WH_num_counter value = prev.MJ25_WH_num_pops }
+				}
+				
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			count_owned_pop_amount = {
+				limit = {
+					is_sapient = yes
+					NOT = { pop_group_has_trait = MJ25_WH_word_bearer }
+					NOT = { pop_group_has_trait = MJ25_WH_trait_truthcursed }
+				}
+				count > 0
+			}
+		}
+		
+		weighted_random_owned_pop_group = {
+			limit = {
+				NOT = { pop_group_has_trait = MJ25_WH_word_bearer }
+				NOT = { pop_group_has_trait = MJ25_WH_trait_truthcursed }
+			}
+			save_event_target_as = MJ25_WH_og_group
+		}
+		if = {
+			limit = {
+				any_owned_pop_group = {
+					has_pop_group_flag = MJ25_WH_wordbearer@event_target:MJ25_WH_og_group.species
+				}
+			}
+			random_owned_pop_group = {
+				limit = {
+					has_pop_group_flag = MJ25_WH_wordbearer@event_target:MJ25_WH_og_group.species
+				}
+				save_event_target_as = MJ25_WH_group_to_mutate
+			}
+		}
+		else = {
+			create_pop_group = {
+				species = event_target:MJ25_WH_og_group.species
+				size = 0
+				effect = {
+					set_pop_group_flag = MJ25_WH_wordbearer@event_target:MJ25_WH_og_group.species
+					save_event_target_as = MJ25_WH_group_to_mutate
+					# species = {
+					# 	set_species_flag = cannot_think
+					# }
+					if = {
+						limit = { pop_has_happiness = yes }
+						modify_species = {
+							add_trait = MJ25_WH_word_bearer
+						}
+					}
+					else = {
+						modify_species = {
+							add_trait = MJ25_WH_word_bearer_gestalt
+						}
+					}
+				}
+			}
+		}
+		every_owned_pop_group = {
+			limit = {
+				NOT = { pop_group_has_trait = MJ25_WH_word_bearer }
+				NOT = { pop_group_has_trait = MJ25_WH_trait_truthcursed }
+			}
+			save_event_target_as = MJ25_WH_og_group
+
+			root = {
+				export_trigger_value_to_variable = {
+					trigger = count_owned_pop_amount
+					parameters = {
+						limit = {
+							is_same_value = event_target:MJ25_WH_og_group
+						}
+					}
+					variable = MJ25_WH_num_pops_temp
+					rounded = yes
+				}
+			}
+			
+
+			event_target:MJ25_WH_group_to_mutate = {
+
+				set_variable = { which = MJ25_WH_num_pops value = root.MJ25_WH_num_pops_temp }
+				
+				root = {
+					change_variable = { which = MJ25_WH_num_mutated_pops_message value = prev.MJ25_WH_num_pops }
+				}
+
+				transfer_pop_amount = {
+					source = event_target:MJ25_WH_og_group
+					target = event_target:MJ25_WH_group_to_mutate
+					amount = MJ25_WH_num_pops
+				}
+			}
+		}
+	}
+
+	root = {
+		if = {
+			limit = { check_variable = { which = MJ25_WH_num_mutated_pops_message value > 0 } }
+			create_message = {
+				type = MJ25_WH_POPS_MUTATED
+				localization = MJ25_WH_POPS_MUTATED_WORD_BEARER_DESC
+				days = 30
+				target = this
+				variable = {
+					type = name
+					localization = PLANET
+					scope = root
+				}
+				variable = {
+					type = variable
+					varname = MJ25_WH_num_mutated_pops_message
+					localization = VALUE
+					scope = this
+				}
+			}
+			owner = {
+				if = {
+					limit = {
+						has_ascension_perk = MJ25_WH_ap_whispers
+					}
+					set_variable = {
+						which = MJ25_WH_mutations
+						value = prev.MJ25_WH_num_mutated_pops_message
+					}
+					multiply_variable = {
+						which = MJ25_WH_mutations
+						value = 0.25
+					}
+					complete_crisis_objective = MJ25_WH_crisobj_enlighten_pops
+				}
+			}
+		}
+	}
+}
+
+MJ25_WH_mutate_pops_starsong_vessel = {
+
+	save_event_target_as = MJ25_WH_planet
+	root = { 
+		set_variable = { which = MJ25_WH_num_mutated_pops_message value = 0 }
+	}
+	set_variable = { which = MJ25_WH_num_counter value = $NUM_POPS$ }
+	
+
+	export_trigger_value_to_variable = {
+		trigger = count_owned_pop_amount
+		parameters = {
+			limit = {
+				is_sapient = yes
+				NOT = { pop_group_has_trait = MJ25_WH_trait_starsong_vessel }
+			}
+		}
+		variable = MJ25_WH_num_pops_temp
+		rounded = yes
+	}
+
+	if = {
+		limit = {
+			check_variable = {
+				which = MJ25_WH_num_pops_temp
+				value > This.MJ25_WH_num_counter
+			}
+		}
+
+		while = {
+			limit = {
+				check_variable = {
+					which = MJ25_WH_num_counter
+					value > 0
+				}
+			}
+			weighted_random_owned_pop_group = {
+				limit = {
+					NOT = { pop_group_has_trait = MJ25_WH_trait_starsong_vessel }
+				}
+				save_event_target_as = MJ25_WH_og_group
+			}
+			if = {
+				limit = {
+					any_owned_pop_group = {
+						has_pop_group_flag = MJ25_WH_wordbearer@event_target:MJ25_WH_og_group.species
+					}
+				}
+				random_owned_pop_group = {
+					limit = {
+						has_pop_group_flag = MJ25_WH_wordbearer@event_target:MJ25_WH_og_group.species
+					}
+					save_event_target_as = MJ25_WH_group_to_mutate
+				}
+			}
+			else = {
+				create_pop_group = {
+					species = event_target:MJ25_WH_og_group.species
+					size = 0
+					effect = {
+						set_pop_group_flag = MJ25_WH_wordbearer@event_target:MJ25_WH_og_group.species
+						save_event_target_as = MJ25_WH_group_to_mutate
+						if = {
+							limit = { pop_has_happiness = yes }
+							modify_species = {
+								add_trait = MJ25_WH_trait_starsong_vessel
+							}
+						}
+						else = {
+							modify_species = {
+								add_trait = MJ25_WH_trait_starsong_vessel_gestalt
+							}
+						}
+					}
+				}
+			}
+
+			export_trigger_value_to_variable = {
+				trigger = count_owned_pop_amount
+				parameters = {
+					limit = {
+						is_same_value = event_target:MJ25_WH_og_group
+					}
+				}
+				variable = MJ25_WH_num_pops_temp
+				rounded = yes
+			}
+
+			event_target:MJ25_WH_group_to_mutate = {
+
+				set_variable = { which = MJ25_WH_num_pops value = prev.MJ25_WH_num_pops_temp }
+				if = {
+					limit = {
+						check_variable = { which = MJ25_WH_num_pops value > prev.MJ25_WH_num_counter }
+					}
+					set_variable = { which = MJ25_WH_num_pops value = prev.MJ25_WH_num_counter }
+				}
+
+				
+				root = {
+					change_variable = { which = MJ25_WH_num_mutated_pops_message value = prev.MJ25_WH_num_pops }
+				}
+				
+
+
+				transfer_pop_amount = {
+					source = event_target:MJ25_WH_og_group
+					target = event_target:MJ25_WH_group_to_mutate
+					amount = MJ25_WH_num_pops
+				}
+
+				prev = {
+					subtract_variable = { which = MJ25_WH_num_counter value = prev.MJ25_WH_num_pops }
+				}
+				
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			count_owned_pop_amount = {
+				limit = {
+					is_sapient = yes
+					NOT = { pop_group_has_trait = MJ25_WH_trait_starsong_vessel }
+				}
+				count > 0
+			}
+		}
+		
+		weighted_random_owned_pop_group = {
+			limit = {
+				NOT = { pop_group_has_trait = MJ25_WH_trait_starsong_vessel }
+			}
+			save_event_target_as = MJ25_WH_og_group
+		}
+		if = {
+			limit = {
+				any_owned_pop_group = {
+					has_pop_group_flag = MJ25_WH_wordbearer@event_target:MJ25_WH_og_group.species
+				}
+			}
+			random_owned_pop_group = {
+				limit = {
+					has_pop_group_flag = MJ25_WH_wordbearer@event_target:MJ25_WH_og_group.species
+				}
+				save_event_target_as = MJ25_WH_group_to_mutate
+			}
+		}
+		else = {
+			create_pop_group = {
+				species = event_target:MJ25_WH_og_group.species
+				size = 0
+				effect = {
+					set_pop_group_flag = MJ25_WH_wordbearer@event_target:MJ25_WH_og_group.species
+					save_event_target_as = MJ25_WH_group_to_mutate
+					if = {
+						limit = { pop_has_happiness = yes }
+						modify_species = {
+							add_trait = MJ25_WH_trait_starsong_vessel
+						}
+					}
+					else = {
+						modify_species = {
+							add_trait = MJ25_WH_trait_starsong_vessel_gestalt
+						}
+					}
+				}
+			}
+		}
+		every_owned_pop_group = {
+			limit = {
+				NOT = { pop_group_has_trait = MJ25_WH_trait_starsong_vessel }
+			}
+			save_event_target_as = MJ25_WH_og_group
+
+			root = {
+				export_trigger_value_to_variable = {
+					trigger = count_owned_pop_amount
+					parameters = {
+						limit = {
+							is_same_value = event_target:MJ25_WH_og_group
+						}
+					}
+					variable = MJ25_WH_num_pops_temp
+					rounded = yes
+				}
+			}
+			
+
+			event_target:MJ25_WH_group_to_mutate = {
+
+				set_variable = { which = MJ25_WH_num_pops value = root.MJ25_WH_num_pops_temp }
+				
+				root = {
+					change_variable = { which = MJ25_WH_num_mutated_pops_message value = prev.MJ25_WH_num_pops }
+				}
+				
+				transfer_pop_amount = {
+					source = event_target:MJ25_WH_og_group
+					target = event_target:MJ25_WH_group_to_mutate
+					amount = MJ25_WH_num_pops
+				}
+			}
+		}
+		
+		
+		
+	}
+
+	root = {
+		if = {
+			limit = { check_variable = { which = MJ25_WH_num_mutated_pops_message value > 0 } }
+			create_message = {
+				type = MJ25_WH_POPS_MUTATED
+				localization = MJ25_WH_POPS_MUTATED_STARSONG_VESSEL_DESC
+				days = 30
+				target = this
+				variable = {
+					type = name
+					localization = PLANET
+					scope = root
+				}
+				variable = {
+					type = variable
+					varname = MJ25_WH_num_mutated_pops_message
+					localization = VALUE
+					scope = this
+				}
+			}
+			owner = {
+				if = {
+					limit = {
+						has_ascension_perk = MJ25_WH_ap_whispers
+					}
+					set_variable = {
+						which = MJ25_WH_mutations
+						value = prev.MJ25_WH_num_mutated_pops_message
+					}
+					multiply_variable = {
+						which = MJ25_WH_mutations
+						value = 0.25
+					}
+					complete_crisis_objective = MJ25_WH_crisobj_enlighten_pops
+				}
+			}
+		}
+	}
+}
+
+
+
+
+
+# MJ25_WH_mutate_pops_truthcursed = {
+
+# 	save_event_target_as = MJ25_WH_planet
+# 	root = { 
+# 		set_variable = { which = MJ25_WH_num_mutated_pops_message value = 0 }
+# 	}
+# 	set_variable = { which = MJ25_WH_num_counter value = $NUM_POPS$ }
+	
+
+# 	export_trigger_value_to_variable = {
+# 		trigger = count_owned_pop_amount
+# 		parameters = {
+# 			limit = {
+# 				is_sapient = yes
+# 				NOT = { pop_group_has_trait = MJ25_WH_trait_truthcursed }
+# 			}
+# 		}
+# 		variable = MJ25_WH_num_pops_temp
+# 		rounded = yes
+# 	}
+
+# 	if = {
+# 		limit = {
+# 			check_variable = {
+# 				which = MJ25_WH_num_pops_temp
+# 				value > This.MJ25_WH_num_counter
+# 			}
+# 		}
+
+# 		while = {
+# 			limit = {
+# 				check_variable = {
+# 					which = MJ25_WH_num_counter
+# 					value > 0
+# 				}
+# 			}
+# 			weighted_random_owned_pop_group = {
+# 				limit = {
+# 					NOT = { pop_group_has_trait = MJ25_WH_trait_truthcursed }
+# 				}
+# 				save_event_target_as = MJ25_WH_og_group
+# 			}
+# 			if = {
+# 				limit = {
+# 					any_owned_pop_group = {
+# 						has_pop_group_flag = MJ25_WH_wordbearer@event_target:MJ25_WH_og_group.species
+# 					}
+# 				}
+# 				random_owned_pop_group = {
+# 					limit = {
+# 						has_pop_group_flag = MJ25_WH_wordbearer@event_target:MJ25_WH_og_group.species
+# 					}
+# 					save_event_target_as = MJ25_WH_group_to_mutate
+# 				}
+# 			}
+# 			else = {
+# 				create_pop_group = {
+# 					species = event_target:MJ25_WH_og_group.species
+# 					size = 0
+# 					effect = {
+# 						set_pop_group_flag = MJ25_WH_wordbearer@event_target:MJ25_WH_og_group.species
+# 						save_event_target_as = MJ25_WH_group_to_mutate
+# 						modify_species = {
+# 							add_trait = MJ25_WH_trait_truthcursed
+# 						}
+# 					}
+# 				}
+# 			}
+
+# 			export_trigger_value_to_variable = {
+# 				trigger = count_owned_pop_amount
+# 				parameters = {
+# 					limit = {
+# 						is_same_value = event_target:MJ25_WH_og_group
+# 					}
+# 				}
+# 				variable = MJ25_WH_num_pops_temp
+# 				rounded = yes
+# 			}
+
+# 			event_target:MJ25_WH_group_to_mutate = {
+
+# 				set_variable = { which = MJ25_WH_num_pops value = prev.MJ25_WH_num_pops_temp }
+# 				if = {
+# 					limit = {
+# 						check_variable = { which = MJ25_WH_num_pops value > prev.MJ25_WH_num_counter }
+# 					}
+# 					set_variable = { which = MJ25_WH_num_pops value = prev.MJ25_WH_num_counter }
+# 				}
+
+				
+# 				root = {
+# 					change_variable = { which = MJ25_WH_num_mutated_pops_message value = prev.MJ25_WH_num_pops }
+# 				}
+				
+
+
+# 				transfer_pop_amount = {
+# 					source = event_target:MJ25_WH_og_group
+# 					target = event_target:MJ25_WH_group_to_mutate
+# 					amount = MJ25_WH_num_pops
+# 				}
+
+# 				prev = {
+# 					subtract_variable = { which = MJ25_WH_num_counter value = prev.MJ25_WH_num_pops }
+# 				}
+				
+# 			}
+# 		}
+# 	}
+# 	else_if = {
+# 		limit = {
+# 			count_owned_pop_amount = {
+# 				limit = {
+# 					is_sapient = yes
+# 					NOT = { pop_group_has_trait = MJ25_WH_trait_truthcursed }
+# 				}
+# 				count > 0
+# 			}
+# 		}
+		
+# 		weighted_random_owned_pop_group = {
+# 			limit = {
+# 				NOT = { pop_group_has_trait = MJ25_WH_trait_truthcursed }
+# 			}
+# 			save_event_target_as = MJ25_WH_og_group
+# 		}
+# 		if = {
+# 			limit = {
+# 				any_owned_pop_group = {
+# 					has_pop_group_flag = MJ25_WH_wordbearer@event_target:MJ25_WH_og_group.species
+# 				}
+# 			}
+# 			random_owned_pop_group = {
+# 				limit = {
+# 					has_pop_group_flag = MJ25_WH_wordbearer@event_target:MJ25_WH_og_group.species
+# 				}
+# 				save_event_target_as = MJ25_WH_group_to_mutate
+# 			}
+# 		}
+# 		else = {
+# 			create_pop_group = {
+# 				species = event_target:MJ25_WH_og_group.species
+# 				size = 0
+# 				effect = {
+# 					set_pop_group_flag = MJ25_WH_wordbearer@event_target:MJ25_WH_og_group.species
+# 					save_event_target_as = MJ25_WH_group_to_mutate
+# 					modify_species = {
+# 						add_trait = MJ25_WH_trait_truthcursed
+# 					}
+# 				}
+# 			}
+# 		}
+# 		every_owned_pop_group = {
+# 			limit = {
+# 				NOT = { pop_group_has_trait = MJ25_WH_trait_truthcursed }
+# 			}
+# 			save_event_target_as = MJ25_WH_og_group
+# 			event_target:MJ25_WH_group_to_mutate = {
+# 				transfer_pop_amount = {
+# 					source = event_target:MJ25_WH_og_group
+# 					target = event_target:MJ25_WH_group_to_mutate
+# 					amount = @MJ25_WH_truthcurse_num_pops
+# 				}
+# 			}
+
+# 			root = {
+# 				export_trigger_value_to_variable = {
+# 					trigger = count_owned_pop_amount
+# 					parameters = {
+# 						limit = {
+# 							is_same_value = event_target:MJ25_WH_og_group
+# 						}
+# 					}
+# 					variable = MJ25_WH_num_pops_temp
+# 					rounded = yes
+# 				}
+# 			}
+			
+
+# 			event_target:MJ25_WH_group_to_mutate = {
+
+# 				set_variable = { which = MJ25_WH_num_pops value = root.MJ25_WH_num_pops_temp }
+				
+# 				root = {
+# 					change_variable = { which = MJ25_WH_num_mutated_pops_message value = prev.MJ25_WH_num_pops }
+# 				}
+
+# 				transfer_pop_amount = {
+# 					source = event_target:MJ25_WH_og_group
+# 					target = event_target:MJ25_WH_group_to_mutate
+# 					amount = MJ25_WH_num_pops
+# 				}
+# 			}
+# 		}
+		
+		
+		
+# 	}
+
+# 	root = {
+# 		if = {
+# 			limit = { check_variable = { which = MJ25_WH_num_mutated_pops_message value > 0 } }
+# 			create_message = {
+# 				type = MJ25_WH_POPS_MUTATED
+# 				localization = MJ25_WH_POPS_MUTATED_STARSONG_VESSEL_DESC
+# 				days = 30
+# 				target = this
+# 				variable = {
+# 					type = name
+# 					localization = PLANET
+# 					scope = root
+# 				}
+# 				variable = {
+# 					type = variable
+# 					varname = MJ25_WH_num_mutated_pops_message
+# 					localization = VALUE
+# 					scope = this
+# 				}
+# 			}
+# 		}
+# 	}
+# }
+
+
+@MJ25_WH_truthcurse_num_pops = 300
+
+MJ25_WH_mutate_pops_truthcursed = {
+	weighted_random_owned_pop_group = {
+		limit = {
+			pop_group_size > @MJ25_WH_truthcurse_num_pops
+		}
+		save_event_target_as = MJ25_WH_og_group
+	}
+	if = {
+		limit = {
+			NOT = { exists = event_target:MJ25_WH_og_group }
+		}
+		weighted_random_owned_pop_group = {
+			save_event_target_as = MJ25_WH_og_group
+		}
+	}
+	if = {
+		limit = {
+			any_owned_pop_group = {
+				has_pop_group_flag = MJ25_WH_truthcursed@event_target:MJ25_WH_og_group.species
+			}
+		}
+		random_owned_pop_group = {
+			limit = {
+				has_pop_group_flag = MJ25_WH_truthcursed@event_target:MJ25_WH_og_group.species
+			}
+			save_event_target_as = MJ25_WH_group_to_mutate
+		}
+	}
+	else = {
+		create_pop_group = {
+			species = event_target:MJ25_WH_og_group.species
+			size = 0
+			effect = {
+				set_pop_group_flag = MJ25_WH_truthcursed@event_target:MJ25_WH_og_group.species
+				save_event_target_as = MJ25_WH_group_to_mutate
+				if = {
+					limit = { pop_has_happiness = yes }
+					modify_species = {
+						add_trait = MJ25_WH_trait_truthcursed
+					}
+				}
+				else = {
+					modify_species = {
+						add_trait = MJ25_WH_trait_truthcursed_gestalt
+					}
+				}
+			}
+		}
+	}
+	event_target:MJ25_WH_group_to_mutate = {
+		transfer_pop_amount = {
+			source = event_target:MJ25_WH_og_group
+			target = event_target:MJ25_WH_group_to_mutate
+			amount = @MJ25_WH_truthcurse_num_pops
+		}
+	}
+}
+
+# MJ25_WH_mutate_pops_truth_cursed = {
+# 	save_event_target_as = MJ25_WH_planet
+
+# 	root = { set_variable = { which = MJ25_WH_num_mutated_pops_message value = 0 } }
+
+# 	if = {
+# 		limit = {
+# 			count_owned_pop_amount = {
+# 				limit = {
+# 					is_sapient = yes
+# 					NOT = { pop_group_has_trait = MJ25_WH_word_bearer }
+# 					NOT = { pop_group_has_trait = MJ25_WH_trait_truthcursed }
+# 				}
+# 				count >= $NUM_POPS$
+# 			}
+# 		}
+# 		while = {
+# 			limit = {
+# 				check_variable_arithmetic = {
+# 					which = $NUM_POPS$
+# 					value > 0
+# 				}
+# 			}
+# 			weighted_random_owned_pop_group = {
+# 				limit = {
+# 					is_sapient = yes
+# 					NOT = { pop_group_has_trait = MJ25_WH_word_bearer }
+# 					NOT = { pop_group_has_trait = MJ25_WH_trait_truthcursed }
+# 				}
+# 				species = {
+# 					save_event_target_as = MJ25_WH_og_species
+# 				}
+# 				if = {
+# 					limit = {
+# 						NOT = { species = { has_species_flag = MJ25_WH_truthcursed_made } }
+# 					}
+# 					create_species = {
+# 						name = this
+# 						plural = this
+# 						class = this
+# 						can_be_modified = this
+# 						portrait = this
+# 						homeworld = this
+# 						is_mod = yes
+# 						mod_name_affix = "MJ25_WH_truthcursed_affix"
+
+# 						traits = {
+# 							trait = MJ25_WH_trait_truthcursed
+# 						}
+# 						traits = this
+
+# 						effect = {
+# 							set_species_flag = MJ25_WH_is_truthcursed_species
+# 							save_event_target_as = MJ25_WH_truthcursed_species
+# 						}
+# 					}
+# 					species = {
+# 						set_species_flag = MJ25_WH_truthcursed_made
+# 					}
+# 				}
+# 				else = {
+# 					owner = {
+# 						every_owned_species = {
+# 							limit = {
+# 								is_subspecies = prevprev.species
+# 								has_species_flag = MJ25_WH_is_truthcursed_species
+# 							}
+# 							save_event_target_as = MJ25_WH_truthcursed_species
+# 						}
+# 					}
+# 				}
+
+# 				if = {
+# 					limit = {
+# 						pop_group_size < prev.$NUM_POPS$
+# 					}
+# 					prev = {
+# 						export_trigger_value_to_variable = {
+# 							trigger = pop_group_size
+# 							variable = MJ25_WH_num_mutated_pops_temp
+# 							rounded = yes
+# 						}
+# 						subtract_variable = { which = prev.$NUM_POPS$ value = MJ25_WH_num_mutated_pops_temp }
+# 						root = {
+# 							change_variable = { which = MJ25_WH_num_mutated_pops_message value = prev.MJ25_WH_num_mutated_pops_temp }
+# 						}
+# 					}
+# 					change_species = event_target:MJ25_WH_truthcursed_species
+# 				}
+# 				else = {
+# 					kill_pop_group = {
+# 						pop_group = this
+# 						amount = prev.$NUM_POPS$
+# 					}
+# 					prev = {
+# 						create_pop_group = {
+# 							species = event_target:MJ25_WH_truthcursed_species
+# 							size = prevprev.$NUM_POPS$
+# 						}
+# 					}
+# 					prev = {
+# 						root = {
+# 							change_variable = { which = MJ25_WH_num_mutated_pops_message value = prev.$NUM_POPS$ }
+# 						}
+# 						set_variable = { which = $NUM_POPS$ value = 0 }
+# 					}
+# 				}
+				
+# 			}
+# 		}
+# 	}
+# 	else = {
+# 		export_trigger_value_to_variable = {
+# 			trigger = count_owned_pop_amount
+# 			parameters = {
+# 				limit = {
+# 					is_sapient = yes
+# 					NOT = { pop_group_has_trait = MJ25_WH_word_bearer }
+# 					NOT = { pop_group_has_trait = MJ25_WH_trait_truthcursed }
+# 				}
+# 			}
+# 			variable = MJ25_WH_num_mutated_pops_temp
+# 			rounded = yes
+# 		}
+# 		change_variable = { which = root.MJ25_WH_num_mutated_pops_message value = MJ25_WH_num_mutated_pops_temp }
+# 		every_owned_pop_group = {
+# 			limit = {
+# 				is_sapient = yes
+# 				NOT = { pop_group_has_trait = MJ25_WH_word_bearer }
+# 				NOT = { pop_group_has_trait = MJ25_WH_trait_truthcursed }
+# 			}
+			
+# 			species = {
+# 				save_event_target_as = MJ25_WH_og_species
+# 			}
+# 			if = {
+# 				limit = {
+# 					NOT = { species = { has_species_flag = MJ25_WH_truthcursed_made } }
+# 				}
+# 				create_species = {
+# 					name = this
+# 					plural = this
+# 					class = this
+# 					can_be_modified = this
+# 					portrait = this
+# 					homeworld = this
+# 					is_mod = yes
+# 					mod_name_affix = "MJ25_WH_truthcursed_affix"
+
+# 					traits = {
+# 						trait = MJ25_WH_trait_truthcursed
+# 					}
+# 					traits = this
+
+# 					effect = {
+# 						set_species_flag = MJ25_WH_is_truthcursed_species
+# 						save_event_target_as = MJ25_WH_truthcursed_species
+# 					}
+# 				}
+# 			}
+# 			else = {
+# 				owner = {
+# 					every_owned_species = {
+# 						limit = {
+# 							is_subspecies = prevprev.species
+# 							has_species_flag = MJ25_WH_is_truthcursed_species
+# 						}
+# 						save_event_target_as = MJ25_WH_truthcursed_species
+# 					}
+# 				}
+# 			}
+# 			change_species = event_target:MJ25_WH_truthcursed_species	
+# 		}
+# 	}
+
+# 	if = {
+# 		limit = { check_variable = { which = root.MJ25_WH_num_mutated_pops_message value > 0 } }
+# 		create_message = {
+# 			type = MJ25_WH_POPS_MUTATED
+# 			localization = MJ25_WH_POPS_MUTATED_TRUTH_CURSED_DESC
+# 			days = 30
+# 			target = this
+# 			variable = {
+# 				type = name
+# 				localization = PLANET
+# 				scope = this
+# 			}
+# 			variable = {
+# 				type = variable
+# 				varname = root.MJ25_WH_num_mutated_pops_message
+# 				localization = VALUE
+# 				scope = this
+# 			}
+# 		}
+# 	}
+# }
+
+
+# Run this in the scope of the victorious whispers country
+MJ25_WH_victory_effect = {
+	
+	create_country = {
+		name = "NAME_MJ25_WH_aural_starmass_country"
+		type = gray_goo
+		flag = {
+			icon = {
+				category = "zoological"
+				file = "flag_zoological_10.dds"
+			}
+			background= {
+				category = "backgrounds"
+				file = "new_dawn.dds"
+			}
+			colors={
+				"purple"
+				"black"
+				"null"
+				"null"
+			}
+		}
+		effect = {
+			every_country = {
+				establish_communications_no_message = prev
+			}
+			save_event_target_as = MJ25_WH_aural_starmass_country
+		}
+	}
+
+# The crisis empire and everything within a songflare is removed.
+	hidden_effect = {
+		every_owned_fleet = {
+			limit = {
+				is_mobile = no
+			}
+			delete_fleet = this
+		}
+		every_owned_planet = {
+			every_owned_pop_group = {
+				kill_all_pop = yes
+			}
+		}
+	}
+
+	every_system = {
+		limit = {
+			any_system_ambient_object = {
+				is_ambient_object_type = MJ25_WH_space_storm_1
+			}
+		}
+		every_system_planet = {
+			if = {
+				limit = { is_star = yes }
+				if = {
+					limit = {
+						exists = orbital_defence
+					}
+					destroy_fleet = orbital_defence
+				}
+				if = {
+					limit = {
+						exists = orbital_station
+					}
+					orbital_station = { dismantle = yes }
+				}
+
+				clear_deposits = yes
+				clear_planet_modifiers = yes
+				prevent_anomaly = yes
+				change_pc = pc_MJ25_WH_missing_star
+			}
+		}
+		every_system_planet = {
+			if = {
+				limit = { is_star = no }
+				if = {
+					limit = {
+						exists = orbital_defence
+					}
+					destroy_fleet = orbital_defence
+				}
+				if = {
+					limit = {
+						exists = orbital_station
+					}
+					orbital_station = { dismantle = yes }
+				}
+				every_owned_pop_group = {
+					kill_all_pop = yes
+				}
+				remove_planet = yes
+			}
+		}
+		every_system_ambient_object = {
+			destroy_ambient_object = this
+		}
+		every_system_megastructure = {
+			delete_megastructure = this
+		}
+		every_fleet_in_system = {
+			delete_fleet = this
+		}
+		solar_system = {
+			set_star_class = sc_MJ25_WH_missing_star
+		}
+		system_event = { id = MJ25_WH_whispers.335 }
+	}
+
+	every_country = {
+		limit = { 
+			exists = this
+			NOT = { is_same_value = root } 
+		}
+		every_owned_planet = {
+			limit = { is_colony = yes }
+
+			
+			random_list = {
+				# Other colonies have pops mutated to Truth-Cursed at a ~30% rate
+				7 = {
+					every_owned_pop_group = {
+						limit = {
+							NOT = { pop_group_has_trait = MJ25_WH_trait_truthcursed }
+						}
+						random = {
+							chance = 30
+							if = {
+								limit = { pop_has_happiness = yes }
+								modify_species = {
+									species = this
+									add_trait = MJ25_WH_trait_truthcursed
+									add_traits_at_start_of_list = yes
+								}
+							}
+							else = {
+								modify_species = {
+									species = this
+									add_trait = MJ25_WH_trait_truthcursed_gestalt
+									add_traits_at_start_of_list = yes
+								}
+							}
+						}
+					}
+				}
+				# Other non-capital colonies are removed at a ~30% rate
+				3 = {
+					remove_planet = yes
+				}
+			}
+		}
+
+		# Remaining stars are randomly mutated into neutral Aural Starmasses at a ~5% rate
+		every_system_within_border = {
+			random_list = {
+				95 = { }
+				5 = {
+					
+					random_system_planet = {
+						limit = { is_star = yes }
+						create_fleet = {
+							name = "NAME_MJ25_WH_aural_starmass"
+							settings = {
+								spawn_debris = no
+							}
+							effect = {
+								set_owner = event_target:MJ25_WH_aural_starmass_country
+								create_ship = {
+									name = "MJ25_WH_aural_starmass_name"
+									design = "MJ25_WH_aural_starmass_name"
+									effect = {
+										set_ship_flag = MJ25_WH_aural_starmass
+									}
+								}
+								set_location = {
+									target = prev
+									distance = 0
+									angle = 90
+									direction = in_system
+								}
+								set_fleet_stance = aggressive
+								set_aggro_range_measure_from = self
+								set_aggro_range = 30000
+
+								random_system = {
+									limit = {
+										distance = {
+											source = prev
+											use_bypasses = no
+											min_jumps = 1
+											max_jumps = 10
+										}
+									}
+									random_system_planet = {
+										limit = {
+											is_star = yes
+										}
+										save_event_target_as = MJ25_WH_starmass_target
+									}
+								}
+								auto_move_to_planet = {
+									target = event_target:MJ25_WH_starmass_target
+									clear_auto_move_on_arrival = no
+								}
+								fleet_event = { id = MJ25_WH.1190 days = 180 }
+							}
+						}
+					}
+					every_system_planet = {
+						limit = { is_star = yes }
+						change_pc = pc_MJ25_WH_missing_star
+					}
+					solar_system = {
+						set_star_class = sc_MJ25_WH_missing_star
+					}
+					every_system_planet = {
+						limit = {
+							is_a_habitable_planet_megastructure = yes
+						}
+						if = {
+							limit = {
+								is_artificial = no
+							}
+							hidden_effect = {
+								clear_planet_modifiers = yes
+								destroy_colony = yes
+							}
+							change_pc = pc_frozen
+						}
+						else_if = {
+							limit = { is_colony = yes }
+							remove_all_buildings = yes
+							destroy_colony = yes
+							if = {
+								limit = { is_planet_class = pc_habitat }
+								spawn_habitat_cracker_effect = yes
+							}
+							else_if = {
+								limit = { is_ringworld = yes }
+								spawn_ringworld_cracker_effect = yes
+								change_pc = pc_ringworld_habitable_damaged
+							}
+							else = {
+								change_pc = pc_frozen
+							}
+						}
+						else_if = {
+							limit = { is_planet_class = pc_habitat }
+							spawn_habitat_cracker_effect = yes
+						}
+						else_if = {
+							limit = { is_ringworld = yes }
+							spawn_ringworld_cracker_effect = yes
+							change_pc = pc_ringworld_habitable_damaged
+						}
+						else_if = {
+							limit = { is_planet_class = pc_ringworld_tech }
+							spawn_ringworld_cracker_effect = yes
+							change_pc = pc_ringworld_tech_damaged
+						}
+						else_if = {
+							limit = { is_planet_class = pc_ringworld_seam }
+							spawn_ringworld_cracker_effect = yes
+							change_pc = pc_ringworld_seam_damaged
+						}
+					}
+					every_system_planet = {
+						limit = {
+							is_planet_class = pc_barren
+						}
+						change_pc = pc_barren_cold
+					}
+					remove_system_terraforming_candidates = yes
+				}
+			}
+		}
+	}
+}
+
+
+MJ25_WH_test_make_starmasses = {
+	create_country = {
+		name = "NAME_MJ25_WH_aural_starmass_country"
+		type = gray_goo
+		flag = {
+			icon = {
+				category = "zoological"
+				file = "flag_zoological_10.dds"
+			}
+			background= {
+				category = "backgrounds"
+				file = "new_dawn.dds"
+			}
+			colors={
+				"purple"
+				"black"
+				"null"
+				"null"
+			}
+		}
+		effect = {
+			every_country = {
+				establish_communications_no_message = prev
+			}
+			save_event_target_as = MJ25_WH_aural_starmass_country
+		}
+	}
+
+	every_system_within_border = {
+						
+		random_system_planet = {
+			limit = { is_star = yes }
+			create_fleet = {
+				name = "NAME_MJ25_WH_aural_starmass"
+				settings = {
+					spawn_debris = no
+				}
+				effect = {
+					set_owner = event_target:MJ25_WH_aural_starmass_country
+					create_ship = {
+						name = "MJ25_WH_aural_starmass_name"
+						design = "MJ25_WH_aural_starmass_name"
+						effect = {
+							set_ship_flag = MJ25_WH_aural_starmass
+						}
+					}
+					set_location = {
+						target = prev
+						distance = 0
+						angle = 90
+						direction = in_system
+					}
+					set_fleet_stance = aggressive
+					set_aggro_range_measure_from = self
+					set_aggro_range = 3000
+
+					queue_actions = {
+						repeat = {
+							find_random_system = {
+								trigger = {
+									id = "MJ25_WH_starmass.trigger.1"
+									distance = {
+										source = prevprev
+										use_bypasses = no
+										min_jumps = 1
+										max_jumps = 10
+									}
+								}
+								found_system = {
+									move_to = THIS
+								}
+							}
+							find_closest_planet = {
+								trigger = {
+									id = "MJ25_WH_starmass.trigger.2"
+									is_star = yes
+								}
+								found_planet = {
+									orbit_planet = THIS
+									wait = {
+										duration = 50
+										random = 25
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# MJ25_WH_mutate_pops_truth_cursed = {
+# 	save_event_target_as = MJ25_WH_planet
+
+# 	root = { set_variable = { which = MJ25_WH_num_mutated_pops_message value = 0 } }
+
+# 	if = {
+# 		limit = {
+# 			count_owned_pop_amount = {
+# 				limit = {
+# 					is_sapient = yes
+# 					NOT = { pop_group_has_trait = MJ25_WH_word_bearer }
+# 					NOT = { pop_group_has_trait = MJ25_WH_trait_truthcursed }
+# 				}
+# 				count >= $NUM_POPS$
+# 			}
+# 		}
+# 		while = {
+# 			limit = {
+# 				check_variable_arithmetic = {
+# 					which = $NUM_POPS$
+# 					value > 0
+# 				}
+# 			}
+# 			weighted_random_owned_pop_group = {
+# 				limit = {
+# 					is_sapient = yes
+# 					NOT = { pop_group_has_trait = MJ25_WH_word_bearer }
+# 					NOT = { pop_group_has_trait = MJ25_WH_trait_truthcursed }
+# 				}
+# 				species = {
+# 					save_event_target_as = MJ25_WH_og_species
+# 				}
+# 				if = {
+# 					limit = {
+# 						NOT = { species = { has_species_flag = MJ25_WH_truthcursed_made } }
+# 					}
+# 					create_species = {
+# 						name = this
+# 						plural = this
+# 						class = this
+# 						can_be_modified = this
+# 						portrait = this
+# 						homeworld = this
+# 						is_mod = yes
+# 						mod_name_affix = "MJ25_WH_truthcursed_affix"
+
+# 						traits = {
+# 							trait = MJ25_WH_trait_truthcursed
+# 						}
+# 						traits = this
+
+# 						effect = {
+# 							set_species_flag = MJ25_WH_is_truthcursed_species
+# 							save_event_target_as = MJ25_WH_truthcursed_species
+# 						}
+# 					}
+# 					species = {
+# 						set_species_flag = MJ25_WH_truthcursed_made
+# 					}
+# 				}
+# 				else = {
+# 					owner = {
+# 						every_owned_species = {
+# 							limit = {
+# 								is_subspecies = prevprev.species
+# 								has_species_flag = MJ25_WH_is_truthcursed_species
+# 							}
+# 							save_event_target_as = MJ25_WH_truthcursed_species
+# 						}
+# 					}
+# 				}
+
+# 				if = {
+# 					limit = {
+# 						pop_group_size < prev.$NUM_POPS$
+# 					}
+# 					prev = {
+# 						export_trigger_value_to_variable = {
+# 							trigger = pop_group_size
+# 							variable = MJ25_WH_num_mutated_pops_temp
+# 							rounded = yes
+# 						}
+# 						subtract_variable = { which = prev.$NUM_POPS$ value = MJ25_WH_num_mutated_pops_temp }
+# 						root = {
+# 							change_variable = { which = MJ25_WH_num_mutated_pops_message value = prev.MJ25_WH_num_mutated_pops_temp }
+# 						}
+# 					}
+# 					change_species = event_target:MJ25_WH_truthcursed_species
+# 				}
+# 				else = {
+# 					kill_pop_group = {
+# 						pop_group = this
+# 						amount = prev.$NUM_POPS$
+# 					}
+# 					prev = {
+# 						create_pop_group = {
+# 							species = event_target:MJ25_WH_truthcursed_species
+# 							size = prevprev.$NUM_POPS$
+# 						}
+# 					}
+# 					prev = {
+# 						root = {
+# 							change_variable = { which = MJ25_WH_num_mutated_pops_message value = prev.$NUM_POPS$ }
+# 						}
+# 						set_variable = { which = $NUM_POPS$ value = 0 }
+# 					}
+# 				}
+				
+# 			}
+# 		}
+# 	}
+# 	else = {
+# 		export_trigger_value_to_variable = {
+# 			trigger = count_owned_pop_amount
+# 			parameters = {
+# 				limit = {
+# 					is_sapient = yes
+# 					NOT = { pop_group_has_trait = MJ25_WH_word_bearer }
+# 					NOT = { pop_group_has_trait = MJ25_WH_trait_truthcursed }
+# 				}
+# 			}
+# 			variable = MJ25_WH_num_mutated_pops_temp
+# 			rounded = yes
+# 		}
+# 		change_variable = { which = root.MJ25_WH_num_mutated_pops_message value = MJ25_WH_num_mutated_pops_temp }
+# 		every_owned_pop_group = {
+# 			limit = {
+# 				is_sapient = yes
+# 				NOT = { pop_group_has_trait = MJ25_WH_word_bearer }
+# 				NOT = { pop_group_has_trait = MJ25_WH_trait_truthcursed }
+# 			}
+			
+# 			species = {
+# 				save_event_target_as = MJ25_WH_og_species
+# 			}
+# 			if = {
+# 				limit = {
+# 					NOT = { species = { has_species_flag = MJ25_WH_truthcursed_made } }
+# 				}
+# 				create_species = {
+# 					name = this
+# 					plural = this
+# 					class = this
+# 					can_be_modified = this
+# 					portrait = this
+# 					homeworld = this
+# 					is_mod = yes
+# 					mod_name_affix = "MJ25_WH_truthcursed_affix"
+
+# 					traits = {
+# 						trait = MJ25_WH_trait_truthcursed
+# 					}
+# 					traits = this
+
+# 					effect = {
+# 						set_species_flag = MJ25_WH_is_truthcursed_species
+# 						save_event_target_as = MJ25_WH_truthcursed_species
+# 					}
+# 				}
+# 			}
+# 			else = {
+# 				owner = {
+# 					every_owned_species = {
+# 						limit = {
+# 							is_subspecies = prevprev.species
+# 							has_species_flag = MJ25_WH_is_truthcursed_species
+# 						}
+# 						save_event_target_as = MJ25_WH_truthcursed_species
+# 					}
+# 				}
+# 			}
+# 			change_species = event_target:MJ25_WH_truthcursed_species	
+# 		}
+# 	}
+
+# 	if = {
+# 		limit = { check_variable = { which = root.MJ25_WH_num_mutated_pops_message value > 0 } }
+# 		create_message = {
+# 			type = MJ25_WH_POPS_MUTATED
+# 			localization = MJ25_WH_POPS_MUTATED_TRUTH_CURSED_DESC
+# 			days = 30
+# 			target = this
+# 			variable = {
+# 				type = name
+# 				localization = PLANET
+# 				scope = this
+# 			}
+# 			variable = {
+# 				type = variable
+# 				varname = root.MJ25_WH_num_mutated_pops_message
+# 				localization = VALUE
+# 				scope = this
+# 			}
+# 		}
+# 	}
+# }
+
+# run this on the scope of the aural starmass ship that has died.
+MJ25_WH_on_aural_starmass_death = {
+	create_ambient_object = {
+		type = "MJ25_WH_starmass_explosion"
+		play_animation_once = yes
+		location = this
+	}
+	solar_system = {
+		# destroy all orbital stations
+		every_system_planet = {
+			limit = {
+				exists = orbital_station
+			}
+			orbital_station = { dismantle = yes }
+		}
+		# add 50 devastation to colonies
+		every_system_planet = {
+			limit = {
+				is_colony = yes
+				exists = owner
+				owner = { NOT = { has_ascension_perk = MJ25_WH_ap_whispers } }
+			}
+			add_planet_devastation = 30
+		}
+		every_fleet_in_system = {
+			limit = { 
+				NOT = { has_modifier = MJ25_WH_aural_explosion } 
+				owner = { NOT = { has_ascension_perk = MJ25_WH_ap_whispers } }
+			}
+			add_modifier = {
+				modifier = MJ25_WH_aural_explosion
+				days = 120
+			}
+			every_owned_ship = {
+				if = {
+					limit = {
+						has_max_hp < 250000
+					}
+					reduce_hp_percent = 0.2
+				}
+				if = {
+					limit = {
+						has_max_hp < 1000
+					}
+					damage_ship = 500
+				}
+			}
+		}
+	}
+}
+

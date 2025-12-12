@@ -1,0 +1,358 @@
+
+###########################
+#
+# WHISPERING CULTIST
+#
+###########################
+
+MJ25_WH_whisper_cultist = {
+	category = criminal
+	is_capped_by_modifier = yes
+	can_set_priority = no
+
+	swappable_data = {
+		default = {
+			building_icon = building_residence
+		}
+	}
+
+	contributes_to_diplo_weight = no
+
+	tags = { crime }
+
+	possible_pre_triggers = {
+		has_owner = yes
+		is_sapient = yes
+	}
+
+	possible = {
+		# check that this is not a robot in servitude
+		NOT = {
+			has_citizenship_type = {
+				country = owner
+				type = citizenship_robot_servitude
+			}
+		}
+		owner = {
+			is_gestalt = no
+		}
+	}
+
+	planet_modifier = {
+		planet_crime_add = 20
+		planet_stability_add = -5
+	}
+
+	resources = {
+		category = planet_jobs
+		upkeep = {
+			energy = 1
+		}
+	}
+
+	weight = {
+		weight = 150
+	}
+}
+
+MJ25_WH_whisper_cultist_drone = {
+	category = deviant_drone
+	is_capped_by_modifier = yes
+	can_set_priority = no
+
+	swappable_data = {
+		default = {
+			icon = criminal
+		}
+	}
+
+	contributes_to_diplo_weight = no
+
+	tags = { crime }
+
+	possible_pre_triggers = {
+		has_planet = yes
+		is_sapient = yes
+	}
+
+	possible = {
+		owner = {
+			is_gestalt = yes
+		}
+	}
+
+	planet_modifier = {
+		planet_crime_add = 20
+		planet_stability_add = -5
+	}
+
+	resources = {
+		category = planet_jobs
+		upkeep = {
+			energy = 1
+		}
+	}
+
+	weight = {
+		weight = 1100
+	}
+}
+
+
+###########################
+#
+# LISTENER
+#
+###########################
+
+MJ25_WH_listener = {
+	category = specialist
+
+	swappable_data = {
+		default = {
+			condition_string = SPECIALIST_JOB_TRIGGER
+			building_icon = building_MJ25_WH_lilting_altar
+		}
+	}
+	tags = { unity research }
+
+	possible_pre_triggers = {
+		has_owner = yes
+		is_being_purged = no
+		is_being_assimilated = no
+		is_sapient = yes
+	}
+
+	possible_precalc = can_fill_specialist_job
+	possible = {
+		complex_specialist_job_check_trigger = yes
+
+	}
+
+	resources = {
+		category = planet_MJ25_WH_listeners
+		# PRODUCES
+		produces = {
+			MJ25_WH_void_whispers = 0.5
+		}
+		upkeep = {
+			unity = 2
+		}
+	}
+
+	
+
+	weight = {
+		weight = @specialist_job_weight
+		modifier = {
+			factor = 3
+			exists = owner
+		}
+	}
+
+	inline_script = "jobs/automodding_priority_unity"
+
+	promotion = {
+		time = @standard_promotion_time
+		effect = {
+			pop_amount_change_category = {
+				CATEGORY = specialist
+				AMOUNT = local_pop_amount
+			}
+		}
+	}
+}
+
+MJ25_WH_listener_drone = {
+	category = complex_drone
+
+	swappable_data = {
+		default = {
+			condition_string = DRONE_JOB_TRIGGER
+			building_icon = building_MJ25_WH_lilting_altar
+		}
+	}
+	tags = { unity research }
+
+	possible_pre_triggers = {
+		has_owner = yes
+		is_being_purged = no
+		is_being_assimilated = no
+		is_sapient = yes
+	}
+
+	possible_precalc = can_fill_specialist_job
+	possible = {
+		complex_specialist_job_check_trigger = yes
+
+	}
+
+	resources = {
+		category = planet_MJ25_WH_listeners
+		# PRODUCES
+		produces = {
+			MJ25_WH_void_whispers = 0.5
+		}
+		upkeep = {
+			unity = 2
+		}
+	}
+
+	weight = {
+		weight = @complex_drone_job_weight
+		modifier = {
+			factor = 3
+			exists = owner
+		}
+	}
+
+	inline_script = "jobs/automodding_priority_unity"
+
+	promotion = {
+		time = @standard_promotion_time
+		effect = {
+			pop_amount_change_category = {
+				CATEGORY = complex_drone
+				AMOUNT = local_pop_amount
+			}
+		}
+	}
+}
+
+###########################
+#
+# CHORISTER
+#
+###########################
+
+MJ25_WH_chorister = {
+	category = specialist
+
+	swappable_data = {
+		default = {
+			condition_string = SPECIALIST_JOB_TRIGGER
+			building_icon = building_bureaucratic_1
+		}
+	}
+	tags = { unity enforcer strategic_resource }
+
+	possible_pre_triggers = {
+		has_owner = yes
+		is_being_purged = no
+		is_being_assimilated = no
+		is_sapient = yes
+	}
+
+	possible_precalc = can_fill_specialist_job
+	possible = {
+		complex_specialist_job_check_trigger = yes
+
+	}
+
+	resources = {
+		category = planet_MJ25_WH_listeners
+		# PRODUCES
+		produces = {
+			influence = 0.2
+		}
+		upkeep = {
+			consumer_goods = 1
+		}
+	}
+
+	country_modifier = {
+		country_edict_fund_add = 5
+	}
+
+	weight = {
+		weight = @specialist_job_weight
+		modifier = {
+			factor = 3
+			exists = owner
+		}
+	}
+
+	inline_script = "jobs/automodding_priority_unity"
+
+	promotion = {
+		time = @standard_promotion_time
+		effect = {
+			pop_amount_change_category = {
+				CATEGORY = specialist
+				AMOUNT = local_pop_amount
+			}
+		}
+	}
+}
+
+#Swap for auth_hive
+MJ25_WH_chorister_drone = {
+	category = complex_drone
+
+	swappable_data = {
+		default = {
+			condition_string = DRONE_JOB_TRIGGER
+			building_icon = building_MJ25_WH_starsong_cathedral
+		}
+	}
+	tags = { unity enforcer strategic_resource }
+
+	possible_pre_triggers = {
+		has_owner = yes
+		is_being_purged = no
+		is_being_assimilated = no
+		is_sapient = yes
+	}
+
+	possible_precalc = can_fill_specialist_job
+	possible = {
+		complex_specialist_job_check_trigger = yes
+
+	}
+
+	resources = {
+		category = planet_MJ25_WH_listeners
+		# PRODUCES
+		produces = {
+			influence = 0.2
+		}
+		upkeep = {
+			trigger = {
+				exists = owner
+				owner = {
+					is_hive_empire = no
+				}
+			}
+			energy = 2
+		}
+		upkeep = {
+			trigger = {
+				exists = owner
+				owner = {
+					is_hive_empire = yes
+				}
+			}
+			minerals = 2
+		}
+	}
+
+	weight = {
+		weight = @complex_drone_job_weight
+		modifier = {
+			factor = 3
+			exists = owner
+		}
+	}
+
+	inline_script = "jobs/automodding_priority_unity"
+
+	promotion = {
+		time = @standard_promotion_time
+		effect = {
+			pop_amount_change_category = {
+				CATEGORY = complex_drone
+				AMOUNT = local_pop_amount
+			}
+		}
+	}
+}

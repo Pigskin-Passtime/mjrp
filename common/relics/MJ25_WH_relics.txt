@@ -1,0 +1,128 @@
+r_MJ25_WH_choir = {
+	activation_duration = @triumph_duration
+	portrait = "GFX_MJ25_WH_relic_choir"
+	sound = MJ25_WH_event_song
+
+	resources = {
+		category = relics
+		# Activation cost
+		cost = {
+			unity = @activation_cost
+			MJ25_WH_void_whispers = 500
+		}
+	}
+
+	can_be_stolen = no
+
+	ai_weight = {
+		weight = 100
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			has_country_flag = MJ25_WH_hue_web
+		}
+		custom_tooltip = "MJ25_WH_choir_tt"
+		show_only_custom_tooltip = no
+		country_naval_cap_add = 10
+		mult = value:MJ25_WH_hue_mult_2000
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			has_country_flag = MJ25_WH_hue_weft
+		}
+		custom_tooltip = "MJ25_WH_choir_tt"
+		show_only_custom_tooltip = no
+		country_unity_produces_mult = 0.01
+		mult = value:MJ25_WH_hue_mult_5000
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			has_country_flag = MJ25_WH_hue_knot
+		}
+		custom_tooltip = "MJ25_WH_choir_tt"
+		show_only_custom_tooltip = no
+		country_starbase_capacity_add = 1
+		mult = value:MJ25_WH_hue_mult_10000
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			has_country_flag = MJ25_WH_hue_eye
+		}
+		ship_evasion_add = 1
+		mult = value:MJ25_WH_hue_mult_5000
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			has_country_flag = MJ25_WH_hue_breeze
+		}
+		ship_speed_mult = 0.01
+		mult = value:MJ25_WH_hue_mult_3000
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			has_country_flag = MJ25_WH_hue_gale
+		}
+		ship_ftl_jumpdrive_range_mult = 0.01
+		ship_jumpdrive_cooldown_mult = -0.005
+		mult = value:MJ25_WH_hue_mult_2000
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			has_country_flag = MJ25_WH_hue_rain
+		}
+		ship_shield_mult = 0.02
+		ship_shield_hardening_add = 0.01
+		mult = value:MJ25_WH_hue_mult_3000
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			has_country_flag = MJ25_WH_hue_lightning
+		}
+		ship_weapon_damage = 0.01
+		ship_accuracy_add = 1
+		mult = value:MJ25_WH_hue_mult_2000
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			has_country_flag = MJ25_WH_hue_thunder
+		}
+		ship_weapon_range_mult = 0.01
+		mult = value:MJ25_WH_hue_mult_5000
+	}
+
+	score = 0
+
+	active_effect = {
+		hidden_effect = {
+			change_variable = {
+				which = MJ25_WH_voices_counter
+				value = 5000
+			}
+		}
+		custom_tooltip = MJ25_WH_choir_activation_tt
+		custom_tooltip = relic_triumph_cooldown
+		hidden_effect = {
+			add_modifier = {
+				modifier = "relic_activation_cooldown"
+				days = @triumph_duration
+			}
+		}
+	}
+
+	# Possible check for activation
+	possible = {
+		inline_script = {
+			script = relics/activation_checks
+			RELIC = r_MJ25_WH_choir
+		}
+	}
+}

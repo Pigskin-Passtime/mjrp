@@ -1,0 +1,176 @@
+##########################################################################
+# Decisions
+##########################################################################
+
+decision_MJ25_WH_one_empty_echoing_word = {
+	owned_planets_only = yes
+	sound = MJ25_WH_event_song
+	icon = GFX_MJ25_WH_echoing_word_decision
+
+	resources = {
+		category = decisions
+		cost = {
+			influence = 100
+		}
+	}
+
+	potential = {
+		owner = {
+			OR = {
+				#has_country_flag = MJ25_WH_decision_testing
+				has_country_flag = MJ25_WH_crisis_site_4_complete
+			}
+		}
+		NOT = { has_planet_flag = MJ25_WH_echoing_word_active }
+	}
+
+	effect = {
+		planet_event = { id = MJ25_WH.1050 }
+		set_planet_flag = MJ25_WH_echoing_word_active
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}
+
+decision_MJ25_WH_wordbearer_sacrifice = {
+	owned_planets_only = yes
+	icon = GFX_MJ25_WH_decision_wordbearers
+	sound = MJ25_WH_event_song
+
+	enactment_time = 90
+
+	resources = {
+		category = decisions
+		cost = {
+			influence = 50
+			unity = 10000
+		}
+	}
+
+	potential = {
+		exists = owner
+		owner = {
+			any_situation = { is_situation_type = MJ25_WH_hue_situation }
+		}
+	}
+
+	allow = {
+		custom_tooltip = {
+			fail_text = MJ25_WH_not_enough_wordbearers
+			NOT = {
+				any_owned_pop_group = {
+					has_trait = MJ25_WH_word_bearer
+					pop_group_size > 1000
+				}
+			}
+		}
+	}
+
+	abort_trigger = {
+		OR = {
+			AND = {
+				exists = owner
+				owner = {
+					NOT = {
+						any_situation = { is_situation_type = MJ25_WH_hue_situation }
+					}
+				}
+			}
+			NOT = {
+				any_owned_pop_group = {
+					has_trait = MJ25_WH_word_bearer
+					pop_group_size > 1000
+				}
+			}
+		}		
+	}
+
+	effect = {
+		owner = {
+			if = {
+				limit = {
+					any_situation = {
+						is_situation_type = MJ25_WH_hue_situation
+					}
+				}
+				random_situation = {
+					limit = { is_situation_type = MJ25_WH_hue_situation }
+					add_situation_progress = 20
+				}
+			}
+		}
+		random_owned_pop_group = {
+			limit = {
+				has_trait = MJ25_WH_word_bearer
+				pop_group_size > 1000
+			}
+			kill_pop_group = {
+				pop_group = this
+				amount = 1000
+			}
+		}
+	}
+}
+
+decision_MJ25_WH_relocate_oratorium = {
+	owned_planets_only = yes
+	sound = MJ25_WH_event_song
+	icon = GFX_MJ25_WH_decision_oratorium
+
+	enactment_time = 3600
+
+	resources = {
+		category = decisions
+		cost = {
+			MJ25_WH_void_whispers = 10000
+		}
+	}
+
+	potential = {
+		exists = owner
+		owner = {
+			any_situation = { is_situation_type = MJ25_WH_massa_situation }
+		}
+	}
+
+	allow = {
+		custom_tooltip = {
+			fail_text = MJ25_WH_oratorium_here
+			NOT = { has_modifier = MJ25_WH_oratorium }
+		}
+	}
+
+	abort_trigger = {
+		exists = owner
+		owner = {
+			NOT = {
+				any_situation = { is_situation_type = MJ25_WH_massa_situation }
+			}
+		}
+	}
+
+	effect = {
+		hidden_effect = {
+			random_galaxy_planet = {
+				limit = {
+					has_planet_flag = MJ25_WH_oratorium_site@root.owner
+				}
+				#Effect here
+				remove_planet_flag = MJ25_WH_oratorium_site@root.owner
+				if = {
+					limit = {
+						has_modifier = MJ25_WH_oratorium
+					}
+					remove_modifier = MJ25_WH_oratorium
+				}
+			}
+			set_planet_flag = MJ25_WH_oratorium_site@owner
+		}
+		add_modifier = { 
+			modifier = "MJ25_WH_oratorium" 
+			days = -1 
+		}
+	}
+}

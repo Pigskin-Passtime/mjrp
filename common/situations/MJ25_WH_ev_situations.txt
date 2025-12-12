@@ -1,0 +1,275 @@
+situation_MJ25_WH_one_empty_echoing_word = {
+	picture = GFX_MJ25_WH_planet_event
+	complete_icon_frame = GFX_MJ25_WH_situation_outcome_frame
+	complete_icon = GFX_situation_outcome_unknown
+	on_progress_complete = {
+		custom_tooltip = situation_MJ25_WH_echoing_word_outcome
+		hidden_effect = {
+			situation_event = { id = MJ25_WH.1060 }
+		}
+	}
+	stages = {
+		stage_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_blue
+			end = 12
+			target_modifier = {
+				planet_MJ25_WH_listeners_unity_produces_add = 3
+				planet_MJ25_WH_listeners_MJ25_WH_void_whispers_produces_add = 3
+				pop_bonus_workforce_mult = 0.1
+				planet_jobs_produces_mult = 0.25
+				pop_happiness = 0.1
+				job_MJ25_WH_listener_add = 100
+			}
+			custom_tooltip = stage_unknown_effects
+		}
+		stage_2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_blue
+			end = 24
+			target_modifier = {
+				planet_MJ25_WH_listeners_unity_produces_add = 6
+				planet_MJ25_WH_listeners_MJ25_WH_void_whispers_produces_add = 6
+				pop_bonus_workforce_mult = 0.2
+				planet_jobs_produces_mult = 0.50
+				pop_happiness = 0.2
+				job_MJ25_WH_listener_add = 200
+			}
+			custom_tooltip = stage_unknown_effects
+		}
+		stage_3 = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_blue
+			end = 36
+			target_modifier = {
+				planet_MJ25_WH_listeners_unity_produces_add = 9
+				planet_MJ25_WH_listeners_MJ25_WH_void_whispers_produces_add = 9
+				pop_bonus_workforce_mult = 0.3
+				planet_jobs_produces_mult = 0.75
+				pop_happiness = 0.3
+				job_MJ25_WH_listener_add = 300
+			}
+			custom_tooltip = stage_unknown_effects
+		}
+		stage_4 = {
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_blue
+			end = 48
+			target_modifier = {
+				planet_MJ25_WH_listeners_unity_produces_add = 12
+				planet_MJ25_WH_listeners_MJ25_WH_void_whispers_produces_add = 12
+				pop_bonus_workforce_mult = 0.4
+				planet_jobs_produces_mult = 1.0
+				pop_happiness = 0.4
+				job_MJ25_WH_listener_add = 400
+			}
+			custom_tooltip = stage_unknown_effects
+		}
+		stage_5 = {
+			icon = GFX_situation_stage_5
+			icon_background = GFX_situation_stage_frame_blue
+			end = 60
+			target_modifier = {
+				planet_MJ25_WH_listeners_unity_produces_add = 15
+				planet_MJ25_WH_listeners_MJ25_WH_void_whispers_produces_add = 15
+				pop_bonus_workforce_mult = 0.5
+				planet_jobs_produces_mult = 1.25
+				pop_happiness = 0.5
+				job_MJ25_WH_listener_add = 500
+			}
+			custom_tooltip = stage_unknown_effects
+		}
+	}
+	approach = {
+		name = situation_MJ25_WH_echoing_word_approach
+		icon = GFX_MJ25_WH_situation_approach_starsong
+		icon_background = GFX_MJ25_WH_situation_approach_bg
+		default = yes
+		on_select = {
+			custom_tooltip = approach_outcome_tooltip
+		}
+	}
+	triggered_modifier = {				
+		potential = { has_situation_flag = MJ25_WH_echoing_stage_1 }
+		modifier = { }
+	}
+	monthly_progress = {
+		base = 1
+	}
+	abort_trigger = {
+		OR = {
+			NOT = { exists = target.owner }
+			target.owner = { NOT = { is_same_value = root.owner } }
+		}
+	}
+}
+
+
+situation_MJ25_WH_resource_deficit = {
+	picture = GFX_evt_deficit
+	category = negative
+	fail_icon = GFX_situation_outcome_meh
+	fail_icon_frame = GFX_situation_outcome_frame_green
+	complete_icon = GFX_situation_outcome_bankrupcy
+	complete_icon_frame = GFX_situation_outcome_frame_red
+
+	on_start = {
+		set_situation_flag = deficit_situation
+		owner = {
+			country_event = { id = timeline.19 } # Timeline Deficit
+		}
+	}
+	# on_abort = {
+	# 	owner = {
+	# 		add_resource = {
+	# 			exotic_gases = @bailout_strategic_base_amount
+	# 			mult = value:bailout_scaling_factor
+	# 		}
+	# 	}
+	# }
+
+	initial_progress = 15
+	stages = {
+		deficit_first = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_red
+			end = 25
+			modifier = {
+				planet_jobs_produces_mult = -0.05
+				empire_size_penalty_mult = 0.5
+				ship_accuracy_add = -15
+
+			}
+		}
+		deficit_second = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_red
+			end = 50
+			modifier = {
+				planet_jobs_produces_mult = -0.1
+				empire_size_penalty_mult = 1.0
+				ship_accuracy_add = -30
+			}
+		}
+		deficit_third = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_red
+			end = 75
+			modifier = {
+				planet_jobs_produces_mult = -0.15
+				empire_size_penalty_mult = 1.5
+				ship_accuracy_add = -45
+			}
+		}
+		deficit_fourth = {
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_red
+			end = 100
+			modifier = {
+				planet_jobs_produces_mult = -0.2
+				empire_size_penalty_mult = 2.0
+				ship_accuracy_add = -60
+			}
+		}
+	}
+
+	on_progress_complete = {
+		custom_tooltip = deficit_situation_MJ25_Wh_resource_defaulted_tt
+		hidden_effect = {
+			situation_event = { id = MJ25_WH.1130 }
+		}
+	}
+	on_fail = {
+		custom_tooltip = deficit_situation_finish_tooltip
+		hidden_effect = { destroy_situation = this }
+	}
+	monthly_progress = {
+		base = 0
+		modifier = {
+			add = value:deficit_situation_progress_value|RESOURCE|MJ25_WH_void_whispers|
+			desc = string_expenditures_greater_than_income_MJ25_WH_resource
+			owner = { has_actual_deficit = { RESOURCE = MJ25_WH_void_whispers } }
+		}
+		modifier = {
+			subtract = 5
+			desc = string_not_in_deficit_MJ25_WH_resource
+			owner = {
+				resource_income_compare = {
+					resource = MJ25_WH_void_whispers
+					value >= 0
+				}
+			}
+		}
+		modifier = {
+			subtract = 1
+			desc = string_resource_reserves_MJ25_WH_resource
+			owner = {
+				has_negative_income_with_stockpile = { RESOURCE = MJ25_WH_void_whispers }
+			}
+		}
+		modifier = {
+			desc = civilian_difficulty
+			mult = 0.1
+			situation_monthly_progress > 0
+			is_difficulty = 0
+			owner = {
+				is_ai = no
+			}
+		}
+		modifier = {
+			desc = cadet_difficulty
+			mult = 0.5
+			situation_monthly_progress > 0
+			is_difficulty = 1
+			owner = {
+				is_ai = no
+			}
+		}
+	}
+	approach = {
+		name = deficit_approach_do_nothing
+		icon = GFX_situation_approach_this_is_fine
+		icon_background = GFX_situation_approach_bg_yellow
+		default = yes
+		on_select = {
+			custom_tooltip = deficit_approach_do_nothing_tooltip
+		}
+		ai_weight = {
+			base = 1
+		}
+	}
+	approach = {
+		name = deficit_approach_MJ25_WH_resource_deficit_work_harder
+		icon = GFX_MJ25_WH_situation_approach_starsong
+		icon_background = GFX_situation_approach_bg_yellow
+		modifier = {
+			planet_MJ25_WH_listeners_MJ25_WH_void_whispers_produces_add = 4
+			planet_MJ25_WH_listeners_unity_upkeep_add = 2
+		}
+		ai_weight = {
+			base = 5
+		}
+	}
+	# approach = {
+	# 	name = deficit_approach_MJ25_WH_resource_deficit_exposure
+	# 	icon = GFX_situation_approach_energy_credits
+	# 	icon_background = GFX_situation_approach_bg_green
+	# 	modifier = {
+	# 		planet_pops_upkeep_mult = 0.5
+	# 		pop_category_workers_MJ25_WH_void_whispers_produces_add = 0.3
+	# 		pop_category_specialists_MJ25_WH_void_whispers_produces_add = 0.3
+	# 	}
+
+	# 	ai_weight = {
+	# 		base = 0
+	# 		modifier = {
+	# 			add = 2
+	# 			current_stage = deficit_third
+	# 		}
+	# 		modifier = {
+	# 			add = 2
+	# 			current_stage = deficit_fourth
+	# 		}
+	# 	}
+	# }
+}

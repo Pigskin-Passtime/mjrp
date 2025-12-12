@@ -1,0 +1,75 @@
+# possible section models:
+# SHIPYARD_STARBASE_SECTION
+# REFINERY_STARBASE_SECTION
+# SCIENCE_STARBASE_SECTION
+# HANGAR_STARBASE_SECTION
+# ASSEMBLYYARD_STARBASE_SECTION
+#Remember to update operation_sabotage_starbase if you add any new modules.
+# You will need to update the description, espionage_sabotage_starbase_module, and remove_sabotage_starbase_flag
+
+
+MJ25_WH_augury_array = {
+	icon = "GFX_spaceport_module_MJ25_WH_augury_array"
+	section = "SCIENCE_STARBASE_SECTION"
+	construction_days = 180
+
+	potential = {
+		exists = owner
+		owner = { 
+			OR = {
+				has_crisis_perk = MJ25_WH_menp_attuned_arrays
+			}
+		}
+		is_normal_starbase = yes
+	}
+
+	possible = {
+		NOT = {
+			has_starbase_building = dark_matter_listening_post
+		}
+	}
+
+	resources = {
+		category = starbase_modules
+		cost = {
+			alloys = 100
+		}
+
+		upkeep = {
+			energy = 1
+		}
+	}
+
+	station_modifier = {
+		ship_cloaking_detection_add = 1
+	}
+
+	# Kalisalos: I reverted it back and applied a fix to the crisobj so that these are counted in country economy trackers
+	triggered_country_modifier = {
+		potential = {
+			owner = {
+				OR = {
+					has_crisis_perk = MJ25_WH_menp_attuned_arrays 
+					has_country_flag = MJ25_WH_perk_testing
+				}
+			}
+		}
+		country_base_MJ25_WH_void_whispers_produces_add = 1
+	}
+
+	ai_build_at_chokepoint = yes
+	ai_build_outside_chokepoint = yes
+	ai_weight = {
+		weight = 100 #use same weight here - ai weighting is done in starbase_types.txt
+		modifier = {
+			add = 1000
+			owner = {
+				NOT = {
+					any_owned_starbase = {
+						has_starbase_module = detection_array
+					}
+				}
+			}
+		}
+	}
+}
