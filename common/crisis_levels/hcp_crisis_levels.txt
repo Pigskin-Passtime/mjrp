@@ -18,18 +18,11 @@ hcp_crisis_harvesters_level_1 = {
 	on_unlock = {
 		hidden_effect = {
 			owner = {
-				if = {
-					limit = { country_uses_bio_ships = yes }
-					create_ship_design = { design = "hcp_BIO_NAME_Prospector_Drone" }
-				}
-				else = {
-					create_ship_design = { design = "hcp_NAME_Prospector_Drone" }
-				}
 				country_event = { id = hcp_harvesters_crisis.100 }
-				last_created_design = {
-					set_design_flag = hcp_prospector_drone
+				give_technology = {
+					tech = hcp_tech_prospector_drone
+					message = no
 				}
-				add_ship_design = last_created_design
 				refresh_auto_generated_ship_designs = yes
 				add_research_option = tech_mining_drone_weapon_1
 			}
@@ -121,6 +114,10 @@ hcp_crisis_harvesters_level_4 = {
 		hidden_effect = {
 			owner = {
 				country_event = { id = hcp_harvesters_crisis.400 }
+				give_technology = {
+					tech = hcp_tech_stellar_harvester
+					message = no
+				}
 			}
 		}
 	}
@@ -162,20 +159,6 @@ hcp_crisis_harvesters_level_5 = {
 
 	on_unlock = {
 		hidden_effect = {
-			declare_crisis_effect = yes
-			every_playable_country = {
-				limit = {
-					is_galactic_community_member = no
-					NOR = {
-						is_same_value = owner
-						is_at_war_with = owner
-					}
-				}
-				join_war_on_side = {
-					war = event_target:crisis_war
-					side = event_target:community_war_leader
-				}
-			}
 			owner = {
 				country_event = { id = hcp_harvesters_crisis.500 }
 			}

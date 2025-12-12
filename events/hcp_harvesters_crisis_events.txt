@@ -260,14 +260,15 @@ ship_event = {
 		owner = {
 			has_crisis_perk = hcp_menp_prospector_drone
 		}
-		design = {
-			has_design_flag = hcp_prospector_drone
-		}
+		is_ship_size = hcp_prospector_drone
 		from = {
 			NOR = {
 				is_colonizable = yes
 				has_deposit_for = shipclass_mining_station
 				has_deposit_for = shipclass_research_station
+				has_modifier = terraforming_candidate
+				has_modifier = frozen_terraforming_candidate
+				has_modifier = toxic_terraforming_candidate
 			}
 		}
 	}
@@ -722,26 +723,378 @@ country_event = {
 				id = hcp_harvesters_crisis.505
 				days = 5
 			}
-			#Make everyone hate you
-			every_playable_country = {
-				limit = {
-					NOT = { is_same_value = root }
-				}
-				establish_communications_no_message = root
-				add_opinion_modifier = {
-					who = root
-					modifier = opinion_destroying_galaxy
-				}
+			country_event = {
+				id = hcp_harvesters_crisis.502
+				days = 210
 			}
-			every_country = {
-				limit = { is_fallen_empire = yes }
-				add_opinion_modifier = {
-					who = root
-					modifier = opinion_destroying_galaxy
+			every_playable_country = {
+				limit = { NOT = { is_same_value = root } }
+				country_event = {
+					id = hcp_harvesters_crisis.501
+					days = 120
+					scopes = {
+						from = root
+					}
+				}
+				# Not all FEs should attack on lower difficulty, starting with 3
+				switch = {
+					trigger = is_difficulty
+					3 = {
+						hcp_harvesters_fe_effect = yes
+					}
+					4 = {
+						while = {
+							count = 2
+							hcp_harvesters_fe_effect = yes
+						}
+					}
+					5 = {
+						while = {
+							count = 4
+							hcp_harvesters_fe_effect = yes
+						}
+					}
+					6 = {
+						while = {
+							count = 6
+							hcp_harvesters_fe_effect = yes
+						}
+					}
 				}
 			}
 		}
 	}
+}
+
+# Creates a coalition of opposing countries against the crisis
+country_event = {
+    id = hcp_harvesters_crisis.501
+    title = hcp_harvesters_crisis.501.name
+    desc = hcp_harvesters_crisis.501.desc
+    picture = GFX_evt_announcement
+    show_sound = event_sensor_ping
+    location = from
+
+    is_triggered_only = yes
+
+	immediate = {
+		establish_communications_no_message = from
+		add_opinion_modifier = {
+			who = from
+			modifier = opinion_destroying_galaxy
+		}
+	}
+
+    # Coalition war
+    option = {
+        name = hcp_harvesters_crisis.501.a
+        custom_tooltip = hcp_harvesters_crisis.501.a.tt
+        trigger = {
+            is_player_crisis = no
+            is_homicidal = no
+        }
+        ai_chance = {
+            modifier = {
+                add = 5
+                is_xenophobe = yes # No one should become stronger than us
+            }
+            modifier = {
+                add = 5
+                is_xenophile = yes # We have to protect the weak
+            }
+            modifier = {
+                add = 5
+                is_militarist = yes
+            }
+            modifier = {
+                add = 15
+                has_ascension_perk = ap_defender_of_the_galaxy
+            }
+            modifier = {
+                add = 5
+                is_galactic_community_member = yes
+            }
+            modifier = {
+                add = 25
+                is_fallen_empire = yes
+            }
+			modifier = {
+				add = 10
+				any_neighbor_country = {
+					is_same_empire = from
+				}
+			}
+            modifier = {
+                add = 10
+                OR = {
+                    is_galactic_custodian = yes
+                    is_galactic_emperor = yes
+                }
+            }
+        }
+        hidden_effect = { set_country_flag = hcp_anti_harvesters_coalition_@from }
+    }
+
+    # Genocidals
+    option = {
+        name = hcp_harvesters_crisis.501.b
+        custom_tooltip = hcp_harvesters_crisis.501.b.tt
+        trigger = {
+            is_homicidal = yes
+        }
+    }
+
+    # Neutral
+    option = {
+        name = hcp_harvesters_crisis.501.c
+        custom_tooltip = hcp_harvesters_crisis.501.c.tt
+        trigger = {
+            is_homicidal = no
+        }
+        ai_chance = {
+            modifier = {
+                add = 10
+                is_pacifist = yes
+            }
+            modifier = {
+                add = 25
+                has_civic = civic_inwards_perfection
+            }
+            modifier = {
+                add = 5
+                is_galactic_community_member = no
+            }
+        }
+    }
+
+	after = {
+		if = {
+			limit = {
+				is_country_type = default
+				NOT = { has_event_chain = hcp_anti_harvesters_chain }
+			}
+			begin_event_chain = { event_chain = hcp_anti_harvesters_chain }
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					is_country_type = default
+				}
+				set_country_flag = hcp_has_anti_harvesters_chain_@from
+				from = {
+					every_owned_fleet = {
+						limit = {
+							is_ship_size = hcp_stellar_harvester
+						}
+						enable_special_project = {
+							name = hcp_DESTROY_STELLAR_HARVESTER
+							location = this
+							owner = root.owner
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Starts the crisis war (hidden)
+country_event = {
+	id = hcp_harvesters_crisis.502
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		# Kick the Crisis out of Alliances.
+		if = {
+			limit = { has_federation = yes }
+			leave_alliance = { override_requirements = yes }
+		}
+		if = {
+			limit = {
+				is_galactic_community_formed = yes
+				is_galactic_community_member = yes
+			}
+			remove_from_galactic_community = yes
+		}
+		awaken_guardians_of_the_galaxy = yes
+
+		# Will add the GalCom leaders as war_leader, otherwise the strongest opponent
+		if = {
+			limit = {
+				has_galactic_emperor = yes
+				galactic_emperor = { has_country_flag = hcp_anti_harvesters_coalition_@root }
+			}
+			galactic_emperor = { save_event_target_as = war_leader }
+		}
+		else_if = {
+			limit = {
+				has_galactic_emperor = no
+				has_galactic_custodian = yes
+				galactic_custodian = { has_country_flag = hcp_anti_harvesters_coalition_@root }
+			}
+			galactic_custodian = { save_event_target_as = war_leader }
+		}
+
+		# An FE will take the lead
+		else_if = {
+			limit = {
+				any_country = {
+					is_fallen_empire = yes
+					has_country_flag = anti_hyperthermia_fe
+				}
+			}
+			random_country = {
+				limit = {
+					is_fallen_empire = yes
+					has_country_flag = anti_hyperthermia_fe
+				}
+				save_event_target_as = war_leader
+			}
+		}
+
+		# Will otherwise select the strongest
+		else_if = {
+			limit = {
+				any_playable_country = {
+					is_subject = no
+					has_country_flag = hcp_anti_harvesters_coalition_@root
+					relative_power = {
+						who = prev
+						value >= superior
+						category = fleet
+					}
+				}
+			}
+			random_playable_country = {
+				limit = {
+					is_subject = no
+					has_country_flag = hcp_anti_harvesters_coalition_@root
+					relative_power = {
+						who = prev
+						value >= superior
+						category = fleet
+					}
+				}
+				save_event_target_as = war_leader
+			}
+		}
+		else_if = {
+			limit = {
+				any_playable_country = {
+					is_subject = no
+					has_country_flag = hcp_anti_harvesters_coalition_@root
+					relative_power = {
+						who = prev
+						value >= equivalent
+						category = all
+					}
+				}
+			}
+			random_playable_country = {
+				limit = {
+					is_subject = no
+					has_country_flag = hcp_anti_harvesters_coalition_@root
+					relative_power = {
+						who = prev
+						value >= equivalent
+						category = all
+					}
+				}
+				save_event_target_as = war_leader
+			}
+		}
+		else = {
+			random_playable_country = {
+				limit = {
+					has_country_flag = hcp_anti_harvesters_coalition_@root
+					is_subject = no
+				}
+				save_event_target_as = war_leader
+			}
+		}
+
+		# WAR!
+		event_target:war_leader = {
+			declare_war = {
+				target = root
+				name = {
+					key = "NAME_Declared_Crisis_War"
+					variable_string = "[This.MainDefender.GetAdj]"
+				}
+				attacker_war_goal = "wg_declared_crisis"
+				effect = { save_event_target_as = hcp_harvesters_war }
+			}
+		}
+		every_country = {
+			limit = {
+				has_country_flag = hcp_anti_harvesters_coalition_@root
+				NOR = {
+					is_same_value = event_target:war_leader
+					is_at_war_with = root
+					has_subject = root
+				}
+			}
+			join_war = event_target:war_leader
+		}
+
+		# Subjects
+		every_subject = {
+			if = {
+				limit = { has_federation = yes }
+				leave_alliance = { override_requirements = yes }
+			}
+			if = {
+				limit = {
+					is_galactic_community_formed = yes
+					is_galactic_community_member = yes
+				}
+				remove_from_galactic_community = yes
+			}
+		}
+
+		# Notifications
+		country_event = { id = hcp_harvesters_crisis.503 }
+		every_playable_country = {
+			limit = {
+				NOT = { is_same_empire = root }
+			}
+			country_event = {
+				id = hcp_harvesters_crisis.504
+				scopes = {
+					from = root
+				}
+			}
+		}
+	}
+}
+
+# Crisis war - crisis
+country_event = {
+    id = hcp_harvesters_crisis.503
+    title = hcp_harvesters_crisis.503.name
+    desc = hcp_harvesters_crisis.503.desc
+    picture = GFX_evt_crisis_declared
+    show_sound = event_death_cult
+    event_chain = hcp_harvesters_victory_chain
+
+    is_triggered_only = yes
+
+    option = { name = hcp_harvesters_crisis.503.a }
+}
+
+# Crisis war - others
+country_event = {
+    id = hcp_harvesters_crisis.504
+    title = hcp_harvesters_crisis.504.name
+    desc = hcp_harvesters_crisis.504.desc
+    picture = GFX_evt_crisis_declared
+    show_sound = event_announcement
+	event_chain = hcp_anti_harvesters_chain
+
+    is_triggered_only = yes
+
+    option = { name = hcp_harvesters_crisis.504.a }
 }
 
 country_event = {
@@ -971,12 +1324,7 @@ country_event = {
 				NOT = { is_same_value = root }
 				has_communications = root
 				has_event_chain = hcp_anti_harvesters_chain
-				any_situation = {
-					is_situation_type = hcp_situation_outward_bound_dummy
-					target = {
-						is_same_value = root
-					}
-				}
+				has_country_flag = hcp_has_anti_harvesters_chain_@root.owner
 			}
 			complete_special_project = {
 				type = hcp_DESTROY_STELLAR_HARVESTER
@@ -1066,7 +1414,23 @@ fleet_event = {
 	hide_window = yes
 
 	immediate = {
+		solar_system = {
+			remove_star_flag = hcp_depart_galaxy_location_@root.owner
+			every_fleet_in_system = {
+				limit = {
+					exists = owner
+					owner = { is_same_empire = root.owner }
+					is_ship_size = hcp_stellar_harvester
+					NOT = { is_same_value = root }
+				}
+				clear_orders = yes
+			}
+		}
 		owner = {
+			complete_special_project = {
+				type = hcp_DEPARTURE_POINT
+				location = root.star
+			}
 			subtract_variable = {
 				which = hcp_num_stellar_harvesters
 				value = 1
@@ -1123,36 +1487,13 @@ fleet_event = {
 					}
 				}
 				else = {
-					switch = {
-						trigger = galaxy_size
-						huge = { set_variable = { which = hcp_outward_bound_required_progress value = @hcp_outward_bound_required_progress_huge } }
-						large = { set_variable = { which = hcp_outward_bound_required_progress value = @hcp_outward_bound_required_progress_large } }
-						medium = { set_variable = { which = hcp_outward_bound_required_progress value = @hcp_outward_bound_required_progress_medium } }
-						small = { set_variable = { which = hcp_outward_bound_required_progress value = @hcp_outward_bound_required_progress_small } }
-						tiny = { set_variable = { which = hcp_outward_bound_required_progress value = @hcp_outward_bound_required_progress_tiny } }
-					}
-					start_situation = {
-						type = hcp_situation_outward_bound_dummy
-						target = root.owner
-						effect = {
-							situation_event = {
-								id = hcp_harvesters_situations.2000
-								scopes = {
-									from = root.solar_system
-								}
-							}
-						}
-					}
+					hcp_start_outward_bound_dummy_situation = { EVENT = hcp_harvesters_situations.2000 SCOPE = root.solar_system }
 				}
 			}
 			every_playable_country = {
 				limit = {
-					any_situation = {
-						is_situation_type = hcp_situation_outward_bound_dummy
-						target = {
-							is_same_value = root.owner
-						}
-					}
+					has_event_chain = hcp_anti_harvesters_chain
+					has_country_flag = hcp_has_anti_harvesters_chain_@root.owner
 				}
 				abort_special_project = {
 					type = hcp_DESTROY_STELLAR_HARVESTER
@@ -1172,6 +1513,206 @@ fleet_event = {
 			}
 		}
 		delete_fleet = this
+	}
+}
+
+# Stellar Harvester Refits/Upgrades via fleet action
+fleet_event = {
+	id = hcp_harvesters_crisis.720
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		if = {
+			limit = {
+				owner = {
+					count_owned_design = {
+						limit = {
+							is_ship_size = hcp_stellar_harvester
+						}
+						count > 1
+					}
+				}
+			}
+			fleet_event = {
+				id = hcp_harvesters_crisis.725
+			}
+		}
+		else = {
+			set_ship_design = {
+				random_existing_design = hcp_stellar_harvester
+			}
+		}
+	}
+}
+
+fleet_event = {
+	id = hcp_harvesters_crisis.725
+	title = "hcp_harvesters_crisis.725.name"
+	desc = "hcp_harvesters_crisis.725.desc"
+	picture = GFX_evt_megastructure_construction
+	show_sound = event_construction
+
+	is_triggered_only = yes
+
+	immediate = {
+		random_owned_ship = {
+			save_event_target_as = hcp_retrofitting_stellar_harvester
+		}
+		owner = {
+			random_owned_design = {
+				limit = {
+					is_ship_size = hcp_stellar_harvester
+				}
+				save_event_target_as = hcp_harvester_design_1
+			}
+			random_owned_design = {
+				limit = {
+					is_ship_size = hcp_stellar_harvester
+					NOT = { is_same_value = event_target:hcp_harvester_design_1 }
+				}
+				save_event_target_as = hcp_harvester_design_2
+			}
+			random_owned_design = {
+				limit = {
+					is_ship_size = hcp_stellar_harvester
+					NOR = {
+						is_same_value = event_target:hcp_harvester_design_1
+						is_same_value = event_target:hcp_harvester_design_2
+					}
+				}
+				save_event_target_as = hcp_harvester_design_3
+			}
+			random_owned_design = {
+				limit = {
+					is_ship_size = hcp_stellar_harvester
+					NOR = {
+						is_same_value = event_target:hcp_harvester_design_1
+						is_same_value = event_target:hcp_harvester_design_2
+						is_same_value = event_target:hcp_harvester_design_3
+					}
+				}
+				save_event_target_as = hcp_harvester_design_4
+			}
+			random_owned_design = {
+				limit = {
+					is_ship_size = hcp_stellar_harvester
+					NOR = {
+						is_same_value = event_target:hcp_harvester_design_1
+						is_same_value = event_target:hcp_harvester_design_2
+						is_same_value = event_target:hcp_harvester_design_3
+						is_same_value = event_target:hcp_harvester_design_4
+					}
+				}
+				save_event_target_as = hcp_harvester_design_5
+			}
+		}
+		create_country = {
+            name = "NAME_hcp_refit"
+            type = global_event
+            auto_delete = yes
+            flag = {
+                icon = {
+                    category = "special"
+                    file = "unknown.dds"
+                }
+                background = {
+                    category = "backgrounds"
+                    file = "00_solid.dds"
+                }
+                colors = {
+                    "red"
+                    "red"
+                    "null"
+                    "null"
+                }
+            }
+            effect = {
+                save_event_target_as = hcp_refit_country
+            }
+        }
+		event_target:hcp_refit_country = {
+			hcp_spawn_design_name_fleet = { NUM = 1 }
+			hcp_spawn_design_name_fleet = { NUM = 2 }
+			hcp_spawn_design_name_fleet = { NUM = 3 }
+			hcp_spawn_design_name_fleet = { NUM = 4 }
+			hcp_spawn_design_name_fleet = { NUM = 5 }
+		}
+	}
+
+	option = {
+		name = hcp_harvesters_crisis.725.a
+		trigger = {
+			exists = event_target:hcp_harvester_design_1
+		}
+		set_ship_design = {
+			design = event_target:hcp_harvester_design_1
+		}
+	}
+
+	option = {
+		name = hcp_harvesters_crisis.725.b
+		trigger = {
+			exists = event_target:hcp_harvester_design_2
+		}
+		set_ship_design = {
+			design = event_target:hcp_harvester_design_2
+		}
+	}
+
+	option = {
+		name = hcp_harvesters_crisis.725.c
+		trigger = {
+			exists = event_target:hcp_harvester_design_3
+		}
+		set_ship_design = {
+			design = event_target:hcp_harvester_design_3
+		}
+	}
+
+	option = {
+		name = hcp_harvesters_crisis.725.d
+		trigger = {
+			exists = event_target:hcp_harvester_design_4
+		}
+		set_ship_design = {
+			design = event_target:hcp_harvester_design_4
+		}
+	}
+
+	option = {
+		name = hcp_harvesters_crisis.725.e
+		default_hide_option = yes
+		trigger = {
+			exists = event_target:hcp_harvester_design_5
+		}
+		set_ship_design = {
+			design = event_target:hcp_harvester_design_5
+		}
+	}
+
+	option = {
+		name = hcp_harvesters_crisis.725.f
+	}
+
+	after = {
+		hidden_effect = {
+			owner = {
+				every_owned_design = {
+					limit = {
+						has_design_flag = hcp_harvester_design_selected
+					}
+					remove_design_flag = hcp_harvester_design_selected
+				}
+			}
+			if = {
+				limit = { exists = event_target:hcp_refit_country }
+				event_target:hcp_refit_country = {
+					destroy_country = yes
+				}
+			}
+		}
 	}
 }
 
@@ -1273,6 +1814,25 @@ country_event = {
 			#	delete_fleet = this
 			#}
 			set_country_flag = silence_destroy_event
+			every_playable_country = {
+				limit = {
+					NOT = { is_same_empire = root }
+					has_event_chain = hcp_anti_harvesters_chain
+				}
+				save_event_target_as = hcp_project_owner
+				root = {
+					every_owned_fleet = {
+						limit = { is_ship_size = hcp_stellar_harvester }
+						event_target:hcp_project_owner = {
+							abort_special_project = {
+								type = hcp_DESTROY_STELLAR_HARVESTER
+								location = prev
+							}
+						}
+					}
+				}
+			}
+			hcp_end_anti_harvesters_event_chain = yes
 			destroy_country = yes
 			win = yes
 		}
@@ -1335,6 +1895,7 @@ country_event = {
 			}
 		}
 		set_country_flag = silence_destroy_event
+		hcp_end_anti_harvesters_event_chain = yes
 		every_playable_country = {
 			limit = { is_ai = no }
 			if = {

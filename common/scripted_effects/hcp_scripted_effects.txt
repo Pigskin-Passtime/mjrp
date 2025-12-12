@@ -245,6 +245,10 @@ hcp_harvest_star_system = {
 			}
 			every_owned_pop_group = {
 				limit = {
+					OR = {
+						is_pre_sapient = no
+						has_trait = trait_nascent_stage
+					}
 					NOR = {
 						has_trait = trait_pathogenic_genes
 						has_trait = trait_self_modified
@@ -268,6 +272,23 @@ hcp_harvest_star_system = {
 					PERCENTAGE = 100%
 				}
 			}
+			if = {
+				limit = {
+					root.owner = {
+						has_policy_flag = pre_sapients_protect
+					}
+				}
+				every_owned_pop_group = {
+					limit = {
+						is_pre_sapient = yes
+					}
+					resettle_pop_group = {
+						POP_GROUP = this
+						PLANET = event_target:hcp_relocate_target
+						PERCENTAGE = 100%
+					}
+				}
+			}
 		}
 		else = {
 			every_owned_pop_group = {
@@ -277,6 +298,17 @@ hcp_harvest_star_system = {
 				root.from.owner = {
 					add_resource = {
 						minerals = 1
+						multiplier = prev.trigger:pop_group_size
+					}
+				}
+			}
+			every_owned_pop_group = {
+				limit = {
+					is_infernal = yes
+				}
+				root.from.owner = {
+					add_resource = {
+						alloys = 1
 						multiplier = prev.trigger:pop_group_size
 					}
 				}
@@ -331,6 +363,7 @@ hcp_harvest_star_system = {
 			hcp_resources_from_planet_size = yes
 		}
 		change_pc = hcp_pc_harvested_system
+		clear_planet_modifiers = yes
 	}
 	# Handle Contingency Machine Worlds
 	every_system_planet = {
@@ -488,7 +521,56 @@ hcp_resources_from_planet_size = {
 	}
 }
 
+hcp_spawn_design_name_fleet = {
+	if = {
+		limit = { exists = event_target:hcp_harvester_design_$NUM$ }
+		create_fleet = {
+			name = "hcp_NAME_Stellar_Harvester"
+			settings = {
+				can_disband = no
+			}
+			effect = {
+				set_owner = event_target:hcp_refit_country
+				create_ship = {
+					name = "hcp_NAME_Stellar_Harvester"
+					design = event_target:hcp_harvester_design_$NUM$
+					effect = {
+						save_event_target_as = hcp_harvester_design_$NUM$_name
+					}
+				}
+				set_fleet_stance = passive
+				set_mia = mia_emergency_ftl
+			}
+		}
+	}
+}
+
 hcp_replicate_stellar_harvester = {
+	$OWNER$ = {
+		if = {
+			limit = {
+				any_owned_ship = {
+					is_ship_size = hcp_stellar_harvester
+				}
+			}
+			random_owned_ship = {
+				limit = {
+					is_ship_size = hcp_stellar_harvester
+				}
+				save_event_target_as = hcp_target_harvester
+			}
+		}
+		else = {
+			owner = {
+				random_owned_design = {
+					limit = {
+						is_ship_size = hcp_stellar_harvester
+					}
+					save_event_target_as = hcp_target_harvester
+				}
+			}
+		}
+	}
 	create_fleet = {
 		name = "hcp_NAME_Stellar_Harvester"
 		settings = {
@@ -499,15 +581,15 @@ hcp_replicate_stellar_harvester = {
 			set_fleet_flag = hcp_stellar_harvester
 			create_ship = {
 				name = "hcp_NAME_Stellar_Harvester"
-				design = "hcp_NAME_Stellar_Harvester"
+				design = event_target:hcp_target_harvester #"hcp_NAME_Stellar_Harvester"
 			}
 			set_location = {
-					target = $TARGET$
-					distance = 10
-				}
+				target = $TARGET$
+				distance = 10
+			}
 			set_fleet_stance = passive
 			set_variable = {
-				which = hcp_harvester_stored_resources
+				which = hcp_harvester_ability_progress
 				value = 0
 			}
 		}
@@ -535,22 +617,14 @@ hcp_replicate_stellar_harvester = {
 		if = {
 			limit = {
 				any_playable_country = {
-					any_situation = {
-						is_situation_type = hcp_situation_outward_bound_dummy
-						target = {
-							is_same_value = event_target:hcp_new_harvester_owner
-						}
-					}
+					has_event_chain = hcp_anti_harvesters_chain
+					has_country_flag = hcp_has_anti_harvesters_chain_@event_target:hcp_new_harvester_owner
 				}
 			}
 			every_playable_country = {
 				limit = {
-					any_situation = {
-						is_situation_type = hcp_situation_outward_bound_dummy
-						target = {
-							is_same_value = event_target:hcp_new_harvester_owner
-						}
-					}
+					has_event_chain = hcp_anti_harvesters_chain
+					has_country_flag = hcp_has_anti_harvesters_chain_@event_target:hcp_new_harvester_owner
 				}
 				event_target:hcp_new_harvester = {
 					enable_special_project = {
@@ -592,23 +666,32 @@ hcp_replicate_stellar_harvester = {
 						}
 					}
 				}
-				switch = {
-					trigger = galaxy_size
-					huge = { set_variable = { which = hcp_outward_bound_required_progress value = @hcp_outward_bound_required_progress_huge } }
-					large = { set_variable = { which = hcp_outward_bound_required_progress value = @hcp_outward_bound_required_progress_large } }
-					medium = { set_variable = { which = hcp_outward_bound_required_progress value = @hcp_outward_bound_required_progress_medium } }
-					small = { set_variable = { which = hcp_outward_bound_required_progress value = @hcp_outward_bound_required_progress_small } }
-					tiny = { set_variable = { which = hcp_outward_bound_required_progress value = @hcp_outward_bound_required_progress_tiny } }
+				hcp_start_outward_bound_dummy_situation = { EVENT = hcp_harvesters_situations.2001 }
+			}
+		}
+	}
+}
+
+hcp_start_outward_bound_dummy_situation = {
+	switch = {
+		trigger = galaxy_size
+		huge = { set_variable = { which = hcp_outward_bound_required_progress value = @hcp_outward_bound_required_progress_huge } }
+		large = { set_variable = { which = hcp_outward_bound_required_progress value = @hcp_outward_bound_required_progress_large } }
+		medium = { set_variable = { which = hcp_outward_bound_required_progress value = @hcp_outward_bound_required_progress_medium } }
+		small = { set_variable = { which = hcp_outward_bound_required_progress value = @hcp_outward_bound_required_progress_small } }
+		tiny = { set_variable = { which = hcp_outward_bound_required_progress value = @hcp_outward_bound_required_progress_tiny } }
+	}
+	start_situation = {
+		type = hcp_situation_outward_bound_dummy
+		target = root.owner
+		effect = {
+			situation_event = {
+				id = $EVENT$
+				[[SCOPE]
+				scopes = {
+					from = 	$SCOPE$
 				}
-				start_situation = {
-					type = hcp_situation_outward_bound_dummy
-					target = root.owner
-					effect = {
-						situation_event = {
-							id = hcp_harvesters_situations.2001
-						}
-					}
-				}
+				]
 			}
 		}
 	}
@@ -817,5 +900,44 @@ hcp_highlight_departure_points = {
 				owner = root
 			}
 		}
+	}
+}
+
+hcp_harvesters_fe_effect = {
+	random_country = {
+		limit = {
+			is_fallen_empire = yes
+			NOR = {
+				is_at_war_with = root
+				has_country_flag = hcp_anti_harvesters_fe@from
+				# Divided Hive Mind
+				has_country_flag = first_hive_fe_fragment
+				has_country_flag = second_hive_fe_fragment
+				has_country_flag = third_hive_fe_fragment
+			}
+		}
+		set_country_flag = hcp_anti_harvesters_fe@from
+		country_event = {
+			id = hcp_harvesters_crisis.501
+			days = 120
+			scopes = {
+				from = root
+			}
+		}
+	}
+}
+
+hcp_end_anti_harvesters_event_chain = {
+	every_playable_country = {
+		limit = {
+			has_event_chain = hcp_anti_harvesters_chain
+			NOT = {
+				any_playable_country = {
+					NOT = { is_same_empire = root }
+					has_crisis_perk = hcp_menp_galactic_harvest
+				}
+			}
+		}
+		end_event_chain = hcp_anti_harvesters_chain
 	}
 }

@@ -4,6 +4,130 @@
 ##################
 
 ###########################
+# EXCAVATION LANCE
+###########################
+
+weapon_component_template = {
+	key = "hcp_EXCAVATION_BEAM"
+	size = extra_large
+	type = instant
+	prio_projectile = yes
+
+	icon = "GFX_ship_part_mining_drone_laser_1"
+	icon_frame = 1
+
+	power = -260
+
+	damage = { min = 100 max = 300 }
+	hull_damage = 1.25
+	shield_damage = 0.25
+	armor_damage = 1.50
+	windup = { min = 12 max = 47 }
+	range = 150
+	accuracy = 0.95
+	tracking = 1
+	military_power_multiplier = 1
+
+	firing_arc = 90.0
+	use_ship_main_target = yes
+	potential = {
+		is_ship_size = hcp_excavator_drone
+	}
+
+	component_set = "hcp_EXCAVATION_BEAM"
+	projectile_gfx = "gamma_laser_l"
+	tags = { weapon_type_energy weapon_role_artillery x_slot }
+	ai_tags = { weapon_role_artillery artillery }
+	ai_tag_weight = 0
+
+	# on_hit = {
+	# 	custom_tooltip = "lfb_on_hit_stun_tt"
+	# 	hidden_effect = {
+	# 		if = {
+	# 			limit = {
+	# 				exists = this
+	# 				NOT = { has_ship_flag = conduit_paralyzed }
+	# 			}
+	# 			set_timed_ship_flag = { flag = conduit_paralyzed days = 35 }
+	# 			add_modifier = {
+	# 				modifier = lf_weapon_stun_effect
+	# 				days = 7 # If this changes, adjust the tt
+	# 			}
+	# 		}
+	# 		from.owner = { complete_crisis_objective = crisobj_lens_beam_impact }
+	# 	}
+	# }
+
+	target_weights = {
+		titan = 3
+		battleship = 2
+		stinger_stage_1 = 1.5
+		stinger_stage_2 = 2
+		stinger_stage_3 = 2
+	}
+
+	ai_weight = {
+		weight = 10
+	}
+}
+
+###########################
+# STELLAR HARVESTER STRIKE CRAFT
+###########################
+
+strike_craft_component_template = {
+	key = "hcp_DRONE_STRIKE_CRAFT"
+	size = LARGE
+	entity = "ancient_corvette_hull_entity"
+	power = -59
+
+	count = 8
+	regeneration_per_day = 1
+	launch_time = 1.5
+
+	damage = { min = 4 max = 10 }
+	cooldown = 2.3
+	range = 10
+	engagement_range = 125
+	accuracy = 0.70
+	tracking = 0.30
+
+	health = 40
+	armor = 15
+	shield = 0
+	evasion = 0.50
+
+	speed = 500
+	rotation_speed = 0.75
+	acceleration = 2.5
+
+
+	shield_damage = 1.0
+	shield_penetration = 1
+	armor_damage = 1.50
+	hull_damage = 1.25
+
+	ship_behavior = "bombers_behavior"
+
+	weapon_type = instant # Not PD, unlike other strike craft
+	projectile_gfx = "gamma_laser_s"
+
+	component_set = "hcp_DRONE_STRIKE_CRAFT"
+	icon = "GFX_ship_part_strike_craft_scout_1"
+	icon_frame = 1
+	tags = { weapon_type_strike_craft }
+	ai_tags = { weapon_role_anti_armor carrier }
+
+	ai_weight = {
+		base = 1000
+	}
+
+	potential = {
+		is_ship_size = hcp_stellar_harvester
+	}
+}
+
+###########################
 # STELLAR HARVESTER STAR CRACKER
 ###########################
 
@@ -47,6 +171,63 @@ utility_component_template = {
 	icon_frame = 1
 	power = 0
 
+	potential = {
+		is_ship_size = hcp_stellar_harvester
+	}
+	component_set = "hcp_SHIP_STELLAR_HARVESTER_REPLICATE"
+
+	scripted_action = {
+		scope = self
+
+        possible = {
+			always = yes
+		}
+
+		button_clickable = {
+			custom_tooltip = {
+				fail_text = hcp_stellar_harvester_retrofit_can_upgrade
+				is_scope_set = owner
+				owner = {
+					OR = {
+						root = {
+							can_be_upgraded = yes
+						}
+						count_owned_design = {
+							limit = {
+								is_ship_size = hcp_stellar_harvester
+							}
+							count > 1
+						}
+					}
+				}
+			}
+			custom_tooltip = {
+				fail_text = hcp_stellar_harvester_retrofit_in_progress
+				is_scope_set = owner
+				owner = {
+					NOT = {
+						has_active_event = {
+							hcp_harvesters_crisis.725
+						}
+					}
+				}
+			}
+		}
+
+		name = hcp_on_stellar_harvester_retrofit
+		tooltip = hcp_stellar_harvester_retrofit_ship_button
+		icon = GFX_hcp_scripted_action_stellar_harvester_retrofit
+		activity_key = hcp_stellar_harvester_retrofit_activity_key
+		context_menu_name = hcp_stellar_harvester_retrofit_menu_title
+		progress_activity_key = hcp_stellar_harvester_retrofit_progress_activity_key
+		on_click_sound = "event_construction"
+
+		cooldown = 0
+		cost = { hcp_mining_efficiency = 500 }
+
+		shortcut = "SHIFT+R"
+	}
+
 	scripted_action = {
 		scope = self
 
@@ -79,7 +260,8 @@ utility_component_template = {
 		cooldown = 0
 		cost = { minerals = @hcp_replicate_cost }
 
-		shortcut = "SHIFT+R"
+		shortcut = "SHIFT+Z"
+		slot = 1
 	}
 
 	scripted_action = {
@@ -94,7 +276,7 @@ utility_component_template = {
 				fail_text = hcp_stellar_harvester_depart_galaxy_must_be_rim
 				is_scope_set = solar_system
 				solar_system = {
-					is_rim_system = yes
+					has_star_flag = hcp_depart_galaxy_location_@root.owner
 				}
 			}
 			is_in_combat = no
@@ -118,8 +300,8 @@ utility_component_template = {
 		cooldown = 0
 		cost = { energy = 100000 }
 
-		shortcut = "SHIFT+Z"
-		slot = 1
+		shortcut = "SHIFT+C"
+		slot = 2
 	}
 
 	ai_weight = {

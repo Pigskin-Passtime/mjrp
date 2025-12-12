@@ -68,8 +68,16 @@ hcp_orbital_quarrier = {
 	placement_rules = {
 		planet_possible = {
 			custom_tooltip = {
-				fail_text = "hcp_requires_not_capital"
-				is_capital = no
+				fail_text = "requires_survey_not_habitable"
+				is_surveyed = {			# prevent leaking habitability information
+					who = prev.from
+					status = yes
+				}
+				colonizable_planet = no
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_anomaly"
+				NOT = { has_anomaly = yes }
 			}
 			custom_tooltip = {
 				fail_text = "hcp_requires_not_gas_giant"

@@ -3,6 +3,68 @@
 # By jam1066
 ##################
 
+hcp_prospector_drone = {
+	max_speed = @speed_very_fast
+	acceleration = 0.3
+	rotation_speed = 0.2
+	max_hitpoints = @science_hp
+	modifier = {
+		ship_evasion_add = @science_evasion
+	}
+	ship_modifier = {
+		ship_hyperlane_range_add = 1
+	}
+	size_multiplier = 1
+	fleet_slot_size = 1
+	section_slots = { "mid" = { locator = "part1" } }
+	num_target_locators = 0
+	is_space_station = no
+	icon = ship_size_science
+	base_buildtime = @science_build_time
+
+	combat_disengage_chance = 2.0
+
+	enable_default_design = yes
+	graphical_culture = no
+	is_bio_ship = no
+	use_shipnames_from = science
+	is_designable = no
+	components_add_to_cost = no
+	potential_country = {
+		has_technology = hcp_tech_prospector_drone
+	}
+	is_civilian = yes
+	class = shipclass_science_ship
+	construction_type = { starbase_shipyard starbase_beastport }
+	required_component_set = "power_core"
+	required_component_set = "ftl_components"
+	required_component_set = "thruster_components"
+	required_component_set = "sensor_components"
+	required_component_set = "science_cloaking_components"
+	valid_target_aggressive_stance = no
+	auto_upgrade = yes
+
+	role_background = "GFX_role_selection_background"
+	available_to_everyone = yes
+
+	resources = {
+		category = ships
+		cost = {
+			alloys = 75
+		}
+		upkeep = {
+			energy = @science_upkeep_energy
+			alloys = @science_upkeep_alloys
+		}
+	}
+
+	ai_ship_data = {
+		min = value:desired_science_ships
+		system_mult = value:desired_science_ships_system_mult
+		max = value:max_science_ships
+	}
+}
+
 #Mining Drone
 hcp_mining_drone = {
 	max_speed = @speed_very_fast
@@ -25,7 +87,7 @@ hcp_mining_drone = {
 	is_bio_ship = no
 	use_shipnames_from = corvette
 
-	construction_type = starbase_shipyard
+	construction_type = { starbase_shipyard starbase_beastport }
 	required_component_set = "power_core"
 	required_component_set = "ftl_components"
 	required_component_set = "thruster_components"
@@ -54,6 +116,10 @@ hcp_mining_drone = {
 			alloys = @corvette_upkeep_alloys
 		}
 	}
+
+	ai_ship_data = {
+		fraction = 33
+	}
 }
 
 #Excavator Drone
@@ -79,7 +145,7 @@ hcp_excavator_drone = {
 	is_bio_ship = no
 	use_shipnames_from = destroyer
 
-	construction_type = starbase_shipyard
+	construction_type = { starbase_shipyard starbase_beastport }
 	required_component_set = "power_core"
 	required_component_set = "ftl_components"
 	required_component_set = "thruster_components"
@@ -108,11 +174,15 @@ hcp_excavator_drone = {
 			alloys = @destroyer_upkeep_alloys
 		}
 	}
+
+	ai_ship_data = {
+		fraction = 33
+	}
 }
 
 #Stellar Harvester
 hcp_stellar_harvester = {
-	graphical_culture = yes
+	graphical_culture = no
 	can_be_inspected = yes
 	max_speed = @speed_default
 	acceleration = 0.2
@@ -147,9 +217,28 @@ hcp_stellar_harvester = {
 	#}
 
 	class = shipclass_military_special
-	is_designable = no
+	is_designable = yes
+	enable_default_design = yes
 	is_hero_ship = yes
+	available_to_everyone = yes
+	use_shipnames_from = mining_station
 
+	# custom_state_loc_prefix = "hcp_HARVESTER_PROGRESS"
+
+	required_component_set = "power_core"
+	required_component_set = "ftl_components"
+	required_component_set = "thruster_components"
+	required_component_set = "sensor_components"
+	required_component_set = "combat_computers"
+	required_component_set = "hcp_SHIP_STELLAR_HARVESTER_REPLICATE"
+
+	potential_country = {
+		has_technology = hcp_tech_stellar_harvester
+	}
+
+	role_background = "GFX_role_selection_background"
+
+	components_add_to_cost = no
 	resources = {
 		category = ships
 		upkeep = {

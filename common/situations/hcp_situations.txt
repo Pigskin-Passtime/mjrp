@@ -39,7 +39,6 @@ hcp_situation_harvest_planet = {
 				if = {
 					limit = {
 						any_system_megastructure = {
-							owner = { is_same_value = root.owner }
 							has_megastructure_flag = hcp_harvest_@prevprev
 						}
 					}
@@ -192,18 +191,6 @@ hcp_situation_outward_bound_dummy = {
 		situation_event = {
 			id = hcp_harvesters_situations.10
 		}
-		target = {
-			every_owned_fleet = {
-				limit = {
-					is_ship_size = hcp_stellar_harvester
-				}
-				enable_special_project = {
-					name = hcp_DESTROY_STELLAR_HARVESTER
-					location = this
-					owner = root.owner
-				}
-			}
-		}
 	}
 
 	stages = {
@@ -247,39 +234,12 @@ hcp_situation_outward_bound_dummy = {
 	}
 
 	abort_trigger = {
-		NOR = {
-			exists = owner
-			exists = target
+		OR = {
+			NOT = { exists = owner }
+			NOT = { exists = target }
 		}
 	}
 
 	on_abort = {
-		target = {
-			every_owned_fleet = {
-				limit = { is_ship_size = hcp_stellar_harvester }
-				root.owner = {
-					abort_special_project = {
-						type = hcp_DESTROY_STELLAR_HARVESTER
-						location = prev
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				exists = owner
-				NOT = {
-					owner = {
-						any_situation = {
-							is_situation_type = hcp_situation_outward_bound_dummy
-							target = { NOT = { is_same_value = root.target } }
-						}
-					}
-				}
-			}
-			owner = {
-				end_event_chain = hcp_anti_harvesters_chain
-			}
-		}
 	}
 }
