@@ -1,0 +1,96 @@
+	if = {
+		limit = {
+			NOT = { has_global_flag = galactic_community_founded }
+		}
+		set_global_flag = galactic_community_founded				# galcom setup
+		if = { 
+			limit = {
+				OR = {
+					has_federations_dlc = yes
+					has_nemesis = yes
+				}
+			}
+			if = {
+				limit = {
+					OR = {
+						has_global_flag = year_2275_start
+						has_global_flag = year_2300_start
+					}
+				}
+				
+				pass_resolution_no_cooldown = resolution_commerce_buzzword_standardization #done
+				pass_resolution_no_cooldown = resolution_industry_regulatory_facilitation
+				pass_resolution_no_cooldown = resolution_greatergood_workers_rights
+				pass_resolution_no_cooldown = resolution_ecology_recycling_initiatives
+				pass_resolution_no_cooldown = resolution_galacticstudies_cooperative_research_channels
+				pass_resolution_no_cooldown = resolution_divinity_comfort_the_fallen
+				pass_resolution_no_cooldown = resolution_mutualdefense_the_readied_shield
+				pass_resolution_no_cooldown = resolution_rulesofwar_guardian_angels
+
+				pass_resolution_no_cooldown = resolution_sanctions_tech_1
+				pass_resolution_no_cooldown = resolution_sanctions_economic_1
+				pass_resolution_no_cooldown = resolution_sanctions_military_1
+				pass_resolution_no_cooldown = resolution_sanctions_administrative_1
+				pass_resolution_no_cooldown = resolution_galacticreforms_form_council
+
+				#pass_resolution_no_cooldown = resolution_galactic_market_form
+				set_global_flag = galactic_council_formed
+				if = {
+					limit = {
+						has_overlord_dlc = yes
+					}
+					pass_resolution_no_cooldown = resolution_defenseprivatization_condottieri
+					pass_resolution_no_cooldown = resolution_intergalacticdirective_regulated_growth
+					pass_resolution_no_cooldown = resolution_bureaucraticsurveillance_administrative_insight
+				}
+			}
+			if = {
+				limit = {
+					has_global_flag = year_2300_start
+				}
+				pass_resolution_no_cooldown = resolution_commerce_leveraged_privateering
+				pass_resolution_no_cooldown = resolution_industry_collective_waste_management
+				pass_resolution_no_cooldown = resolution_greatergood_five_year_plans
+				pass_resolution_no_cooldown = resolution_ecology_natural_sanctuaries
+				pass_resolution_no_cooldown = resolution_galacticstudies_astral_studies_network
+				pass_resolution_no_cooldown = resolution_divinity_tithe_on_the_soulless
+				pass_resolution_no_cooldown = resolution_rulesofwar_independent_tribunals
+				pass_resolution_no_cooldown = resolution_divinity_right_to_work
+				pass_resolution_no_cooldown = resolution_mutualdefense_military_readiness_act
+				pass_resolution_no_cooldown = resolution_rulesofwar_reverence_for_life
+
+				pass_resolution_no_cooldown = resolution_galacticreforms_form_council
+				pass_resolution_no_cooldown = resolution_galacticreforms_council_size_4
+				set_global_flag = galactic_council_formed
+				set_council_size = 3
+				set_council_veto = yes
+				set_council_emergency_measures = yes
+				if = {
+					limit = {
+						has_overlord_dlc = yes
+					}
+					pass_resolution_no_cooldown = resolution_defenseprivatization_private_support_troops
+					pass_resolution_no_cooldown = resolution_intergalacticdirective_ensured_sovereignty
+					pass_resolution_no_cooldown = resolution_bureaucraticsurveillance_borderless_authority
+				}
+			}
+			if = {
+				limit = {
+					OR = {
+						has_global_flag = year_2275_start
+						has_global_flag = year_2300_start
+					}	
+				}
+				random_country = {
+					limit = {
+						is_country_type = default
+					}
+					capital_scope = {
+						save_global_event_target_as = market_founder_planet
+					}
+					save_global_event_target_as = market_founder
+					country_event = { id = action.99 }
+				}
+			}
+		}
+	}

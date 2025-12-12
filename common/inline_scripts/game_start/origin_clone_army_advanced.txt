@@ -1,0 +1,71 @@
+if = {
+	limit = {
+		has_origin = origin_clone_army
+	}
+	set_variable = {
+		which = cloning_vats_spawned
+		value = 2
+	}
+	switch = {
+		trigger = has_global_flag
+		year_2225_start = {
+			generate_starting_planets_actual = {
+				NUM_COLONIES = 3
+			}
+		}
+		year_2250_start = {
+			generate_starting_planets_actual = {
+				NUM_COLONIES = 5
+			}
+		}
+		year_2275_start = {
+			generate_starting_planets_actual = {
+				NUM_COLONIES = 5
+			}
+		}
+	}
+	while = {
+		limit = {
+			check_variable = {
+				which = cloning_vats_spawned
+				value < 6
+			}
+		}
+		if = {
+			limit = {
+				num_owned_planets > 3
+			}
+			random_owned_planet = {
+				limit = {
+					NOT = {
+						has_building = building_clone_army_clone_vat
+					}
+				}
+					add_building = building_clone_army_clone_vat
+					prev = {
+						change_variable = {
+							which = cloning_vats_spawned
+							value = 1
+						}
+					}
+			}
+		}
+		
+		else = {
+			random_owned_planet = {
+				limit = {
+					NOT = {
+						is_capital = no
+					}
+				}
+				add_building = building_clone_army_clone_vat
+				prev = {
+					change_variable = {
+						which = cloning_vats_spawned
+						value = 1
+					}
+				}
+			}
+		}
+	}
+}

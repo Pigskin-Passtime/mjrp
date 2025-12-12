@@ -1,0 +1,109 @@
+	inline_script = "game_start/rural_districts_initializer"
+
+	inline_script = "game_start/authority_regular"
+	inline_script = "game_start/authority_hive"
+	inline_script = "game_start/authority_machine"
+
+	## Species
+	inline_script = "game_start/species_lithoids"
+	inline_script = "game_start/species_individual_machine"
+	#inline_script = "game_start/species_subspecies" ## Set subspecies flags damn you last_created_species
+	# Additional Subspecies Initial Setup
+
+	if = {
+		limit = {
+			owner = {
+				has_subspecies_civic_or_origin = yes
+			}
+		}
+		owner = {
+			capital_scope = {
+				random_owned_pop_group = {
+					limit = {
+						NOT = {
+							is_same_species = root.species
+						}
+					}
+					save_event_target_as = secondary_species_@root
+				}
+			}
+			if = {
+				limit = {
+					owner = {
+						is_guided_sapience_empire = no
+						OR = {
+							event_target:secondary_species_@this = { is_lithoid = yes }
+							event_target:secondary_species_@this = { has_trait = trait_machine_unit }
+						}
+					}
+				}
+				owner = {
+					set_country_flag = lithoid_subspecies
+				}
+			}
+			else = {
+				owner = {
+					set_country_flag = non_lithoid_subspecies
+				}
+				change_variable = {
+					which = farming_districts
+					value = 1
+				}
+			}
+		}
+	}
+
+
+	## Ethic
+	inline_script = "game_start/ethic_spiritualist"
+	inline_script = "game_start/ethic_materialist"
+	inline_script = "game_start/ethic_pacifist"
+	inline_script = "game_start/ethic_militarist"
+	inline_script = "game_start/ethic_egalitarian"
+	inline_script = "game_start/ethic_authoritarian"
+	inline_script = "game_start/ethic_xenophile"
+	inline_script = "game_start/ethic_xenophobe"
+
+	##Civics
+	inline_script = "game_start/civics"
+
+	# Shipsets
+	inline_script = "game_start/shipsets"
+
+	# BioGenesis
+	inline_script = "game_start/origin_wilderness"
+	
+	# Origins 
+	inline_script = "game_start/origin_subterranean"
+
+	inline_script = {
+		script = "game_start/spawn_appropriate_city_districts"
+		DISTRICTS = 2
+	}
+	inline_script = "game_start/origin_shattered_ring"
+	#inline_script = "game_start/origin_shattered_ring_advanced"
+
+	
+
+	if = {												# extra stuff for everyone (different stuff for wilderness)
+		limit = {
+			owner = {
+				capital_scope = { uses_habitat_capitals = no }
+				is_wilderness_empire = no
+			}
+		}
+		
+		add_building = building_foundry_1
+		add_building = building_research_lab_1
+		#add_building = building_stronghold
+	}
+	else = {
+		add_building = building_natural_furnace_1
+		add_building = building_brain_node_1
+		add_building = building_planetary_carapace
+	}
+	change_variable = {
+		which = mining_districts
+		value = 2
+	}
+	inline_script = "game_start/rural_districts_placement" # make sure this is always the last thing pls

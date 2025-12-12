@@ -1,0 +1,1098 @@
+@energy_t1 = 1000
+@energy_t2 = 5000
+@energy_t3 = 10000
+@energy_t4 = 50000
+
+@minerals_t1 = 1000
+@minerals_t2 = 5000
+@minerals_t3 = 10000
+@minerals_t4 = 50000
+
+@alloys_t1 = 1000
+@alloys_t2 = 6000
+@alloys_t3 = 12000
+@alloys_t4 = 36000
+
+@influence_t1 = 200
+@influence_t2 = 400
+@influence_t3 = 600
+@influence_t4 = 800
+
+@unity_t1 = 1000
+@unity_t2 = 6000
+@unity_t3 = 12000
+@unity_t4 = 36000
+
+create_tech_country = {
+	optimize_memory
+	switch = {
+		trigger = has_global_flag 
+		year_2225_start = {
+			if = {
+				limit = {
+					NOT = {
+						exists = event_target:tech_country
+					}
+				}
+				create_country = {
+					name = "NAME_Tech_Country"
+					name_list = "PRT1"
+					species = random
+					type = tech_country_1
+					flag = {
+						background = {
+							category = "backgrounds"
+							file = "00_solid.dds"
+						}
+						colors ={
+							"black"
+							"black"
+							"null"
+							"null"
+						}
+					}
+					effect = {
+						save_global_event_target_as = tech_country
+						randomize_flag_symbol = "pirate"
+					}
+				}
+			}
+		}
+		year_2250_start = {
+			if = {
+				limit = {
+					NOT = {
+						exists = event_target:tech_country
+					}
+				}
+				create_country = {
+					name = "NAME_Tech_Country"
+					name_list = "PRT1"
+					species = random
+					type = tech_country_2
+					flag = {
+						background = {
+							category = "backgrounds"
+							file = "00_solid.dds"
+						}
+						colors ={
+							"black"
+							"black"
+							"null"
+							"null"
+						}
+					}
+					effect = {
+						save_global_event_target_as = tech_country
+						randomize_flag_symbol = "pirate"
+					}
+				}
+			}
+		}
+		year_2275_start = {
+			if = {
+				limit = {
+					NOT = {
+						exists = event_target:tech_country
+					}
+				}
+				create_country = {
+					name = "NAME_Tech_Country"
+					name_list = "PRT1"
+					species = random
+					type = tech_country_3
+					flag = {
+						background = {
+							category = "backgrounds"
+							file = "00_solid.dds"
+						}
+						colors ={
+							"black"
+							"black"
+							"null"
+							"null"
+						}
+					}
+					effect = {
+						save_global_event_target_as = tech_country
+						randomize_flag_symbol = "pirate"
+					}
+				}
+			}
+		}
+		year_2300_start = {
+			if = {
+				limit = {
+					NOT = {
+						exists = event_target:tech_country
+					}
+				}
+				create_country = {
+					name = "NAME_Tech_Country"
+					name_list = "PRT1"
+					species = random
+					type = tech_country_4
+					flag = {
+						background = {
+							category = "backgrounds"
+							file = "00_solid.dds"
+						}
+						colors ={
+							"black"
+							"black"
+							"null"
+							"null"
+						}
+					}
+					effect = {
+						save_global_event_target_as = tech_country
+						randomize_flag_symbol = "pirate"
+					}
+				}
+			}
+		}
+	}
+}
+
+generate_colony = {
+	optimize_memory
+	change_pc = root.species
+	#if = {
+	#	limit = {
+	#		root = {
+	#			capital_scope = {
+	#				has_planet_flag = special_start_planet
+	#			}
+	#		}
+	#	}
+	#	set_planet_flag = special_start_planet
+	#}
+
+	if = {
+		limit = {
+			is_planet_class = pc_habitat
+		}
+		void_dweller_home_planet_setup = yes
+	}
+	create_colony = {
+		owner = root
+		species = root.species
+		ethos = owner
+	}
+	while = {
+		limit = {
+			pop_amount < 100
+		}
+		create_pop_group = {
+			species = owner
+		}
+	}
+	#generate_start_deposits_and_blockers = yes
+	#generate_start_buildings_and_districts = yes
+	generate_start_pops = yes
+	#fire_on_action = {
+	#	on_action = on_initialize_advanced_colony
+	#	scopes = { from = owner }
+	#}
+
+	validate_and_repair_planet_buildings_and_districts = yes
+	inline_script = "game_start/origin_synthetic_fertility_advanced"
+	#planet_event = {
+	#	id = game_start.12
+	#	scopes = {
+	#		from = root.species
+	#	}
+	#}
+	
+	
+#	planet_event = {
+#		id = game_start.20
+#		scopes = {
+#			from = root
+#		}
+#	}
+#	planet_event = {
+#		id = game_start.21
+#		scopes = {
+#			from = root
+#		}
+#	}
+#	planet_event = {
+#		id = game_start.22
+#		scopes = {
+#			from = root
+#		}
+#	}
+#	planet_event = {
+#		id = game_start.23
+#		scopes = {
+#			from = root
+#		}
+#	}
+
+}
+
+generate_mining_and_research_stations = {
+	optimize_memory
+	every_system_within_border = {
+		limit = {
+			any_system_planet = {
+				OR = {
+					AND = {
+						has_deposit_for = shipclass_mining_station
+						has_mining_station = no
+						has_any_rare_strategic_resource = no
+					}
+					AND = {
+						has_deposit_for = shipclass_research_station
+						has_research_station = no
+						has_any_rare_strategic_resource = no
+					}
+				}
+			}
+		}
+		every_system_planet = {
+			limit = {
+				has_deposit_for = shipclass_mining_station
+				has_mining_station = no
+				has_any_rare_strategic_resource = no
+				is_colony = no
+			}
+			create_mining_station = {
+				owner = ROOT
+			}
+		}
+		every_system_planet = {
+			limit = {
+				has_deposit_for = shipclass_research_station
+				has_research_station = no
+				has_any_rare_strategic_resource = no
+				is_colony = no
+			}
+			create_research_station = {
+				owner = ROOT
+			}
+		}
+	}
+}
+
+generate_starting_resources = {
+	optimize_memory
+	switch = {
+		trigger = has_global_flag
+		year_2225_start = {
+			generate_starting_resources_t1 = yes
+		}
+		year_2250_start = {
+			generate_starting_resources_t2 = yes
+		}
+		year_2275_start = {
+			generate_starting_resources_t3 = yes
+		}
+		year_2300_start = {
+			generate_starting_resources_t4 = yes
+		}
+	}
+}
+
+generate_starting_resources_t1 = {
+	optimize_memory
+		add_resource = { energy = @energy_t1 }
+		add_resource = { minerals = @minerals_t1 }
+		add_resource = { alloys = @alloys_t1 }
+		add_resource = { influence = @influence_t1 }
+		add_resource = { unity = @unity_t1 }
+		#add_monthly_resource_mult = {
+		#	resource = unity
+		#	value = 12
+		#	min = 150
+		#	max = 100000
+		#}
+		if = {
+			limit = {
+				OR = {
+					AND = {
+						is_lithoid_empire = no
+						is_machine_empire = no
+					}
+					is_catalytic_empire = yes
+					has_country_flag = non_lithoid_subspecies
+					has_origin = origin_broken_shackles
+				}
+			}
+			add_resource = { food = 1000 }
+		}
+		else = {
+			add_resource = { energy = 1000 }
+		}
+		if = {
+			limit = { is_gestalt = no }
+			add_resource = { consumer_goods = 500 }
+		}
+		else = {
+			add_resource = { minerals = 500 }
+		}
+}
+
+generate_starting_resources_t2 = {
+	optimize_memory
+		add_resource = { energy = @energy_t2 }
+		add_resource = { minerals = @minerals_t2 }
+		add_resource = { alloys = @alloys_t2 }
+		add_resource = { influence = @influence_t2 }
+		add_resource = { unity = @unity_t2 }
+		#add_monthly_resource_mult = {
+		#	resource = unity
+		#	value = 12
+		#	min = 150
+		#	max = 100000
+		#}
+		if = {
+			limit = {
+				OR = {
+					AND = {
+						is_lithoid_empire = no
+						is_machine_empire = no
+					}
+					is_catalytic_empire = yes
+					has_country_flag = non_lithoid_subspecies
+					has_origin = origin_broken_shackles
+				}
+			}
+			add_resource = { food = 5000 }
+		}
+		else = {
+			add_resource = { energy = 5000 }
+		}
+		if = {
+			limit = { is_gestalt = no }
+			add_resource = { consumer_goods = 2500 }
+		}
+		else = {
+			add_resource = { minerals = 5000 }
+		}
+}
+
+generate_starting_resources_t3 = {
+	optimize_memory
+		add_resource = { energy = @energy_t3 }
+		add_resource = { minerals = @minerals_t3 }
+		add_resource = { alloys = @alloys_t3 }
+		add_resource = { influence = @influence_t3 }
+		add_resource = { unity = @unity_t3 }
+		#add_monthly_resource_mult = {
+		#	resource = unity
+		#	value = @tier2unityreward
+		#	min = @tier2unitymin
+		#	max = @tier2unitymax
+		#}
+		if = {
+			limit = {
+				OR = {
+					AND = {
+						is_lithoid_empire = no
+						is_machine_empire = no
+					}
+					is_catalytic_empire = yes
+					has_country_flag = non_lithoid_subspecies
+					has_origin = origin_broken_shackles
+				}
+			}
+			add_resource = { food = 10000 }
+		}
+		else = {
+			add_resource = { energy = 10000 }
+		}
+		if = {
+			limit = { is_gestalt = no }
+			add_resource = { consumer_goods = 5000 }
+		}
+		else = {
+			add_resource = { minerals = 10000 }
+		}
+}
+
+generate_starting_resources_t4 = {
+	optimize_memory
+		add_resource = { energy = @energy_t4 }
+		add_resource = { minerals = @minerals_t4 }
+		add_resource = { alloys = @alloys_t4 }
+		add_resource = { influence = @influence_t4 }
+		add_resource = { unity = @unity_t4 }
+		#add_monthly_resource_mult = {
+		#	resource = unity
+		#	value = @tier2unityreward
+		#	min = @tier2unitymin
+		#	max = @tier2unitymax
+		#}
+		if = {
+			limit = {
+				OR = {
+					AND = {
+						is_lithoid_empire = no
+						is_machine_empire = no
+					}
+					is_catalytic_empire = yes
+					has_country_flag = non_lithoid_subspecies
+					has_origin = origin_broken_shackles
+				}
+			}
+			add_resource = { food = 30000 }
+		}
+		else = {
+			add_resource = { energy = 30000 }
+		}
+		if = {
+			limit = { is_gestalt = no }
+			add_resource = { consumer_goods = 10000 }
+		}
+		else = {
+			add_resource = { minerals = 30000 }
+		}
+}
+
+generate_starting_borders = {
+	optimize_memory
+	set_country_flag = not_setup
+	export_trigger_value_to_variable = {
+		trigger = count_playable_country
+		variable = num_empires_setup
+	}
+	subtract_variable = {
+		which = num_empires_setup
+		value = 1
+	}
+
+	if = {
+		limit = {
+			count_playable_country = {
+				count < this.num_empires_setup
+				limit = {
+					has_country_flag = not_setup
+				}
+			}
+		}
+		#remove_country_flag = not_setup
+		log = "failed check with [This.GetName]"
+	}
+	else = {
+		log = "passed setup flag with [This.GetName]"
+		switch = {
+			trigger = has_global_flag
+			year_2225_start = {
+				generate_starting_borders_actual = {
+					JUMPS_FROM_CAPITAL = 3
+					EXTRA_JUMPS_SURVEYED = 5
+					EXTRA_JUMPS_VISITED = 7
+				}
+			}
+			year_2250_start = {
+				generate_starting_borders_actual = {
+					JUMPS_FROM_CAPITAL = 5
+					EXTRA_JUMPS_SURVEYED = 8
+					EXTRA_JUMPS_VISITED = 12
+				}
+			}
+			year_2275_start = {
+				generate_starting_borders_actual = {
+					JUMPS_FROM_CAPITAL = 7
+					EXTRA_JUMPS_SURVEYED = 11
+					EXTRA_JUMPS_VISITED = 16
+				}
+			}
+			year_2300_start = {
+				generate_starting_borders_actual = {
+					JUMPS_FROM_CAPITAL = 9
+					EXTRA_JUMPS_SURVEYED = 14
+					EXTRA_JUMPS_VISITED = 21
+				}
+			}
+		}
+	}
+}
+
+
+generate_starting_borders_actual = {							# $JUMPS_FROM_CAPITAL$ - how adjacent systems the effect will try to take
+	optimize_memory												# $EXTRA_JUMPS_SURVEYED$ - how systems out from their borders will be surveyed 
+																# $EXTRA_JUMPS_VISITED$ - how many systems out from their borders will be visited (eg by a science ship or fleet)
+#	every_system = {											# generate outposts
+#		limit = {
+#			distance = {
+#				source = root.capital_scope.solar_system
+#				min_jumps = 1
+#				max_jumps = $JUMPS_FROM_CAPITAL$
+#				type = hyperlane
+#			}
+#			valid_for_border_generation = yes
+#		}
+#		root = { set_visited = prev }
+#		set_surveyed = {
+#			surveyed = yes
+#			surveyor = root
+#		}
+#		create_starbase = {
+#			owner = root
+#			size = starbase_outpost
+#		}
+#	}
+
+	while = {
+		count = $JUMPS_FROM_CAPITAL$
+		every_country = {
+			limit = {
+				is_country_type = default
+			}
+			every_system_within_border = {
+				limit = {
+					is_on_border = yes
+					any_neighbor_system = {
+						valid_for_border_generation = yes
+					}
+				}
+				every_neighbor_system = {
+					limit = {
+						valid_for_border_generation = yes
+						#print_scope_trigger = yes
+						distance = {
+							source = prevprev.capital_scope.solar_system
+							min_jumps = 1
+							max_jumps = $JUMPS_FROM_CAPITAL$
+							type = hyperlane
+						}
+					}
+					prevprev = {
+						set_visited = prev }
+						set_surveyed = {
+							surveyed = yes
+							surveyor = root
+						}
+					create_starbase = {
+						owner = prevprev
+						size = starbase_outpost
+					}
+				}
+			}
+			set_country_flag = borders_generated
+		}
+	}
+	every_country = {
+		limit = {
+			is_country_type = default
+		}
+		every_system = {										# set system surveyed
+			limit = {
+				distance = {
+					source = prev.capital_scope.solar_system
+					min_jumps = $JUMPS_FROM_CAPITAL$
+					max_jumps = $EXTRA_JUMPS_SURVEYED$
+					type = hyperlane
+				}
+			}
+			prev = { set_visited = prev }
+			set_surveyed = {
+				surveyed = yes
+				surveyor = prev
+			}
+		}
+
+		every_system = {										# set system visited
+			limit = {
+				distance = {
+					source = prev.capital_scope.solar_system
+					min_jumps = $EXTRA_JUMPS_SURVEYED$
+					max_jumps = $EXTRA_JUMPS_VISITED$
+					type = hyperlane
+				}
+			}
+			prev = { set_visited = prev }
+			set_surveyed = {
+				surveyed = yes
+				surveyor = prev
+			}
+		}
+	}
+	set_global_flag = ready_to_generate_empires
+}
+
+generate_starting_planets = {
+	optimize_memory
+	switch = {
+		trigger = has_global_flag
+		year_2225_start = {
+			generate_starting_planets_actual = {
+				NUM_COLONIES = 3
+			}
+		}
+		year_2250_start = {
+			generate_starting_planets_actual = {
+				NUM_COLONIES = 5
+			}
+		}
+		year_2275_start = {
+			generate_starting_planets_actual = {
+				NUM_COLONIES = 7
+			}
+		}
+		year_2300_start = {
+			generate_starting_planets_actual = {
+				NUM_COLONIES = 9
+			}
+		}
+	}
+
+	if = {
+		limit = {
+			NOT = {
+				has_global_flag = year_2200_start
+			}
+		}
+		every_owned_planet = {
+			limit = {
+				is_capital = no
+			}
+			inline_script = "game_start/advanced_colony"
+			inline_script = "game_start/capital_building_validation"
+		}
+	}
+}
+
+
+generate_starting_planets_actual = {
+	optimize_memory
+	root = {
+		generate_mining_and_research_stations = yes
+		while = {
+			limit = {
+				num_owned_planets <= $NUM_COLONIES$
+				NOR = {
+					has_origin = origin_shattered_ring
+					#has_origin = origin_clone_army
+				}
+			}
+			if = {
+				limit = {
+					any_system_within_border = {
+						any_system_planet = {
+							is_colonizable = yes
+						}
+					}
+				}
+				random_system_within_border = {
+					limit = {
+						any_system_planet = {
+							is_colonizable = yes
+						}
+					}
+					random_system_planet = {
+						limit = {
+							is_colonizable = yes
+						}
+						generate_colony = yes
+					}
+				}
+			}
+			else = {
+				random_system_within_border = {
+					limit = {
+						any_system_planet = {
+							is_colony = no
+							is_star = no
+							is_asteroid = no
+						}
+					}
+					random_system_planet = {
+						limit = {
+							is_star = no
+							is_asteroid = no
+							is_colony = no
+						}
+						set_planet_size = 18
+						change_pc = root.species
+						reroll_planet = yes
+						generate_colony = yes
+					}
+				}
+			}
+			every_owned_planet = {
+				clear_blockers = yes
+				#calculate_modifier = yes
+			}
+		}
+	}
+}
+
+establish_communications_effect = {
+	optimize_memory
+	switch = {
+		trigger = has_global_flag
+		year_2225_start = {
+			establish_comms_t1 = yes
+		}
+		year_2250_start = {
+			establish_comms_t2 = yes
+		}
+		year_2275_start = {
+			establish_comms_t3 = yes
+		}
+		year_2300_start = {
+			establish_comms_t4 = yes
+		}
+	}
+}
+
+establish_comms_t1 = {
+		every_country = {
+			limit = {
+				is_country_type = default
+			}
+			every_neighbor_country = { 
+				limit = {
+					is_country_type = default
+				}
+				establish_communications_no_message = prev
+				random_neighbor_country = {
+					limit = {
+						is_country_type = default
+					}
+					establish_communications_no_message = prev
+				}
+			}
+		}
+}
+
+establish_comms_t2 = {
+		every_country = {
+			limit = {
+				is_country_type = default
+			}
+			every_country = {
+				limit = {
+					is_country_type = default
+					NOT = {
+						is_same_value = prev
+					}
+				}
+				establish_communications_no_message = prev
+			
+		}
+	}
+}
+
+establish_comms_t3 = {
+		every_country = {
+			limit = {
+				is_country_type = default
+			}
+			every_country = {
+				limit = {
+					is_country_type = default
+					NOT = {
+						is_same_value = prev
+					}
+				}
+				establish_communications_no_message = prev		
+				inline_script = "game_start/galcom_setup"
+				if = {
+					limit = {
+						is_homicidal = no
+						NOT = {
+							has_country_flag = galcom_fired
+						}
+					}
+					country_event = {
+						id = galcom.16
+					}
+					set_country_flag = galcom_fired
+				}
+				add_intel = {
+					amount = 20
+					who = prev
+				}
+			}
+		}
+		
+		every_country = {
+			every_country = {
+				limit = {
+					NOT = {
+						is_same_value = prev
+					}
+				}
+				if = {
+					limit = {
+						has_active_first_contact_with = prev
+					}
+					establish_communications_no_message = prev
+				}
+			}
+		}
+
+}
+	
+establish_comms_t4 = {
+		every_country = {
+			limit = {
+				is_country_type = default
+			}
+			every_country = {
+				limit = {
+					is_country_type = default
+					NOR = {
+						is_same_value = prev
+						#has_communications = prev
+					}
+				}
+				establish_communications_no_message = prev
+				inline_script = "game_start/galcom_setup"
+				if = {
+					limit = {
+						is_homicidal = no
+						NOT = {
+							has_country_flag = galcom_fired
+						}
+					}
+					country_event = {
+						id = galcom.16
+					}
+					set_country_flag = galcom_fired
+				}
+				add_intel = {
+					amount = 50
+					who = prev
+				}
+			}
+		}
+		every_country = {
+			every_country = {
+				limit = {
+					NOT = {
+						is_same_value = prev
+					}
+				}
+				if = {
+					limit = {
+						has_active_first_contact_with = prev
+					}
+					establish_communications_no_message = prev
+				}
+			}
+		}
+}
+
+generate_starbase_setup = {
+	switch = {
+		trigger = has_global_flag
+		year_2225_start = {
+			generate_starbase_t1 = yes
+		}
+		year_2250_start = {
+			generate_starbase_t2 = yes
+		}
+		year_2275_start = {
+			generate_starbase_t3 = yes
+		}
+		year_2300_start = {
+			generate_starbase_t4 = yes
+		}
+	}
+}
+
+generate_starbase_t1 = {
+	every_owned_planet = {
+		limit = {
+			is_capital = no
+		}
+		starbase = {
+ 			set_starbase_size = starbase_starport
+			set_starbase_module = { slot = 1 module = anchorage }
+			set_starbase_module = { slot = 2 module = anchorage }
+			#set_starbase_building = { slot = 1 building = hydroponics_bay }
+		}
+	}
+}
+
+generate_starbase_t2 = {
+	every_owned_planet = {
+		limit = {
+			is_capital = no
+		}
+		solar_system = {
+			starbase = {
+				set_starbase_size = starbase_starhold
+				set_starbase_module = { slot = 1 module = anchorage }
+				set_starbase_module = { slot = 2 module = anchorage }
+				set_starbase_module = { slot = 3 module = anchorage  }
+				set_starbase_module = { slot = 4 module = anchorage  }
+				#set_starbase_building = { slot = 1 building = hydroponics_bay }
+			}
+		}
+	}
+	capital_scope = {
+		solar_system = {
+			starbase = {
+				set_starbase_size = starbase_starhold
+				#set_starbase_module = { slot = 3 module = shipyard }
+				#set_starbase_module = { slot = 4 module = shipyard }
+				#set_starbase_building = { slot = 2 building = hydroponics_bay }
+			}
+		}
+	}
+}
+
+generate_starbase_t3 = {
+	every_owned_planet = {
+		limit = {
+			is_capital = no
+		}
+		solar_system = {
+			starbase = {
+				set_starbase_size = starbase_starfortress
+				set_starbase_module = { slot = 1 module = anchorage }
+				set_starbase_module = { slot = 2 module = anchorage }
+				set_starbase_module = { slot = 3 module = anchorage  }
+				set_starbase_module = { slot = 4 module = anchorage  }
+				set_starbase_module = { slot = 5 module = gun_battery }
+				set_starbase_module = { slot = 6 module = gun_battery }
+				#set_starbase_building = { slot = 1 building = hydroponics_bay }
+			}
+		}
+	}
+	capital_scope = {
+		solar_system = {
+			starbase = {
+				set_starbase_size = starbase_starfortress
+				set_starbase_module = { slot = 3 module = anchorage }
+				set_starbase_module = { slot = 4 module = anchorage }
+				set_starbase_module = { slot = 5 module = anchorage }
+				set_starbase_module = { slot = 6 module = anchorage }
+				#set_starbase_building = { slot = 2 building = hydroponics_bay }
+				#set_starbase_building = { slot = 3 building = fleet_academy }
+			}
+		}
+	}
+}
+
+generate_starbase_t4 = {
+	every_owned_planet = {
+		limit = {
+			is_capital = no
+		}
+		solar_system = {
+			starbase = {
+				set_starbase_size = starbase_citadel
+				set_starbase_module = { slot = 1 module = anchorage }
+				set_starbase_module = { slot = 2 module = anchorage }
+				set_starbase_module = { slot = 3 module = anchorage  }
+				set_starbase_module = { slot = 4 module = anchorage  }
+				set_starbase_module = { slot = 5 module = gun_battery }
+				set_starbase_module = { slot = 6 module = gun_battery }
+				#set_starbase_building = { slot = 1 building = hydroponics_bay }
+			}
+		}
+	}
+	capital_scope = {
+		solar_system = {
+			starbase = {
+				set_starbase_size = starbase_citadel
+				set_starbase_module = { slot = 3 module = anchorage }
+				set_starbase_module = { slot = 4 module = anchorage }
+				set_starbase_module = { slot = 5 module = anchorage }
+				set_starbase_module = { slot = 6 module = anchorage }
+				#set_starbase_building = { slot = 2 building = hydroponics_bay }
+				#set_starbase_building = { slot = 3 building = fleet_academy }
+			}
+		}
+	}
+}
+
+generate_starting_fleets = {
+	create_fleet_from_naval_cap = 0.6
+}
+
+generate_start_selection_dates = {
+	set_variable = {			# mid game dates
+		which = mid_game_setup_value_temp
+		value = mid_game_setup_value
+	}
+	subtract_variable = {
+		which = mid_game_setup_value_temp
+		value = $years$
+	}
+	set_variable = {
+		which = mid_game_start_$years$
+		value = mid_game_setup_value_temp
+	}
+	if = {
+		limit = {
+			check_variable = {
+				which = mid_game_start_$years$
+				value <= 0
+			}
+		}
+		set_variable = {
+			which = mid_game_start_$years$
+			value = 1
+		}
+	}
+	add_variable = {
+		which = mid_game_start_$years$
+		value = 2200
+	}
+	set_variable = {		# end game dates
+		which = end_game_setup_value_temp
+		value = end_game_setup_value
+	}
+	subtract_variable = {
+		which = end_game_setup_value_temp
+		value = $years$
+	}
+	set_variable = {
+		which = end_game_start_$years$
+		value = end_game_setup_value_temp
+	}
+	if = {
+		limit = {
+			check_variable = {
+				which = end_game_start_$years$
+				value <= 0
+			}
+		}
+		set_variable = {
+			which = end_game_start_$years$
+			value = 1
+		}
+	}
+	add_variable = {
+		which = end_game_start_$years$
+		value = 2200
+	}
+	set_variable = {		# victory year dates
+		which = victory_year_setup_value_temp
+		value = victory_year_setup_value
+	}
+	subtract_variable = {
+		which = victory_year_setup_value_temp
+		value = $years$
+	}
+	set_variable = {
+		which = victory_year_$years$
+		value = victory_year_setup_value_temp
+	}
+	if = {
+		limit = {
+			check_variable = {
+				which = victory_year_$years$
+				value <= 0
+			}
+		}
+		set_variable = {
+			which = victory_year_$years$
+			value = 1
+		}
+	}
+}
+
+generate_planets_for_special_empires = {
+	inline_script = "game_start/origin_shattered_ring_advanced"
+	inline_script = "game_start/origin_clone_army_advanced"
+}

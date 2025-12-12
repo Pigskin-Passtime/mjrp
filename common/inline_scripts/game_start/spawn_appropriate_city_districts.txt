@@ -1,0 +1,51 @@
+	if = {												# extra stuff for hive
+		limit = {
+			exists = owner
+			owner = {
+				is_hive_empire = yes
+				is_wilderness_empire = no
+			}
+		}
+		add_building = building_hive_capital
+		if = {					
+			limit = {
+				owner = {
+					NOT = {
+						has_origin = origin_progenitor_hive
+					}
+				}
+			}
+			add_building = building_spawning_pool
+		}
+		else = {
+			add_building = building_offspring_nest
+		}
+		add_district_and_planet_size_if_needed_effect_amount = {
+			amount = $DISTRICTS$
+			district = district_hive
+		}
+	}
+	if = {												# extra city districts for machines
+		limit = {
+			exists = owner
+			owner = {
+				is_machine_empire = yes
+			}
+		}
+		add_district_and_planet_size_if_needed_effect_amount = {
+					amount = $DISTRICTS$
+					district = district_nexus
+		}
+	}
+	if = {												# extra city districts for normie empires
+		limit = {
+			exists = owner
+			owner = {
+				is_regular_empire = yes
+			}
+		}
+		add_district_and_planet_size_if_needed_effect_amount = {
+			amount = $DISTRICTS$
+			district = district_city
+		}
+	}

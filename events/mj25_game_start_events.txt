@@ -1,0 +1,1113 @@
+namespace = mj25_game_start
+
+event = {
+	id = mj25_game_start.1
+	is_triggered_only = yes
+	hide_window = yes
+	fire_only_once = yes
+
+	trigger = {
+		NOT = {
+			has_global_flag = mj25_active
+		}
+	}
+
+	immediate = {
+		set_global_flag = mj25_active
+	}
+}
+
+country_event = {							# host chooses start year
+	id = mj25_game_start.2
+	#hide_window = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	title = mj25_game_start_title
+	desc = mj25_game_start_desc
+	picture = GFX_evt_astral_rift_genesis_3
+
+	trigger = {
+		has_country_flag = game_host
+	}
+
+	immediate = {
+		set_global_flag = year_selector_fired
+	}
+
+	option = {
+		NAME = year_2200_start
+		custom_tooltip = year_2200_start.tt
+		hidden_effect = {
+			set_global_flag = year_2200_start
+		}
+	}
+
+	option = {
+		NAME = year_2225_start
+		custom_tooltip = year_2225_start.tt
+		hidden_effect = {
+			set_global_flag = year_2225_start
+			every_country = {
+				limit = {
+					is_country_type = default
+				}
+				set_variable = {
+					which = tradition_picks
+					value = 1
+				}
+				country_event = {
+					id = mj25_game_start.4
+				}
+
+			}
+		}
+	}
+
+	option = {
+		NAME = year_2250_start
+		custom_tooltip = year_2250_start.tt
+		hidden_effect = {
+			set_global_flag = year_2250_start
+			every_country = {
+				limit = {
+					is_country_type = default
+				}
+				set_variable = {
+					which = tradition_picks
+					value = 2
+				}
+				country_event = {
+					id = mj25_game_start.4
+				}
+			}
+		}
+	}
+
+	option = {
+		NAME = year_2275_start
+		custom_tooltip = year_2275_start.tt
+		hidden_effect = {
+			set_global_flag = year_2275_start
+			every_country = {
+				limit = {
+					is_country_type = default
+				}
+				set_variable = {
+					which = tradition_picks
+					value = 3
+				}
+				country_event = {
+					id = mj25_game_start.4
+				}
+			}
+		}
+	}
+	option = {
+		NAME = year_2300_start
+		custom_tooltip = year_2300_start.tt
+		hidden_effect = {
+			set_global_flag = year_2300_start
+			every_country = {
+				limit = {
+					is_country_type = default
+				}
+				set_variable = {
+					which = tradition_picks
+					value = 4
+				}
+				country_event = {
+					id = mj25_game_start.4
+				}
+			}
+		}
+	}
+	after = {
+		#hidden_effect = {
+		#	every_country = {
+		#		limit = {
+		#			is_country_type = default
+		#		}
+		#		set_country_flag = not_setup
+		#	}
+		#}
+	}
+}
+
+country_event = {									# picking out the "host" (in the case of observer host, first empire to spawn will pick)
+	id = mj25_game_start.3
+	is_triggered_only = yes
+	hide_window = yes
+	fire_only_once = yes
+
+	trigger = {
+		NOT = {
+			has_global_flag = host_assigned
+		}
+	}
+
+	immediate = {	
+		if = {
+			limit = {
+				NOT = {
+					has_global_flag = host_assigned
+				}
+			}
+			set_country_flag = game_host
+			set_global_flag = host_assigned
+		}
+	}
+}
+
+country_event = {										# everyone gets an advanced start
+	id = mj25_game_start.4
+	is_triggered_only = yes
+	hide_window = yes
+	
+
+	trigger = {
+		is_country_type = default
+		OR = {
+			has_global_flag = year_2225_start
+			has_global_flag = year_2250_start
+			has_global_flag = year_2275_start
+			has_global_flag = year_2300_start
+		}
+	}
+
+	immediate = {
+		set_update_modifiers_batch = BEGIN				
+		set_spawn_system_batch = BEGIN
+		create_tech_country = yes
+		copy_techs_from = {
+			target = event_target:tech_country
+		}
+		generate_starting_resources = yes
+		generate_starting_borders = yes
+#		calculate_modifier = yes
+		set_spawn_system_batch = END
+		set_update_modifiers_batch = END
+		if = {
+			limit = {
+				has_global_flag = ready_to_generate_empires
+			}
+			every_country = {
+				limit = {
+					is_country_type = default
+					NOT = {
+						has_country_flag = setup_complete
+					}
+				}
+				fire_on_action = {
+					on_action = on_ready_for_empire_generation
+				}
+			}
+		}
+		#calculate_modifier = yes
+		
+	}
+}
+
+country_event = {
+	id = mj25_game_start.5
+	is_triggered_only = yes
+	#hide_window = yes
+	#fire_only_once = yes
+	title = mj_25_game_start_5_title
+	desc = mj_25_game_start_5_desc
+	picture = GFX_evt_astral_rift_genesis_2
+	
+	trigger = {
+		check_variable = {
+			which = tradition_picks
+			value > 0
+		}
+	}
+
+	immediate = {}
+
+	option = {						# adaptability
+		trigger = {
+			is_machine_empire = no
+		}
+        inline_script = {
+            script = "game_start/assign_traditions"
+            TRADITION = adaptability
+            ONE = recycling
+            TWO = survival_fittest
+            THREE = environmental_diversification
+            FOUR = adaptive_ecology
+            FIVE = appropriation
+        }
+		subtract_variable = {
+			which = tradition_picks
+			value = 1
+		}
+		ai_chance = {
+			base = 5
+			factor = 5
+			modifier = {
+				factor = 2
+				is_homicidal = yes
+			}
+			modifier = {
+				factor = 2
+				has_ethic = ethic_xenophobe
+			}
+			modifier = {
+				factor = 3
+				has_ethic = ethic_fanatic_xenophobe
+			}
+			modifier = {
+				factor = 2.5
+				is_hive_empire = yes
+			}
+			modifier = {
+				factor = 0.1
+				has_void_dweller_origin = yes
+			}
+		}
+    }
+
+	option = {						# aptitude
+		trigger = {
+			has_paragon_dlc = yes
+		}
+        inline_script = {
+            script = "game_start/assign_traditions"
+            TRADITION = aptitude
+            ONE = the_empire_needs_you
+            TWO = specialist_training
+            THREE = psychological_profiling
+            FOUR = healthcare_program
+            FIVE = champions_of_the_empire
+        }
+		subtract_variable = {
+			which = tradition_picks
+			value = 1
+		}
+		ai_chance = {
+			base = 5
+			factor = 5
+			modifier = {
+				factor = 0.5
+				is_gestalt = yes
+			}
+		}
+    }
+
+	option = {						# archivism
+		trigger = {
+			has_grand_archive_dlc = yes
+		}
+        inline_script = {
+            script = "game_start/assign_traditions"
+            TRADITION = archivism
+            ONE = xeno_paleontology
+            TWO = frontier_archaeology
+            THREE = expert_negociation
+            FOUR = flawless_display
+            FIVE = exhibition_specialization
+        }
+		subtract_variable = {
+			which = tradition_picks
+			value = 1
+		}
+	ai_chance = {
+		base = 0
+		modifier = {
+			add = 5
+			count_exhibit = {
+				limit = { contains_specimen = yes }
+				count > 5
+			}
+		}
+		modifier = {
+			add = 5
+			count_exhibit = {
+				limit = {
+					is_exhibit_active = yes
+					contains_specimen = yes
+				}
+				count > 5
+			}
+		}
+		modifier = {
+			factor = 5
+			is_galactic_curators_empire = yes
+		}
+	}
+    }
+
+	option = {						# diplomacy
+		trigger = {
+			NOR = {
+				has_valid_civic = civic_inwards_perfection
+				has_valid_civic = civic_hive_devouring_swarm
+			}
+		}
+        inline_script = {
+            script = "game_start/assign_traditions"
+            TRADITION = diplomacy
+            ONE = the_federation
+            TWO = entente_coordination
+            THREE = diplomatic_networking
+            FOUR = direct_diplomacy
+            FIVE = eminent_diplomats
+        }
+		subtract_variable = {
+			which = tradition_picks
+			value = 1
+		}
+		ai_chance = {
+			base = 5
+			factor = 5
+			modifier = {
+				factor = 25
+				has_federator_personality = yes
+			}
+			modifier = {
+				factor = 10
+				has_federation = yes
+			}
+			modifier = {
+				factor = 4
+				has_ethic = ethic_xenophile
+			}
+			modifier = {
+				factor = 6
+				has_ethic = ethic_fanatic_xenophile
+			}
+			modifier = {
+				factor = 0
+				OR = {
+					is_xenophobe = yes
+					is_homicidal = yes
+				}
+			}
+			modifier = {
+				factor = 0.5
+				is_gestalt = yes
+			}
+		}
+    }
+
+	option = {						# discovery
+		trigger = {
+			#always = yes
+		}
+        inline_script = {
+            script = "game_start/assign_traditions"
+            TRADITION = discovery
+            ONE = to_boldly_go
+            TWO = databank_uplinks
+            THREE = science_division
+            FOUR = polytechnic_education
+            FIVE = faith_in_science
+        }
+		subtract_variable = {
+			which = tradition_picks
+			value = 1
+		}
+		ai_chance = {
+			base = 5
+			factor = 20
+			modifier = {
+				factor = 5
+				years_passed < 20
+			}
+			modifier = {
+				factor = 2
+				has_ethic = ethic_materialist
+			}
+			modifier = {
+				factor = 3
+				has_ethic = ethic_fanatic_materialist
+			}
+		}
+    }
+
+	option = {						# domestication
+		trigger = {
+			has_grand_archive_dlc = yes
+		}
+        inline_script = {
+            script = "game_start/assign_traditions"
+            TRADITION = domestication
+            ONE = containment_protocols
+            TWO = bio_repurposing
+            THREE = astrozoology
+            FOUR = metabolic_regulation
+            FIVE = killer_instinct
+        }
+		subtract_variable = {
+			which = tradition_picks
+			value = 1
+		}
+		ai_chance = {
+			base = 0
+			modifier = {
+				add = 10
+				count_used_naval_cap = {
+					limit = { is_space_fauna = yes }
+					count >= 40
+				}
+			}
+			modifier = {
+				add = 10
+				num_vivarium_slots = value:get_vivarium_capacity
+			}
+			modifier = {
+				factor = 5
+				is_beastmasters_empire = yes
+			}
+		}
+    }
+
+	option = {						# domination
+		trigger = {
+			
+		}
+        inline_script = {
+            script = "game_start/assign_traditions"
+            TRADITION = domination
+            ONE = colonial_viceroys
+            TWO = imperious_architecture
+            THREE = judgment_corps
+            FOUR = grand_council
+            FIVE = workplace_motivators
+        }
+		subtract_variable = {
+			which = tradition_picks
+			value = 1
+		}
+		ai_chance = {
+			base = 5
+			factor = 10
+			modifier = {
+				factor = 2
+				has_ethic = ethic_authoritarian
+			}
+			modifier = {
+				factor = 3
+				has_ethic = ethic_fanatic_authoritarian
+			}
+		}
+    }
+
+	option = {						# enmity
+		trigger = {
+			has_humanoids = yes
+			NOR = {
+				is_homicidal = yes
+				has_valid_civic = civic_machine_assimilator
+				has_valid_civic = civic_inwards_perfection
+			}
+		}
+        inline_script = {
+            script = "game_start/assign_traditions"
+            TRADITION = enmity
+            ONE = rise_to_the_occasion
+            TWO = consumate_contrarian
+            THREE = match
+            FOUR = outpace
+            FIVE = eclipse
+        }
+		subtract_variable = {
+			which = tradition_picks
+			value = 1
+		}
+		ai_chance = {
+			base = 5
+			weight = 10
+
+			modifier = {
+				factor = 0
+				NOT = { has_country_flag = has_encountered_other_empire }
+			}
+
+			modifier = {
+				factor = 0
+				OR = {
+					has_ethic = ethic_fanatic_xenophile
+					has_valid_civic = civic_hive_empath
+				}
+			}
+
+			modifier = {
+				factor = 0
+				num_rivals = 0
+			}
+
+			# Ambitious people who want to be rivals
+			modifier = {
+				factor = 2.0
+				is_fanatic = yes
+			}
+			modifier = {
+				factor = 1.5
+				has_ethic = ethic_militarist
+			}
+			modifier = {
+				factor = 1.25
+				has_ethic = ethic_authoritarian
+			}
+			modifier = {
+				factor = 2
+				OR = {
+					has_valid_civic = civic_nationalistic_zeal
+					has_valid_civic = civic_pompous_purists
+				}
+			}
+			modifier = {
+				factor = 3
+				OR = {
+					has_valid_civic = civic_hive_strength_of_legions
+					has_valid_civic = civic_machine_warbots
+					has_valid_civic = civic_private_military_companies
+					has_valid_civic = civic_warrior_culture
+					has_origin = origin_payback
+				}
+			}
+
+			modifier = {
+				factor = 1.5
+				OR = {
+					has_ai_personality_behaviour = subjugator
+					has_ai_personality_behaviour = opportunist
+					has_ai_personality_behaviour = propagator
+				}
+			}
+			modifier = {
+				factor = 20
+				has_ai_personality = metalhead
+			}
+		}
+    }
+
+	option = {						# expansion
+		trigger = {
+			#always = yes
+		}
+        inline_script = {
+            script = "game_start/assign_traditions"
+            TRADITION = expansion
+            ONE = reach_for_the_stars
+            TWO = colonization_fever
+            THREE = courier_network
+            FOUR = galactic_ambition
+            FIVE = a_new_life
+        }
+		subtract_variable = {
+			which = tradition_picks
+			value = 1
+		}
+
+		ai_chance = {
+			base = 5
+			factor = 20
+			modifier = {
+				factor = 5
+				years_passed < 20
+			}
+			modifier = {
+				factor = 5
+				has_void_dweller_origin = yes
+			}
+		}
+    }
+
+	option = {						# harmony
+		trigger = {
+			is_gestalt = no
+		}
+        inline_script = {
+            script = "game_start/assign_traditions"
+            TRADITION = harmony
+            ONE = mind_and_body
+            TWO = kinship
+            THREE = the_greater_good
+            FOUR = harmonious_directives
+            FIVE = utopian_dream
+        }
+		subtract_variable = {
+			which = tradition_picks
+			value = 1
+		}
+		ai_chance = {
+			base = 5
+			factor = 7.5
+			modifier = {
+				factor = 2
+				has_ethic = ethic_egalitarian
+			}
+			modifier = {
+				factor = 3
+				has_ethic = ethic_fanatic_egalitarian
+			}
+			modifier = {
+				factor = 2
+				has_ethic = ethic_authoritarian
+			}
+			modifier = {
+				factor = 3
+				has_ethic = ethic_fanatic_authoritarian
+			}
+			modifier = {
+				factor = 2
+				has_ethic = ethic_spiritualist
+			}
+			modifier = {
+				factor = 3
+				has_ethic = ethic_fanatic_spiritualist
+			}
+			modifier = {
+				factor = 3
+				has_origin = origin_necrophage
+			}
+		}
+    }
+
+	option = {						# logistics
+		trigger = {
+			is_gestalt = yes
+		}
+        inline_script = {
+            script = "game_start/assign_traditions"
+            TRADITION = logistics
+            ONE = 1
+            TWO = 2
+            THREE = 3
+            FOUR = 4
+            FIVE = 5
+        }
+		subtract_variable = {
+			which = tradition_picks
+			value = 1
+		}
+		ai_chance = {
+			base = 5
+			factor = 20
+			modifier = {
+				factor = 3
+				is_megacorp = yes
+			}
+			modifier = {
+				factor = 100
+				should_ai_focus_on_trade = yes
+			}
+		}
+    }
+
+	option = {						# mercantile
+		trigger = {
+			is_regular_empire = yes
+		}
+        inline_script = {
+            script = "game_start/assign_traditions"
+            TRADITION = mercantile
+            ONE = trickle_up_economics
+            TWO = commercial_enterprise
+            THREE = adaptive_economic_policies
+            FOUR = marketplace_of_better_ideas
+            FIVE = insider_trading
+        }
+		subtract_variable = {
+			which = tradition_picks
+			value = 1
+		}
+		ai_chance = {
+			base = 5
+			factor = 20
+			modifier = {
+				factor = 3
+				is_megacorp = yes
+			}
+			modifier = {
+				factor = 100
+				should_ai_focus_on_trade = yes
+			}
+		}
+    }
+
+	option = {						# politics
+		trigger = {
+			host_has_dlc = Federations
+			is_homicidal = no
+		}
+        inline_script = {
+            script = "game_start/assign_traditions"
+            TRADITION = politics
+            ONE = quid_pro_quo
+            TWO = gravitas
+            THREE = national_agenda
+            FOUR = persistent_petitioners
+            FIVE = extraordinary_powers
+        }
+		subtract_variable = {
+			which = tradition_picks
+			value = 1
+		}
+		ai_chance = {
+			base = 5
+			factor = 5
+			modifier = {
+				factor = 10
+				is_part_of_galactic_council = yes
+			}
+			modifier = {
+				factor = 0
+				is_galactic_community_member = no
+			}
+			modifier = {
+				factor = 3
+				has_ethic = ethic_xenophile
+			}
+			modifier = {
+				factor = 6
+				has_ethic = ethic_fanatic_xenophile
+			}
+			modifier = {
+				factor = 3
+				has_ethic = ethic_pacifist
+			}
+			modifier = {
+				factor = 6
+				has_ethic = ethic_fanatic_pacifist
+			}
+			modifier = {
+				factor = 0.5
+				has_ethic = ethic_xenophobe
+			}
+			modifier = {
+				factor = 0.25
+				has_ethic = ethic_fanatic_xenophobe
+			}
+			modifier = {
+				factor = 0
+				OR = {
+					is_homicidal = yes
+				}
+			}
+		}
+    }
+
+	option = {						# prosperity
+		trigger = {
+			#always = yes
+		}
+        inline_script = {
+            script = "game_start/assign_traditions"
+            TRADITION = prosperity
+            ONE = administrative_operations
+            TWO = sct
+            THREE = pursuit_of_profit
+            FOUR = interstellar_franchising
+            FIVE = public_works
+        }
+		subtract_variable = {
+			which = tradition_picks
+			value = 1
+		}
+		ai_chance = {
+			base = 5
+			factor = 20
+			
+			modifier = {
+				factor = 2
+				has_ethic = ethic_pacifist
+			}
+			modifier = {
+				factor = 3
+				has_ethic = ethic_fanatic_pacifist
+			}
+		}
+    }
+
+	option = {						# statecraft
+		trigger = {
+			#always = yes
+		}
+        inline_script = {
+            script = "game_start/assign_traditions"
+            TRADITION = statecraft
+            ONE = constitutional_focus
+            TWO = inspiring_agendas
+            THREE = immutable_directives
+            FOUR = amongst_peers
+            FIVE = shared_benefits
+        }
+		subtract_variable = {
+			which = tradition_picks
+			value = 1
+		}
+		ai_chance = {
+			base = 5
+			factor = 5
+			modifier = {
+				factor = 0.5
+				is_gestalt = yes
+			}
+		}
+    }
+
+	option = {						# subterfuge
+		trigger = {
+			has_nemesis = yes
+		}
+        inline_script = {
+            script = "game_start/assign_traditions"
+            TRADITION = subterfuge
+            ONE = information_security
+            TWO = operational_security
+            THREE = nda
+            FOUR = double_agents
+            FIVE = shadow_recruits
+        }
+		subtract_variable = {
+			which = tradition_picks
+			value = 1
+		}
+		ai_chance = {
+			base = 5
+			factor = 5
+			modifier = {
+				factor = 1.5
+				has_ethic = ethic_xenophobe
+			}
+			modifier = {
+				factor = 2
+				has_ethic = ethic_fanatic_xenophobe
+			}
+			modifier = {
+				factor = 10
+				has_valid_civic = civic_hive_bodysnatcher
+			}
+		}
+    }
+
+	option = {						# supremacy
+		trigger = {
+			#always = yes			
+		}
+        inline_script = {
+            script = "game_start/assign_traditions"
+            TRADITION = supremacy
+            ONE = master_shipwrights
+            TWO = fleet_logistical_corps
+            THREE = overwhelming_force
+            FOUR = war_games
+            FIVE = great_game
+        }
+		subtract_variable = {
+			which = tradition_picks
+			value = 1
+		}
+		ai_chance = {
+			base = 5
+			factor = 10
+			modifier = {
+				factor = 10
+				has_ascension_perk = ap_become_the_crisis
+			}
+			modifier = {
+				factor = 2
+				has_ethic = ethic_militarist
+			}
+			modifier = {
+				factor = 3
+				has_ethic = ethic_fanatic_militarist
+			}
+			modifier = {
+				factor = 2
+				has_ethic = ethic_xenophobe
+			}
+			modifier = {
+				factor = 3
+				has_ethic = ethic_fanatic_xenophobe
+			}
+			modifier = {
+				factor = 5
+				is_homicidal = yes
+			}
+		}
+    }
+
+	option = {						# synchronicity
+		trigger = {
+			is_gestalt = yes
+		}
+        inline_script = {
+            script = "game_start/assign_traditions"
+            TRADITION = synchronicity
+            ONE = cloned_organs
+            TWO = kinship_gestalt
+            THREE = integrated_preservation
+            FOUR = harmonious_directives
+            FIVE = collective_reasoning
+        }
+		subtract_variable = {
+			which = tradition_picks
+			value = 1
+		}
+		ai_chance = {
+			base = 5
+			factor = 10
+			modifier = {
+				factor = 3
+				has_origin = origin_necrophage
+			}
+		}
+    }
+
+	option = {						# unyielding
+		trigger = {
+			OR = {
+				host_has_dlc = "Apocalypse"
+				has_overlord_dlc = yes
+			}
+		}
+        inline_script = {
+            script = "game_start/assign_traditions"
+            TRADITION = unyielding
+            ONE = resistance_is_frugal
+            TWO = never_surrender
+            THREE = bulwark_of_harmony
+            FOUR = defensive_zeal
+            FIVE = fortress_doctrine
+        }
+		subtract_variable = {
+			which = tradition_picks
+			value = 1
+		}
+		ai_chance = {
+			base = 5
+			factor = 5
+			modifier = {
+				factor = 5
+				has_ethic = ethic_pacifist
+			}
+			modifier = {
+				factor = 10
+				has_ethic = ethic_fanatic_pacifist
+			}
+			modifier = {
+				factor = 4
+				has_valid_civic = civic_inwards_perfection
+			}
+			modifier = {
+				factor = 3
+				is_specialist_subject_type = { TYPE = bulwark }
+			}
+			modifier = {
+				factor = 4
+				has_valid_civic = civic_machine_stalwart_network
+			}
+			modifier = {
+				factor = 5
+				has_origin = origin_starlit_citadel
+			}
+			modifier = {
+				factor = 3
+				any_neighbor_country = {
+					is_country_type = default
+					opinion_level = { who = prev level <= poor }
+					relative_power = { who = prev value >= superior }
+				}
+			}
+		}
+    }
+
+	option = {						# versatility
+		trigger = {
+			is_machine_empire = yes
+		}
+        inline_script = {
+            script = "game_start/assign_traditions"
+            TRADITION = versatility
+            ONE = universal_compatibility
+            TWO = adaptive_programming
+            THREE = spatial_optimization
+            FOUR = material_analysis
+            FIVE = operational_proxies
+        }
+		subtract_variable = {
+			which = tradition_picks
+			value = 1
+		}
+		ai_chance = {
+			base = 5
+			factor = 5
+			modifier = {
+				factor = 2
+				has_valid_civic = civic_machine_servitor
+			}
+		}
+    }
+
+	after = {
+		hidden_effect = {
+			country_event = {
+				id = mj25_game_start.5
+			}
+		}
+	}
+}
+
+
+country_event = {
+	id = mj25_game_start.6
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		is_country_type = default
+		NOT = {
+			has_country_flag = setup_complete
+		}
+	}
+	immediate = {
+		set_spawn_system_batch = BEGIN
+		set_update_modifiers_batch = BEGIN
+		generate_planets_for_special_empires = yes
+		generate_starting_planets = yes
+		generate_starbase_setup = yes
+		calculate_modifier = yes
+		establish_communications_effect = yes
+		set_country_flag = setup_complete
+		country_event = {
+			id = mj25_game_start.5
+		}
+		country_event = {
+			id = mj25_game_start.7
+			days = 3
+		}
+		set_spawn_system_batch = END
+		set_update_modifiers_batch = END
+		refresh_auto_generated_ship_designs = yes
+		# Blocking discovering new life events since we've already discovered extraterrestrial life at this point
+		set_country_flag = first_contact_event
+		set_timed_country_flag = {
+			flag = day_0
+			days = 3
+		}
+		set_country_flag = Story7	
+		set_country_flag = Story8	
+	}
+}
+
+country_event = {
+	id = mj25_game_start.7
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		is_country_type = default
+		NOT = {
+			has_country_flag = fleets_spawned
+		}
+	}
+	immediate = {
+		set_country_flag = fleets_spawned
+		generate_starting_fleets = yes
+	}
+}
