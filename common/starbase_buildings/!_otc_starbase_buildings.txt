@@ -1,0 +1,47 @@
+## OTC Starbase Buildings
+# Created by Accorata & BrettlesSr
+
+otc_temporal_shell = {
+	icon = "GFX_starbase_otc_temporal_shell"
+	construction_days = 360
+
+	potential = {
+		exists = owner
+		owner = { has_menace_perk = menp_otc_temporal_shell }
+		is_normal_starbase = yes
+	}
+
+	resources = {
+		category = starbase_buildings
+		cost = {
+			alloys = 100
+			otc_temporal_fabric = 5
+		}
+		upkeep = {
+			energy = 15
+		}
+	}
+
+	ai_weight = {
+		weight = 50
+	}
+
+	on_finished = {
+		if = {
+			limit = {
+				solar_system = { NOT = { has_modifier = otc_temporal_shell_aura } }
+			}
+			solar_system = {
+				system_event = { id = omnitemporal.31 }
+			}
+		}
+	}
+
+	on_destroyed = {
+		solar_system = {
+			system_event = { id = omnitemporal.32 }
+		}
+	}
+
+	custom_tooltip = sm_otc_temporal_shell_desc_modifier
+}

@@ -1,0 +1,197 @@
+## OTC Megastructures
+# Created by Accorata
+
+otc_atemporal_research_zone = {
+	entity = "otc_arz_entity"
+	construction_entity = "otc_arz_entity_construction"
+	portrait = "GFX_megastructure_construction_background"
+	place_entity_on_planet_plane = no
+	entity_offset = { x = -30 y = -30 }
+	rotate_to_center = no
+	scale_offset = yes
+	build_time = 900 # 2.5 years
+
+	resources = {
+		category = megastructures
+		cost = {
+			unity = 2500
+		}
+		cost = {
+			trigger = {
+				country_uses_bio_ships = no
+			}
+			alloys = 1000
+		}
+		cost = {
+			trigger = {
+				country_uses_bio_ships = yes
+			}
+			alloys = 1000
+			mult = 0.5
+		}
+		cost = {
+			trigger = {
+				country_uses_bio_ships = yes
+			}
+			food = 1000
+			mult = @halved_alloy_to_food_cost_ratio
+		}
+
+		upkeep = {
+			energy = 25
+		}
+	}
+
+	construction_blocks_and_blocked_by = none
+	custom_tooltip_requirements = "MEGASTRUCTURE_TOOLTIP_REQUIREMENTS_OTC_ARZ"
+
+	potential = {
+		has_crisis_level = otc_crisis_omnitemporal_level_2
+	}
+
+	possible = {
+		hidden_trigger = {
+			exists = starbase
+		}
+		custom_tooltip = {
+			fail_text = "requires_inside_border"
+			is_inside_border = from
+		}
+		custom_tooltip = {
+			fail_text = "requires_surveyed_system"
+			NOT = {
+				any_system_planet = {
+					is_surveyed = {
+						who = prev.from
+						status = no
+					}
+				}
+			}
+		}
+		custom_tooltip = {
+			fail_text = "otc_requires_black_hole_or_neutron_star"
+			OR = {
+				is_star_class = sc_neutron_star
+				is_star_class = sc_black_hole
+			}
+		}
+		custom_tooltip = {
+			fail_text = "otc_requires_less_than_x_arz"
+			from = {
+				check_variable = {
+					which = otc_atemporal_research_zone_counter
+					value <= value:otc_arz_limit
+				}
+			}
+		}
+	}
+
+	placement_rules = {
+		planet_possible = {
+			custom_tooltip = {
+				fail_text = "must_build_around_star"
+				is_star = yes
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_anomaly"
+				NOT = { has_anomaly = yes }
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_existing_megastructure"
+				NOR = {
+					has_planet_flag = megastructure
+					has_planet_flag = has_megastructure
+				}
+			}
+			OR = {
+				is_star_class = sc_neutron_star
+				is_star_class = sc_black_hole
+			}
+		}
+	}
+
+	country_modifier = {
+		custom_tooltip = otc_atemporal_research_zone_effects
+	}
+
+	# root = system
+	# from = country
+	ai_weight = {
+		factor = 25
+
+		modifier = {
+			factor = 5
+			starbase = {
+				has_starbase_size >= starbase_starfortress
+			}
+		}
+
+		modifier = {
+			factor = 0.1
+			any_neighbor_system = {
+				exists = owner
+				NOT = {
+					owner = {
+						is_same_value = from
+					}
+				}
+			}
+		}
+	}
+
+	on_build_start = {
+		if = {
+			limit = {
+				exists = from
+			}
+			from = {
+				change_variable = {
+					which = otc_atemporal_research_zone_counter
+					value = 1
+				}
+			}
+		}
+	}
+
+	on_build_cancel = {
+		if = {
+			limit = {
+				exists = from
+			}
+			from = {
+				if = {
+					limit = {
+						check_variable = {
+							which = otc_atemporal_research_zone_counter
+							value >= 1
+						}
+					}
+					change_variable = {
+						which = otc_atemporal_research_zone_counter
+						value = -1
+					}
+				}
+			}
+		}
+	}
+
+	on_build_complete = {
+		fromfrom.planet = {
+			set_planet_flag = has_megastructure
+			set_planet_flag = otc_has_atemporal_research_zone
+			if = {
+				limit = { has_orbital_station = yes }
+				orbital_station = {
+					dismantle = yes
+				}
+			}
+		}
+		from = {
+			set_country_flag = otc_has_built_arz
+			change_variable = {
+				which = otc_built_arzs
+				value = 1
+			}
+		}
+	}
+}

@@ -1,0 +1,72 @@
+## OTC Espionage Operations
+# Created by BrettlesSr
+
+@diff_t7 = 11
+@operationTargetedByTimer = 10800
+
+#Reset Civilisation
+operation_reset_civilisation = {
+	categories = { op_cat_sabotage op_cat_technology }
+	picture = GFX_evt_clocks
+	desc = operation_reset_civilisation_desc
+	stages = 3
+
+	resources = {
+		category = operations
+		cost = {
+			influence = 250
+		}
+		upkeep = {
+			energy = 9
+		}
+	}
+
+	spy_power_cost = 60
+
+	potential = {
+		owner = {
+			has_crisis_perk = menp_otc_reset_civilisation
+		}
+		target = { is_primitive = no }
+	}
+	allow = {
+		custom_tooltip = {
+			fail_text = operation_reset_civilisation_rival_time_travellers
+			target = {
+				NOT = {
+					has_ascension_perk = otc_ap_omnitemporal
+				}
+			}
+		}
+		custom_tooltip = {
+			is_running_espionage_operation = no
+			fail_text = operation_one_at_a_time
+		}
+	}
+	stage = {
+		difficulty = @diff_t7
+		icon = GFX_espionage_chapter_icon_motion
+		event = omnitemporal.50
+	}
+	stage = {
+		difficulty = @diff_t7
+		icon = GFX_espionage_chapter_icon_target
+		event = omnitemporal.51
+	}
+	stage = {
+		difficulty = @diff_t7
+		icon = GFX_espionage_chapter_icon_success
+		event = omnitemporal.52
+	}
+	on_roll_failed = {
+		standard_espionage_operation_on_roll_failed = { RANDOM_EVENTS = operation_random_events_deepcover }
+	}
+	on_create = {
+		target = {
+			set_timed_country_flag = {
+				flag = espionage_operation_targeted_by@root.owner #Used in random Spy Network events
+				days = @operationTargetedByTimer
+			}
+		}
+	}
+}

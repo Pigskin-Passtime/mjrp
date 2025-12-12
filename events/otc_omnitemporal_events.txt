@@ -1,0 +1,1823 @@
+## OTC Events
+# Created by Accorata & BrettlesSr
+
+namespace = omnitemporal
+
+### Hidden Events ###
+# Fired on choosing the Omnitemporal Ascension Perk
+country_event = {
+	id = omnitemporal.0
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_ascension_perk = otc_ap_omnitemporal
+	}
+
+	immediate = {
+		# Set Variable to check Temporal Fabric gained from Physicists
+		set_variable = {
+			which = otc_physicist_temporal_fabric_produced
+			value = 0
+		}
+		# Enable Chronological Studies Special Project & Add Scientist Modifier if no Ancrel DLC
+		country_event = {
+			id = omnitemporal.2
+		}
+	}		
+}
+
+# Fired on Chronological Studies Minor Artifact Decision / Special Project
+country_event = {
+	id = omnitemporal.1
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_ascension_perk = otc_ap_omnitemporal
+	}
+
+	immediate = {
+		otc_create_temporal_anomaly = yes
+	}		
+}
+
+# Enable Chronological Studies Special Project if no Ancrel DLC
+country_event = {
+	id = omnitemporal.2
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_ancrel = no
+		has_ascension_perk = otc_ap_omnitemporal
+	}
+
+	immediate = {
+		add_modifier = {
+			modifier = otc_secrets_of_the_past_no_ancrel
+			days = -1
+		}
+		capital_scope = {
+			enable_special_project = {
+				name = "otc_chronological_studies_project"
+				location = this
+				owner = root
+			}
+		}
+	}		
+}
+
+# Fired on reaching Level 2 of the Crisis
+country_event = {
+	id = omnitemporal.20
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_ascension_perk = otc_ap_omnitemporal
+	}
+
+	immediate = {
+		# Set Variable to limit Kilostructures Built
+		set_variable = {
+			which = otc_atemporal_research_zone_counter
+			value = 0
+		}
+	}		
+}
+
+# ARZs Create Temporal Anomalies
+event = {
+	id = omnitemporal.21
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_playable_country = {
+			has_country_flag = otc_has_built_arz
+		}
+	}
+
+	immediate = {
+		every_playable_country = {
+			limit = {
+				has_country_flag = otc_has_built_arz
+			}
+			country_event = {
+				id = omnitemporal.22
+			}
+		}
+	}
+}
+
+country_event = {
+	id = omnitemporal.22
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_flag = otc_has_built_arz
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				NOT = {
+					is_variable_set = otc_arz_temporal_anomaly_progress
+				}
+			}
+			set_variable = {
+				which = otc_arz_temporal_anomaly_progress
+				value = 0
+			}
+		}
+		# Add progress for each ARZ
+		change_variable = {
+			which = otc_arz_temporal_anomaly_progress
+			value = otc_built_arzs
+		}
+		# Add a random amount from 0-2
+		random_list = {
+			1 = {
+				change_variable = {
+					which = otc_arz_temporal_anomaly_progress
+					value = 0
+				}
+			}
+			1 = {
+				change_variable = {
+					which = otc_arz_temporal_anomaly_progress
+					value = 1
+				}
+			}
+			1 = {
+				change_variable = {
+					which = otc_arz_temporal_anomaly_progress
+					value = 2
+				}
+			}
+		}
+		# Check if threshold has been reached to create anomaly
+		if = {
+			limit = {
+				check_variable_arithmetic = {
+					which = otc_arz_temporal_anomaly_progress
+					value >= 35
+				}
+			}
+			subtract_variable = {
+				which = otc_arz_temporal_anomaly_progress
+				value = 35
+			}
+			otc_create_temporal_anomaly = yes
+		}
+	}
+}
+
+# Fired on reaching Level 3 of the Crisis
+country_event = {
+	id = omnitemporal.30
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_ascension_perk = otc_ap_omnitemporal
+	}
+
+	immediate = {
+		# Add Travel Timelines tech option
+		add_research_option = tech_otc_travel_timelines
+	}		
+}
+
+# Spawn Temporal Shell
+system_event = {
+	id = omnitemporal.31
+	hide_window = yes 
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_modifier = otc_temporal_shell_aura }
+		starbase = {
+			count_starbase_buildings = { 
+				type = otc_temporal_shell 
+				include_being_constructed = no 
+				count = 1 
+			}
+		}
+	}
+
+	immediate = {
+		add_modifier = {
+			modifier = otc_temporal_shell_aura
+			days = -1
+		}
+		star = {
+			create_ambient_object = {
+				type = "psi_storm_1"
+				location = this
+			}
+		}
+		last_created_ambient_object = {	
+			set_ambient_object_flag = otc_temporal_shell_aura
+			set_location = {
+				target = prev
+				distance = 0
+				angle = random
+			}
+		}
+	}
+}
+
+# Remove Temporal Shell (when a Temporal Shell starbase building is dismantled)
+system_event = {
+	id = omnitemporal.32
+	hide_window = yes 
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_modifier = otc_temporal_shell_aura 
+	}
+
+	immediate = {
+		remove_modifier = otc_temporal_shell_aura
+		every_ambient_object = {
+			limit = { has_ambient_object_flag = otc_temporal_shell_aura }
+			destroy_ambient_object = this
+		}
+	}
+}
+
+# Indefinite Lifespans obtained
+country_event = {
+	id = omnitemporal.40
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		log = "40"
+		every_owned_leader = {
+			limit = { is_immortal = no }
+			log = "set immortal"
+			set_immortal = yes
+		}
+	}
+}
+
+# Indefinite Lifespans Effect - leader acquired
+event = {
+	id = omnitemporal.41
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			has_crisis_perk = menp_otc_indefinite_lifespans
+		}
+	}
+
+	immediate = {
+		set_immortal = yes
+	}
+}
+
+# Indefinite Lifespans Effect - species modification complete
+event = {
+	id = omnitemporal.42
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_crisis_perk = menp_otc_indefinite_lifespans
+		OR = {
+			any_owned_leader = {
+				is_immortal = no
+			}
+			any_pool_leader = {
+				is_immortal = no
+			}
+		}
+	}
+
+	immediate = {
+		every_owned_leader = {
+			limit = {
+				is_immortal = no
+			}
+			set_immortal = yes
+		}
+		every_pool_leader = {
+			limit = {
+				is_immortal = no
+			}
+			set_immortal = yes
+		}
+	}
+}
+
+# Indefinite Lifespans Effect - final catch for leaders found another way
+country_event = {
+	id = omnitemporal.43
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_crisis_perk = menp_otc_indefinite_lifespans
+		any_owned_leader = {
+			is_immortal = no
+		}
+	}
+
+	immediate = {
+		every_owned_leader = {
+			limit = {
+				is_immortal = no
+			}
+			set_immortal = yes
+		}
+	}
+}
+
+country_event = {
+	id = omnitemporal.44
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_crisis_perk = menp_otc_indefinite_lifespans
+		from = {
+			is_pool_leader = no
+			NOR = {
+				leader_backup_clone_can_activate = yes
+				AND = {
+					species = {
+						has_trait = trait_spare_organs
+					}
+					NOT = {
+						has_trait = trait_leader_second_chanced
+					}
+				}
+			}
+		}
+	}
+
+	immediate = {
+		clone_leader = {
+			target = from
+			effect = {
+				if = {
+					limit = {
+						NOT = {
+							has_trait = leader_trait_otc_timeline_warped
+						}
+					}
+					give_trait_no_notify_ignore_autocracy_restriction = {
+						TRAIT = leader_trait_otc_timeline_warped
+					}
+				}
+				leader_event = {
+					id = omnitemporal.46
+				}
+				set_years_served = from
+				restore_leader_location = yes
+			}
+		}
+		from = {
+			set_leader_flag = leader_death_events_blocked
+		}
+	}
+}
+
+leader_event = {
+	id = omnitemporal.46
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		locked_random_list = {
+			1 = {
+				modifier = {
+					factor = 0
+					has_leader_flag = otc_timeline_warped_1
+				}
+				set_leader_flag = otc_timeline_warped_1
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					has_astral_planes_dlc = no
+				}
+				modifier = {
+					factor = 0
+					has_leader_flag = otc_timeline_warped_2
+				}
+				set_leader_flag = otc_timeline_warped_2
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					has_leader_flag = otc_timeline_warped_3
+				}
+				set_leader_flag = otc_timeline_warped_3
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					has_leader_flag = otc_timeline_warped_4
+				}
+				set_leader_flag = otc_timeline_warped_4
+			}
+		}
+	}
+}
+
+fleet_event = {
+	id = omnitemporal.45
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		create_ship = {
+			design = event_target:otc_create_ship_@fromfrom
+		}
+	}
+}
+
+espionage_operation_event = {
+	id = omnitemporal.50
+	title = omnitemporal.50.name
+	location = target.capital
+	desc = omnitemporal.50.desc
+	picture = GFX_evt_inhabited_solar_system
+
+	is_triggered_only = yes
+
+	option = {
+		name = PROCEED
+	}
+}
+
+espionage_operation_event = {
+	id = omnitemporal.51
+	title = omnitemporal.51.name
+	desc = omnitemporal.51.desc
+	picture = GFX_evt_spymaster
+	location = target.capital
+
+	is_triggered_only = yes
+
+	option = {
+		name = ACKNOWLEDGED
+	}
+}
+
+espionage_operation_event = {
+	id = omnitemporal.52
+	title = omnitemporal.52.name
+	desc = omnitemporal.52.desc
+	picture = GFX_evt_astral_rift
+	location = target.capital
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_espionage_operation_progress_locked = yes
+		owner = {
+			save_event_target_as = resettor_civ
+		}
+	}
+
+	option = {
+		name = LAUNCH_OPERATION
+		owner = {
+			random_situation = {
+				limit = {
+					is_situation_type = situation_otc_end_of_time
+				}
+				add_situation_progress = 10
+			}
+		}
+		hidden_effect = {
+			target = {
+				otc_reset_civilisation = yes
+			}
+			owner = {
+				set_country_flag = reset_civilisation@root.target
+				country_event = { id = omnitemporal.53 }
+			}
+		}
+	}
+
+	after = {
+		set_espionage_operation_progress_locked = no
+	}
+}
+
+country_event = {
+	id = omnitemporal.521
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		otc_reset_civilisation = yes
+	}
+}
+
+country_event = {
+	id = omnitemporal.53
+	title = omnitemporal.53.name
+	desc = omnitemporal.53.desc
+	picture = GFX_evt_medieval_alien_civilization
+
+	is_triggered_only = yes
+
+	option = {
+		name = EXCELLENT
+	}
+}
+
+country_event = {
+	id = omnitemporal.54
+	title = omnitemporal.54.name
+	desc = omnitemporal.54.desc
+	picture = GFX_evt_clocks
+
+	is_triggered_only = yes
+
+	immediate = {
+		start_situation = {
+			type = situation_otc_end_of_time
+		}
+	}
+
+	option = {
+		name = omnitemporal.54.a
+	}
+}
+
+# The Greatest Timeline Effects - on_monthly_pulse_country
+country_event = {
+	id = omnitemporal.55
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_crisis_perk = menp_otc_the_greatest_timeline
+	}
+
+	immediate = {
+		# otc_restore_negative_income = {
+		# 	RESOURCE = trade
+		# }
+		otc_restore_negative_income = {
+			RESOURCE = energy
+		}
+		otc_restore_negative_income = {
+			RESOURCE = minerals
+		}
+		otc_restore_negative_income = {
+			RESOURCE = food
+		}
+		otc_restore_negative_income = {
+			RESOURCE = consumer_goods
+		}
+		otc_restore_negative_income = {
+			RESOURCE = alloys
+		}
+		otc_restore_negative_income = {
+			RESOURCE = volatile_motes
+		}
+		otc_restore_negative_income = {
+			RESOURCE = exotic_gases
+		}
+		otc_restore_negative_income = {
+			RESOURCE = rare_crystals
+		}
+		otc_restore_negative_income = {
+			RESOURCE = sr_living_metal
+		}
+		otc_restore_negative_income = {
+			RESOURCE = sr_zro
+		}
+		otc_restore_negative_income = {
+			RESOURCE = sr_dark_matter
+		}
+		otc_restore_negative_income = {
+			RESOURCE = nanites
+		}
+	}
+}
+
+country_event = {
+	id = omnitemporal.56
+	title = omnitemporal.56.name
+	desc = omnitemporal.56.desc
+	picture = GFX_evt_clocks
+
+	is_triggered_only = yes
+
+	option = {
+		name = omnitemporal.56.a
+		custom_tooltip = omnitemporal.56.a.tooltip
+	}
+}
+
+### Temporal Anomalies ###
+## Base Anomalies (Without Travel Timelines Tech)
+# Leader disappears into the future
+ship_event = {
+	id = omnitemporal.1000
+	title = omnitemporal.1000.name
+	desc = omnitemporal.1000.desc
+	picture = GFX_evt_ship_in_orbit_3
+	show_sound = evn_ove_scholarium_cache_rare_tech
+	location = from
+	is_triggered_only = yes
+
+	option = {
+		name = omnitemporal.1000.a
+		custom_tooltip = omnitemporal.1000.a.tooltip
+		hidden_effect = {
+			leader = {
+				kill_leader = {
+					show_notification = no
+				}
+			}
+			owner = {
+				complete_crisis_objective = otc_crisobj_research_time_anomaly
+				set_country_flag = otc_has_finished_temporal_anomaly
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+# Leader arrives from the future
+ship_event = {
+	id = omnitemporal.1001
+	title = omnitemporal.1001.name
+	desc = omnitemporal.1001.desc
+	picture = GFX_evt_face_off_in_space
+	show_sound = evn_ove_scholarium_cache_rare_tech
+	location = from
+	is_triggered_only = yes
+
+	immediate = {
+		owner = {
+			random_owned_leader = {
+				limit = {
+					has_leader_flag = otc_completed_time_anomaly
+					NOT = {
+						is_same_value = root.leader
+					}
+				}
+				save_event_target_as = otc_future_leader
+				set_leader_flag = otc_temporal_cloned
+			}
+			clone_leader = {
+				target = event_target:otc_future_leader
+				effect = {
+					set_leader_flag = otc_temporal_clone
+					set_years_served = event_target:otc_future_leader
+				}
+			}
+		}
+	}
+
+	option = {
+		name = omnitemporal.1001.a
+		custom_tooltip = omnitemporal.1001.a.tooltip
+		hidden_effect = {
+			owner = {
+				complete_crisis_objective = otc_crisobj_research_time_anomaly
+				set_country_flag = otc_has_finished_temporal_anomaly
+			}
+			leader = {
+				set_leader_flag = otc_completed_time_anomaly
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+
+	option = {
+		name = omnitemporal.1001.b
+		custom_tooltip = omnitemporal.1001.a.tooltip
+		hidden_effect = {
+			owner = {
+				complete_crisis_objective = otc_crisobj_research_time_anomaly
+				set_country_flag = otc_has_finished_temporal_anomaly
+			}
+			leader = {
+				set_leader_flag = otc_completed_time_anomaly
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+# Leader who will travel into the past dies
+country_event = {
+	id = omnitemporal.1014
+	title = omnitemporal.1014.name
+	desc = omnitemporal.1014.desc
+	picture = GFX_evt_zro_4
+	show_sound = event_default
+	location = capital_scope
+	is_triggered_only = yes
+
+	trigger = {
+		from = {
+			has_leader_flag = otc_temporal_cloned
+			NOR = {
+				leader_backup_clone_can_activate = yes
+				AND = {
+					species = {
+						has_trait = trait_spare_organs
+					}
+					NOT = {
+						has_trait = trait_leader_second_chanced
+					}
+				}
+			}
+		}
+		NOT = {
+			has_crisis_perk = menp_otc_indefinite_lifespans
+		}
+	}
+
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				has_leader_flag = otc_temporal_clone
+			}
+			save_event_target_as = otc_temporal_clone
+		}
+	}
+
+	option = {
+		name = omnitemporal.1014.a
+
+		event_target:otc_temporal_clone = {
+			kill_leader = {
+				show_notification = no
+			}
+		}
+
+		add_resource = {
+			otc_temporal_fabric = 500
+		}
+		
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+# Time on planet accelerates to ultra fast speeds
+ship_event = {
+	id = omnitemporal.1003
+	title = omnitemporal.1003.name
+	desc = omnitemporal.1003.desc
+	picture = GFX_evt_astral_rift_clock
+	show_sound = evn_ove_scholarium_cache_rare_tech
+	location = from
+	is_triggered_only = yes
+
+	immediate = {
+		owner = {
+			country_event = {
+				id = omnitemporal.1004
+				days = 90
+				random = 30
+			}
+		}
+	}
+
+	option = {
+		name = omnitemporal.1003.a
+		hidden_effect = {
+			owner = {
+				complete_crisis_objective = otc_crisobj_research_time_anomaly
+				set_country_flag = otc_has_finished_temporal_anomaly
+			}
+			leader = {
+				set_leader_flag = otc_completed_time_anomaly
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+# Ultra Fast Time Planet Stage 1
+country_event = {
+	id = omnitemporal.1004
+	title = omnitemporal.1004.name
+	desc = omnitemporal.1004.desc
+	picture = GFX_evt_warm_barren
+	show_sound = event_default
+	location = fromfrom
+	is_triggered_only = yes
+
+	immediate = {
+		fromfrom = {
+			change_pc = pc_barren
+		}
+		country_event = {
+			id = omnitemporal.1005
+			days = 90
+			random = 30
+		}
+	}
+
+	option = {
+		name = omnitemporal.1004.a
+		tooltip = {
+			fromfrom = {
+				change_pc = pc_barren
+			}
+		}
+		
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+# Ultra Fast Planet Stage 2
+country_event = {
+	id = omnitemporal.1005
+	title = omnitemporal.1005.name
+	desc = omnitemporal.1005.desc
+	picture = GFX_evt_arid
+	show_sound = event_default
+	location = fromfromfrom
+	is_triggered_only = yes
+
+	immediate = {
+		fromfromfrom = {
+			change_pc = pc_arid
+		}
+		country_event = {
+			id = omnitemporal.1006
+			days = 90
+			random = 30
+		}
+	}
+
+	option = {
+		name = omnitemporal.1005.a
+		tooltip = {
+			fromfromfrom = {
+				change_pc = pc_arid
+			}
+		}
+		
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+# Ultra Fast Planet Final Stage
+country_event = {
+	id = omnitemporal.1006
+	title = omnitemporal.1006.name
+	desc = omnitemporal.1006.desc
+	picture = GFX_evt_continental
+	show_sound = event_default
+	location = fromfromfromfrom
+	is_triggered_only = yes
+
+	immediate = {
+		fromfromfromfrom = {
+			change_pc = pc_continental
+			# Spawns Pre-Sapients (Disabled due to errors before release)
+			#spawn_presapient_species_randomizer_effect = yes
+			#set_planet_flag = pre_sapient_planet
+		}
+	}
+
+	option = {
+		name = omnitemporal.1006.a
+		tooltip = {
+			fromfromfromfrom = {
+				change_pc = pc_continental
+			}
+		}
+		
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+# Leader is frozen in time loop
+ship_event = {
+	id = omnitemporal.1007
+	title = omnitemporal.1007.name
+	desc = omnitemporal.1007.desc
+	picture = GFX_evt_overt_indoctrination
+	show_sound = evn_ove_scholarium_cache_rare_tech
+	location = from
+	is_triggered_only = yes
+
+	immediate = {
+		leader = {
+			save_event_target_as = time_loop_trapped_scientist
+		}
+	}
+
+	option = {
+		name = omnitemporal.1007.a
+		leader = {
+			add_trait = {
+				trait = leader_trait_otc_time_loop_trapped
+			}
+		}
+		hidden_effect = {
+			owner = {
+				complete_crisis_objective = otc_crisobj_research_time_anomaly
+				set_country_flag = otc_has_finished_temporal_anomaly
+			}
+			leader = {
+				set_leader_flag = otc_completed_time_anomaly
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+# Time revelation and clocks display weirdly
+ship_event = {
+	id = omnitemporal.1008
+	title = omnitemporal.1008.name
+	desc = omnitemporal.1008.desc
+	picture = GFX_evt_timeworm_transcriptions
+	show_sound = evn_ove_scholarium_cache_rare_tech
+	location = from
+	is_triggered_only = yes
+
+	option = {
+		name = omnitemporal.1008.a
+
+		owner = {
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier4researchreward
+				min = @tier4researchmin
+				max = @tier4researchmax
+			}
+		}
+
+		hidden_effect = {
+			if = {
+				limit = {
+					has_machine_age_dlc = yes
+				}
+				date_distortion = yes
+				event_target:global_event_country = {
+					# Ends Distortion in 30 days
+					country_event = {
+						id = crisis.7519
+						days = 30
+					} 
+				}
+			}
+			owner = {
+				complete_crisis_objective = otc_crisobj_research_time_anomaly
+				set_country_flag = otc_has_finished_temporal_anomaly
+			}
+			leader = {
+				set_leader_flag = otc_completed_time_anomaly
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+# Planet speeds up
+ship_event = {
+	id = omnitemporal.1009
+	title = omnitemporal.1009.name
+	desc = omnitemporal.1009.desc
+	picture = GFX_evt_kaleidoscopic_lights
+	show_sound = evn_ove_scholarium_cache_rare_tech
+	location = from
+	is_triggered_only = yes
+
+	option = {
+		name = omnitemporal.1008.a
+
+		from = {
+			add_modifier = {
+				modifier = otc_time_accelerated
+				days = 360
+			}
+		}
+
+		hidden_effect = {
+			owner = {
+				complete_crisis_objective = otc_crisobj_research_time_anomaly
+				set_country_flag = otc_has_finished_temporal_anomaly
+			}
+			leader = {
+				set_leader_flag = otc_completed_time_anomaly
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+#everyone loses a day
+country_event = {
+	id = omnitemporal.1010
+	title = omnitemporal.1010.name
+	desc = omnitemporal.1010.desc
+	picture = GFX_evt_glitchy_matrix
+	show_sound = evn_ove_scholarium_cache_rare_tech
+	location = fromfrom
+	is_triggered_only = yes
+
+	option = {
+		name = DISCONCERTING
+		add_modifier = {
+			modifier = otc_forgot_a_day
+			days = 1800
+		}
+		
+		hidden_effect = {
+			complete_crisis_objective = otc_crisobj_research_time_anomaly
+			set_country_flag = otc_has_finished_temporal_anomaly
+			from = {
+				leader = {
+					set_leader_flag = otc_completed_time_anomaly
+				}
+			}
+			every_playable_country = {
+				limit = {
+					NOT = {
+						is_same_value = root
+					}
+				}
+				country_event = { id = omnitemporal.1012 days = 1 }
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+ship_event = {
+	id = omnitemporal.1011
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_saved_date ={
+			key = lost_date_flag
+			days_from_present = 1
+			expires = 360
+		}
+		owner = {
+			country_event = {
+				id = omnitemporal.1010
+				days = 2
+			}
+		}
+	}
+}
+
+#everyone loses a day - others
+country_event = {
+	id = omnitemporal.1012
+	title = omnitemporal.1012.name
+	desc = omnitemporal.1012.desc
+	picture = GFX_evt_clocks
+	is_triggered_only = yes
+
+	immediate = {
+		set_saved_date ={
+			key = lost_date_flag
+			days_from_present = 1
+			expires = 360
+		}
+		set_saved_date ={
+			key = lost_date_flag_minus_one
+			days_from_present = 2
+			expires = 360
+		}
+		set_saved_date ={
+			key = lost_date_flag_plus_one
+			days_from_present = 0
+			expires = 360
+		}
+	}
+
+	option = {
+		name = OUTRAGEOUS
+		add_modifier = {
+			modifier = otc_forgot_a_day
+			days = 1800
+		}
+		if = {
+			limit = {
+				has_communications = FROM
+			}
+			add_opinion_modifier = {
+				modifier = otc_opinion_lost_day
+				who = FROM
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+# Leader rapidly ages
+ship_event = {
+	id = omnitemporal.1013
+	title = omnitemporal.1013.name
+	desc = omnitemporal.1013.desc
+	picture = GFX_evt_necrophage
+	show_sound = evn_ove_scholarium_cache_rare_tech
+	location = from
+	is_triggered_only = yes
+
+	immediate = {
+		leader = {
+			save_event_target_as = aging_leader
+		}
+	}
+
+	option = {
+		name = omnitemporal.1013.a
+		leader = {
+			add_age = 20
+		}
+		hidden_effect = {
+			owner = {
+				complete_crisis_objective = otc_crisobj_research_time_anomaly
+				set_country_flag = otc_has_finished_temporal_anomaly
+			}
+			leader = {
+				set_leader_flag = otc_completed_time_anomaly
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+## Dangerous/Impactful Anomalies (With Travel Timelines Tech)
+# Planet slows down
+ship_event = {
+	id = omnitemporal.1100
+	title = omnitemporal.1100.name
+	desc = omnitemporal.1100.desc
+	picture = GFX_evt_relic_world_building
+	show_sound = evn_ove_scholarium_cache_rare_tech
+	location = from
+	is_triggered_only = yes
+
+	option = {
+		name = omnitemporal.1100.a
+
+		from = {
+			add_modifier = {
+				modifier = otc_time_decelerated
+				days = 360
+			}
+		}
+
+		hidden_effect = {
+			owner = {
+				complete_crisis_objective = otc_crisobj_research_time_anomaly
+			}
+			leader = {
+				set_leader_flag = otc_completed_time_anomaly
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+# Planet stops
+ship_event = {
+	id = omnitemporal.1101
+	title = omnitemporal.1101.name
+	desc = omnitemporal.1101.desc
+	picture = GFX_evt_tomb_world
+	show_sound = evn_ove_scholarium_cache_rare_tech
+	location = from
+	is_triggered_only = yes
+
+	option = {
+		name = omnitemporal.1101.a
+
+		from = {
+			add_modifier = {
+				modifier = otc_time_stopped
+			}
+		}
+
+		hidden_effect = {
+			owner = {
+				complete_crisis_objective = otc_crisobj_research_time_anomaly
+			}
+			leader = {
+				set_leader_flag = otc_completed_time_anomaly
+			}
+			from = {
+				planet_event = {
+					id = omnitemporal.1107
+					days = 180
+				}
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+# Planet resumes
+planet_event = {
+	id = omnitemporal.1107
+	title = omnitemporal.1107.name
+	desc = omnitemporal.1107.desc
+	picture = GFX_evt_astral_rift_library
+	show_sound = evn_ove_scholarium_cache_rare_tech
+	location = from
+	is_triggered_only = yes
+
+	option = {
+		name = omnitemporal.1107.a
+
+		remove_modifier = otc_time_stopped
+
+		add_modifier = {
+			modifier = otc_after_time_resumed
+			days = 360
+		}
+
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+# Visions of our past selves
+ship_event = {
+	id = omnitemporal.1102
+	title = omnitemporal.1102.name
+	desc = omnitemporal.1102.desc
+	picture = GFX_evt_alien_cavemen
+	show_sound = evn_ove_scholarium_cache_rare_tech
+	location = from
+	is_triggered_only = yes
+
+	option = {
+		name = omnitemporal.1102.a
+
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+			if = {
+				limit = {
+					has_first_contact_dlc = yes
+					has_all_insights = no
+					any_situation = {
+						is_situation_type = situation_observation_insight
+					}
+				}
+				add_observation_insight_effect = {
+					VALUE = 25
+					OUTPOST = from
+				}
+			}
+			else = {
+				add_modifier = {
+					modifier = otc_past_selves
+					days = 3600
+				}
+			}
+		}
+
+		hidden_effect = {
+			owner = {
+				complete_crisis_objective = otc_crisobj_research_time_anomaly
+			}
+			leader = {
+				set_leader_flag = otc_completed_time_anomaly
+			}
+			random_list = {
+				1 = {
+					modifier = {
+						factor = 0
+						owner = {
+							is_gestalt = yes
+						}
+					}
+					owner = {
+						country_event = {
+							id = omnitemporal.1103
+							days = 30
+						}
+					}
+				}
+				1 = {}
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+# Disillusioned with our origins
+country_event = {
+	id = omnitemporal.1103
+	title = omnitemporal.1103.name
+	desc = omnitemporal.1103.desc
+	picture = GFX_evt_smear_campaign
+	show_sound = event_default
+	location = capital_scope
+	is_triggered_only = yes
+
+
+	option = {
+		name = omnitemporal.1103.a
+		
+		add_modifier = {
+			modifier = otc_disillusioned_past
+			days = 180
+		}
+		
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+# Fallen empire awakens
+ship_event = {
+	id = omnitemporal.1104
+	title = omnitemporal.1104.name
+	desc = omnitemporal.1104.desc
+	picture = GFX_evt_fallen_empire_awakes
+	show_sound = evn_ove_scholarium_cache_rare_tech
+	location = from
+	is_triggered_only = yes
+
+	option = {
+		name = omnitemporal.1104.a
+
+		hidden_effect = {
+			owner = {
+				complete_crisis_objective = otc_crisobj_research_time_anomaly
+				country_event = {
+					id = omnitemporal.1105
+					days = 65
+				}
+			}
+			leader = {
+				set_leader_flag = otc_completed_time_anomaly
+			}
+			random_country = {
+				limit = {
+					is_country_type = fallen_empire
+					NOT = { has_country_flag = awakening_not_allowed }
+				}
+				country_event = {
+					id = omnitemporal.1108
+					days = 55
+				}
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+country_event = {
+	id = omnitemporal.1108
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_global_flag = sleepers_awake_happened
+
+		if = {
+			limit = {
+				is_hive_empire = no
+			}
+			country_event = { id = fallen_empires_awakening.3 }
+			save_event_target_as = first_awakener
+		}
+		else_if = {
+			limit = { # Making an extra if check here to not break mods too badly
+				is_hive_empire = yes
+			}
+			awaken_strongest_fe_fragment = yes
+		}
+
+		# Notify players
+		every_country = {
+			limit = {
+				is_ai = no
+			}
+			country_event = { id = fallen_empires_awakening.2 }
+		}
+		observer_event = { id = observer.73 }
+	}
+}
+
+# Accidentally awakened fallen empire
+country_event = {
+	id = omnitemporal.1105
+	title = omnitemporal.1105.name
+	desc = omnitemporal.1105.desc
+	picture = GFX_evt_exhibition_grand_archive
+	show_sound = event_default
+	location = capital_scope
+	is_triggered_only = yes
+
+	immediate = {
+		every_playable_country = {
+			limit = {
+				has_communications = root
+				NOT = {
+					is_same_value = root
+				}
+			}
+			country_event = {
+				id = omnitemporal.1106
+			}
+		}
+	}
+
+	option = {
+		name = omnitemporal.1105.a
+		
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+# Accidentally awakened fallen empire response
+country_event = {
+	id = omnitemporal.1106
+	title = omnitemporal.1106.name
+	desc = omnitemporal.1106.desc
+	picture = GFX_evt_mysterious_signal
+	is_triggered_only = yes
+
+	option = {
+		name = omnitemporal.1106.a
+
+		add_opinion_modifier = {
+			modifier = otc_opinion_awakened_empire
+			who = from
+		}
+		
+		ai_chance = {
+			factor = 1
+		}
+	}
+
+	option = {
+		name = omnitemporal.1106.b
+
+		trigger = {
+			is_materialist = yes
+		}
+
+		add_opinion_modifier = {
+			modifier = otc_opinion_awakened_empire_lesser
+			who = from
+		}
+		
+		ai_chance = {
+			factor = 2
+		}
+	}
+}
+
+
+# testing event
+country_event = {
+	id = omnitemporal.1002
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		owner = {
+			complete_crisis_objective = otc_crisobj_research_time_anomaly
+			set_country_flag = otc_has_finished_temporal_anomaly
+		}
+	}
+}
+
+### Menace Objectives ###
+# Menace Objective - Temporal Fabric Production
+# Fired from on_action 'on_monthly_pulse'
+event = {
+	id = omnitemporal.5000
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_playable_country = {
+			has_ascension_perk = otc_ap_omnitemporal
+		}
+	}
+
+	immediate = {
+		every_playable_country = {
+			limit = {
+				has_ascension_perk = otc_ap_omnitemporal
+			}
+			if = {
+				limit = {
+					NOT = {
+						is_variable_set = otc_physicist_temporal_fabric_produced
+					}
+
+				}
+				set_variable = {
+					which = otc_physicist_temporal_fabric_produced
+					value = 0
+				}
+			}
+			export_resource_income_to_variable = {
+				resource = otc_temporal_fabric
+				variable = otc_physicist_temporal_fabric_produced
+			}
+			complete_crisis_objective = otc_crisobj_physicist_production
+		}
+	}
+}
+
+# Menace Objective - Excavate Archeological Sites
+# Fired from on_action 'on_arch_site_finished'
+fleet_event = {
+	id = omnitemporal.5010
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			has_ascension_perk = otc_ap_omnitemporal
+		}
+	}
+
+	immediate = {
+		owner = {
+			complete_crisis_objective = otc_crisobj_research_archeological_sites
+		}
+	}
+}
+
+# Menace Objective - Research Anomalies
+# Fired from on_action 'anomaly_success'
+ship_event = {
+	id = omnitemporal.5020
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			has_ascension_perk = otc_ap_omnitemporal
+		}
+	}
+
+	immediate = {
+		owner = {
+			complete_crisis_objective = otc_crisobj_research_anomaly
+		}
+	}
+}
+
+# Menace Objective - Activate Relics
+# Fired from on_action 'on_relic_activated'
+country_event = {
+	id = omnitemporal.5030
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			has_ascension_perk = otc_ap_omnitemporal
+		}
+	}
+
+	immediate = {
+		owner = {
+			complete_crisis_objective = otc_crisobj_activate_relic
+		}
+	}
+}
+
+### End of Time Situation ###
+
+# Final Event - Win the game!
+situation_event = {
+	id = omnitemporal.2000
+	title = omnitemporal.2000.name
+	desc = omnitemporal.2000.desc
+	picture = GFX_evt_astral_rift_vortex
+	show_sound = event_mystic_reveal
+	location = owner.capital_scope
+	is_triggered_only = yes
+
+	option = {
+		name = omnitemporal.2000.a
+		
+		ai_chance = {
+			factor = 1
+		}
+	}
+
+	after = {
+		owner = {
+			win = yes
+		}
+	}
+}
+
+situation_event = {
+	id = omnitemporal.2001
+	title = omnitemporal.2001.name
+	desc = omnitemporal.2001.desc
+	picture = GFX_evt_timeworm_transcriptions
+	location = owner.capital_scope
+	is_triggered_only = yes
+
+	immediate = {
+		owner = {
+			set_country_flag = otc_final_stage
+		}
+		every_playable_country = {
+			limit = {
+				NOT = {
+					has_country_flag = otc_final_stage
+				}
+			}
+			country_event = {
+				id = omnitemporal.2002
+			}
+		}
+	}
+
+	option = {
+		name = omnitemporal.2001.a
+		owner = {
+			add_resource = {
+				otc_temporal_fabric = -100
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+country_event = {
+	id = omnitemporal.2002
+	title = omnitemporal.2002.name
+	desc = omnitemporal.2002.desc
+	picture = GFX_evt_clocks
+	show_sound = event_air_raid_siren
+	is_triggered_only = yes
+
+	option = {
+		name = omnitemporal.2002.a
+		
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+country_event = {
+	id = omnitemporal.2003
+	title = omnitemporal.2003.name
+	desc = omnitemporal.2003.desc
+	picture = GFX_evt_astral_rift_psionic_stranger_2
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+
+	option = {
+		name = omnitemporal.2003.a
+		add_resource = {
+			otc_temporal_fabric = 100
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+event = {
+	id = omnitemporal.2004
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_playable_country = {
+			country_has_situation = {
+				SITUATION = situation_otc_end_of_time
+			} 
+		}
+	}
+
+	immediate = {
+		every_playable_country = {
+			limit = {
+				country_has_situation = {
+					SITUATION = situation_otc_end_of_time
+				} 
+			}
+			country_event = {
+				id = omnitemporal.2005
+			}
+		}
+	}
+}
+
+country_event = {
+	id = omnitemporal.2005
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		country_has_situation = {
+			SITUATION = situation_otc_end_of_time
+		} 
+	}
+
+	immediate = {
+		save_event_target_as = civ_ending_time
+		if = {
+			limit = {
+				NOT = {
+					any_country = {
+						relative_power = {
+							who = root
+							category = all
+							value > equivalent
+						}
+					}
+				}
+			}
+			log = "no one is stronger"
+			set_country_flag = otc_end_of_time_apex_of_power
+		}
+		else = {
+			every_country = {
+				save_event_target_as = log_c
+				if = {
+					limit = {
+						relative_power = {
+								who = root
+								category = all
+								value > equivalent
+						}
+					}
+					log = "\\[log_c.GetName] is stronger"
+					event_target:civ_ending_time = {
+						remove_country_flag = otc_end_of_time_apex_of_power
+					}
+				}	
+			}
+		}
+	}
+}

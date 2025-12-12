@@ -1,0 +1,359 @@
+## OTC Scripted Effects
+# Created by Accorata & BrettlesSr
+
+otc_create_temporal_anomaly = {
+	random_planet_within_border = {
+		limit = {
+			has_anomaly = no
+		}
+		add_anomaly = {
+			category = otc_temporal_anomaly_cat
+			target = root
+		}
+		save_event_target_as = anomaly_target
+		solar_system.owner = {
+			create_message = {
+				type = OTC_NEW_TEMPORAL_ANOMALY
+				localization = MESSAGE_OTC_NEW_TEMPORAL_ANOMALY_DESC
+				days = @toast_message_days
+				target = event_target:anomaly_target
+				variable = {
+					type = name
+					localization = LOCATION
+					scope = event_target:anomaly_target
+				}
+			}
+		}
+	}
+}
+
+otc_restore_negative_income = {
+	if = {
+		limit = {
+			resource_income_compare = {
+				resource = $RESOURCE$
+				value < 0
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					is_variable_set = otc_$RESOURCE$_income
+				}
+			}
+			set_variable = {
+				which = otc_$RESOURCE$_income
+				value = 0
+			}
+			#set_variable = {
+			#	which = otc_$RESOURCE$_trade
+			#	value = 0
+			#}
+		}
+		export_resource_income_to_variable = {
+			resource = $RESOURCE$
+			variable = otc_$RESOURCE$_income
+		}
+		#export_modifier_to_variable = {
+		#	modifier = monthly_trades_$RESOURCE$_produces_add
+		#	variable = otc_$RESOURCE$_trade
+		#}
+		#subtract_variable = {
+		#	which = otc_$RESOURCE$_income
+		#	value = otc_$RESOURCE$_trade
+		#}
+		add_resource = {
+			$RESOURCE$ = -1
+			mult = otc_$RESOURCE$_income
+		}
+	}
+}
+
+otc_reset_civilisation = {
+	# 1 - save the civs species, ethics
+	save_event_target_as = resetting_civ
+	species = {
+		save_event_target_as = resetting_civ_species
+	}
+
+	if = {
+		limit = {
+			has_origin = origin_doomsday
+			any_planet_within_border = {
+				is_planet_class = pc_shattered
+				has_planet_flag = doomsday_still_original_owner
+			}
+		}
+		random_planet_within_border = {
+			limit = {
+				is_planet_class = pc_shattered
+				has_planet_flag = doomsday_still_original_owner
+			}
+			save_event_target_as = resetting_civ_homeworld
+		}
+		set_country_flag = resetting_to_exploded_world
+	}
+
+	capital_scope = {
+		save_event_target_as = resetting_civ_homeworld
+		if = {
+			limit = { 
+				owner = {
+					OR = {
+						has_origin = origin_post_apocalyptic
+						has_origin = origin_post_apocalyptic_machines
+						has_country_flag = resetting_to_exploded_world
+					}
+				}
+			}
+			event_target:resetting_civ_species = {
+				switch = {
+					trigger = has_trait
+					trait_pc_desert_preference = {
+						event_target:resetting_civ_homeworld = {
+							change_pc = pc_desert
+						}
+					}
+					trait_pc_arid_preference = {
+						event_target:resetting_civ_homeworld = {
+							change_pc = pc_arid
+						}
+					}
+					trait_pc_savannah_preference = {
+						event_target:resetting_civ_homeworld = {
+							change_pc = pc_savannah
+						}
+					}
+					trait_pc_tropical_preference = {
+						event_target:resetting_civ_homeworld = {
+							change_pc = pc_tropical
+						}
+					}
+					trait_pc_continental_preference = {
+						event_target:resetting_civ_homeworld = {
+							change_pc = pc_continental
+						}
+					}
+					trait_pc_ocean_preference = {
+						event_target:resetting_civ_homeworld = {
+							change_pc = pc_ocean
+						}
+					}
+					trait_pc_arctic_preference = {
+						event_target:resetting_civ_homeworld = {
+							change_pc = pc_arctic
+						}
+					}
+					trait_pc_tundra_preference = {
+						event_target:resetting_civ_homeworld = {
+							change_pc = pc_tundra
+						}
+					}
+					trait_pc_alpine_preference = {
+						event_target:resetting_civ_homeworld = {
+							change_pc = pc_alpine
+						}
+					}
+					trait_dry_planet_preference = {
+						event_target:resetting_civ_homeworld = {
+							change_pc = pc_arid
+						}
+					}
+					trait_wet_planet_preference = {
+						event_target:resetting_civ_homeworld = {
+							change_pc = pc_continental
+						}
+					}
+					trait_cold_planet_preference = {
+						event_target:resetting_civ_homeworld = {
+							change_pc = pc_tundra
+						}
+					}
+					default = {
+						event_target:resetting_civ_homeworld = {
+							change_pc = pc_gaia
+						}
+					}
+				}
+			}
+		}
+	}
+
+	if = {
+		limit = {
+			has_origin = origin_tree_of_life
+			event_target:resetting_civ_homeworld = {
+				NOT = {
+					has_deposit = d_tree_of_life_home
+				}
+			}
+		}
+		event_target:resetting_civ_homeworld = {
+			add_deposit = d_tree_of_life_home
+		}
+	}	
+	
+
+	# 2 destroy all their colonies, ships, armies, leaders, pops, empire etc etc
+	every_owned_megastructure = {
+		remove_megastructure = this
+	}
+	destroy_country = yes
+
+	# 3 remove all leaders of the primary species from other empires
+	# 4 remmove all migrant pops
+	every_playable_country = {
+		save_event_target_as = resetting_civ_target
+		country_event = {
+			id = omnitemporal.56
+			days = 1
+		}
+		every_owned_leader = {
+			limit = {
+				is_exact_same_species = event_target:resetting_civ_species
+			}
+			kill_leader = {
+				show_notification = no
+			}
+			create_message = {
+				type = OTC_RESET_LEADER_DEATH
+				localization = OTC_RESET_LEADER_DEATH_DESC
+				days = 0
+				variable = {
+					type = name
+					localization = LEADER
+					scope = event_target:resetting_civ_target
+				}
+			}
+		}
+		every_owned_pop_group = {
+			limit = {
+				is_exact_same_species = event_target:resetting_civ_species
+			}
+			kill_pop_group = {
+				pop_group = THIS
+			}
+		}
+	}
+
+	# 5 spawn an appropriate primitive civ
+	# create species
+	modify_species = {
+		species = event_target:resetting_civ_species
+		remove_trait = trait_clone_soldier_infertile
+		remove_trait = trait_necrophage
+		remove_trait = trait_clone_soldier_infertile_full_potential
+		remove_trait = trait_clone_soldier_fertile
+		remove_trait = trait_auto_mod_biological
+		remove_trait = trait_cybernetic
+		remove_trait = trait_psionic
+		remove_trait = trait_self_modified
+		remove_trait = trait_survivor
+		remove_trait = trait_enigmatic_intelligence_poor
+		remove_trait = trait_enigmatic_intelligence
+		remove_trait = trait_enigmatic_intelligence_failed
+		remove_trait = trait_bioadaptability
+		remove_trait = trait_social_pheromones
+		remove_trait = trait_limited_regeneration
+		remove_trait = trait_void_dweller_1
+		remove_trait = trait_void_dweller_2
+		remove_trait = trait_zombie
+		remove_trait = trait_robot_synthetic_dawn
+		remove_trait = trait_robot_immortality
+		remove_trait = trait_brainslug
+		remove_trait = trait_robot_notofthisworld
+		remove_trait = trait_notofthisworld
+		remove_trait = trait_adaptive_lithoid
+		remove_trait = trait_rapid_breeders_lithoid
+		remove_trait = trait_delicious
+		remove_trait = trait_nerve_stapled
+		remove_trait = trait_fertile
+		remove_trait = trait_robust
+		remove_trait = trait_erudite
+		remove_trait = trait_vat_grown
+		remove_trait = trait_felsic
+		remove_trait = trait_natural_machinist
+		remove_trait = trait_drake_scaled
+		remove_trait = trait_voidling
+		remove_trait = trait_auto_mod_overtuned
+		remove_trait = trait_tiyanki
+		remove_trait = trait_spliced_adaptability
+		remove_trait = trait_juiced_power
+		remove_trait = trait_farm_hands
+		remove_trait = trait_crack_miner
+		remove_trait = trait_technical_skill
+		remove_trait = trait_commercial_genius
+		remove_trait = trait_crafted_smiles
+		remove_trait = trait_low_maintenance
+		remove_trait = trait_artificial_intelligence
+		remove_trait = trait_gene_mentorship
+		remove_trait = trait_expressed_tradition
+		remove_trait = trait_elevated_synapses
+		remove_trait = trait_preplanned_growth
+		remove_trait = trait_excessive_endurance
+		inline_script = {
+			script = traits/remove_all_cybernetic_traits
+		}
+		remove_trait = trait_exd
+		remove_trait = trait_storm_fused
+		remove_trait = trait_pathogenic_genes
+		remove_trait = trait_limited_cybernetic
+		remove_trait = trait_adaptive_mutations
+		remove_trait = trait_adaptive_minerals
+		remove_trait = trait_adaptive_energy
+		remove_trait = trait_adaptive_food
+		remove_trait = trait_adaptive_research
+		remove_trait = trait_adaptive_unity
+		remove_trait = trait_adaptive_forge
+		remove_trait = trait_adaptive_trade
+		remove_trait = trait_adaptive_amenities
+		remove_trait = trait_inner_darkness
+		remove_trait = trait_geleboric_mutations
+		remove_trait = trait_psionic_ephapse
+	}
+	event_target:resetting_civ_homeworld = {
+		every_owned_pop_group = {
+			kill_all_pop = yes
+		}
+		
+		inline_script = {
+			script = districts/remove_all_default_rural_districts
+		}
+		while = {
+		limit = {
+			num_districts = {
+				type = district_city
+				value > 0
+			}
+		}
+		remove_district = district_mining
+		}
+		while = {
+			limit = {
+				num_districts = {
+					type = district_hive
+					value > 0
+				}
+			}
+			remove_district = district_mining
+		}
+		planet_event = {
+			id = action.89
+		}
+
+		generate_very_early_pre_ftls_on_planet = yes
+		set_name = random
+		change_colony_foundation_date = -2341
+		while = {
+			count = 4
+			create_army = {
+				owner = last_created_country
+				type = primitive_additional_army
+				species = last_created_country
+			}
+		}
+	}
+	
+
+	# considerations: what about syncretic evo / void dwellers / lost colony / remnants / hard reset / clone army /  wilderness / necrophage
+}

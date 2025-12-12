@@ -1,0 +1,152 @@
+## OTC Anomaly Categories
+# Created by Accorata & BrettlesSr
+
+# Temporal Anomalies
+otc_temporal_anomaly_cat = {
+	picture = GFX_evt_clocks
+
+	level = 5
+
+	# Cannot Spawn Naturally
+	spawn_chance = {
+		modifier = {
+			add = 0
+		}
+	}
+
+	on_success = {
+		0 = {
+			modifier = {
+				add = 100
+				leader = {
+					has_leader_flag = otc_temporal_cloned
+				}
+			}
+			anomaly_event = omnitemporal.1000
+		}
+		0 = {
+			modifier = {
+				add = 2
+				owner = {
+					any_owned_leader = {
+						has_leader_flag = otc_completed_time_anomaly
+						NOT = {
+							is_same_value = root.leader
+						}
+					}
+				}
+			}
+			anomaly_event = omnitemporal.1001
+		}
+		0 = {
+			modifier = {
+				add = 3
+				from = {
+					is_planet_class = pc_molten
+				}
+			}
+			anomaly_event = omnitemporal.1003
+		}
+		1 = {
+			modifier = {
+				factor = 0
+				leader = {
+					has_trait = leader_trait_otc_time_loop_trapped
+				}
+			}
+			anomaly_event = omnitemporal.1007
+		}
+		1 = omnitemporal.1008
+		0 = {
+			modifier = {
+				add = 2
+				from = {
+					is_colonizable = yes
+					is_colony = yes
+				}
+			}
+			anomaly_event = omnitemporal.1009
+		}
+		1 = {
+			anomaly_event = omnitemporal.1011
+		}
+		1 = {
+			modifier = {
+				factor = 0
+				leader = {
+					is_immortal = yes
+				}
+			}
+			anomaly_event = omnitemporal.1013
+		}
+
+		0 = {
+			modifier = {
+				add = 2
+				from = {
+					is_colonizable = yes
+					is_colony = yes
+				}
+			}
+			modifier = {
+				factor = 0
+				owner = {
+					NOT = {
+						has_technology = tech_otc_travel_timelines
+					}
+				}
+			}
+			anomaly_event = omnitemporal.1100
+		}
+		0 = {
+			modifier = {
+				add = 1
+				from = {
+					is_colony = yes
+				}
+			}
+			modifier = {
+				factor = 0
+				owner = {
+					NOT = {
+						has_technology = tech_otc_travel_timelines
+					}
+				}
+			}
+			anomaly_event = omnitemporal.1101
+		}
+		2 = {
+			modifier = {
+				factor = 0
+				owner = {
+					NOT = {
+						has_technology = tech_otc_travel_timelines
+					}
+				}
+			}
+			anomaly_event = omnitemporal.1102
+		}
+		0 = {
+			modifier = {
+				add = 2
+				NOT = {
+					has_global_flag = sleepers_awake_happened
+					has_global_flag = guardians_of_the_galaxy_happened
+				}
+				any_country = {
+					is_country_type = fallen_empire
+					NOT = { has_country_flag = awakening_not_allowed }
+				}
+			}
+			modifier = {
+				factor = 0
+				owner = {
+					NOT = {
+						has_technology = tech_otc_travel_timelines
+					}
+				}
+			}
+			anomaly_event = omnitemporal.1104
+		}
+	}
+}

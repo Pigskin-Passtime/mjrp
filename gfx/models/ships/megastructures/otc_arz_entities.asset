@@ -1,0 +1,57 @@
+## OTC ARZ Entities
+# By Accorata
+
+entity = {
+	name = "otc_arz_entity"
+
+	# Center Core Effect
+	locator = { name = "root" position = { 0 0 0 } }
+
+	default_state = "idle"
+	state = { name = "idle" state_time = 5
+		start_event = { node = "root" particle = "ion_cannon_core_effect" keep_particle = yes trigger_once = yes }
+	}
+
+	attach = { "root" = "ion_cannon_core_entity" }
+
+	# Side Wings
+	locator = { name = "wings" position = { 0 0 0 } }
+
+	attach = { "wings" = "otc_arz_entity_construction" }
+}
+
+entity = {
+	name = "otc_arz_entity_construction"
+
+	# Side Wings
+	locator = { name = "wing1" position = { 0 0 10 } }
+
+	attach = { "wing1" = "otc_arz_wing_entity" }
+
+	locator = { name = "wing2" position = { 10 0 0 } rotation = { 90 0 0 } }
+
+	attach = { "wing2" = "otc_arz_wing_entity" }
+
+	locator = { name = "wing3" position = { 0 0 -10 } rotation = { 180 0 0 } }
+
+	attach = { "wing3" = "otc_arz_wing_entity" }
+
+	locator = { name = "wing4" position = { -10 0 0 } rotation = { 270 0 0 } }
+
+	attach = { "wing4" = "otc_arz_wing_entity" }
+}
+
+entity = {
+	name = "otc_arz_wing_entity"
+	
+	pdxmesh = "otc_arz_wing_mesh"
+
+	meshsettings = {
+		name = "bodyShape"
+		index = 0
+		texture_diffuse = "otc_arz_wing_diffuse.dds"
+		texture_normal = "otc_arz_wing_normal.dds"
+		texture_specular = "mammalian_01_ion_cannon_specular.dds"
+		shader = "PdxMeshShip"
+	}
+}
