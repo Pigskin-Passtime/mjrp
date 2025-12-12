@@ -1,0 +1,704 @@
+# common\component_templates\darktec_components_aux_fleetactions.txt
+
+# Authors: Rodahtnov & Zyralynn
+
+# Supermodules
+utility_component_template = {	# Voidrift
+	key = "DARKTEC_SHIP_UTILITY_VOIDJUMP"
+	size = aux
+	icon = GFX_DARKTEC_SHIP_UTILITY_VOIDJUMP
+	icon_frame = 1
+	power = 0
+	component_set = "DARKTEC_SHIP_UTILITY_VOIDJUMP"
+
+	prerequisites = {
+		tech_darktec_ship_util_voidjump
+	}
+
+	potential = {
+		from = {
+			has_ascension_perk = darktec_ap_postbaryonic
+		}
+	}
+
+	custom_tooltip = DARKTEC_SHIP_UTILITY_VOIDJUMP_TOOLTIP
+
+	modifier = {
+		ship_speed_mult = 0.05
+	}
+
+	scripted_action = {
+		scope = self
+		possible = {
+			from = {
+				NOT = {
+					has_fleet_flag = darktec_just_used_voidjump
+				}
+			}
+			#exists = owner
+			#owner = {
+			#	NOT = {
+			#		has_country_flag = darktec_just_used_voidjump
+			#	}
+			#}
+		}
+		cost = {
+			sr_dark_matter = @darktec_ship_component_on_action_dark_matter_cost
+			darktec_contained_entropy = @darktec_ship_component_on_action_entropy_cost
+		}
+		finished = {
+			from = {
+				has_fleet_flag = darktec_just_used_voidjump
+			}
+			#exists = owner
+			#owner = {
+			#	has_country_flag = darktec_just_used_voidjump
+			#}
+		}
+		name = on_darktec_voidjump_ability
+		tooltip = on_darktec_voidjump_ability_tooltip
+		icon = GFX_fleet_order_darktec_voidjump_action
+		icon_selected = GFX_fleet_order_darktec_voidjump_selected
+		context_menu_name = on_darktec_voidjump_ability_title
+		activity_key = on_darktec_voidjump_ability_activity
+		progress_activity_key = on_darktec_voidjump_ability_progress
+		required_progress = 1
+		cooldown = 360
+	}
+	size_restriction = {
+		darktec_crisis_destroyer
+		darktec_crisis_cruiser
+		darktec_crisis_battleship
+	}
+	blocked_by = {
+		#DARKTEC_SHIP_UTILITY_VOIDJUMP
+		#DARKTEC_SHIP_UTILITY_VOIDJUMP_ORGANIC
+		DARKTEC_SHIP_UTILITY_INERTIALESS
+		DARKTEC_SHIP_UTILITY_INERTIALESS_ORGANIC
+		DARKTEC_SHIP_UTILITY_COLLAPSER
+		DARKTEC_SHIP_UTILITY_COLLAPSER_ORGANIC
+		DARKTEC_SHIP_UTILITY_INTERFERER
+		DARKTEC_SHIP_UTILITY_INTERFERER_ORGANIC
+	}
+	ai_weight = {
+		factor = 0.01
+
+		modifier = {
+			factor = 0
+			NOT = {
+				has_ascension_perk = darktec_ap_postbaryonic
+			}
+		}
+	}
+}
+utility_component_template = {
+	key = "DARKTEC_SHIP_UTILITY_VOIDJUMP_ORGANIC"
+	size = aux
+	icon = GFX_DARKTEC_SHIP_UTILITY_VOIDJUMP_ORGANIC
+	icon_frame = 1
+	power = 0
+	component_set = "DARKTEC_SHIP_UTILITY_VOIDJUMP_ORGANIC"
+
+	prerequisites = {
+		tech_darktec_ship_util_voidjump
+	}
+
+	potential = {
+		from = {
+			has_ascension_perk = darktec_ap_postbaryonic
+		}
+	}
+
+	custom_tooltip = DARKTEC_SHIP_UTILITY_VOIDJUMP_TOOLTIP
+
+	modifier = {
+		ship_speed_mult = 0.05
+	}
+	scripted_action = {
+		scope = self
+		possible = {
+			from = {
+				NOT = {
+					has_fleet_flag = darktec_just_used_voidjump
+				}
+			}
+			#exists = owner
+			#owner = {
+			#	NOT = {
+			#		has_country_flag = darktec_just_used_voidjump
+			#	}
+			#}
+		}
+		cost = {
+			sr_dark_matter = @darktec_ship_component_on_action_dark_matter_cost
+			darktec_contained_entropy = @darktec_ship_component_on_action_entropy_cost
+		}
+		finished = {
+			from = {
+				has_fleet_flag = darktec_just_used_voidjump
+			}
+			#exists = owner
+			#owner = {
+			#	has_country_flag = darktec_just_used_voidjump
+			#}
+		}
+		name = on_darktec_voidjump_ability
+		tooltip = on_darktec_voidjump_ability_tooltip
+		icon = GFX_fleet_order_darktec_voidjump_action
+		icon_selected = GFX_fleet_order_darktec_voidjump_selected
+		context_menu_name = on_darktec_voidjump_ability_title
+		activity_key = on_darktec_voidjump_ability_activity
+		progress_activity_key = on_darktec_voidjump_ability_progress
+		required_progress = 1
+		cooldown = 360
+	}
+	size_restriction = {
+		darktec_crisis_mauler
+		darktec_crisis_weaver
+		darktec_crisis_stinger
+	}
+	blocked_by = {
+		#DARKTEC_SHIP_UTILITY_VOIDJUMP
+		#DARKTEC_SHIP_UTILITY_VOIDJUMP_ORGANIC
+		DARKTEC_SHIP_UTILITY_INERTIALESS
+		DARKTEC_SHIP_UTILITY_INERTIALESS_ORGANIC
+		DARKTEC_SHIP_UTILITY_COLLAPSER
+		DARKTEC_SHIP_UTILITY_COLLAPSER_ORGANIC
+		DARKTEC_SHIP_UTILITY_INTERFERER
+		DARKTEC_SHIP_UTILITY_INTERFERER_ORGANIC
+	}
+	ai_weight = {
+		factor = 0.01
+
+		modifier = {
+			factor = 0
+			NOT = {
+				has_ascension_perk = darktec_ap_postbaryonic
+			}
+		}
+	}
+}
+
+utility_component_template = {	# Inertialess
+	key = "DARKTEC_SHIP_UTILITY_INERTIALESS"
+	size = aux
+	icon = GFX_DARKTEC_SHIP_UTILITY_INERTIALESS
+	icon_frame = 1
+	power = 200
+	component_set = "DARKTEC_SHIP_UTILITY_INERTIALESS"
+
+	prerequisites = {
+		tech_darktec_ship_util_inertialess
+	}
+
+	potential = {
+		from = {
+			has_ascension_perk = darktec_ap_postbaryonic
+		}
+	}
+
+	custom_tooltip = DARKTEC_SHIP_UTILITY_INERTIALESS_TOOLTIP
+
+	scripted_action = {
+		scope = self
+		possible = {
+			from = {
+				NOT = {
+					has_fleet_flag = darktec_just_used_inertialess
+				}
+			}
+			#exists = owner
+			#owner = {
+			#	NOT = {
+			#		has_country_flag = darktec_just_used_inertialess
+			#	}
+			#}
+		}
+		cost = {
+			sr_dark_matter = @darktec_ship_component_on_action_dark_matter_cost
+			darktec_contained_entropy = @darktec_ship_component_on_action_entropy_cost
+		}
+		finished = {
+			from = {
+				has_fleet_flag = darktec_just_used_inertialess
+			}
+			#exists = owner
+			#owner = {
+			#	has_country_flag = darktec_just_used_inertialess
+			#}
+		}
+		name = on_darktec_inertialess_ability
+		tooltip = on_darktec_inertialess_ability_tooltip
+		icon = GFX_fleet_order_darktec_inertialess_action
+		icon_selected = GFX_fleet_order_darktec_inertialess_selected
+		context_menu_name = on_darktec_inertialess_ability_title
+		activity_key = on_darktec_inertialess_ability_activity
+		progress_activity_key = on_darktec_inertialess_ability_progress
+		required_progress = 1
+		cooldown = 360
+	}
+	size_restriction = {
+		darktec_crisis_destroyer
+		darktec_crisis_cruiser
+		darktec_crisis_battleship
+	}
+	blocked_by = {
+		DARKTEC_SHIP_UTILITY_VOIDJUMP
+		DARKTEC_SHIP_UTILITY_VOIDJUMP_ORGANIC
+		#DARKTEC_SHIP_UTILITY_INERTIALESS
+		#DARKTEC_SHIP_UTILITY_INERTIALESS_ORGANIC
+		DARKTEC_SHIP_UTILITY_COLLAPSER
+		DARKTEC_SHIP_UTILITY_COLLAPSER_ORGANIC
+		DARKTEC_SHIP_UTILITY_INTERFERER
+		DARKTEC_SHIP_UTILITY_INTERFERER_ORGANIC
+	}
+	ai_weight = {
+		factor = 10
+
+		modifier = {
+			factor = 0
+			NOT = {
+				has_ascension_perk = darktec_ap_postbaryonic
+			}
+		}
+	}
+}
+utility_component_template = {
+	key = "DARKTEC_SHIP_UTILITY_INERTIALESS_ORGANIC"
+	size = aux
+	icon = GFX_DARKTEC_SHIP_UTILITY_INERTIALESS_ORGANIC
+	icon_frame = 1
+	power = 0
+	component_set = "DARKTEC_SHIP_UTILITY_INERTIALESS_ORGANIC"
+
+	prerequisites = {
+		tech_darktec_ship_util_inertialess
+	}
+
+	potential = {
+		from = {
+			has_ascension_perk = darktec_ap_postbaryonic
+		}
+	}
+
+	custom_tooltip = DARKTEC_SHIP_UTILITY_INERTIALESS_TOOLTIP
+	scripted_action = {
+		scope = self
+		possible = {
+			from = {
+				NOT = {
+					has_fleet_flag = darktec_just_used_inertialess
+				}
+			}
+			#exists = owner
+			#owner = {
+			#	NOT = {
+			#		has_country_flag = darktec_just_used_inertialess
+			#	}
+			#}
+		}
+		cost = {
+			sr_dark_matter = @darktec_ship_component_on_action_dark_matter_cost
+			darktec_contained_entropy = @darktec_ship_component_on_action_entropy_cost
+		}
+		finished = {
+			from = {
+				has_fleet_flag = darktec_just_used_inertialess
+			}
+			#exists = owner
+			#owner = {
+			#	has_country_flag = darktec_just_used_inertialess
+			#}
+		}
+		name = on_darktec_inertialess_ability
+		tooltip = on_darktec_inertialess_ability_tooltip
+		icon = GFX_fleet_order_darktec_inertialess_action
+		icon_selected = GFX_fleet_order_darktec_inertialess_selected
+		context_menu_name = on_darktec_inertialess_ability_title
+		activity_key = on_darktec_inertialess_ability_activity
+		progress_activity_key = on_darktec_inertialess_ability_progress
+		required_progress = 1
+		cooldown = 360
+	}
+	size_restriction = {
+		darktec_crisis_mauler
+		darktec_crisis_weaver
+		darktec_crisis_stinger
+	}
+	blocked_by = {
+		DARKTEC_SHIP_UTILITY_VOIDJUMP
+		DARKTEC_SHIP_UTILITY_VOIDJUMP_ORGANIC
+		#DARKTEC_SHIP_UTILITY_INERTIALESS
+		#DARKTEC_SHIP_UTILITY_INERTIALESS_ORGANIC
+		DARKTEC_SHIP_UTILITY_COLLAPSER
+		DARKTEC_SHIP_UTILITY_COLLAPSER_ORGANIC
+		DARKTEC_SHIP_UTILITY_INTERFERER
+		DARKTEC_SHIP_UTILITY_INTERFERER_ORGANIC
+	}
+	ai_weight = {
+		factor = 10
+
+		modifier = {
+			factor = 0
+			NOT = {
+				has_ascension_perk = darktec_ap_postbaryonic
+			}
+		}
+	}
+}
+
+utility_component_template = {	# Collapser
+	key = "DARKTEC_SHIP_UTILITY_COLLAPSER"
+	size = aux
+	icon = GFX_DARKTEC_SHIP_UTILITY_COLLAPSER
+	icon_frame = 1
+	power = 0
+	component_set = "DARKTEC_SHIP_UTILITY_COLLAPSER"
+
+	prerequisites = {
+		tech_darktec_ship_util_collapser
+	}
+
+	potential = {
+		from = {
+			has_ascension_perk = darktec_ap_postbaryonic
+		}
+	}
+
+	custom_tooltip = DARKTEC_SHIP_UTILITY_COLLAPSER_TOOLTIP
+
+	modifier = {
+		ship_hull_add = 100
+	}
+
+	scripted_action = {
+		scope = self
+		possible = {
+			from = {
+				NOT = {
+					has_fleet_flag = darktec_just_used_collapser
+				}
+			}
+			#exists = owner
+			#owner = {
+			#	NOT = {
+			#		has_country_flag = darktec_just_used_collapser
+			#	}
+			#}
+		}
+		cost = {
+			sr_dark_matter = @darktec_ship_component_on_action_dark_matter_cost
+			darktec_contained_entropy = @darktec_ship_component_on_action_entropy_cost
+		}
+		
+		finished = {
+			from = {
+				has_fleet_flag = darktec_just_used_collapser
+			}
+			#exists = owner
+			#owner = {
+			#	has_country_flag = darktec_just_used_collapser
+			#}
+		}
+		name = on_darktec_collapser_ability
+		tooltip = on_darktec_collapser_ability_tooltip
+		icon = GFX_fleet_order_darktec_collapser_action
+		icon_selected = GFX_fleet_order_darktec_collapser_selected
+		context_menu_name = on_darktec_collapser_ability_title
+		activity_key = on_darktec_collapser_ability_activity
+		progress_activity_key = on_darktec_collapser_ability_progress
+		required_progress = 1
+		cooldown = 360
+	}
+	size_restriction = {
+		darktec_crisis_destroyer
+		darktec_crisis_cruiser
+		darktec_crisis_battleship
+	}
+	blocked_by = {
+		DARKTEC_SHIP_UTILITY_VOIDJUMP
+		DARKTEC_SHIP_UTILITY_VOIDJUMP_ORGANIC
+		DARKTEC_SHIP_UTILITY_INERTIALESS
+		DARKTEC_SHIP_UTILITY_INERTIALESS_ORGANIC
+		#DARKTEC_SHIP_UTILITY_COLLAPSER
+		#DARKTEC_SHIP_UTILITY_COLLAPSER_ORGANIC
+		DARKTEC_SHIP_UTILITY_INTERFERER
+		DARKTEC_SHIP_UTILITY_INTERFERER_ORGANIC
+	}
+	ai_weight = {
+		factor = 0.01
+
+		modifier = {
+			factor = 0
+			NOT = {
+				has_ascension_perk = darktec_ap_postbaryonic
+			}
+		}
+	}
+}
+utility_component_template = {
+	key = "DARKTEC_SHIP_UTILITY_COLLAPSER_ORGANIC"
+	size = aux
+	icon = GFX_DARKTEC_SHIP_UTILITY_COLLAPSER_ORGANIC
+	icon_frame = 1
+	power = 0
+	component_set = "DARKTEC_SHIP_UTILITY_COLLAPSER_ORGANIC"
+
+	prerequisites = {
+		tech_darktec_ship_util_collapser
+	}
+
+	potential = {
+		from = {
+			has_ascension_perk = darktec_ap_postbaryonic
+		}
+	}
+
+	modifier = {
+		ship_hull_add = 100
+	}
+
+	custom_tooltip = DARKTEC_SHIP_UTILITY_COLLAPSER_TOOLTIP
+	scripted_action = {
+		scope = self
+		possible = {
+			from = {
+				NOT = {
+					has_fleet_flag = darktec_just_used_collapser
+				}
+			}
+			#exists = owner
+			#owner = {
+			#	NOT = {
+			#		has_country_flag = darktec_just_used_collapser
+			#	}
+			#}
+		}
+		cost = {
+			sr_dark_matter = @darktec_ship_component_on_action_dark_matter_cost
+			darktec_contained_entropy = @darktec_ship_component_on_action_entropy_cost
+		}
+		finished = {
+			from = {
+				has_fleet_flag = darktec_just_used_collapser
+			}
+			#exists = owner
+			#owner = {
+			#	has_country_flag = darktec_just_used_collapser
+			#}
+		}
+		name = on_darktec_collapser_ability
+		tooltip = on_darktec_collapser_ability_tooltip
+		icon = GFX_fleet_order_darktec_collapser_action
+		icon_selected = GFX_fleet_order_darktec_collapser_selected
+		context_menu_name = on_darktec_collapser_ability_title
+		activity_key = on_darktec_collapser_ability_activity
+		progress_activity_key = on_darktec_collapser_ability_progress
+		required_progress = 1
+		cooldown = 360
+	}
+	size_restriction = {
+		darktec_crisis_mauler
+		darktec_crisis_weaver
+		darktec_crisis_stinger
+	}
+	blocked_by = {
+		DARKTEC_SHIP_UTILITY_VOIDJUMP
+		DARKTEC_SHIP_UTILITY_VOIDJUMP_ORGANIC
+		DARKTEC_SHIP_UTILITY_INERTIALESS
+		DARKTEC_SHIP_UTILITY_INERTIALESS_ORGANIC
+		#DARKTEC_SHIP_UTILITY_COLLAPSER
+		#DARKTEC_SHIP_UTILITY_COLLAPSER_ORGANIC
+		DARKTEC_SHIP_UTILITY_INTERFERER
+		DARKTEC_SHIP_UTILITY_INTERFERER_ORGANIC
+	}
+	ai_weight = {
+		factor = 0.01
+
+		modifier = {
+			factor = 0
+			NOT = {
+				has_ascension_perk = darktec_ap_postbaryonic
+			}
+		}
+	}
+}
+
+utility_component_template = {	# Interferer
+	key = "DARKTEC_SHIP_UTILITY_INTERFERER"
+	size = aux
+	icon = GFX_DARKTEC_SHIP_UTILITY_INTERFERER
+	icon_frame = 1
+	power = 0
+	component_set = "DARKTEC_SHIP_UTILITY_INTERFERER"
+
+	prerequisites = {
+		tech_darktec_ship_util_interferer
+	}
+
+	potential = {
+		from = {
+			has_ascension_perk = darktec_ap_postbaryonic
+		}
+	}
+
+	modifier = {
+		ship_cloaking_strength_add = 2
+		cloaking_cooldown = -0.25
+	}
+
+	custom_tooltip = DARKTEC_SHIP_UTILITY_INTERFERER_TOOLTIP
+	scripted_action = {
+		scope = self
+		possible = {
+			from = {
+				NOT = {
+					has_fleet_flag = darktec_just_used_interferer
+				}
+			}
+			#exists = owner
+			#owner = {
+			#	NOT = {
+			#		has_country_flag = darktec_just_used_interferer
+			#	}
+			#}
+		}
+		cost = {
+			sr_dark_matter = @darktec_ship_component_on_action_dark_matter_cost
+			darktec_contained_entropy = @darktec_ship_component_on_action_entropy_cost
+		}
+		finished = {
+			from = {
+				has_fleet_flag = darktec_just_used_interferer
+			}
+			#exists = owner
+			#owner = {
+			#	has_country_flag = darktec_just_used_interferer
+			#}
+		}
+		name = on_darktec_interferer_ability
+		tooltip = on_darktec_interferer_ability_tooltip
+		icon = GFX_fleet_order_darktec_interferer_action
+		icon_selected = GFX_fleet_order_darktec_interferer_selected
+		context_menu_name = on_darktec_interferer_ability_title
+		activity_key = on_darktec_interferer_ability_activity
+		progress_activity_key = on_darktec_interferer_ability_progress
+		required_progress = 1
+		cooldown = 360
+	}
+	size_restriction = {
+		darktec_crisis_destroyer
+		darktec_crisis_cruiser
+		darktec_crisis_battleship
+	}
+	blocked_by = {
+		DARKTEC_SHIP_UTILITY_VOIDJUMP
+		DARKTEC_SHIP_UTILITY_VOIDJUMP_ORGANIC
+		DARKTEC_SHIP_UTILITY_INERTIALESS
+		DARKTEC_SHIP_UTILITY_INERTIALESS_ORGANIC
+		DARKTEC_SHIP_UTILITY_COLLAPSER
+		DARKTEC_SHIP_UTILITY_COLLAPSER_ORGANIC
+		#DARKTEC_SHIP_UTILITY_INTERFERER
+		#DARKTEC_SHIP_UTILITY_INTERFERER_ORGANIC
+	}
+	ai_weight = {
+		factor = 0.01
+
+		modifier = {
+			factor = 0
+			NOT = {
+				has_ascension_perk = darktec_ap_postbaryonic
+			}
+		}
+	}
+}
+utility_component_template = {
+	key = "DARKTEC_SHIP_UTILITY_INTERFERER_ORGANIC"
+	size = aux
+	icon = GFX_DARKTEC_SHIP_UTILITY_INTERFERER_ORGANIC
+	icon_frame = 1
+	power = 0
+	component_set = "DARKTEC_SHIP_UTILITY_INTERFERER_ORGANIC"
+
+	prerequisites = {
+		tech_darktec_ship_util_interferer
+	}
+
+	potential = {
+		from = {
+			has_ascension_perk = darktec_ap_postbaryonic
+		}
+	}
+
+	modifier = {
+		ship_cloaking_strength_add = 2
+		cloaking_cooldown = -0.25
+	}
+
+	custom_tooltip = DARKTEC_SHIP_UTILITY_INTERFERER_TOOLTIP
+	scripted_action = {
+		scope = self
+		possible = {
+			from = {
+				NOT = {
+					has_fleet_flag = darktec_just_used_interferer
+				}
+			}
+			#exists = owner
+			#owner = {
+			#	NOT = {
+			#		has_country_flag = darktec_just_used_interferer
+			#	}
+			#}
+		}
+		cost = {
+			sr_dark_matter = @darktec_ship_component_on_action_dark_matter_cost
+			darktec_contained_entropy = @darktec_ship_component_on_action_entropy_cost
+		}
+		finished = {
+			from = {
+				has_fleet_flag = darktec_just_used_interferer
+			}
+			#exists = owner
+			#owner = {
+			#	has_country_flag = darktec_just_used_interferer
+			#}
+		}
+		name = on_darktec_interferer_ability
+		tooltip = on_darktec_interferer_ability_tooltip
+		icon = GFX_fleet_order_darktec_interferer_action
+		icon_selected = GFX_fleet_order_darktec_interferer_selected
+		context_menu_name = on_darktec_interferer_ability_title
+		activity_key = on_darktec_interferer_ability_activity
+		progress_activity_key = on_darktec_interferer_ability_progress
+		required_progress = 1
+		cooldown = 360
+	}
+	size_restriction = {
+		darktec_crisis_mauler
+		darktec_crisis_weaver
+		darktec_crisis_stinger
+	}
+	blocked_by = {
+		DARKTEC_SHIP_UTILITY_VOIDJUMP
+		DARKTEC_SHIP_UTILITY_VOIDJUMP_ORGANIC
+		DARKTEC_SHIP_UTILITY_INERTIALESS
+		DARKTEC_SHIP_UTILITY_INERTIALESS_ORGANIC
+		DARKTEC_SHIP_UTILITY_COLLAPSER
+		DARKTEC_SHIP_UTILITY_COLLAPSER_ORGANIC
+		#DARKTEC_SHIP_UTILITY_INTERFERER
+		#DARKTEC_SHIP_UTILITY_INTERFERER_ORGANIC
+	}
+	ai_weight = {
+		factor = 0.01
+
+		modifier = {
+			factor = 0
+			NOT = {
+				has_ascension_perk = darktec_ap_postbaryonic
+			}
+		}
+	}
+}
+
+# Do not remove below v

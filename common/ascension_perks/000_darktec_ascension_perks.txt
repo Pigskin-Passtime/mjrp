@@ -1,0 +1,278 @@
+# common\ascension_perks\darktec_ascension_perks.txt
+
+# Authors: Rodahtnov & Zyralynn
+
+darktec_ap_postbaryonic = {
+	# Base
+		potential = {
+			OR = {
+				has_machine_age_dlc = yes
+				has_nemesis = yes
+				has_biogenesis_dlc = yes
+			}
+			NOR = { # Vanilla
+				has_ascension_perk = ap_become_the_crisis
+				has_ascension_perk = ap_cosmogenesis
+				has_ascension_perk = ap_defender_of_the_galaxy
+				has_ascension_perk = ap_behemoths
+				has_origin = origin_slavers # No crisis for MSI
+				# Compat with other crises
+				has_country_flag = player_crisis_chosen
+			}
+			NOT = {	# Exclusions
+				has_country_flag = excluded_from_crisis
+			}
+
+			# Selfcheck
+			NOT = {
+				has_ascension_perk = darktec_ap_postbaryonic
+			}
+		}
+
+		possible = {
+			custom_tooltip = {
+				fail_text = "requires_ascension_perks_3"
+				num_ascension_perks > 2
+			}
+			custom_tooltip = {
+				fail_text = "requires_independence"
+				is_subject = no
+			}
+			custom_tooltip = {
+				fail_text = "must_not_be_custodian"
+				is_galactic_custodian = no
+			}
+			custom_tooltip = {
+				fail_text = "must_not_be_emperor"
+				is_galactic_emperor = no
+			}
+			custom_tooltip = {
+				fail_text = "darktec_ap_postbaryonic_not_for_wilderness"
+				is_wilderness_empire = no
+			}
+			custom_tooltip = {
+				fail_text = "darktec_ap_postbaryonic_requires_able_to_modify_species"
+				NOR = {
+					is_natural_design_empire = yes
+					AND = {
+						has_origin = origin_clone_army
+						NOT = {
+							has_country_flag = clone_army_fertility_unlocked
+						}
+					}
+					has_origin = origin_evolutionary_predators
+				}
+			}
+			custom_tooltip = {
+				fail_text = "darktec_ap_postbaryonic_not_for_multispecies"
+				NOR = {
+					has_valid_civic = civic_machine_servitor
+					has_origin = origin_broken_shackles
+				}
+			}
+		}
+
+		on_enabled = {
+			if = { # Effect
+				limit = {
+					NOR = {
+						has_country_flag = darktec_entropic_transformation
+						has_country_flag = darktec_entropic_taint
+					}
+				}
+				custom_tooltip = darktec_ap_postbaryonic_tooltip
+			}
+			if = { # Effect SWAP
+				limit = {
+						has_country_flag = darktec_entropic_transformation
+				}
+				custom_tooltip = darktec_ap_postbaryonic_transformed_tooltip
+			}
+			if = { # Effect SWAP
+				limit = {
+						has_country_flag = darktec_entropic_taint
+				}
+				custom_tooltip = darktec_ap_postbaryonic_tainted_tooltip
+			}
+				
+			if = { # Pre-steps - Dark matter tech
+				limit = {
+					NOR = {
+						has_country_flag = darktec_entropic_transformation
+						has_country_flag = darktec_entropic_taint
+					}
+					NOT = {
+						has_technology = tech_mine_dark_matter
+					}
+				}
+				custom_tooltip = darktec_ap_postbaryonic_tooltip_will_need_to_research_dm_tech
+			}
+			hidden_effect = {
+				set_country_flag = player_crisis_chosen
+
+				# Activates the events
+				country_event = {
+					id = darktec_crisis.1
+				}
+
+				# Crisis objective checkers
+				set_variable = {
+					which = darktec_crisob_extracted_entropy
+					value = 0
+				}
+				set_variable = {
+					which = darktec_crisobj_researched_techs
+					value = 0
+				}
+				set_variable = {
+					which = darktec_crisobj_built_umbral_buildings
+					value = 0
+				}
+				set_variable = {
+					which = darktec_crisobj_harvested_worlds
+					value = 0
+				}
+				set_variable = {
+					which = darktec_crisobj_conquered_worlds
+					value = 0
+				}
+				set_variable = {
+					which = darktec_crisobj_assimilated_pops
+					value = 0
+				}
+				set_variable = {
+					which = darktec_crisobj_tainted_pops
+					value = 0
+				}
+				set_variable = {
+					which = darktec_crisobj_built_umbral_ships
+					value = 0
+				}
+				set_variable = {
+					which = darktec_crisobj_destroyed_empires
+					value = 0
+				}
+				set_variable = {
+					which = darktec_entropy_from_income
+					value = 0
+				}
+				set_variable = {
+					which = darktec_entropy_stockpile
+					value = 0
+				}
+			}
+		}
+
+		ai_weight = {
+			factor = 7.5
+			# "Generic" Weights
+			modifier = {
+				factor = 0
+				OR = {
+					is_egalitarian = yes
+					is_xenophile = yes
+				}
+			}
+			modifier = {
+				factor = 2
+				OR = {
+					has_tradition = tr_discovery_finish
+					has_tradition = tr_prosperity_finish
+				}
+			}
+			modifier = {
+				factor = 2
+				has_ascension_perk = ap_technological_ascendancy
+			}
+			modifier = {
+				factor = 2
+				has_ascension_perk = ap_enigmatic_engineering
+			}
+			modifier = {
+				factor = 2
+				vassals > 0
+				any_subject = {
+					any_agreement = {
+						has_active_specialization = specialist_scholarium
+					}
+				}
+			}
+			modifier = {
+				factor = 10
+				has_country_flag = whisperers_covenant_confirmed
+			}
+			modifier = {
+				factor = 0
+				galaxy_percentage < 0.1
+			}
+			modifier = {
+				factor = 2
+				galaxy_percentage > 0.2
+			}
+			# Native to the crisis
+			modifier = {	# Dark matter empires love this more
+				factor = 10
+				OR = {
+					owner_main_species = {
+						OR = {
+							# Event chain
+							has_trait = trait_inner_darkness
+							# Machine age
+							has_trait = trait_robot_ceaseless_symmetric_annihilation_engine
+						}
+					}
+					is_dark_consortium_empire = yes
+				}
+			}
+			modifier = {	# Selected aspirant amongst the fold - handled by darktec_galaxy_events.100
+				factor = 10
+				has_country_flag = darktec_selected_as_adversary
+			}
+
+			modifier = {	# No custom countries for now, sorry
+				factor = 0
+				is_default_or_fallen = no
+			}
+
+			modifier = {	 # No FEs
+				factor = 0
+				is_fallen_empire = yes
+			}
+		}
+	# /
+
+	tradition_swap = {	# Transformation
+		name = darktec_ap_postbaryonic_transformed
+		inherit_effects = yes
+		inherit_icon = no
+		inherit_name = no
+		trigger = {
+			has_country_flag = darktec_entropic_transformation
+		}
+		on_enabled = {
+			custom_tooltip = "darktec_ap_postbaryonic_transformed_tooltip"
+		}
+		weight = {
+			base = 999
+		}
+	}
+
+	tradition_swap = {	# Taint
+		name = darktec_ap_postbaryonic_tainted
+		inherit_effects = yes
+		inherit_icon = no
+		inherit_name = no
+		trigger = {
+			has_country_flag = darktec_entropic_taint
+		}
+		on_enabled = {
+			custom_tooltip = "darktec_ap_postbaryonic_tainted_tooltip"
+		}
+		weight = {
+			base = 999
+		}
+	}
+}
+
+
+# Do not remove below v

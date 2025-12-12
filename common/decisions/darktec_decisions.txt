@@ -1,0 +1,490 @@
+# common\traits\darktec_leader_traits.txt
+
+# Authors: Rodahtnov & Zyralynn
+
+# Taint world
+darktec_decision_taint_world_menial = {
+	owned_planets_only = yes
+	sound = event_mystic_reveal_light
+	icon = darktec_decision_taint_world_menial
+
+	enactment_time = 180
+
+	resources = {
+		category = decisions
+		cost = {
+			influence = 15
+		}
+	}
+
+	potential = {
+		always = no	# DISCARDED
+		exists = owner
+		owner = {
+			has_ascension_perk = darktec_ap_postbaryonic
+			has_crisis_level = darktec_crisis_postbaryonic_level_4
+			has_country_flag = darktec_entropic_taint
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_modifier = darktec_pm_tainted_worker
+				}
+			}
+			NOR = {
+				has_modifier = darktec_pm_tainted_worker
+				has_modifier = darktec_pm_tainted_specialist
+				has_modifier = darktec_pm_tainted_utility
+				has_modifier = darktec_pm_tainted_pops
+			}
+		}
+	}
+
+	effect = {
+		if = {
+			limit = {
+				hidden_trigger = {
+					NOT = {
+						has_modifier = darktec_pm_tainted_worker
+					}
+				}
+			}
+			custom_tooltip = darktec_decision_taint_world_menial_tooltip
+			
+			hidden_effect = {
+				set_variable = {
+					which = darktec_tainted_level
+					value = 1
+				}
+			}
+			add_modifier = {
+				modifier = darktec_pm_tainted_worker
+				mult = darktec_tainted_level
+			}
+		}
+		else = {
+			custom_tooltip = darktec_decision_taint_world_menial_repeated_tooltip
+			hidden_effect = {
+				change_variable = {
+					which = darktec_tainted_level
+					value = 1
+				}
+			}
+			remove_modifier = darktec_pm_tainted_worker
+			add_modifier = {
+				modifier = darktec_pm_tainted_worker
+				mult = darktec_tainted_level
+			}
+		}
+		owner = {
+			complete_crisis_objective = darktec_crisobj_immediate_taint_world
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}
+darktec_decision_taint_world_specialist = {
+	owned_planets_only = yes
+	sound = event_mystic_reveal_light
+	icon = darktec_decision_taint_world_specialist
+
+	enactment_time = 180
+
+	resources = {
+		category = decisions
+		cost = {
+			influence = 15
+		}
+	}
+
+	potential = {
+		always = no	# DISCARDED
+		exists = owner
+		owner = {
+			has_ascension_perk = darktec_ap_postbaryonic
+			has_crisis_level = darktec_crisis_postbaryonic_level_4
+			has_country_flag = darktec_entropic_taint
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_modifier = darktec_pm_tainted_specialist
+				}
+			}
+			NOR = {
+				has_modifier = darktec_pm_tainted_worker
+				has_modifier = darktec_pm_tainted_specialist
+				has_modifier = darktec_pm_tainted_utility
+				has_modifier = darktec_pm_tainted_pops
+			}
+		}
+	}
+
+	effect = {
+		if = {
+			limit = {
+				hidden_trigger = {
+					NOT = {
+						has_modifier = darktec_pm_tainted_specialist
+					}
+				}
+			}
+			custom_tooltip = darktec_decision_taint_world_specialist_tooltip
+			
+			hidden_effect = {
+				set_variable = {
+					which = darktec_tainted_level
+					value = 1
+				}
+			}
+			add_modifier = {
+				modifier = darktec_pm_tainted_specialist
+				mult = darktec_tainted_level
+			}
+		}
+		else = {
+			custom_tooltip = darktec_decision_taint_world_specialist_repeated_tooltip
+			hidden_effect = {
+				change_variable = {
+					which = darktec_tainted_level
+					value = 1
+				}
+			}
+			remove_modifier = darktec_pm_tainted_specialist
+			add_modifier = {
+				modifier = darktec_pm_tainted_specialist
+				mult = darktec_tainted_level
+			}
+		}
+		owner = {
+			complete_crisis_objective = darktec_crisobj_immediate_taint_world
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}
+darktec_decision_taint_world_pop = {
+	owned_planets_only = yes
+	sound = event_mystic_reveal_light
+	icon = darktec_decision_taint_world_pop
+
+	enactment_time = 180
+
+	resources = {
+		category = decisions
+		cost = {
+			influence = 15
+		}
+	}
+
+	potential = {
+		always = no	# DISCARDED
+		exists = owner
+		owner = {
+			has_ascension_perk = darktec_ap_postbaryonic
+			has_crisis_level = darktec_crisis_postbaryonic_level_4
+			has_country_flag = darktec_entropic_taint
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_modifier = darktec_pm_tainted_pops
+				}
+			}
+			NOR = {
+				has_modifier = darktec_pm_tainted_worker
+				has_modifier = darktec_pm_tainted_specialist
+				has_modifier = darktec_pm_tainted_utility
+				has_modifier = darktec_pm_tainted_pops
+			}
+		}
+	}
+
+	effect = {
+		if = {
+			limit = {
+				hidden_trigger = {
+					NOT = {
+						has_modifier = darktec_pm_tainted_pops
+					}
+				}
+			}
+			custom_tooltip = darktec_decision_taint_world_pop_tooltip
+			
+			hidden_effect = {
+				set_variable = {
+					which = darktec_tainted_level
+					value = 1
+				}
+			}
+			add_modifier = {
+				modifier = darktec_pm_tainted_pops
+				mult = darktec_tainted_level
+			}
+		}
+		else = {
+			custom_tooltip = darktec_decision_taint_world_pop_repeated_tooltip
+			hidden_effect = {
+				change_variable = {
+					which = darktec_tainted_level
+					value = 1
+				}
+			}
+			remove_modifier = darktec_pm_tainted_pops
+			add_modifier = {
+				modifier = darktec_pm_tainted_pops
+				mult = darktec_tainted_level
+			}
+		}
+		owner = {
+			complete_crisis_objective = darktec_crisobj_immediate_taint_world
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}
+darktec_decision_taint_world_utility = {
+	owned_planets_only = yes
+	sound = event_mystic_reveal_light
+	icon = darktec_decision_taint_world_utility
+
+	enactment_time = 180
+
+	resources = {
+		category = decisions
+		cost = {
+			influence = 15
+		}
+	}
+
+	potential = {
+		always = no	# DISCARDED
+		exists = owner
+		owner = {
+			has_ascension_perk = darktec_ap_postbaryonic
+			has_crisis_level = darktec_crisis_postbaryonic_level_4
+			has_country_flag = darktec_entropic_taint
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_modifier = darktec_pm_tainted_utility
+				}
+			}
+			NOR = {
+				has_modifier = darktec_pm_tainted_worker
+				has_modifier = darktec_pm_tainted_specialist
+				has_modifier = darktec_pm_tainted_utility
+				has_modifier = darktec_pm_tainted_pops
+			}
+		}
+	}
+
+	effect = {
+		if = {
+			limit = {
+				hidden_trigger = {
+					NOT = {
+						has_modifier = darktec_pm_tainted_utility
+					}
+				}
+			}
+			custom_tooltip = darktec_decision_taint_world_utility_tooltip
+			
+			hidden_effect = {
+				set_variable = {
+					which = darktec_tainted_level
+					value = 1
+				}
+			}
+			add_modifier = {
+				modifier = darktec_pm_tainted_utility
+				mult = darktec_tainted_level
+			}
+		}
+		else = {
+			custom_tooltip = darktec_decision_taint_world_utility_repeated_tooltip
+			hidden_effect = {
+				change_variable = {
+					which = darktec_tainted_level
+					value = 1
+				}
+			}
+			remove_modifier = darktec_pm_tainted_utility
+			add_modifier = {
+				modifier = darktec_pm_tainted_utility
+				mult = darktec_tainted_level
+			}
+		}
+		owner = {
+			complete_crisis_objective = darktec_crisobj_immediate_taint_world
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}
+
+darktec_decision_untaint_world = {
+	owned_planets_only = yes
+	sound = event_mystic_reveal_light
+	icon = darktec_decision_untaint_world
+
+	enactment_time = 180
+
+	resources = {
+		category = decisions
+		cost = {
+			influence = 15
+		}
+	}
+
+	potential = {
+		always = no	# DISCARDED
+		exists = owner
+		owner = {
+			NOR = {
+				has_ascension_perk = darktec_ap_postbaryonic
+			}
+		}
+		OR = {
+			has_modifier = darktec_pm_tainted_worker
+			has_modifier = darktec_pm_tainted_specialist
+			has_modifier = darktec_pm_tainted_utility
+			has_modifier = darktec_pm_tainted_pops
+		}
+	}
+
+	effect = {
+		custom_tooltip = darktec_decision_untaint_world_tooltip
+		hidden_effect = {
+			switch = {
+				trigger = has_modifier
+				darktec_pm_tainted_worker = {
+					remove_modifier = darktec_pm_tainted_worker
+				}
+				darktec_pm_tainted_specialist = {
+					remove_modifier = darktec_pm_tainted_specialist
+				}
+				darktec_pm_tainted_utility = {
+					remove_modifier = darktec_pm_tainted_utility
+				}
+				darktec_pm_tainted_pops = {
+					remove_modifier = darktec_pm_tainted_pops
+				}
+			}
+			clear_variable = darktec_tainted_level
+		}
+		add_planet_devastation = 30
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}
+
+# Entropy world
+darktec_decision_entropy_world = {	
+	owned_planets_only = yes
+	sound = event_mystic_reveal_light
+	icon = darktec_decision_entropy_world
+
+	enactment_time = 180
+
+	resources = {
+		category = decisions
+		cost = {
+			influence = 15
+		}
+	}
+
+	potential = {
+		always = no	# DISCARDED
+		exists = owner
+		owner = {
+			has_ascension_perk = darktec_ap_postbaryonic
+			has_crisis_level = darktec_crisis_postbaryonic_level_4
+			has_country_flag = darktec_entropic_transformation
+		}
+	}
+
+	effect = {
+		custom_tooltip = darktec_decision_entropy_world_tooltip
+		hidden_effect = {
+			add_modifier = {
+				modifier = darktec_pm_entropic_world_phase_1
+			}
+			#planet_event = {	# DISCARDED
+			#	id = darktec_crisis_objectives.71
+			#}
+		}
+	}
+
+	ai_weight = {
+		weight = 20
+	}
+}
+darktec_decision_undo_entropy_world = {
+	owned_planets_only = yes
+	sound = event_mystic_reveal_light
+	icon = darktec_decision_undo_entropy_world
+
+	enactment_time = 180
+
+	resources = {
+		category = decisions
+		cost = {
+			influence = 15
+		}
+	}
+
+	potential = {
+		always = no	# DISCARDED
+		exists = owner
+		owner = {
+			NOR = {
+				has_ascension_perk = darktec_ap_postbaryonic
+				has_country_flag = darktec_entropic_transformation
+				has_crisis_level = darktec_crisis_postbaryonic_level_4
+			}
+		}
+		OR = {
+			has_modifier = darktec_pm_entropic_world_phase_1
+			has_modifier = darktec_pm_entropic_world_phase_2
+			has_modifier = darktec_pm_entropic_world_phase_3
+			has_modifier = darktec_pm_entropic_world
+		}
+	}
+
+	effect = {
+		custom_tooltip = darktec_decision_undo_entropy_world_tooltip
+		hidden_effect = {
+			switch = {
+				trigger = has_modifier
+				darktec_pm_entropic_world_phase_1 = {
+					remove_modifier = darktec_pm_entropic_world_phase_1
+				}
+				darktec_pm_entropic_world_phase_2 = {
+					remove_modifier = darktec_pm_entropic_world_phase_2
+				}
+				darktec_pm_entropic_world_phase_3 = {
+					remove_modifier = darktec_pm_entropic_world_phase_3
+				}
+				darktec_pm_entropic_world = {
+					remove_modifier = darktec_pm_entropic_world
+				}
+			}
+		}
+	}
+
+	ai_weight = {
+		weight = 100
+	}
+}

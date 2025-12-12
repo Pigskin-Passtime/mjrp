@@ -1,0 +1,1563 @@
+# events\darktec_mechanics_events.txt
+
+# Authors: Rodahtnov & Zyralynn
+
+
+namespace = darktec_gamestart
+
+# Marks the mod as active/crisis as active
+
+# Removes empire flags in case someone tries to cheese them with a custom empire
+
+
+namespace = darktec_misc
+
+# Sets global flag
+event = {
+	id = darktec_misc.1
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = {
+			has_global_flag = darktec_crisis_mod_enabled
+		}
+	}
+
+	immediate = {
+		set_global_flag = darktec_crisis_mod_enabled
+	}
+}
+
+# Removes unwanted flags
+country_event = {
+	id = darktec_misc.2
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = no
+	}
+
+	immediate = {
+		break = yes
+	}
+}
+
+# on_monthly_pulse_country - checks the amount of stored entropy and launches the appropiate event
+country_event = {
+	id = darktec_misc.10
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		# Has the crisis perk
+		has_ascension_perk = darktec_ap_postbaryonic
+		# Has at least level 1
+		has_crisis_level = darktec_crisis_postbaryonic_level_1
+	}
+
+	immediate = {
+		#
+		if = {
+			limit = {
+				NOR = {
+					has_crisis_level = darktec_crisis_postbaryonic_level_2
+					has_country_flag = darktec_crisis_postbaryonic_level_2_progress
+				}
+				has_country_flag = darktec_crisis_postbaryonic_level_1_unlocked
+				resource_stockpile_compare = {
+					resource = darktec_contained_entropy
+					value >= @darktec_crisis_level_2_required_currency
+				}
+			}
+			set_country_flag = darktec_crisis_postbaryonic_level_2_progress
+			country_event = {
+				id = darktec_crisis.20
+				days = 1
+			}
+		}
+		if = {
+			limit = {
+				NOR = {
+					has_crisis_level = darktec_crisis_postbaryonic_level_3
+					has_country_flag = darktec_crisis_postbaryonic_level_3_progress
+				}
+				has_country_flag = darktec_crisis_postbaryonic_level_2_unlocked
+				resource_stockpile_compare = {
+					resource = darktec_contained_entropy
+					value >= @darktec_crisis_level_3_required_currency
+				}
+			}
+			set_country_flag = darktec_crisis_postbaryonic_level_3_progress
+			country_event = {
+				id = darktec_crisis.30
+				days = 1
+			}
+		}
+		if = {
+			limit = {
+				NOR = {
+					has_crisis_level = darktec_crisis_postbaryonic_level_4
+					has_country_flag = darktec_crisis_postbaryonic_level_4_progress
+				}
+				has_country_flag = darktec_crisis_postbaryonic_level_3_unlocked
+				resource_stockpile_compare = {
+					resource = darktec_contained_entropy
+					value >= @darktec_crisis_level_4_required_currency
+				}
+			}
+			set_country_flag = darktec_crisis_postbaryonic_level_4_progress
+			country_event = {
+				id = darktec_crisis.40
+				days = 1
+			}
+		}
+		if = {
+			limit = {
+				NOR = {
+					has_crisis_level = darktec_crisis_postbaryonic_level_5
+					has_country_flag = darktec_crisis_postbaryonic_level_5_progress
+				}
+				has_country_flag = darktec_crisis_postbaryonic_level_4_unlocked
+				resource_stockpile_compare = {
+					resource = darktec_contained_entropy
+					value >= @darktec_crisis_level_5_required_currency
+				}
+			}
+			set_country_flag = darktec_crisis_postbaryonic_level_5_progress
+			country_event = {
+				id = darktec_crisis.50
+				days = 1
+			}
+		}
+	}
+}
+
+namespace = darktec_mechanics
+
+# Entrophereal assimilation /growth -  Biyearly
+country_event = {
+	id = darktec_mechanics.10
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		# Has the crisis perk
+		has_ascension_perk = darktec_ap_postbaryonic
+		has_country_flag = darktec_entropic_transformation
+	}
+
+	immediate = {
+		# Moved to biyearly event when you pick the ap - you should take 2 years anyway for the transformation part so should be fine
+		#set_saved_date = {
+		#	key = darktec_entrophereal_growth_pulse
+		#	days_from_present = 720
+		#	expires = 720
+		#}
+		every_owned_planet = {
+			limit = {
+				is_colony = yes
+				OR = {
+					has_active_building = building_darktec_umbral_portal_1
+					has_active_building = building_darktec_umbral_portal_2
+				}
+				controller = {
+					is_same_value = root
+				}
+			}
+			if = {	# Assimilation pulse
+				limit = {
+					owner = {
+						has_crisis_level = darktec_crisis_postbaryonic_level_4
+					}
+				}
+				planet_event = {
+					id = darktec_mechanics.1001
+				}
+			}
+			if = {	# Growth pulse
+				limit = {
+					owner = {
+						has_crisis_level = darktec_crisis_postbaryonic_level_4
+					}
+				}
+				planet_event = {
+					id = darktec_mechanics.1011
+				}
+			}
+		}
+	}
+}
+# Note: separated into two events just for convenience
+planet_event = {
+	id = darktec_mechanics.1001
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				any_owned_species = {
+					NOT = {
+						is_same_value = root.owner_main_species
+					}
+				}
+			}
+			darktec_enthrophereal_assimilation_effect = yes
+		}
+	}
+}
+# Note: separated into two events just for convenience
+planet_event = {
+	id = darktec_mechanics.1011
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				has_active_building = building_darktec_umbral_portal_1
+			}
+			random_owned_pop_group = {
+				limit = {
+					has_trait = trait_darktec_entro_main
+				}
+				# IMPROVE
+				add_pop_amount = 150
+			}
+		}
+		if = {
+			limit = {
+				has_active_building = building_darktec_umbral_portal_2
+			}
+			random_owned_pop_group = {
+				limit = {
+					has_trait = trait_darktec_entro_main
+				}
+				# IMPROVE
+				add_pop_amount = 300
+			}
+		}
+		if = {
+			limit = {
+				any_owned_species = {
+					has_trait = trait_darktec_entro_multiplicity
+				}
+			}
+			random = {
+				chance = 10
+				random_owned_pop_group = {
+					limit = {
+						has_trait = trait_darktec_entro_multiplicity
+					}
+					add_pop_amount = 100
+				}
+			}
+		}
+		if = {	# DEBUG
+			limit = {
+				always = no
+			}
+			random_owned_pop_group = {
+				# IMPROVE
+				add_pop_amount = 200
+			}
+		}
+	}
+}
+country_event = {	# Save the date
+	id = darktec_mechanics.1021
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		OR = {
+			has_ascension_perk = darktec_ap_postbaryonic
+			has_country_flag = darktec_can_build_portals
+		}
+	}
+
+	immediate = {
+		set_saved_date = {
+			key = darktec_entrophereal_growth_pulse
+			days_from_present = 720
+			expires = 720
+		}
+	}
+}
+
+# Portrait species change handler - on_modification_complete
+# Whenever you change the portrait of an entrophereal species... it gives that portrait back
+# This = Country
+# From = Species ( Post Modification )
+# FromFrom = Species ( Original )
+# Prev = Planet
+country_event = {	# on_modification_complete
+	id = darktec_mechanics.50
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		OR = {
+			fromfrom = {
+				has_trait = trait_darktec_entro_main
+				OR = {
+					species_portrait = darktec_humanoid_01
+					species_portrait = darktec_beast_01
+					species_portrait = darktec_insectoid_01
+					species_portrait = darktec_molluscoid_01
+					species_portrait = darktec_plantoid_01
+					species_portrait = darktec_lithoid_01
+					species_portrait = darktec_machine_01
+				}
+			}
+			from = {
+				has_trait = trait_darktec_entro_main
+				NOR = {
+					species_portrait = darktec_humanoid_01
+					species_portrait = darktec_beast_01
+					species_portrait = darktec_insectoid_01
+					species_portrait = darktec_molluscoid_01
+					species_portrait = darktec_plantoid_01
+					species_portrait = darktec_lithoid_01
+					species_portrait = darktec_machine_01
+				}
+			}
+		}
+	}
+
+	immediate = {
+		fromfrom = {
+			save_event_target_as = darktec_original_species
+		}
+		from = {
+			save_event_target_as = darktec_changed_species
+		}
+		event_target:darktec_changed_species = {
+			darktec_transform_species_portrait = yes
+		}
+		every_owned_leader = {
+			limit = {
+				species = {
+					is_same_value = event_target:darktec_changed_species
+				}
+			}
+			darktec_transform_leader_portrait = yes
+		}
+	}
+}
+
+# root = country
+# From = leader
+country_event = {	# on_leader_level_up
+	id = darktec_mechanics.6001
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		from = {
+			species = {
+				has_trait = trait_darktec_purity_ingrained_entrogenomics
+			}
+			num_negative_traits > 1
+		}
+	}
+
+	immediate = {
+		random = {
+			chance = 25
+			set_variable = {
+				which = darktec_leader_skill_dm_cost
+				value = from.trigger:has_base_skill
+			}
+			multiply_variable = {
+				which = darktec_leader_skill_dm_cost
+				value = 200
+			}
+			if = {
+				limit = {
+					resource_stockpile_compare = {
+						resource = sr_dark_matter
+						value > darktec_leader_skill_dm_cost
+					}
+				}
+				add_resource = {
+					sr_dark_matter = -1
+					mult = darktec_leader_skill_dm_cost
+				}
+				from = {
+					remove_all_negative_traits = yes
+				}
+			}
+		}
+	}
+}
+
+# Dark Splicing
+# A pop amount has been grown
+# This = Planet scope
+# From = Country
+# FromFrom = Pop group
+# local_pop_amount = variable of how much was grown
+planet_event = {	# on_pop_growth
+	id = darktec_mechanics.6002
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		always = no
+		OR = {
+			fromfrom = {
+				has_trait = trait_darktec_cloning_mirror_splicing
+			}
+			#has_global_flag = darktec_test_mirror_splicing
+		}
+	}
+
+	immediate = {
+		change_variable = {
+			which = darktec_grown_mirror_spliced_pops
+			value = 1
+		}
+		if = {
+			limit = {
+				fromfrom = {
+					check_variable = {
+						which = local_pop_amount
+						value >= 100
+					}
+				}
+			}
+			change_variable = {
+				which = darktec_test_local_pop_amount_is_100
+				value = 1
+			}
+		}
+		#random = {
+		#	chance = 100
+		#	owner = {
+		#		if = {
+		#			limit = {
+		#				NOR = {
+		#					is_variable_set = darktec_mirror_spliced_pops
+		#				}
+		#			}
+		#			set_variable = {
+		#				which = darktec_mirror_spliced_pops
+		#				value = 1
+		#			}
+		#		}
+		#		else = {
+		#			change_variable = {
+		#				which = darktec_mirror_spliced_pops
+		#				value = 1
+		#			}
+		#		}
+		#	}
+		#	if = {
+		#		limit = {
+		#			has_global_flag = darktec_test_mirror_splicing
+		#		}
+		#		random_owned_pop_group = {
+		#			add_pop_amount = 100
+		#		}
+		#		change_variable = {
+		#			which = darktec_test_splicing
+		#			value = 100
+		#		}
+		#	}
+		#	else = {
+		#		random_owned_pop_group = {
+		#			limit = {
+		#				has_trait = trait_darktec_cloning_mirror_splicing
+		#			}
+		#			add_pop_amount = 100
+		#		}
+		#	}
+		#}
+	}
+}
+
+# Void threadware global event
+country_event = {	# on_yearly_pulse_country
+	id = darktec_mechanics.6003
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_ascension_perk = darktec_ap_postbaryonic
+		has_crisis_level = darktec_crisis_postbaryonic_level_3
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				NOR = {
+					is_variable_set = darktec_void_randomness_researcher
+					is_variable_set = darktec_void_randomness_bureaucrat
+				}
+			}
+			set_variable = {
+				which = darktec_void_randomness_researcher
+				value = 1
+			}
+			set_variable = {
+				which = darktec_void_randomness_bureaucrat
+				value = 1
+			}
+		}
+		else = {
+			set_variable_to_random_value = {
+				which = darktec_void_randomness_researcher
+				min = 1
+				max = 100
+				rounded = yes
+			}
+			set_variable_to_random_value = {
+				which = darktec_void_randomness_bureaucrat
+				min = 1
+				max = 100
+				rounded = yes
+			}
+		}
+	}
+}
+
+# Synthetic evolution fixer - As i can't (and should not) edit synthevo events, in case an empire ascends after doing the phase 4 of the crisis and adopt the transformation path
+country_event = {	# on_monthly_pulse_country
+	id = darktec_mechanics.5001
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		# Synthetically ascended
+		OR = {
+			has_ascension_perk = ap_synthetic_evolution
+			has_tradition = tr_synthetics_adopt
+			has_country_flag = synthetic_empire
+		}
+		# Post-baryonic crisis
+		has_ascension_perk = darktec_ap_postbaryonic
+		has_country_flag = darktec_entropic_transformation
+		# Species have changed but do not have the trait
+		owner_main_species = {
+			OR = {
+				has_trait = trait_mechanical
+				has_trait = trait_machine_unit
+			}
+			NOT = {
+				has_trait = trait_darktec_entro_main
+			}
+		}
+		NOT = {
+			has_country_flag = darktec_fixed_synthevo
+		}
+	}
+
+	immediate = {
+		set_country_flag = darktec_fixed_synthevo
+		owner_main_species = {
+			save_event_target_as = darktec_changed_species
+		}
+		event_target:darktec_changed_species = {
+			darktec_transform_species_portrait = yes
+		}
+		every_owned_leader = {
+			limit = {
+				species = {
+					is_same_value = event_target:darktec_changed_species
+				}
+			}
+			darktec_transform_leader_portrait = yes
+		}
+	}
+}
+
+# Entrophereal Sphere Overcharge - Monthly (5% of ACTUAL population)
+country_event = {	# DISCARDED
+	id = darktec_mechanics.100
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		# Has the crisis perk
+		has_ascension_perk = darktec_ap_postbaryonic
+		has_crisis_level = darktec_crisis_postbaryonic_level_5
+		has_country_flag = darktec_sphere_phase_2_overcharge_with_entrophereals
+	}
+
+	immediate = {
+		every_owned_planet = {
+			limit = {
+				is_colony = yes
+				OR = {
+					has_building = building_darktec_umbral_portal_1
+					has_building = building_darktec_umbral_portal_2
+				}
+				controller = {
+					is_same_value = root
+				}
+			}
+			planet_event = {
+				id = darktec_mechanics.10001
+			}
+		}
+	}
+}
+planet_event = {
+	id = darktec_mechanics.10001
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+		break = yes
+		#while = {
+		#	count = value:darktec_enthrophereal_overcharge_value
+		#	darktec_enthrophereal_overcharge_effect = yes
+		#}
+	}
+}
+
+namespace = darktec_ships
+
+# Bombardment
+# Pops converted into antimatter/dark matter by bombardment
+# This = Planet where the pop was bombed to death
+# From = Country bombarding the planet
+# FromFrom = Biggest fleet bombarding the planet (the one we used the bombardment stance from)
+planet_event = {
+	id = darktec_ships.150
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		from = {	# Reality harvesting
+			has_crisis_level = darktec_crisis_postbaryonic_level_5
+		}
+	}
+
+	immediate = {
+		from = {
+			complete_crisis_objective = darktec_crisobj_immediate_assimilate_pops
+			add_resource = {
+				sr_dark_matter = @darktec_bombarded_pops_into_darkmatter_reward
+			}
+			change_variable = {
+				which = darktec_crisobj_assimilated_pops
+				value = 1
+			}
+		}
+	}
+}
+
+# darktec_crisobj_immediate_conquer_worlds
+# Planet subverted/tainted when bombarded entirely
+planet_event = {
+	id = darktec_ships.200
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		planet_devastation >= 90
+		NOT = {
+			has_modifier = darktec_pm_entropic_world
+		}
+		from.owner = {
+			has_crisis_level = darktec_crisis_postbaryonic_level_4
+			OR = {
+				has_country_flag = darktec_entropic_transformation
+			}
+		}
+	}
+
+	immediate = {
+		#if = {	# Taint effect
+		#	limit = {
+		#		from.owner = {
+		#			has_crisis_level = darktec_crisis_postbaryonic_level_4
+		#			has_country_flag = darktec_entropic_taint
+		#		}
+		#	}
+		#	darktec_planet_taint_effect = yes
+		#}
+		if = {	# Entropy corruption effect
+			limit = {
+				from.owner = {
+					has_crisis_level = darktec_crisis_postbaryonic_level_4
+					has_country_flag = darktec_entropic_transformation
+				}
+			}
+			darktec_planet_entropy_corruption_effect = yes
+			
+		}
+		else = {
+			break = yes
+		}
+	}
+
+	after = {
+		from.owner = {
+			complete_crisis_objective = darktec_crisobj_immediate_conquer_worlds
+			change_variable = {
+				which = darktec_crisobj_harvested_worlds
+				value = 1
+			}
+		}
+	}
+}
+
+# Ship effects
+
+# Weapon/component effects
+fleet_event = {	# on_darktec_voidjump_ability
+	id = darktec_ships.510
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+		every_owned_ship = {
+			limit = {
+				OR = {
+					has_component = DARKTEC_SHIP_UTILITY_VOIDJUMP
+					has_component = DARKTEC_SHIP_UTILITY_VOIDJUMP_ORGANIC
+				}
+			}
+			add_modifier = {
+				modifier = darktec_modifier_fleet_voidjump
+				days = 60
+			}
+		}
+		while = {
+			limit = {
+				any_owned_ship = {
+					NOR = {
+						has_component = DARKTEC_SHIP_UTILITY_VOIDJUMP
+						has_component = DARKTEC_SHIP_UTILITY_VOIDJUMP_ORGANIC
+					}
+				}
+			}
+			every_owned_ship = {
+				limit = {
+					NOR = {
+						has_component = DARKTEC_SHIP_UTILITY_VOIDJUMP
+						has_component = DARKTEC_SHIP_UTILITY_VOIDJUMP_ORGANIC
+					}
+				}
+				add_modifier = {
+					modifier = darktec_modifier_fleet_inertialess
+					days = 60
+					multiplier = -1
+				}
+				repair_armor_percentage = -0.75
+				reduce_hp = 0.75
+			}
+		}
+		set_timed_fleet_flag = {
+			flag = darktec_just_used_voidjump
+			years = 1
+		}
+		#owner = {
+		#	set_timed_country_flag = {
+		#		flag = darktec_just_used_voidjump
+		#		months = 4
+		#	}
+		#}
+		set_location = owner.capital_scope
+	}
+}
+fleet_event = {	# on_darktec_inertialess_ability
+	id = darktec_ships.520
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+		every_owned_ship = {
+			limit = {
+				OR = {
+					has_component = DARKTEC_SHIP_UTILITY_INERTIALESS
+					has_component = DARKTEC_SHIP_UTILITY_INERTIALESS_ORGANIC
+				}
+			}
+			add_modifier = {
+				modifier = darktec_modifier_fleet_inertialess
+				days = 60
+			}
+		}
+		while = {
+			limit = {
+				any_owned_ship = {
+					NOR = {
+						has_component = DARKTEC_SHIP_UTILITY_INERTIALESS
+						has_component = DARKTEC_SHIP_UTILITY_INERTIALESS_ORGANIC
+					}
+				}
+			}
+			every_owned_ship = {
+				limit = {
+					OR = {
+						has_component = DARKTEC_SHIP_UTILITY_INERTIALESS
+						has_component = DARKTEC_SHIP_UTILITY_INERTIALESS_ORGANIC
+					}
+				}
+				add_modifier = {
+					modifier = darktec_modifier_fleet_inertialess
+					days = 60
+					multiplier = -1
+				}
+				repair_armor_percentage = -0.75
+				reduce_hp_percent = 0.75
+			}
+		}
+		set_timed_fleet_flag = {
+			flag = darktec_just_used_inertialess
+			years = 1
+		}
+		#owner = {
+		#	set_timed_country_flag = {
+		#		flag = darktec_just_used_inertialess
+		#		months = 4
+		#	}
+		#}
+	}
+}
+fleet_event = {	# on_darktec_collapser_ability
+	id = darktec_ships.530
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+		save_event_target_as = darktec_detonation_fleet
+		set_variable = {
+			which = darktec_detonation_effect
+			value = 0
+		}
+		# Gather all the shield hp data
+		while = {
+			limit = {
+				any_owned_ship = {
+					OR = {
+						has_component = DARKTEC_SHIP_UTILITY_COLLAPSER
+						has_component = DARKTEC_SHIP_UTILITY_COLLAPSER_ORGANIC
+					}
+					has_shield_hp > 0
+					check_variable = {
+						which = dt_s_e
+						value = 0
+					}
+					NOT = {
+						has_ship_flag = dt_s_e
+					}
+				}
+			}
+			every_owned_ship = {
+				limit = {
+					OR = {
+						has_component = DARKTEC_SHIP_UTILITY_COLLAPSER
+						has_component = DARKTEC_SHIP_UTILITY_COLLAPSER_ORGANIC
+					}
+					has_shield_hp > 0
+					check_variable = {
+						which = dt_s_e
+						value = 0
+					}
+					NOT = {
+						has_ship_flag = dt_s_e
+					}
+				}
+				# CD
+				set_timed_ship_flag = {
+					flag = dt_s_e
+					years = 1
+				}
+				export_trigger_value_to_variable = {
+					trigger = has_shield_hp
+					variable = dt_s_e
+				}
+				root = {
+					change_variable = {
+						which = darktec_detonation_effect
+						value = prev.dt_s_e
+					}
+				}
+				set_variable = {
+					which = dt_s_e
+					value = 0
+				}
+				# Should be enough... right? Even at acot or gigas levels... right?
+				reduce_shield = 100000000
+				add_modifier = {	# Debuff on itself
+					modifier = darktec_modifier_fleet_collapser
+					days = 30
+					multiplier = -1
+				}
+			}
+		}
+		# Operate the modifier
+		multiply_variable = {	# 100k shields = 5k splash damage
+			which = darktec_detonation_effect
+			value = 0.05
+		}
+		if = {
+			limit = {
+				check_variable = {
+					which = darktec_detonation_effect
+					value > 10000
+				}
+			}
+			set_variable = {
+				which = darktec_detonation_effect
+				value = 10000
+			}
+		}
+		solar_system = {
+			every_ship_in_system = {
+				limit = {
+					NOR = {
+						has_component = DARKTEC_SHIP_UTILITY_COLLAPSER
+						has_component = DARKTEC_SHIP_UTILITY_COLLAPSER_ORGANIC
+					}
+				}
+				damage_ship = root.darktec_detonation_effect
+			}
+		}
+		play_sound = {
+			sound = darktec_shield_collapse
+			location = root
+		}
+		set_timed_fleet_flag = {
+			flag = darktec_just_used_collapser
+			years = 1
+		}
+		#owner = {
+		#	set_timed_country_flag = {
+		#		flag = darktec_just_used_collapser
+		#		months = 4
+		#	}
+		#}
+	}
+}
+fleet_event = {	# on_darktec_collapser_ability continuation
+	id = darktec_ships.531
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+		#TODO damage effect
+	}
+}
+fleet_event = {	# on_darktec_interferer_ability
+	id = darktec_ships.540
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+		every_owned_ship = {
+			limit = {
+				OR = {
+					has_component = DARKTEC_SHIP_UTILITY_INERTIALESS
+					has_component = DARKTEC_SHIP_UTILITY_INERTIALESS_ORGANIC
+				}
+			}
+			add_modifier = {
+				modifier = darktec_modifier_fleet_interferer
+				days = 60
+			}
+		}
+		while = {
+			limit = {
+				any_owned_ship = {
+					NOR = {
+						has_component = DARKTEC_SHIP_UTILITY_INERTIALESS
+						has_component = DARKTEC_SHIP_UTILITY_INERTIALESS_ORGANIC
+					}
+				}
+			}
+			every_owned_ship = {
+				limit = {
+					OR = {
+						has_component = DARKTEC_SHIP_UTILITY_INERTIALESS
+						has_component = DARKTEC_SHIP_UTILITY_INERTIALESS_ORGANIC
+					}
+				}
+				add_modifier = {
+					modifier = darktec_modifier_fleet_interferer
+					days = 60
+					multiplier = -1
+				}
+				repair_armor_percentage = -0.75
+				reduce_hp_percent = 0.75
+			}
+		}
+		set_timed_fleet_flag = {
+			flag = darktec_just_used_interferer
+			years = 1
+		}
+		#owner = {
+		#	set_timed_country_flag = {
+		#		flag = darktec_just_used_interferer
+		#		months = 4
+		#	}
+		#}
+	}
+}
+
+namespace = darktec_technology
+
+# First tech is on darktec_crisis_events.txt
+
+# T1 tech events (excluding the first one)
+
+# T2 tech events
+
+
+namespace = darktec_crisis_objectives
+
+#darktec_crisobj_monthly_extract_entropy - On monthly
+country_event = {
+	id = darktec_crisis_objectives.10
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_ascension_perk = darktec_ap_postbaryonic
+		has_crisis_level = darktec_crisis_postbaryonic_level_1
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				NOT = {
+					is_variable_set = darktec_entropy_from_income
+				}
+			}
+			set_variable = {
+				which = darktec_entropy_from_income
+				value = 0
+			}
+		}
+		export_resource_income_to_variable = {
+			resource = darktec_contained_entropy
+			variable = darktec_entropy_from_income
+		}
+		complete_crisis_objective = darktec_crisobj_monthly_extract_entropy
+
+		# To avoid a secondary event, this also checks the amount of entropy available
+		export_resource_stockpile_to_variable = {
+			resource = darktec_contained_entropy
+			variable = darktec_entropy_stockpile
+		}
+		# For each 1000 stored, increases the mult by 10%
+		# so 10000 stored means the dm amount is 100% higher
+		multiply_variable = {
+			which = darktec_entropy_stockpile
+			value = 0.0001
+		}
+	}
+}
+
+# Crisis Objective - Research Technologies
+# Originally done for only physics but... messy
+country_event = {
+	id = darktec_crisis_objectives.20
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_ascension_perk = darktec_ap_postbaryonic
+		has_crisis_level = darktec_crisis_postbaryonic_level_1
+	}
+
+	immediate = {
+		complete_crisis_objective = darktec_crisobj_immediate_research_physics_technologies
+		change_variable = {
+			which = darktec_crisobj_researched_techs
+			value = 1
+		}
+	}
+}
+
+#darktec_crisobj_immediate_build_and_keep_umbral_buildings - On building complete/upgraded
+# darktec_crisis_objectives.30
+planet_event = {	# Built
+	id = darktec_crisis_objectives.30
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			has_ascension_perk = darktec_ap_postbaryonic
+			has_crisis_level = darktec_crisis_postbaryonic_level_1
+		}
+		OR = {
+			# Anchor
+			last_building_changed = building_darktec_anchor_1
+
+			last_building_changed = building_darktec_storage_1
+
+			last_building_changed = building_darktec_umbral_portal_1
+
+			#last_building_changed = building_darktec_umbral_assimilation_1
+
+			last_building_changed = building_darktec_umbral_reallocator_specialist
+
+			last_building_changed = building_darktec_umbral_reallocator_menial
+
+			last_building_changed = building_darktec_umbral_reallocator_utility
+
+			last_building_changed = building_darktec_umbral_reallocator_pops
+
+			last_building_changed = building_darktec_umbral_compressor_1
+
+			last_building_changed = building_darktec_umbral_decompressor_1
+
+			last_building_changed = building_darktec_umbral_food_1
+
+			last_building_changed = building_darktec_void_foundry_1
+
+			#last_building_changed = building_darktec_void_refinery_1
+
+			last_building_changed = building_darktec_void_research_1
+
+			last_building_changed = building_darktec_void_investigation_1
+
+		}
+	}
+
+	immediate = {
+		owner = {
+			complete_crisis_objective = darktec_crisobj_immediate_build_and_keep_umbral_buildings
+			change_variable = {
+				which = darktec_crisobj_built_umbral_buildings
+				value = 1
+			}
+		}
+	}
+}
+planet_event = {	# Upgraded
+	id = darktec_crisis_objectives.31
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			has_ascension_perk = darktec_ap_postbaryonic
+			has_crisis_level = darktec_crisis_postbaryonic_level_1
+		}
+		OR = {
+			# Anchor
+			#last_building_changed = building_darktec_anchor_1
+			last_building_changed = building_darktec_anchor_2
+			last_building_changed = building_darktec_anchor_3
+			last_building_changed = building_darktec_anchor_4
+
+			#last_building_changed = building_darktec_storage_1
+			last_building_changed = building_darktec_storage_2
+			last_building_changed = building_darktec_storage_3
+			last_building_changed = building_darktec_storage_4
+
+			#last_building_changed = building_darktec_umbral_portal_1
+			last_building_changed = building_darktec_umbral_portal_2
+
+			#last_building_changed = building_darktec_umbral_assimilation_1
+			#last_building_changed = building_darktec_umbral_assimilation_2
+
+			#last_building_changed = building_darktec_umbral_compressor_1
+			last_building_changed = building_darktec_umbral_compressor_2
+			last_building_changed = building_darktec_umbral_compressor_3
+			last_building_changed = building_darktec_umbral_compressor_4
+
+			#last_building_changed = building_darktec_umbral_decompressor_1
+			last_building_changed = building_darktec_umbral_decompressor_2
+			last_building_changed = building_darktec_umbral_decompressor_3
+			last_building_changed = building_darktec_umbral_decompressor_4
+
+			#last_building_changed = building_darktec_umbral_food_1
+			last_building_changed = building_darktec_umbral_food_2
+			last_building_changed = building_darktec_umbral_food_3
+			last_building_changed = building_darktec_umbral_food_4
+
+			#last_building_changed = building_darktec_void_foundry_1
+			last_building_changed = building_darktec_void_foundry_2
+			last_building_changed = building_darktec_void_foundry_3
+			last_building_changed = building_darktec_void_foundry_4
+
+			#last_building_changed = building_darktec_void_refinery_1
+			#last_building_changed = building_darktec_void_refinery_2
+			#last_building_changed = building_darktec_void_refinery_3
+			#last_building_changed = building_darktec_void_refinery_4
+
+			#last_building_changed = building_darktec_void_research_1
+			last_building_changed = building_darktec_void_research_2
+			last_building_changed = building_darktec_void_research_3
+			last_building_changed = building_darktec_void_research_4
+
+			#last_building_changed = building_darktec_void_investigation_1
+			last_building_changed = building_darktec_void_investigation_2
+			last_building_changed = building_darktec_void_investigation_3
+			last_building_changed = building_darktec_void_investigation_4
+
+		}
+	}
+
+	immediate = {
+		owner = {
+			complete_crisis_objective = darktec_crisobj_immediate_build_and_keep_umbral_buildings
+			change_variable = {
+				which = darktec_crisobj_built_umbral_buildings
+				value = 1
+			}
+		}
+	}
+}
+
+
+#darktec_crisobj_yearly_retain_vassals
+# Fired from on_action 'on_yearly_pulse'
+event = {
+	id = darktec_crisis_objectives.40
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_country = {
+			has_ascension_perk = darktec_ap_postbaryonic
+			has_crisis_level = darktec_crisis_postbaryonic_level_1
+			is_overlord = yes
+			any_subject = {
+				exists = this
+			}
+		}
+	}
+
+	immediate = {
+		every_playable_country = {
+			if = {
+				limit = {
+					has_ascension_perk = darktec_ap_postbaryonic
+					has_crisis_level = darktec_crisis_postbaryonic_level_1
+					is_overlord = yes
+				}
+				every_subject = {
+					prev = {
+						complete_crisis_objective = darktec_crisobj_yearly_retain_vassals
+					}
+				}
+			}
+		}
+	}
+}
+
+#darktec_crisobj_yearly_retain_megastructures - excluded habitat things
+# Fired from on_action 'on_yearly_pulse'
+event = {
+	id = darktec_crisis_objectives.50
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_country = {
+			has_ascension_perk = darktec_ap_postbaryonic
+			has_crisis_level = darktec_crisis_postbaryonic_level_1
+			any_owned_megastructure = {
+				NOR = {
+					is_megastructure_type = habitat_major_orbital
+					is_megastructure_type = habitat_minor_orbital
+				}
+			}
+		}
+	}
+
+	immediate = {
+		every_playable_country = {
+			if = {
+				limit = {
+					has_ascension_perk = darktec_ap_postbaryonic
+					has_crisis_level = darktec_crisis_postbaryonic_level_1
+				}
+				every_owned_megastructure = {
+					limit = {
+						NOR = {
+							is_megastructure_type = habitat_major_orbital
+							is_megastructure_type = habitat_minor_orbital
+						}
+					}
+					prev = {
+						complete_crisis_objective = darktec_crisobj_yearly_retain_megastructures
+					}
+				}
+			}
+		}
+	}
+}
+
+#darktec_crisobj_yearly_galcom_retain_galcom_respect
+# Fired from on_action 'on_yearly_pulse'
+event = {
+	id = darktec_crisis_objectives.60
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_galactic_community_formed = yes
+		any_country = {
+			is_galactic_community_member = yes
+			has_ascension_perk = darktec_ap_postbaryonic
+			has_crisis_level = darktec_crisis_postbaryonic_level_1
+			NOT = {	# At that point they don't care
+				has_crisis_level = darktec_crisis_postbaryonic_level_5
+			}
+			OR = {
+				is_part_of_galactic_council = yes
+				is_in_breach_of_any = no
+			}
+		}
+	}
+
+	immediate = {
+		every_playable_country = {
+			limit = {
+				is_galactic_community_member = yes
+				has_ascension_perk = darktec_ap_postbaryonic
+				has_crisis_level = darktec_crisis_postbaryonic_level_1
+				NOT = {	# At that point they don't care
+					has_crisis_level = darktec_crisis_postbaryonic_level_5
+				}
+				OR = {
+					is_part_of_galactic_council = yes
+					is_in_breach_of_any = no
+				}
+			}
+			complete_crisis_objective = darktec_crisobj_yearly_galcom_retain_galcom_respect
+			if = {
+				limit = {
+					is_part_of_galactic_council = yes
+				}
+				complete_crisis_objective = darktec_crisobj_yearly_galcom_retain_galcom_respect
+			}
+		}
+	}
+}
+
+#darktec_crisobj_immediate_conquer_worlds
+# Fired from on_action 'on_planet_conquer'
+planet_event = {
+	id = darktec_crisis_objectives.70
+	hide_window = yes
+	is_triggered_only = yes
+
+	# From = Country scope (new owner)
+	# This = Planet scope
+
+	trigger = {
+		from = {
+			has_crisis_level = darktec_crisis_postbaryonic_level_4
+		}
+		OR = {
+			is_colony = yes
+			AND = {
+				exists = owner
+				owner = {
+					is_primitive = yes
+				}
+			}
+		}
+	}
+
+	immediate = {
+		from = {
+			complete_crisis_objective = darktec_crisobj_immediate_conquer_worlds
+		}
+	}
+}
+
+#darktec_crisobj_immediate_conquer_worlds - Harvested a world (destroyed colony)
+planet_event = {
+	id = darktec_crisis_objectives.71
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		from.owner = {
+			has_crisis_level = darktec_crisis_postbaryonic_level_4
+		}
+	}
+
+	immediate = {
+		from.owner = {
+			complete_crisis_objective = darktec_crisobj_immediate_conquer_worlds
+			change_variable = {
+				which = darktec_crisobj_conquered_worlds
+				value = 1
+			}
+		}
+	}
+}
+
+#darktec_crisobj_immediate_assimilate_pops - check vanilla
+country_event = {
+	id = darktec_crisis_objectives.80
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_ascension_perk = darktec_ap_postbaryonic
+		has_crisis_level = darktec_crisis_postbaryonic_level_4
+	}
+
+	immediate = {
+		complete_crisis_objective = darktec_crisobj_immediate_assimilate_pops
+	}
+	# NOTE: Handled on other places
+}
+
+#darktec_crisobj_immediate_taint_world - Via decision/etc
+country_event = {
+	id = darktec_crisis_objectives.90
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_ascension_perk = darktec_ap_postbaryonic
+		has_crisis_level = darktec_crisis_postbaryonic_level_4
+		OR = {
+			has_country_flag = darktec_entropic_transformation
+			has_country_flag = darktec_entropic_taint
+		}
+	}
+
+	immediate = {
+		complete_crisis_objective = darktec_crisobj_immediate_taint_world
+	}
+	# NOTE: Handled on other places
+}
+
+# Crisis Objective: Building Umbral Ships
+# Scope: Ship Event
+#A ship has been built
+# Root = Ship
+# From = Planet
+#on_ship_built
+ship_event = {
+	id = darktec_crisis_objectives.100
+
+	hide_window = yes
+
+	trigger = {
+		darktec_is_umbral_ship = yes
+		exists = owner
+		owner = {
+			has_ascension_perk = darktec_ap_postbaryonic
+			has_crisis_level = darktec_crisis_postbaryonic_level_2
+		}
+	}
+
+	is_triggered_only = yes
+
+	immediate = {
+		while = {
+			count = trigger:ship_size_multiplier
+			owner = {
+				complete_crisis_objective = darktec_crisobj_immediate_build_umbral_ships
+				change_variable = {
+					which = darktec_crisobj_built_umbral_ships
+					value = 1
+				}
+			}
+		}
+	}
+}
+
+# darktec_crisobj_immediate_destroy_empires
+# Event for destroyed country
+country_event = {
+	id = darktec_crisis_objectives.110
+	hide_window = yes
+	is_triggered_only = yes
+
+	# This = destroyed country
+	# From = optional, destroyer (country)
+
+	trigger = {
+		is_default_or_fallen = yes
+		exists = from
+		from = {
+			has_ascension_perk = darktec_ap_postbaryonic
+			has_crisis_level = darktec_crisis_postbaryonic_level_5
+		}
+	}
+
+	immediate = {
+		from = {
+			complete_crisis_objective = darktec_crisobj_immediate_destroy_empires
+		}
+	}
+}
+
+# Givers rewards when the country is integrated
+country_event = {
+	id = darktec_crisis_objectives.11001
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_ascension_perk = darktec_ap_postbaryonic
+		has_crisis_level = darktec_crisis_postbaryonic_level_5
+		from = { is_subject = yes }
+	}
+
+	immediate = {
+		complete_crisis_objective = darktec_crisobj_immediate_destroy_empires	
+	}
+}
+
+
+# Do not remove below v

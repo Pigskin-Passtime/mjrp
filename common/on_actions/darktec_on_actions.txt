@@ -1,0 +1,246 @@
+# common\megastructures\darktec_megastructures.txt
+
+# Authors: Rodahtnov & Zyralynn
+
+# Triggers when the game starts
+on_game_start = {
+	events = {
+		darktec_misc.1	# Post-Baryonic - Sets mod flag
+	}
+}
+
+on_game_start_country = {
+	events = {
+		darktec_misc.2	# Post-Baryonic - Removes unwanted flags if someone cheeses
+	}
+}
+
+# No scope, like on_game_start
+# Does not run when loading MP saves due to OOS concerns
+on_single_player_save_game_load = {
+	events = {
+		darktec_crisis_endings.3010	# Post-Baryonic ending - Spawns a dimensional horror somewhere in the galaxy
+	}
+}
+
+# No scope, like on_game_start
+on_monthly_pulse = {
+	events = {
+	}
+}
+
+# No scope, like on_game_start
+on_yearly_pulse = {
+	events = {
+		darktec_crisis_objectives.40	# Post-Baryonic Crisis objective - Retain Vassals
+		darktec_crisis_objectives.50	# Post-Baryonic Crisis objective - Retain Megas
+		darktec_crisis_objectives.60	# Post-Baryonic Crisis objective - Retain Galcom respect
+	}
+}
+
+# this = country
+on_monthly_pulse_country = {
+	events = {
+		darktec_misc.10					# Post-Baryonic Crisis Progression - Checks entropy levels to allow levels up or not
+		darktec_crisis_objectives.10	# Post-Baryonic Crisis objective - Checks entropy produced to give the reward (and substract it later)
+
+		darktec_mechanics.5001			# Post-Baryonic Crisis - Bypass in case an empire synth ascends so they don't lose the entrophereal trait
+	}
+}
+
+# this = country
+on_yearly_pulse_country = {
+	events = {
+		darktec_mechanics.6003			# Post-Baryonic Crisis - Void Threadware handler
+	}
+}
+
+# this = country
+on_bi_yearly_pulse_country = {
+	events = {
+		darktec_mechanics.1021			# Post-Baryonic Crisis - Saves entrophereal action dates
+		darktec_mechanics.10			# Post-Baryonic Crisis - Entrophereal action sorting (growth/assim)
+	}
+}
+
+# No scope, like on_game_start
+on_decade_pulse = {
+	events = {
+		darktec_crisis_endings.7010	# Post-Baryonic Crisis ending - The collapse accelerates
+		darktec_crisis_endings.7020	# Post-Baryonic Crisis ending - The collapse is terminal
+	}
+}
+
+#A building construction has been completed.
+# This = Planet
+on_building_complete = {
+	events = {
+		darktec_crisis.27501	# Post-Baryonic Crisis process - built first anchor
+		darktec_crisis.2101		# Post-Baryonic Crisis process - built first storage
+		darktec_crisis.40301	# Post-Baryonic Crisis process - built first portal
+
+		darktec_crisis_objectives.30	# Post-Baryonic Crisis objective - Built an umbral building
+	}
+}
+
+# A building construction has finished, replacing another building.
+# This = Planet
+on_building_replaced = {
+	events = {
+		darktec_crisis.27501	# Post-Baryonic Crisis process - built first anchor
+		darktec_crisis.2101		# Post-Baryonic Crisis process - built first storage
+		darktec_crisis.40301	# Post-Baryonic Crisis process - built first portal
+	}
+}
+
+
+# A building construction has been completed, which is an upgrade of previous building.
+# This = Planet
+on_building_upgraded = {
+	events = {
+		darktec_crisis_objectives.31	# Upgraded an umbral building
+	}
+}
+
+# Triggers country_event for the attacker upon victory (before controller is switched)
+# This = country, lead attacker
+# From = country, planet owner
+# FromFrom = planet
+# 'Attacker' is the side that "IsHostile" to the planet controller. For example: spawned monster armies are attackers, but if they win and the player attempts to retake the planet, the player is the attacker
+on_planet_attackers_win = {
+	events = {
+		# TODO event for tainting planet - DISCARDED
+	}
+}
+
+# A colony has been destroyed by bombardment. Called after the planet's colony status has been cleared
+# This = Planet
+# From = Bombarder
+on_colony_destroyed_by_bombardment = {
+	events = {
+		darktec_crisis_objectives.71	# Post-Baryonic Crisis objective - Harvested a world
+	}
+}
+
+# Planet has taken damage from orbital bombardment - Damage is applied daily
+# This = Planet
+# From = Bombarder (country)
+on_planet_bombarded = {
+	events = {
+		darktec_ships.200
+	}
+}
+
+# Executed whenever a pop is killed due to bombardment damages
+# This = Planet where the pop was bombed to death
+# From = Country which is raining down fire and brimstone
+# FromFrom = Biggest fleet bombarding the planet (the one we used the bombardment stance from)
+# local_kill_pop_amount = amount of pop killed
+on_pop_bombed_to_death = {
+	events = {
+		darktec_ships.150
+	}
+}
+
+# Scope: Ship Event
+#A ship has been built
+# Root = Ship
+# From = Planet
+on_ship_built = {
+	events = {
+		darktec_crisis.2030		# Post-Baryonic Crisis - First Umbral Ship created
+
+		darktec_crisis_objectives.100	# Post-Baryonic Crisis objective - Built an Umbral ship
+	}
+}
+
+
+# A country has increased the level of a tech, use last_increased_tech trigger to check tech and level.
+# This = Country
+on_tech_increased = {
+	events = {
+		darktec_crisis_objectives.20	# Post-Baryonic Crisis objective - Researched Technology
+	}
+}
+
+# Fired whenever a new owner is set for a planet, and the planet was aggressively conquered
+# NOTE: fired in ADDITION to on_planet_transfer
+# This = Planet scope
+# From = Country scope (new owner)
+# FromFrom = Former Owner
+on_planet_conquer = {
+	events = {
+		darktec_crisis_objectives.70	# Post-Baryonic Crisis objective - Conquered a world
+	}
+}
+
+#This = destroyed country
+#From = optional, destroyer (country)
+on_country_destroyed = {
+	events = {
+		darktec_crisis_objectives.110	# Post-Baryonic Crisis objective - Destroyed a Country
+	}
+}
+
+# A Megastructure has been built
+# Root = Country
+# From = Megastructure
+# FromFrom = System
+# FromFromFrom = Fleet
+on_megastructure_built = {
+	events = {
+		darktec_crisis.5001	# Post-Baryonic Crisis - Built the anomaly
+	}
+}
+
+# fires when a country finishes being integrated
+# This = overlord
+# From = subject
+on_subject_integrated = {
+	events = {
+		darktec_crisis_objectives.11001	# Post-Baryonic Crisis objective - Vassalized country integrated counts as destroyed
+	}
+}
+
+# Triggers when a Special Project to apply a species modification template has completed.
+# Note that this will trigger once for each combination of planet & original species.
+#
+# This = Country
+# From = Species ( Post Modification )
+# FromFrom = Species ( Original )
+# Prev = Planet
+on_modification_complete = {
+	events = {
+		darktec_crisis.2020		# Post-Baryonic Crisis - First species modified
+		darktec_mechanics.50	# Post-Baryonic Crisis - Readapts entrophereal portrait if lost
+	}
+}
+
+on_tech_increased = {
+	events = {
+		darktec_crisis.101	# Post-Baryonic Crisis - Dark matter tech researched
+	}
+}
+
+# A leader leveled up.
+# Scope = Country
+# From = Leader
+on_leader_level_up = {
+	events = {
+		darktec_mechanics.6001			# Post-Baryonic Crisis - Ingrained Entrogenomics leader handler
+	}
+}
+# A pop amount has been grown
+# This = Planet scope
+# From = Country
+# FromFrom = Pop group
+# local_pop_amount = variable of how much was grown
+#on_pop_growth = {
+#	events = {
+#		darktec_mechanics.6002			# Post-Baryonic Crisis - Veiled splicing pop effect
+#		NOTE: Removed due to the unreliability of this effect now
+#	}
+#}
+
+
+# Do not remove below v

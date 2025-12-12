@@ -1,0 +1,123 @@
+# common\inline_scripts\buildings\building_darktec_tiered_generic.txt
+
+# Authors: Rodahtnov & Zyralynn
+
+#inline_script = {
+#	script = buildings/building_darktec_tiered_generic
+#	TIER = 2
+#	CAN_BUILD = "yes"
+#	CATEGORY = "resource"
+#	BUILDING_SETS = "
+#		government
+#		urban
+#		farming
+#		mining
+#		generator
+#	"
+#	TECH_PREREQUISITES = "tech_darktec_umbral_extractors"
+#	UPGRADES_TO = "building_darktec_umbral_compressor_2"
+#	POTENTIAL = "has_technology = tech_darktec_umbral_extractors"
+#	COSTS_DARK_MATTER = "yes"
+#	HAS_UPKEEP_DARK_MATTER = "yes"
+#	COSTS_ENTROPY = "no"
+#	HAS_UPKEEP_ENTROPY = no
+#	HAS_UPKEEP_SR = no
+#	SR_UPKEEP_TYPE = energy
+#	EXTRA_TRIGGERS = "
+#	"
+#}
+
+# Dynamic building code
+	can_build = $CAN_BUILD$
+
+	base_buildtime = @darktec_generic_umbral_building_t$TIER$_building_time
+	exempt_from_ai_planet_specialization = no
+
+	category = $CATEGORY$
+
+	building_sets = {
+		$BUILDING_SETS$
+	}
+
+	prerequisites = {
+		$TECH_PREREQUISITES$
+	}
+
+	show_in_tech = $TECH_PREREQUISITES$
+
+	upgrades = {
+		$UPGRADES_TO$
+	}
+
+	potential = {
+		exists = owner
+		owner = {
+			$POTENTIAL$
+		}
+	}
+
+	allow = {
+	}
+
+	destroy_trigger = {
+		exists = owner
+		owner = {
+			NOT = {
+				$POTENTIAL$
+			}
+		}
+	}
+
+	on_destroy = {
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = @darktec_generic_umbral_building_t$TIER$_cost_base
+		}
+		cost = {
+			trigger = {
+				always = $COSTS_DARK_MATTER$
+			}
+			sr_dark_matter = @darktec_generic_umbral_building_t$TIER$_cost_dark_matter
+		}
+		cost = {
+			trigger = {
+				always = $COSTS_ENTROPY$
+			}
+			darktec_contained_entropy = @darktec_generic_umbral_building_t$TIER$_cost_entropy
+		}
+		upkeep = {
+			energy = @darktec_generic_umbral_building_t$TIER$_upkeep_energy
+		}
+		upkeep = {
+			trigger = {
+				always = $HAS_UPKEEP_DARK_MATTER$
+			}
+			sr_dark_matter = @darktec_generic_umbral_building_t$TIER$_upkeep_dark_matter
+		}
+		upkeep = {
+			trigger = {
+				always = $HAS_UPKEEP_ENTROPY$
+			}
+			darktec_contained_entropy = @darktec_generic_umbral_building_t$TIER$_upkeep_entropy
+		}
+		upkeep = {
+			trigger = {
+				always = $HAS_UPKEEP_SR$
+			}
+			$SR_UPKEEP_TYPE$ = @darktec_generic_umbral_building_t$TIER$_upkeep_sr
+		}
+	}
+
+	# Modifiers
+		# On each building for the sake of simplicity
+	# /
+
+	ai_weight_coefficient = 0
+
+	$EXTRA_TRIGGERS$
+# /
+
+# Do not remove below v

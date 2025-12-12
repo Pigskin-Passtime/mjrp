@@ -1,0 +1,193 @@
+# common\crisis_levels\darktec_crisis_levels.txt
+
+# Authors: Rodahtnov & Zyralynn
+
+darktec_crisis_postbaryonic_level_1 = {
+	# REQUIREMENTS
+	required_crisis_currency = @darktec_crisis_level_1_required_currency
+
+	# REWARDS
+	perks = {
+		menp_darktec_anchor_t1
+		menp_darktec_entropy_t1
+		menp_darktec_darkmatter_t1
+	}
+
+	on_unlock = {
+		hidden_effect = {
+			owner = {
+				begin_event_chain = { event_chain = darktec_crisis_chain target = this }
+				add_event_chain_counter = {
+					event_chain = "darktec_crisis_chain"
+					counter = "darktec_crisis_level_reached"
+					amount = 1
+				}
+				#country_event = {	# Handled via previous situation instead
+				#	id = darktec_crisis.10
+				#	days = @darktec_crisis_level_event_delay_days
+				#}
+			}
+		}
+	}
+}
+
+darktec_crisis_postbaryonic_level_2 = {
+	# REQUIREMENTS
+	allow = {
+		custom_tooltip = {
+			success_text = darktec_crisis_postbaryonic_level_2_require_enough_currency_completed
+			fail_text =	darktec_crisis_postbaryonic_level_2_require_enough_currency
+			has_country_flag = darktec_crisis_postbaryonic_level_2_unlocked
+		}
+	}
+	required_crisis_currency = @darktec_crisis_level_2_required_currency
+
+	# REWARDS
+	perks = {
+		menp_darktec_anchor_t2
+		menp_darktec_entropy_t2
+		menp_darktec_darkmatter_t2
+		menp_darktec_umbralships_t2
+	}
+
+	on_unlock = {
+		hidden_effect = {
+			owner = {
+				add_event_chain_counter = {
+					event_chain = "darktec_crisis_chain"
+					counter = "darktec_crisis_level_reached"
+					amount = 1
+				}
+				#country_event = {	# Handled by darktec_misc.10
+				#	id = darktec_crisis.20
+				#	days = @darktec_crisis_level_event_delay_days
+				#}
+			}
+		}
+	}
+}
+
+darktec_crisis_postbaryonic_level_3 = {
+	# REQUIREMENTS
+	allow = {
+		custom_tooltip = {
+			success_text = darktec_crisis_postbaryonic_level_3_require_enough_currency_completed
+			fail_text =	darktec_crisis_postbaryonic_level_3_require_enough_currency
+			has_country_flag = darktec_crisis_postbaryonic_level_3_unlocked
+		}
+	}
+	required_crisis_currency = @darktec_crisis_level_3_required_currency
+
+	# REWARDS
+	perks = {
+		menp_darktec_anchor_t3
+		menp_darktec_entropy_t3
+		menp_darktec_darkmatter_t3
+	}
+
+	on_unlock = {
+		hidden_effect = {
+			owner = {
+				add_event_chain_counter = {
+					event_chain = "darktec_crisis_chain"
+					counter = "darktec_crisis_level_reached"
+					amount = 1
+				}
+				#country_event = {	# Handled by darktec_misc.10
+				#	id = darktec_crisis.30
+				#	days = @darktec_crisis_level_event_delay_days
+				#}
+			}
+		}
+	}
+}
+
+darktec_crisis_postbaryonic_level_4 = {
+	# REQUIREMENTS
+	allow = {
+		custom_tooltip = {
+			success_text = darktec_crisis_postbaryonic_level_4_require_situation_completed
+			fail_text =	darktec_crisis_postbaryonic_level_4_require_situation
+			has_country_flag = darktec_crisis_postbaryonic_level_4_unlocked
+		}
+	}
+	required_crisis_currency = @darktec_crisis_level_4_required_currency
+
+	# REWARDS
+	perks = {
+		menp_darktec_anchor_t4
+		menp_darktec_entropy_t4
+		menp_darktec_darkmatter_t4
+		menp_darktec_umbralships_t4
+	}
+
+	on_unlock = {
+		hidden_effect = {
+			owner = {
+				add_event_chain_counter = {
+					event_chain = "darktec_crisis_chain"
+					counter = "darktec_crisis_level_reached"
+					amount = 1
+				}
+				#country_event = {	# Handled by darktec_misc.10
+				#	id = darktec_crisis.40
+				#	days = @darktec_crisis_level_event_delay_days
+				#}
+			}
+		}
+	}
+}
+
+darktec_crisis_postbaryonic_level_5 = {
+	# REQUIREMENTS
+	allow = {
+		is_subject = no
+		custom_tooltip = {
+			success_text = darktec_crisis_postbaryonic_level_5_require_situation_completed
+			fail_text =	darktec_crisis_postbaryonic_level_5_require_situation
+			has_country_flag = darktec_crisis_postbaryonic_level_5_unlocked
+		}
+	}
+	required_crisis_currency = @darktec_crisis_level_5_required_currency
+
+	# REWARDS
+	perks = {
+		menp_darktec_anchor_t5
+		menp_darktec_entropy_t5
+		menp_darktec_darkmatter_t5
+		menp_darktec_umbralships_t5
+	}
+
+	on_unlock = {
+		hidden_effect = {
+			owner = {
+				add_event_chain_counter = {
+					event_chain = "darktec_crisis_chain"
+					counter = "darktec_crisis_level_reached"
+					amount = 1
+				}
+				#country_event = {	# Handled by darktec_misc.10
+				#	id = darktec_crisis.50
+				#	days = @darktec_crisis_level_event_delay_days
+				#}
+			}
+			declare_crisis_effect = yes
+			every_playable_country = {
+				limit = {
+					is_galactic_community_member = no
+					NOT = {
+						is_same_value = owner
+						is_at_war_with = owner
+					}
+				}
+				join_war_on_side = {
+					war = event_target:crisis_war
+					side = event_target:community_war_leader
+				}
+			}
+		}
+	}
+}
+
+
+# Do not remove below v

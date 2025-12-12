@@ -1,0 +1,554 @@
+# common\megastructures\darktec_megastructures.txt
+
+# Authors: Rodahtnov & Zyralynn
+
+#Calesced Anomaly
+darktec_sphere_0 = {
+	entity = "darktec_bald_blackhole_phase_00_entity"
+	construction_entity = "darktec_bald_blackhole_phase_00_entity"
+	portrait = "GFX_megastructure_construction_background"
+	place_entity_on_planet_plane = no
+	build_type = inside_gravity_well
+
+	entity_offset = { x = 0 y = 0 }
+	build_time = 1800
+	resources = {
+		category = megastructures
+		cost = {
+			sr_dark_matter = 10000
+			darktec_contained_entropy = 20000
+		}
+
+		upkeep = {
+			darktec_contained_entropy = 5
+		}
+	}
+
+	custom_tooltip_requirements = "MEGASTRUCTURE_TOOLTIP_REQUIREMENTS_ONE_PER_COUNTRY"
+
+	prerequisites = { tech_mine_dark_matter }
+	show_prereqs = no
+
+	potential = {
+		has_crisis_level = darktec_crisis_postbaryonic_level_5
+	}
+
+	possible = {
+		hidden_trigger = {
+			exists = starbase
+			from = {
+				NOT = {
+					has_country_flag = darktec_built_sphere
+				}
+			}
+		}
+		custom_tooltip = {
+			fail_text = "requires_inside_border"
+			is_inside_border = from
+		}
+		custom_tooltip = {
+			fail_text = "requires_surveyed_system"
+			NOT = {
+				any_system_planet = {
+					is_surveyed = {
+						who = prev.from
+						status = no
+					}
+				}
+			}
+		}
+	}
+
+	#placement_rules = {
+		#always = yes
+		#planet_possible = {
+		#	custom_tooltip = {
+		#		fail_text = "must_build_around_star"
+		#		is_star = yes
+		#	}
+		#	custom_tooltip = {
+		#		fail_text = "requires_no_anomaly"
+		#		NOT = { has_anomaly = yes }
+		#	}
+		#}
+	#}
+
+	# root = system
+	# from = country
+	ai_weight = {
+		factor = 15
+
+		modifier = {
+			factor = 0.1
+			starbase = { NOT = { has_starbase_size >= starbase_starfortress } }
+		}
+
+		modifier = {
+			factor = 0.1
+			any_neighbor_system = {
+				exists = owner
+				NOT = {
+					owner = { is_same_value = from }
+				}
+			}
+		}
+	}
+
+	on_build_start = {
+	}
+	on_build_cancel = {
+	}
+	on_build_complete = {
+		from = {
+			set_country_flag = darktec_built_sphere
+		}
+		create_ambient_object = {
+			type = darktec_sphere_00_entity
+			location = fromfrom
+		}
+	}
+}
+# Following tiers are handled via situation
+
+darktec_sphere_1 = {
+	entity = "darktec_bald_blackhole_phase_01_entity"
+	construction_entity = "darktec_bald_blackhole_phase_01_entity"
+	portrait = "GFX_megastructure_construction_background"
+	place_entity_on_planet_plane = no
+	build_type = inside_gravity_well
+
+	entity_offset = { x = 0 y = 0 }
+	build_time = 1800
+	resources = {
+		category = megastructures
+		cost = {
+			sr_dark_matter = 10000
+			darktec_contained_entropy = 20000
+		}
+
+		upkeep = {
+			darktec_contained_entropy = 10
+		}
+	}
+
+	custom_tooltip_requirements = "MEGASTRUCTURE_TOOLTIP_REQUIREMENTS_DYSON_SPHERE"
+
+	#prerequisites = { "tech_dyson_sphere" }
+	prerequisites = { "tech_basic_industry" }
+
+	potential = {
+		always = no
+	}
+
+	possible = {
+		always = no
+	}
+
+	upgrade_from = {
+		darktec_sphere_0
+	}
+
+	on_build_start = {
+	}
+	on_build_cancel = {
+	}
+	on_build_complete = {
+		random_ambient_object = {
+			limit = {
+				is_ambient_object_type = darktec_sphere_00_entity
+			}
+			destroy_ambient_object = this
+		}
+		create_ambient_object = {
+			type = darktec_sphere_01_entity
+			location = fromfrom
+		}
+	}
+}
+darktec_sphere_2 = {
+	entity = "darktec_bald_blackhole_phase_02_entity"
+	construction_entity = "darktec_bald_blackhole_phase_02_entity"
+	portrait = "GFX_megastructure_construction_background"
+	place_entity_on_planet_plane = no
+	build_type = inside_gravity_well
+
+	entity_offset = { x = 0 y = 0 }
+	build_time = 1800
+	resources = {
+		category = megastructures
+		cost = {
+			sr_dark_matter = 10000
+			darktec_contained_entropy = 20000
+		}
+
+		upkeep = {
+			darktec_contained_entropy = 20
+		}
+	}
+
+	custom_tooltip_requirements = "MEGASTRUCTURE_TOOLTIP_REQUIREMENTS_DYSON_SPHERE"
+
+	#prerequisites = { "tech_dyson_sphere" }
+	prerequisites = { "tech_basic_industry" }
+
+	potential = {
+		always = no
+	}
+
+	possible = {
+		always = no
+	}
+
+	upgrade_from = {
+		darktec_sphere_1
+	}
+
+	on_build_start = {
+	}
+	on_build_cancel = {
+	}
+	on_build_complete = {
+		random_ambient_object = {
+			limit = {
+				is_ambient_object_type = darktec_sphere_01_entity
+			}
+			destroy_ambient_object = this
+		}
+		create_ambient_object = {
+			type = darktec_sphere_02_entity
+			location = fromfrom
+		}
+	}
+}
+darktec_sphere_3 = {
+	entity = "darktec_bald_blackhole_phase_03_entity"
+	construction_entity = "darktec_bald_blackhole_phase_03_entity"
+	portrait = "GFX_megastructure_construction_background"
+	place_entity_on_planet_plane = no
+	build_type = inside_gravity_well
+
+	entity_offset = { x = 0 y = 0 }
+	build_time = 1800
+	resources = {
+		category = megastructures
+		cost = {
+			sr_dark_matter = 10000
+			darktec_contained_entropy = 20000
+		}
+
+		upkeep = {
+			darktec_contained_entropy = 30
+		}
+	}
+
+	custom_tooltip_requirements = "MEGASTRUCTURE_TOOLTIP_REQUIREMENTS_DYSON_SPHERE"
+
+	#prerequisites = { "tech_dyson_sphere" }
+	prerequisites = { "tech_basic_industry" }
+
+	potential = {
+		always = no
+	}
+
+	possible = {
+		always = no
+	}
+
+	upgrade_from = {
+		darktec_sphere_2
+	}
+
+	on_build_start = {
+	}
+	on_build_cancel = {
+	}
+	on_build_complete = {
+		random_ambient_object = {
+			limit = {
+				is_ambient_object_type = darktec_sphere_02_entity
+			}
+			destroy_ambient_object = this
+		}
+		create_ambient_object = {
+			type = darktec_sphere_03_entity
+			location = fromfrom
+		}
+	}
+}
+darktec_sphere_4 = {
+	entity = "darktec_bald_blackhole_phase_04_entity"
+	construction_entity = "darktec_bald_blackhole_phase_04_entity"
+	portrait = "GFX_megastructure_construction_background"
+	place_entity_on_planet_plane = no
+	build_type = inside_gravity_well
+
+	entity_offset = { x = 0 y = 0 }
+	build_time = 1800
+	resources = {
+		category = megastructures
+		cost = {
+			sr_dark_matter = 10000
+			darktec_contained_entropy = 20000
+		}
+
+		upkeep = {
+			darktec_contained_entropy = 40
+		}
+	}
+
+	custom_tooltip_requirements = "MEGASTRUCTURE_TOOLTIP_REQUIREMENTS_DYSON_SPHERE"
+
+	#prerequisites = { "tech_dyson_sphere" }
+	prerequisites = { "tech_basic_industry" }
+
+	potential = {
+		always = no
+	}
+
+	possible = {
+		always = no
+	}
+
+	upgrade_from = {
+		darktec_sphere_3
+	}
+
+	on_build_start = {
+	}
+	on_build_cancel = {
+	}
+	on_build_complete = {
+		random_ambient_object = {
+			limit = {
+				is_ambient_object_type = darktec_sphere_03_entity
+			}
+			destroy_ambient_object = this
+		}
+		create_ambient_object = {
+			type = darktec_sphere_04_entity
+			location = fromfrom
+		}
+	}
+}
+darktec_sphere_5 = {
+	entity = "darktec_bald_blackhole_phase_05_entity"
+	construction_entity = "darktec_bald_blackhole_phase_05_entity"
+	portrait = "GFX_megastructure_construction_background"
+	place_entity_on_planet_plane = no
+	build_type = inside_gravity_well
+
+	entity_offset = { x = 0 y = 0 }
+	build_time = 1800
+	resources = {
+		category = megastructures
+		cost = {
+			sr_dark_matter = 10000
+			darktec_contained_entropy = 20000
+		}
+
+		upkeep = {
+			darktec_contained_entropy = 50
+		}
+	}
+
+	custom_tooltip_requirements = "MEGASTRUCTURE_TOOLTIP_REQUIREMENTS_DYSON_SPHERE"
+
+	#prerequisites = { "tech_dyson_sphere" }
+	prerequisites = { "tech_basic_industry" }
+
+	potential = {
+		always = no
+	}
+
+	possible = {
+		always = no
+	}
+
+	upgrade_from = {
+		darktec_sphere_4
+	}
+
+	on_build_start = {
+	}
+	on_build_cancel = {
+	}
+	on_build_complete = {
+		random_ambient_object = {
+			limit = {
+				is_ambient_object_type = darktec_sphere_04_entity
+			}
+			destroy_ambient_object = this
+		}
+		create_ambient_object = {
+			type = darktec_sphere_05_entity
+			location = fromfrom
+		}
+	}
+}
+darktec_sphere_6 = {
+	entity = "darktec_bald_blackhole_phase_06_entity"
+	construction_entity = "darktec_bald_blackhole_phase_06_entity"
+	portrait = "GFX_megastructure_construction_background"
+	place_entity_on_planet_plane = no
+	build_type = inside_gravity_well
+
+	entity_offset = { x = 0 y = 0 }
+	build_time = 1800
+	resources = {
+		category = megastructures
+		cost = {
+			sr_dark_matter = 10000
+			darktec_contained_entropy = 20000
+		}
+
+		upkeep = {
+			darktec_contained_entropy = 50
+		}
+	}
+
+	custom_tooltip_requirements = "MEGASTRUCTURE_TOOLTIP_REQUIREMENTS_DYSON_SPHERE"
+
+	#prerequisites = { "tech_dyson_sphere" }
+	prerequisites = { "tech_basic_industry" }
+
+	potential = {
+		always = no
+	}
+
+	possible = {
+		always = no
+	}
+
+	upgrade_from = {
+		darktec_sphere_5
+	}
+
+	on_build_start = {
+	}
+	on_build_cancel = {
+	}
+	on_build_complete = {
+		random_ambient_object = {
+			limit = {
+				is_ambient_object_type = darktec_sphere_05_entity
+			}
+			destroy_ambient_object = this
+		}
+		create_ambient_object = {
+			type = darktec_sphere_06_entity
+			location = fromfrom
+		}
+	}
+}
+darktec_sphere_7 = {
+	entity = "darktec_bald_blackhole_phase_07_entity"
+	construction_entity = "darktec_bald_blackhole_phase_07_entity"
+	portrait = "GFX_megastructure_construction_background"
+	place_entity_on_planet_plane = no
+	build_type = inside_gravity_well
+
+	entity_offset = { x = 0 y = 0 }
+	build_time = 1800
+	resources = {
+		category = megastructures
+		cost = {
+			sr_dark_matter = 10000
+			darktec_contained_entropy = 20000
+		}
+
+		upkeep = {
+			darktec_contained_entropy = 50
+		}
+	}
+
+	custom_tooltip_requirements = "MEGASTRUCTURE_TOOLTIP_REQUIREMENTS_DYSON_SPHERE"
+
+	#prerequisites = { "tech_dyson_sphere" }
+	prerequisites = { "tech_basic_industry" }
+
+	potential = {
+		always = no
+	}
+
+	possible = {
+		always = no
+	}
+
+	upgrade_from = {
+		darktec_sphere_6
+	}
+
+	on_build_start = {
+	}
+	on_build_cancel = {
+	}
+	on_build_complete = {
+		random_ambient_object = {
+			limit = {
+				is_ambient_object_type = darktec_sphere_06_entity
+			}
+			destroy_ambient_object = this
+		}
+		create_ambient_object = {
+			type = darktec_sphere_07_entity
+			location = fromfrom
+		}
+	}
+}
+darktec_sphere_8 = {
+	entity = "darktec_bald_blackhole_phase_08_entity"
+	construction_entity = "darktec_bald_blackhole_phase_08_entity"
+	portrait = "GFX_megastructure_construction_background"
+	place_entity_on_planet_plane = no
+	build_type = inside_gravity_well
+
+	entity_offset = { x = 0 y = 0 }
+	build_time = 1800
+	resources = {
+		category = megastructures
+		cost = {
+			sr_dark_matter = 10000
+			darktec_contained_entropy = 20000
+		}
+
+		upkeep = {
+			darktec_contained_entropy = 50
+		}
+	}
+
+	custom_tooltip_requirements = "MEGASTRUCTURE_TOOLTIP_REQUIREMENTS_DYSON_SPHERE"
+
+	#prerequisites = { "tech_dyson_sphere" }
+	prerequisites = { "tech_basic_industry" }
+
+	potential = {
+		always = no
+	}
+
+	possible = {
+		always = no
+	}
+
+	upgrade_from = {
+		darktec_sphere_7
+	}
+
+	on_build_start = {
+	}
+	on_build_cancel = {
+	}
+	on_build_complete = {
+		random_ambient_object = {
+			limit = {
+				is_ambient_object_type = darktec_sphere_07_entity
+			}
+			destroy_ambient_object = this
+		}
+		create_ambient_object = {
+			type = darktec_sphere_08_entity
+			location = fromfrom
+		}
+	}
+}
+
+# Do not remove below v

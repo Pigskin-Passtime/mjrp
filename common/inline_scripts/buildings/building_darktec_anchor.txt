@@ -1,0 +1,134 @@
+# common\inline_scripts\buildings\building_darktec_anchor.txt
+
+# Authors: Rodahtnov & Zyralynn
+
+
+#inline_script = {
+#	script = buildings/building_darktec_anchor
+#	CAN_BUILD = "yes"
+#	TIER = 1
+#	CATEGORY = "government"
+#	BUILDING_SETS = "
+#		government
+#		urban
+#		research
+#		industrial
+#		foundry
+#		factory
+#	"
+#	UPGRADES_TO = "building_darktec_anchor_2"
+#	POTENTIAL = "
+#	"
+#	COSTS_DARK_MATTER = no
+#	LOCAL_UMBRAL_BOOST = "no"
+#	EXTRA_TRIGGERS = "
+#	"
+#}
+
+# Dynamic building code
+	can_build = $CAN_BUILD$
+	base_buildtime = @darktec_anchor_t$TIER$_building_time
+	exempt_from_ai_planet_specialization = no
+
+	category = $CATEGORY$
+
+	building_sets = {
+		$BUILDING_SETS$
+	}
+
+	upgrades = {
+		$UPGRADES_TO$
+	}
+
+	potential = {
+		exists = owner
+		owner = {
+			$POTENTIAL$
+		}
+	}
+
+	allow = {
+	}
+
+	destroy_trigger = {
+		exists = owner
+		owner = {
+			NOT = {
+				$POTENTIAL$
+			}
+		}
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = @darktec_anchor_t$TIER$_cost_minerals
+		}
+		cost = {
+			trigger = {
+				always = $COSTS_DARK_MATTER$
+			}
+			sr_dark_matter = @darktec_anchor_t$TIER$_cost_dark_matter
+		}
+		upkeep = {
+			energy = @darktec_anchor_t$TIER$_upkeep_energy
+		}
+		produces = {	# Dark matter
+			trigger = {
+				owner  = {
+					has_crisis_level = darktec_crisis_postbaryonic_level_3
+				}
+			}
+			sr_dark_matter = @darktec_anchor_t$TIER$_produce_dark_matter
+			mult = value:darktec_umbral_building_scaling_value
+		}
+		produces = {	# Entropy
+			trigger = {
+				exists = owner
+				owner  = {
+					OR  = {
+						has_crisis_level = darktec_crisis_postbaryonic_level_1
+						has_country_flag = darktec_can_build_anchors
+					}
+				}
+			}
+			darktec_contained_entropy = @darktec_anchor_t$TIER$_produce_entropy
+			mult = value:darktec_umbral_building_scaling_value
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner  = {
+				has_crisis_level = darktec_crisis_postbaryonic_level_4
+			}
+		}
+		modifier = {
+			mod_darktec_umbral_boost = @darktec_anchor_t$TIER$_local_multiplier
+		}
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			exists = owner
+			owner  = {
+				has_crisis_level = darktec_crisis_postbaryonic_level_5
+			}
+		}
+		modifier = {
+			mod_darktec_umbral_boost = @darktec_anchor_t$TIER$_global_multiplier
+		}
+	}
+
+	# Jobs
+		inline_script = {
+			script = jobs/physicists_add
+			AMOUNT = @darktec_anchor_t$TIER$_physicists_jobs_add 
+		}
+	# /
+
+	ai_weight_coefficient = 0
+# /
+
+# Do not remove below v

@@ -1,0 +1,177 @@
+# common\crisis_objectives\darktec_crisis_objectives.txt
+
+# Authors: Rodahtnov & Zyralynn
+
+# Handled by darktec_crisis_objectives.xx
+darktec_crisobj_monthly_extract_entropy = {	# darktec_crisis_objectives.10
+	reward = {
+		base = 0
+		add = darktec_entropy_from_income
+		round = yes 							#we don't want 3.124 resource
+		min = 0								#just in case
+	}
+	recurring = yes
+}
+
+darktec_crisobj_immediate_research_physics_technologies = {	# darktec_crisis_objectives.20
+	reward = {
+		base = 200
+		complex_trigger_modifier = { #subtract 10 for each playable country that exists
+			trigger = count_playable_country
+			mode = subtract
+			mult = 10
+		}
+		round_to = 5	#we want a solid number
+		min = 20		#and we don't want less than 50
+	}
+}
+
+darktec_crisobj_immediate_build_and_keep_umbral_buildings = {	# darktec_crisis_objectives.30
+	reward = {
+		base = 10
+		complex_trigger_modifier = { #subtract 1 for each playable country that exists
+			trigger = count_playable_country
+			mode = subtract
+			mult = 2
+		}
+		round = yes
+		min = 5
+	}
+}
+
+darktec_crisobj_yearly_retain_vassals = {	# darktec_crisis_objectives.40
+	reward = {
+		base = 50
+		complex_trigger_modifier = { #subtract 2.5 for each playable country that exists
+			trigger = count_playable_country
+			mode = subtract
+			mult = 2.5
+		}
+		round_to = 5 	#we want a solid number
+		min = 10 		#and we don't want less than 10
+	}
+	recurring = yes
+}
+
+
+darktec_crisobj_yearly_retain_megastructures = {	# darktec_crisis_objectives.50
+	potential = {
+		has_utopia = yes
+	}
+	reward = {
+		base = 50
+		complex_trigger_modifier = { #subtract 2 for each playable country that exists
+			trigger = count_playable_country
+			mode = subtract
+			mult = 2
+		}
+		round_to = 10 	#we want a solid number
+		min = 10		#and we don't want less than 200
+	}
+	recurring = yes
+}
+
+
+darktec_crisobj_yearly_galcom_retain_galcom_respect = {	# darktec_crisis_objectives.60
+	potential = {
+		has_federations_dlc = yes
+		NOT = {
+			has_crisis_level = darktec_crisis_postbaryonic_level_5
+		}
+	}
+	reward = {
+		base = 100
+		complex_trigger_modifier = { #subtract 2.5 for each playable country that exists
+			trigger = count_playable_country
+			mode = subtract
+			mult = 2.5
+		}
+		round_to = 10 	#we want a solid number
+		min = 50 		#and we don't want less than 50
+	}
+	recurring = yes
+}
+
+darktec_crisobj_immediate_conquer_worlds = {	# darktec_crisis_objectives.70
+	potential = {
+		has_crisis_level = darktec_crisis_postbaryonic_level_4
+	}
+	reward = {
+		base = 100000
+		divide = trigger:num_galaxy_systems 	#on huge, this is 100. On smallest, it is 500
+		complex_trigger_modifier = { 			#fewer worlds => more resource from taking one
+			trigger = check_galaxy_setup_value
+			parameters = { setting = habitable_worlds_scale }
+			mode = divide
+		}
+		round_to = 50 								#we don't want 127.5 resource
+		min = 100									#just in case
+	}
+}
+
+darktec_crisobj_immediate_assimilate_pops = {	# darktec_crisis_objectives.80
+	potential = {
+		OR = {
+			has_country_flag = darktec_entropic_transformation
+			has_country_flag = darktec_entropic_taint
+		}
+	}
+	reward = {
+		base = 0
+		add = darktec_crisobj_assimilated_pops
+		round = yes 							#we don't want 3.124 resource
+		min = 0								#just in case
+	}
+	recurring = yes
+}
+
+darktec_crisobj_immediate_taint_world = {	# darktec_crisis_objectives.90
+	potential = {
+		OR = {
+			has_country_flag = darktec_entropic_transformation
+			has_country_flag = darktec_entropic_taint
+		}
+	}
+	reward = {
+		base = 0
+		add = darktec_crisobj_assimilated_pops
+		round = yes 							#we don't want 3.124 resource
+		min = 0								#just in case
+	}
+	recurring = yes
+}
+
+darktec_crisobj_immediate_build_umbral_ships = {	# darktec_crisis_objectives.100
+	potential = {
+		has_crisis_level = darktec_crisis_postbaryonic_level_2
+	}
+	reward = {
+		base = 50
+		complex_trigger_modifier = {
+			trigger = count_playable_country
+			mode = subtract
+			mult = 0.5
+		}
+		round_to = 5
+		min = 10
+	}
+}
+
+darktec_crisobj_immediate_destroy_empires = {	# darktec_crisis_objectives.110
+	potential = {
+		has_crisis_level = darktec_crisis_postbaryonic_level_4
+	}
+	reward = {
+		base = 500
+		complex_trigger_modifier = { #subtract 25 for each playable country that exists
+			trigger = count_playable_country
+			mode = subtract
+			mult = 25
+		}
+		round_to = 50 	#we want a solid number
+		min = 100 		#and we don't want less than 100
+	}
+}
+
+
+# Do not remove below v

@@ -1,0 +1,74 @@
+# common\inline_scripts\buildings\building_darktec_storage.txt
+
+# Authors: Rodahtnov & Zyralynn
+
+# Dynamic building code
+	can_build = $CAN_BUILD$
+	base_buildtime = @darktec_anchor_t$TIER$_building_time
+	exempt_from_ai_planet_specialization = no
+
+	category = $CATEGORY$
+
+	building_sets = {
+		$BUILDING_SETS$
+	}
+
+	upgrades = {
+		$UPGRADES_TO$
+	}
+
+	potential = {
+		exists = owner
+		owner = {
+			$POTENTIAL$
+		}
+	}
+
+	allow = {
+	}
+
+	destroy_trigger = {
+		exists = owner
+		owner = {
+			NOT = {
+				$POTENTIAL$
+			}
+		}
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = @b1_minerals
+		}
+		upkeep = {
+			energy = @b1_upkeep
+		}
+		produces = {	# Dark matter
+			trigger = {
+				always = yes
+			}
+			sr_dark_matter = @darktec_storage_t$TIER$_produce_dark_matter
+			mult = value:darktec_silo_dm_scaling_value
+		}
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			always = yes
+		}
+		modifier = {
+			country_resource_max_sr_dark_matter_add = $MAX_STORAGE$
+			country_resource_max_darktec_contained_entropy_add = $MAX_STORAGE$
+		}
+	}
+
+	inline_script = {
+		script = jobs/researchers_add
+		AMOUNT = @darktec_generic_umbral_building_t$TIER$_jobs_static_researchers
+	}
+
+	ai_weight_coefficient = 0
+# /
+
+# Do not remove below v

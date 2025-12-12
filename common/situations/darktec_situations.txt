@@ -1,0 +1,786 @@
+# common\situations\darktec_situations.txt
+
+# Authors: Rodahtnov & Zyralynn
+
+situation_darktec_intro = {
+	picture = GFX_evt_darktec_entropy
+	# complete_icon_frame = GFX_situation_outcome_frame_blue
+	# complete_icon = GFX_situation_outcome_unknown
+	progress_direction = monodirectional
+	initial_progress = 0
+
+	desc = {
+		trigger = {
+			success_text = {
+				owner = {
+					NOR = {
+						has_country_flag = darktec_situation_focus_economy
+						has_country_flag = darktec_situation_focus_warfare
+						has_country_flag = darktec_situation_focus_applications
+					}
+				}
+				text = situation_darktec_intro_desc_fallback
+			}
+			success_text = {
+				owner = {
+					has_country_flag = darktec_situation_focus_economy
+				}
+				text = situation_darktec_intro_desc_economy
+			}
+			success_text = {
+				owner = {
+					has_country_flag = darktec_situation_focus_warfare
+				}
+				text = situation_darktec_intro_desc_warfare
+			}
+			success_text = {
+				owner = {
+					has_country_flag = darktec_situation_focus_applications
+				}
+				text = situation_darktec_intro_desc_applications
+			}
+		}
+	}
+
+	on_monthly = {
+		events = {
+		}
+	}
+	on_start = {
+		# just in case
+		set_situation_locked = no
+	}
+	on_progress_complete = {
+		custom_tooltip = situation_darktec_intro_on_progress_complete
+		hidden_effect = {
+			situation_event = {
+				id = darktec_crisis.2100
+			}
+		}
+	}
+	monthly_progress = {
+		base = 0
+		modifier = {
+			add = 5
+			desc = situation_darktec_intro_approach_economy
+			hidden_trigger = {
+				current_situation_approach = situation_darktec_intro_approach_economy
+			}
+		}
+		modifier = {
+			add = 5
+			desc = situation_darktec_intro_approach_warfare
+			hidden_trigger = {
+				current_situation_approach = situation_darktec_intro_approach_warfare
+			}
+		}
+		modifier = {
+			add = 5
+			desc = situation_darktec_intro_approach_applications
+			hidden_trigger = {
+				current_situation_approach = situation_darktec_intro_approach_applications
+			}
+		}
+		modifier = {
+			add = -5
+			desc = situation_darktec_intro_please_build_anchor
+			hidden_trigger = {
+				owner = {
+					has_country_flag = darktec_please_build_anchor
+				}
+			}
+		}
+	}
+
+	stages = {
+		situation_darktec_intro_stage_1 = {	# 0-25
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_green
+			end = 25
+			custom_tooltip = situation_darktec_intro_stage_1_tooltip
+		}
+		situation_darktec_intro_stage_2 = {	# 25-50
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_green
+			end = 50
+			custom_tooltip = situation_darktec_intro_stage_2_tooltip
+			on_first_enter = {
+				hidden_effect = {
+					situation_event = {
+						id = darktec_crisis.225
+					}
+				}
+			}
+		}
+		situation_darktec_intro_stage_3 = {	# 50-75
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_blue
+			end = 75
+			custom_tooltip = situation_darktec_intro_stage_3_tooltip
+			on_first_enter = {
+				hidden_effect = {
+					situation_event = {
+						id = darktec_crisis.250
+					}
+				}
+			}
+		}
+		situation_darktec_intro_stage_4 = {	# 75-100
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_magenta
+			end = 100
+			custom_tooltip = situation_darktec_intro_stage_4_tooltip
+			on_first_enter = {
+				hidden_effect = {
+					situation_event = {
+						id = darktec_crisis.275
+					}
+				}
+			}
+		}
+	}
+
+	approach = {
+		name = situation_darktec_intro_approach_economy
+		icon = GFX_situation_approach_balance_sheet
+		icon_background = GFX_situation_approach_bg_green
+		on_select = {
+			custom_tooltip = situation_darktec_intro_approach_economy_tooltip
+		}
+		default = yes
+
+		allow = {
+			hidden_trigger = {
+				owner = {
+					has_country_flag = darktec_crisis_focus_economy
+				}
+			}
+		}
+		potential = {	# Settled by darktec_crisis.250
+			hidden_trigger = {
+				owner = {
+					has_country_flag = darktec_crisis_focus_economy
+				}
+			}
+		}
+	}
+	approach = {
+		name = situation_darktec_intro_approach_warfare
+		icon = GFX_situation_approach_fleet
+		icon_background = GFX_situation_approach_bg_green
+		on_select = {
+			custom_tooltip = situation_darktec_intro_approach_warfare_tooltip
+		}
+
+		allow = {
+			hidden_trigger = {
+				owner = {
+					has_country_flag = darktec_crisis_focus_warfare
+				}
+			}
+		}
+		potential = {	# Settled by darktec_crisis.250
+			hidden_trigger = {
+				owner = {
+					has_country_flag = darktec_crisis_focus_warfare
+				}
+			}
+		}
+	}
+	approach = {
+		name = situation_darktec_intro_approach_applications
+		icon = GFX_situation_approach_synthesize
+		icon_background = GFX_situation_approach_bg_green
+		on_select = {
+			custom_tooltip = situation_darktec_intro_approach_applications_tooltip
+		}
+
+		allow = {
+			hidden_trigger = {
+				owner = {
+					has_country_flag = darktec_crisis_focus_applications
+				}
+			}
+		}
+		potential = {	# Settled by darktec_crisis.250
+			hidden_trigger = {
+				owner = {
+					has_country_flag = darktec_crisis_focus_applications
+				}
+			}
+		}
+	}
+}
+
+situation_darktec_transformation = {
+	picture = GFX_evt_darktec_transformation
+	# complete_icon_frame = GFX_situation_outcome_frame_blue
+	# complete_icon = GFX_situation_outcome_unknown
+	progress_direction = bidirectional
+	initial_progress = 100
+
+	desc = {
+		trigger = {
+			success_text = {
+				current_situation_approach = situation_darktec_transformation_approach_transformation
+				text = situation_darktec_transformation_desc_transformation
+			}
+			success_text = {
+				current_situation_approach = situation_darktec_transformation_approach_taint
+				text = situation_darktec_transformation_desc_taint
+			}
+		}
+	}
+
+	on_monthly = {
+		events = {
+		}
+	}
+	on_start = {
+		# just in case
+		set_situation_locked = no
+	}
+	on_fail = {	# Taint
+		custom_tooltip = situation_darktec_transformation_on_fail
+		hidden_effect = {
+			situation_event = {
+				id = darktec_crisis.40001
+			}
+		}
+	}
+	on_progress_complete = {	# Transformation
+		custom_tooltip = situation_darktec_transformation_on_progress_complete
+		hidden_effect = {
+			situation_event = {
+				id = darktec_crisis.40201
+			}
+		}
+	}
+	monthly_progress = {
+		base = 0
+		modifier = {
+			add = 5
+			desc = situation_darktec_transformation_approach_transformation
+			current_situation_approach = situation_darktec_transformation_approach_transformation
+		}
+		modifier = {
+			add = -5
+			desc = situation_darktec_transformation_approach_taint
+			current_situation_approach = situation_darktec_transformation_approach_taint
+		}
+	}
+
+	stages = {
+		situation_darktec_transformation_stage_minus_5 = {	# 0-10
+			icon = GFX_situation_stage_5
+			icon_background = GFX_situation_stage_frame_red
+			end = 10
+			custom_tooltip = situation_darktec_transformation_stage_minus_5_tooltip
+			on_first_enter = {
+				hidden_effect = {
+					situation_event = {
+						id = darktec_crisis.40010
+					}
+				}
+			}
+		}
+		situation_darktec_transformation_stage_minus_4 = {	# 10-30
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_red
+			end = 30
+			custom_tooltip = situation_darktec_transformation_stage_minus_4_tooltip
+			on_first_enter = {
+				hidden_effect = {
+					situation_event = {
+						id = darktec_crisis.40030
+					}
+				}
+			}
+		}
+		situation_darktec_transformation_stage_minus_3 = {	# 30-50
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_magenta
+			end = 50
+			custom_tooltip = situation_darktec_transformation_stage_minus_3_tooltip
+			on_first_enter = {
+				hidden_effect = {
+					situation_event = {
+						id = darktec_crisis.40050
+					}
+				}
+			}
+		}
+		situation_darktec_transformation_stage_minus_2 = {	# 50-80
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_blue
+			end = 80
+			custom_tooltip = situation_darktec_transformation_stage_minus_2_tooltip
+			on_first_enter = {
+				hidden_effect = {
+					situation_event = {
+						id = darktec_crisis.40080
+					}
+				}
+			}
+		}
+		situation_darktec_transformation_stage_1 = {	# 80-120
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_green
+			end = 120
+			custom_tooltip = situation_darktec_transformation_stage_1_tooltip
+		}
+		situation_darktec_transformation_stage_2 = {	# 120-150
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_blue
+			end = 150
+			custom_tooltip = situation_darktec_transformation_stage_2_tooltip
+			on_first_enter = {
+				hidden_effect = {
+					situation_event = {
+						id = darktec_crisis.40120
+					}
+				}
+			}
+		}
+		situation_darktec_transformation_stage_3 = {	# 150-180
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_magenta
+			end = 170
+			custom_tooltip = situation_darktec_transformation_stage_3_tooltip
+			on_first_enter = {
+				hidden_effect = {
+					situation_event = {
+						id = darktec_crisis.40150
+					}
+				}
+			}
+		}
+		situation_darktec_transformation_stage_4 = {	# 170-190
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_red
+			end = 190
+			custom_tooltip = situation_darktec_transformation_stage_4_tooltip
+			on_first_enter = {
+				hidden_effect = {
+					situation_event = {
+						id = darktec_crisis.40170
+					}
+				}
+			}
+		}
+		situation_darktec_transformation_stage_5 = {	# 190-200
+			icon = GFX_situation_stage_5
+			icon_background = GFX_situation_stage_frame_red
+			end = 200
+			custom_tooltip = situation_darktec_transformation_stage_5_tooltip
+			on_first_enter = {
+				hidden_effect = {
+					situation_event = {
+						id = darktec_crisis.40190
+					}
+				}
+			}
+		}
+	}
+
+	approach = {
+		name = situation_darktec_transformation_approach_transformation
+		icon = GFX_situation_approach_dark_matter
+		icon_background = GFX_situation_approach_bg_red
+		on_select = {
+			custom_tooltip = situation_darktec_transformation_approach_transformation_tooltip
+		}
+		default = yes
+	}
+
+	approach = {
+		name = situation_darktec_transformation_approach_taint
+		icon = GFX_situation_approach_dark_matter
+		icon_background = GFX_situation_approach_bg_red
+		on_select = {
+			custom_tooltip = situation_darktec_transformation_approach_taint_tooltip
+		}
+	}
+}
+
+situation_darktec_sphere = {
+	picture = GFX_evt_darktec_entropy
+	# complete_icon_frame = GFX_situation_outcome_frame_blue
+	# complete_icon = GFX_situation_outcome_unknown
+	progress_direction = monodirectional
+	initial_progress = 0
+
+	desc = {
+		trigger = {
+			hidden_trigger = {
+				always = yes
+			}
+			success_text = {
+				text = situation_darktec_sphere_desc
+			}
+		}
+	}
+
+	on_monthly = {
+		events = {
+		}
+	}
+	on_start = {
+		# just in case
+		set_situation_locked = no
+		hidden_effect = {
+			#To avoid error logs
+			set_variable = {
+				which = situation_darktec_sphere_dark_matter_upkeep
+				value = 0
+			}
+			set_variable = {
+				which = situation_darktec_sphere_entropy_upkeep
+				value = 0
+			}
+		}
+	}
+	on_fail = {
+		custom_tooltip = situation_darktec_sphere_on_fail
+		# cannot be failed for now
+		hidden_effect = {
+			destroy_situation = this
+		}
+	}
+	on_progress_complete = {	# Crisis win
+		custom_tooltip = situation_darktec_sphere_on_progress_complete
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = darktec_crisis.100
+				}
+			}
+		}
+	}
+	monthly_progress = {
+		base = 3
+		modifier = {
+			mult = 0.5
+			desc = situation_darktec_sphere_entropic_delay
+			has_situation_flag = situation_darktec_sphere_entropic_delay
+		}
+		modifier = {
+			mult = 1.5
+			desc = situation_darktec_sphere_entropic_haste
+			has_situation_flag = situation_darktec_sphere_entropic_haste
+		}
+	}
+
+	stages = {
+		situation_darktec_sphere_stage_1 = {	# 000-100
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_magenta
+			end = 100
+			custom_tooltip = situation_darktec_sphere_stage_1_tooltip
+		}
+		situation_darktec_sphere_stage_2 = {	# 100-200
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_magenta
+			end = 200
+			custom_tooltip = situation_darktec_sphere_stage_2_tooltip
+			on_first_enter = {
+				hidden_effect = {
+					situation_event = {
+						id = darktec_crisis.55010
+					}
+				}
+			}
+		}
+		situation_darktec_sphere_stage_3 = {	# 200-300
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_magenta
+			end = 300
+			custom_tooltip = situation_darktec_sphere_stage_3_tooltip
+			on_first_enter = {
+				hidden_effect = {
+					situation_event = {
+						id = darktec_crisis.55020
+					}
+				}
+			}
+		}
+		situation_darktec_sphere_stage_4 = {	# 300-400
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_magenta
+			end = 400
+			custom_tooltip = situation_darktec_sphere_stage_4_tooltip
+			on_first_enter = {
+				hidden_effect = {
+					situation_event = {
+						id = darktec_crisis.55030
+					}
+				}
+			}
+		}
+		situation_darktec_sphere_stage_5 = {	# 400-500
+			icon = GFX_situation_stage_5
+			icon_background = GFX_situation_stage_frame_magenta
+			end = 500
+			custom_tooltip = situation_darktec_sphere_stage_5_tooltip
+			on_first_enter = {
+				hidden_effect = {
+					situation_event = {
+						id = darktec_crisis.55040
+					}
+				}
+			}
+		}
+		situation_darktec_sphere_stage_6 = {	# 500-600
+			icon = GFX_situation_stage_6
+			icon_background = GFX_situation_stage_frame_magenta
+			end = 600
+			custom_tooltip = situation_darktec_sphere_stage_6_tooltip
+			on_first_enter = {
+				hidden_effect = {
+					situation_event = {
+						id = darktec_crisis.55050
+					}
+				}
+			}
+		}
+		situation_darktec_sphere_stage_7 = {	# 600-700
+			icon = GFX_situation_stage_7
+			icon_background = GFX_situation_stage_frame_magenta
+			end = 700
+			custom_tooltip = situation_darktec_sphere_stage_7_tooltip
+			on_first_enter = {
+				hidden_effect = {
+					situation_event = {
+						id = darktec_crisis.55060
+					}
+				}
+			}
+		}
+		situation_darktec_sphere_stage_8 = {	# 700-800
+			icon = GFX_situation_stage_8
+			icon_background = GFX_situation_stage_frame_magenta
+			end = 800
+			custom_tooltip = situation_darktec_sphere_stage_8_tooltip
+			on_first_enter = {
+				hidden_effect = {
+					situation_event = {
+						id = darktec_crisis.55070
+					}
+				}
+			}
+		}
+		situation_darktec_sphere_stage_9 = {	# 800-900
+			icon = GFX_situation_stage_9
+			icon_background = GFX_situation_stage_frame_magenta
+			end = 900
+			custom_tooltip = situation_darktec_sphere_stage_9_tooltip
+			on_first_enter = {
+				hidden_effect = {
+					situation_event = {
+						id = darktec_crisis.55080
+					}
+				}
+			}
+		}
+		situation_darktec_sphere_stage_10 = {	# 900-1000
+			icon = GFX_situation_stage_10
+			icon_background = GFX_situation_stage_frame_magenta
+			end = 1000
+			custom_tooltip = situation_darktec_sphere_stage_10_tooltip
+		}
+	}
+
+	approach = {
+		name = situation_darktec_sphere_approach_standard
+		icon = GFX_situation_approach_dark_matter
+		icon_background = GFX_situation_approach_bg_red
+		on_select = {
+			custom_tooltip = situation_darktec_sphere_approach_standard_tooltip
+		}
+		default = yes
+		resources = {
+			category = situations
+			# DM
+			upkeep = {
+				trigger = {
+					check_variable = {
+						which = situation_darktec_sphere_dark_matter_upkeep
+						value = 1
+					}
+				}
+				sr_dark_matter = 100
+			}
+			upkeep = {
+				trigger = {
+					check_variable = {
+						which = situation_darktec_sphere_dark_matter_upkeep
+						value = 2
+					}
+				}
+				sr_dark_matter = 200
+			}
+			upkeep = {
+				trigger = {
+					check_variable = {
+						which = situation_darktec_sphere_dark_matter_upkeep
+						value >= 3
+					}
+				}
+				sr_dark_matter = 400
+			}
+			# Entropy
+			upkeep = {
+				trigger = {
+					check_variable = {
+						which = situation_darktec_sphere_entropy_upkeep
+						value = 1
+					}
+				}
+				darktec_contained_entropy = 50
+			}
+			upkeep = {
+				trigger = {
+					check_variable = {
+						which = situation_darktec_sphere_entropy_upkeep
+						value = 2
+					}
+				}
+				darktec_contained_entropy = 100
+			}
+			upkeep = {
+				trigger = {
+					check_variable = {
+						which = situation_darktec_sphere_entropy_upkeep
+						value >= 3
+					}
+				}
+				darktec_contained_entropy = 200
+			}
+		}
+	}
+}
+
+# Deficit of entropy - leads to a lose
+situation_darktec_entropy_deficit = {	# TODO CODE
+	picture = GFX_evt_darktec_entropy
+	# complete_icon_frame = GFX_situation_outcome_frame_blue
+	# complete_icon = GFX_situation_outcome_unknown
+	progress_direction = monodirectional
+	initial_progress = 0
+
+	desc = {
+		trigger = {
+			success_text = {
+				hidden_trigger = {
+					always = yes
+				}
+				text = situation_darktec_entropy_deficit_desc
+			}
+		}
+	}
+
+	on_monthly = {
+		events = {
+		}
+	}
+	on_start = {
+		# just in case
+		set_situation_locked = no
+	}
+	on_progress_complete = {
+		custom_tooltip = situation_darktec_entropy_deficit_on_progress_complete
+		hidden_effect = {
+			situation_event = {
+				id = darktec_crisis.2100
+			}
+		}
+	}
+	monthly_progress = {
+		base = 5
+		# 20 months?
+	}
+
+	stages = {
+		situation_darktec_entropy_deficit_stage_1 = {	# 0-25
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_green
+			end = 25
+			custom_tooltip = situation_darktec_entropy_deficit_stage_1_tooltip
+		}
+		situation_darktec_entropy_deficit_stage_2 = {	# 25-50
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_green
+			end = 50
+			custom_tooltip = situation_darktec_entropy_deficit_stage_2_tooltip
+			on_first_enter = {
+				hidden_effect = {
+					situation_event = {
+						id = darktec_crisis.225
+					}
+				}
+			}
+		}
+		situation_darktec_entropy_deficit_stage_3 = {	# 50-75
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_blue
+			end = 75
+			custom_tooltip = situation_darktec_entropy_deficit_stage_3_tooltip
+			on_first_enter = {
+				hidden_effect = {
+					situation_event = {
+						id = darktec_crisis.250
+					}
+				}
+			}
+		}
+		situation_darktec_entropy_deficit_stage_4 = {	# 75-100
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_magenta
+			end = 100
+			custom_tooltip = situation_darktec_entropy_deficit_stage_4_tooltip
+			on_first_enter = {
+				hidden_effect = {
+					situation_event = {
+						id = darktec_crisis.275
+					}
+				}
+			}
+		}
+	}
+
+	approach = {
+		name = situation_darktec_entropy_deficit_approach_economy
+		icon = GFX_situation_approach_balance_sheet
+		icon_background = GFX_situation_approach_bg_green
+		on_select = {
+			custom_tooltip = situation_darktec_entropy_deficit_approach_economy_tooltip
+		}
+		default = yes
+
+		allow = {
+			hidden_trigger = {
+				owner = {
+					NOR = {
+						#has_country_flag = darktec_situation_focus_economy
+						has_country_flag = darktec_situation_focus_warfare
+						has_country_flag = darktec_situation_focus_applications
+					}
+				}
+			}
+		}
+		potential = {	# Settled by darktec_crisis.250
+			hidden_trigger = {
+				owner = {
+					NOR = {
+						#has_country_flag = darktec_crisis_focus_economy
+						has_country_flag = darktec_crisis_focus_warfare
+						has_country_flag = darktec_crisis_focus_applications
+					}
+				}
+			}
+		}
+	}
+}
+
+
+# Do not remove below v

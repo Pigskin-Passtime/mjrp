@@ -1,0 +1,7257 @@
+# events\darktec_crisis_events.txt
+
+# Authors: Rodahtnov & Zyralynn
+
+namespace = darktec_crisis
+
+# Picked the perk
+country_event = {
+	id = darktec_crisis.1
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.1.name"
+	# Descs
+		desc = {
+			trigger = {
+				is_robot_empire = no
+				is_hive_empire = no
+				has_technology = tech_mine_dark_matter
+			}
+			text = darktec_crisis.1.desc.regular
+		}
+		desc = {
+			trigger = {
+				is_robot_empire = yes
+				is_gestalt = no
+				has_technology = tech_mine_dark_matter
+			}
+			text = darktec_crisis.1.desc.robotic
+		}
+		desc = {
+			trigger = {
+				is_hive_empire = yes
+					has_technology = tech_mine_dark_matter
+			}
+			text = darktec_crisis.1.desc.hive
+		}
+		desc = {
+			trigger = {
+				is_machine_empire = yes
+					has_technology = tech_mine_dark_matter
+			}
+			text = darktec_crisis.1.desc.machine
+		}
+
+		# Notech
+		desc = {
+			trigger = {
+				is_robot_empire = no
+				is_hive_empire = no
+				NOT = {
+					has_technology = tech_mine_dark_matter
+				}
+			}
+			text = darktec_crisis.1.desc.regular.notech
+		}
+		desc = {
+			trigger = {
+				is_robot_empire = yes
+				is_gestalt = no
+				NOT = {
+					has_technology = tech_mine_dark_matter
+				}
+			}
+			text = darktec_crisis.1.desc.robotic.notech
+		}
+		desc = {
+			trigger = {
+				is_hive_empire = yes
+				NOT = {
+					has_technology = tech_mine_dark_matter
+				}
+			}
+			text = darktec_crisis.1.desc.hive.notech
+		}
+		desc = {
+			trigger = {
+				is_machine_empire = yes
+				NOT = {
+					has_technology = tech_mine_dark_matter
+				}
+			}
+			text = darktec_crisis.1.desc.machine.notech
+		}
+	# /
+	picture = GFX_evt_darktec_entropy_explosion
+	show_sound = event_death_cult
+
+	is_triggered_only = yes
+
+	# Options
+		option = {
+			trigger = {
+				is_robot_empire = no
+				is_hive_empire = no
+				has_technology = tech_mine_dark_matter
+			}
+			name = darktec_crisis.1.ok.regular
+			custom_tooltip = darktec_crisis.1.situation.soon
+		}
+		option = {
+			trigger = {
+				is_robot_empire = no
+				is_hive_empire = no
+				NOT = {
+					has_technology = tech_mine_dark_matter
+				}
+			}
+			name = darktec_crisis.1.ok.regular.notech
+			custom_tooltip = darktec_crisis.1.needs.tech.to.continue.crisis
+			add_tech_progress = {
+				tech = tech_mine_dark_matter
+				progress = 0.25
+			}
+		}
+		option = {
+			trigger = {
+				is_robot_empire = yes
+				is_gestalt = no
+				has_technology = tech_mine_dark_matter
+			}
+			name = darktec_crisis.1.ok.robotic
+			custom_tooltip = darktec_crisis.1.situation.soon
+		}
+		option = {
+			trigger = {
+				is_robot_empire = yes
+				is_gestalt = no
+				NOT = {
+					has_technology = tech_mine_dark_matter
+				}
+			}
+			name = darktec_crisis.1.ok.robotic.notech
+			custom_tooltip = darktec_crisis.1.needs.tech.to.continue.crisis
+			add_tech_progress = {
+				tech = tech_mine_dark_matter
+				progress = 0.25
+			}
+		}
+		option = {
+			trigger = {
+				is_hive_empire = yes
+				has_technology = tech_mine_dark_matter
+			}
+			name = darktec_crisis.1.ok.hive
+			custom_tooltip = darktec_crisis.1.situation.soon
+		}
+		option = {
+			trigger = {
+				is_hive_empire = yes
+				NOT = {
+					has_technology = tech_mine_dark_matter
+				}
+			}
+			name = darktec_crisis.1.ok.hive.notech
+			custom_tooltip = darktec_crisis.1.needs.tech.to.continue.crisis
+			add_tech_progress = {
+				tech = tech_mine_dark_matter
+				progress = 0.25
+			}
+		}
+		option = {
+			trigger = {
+				is_machine_empire = yes
+				has_technology = tech_mine_dark_matter
+			}
+			name = darktec_crisis.1.ok.machine
+			custom_tooltip = darktec_crisis.1.situation.soon
+		}
+		option = {
+			trigger = {
+				is_machine_empire = yes
+				NOT = {
+					has_technology = tech_mine_dark_matter
+				}
+			}
+			name = darktec_crisis.1.ok.machine.notech
+			custom_tooltip = darktec_crisis.1.needs.tech.to.continue.crisis
+			add_tech_progress = {
+				tech = tech_mine_dark_matter
+				progress = 0.35
+			}
+		}
+	# /
+
+	after = {
+		hidden_effect = {
+			if = {
+				limit = {
+					has_technology = tech_mine_dark_matter
+				}
+				country_event = {
+					id = darktec_crisis.2
+					days = 5
+				}
+			}
+			else = {
+				add_tech_progress = {
+					tech = tech_mine_dark_matter
+					progress = 0.35
+				}
+			}
+		}
+	}
+}
+
+# Does not have dark matter techs // ON_ACTION = on_tech_researched
+country_event = {
+	id = darktec_crisis.101
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.101.name"
+	# Descs
+		desc = {
+			trigger = {
+				is_gestalt = no
+			}
+			text = darktec_crisis.101.desc.regular
+		}
+		desc = {
+			trigger = {
+				is_gestalt = yes
+			}
+			text = darktec_crisis.101.desc.gestalt
+		}
+	# /
+	picture = GFX_evt_physics_research
+	show_sound = event_laboratory_sound
+
+	is_triggered_only = yes
+
+	trigger = {
+		last_increased_tech = tech_mine_dark_matter
+		has_ascension_perk = darktec_ap_postbaryonic
+	}
+
+	# Options
+		option = {
+			trigger = {
+				is_gestalt = no
+			}
+			name = darktec_crisis.101.ok.regular
+			custom_tooltip = darktec_crisis.1.situation.soon
+		}
+		option = {
+			trigger = {
+				is_gestalt = yes
+			}
+			name = darktec_crisis.101.ok.gestalt
+			custom_tooltip = darktec_crisis.1.situation.soon
+		}
+	# /
+
+	after = {
+		hidden_effect = {
+			set_country_flag = darktec_recently_gained_dm_tech
+			country_event = {
+				id = darktec_crisis.2
+				days = 5
+			}
+		}
+	}
+}
+
+# Has dark matter techs - starts situation
+# Situation with split
+	# Dark Fusion (unlocking traits earlier)
+	# Antimatter Reprocessing (unlocks more dark matter production)
+	# Vacuum Traversal (improves ships faster)
+country_event = {
+	id = darktec_crisis.2
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.2.name"
+	# Descs
+		desc = {
+			trigger = {
+				is_gestalt = no
+			}
+			text = darktec_crisis.2.desc.regular
+		}
+		desc = {
+			trigger = {
+				is_gestalt = yes
+			}
+			text = darktec_crisis.2.desc.gestalt
+		}
+	# /
+	picture = GFX_evt_surreal_visions
+	show_sound = event_mystic_reveal
+
+	is_triggered_only = yes
+
+	# Options
+		option = {
+			name = darktec_crisis.2.focus.economy
+			custom_tooltip = darktec_crisis.2.focus.economy.tooltip
+			hidden_effect = {
+				set_country_flag = darktec_crisis_focus_economy
+			}
+		}
+		option = {
+			name = darktec_crisis.2.focus.warfare
+			custom_tooltip = darktec_crisis.2.focus.warfare.tooltip
+			hidden_effect = {
+				set_country_flag = darktec_crisis_focus_warfare
+			}
+		}
+		option = {
+			name = darktec_crisis.2.focus.applications
+			custom_tooltip = darktec_crisis.2.focus.applications.tooltip
+			hidden_effect = {
+				set_country_flag = darktec_crisis_focus_applications
+			}
+		}
+	# /
+
+	after = {
+		start_situation = {
+			type = situation_darktec_intro
+			target = capital_scope
+			effect = {
+				save_event_target_as = new_situation
+			}
+		}
+		hidden_effect = {
+			event_target:new_situation = {
+				set_situation_locked = no
+			}
+			root = {
+				switch = {
+					trigger = has_country_flag
+					darktec_crisis_focus_economy = {
+						event_target:new_situation = {
+							set_situation_approach = situation_darktec_intro_approach_economy
+						}
+					}
+					darktec_crisis_focus_warfare = {
+						event_target:new_situation = {
+							set_situation_approach = situation_darktec_intro_approach_warfare
+						}
+					}
+					darktec_crisis_focus_applications = {
+						event_target:new_situation = {
+							set_situation_approach = situation_darktec_intro_approach_applications
+						}
+					}
+				}
+			}
+		}
+
+	}
+}
+
+situation_event = {
+	id = darktec_crisis.225
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.225.name"
+	# Descs
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+				current_situation_approach = situation_darktec_intro_approach_economy
+			}
+			text = darktec_crisis.225.desc.regular.economy
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+				current_situation_approach = situation_darktec_intro_approach_economy
+			}
+			text = darktec_crisis.225.desc.gestalt.economy
+		}
+
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+				current_situation_approach = situation_darktec_intro_approach_warfare
+			}
+			text = darktec_crisis.225.desc.regular.warfare
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+				current_situation_approach = situation_darktec_intro_approach_warfare
+			}
+			text = darktec_crisis.225.desc.gestalt.warfare
+		}
+
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+				current_situation_approach = situation_darktec_intro_approach_applications
+			}
+			text = darktec_crisis.225.desc.regular.applications
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+				current_situation_approach = situation_darktec_intro_approach_applications
+			}
+			text = darktec_crisis.225.desc.gestalt.applications
+		}
+	# /
+	picture = {
+		trigger = {
+			current_situation_approach = situation_darktec_intro_approach_economy
+		}
+		picture = GFX_evt_surreal_visions
+	}
+	picture = {
+		trigger = {
+			current_situation_approach = situation_darktec_intro_approach_warfare
+		}
+		picture = GFX_evt_surreal_visions
+	}
+	picture = {
+		trigger = {
+			current_situation_approach = situation_darktec_intro_approach_applications
+		}
+		picture = GFX_evt_surreal_visions
+	}
+	show_sound = event_mystic_reveal
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_situation_locked = yes
+	}
+
+	# Options
+		option = {
+			name = darktec_crisis.225.ok.economy
+			trigger = {
+				OR = {
+					current_situation_approach = situation_darktec_intro_approach_economy
+					owner = {
+						has_country_flag = darktec_crisis_focus_economy
+					}
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.225.ok.warfare
+			trigger = {
+				OR = {
+					current_situation_approach = situation_darktec_intro_approach_warfare
+					owner = {
+						has_country_flag = darktec_crisis_focus_warfare
+					}
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.225.ok.applications
+			trigger = {
+				OR = {
+					current_situation_approach = situation_darktec_intro_approach_applications
+					owner = {
+						has_country_flag = darktec_crisis_focus_applications
+					}
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+	# /
+
+	after = {
+		set_situation_locked = no
+	}
+}
+
+situation_event = {
+	id = darktec_crisis.250
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.250.name"
+	# Descs
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+				current_situation_approach = situation_darktec_intro_approach_economy
+			}
+			text = darktec_crisis.250.desc.regular.economy
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+				current_situation_approach = situation_darktec_intro_approach_economy
+			}
+			text = darktec_crisis.250.desc.gestalt.economy
+		}
+
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+				current_situation_approach = situation_darktec_intro_approach_warfare
+			}
+			text = darktec_crisis.250.desc.regular.warfare
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+				current_situation_approach = situation_darktec_intro_approach_warfare
+			}
+			text = darktec_crisis.250.desc.gestalt.warfare
+		}
+
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+				current_situation_approach = situation_darktec_intro_approach_applications
+			}
+			text = darktec_crisis.250.desc.regular.applications
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+				current_situation_approach = situation_darktec_intro_approach_applications
+			}
+			text = darktec_crisis.250.desc.gestalt.applications
+		}
+	# /
+	picture = {
+		trigger = {
+			current_situation_approach = situation_darktec_intro_approach_economy
+		}
+		picture = GFX_evt_surreal_visions	# TODO EVENT IMAGES
+	}
+	picture = {
+		trigger = {
+			current_situation_approach = situation_darktec_intro_approach_warfare
+		}
+		picture = GFX_evt_surreal_visions	# TODO EVENT IMAGES
+	}
+	picture = {
+		trigger = {
+			current_situation_approach = situation_darktec_intro_approach_applications
+		}
+		picture = GFX_evt_surreal_visions	# TODO EVENT IMAGES
+	}
+	show_sound = event_mystic_reveal
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_situation_locked = yes
+	}
+
+	# Options
+		option = {
+			name = darktec_crisis.250.ok.keep_approach_economy
+			trigger = {
+				OR = {
+					current_situation_approach = situation_darktec_intro_approach_economy
+					owner = {
+						has_country_flag = darktec_crisis_focus_economy
+					}
+				}
+			}
+			hidden_effect = {
+				owner = {
+					remove_country_flag = darktec_crisis_focus_warfare
+					remove_country_flag = darktec_crisis_focus_applications
+					set_country_flag = darktec_crisis_focus_economy
+				}
+				# Just in case
+				set_situation_locked = no
+			}
+			set_situation_approach = situation_darktec_intro_approach_economy
+		}
+		option = {
+			name = darktec_crisis.250.ok.change_approach_economy
+			trigger = {
+				NOR = {
+					current_situation_approach = situation_darktec_intro_approach_economy
+					owner = {
+						has_country_flag = darktec_crisis_focus_economy
+					}
+				}
+			}
+			hidden_effect = {
+				owner = {
+					remove_country_flag = darktec_crisis_focus_warfare
+					remove_country_flag = darktec_crisis_focus_applications
+					set_country_flag = darktec_crisis_focus_economy
+				}
+				# Just in case
+				set_situation_locked = no
+			}
+			set_situation_approach = situation_darktec_intro_approach_economy
+		}
+
+		option = {
+			name = darktec_crisis.250.ok.keep_approach_warfare
+			trigger = {
+				OR = {
+					current_situation_approach = situation_darktec_intro_approach_warfare
+					owner = {
+						has_country_flag = darktec_crisis_focus_warfare
+					}
+				}
+			}
+			hidden_effect = {
+				owner = {
+					remove_country_flag = darktec_crisis_focus_economy
+					remove_country_flag = darktec_crisis_focus_applications
+					set_country_flag = darktec_crisis_focus_warfare
+				}
+				# Just in case
+				set_situation_locked = no
+			}
+			set_situation_approach = situation_darktec_intro_approach_warfare
+		}
+		option = {
+			name = darktec_crisis.250.ok.change_approach_warfare
+			trigger = {
+				NOR = {
+					current_situation_approach = situation_darktec_intro_approach_warfare
+					owner = {
+						has_country_flag = darktec_crisis_focus_warfare
+					}
+				}
+			}
+			hidden_effect = {
+				owner = {
+					remove_country_flag = darktec_crisis_focus_economy
+					remove_country_flag = darktec_crisis_focus_applications
+					set_country_flag = darktec_crisis_focus_warfare
+				}
+				# Just in case
+				set_situation_locked = no
+			}
+			set_situation_approach = situation_darktec_intro_approach_warfare
+		}
+
+		option = {
+			name = darktec_crisis.250.ok.keep_approach_applications
+			trigger = {
+				OR = {
+					current_situation_approach = situation_darktec_intro_approach_applications
+					owner = {
+						has_country_flag = darktec_crisis_focus_applications
+					}
+				}
+			}
+			hidden_effect = {
+				owner = {
+					remove_country_flag = darktec_crisis_focus_economy
+					remove_country_flag = darktec_crisis_focus_warfare
+					set_country_flag = darktec_crisis_focus_applications
+				}
+				# Just in case
+				set_situation_locked = no
+			}
+			set_situation_approach = situation_darktec_intro_approach_applications
+		}
+		option = {
+			name = darktec_crisis.250.ok.change_approach_applications
+			trigger = {
+				NOR = {
+					current_situation_approach = situation_darktec_intro_approach_applications
+					owner = {
+						has_country_flag = darktec_crisis_focus_applications
+					}
+				}
+			}
+			hidden_effect = {
+				owner = {
+					remove_country_flag = darktec_crisis_focus_economy
+					remove_country_flag = darktec_crisis_focus_warfare
+					set_country_flag = darktec_crisis_focus_applications
+				}
+				# Just in case
+				set_situation_locked = no
+			}
+			set_situation_approach = situation_darktec_intro_approach_applications
+		}
+	# /
+
+	after = {
+		custom_tooltip = darktec_crisis.250.chosen.pick.gives.benefits
+		set_situation_locked = no
+	}
+}
+
+situation_event = {
+	id = darktec_crisis.275
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.275.name"
+	# Descs
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+				current_situation_approach = situation_darktec_intro_approach_economy
+			}
+			text = darktec_crisis.275.desc.regular.economy
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+				current_situation_approach = situation_darktec_intro_approach_economy
+			}
+			text = darktec_crisis.275.desc.gestalt.economy
+		}
+
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+				current_situation_approach = situation_darktec_intro_approach_warfare
+			}
+			text = darktec_crisis.275.desc.regular.warfare
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+				current_situation_approach = situation_darktec_intro_approach_warfare
+			}
+			text = darktec_crisis.275.desc.gestalt.warfare
+		}
+
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+				current_situation_approach = situation_darktec_intro_approach_applications
+			}
+			text = darktec_crisis.275.desc.regular.applications
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+				current_situation_approach = situation_darktec_intro_approach_applications
+			}
+			text = darktec_crisis.275.desc.gestalt.applications
+		}
+	# /
+	picture = {
+		trigger = {
+			current_situation_approach = situation_darktec_intro_approach_economy
+		}
+		picture = GFX_evt_surreal_visions
+	}
+	picture = {
+		trigger = {
+			current_situation_approach = situation_darktec_intro_approach_warfare
+		}
+		picture = GFX_evt_surreal_visions
+	}
+	picture = {
+		trigger = {
+			current_situation_approach = situation_darktec_intro_approach_applications
+		}
+		picture = GFX_evt_surreal_visions
+	}
+	show_sound = event_mystic_reveal
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_situation_locked = yes
+	}
+
+	# Options
+		option = {
+			name = darktec_crisis.275.ok.economy
+			trigger = {
+				OR = {
+					current_situation_approach = situation_darktec_intro_approach_economy
+					owner = {
+						has_country_flag = darktec_crisis_focus_economy
+					}
+				}
+			}
+			# Situation should be locked now until the anchor is built
+		}
+
+		option = {
+			name = darktec_crisis.275.ok.warfare
+			trigger = {
+				OR = {
+					current_situation_approach = situation_darktec_intro_approach_warfare
+					owner = {
+						has_country_flag = darktec_crisis_focus_warfare
+					}
+				}
+			}
+			# Situation should be locked now until the anchor is built
+		}
+
+		option = {
+			name = darktec_crisis.275.ok.applications
+			trigger = {
+				OR = {
+					current_situation_approach = situation_darktec_intro_approach_applications
+					owner = {
+						has_country_flag = darktec_crisis_focus_applications
+					}
+				}
+			}
+			# Situation should be locked now until the anchor is built
+		}
+	# /
+
+	after = {
+		custom_tooltip = darktec_crisis.275.activated.crisis.progression.please.build.first.anchor
+		owner = {
+			hidden_effect = {
+				set_country_flag = darktec_please_build_anchor
+				set_country_flag = darktec_allow_anchor_early
+			}
+		}
+		# V handled by flag now
+		set_situation_locked = no
+	}
+}
+
+# First anchor created // ON_ACTION = on_building_complete
+planet_event = {
+	id = darktec_crisis.27501
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.27501.name"
+	# Descs
+		desc = {
+			trigger = {
+				exists = owner
+				owner = {
+					is_gestalt = no
+				}
+			}
+			text = darktec_crisis.27501.desc.regular
+		}
+		desc = {
+			trigger = {
+				exists = owner
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			text = darktec_crisis.27501.desc.gestalt
+		}
+	# /
+	picture = "GFX_evt_darktec_anchor"
+	show_sound = juggernaut_necroid_move
+
+	is_triggered_only = yes
+
+	trigger = {
+		OR = {
+			last_building_changed = building_darktec_anchor_1
+			has_building = building_darktec_anchor_1
+		}
+		exists = owner
+		owner = {
+			has_country_flag = darktec_please_build_anchor
+		}
+	}
+
+	# Options
+		option = {
+			name = darktec_crisis.27501.ok.regular
+			custom_tooltip = darktec_crisis.27501.ok.tooltip
+			trigger = {
+				exists = owner
+				owner = {
+					is_gestalt = no
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				owner = {
+					every_situation = {
+						limit = {
+							is_situation_type = situation_darktec_intro
+						}
+						set_situation_locked = no
+					}
+					hidden_effect = {
+						remove_country_flag = darktec_please_build_anchor
+					}
+				}
+			}
+		}
+		option = {
+			name = darktec_crisis.27501.ok.gestalt
+			custom_tooltip = darktec_crisis.27501.ok.tooltip
+			trigger = {
+				exists = owner
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				owner = {
+					every_situation = {
+						limit = {
+							is_situation_type = situation_darktec_intro
+						}
+						set_situation_locked = no
+					}
+					hidden_effect = {
+						remove_country_flag = darktec_please_build_anchor
+					}
+				}
+			}
+		}
+	# /
+
+	after = {
+		owner = {
+			every_situation = {
+				limit = {
+					is_situation_type = situation_darktec_intro
+				}
+				set_situation_locked = no
+			}
+			hidden_effect = {
+				remove_country_flag = darktec_please_build_anchor
+			}
+		}
+	}
+}
+
+# situation finished
+situation_event = {
+	id = darktec_crisis.2100
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.2100.name"
+	# Descs
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+				current_situation_approach = situation_darktec_intro_approach_economy
+			}
+			text = darktec_crisis.2100.desc.regular.economy
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+				current_situation_approach = situation_darktec_intro_approach_economy
+			}
+			text = darktec_crisis.2100.desc.gestalt.economy
+		}
+
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+				current_situation_approach = situation_darktec_intro_approach_warfare
+			}
+			text = darktec_crisis.2100.desc.regular.warfare
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+				current_situation_approach = situation_darktec_intro_approach_warfare
+			}
+			text = darktec_crisis.2100.desc.gestalt.warfare
+		}
+
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+				current_situation_approach = situation_darktec_intro_approach_applications
+			}
+			text = darktec_crisis.2100.desc.regular.applications
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+				current_situation_approach = situation_darktec_intro_approach_applications
+			}
+			text = darktec_crisis.2100.desc.gestalt.applications
+		}
+	# /
+	picture = {
+		trigger = {
+			current_situation_approach = situation_darktec_intro_approach_economy
+		}
+		picture = GFX_evt_surreal_visions
+	}
+	picture = {
+		trigger = {
+			current_situation_approach = situation_darktec_intro_approach_warfare
+		}
+		picture = GFX_evt_surreal_visions
+	}
+	picture = {
+		trigger = {
+			current_situation_approach = situation_darktec_intro_approach_applications
+		}
+		picture = GFX_evt_surreal_visions
+	}
+	show_sound = event_death_cult
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_situation_locked = yes
+	}
+
+	# Options
+		option = {
+			name = darktec_crisis.2100.ok.economy
+			trigger = {
+				OR = {
+					current_situation_approach = situation_darktec_intro_approach_economy
+					owner = {
+						has_country_flag = darktec_crisis_focus_economy
+					}
+				}
+			}
+			owner = {	# Give the rewards
+				hidden_effect = {	# To allow the tech to appear
+					set_country_flag = darktec_early_extractors
+				}
+				give_technology = {
+					tech = tech_darktec_umbral_extractors_t1
+				}
+			}
+		}
+
+		option = {
+			name = darktec_crisis.2100.ok.warfare
+			trigger = {
+				OR = {
+					current_situation_approach = situation_darktec_intro_approach_warfare
+					owner = {
+						has_country_flag = darktec_crisis_focus_warfare
+					}
+				}
+				hidden_trigger = {
+					exists = owner
+					owner = {
+						country_uses_bio_ships = no
+					}
+				}
+			}
+			owner = {	# Give the rewards
+				hidden_effect = {	# To allow the tech to appear
+					set_country_flag = darktec_early_destroyer
+				}
+				give_technology = {
+					tech = tech_darktec_crisis_destroyer
+				}
+			}
+		}
+		option = {
+			name = darktec_crisis.2100.ok.warfare.bioships
+			trigger = {
+				OR = {
+					current_situation_approach = situation_darktec_intro_approach_warfare
+					owner = {
+						has_country_flag = darktec_crisis_focus_warfare
+					}
+				}
+				hidden_trigger = {
+					exists = owner
+					owner = {
+						country_uses_bio_ships = yes
+					}
+				}
+			}
+			owner = {	# Give the rewards
+				hidden_effect = {	# To allow the tech to appear
+					set_country_flag = darktec_early_mauler
+				}
+				give_technology = {
+					tech = tech_darktec_crisis_mauler
+				}
+			}
+		}
+
+		option = {
+			name = darktec_crisis.2100.ok.applications
+			trigger = {
+				OR = {
+					current_situation_approach = situation_darktec_intro_approach_applications
+					owner = {
+						has_country_flag = darktec_crisis_focus_applications
+					}
+				}
+			}
+			owner = {	# Give the rewards
+				hidden_effect = {	# To allow the tech to appear
+					set_country_flag = darktec_early_traits
+				}
+				give_technology = {
+					tech = tech_darktec_traits_t1
+				}
+			}
+		}
+	# /
+
+	after = {
+		custom_tooltip = darktec_crisis.2100.activated.crisis.progression.please.build.storage
+		owner = {
+			activate_crisis_progression = darktec_crisis_path
+			hidden_effect = {
+				set_country_flag = darktec_crisis_postbaryonic_level_1_unlocked
+				set_country_flag = darktec_please_build_storage
+				remove_country_flag = darktec_allow_anchor_early
+			}
+		}
+		destroy_situation = this
+	}
+}
+
+# Built a storage // ON_ACTION = on_building_complete
+planet_event = {
+	id = darktec_crisis.2101
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.2101.name"
+	# Descs
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			text = darktec_crisis.2101.desc.regular
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			text = darktec_crisis.2101.desc.gestalt
+		}
+	# /
+	picture = GFX_evt_darktec_anchor_blackhole
+	show_sound = event_mystic_reveal
+
+	is_triggered_only = yes
+	location = this
+
+	trigger = {
+		OR = {
+			last_building_changed = building_darktec_storage_1
+			has_building = building_darktec_storage_1
+		}
+		exists = owner
+		owner = {
+			has_country_flag = darktec_please_build_storage
+		}
+	}
+
+	immediate = {
+		hidden_effect = {
+			owner = {
+				remove_country_flag = darktec_please_build_storage
+			}
+		}
+	}
+
+	# Options
+		option = {
+			name = darktec_crisis.2101.ok.regular
+			custom_tooltip = darktec_crisis.2101.ok.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+		}
+
+		option = {
+			name = darktec_crisis.2101.ok.gestalt
+			custom_tooltip = darktec_crisis.2101.ok.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+		}
+	# /
+
+	after = {
+		owner = {
+			add_resource = {
+				darktec_contained_entropy = 200
+			}
+		}
+	}
+}
+
+# Reached level 2 - Just a normal event
+country_event = {
+	id = darktec_crisis.20
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.20.name"
+	# Descs
+		desc = {
+			trigger = {
+				is_gestalt = no
+			}
+			text = darktec_crisis.20.desc.regular
+		}
+		desc = {
+			trigger = {
+				is_gestalt = yes
+			}
+			text = darktec_crisis.20.desc.gestalt
+		}
+	# /
+	picture = GFX_evt_darktec_entropy
+	show_sound = event_death_cult
+
+	is_triggered_only = yes
+
+	trigger = {
+		# recheck in case
+		NOT = {
+			has_crisis_level = darktec_crisis_postbaryonic_level_2
+		}
+	}
+
+	# Options
+		option = {
+			trigger = {
+				is_gestalt = no
+			}
+			name = darktec_crisis.20.ok.regular
+			custom_tooltip = darktec_crisis.will.advance
+		}
+		option = {
+			trigger = {
+				is_gestalt = yes
+			}
+			name = darktec_crisis.20.ok.gestalt
+			custom_tooltip = darktec_crisis.will.advance
+		}
+	# /
+
+	after = {
+		hidden_effect = {
+			set_country_flag = darktec_crisis_postbaryonic_level_2_unlocked
+			# Gives the rewards for the pre t1 focus
+			if = {
+				limit = {
+					OR = {
+						has_country_flag = darktec_crisis_focus_applications
+						has_country_flag = darktec_early_traits
+					}
+				}
+				add_modifier = {
+					modifier = darktec_modifier_menp_early_applications
+				}
+			}
+			if = {
+				limit = {
+					OR = {
+						has_country_flag = darktec_crisis_focus_warfare
+						has_country_flag = darktec_early_destroyer
+						has_country_flag = darktec_early_mauler
+					}
+				}
+				add_modifier = {
+					modifier = darktec_modifier_menp_early_warfare
+				}
+			}
+			if = {
+				limit = {
+					OR = {
+						has_country_flag = darktec_crisis_focus_economy
+						has_country_flag = darktec_early_extractors
+					}
+				}
+				add_modifier = {
+					modifier = darktec_modifier_menp_early_industry
+				}
+			}
+			# Unlocks ships
+			if = {
+				limit = {
+					country_uses_bio_ships = no
+					NOR = {
+						has_tech_option = tech_darktec_crisis_destroyer
+						has_technology = tech_darktec_crisis_destroyer
+					}
+				}
+				add_research_option = tech_darktec_crisis_destroyer
+			}
+			if = {
+				limit = {
+					country_uses_bio_ships = yes
+					NOR = {
+						has_tech_option = tech_darktec_crisis_mauler
+						has_technology = tech_darktec_crisis_mauler
+					}
+				}
+				add_research_option = tech_darktec_crisis_mauler
+			}
+		}
+	}
+}
+
+# First entropic trait added - on_modification_complete
+# Whenever you change the portrait of an entrophereal species... it gives that portrait back
+# This = Country
+# From = Species ( Post Modification )
+# FromFrom = Species ( Original )
+# Prev = Planet
+country_event = {
+	id = darktec_crisis.2020
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.2020.name"
+	# Descs
+		desc = {
+			trigger = {
+				is_gestalt = no
+			}
+			text = darktec_crisis.2020.desc.regular
+		}
+		desc = {
+			trigger = {
+				is_gestalt = yes
+			}
+			text = darktec_crisis.2020.desc.gestalt
+		}
+	# /
+	picture = GFX_evt_genetic_ascension_purity
+	show_sound = event_necrophage
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_technology = tech_darktec_traits_t1
+		NOT = {
+			has_country_flag = darktec_announced_species_mod
+		}
+		from = {
+			darktec_has_umbral_traits = yes
+		}
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_country_flag = darktec_announced_species_mod
+		}
+	}
+
+	# Options
+		option = {
+			name = darktec_crisis.2020.ok.regular
+			custom_tooltip = darktec_crisis.2020.ok.tooltip
+			trigger = {
+				is_gestalt = no
+			}
+		}
+		option = {
+			name = darktec_crisis.2020.ok.gestalt
+			custom_tooltip = darktec_crisis.2020.ok.tooltip
+			trigger = {
+				is_gestalt = yes
+			}
+		}
+	# /
+}
+
+# First Umbral Ship
+# Scope: Ship Event
+#A ship has been built
+# Root = Ship
+# From = Planet
+#on_ship_built
+ship_event = {
+	id = darktec_crisis.2030
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.2030.name"
+	# Descs
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			text = darktec_crisis.2030.desc.regular
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			text = darktec_crisis.2030.desc.gestalt
+		}
+	# /
+	picture = GFX_evt_ghost_ship
+	show_sound = event_ship_thrusters
+
+	is_triggered_only = yes
+
+	trigger = {
+		exists = owner
+		owner = {
+			OR = {
+				has_technology = tech_darktec_crisis_destroyer
+				has_technology = tech_darktec_crisis_cruiser
+				has_technology = tech_darktec_crisis_battleship
+				has_technology = tech_darktec_crisis_mauler
+				has_technology = tech_darktec_crisis_weaver
+				has_technology = tech_darktec_crisis_stinger
+			}
+			NOT = {
+				has_country_flag = darktec_announced_ship_built
+			}
+		}
+		darktec_is_umbral_ship = yes
+	}
+
+	immediate = {
+		hidden_effect = {
+			owner = {
+				set_country_flag = darktec_announced_ship_built
+			}
+		}
+	}
+
+	# Options
+		option = {
+			name = darktec_crisis.2030.ok.regular
+			custom_tooltip = darktec_crisis.2030.ok.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+		}
+		option = {
+			name = darktec_crisis.2030.ok.gestalt
+			custom_tooltip = darktec_crisis.2030.ok.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+		}
+	# /
+}
+
+# Reached level 3 - Just a normal event
+country_event = {
+	id = darktec_crisis.30
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.30.name"
+	# Descs
+		desc = {
+			trigger = {
+				is_gestalt = no
+			}
+			text = darktec_crisis.30.desc.regular
+		}
+		desc = {
+			trigger = {
+				is_gestalt = yes
+			}
+			text = darktec_crisis.30.desc.gestalt
+		}
+	# /
+	picture = GFX_evt_darktec_anchor_closeup
+	show_sound = event_death_cult
+
+	is_triggered_only = yes
+
+	trigger = {
+		# recheck in case
+		NOT = {
+			has_crisis_level = darktec_crisis_postbaryonic_level_3
+		}
+	}
+
+	# Options
+		option = {
+			trigger = {
+				is_gestalt = no
+			}
+			name = darktec_crisis.30.ok.regular
+			custom_tooltip = darktec_crisis.will.advance
+		}
+		option = {
+			trigger = {
+				is_gestalt = yes
+			}
+			name = darktec_crisis.30.ok.gestalt
+			custom_tooltip = darktec_crisis.will.advance
+		}
+	# /
+
+	after = {
+		hidden_effect = {
+			set_country_flag = darktec_crisis_postbaryonic_level_3_unlocked
+			# Unlocks ships
+			if = {
+				limit = {
+					country_uses_bio_ships = no
+					NOR = {
+						has_tech_option = tech_darktec_crisis_cruiser
+						has_technology = tech_darktec_crisis_cruiser
+					}
+				}
+				add_research_option = tech_darktec_crisis_cruiser
+			}
+			if = {
+				limit = {
+					country_uses_bio_ships = yes
+					NOR = {
+						has_tech_option = tech_darktec_crisis_weaver
+						has_technology = tech_darktec_crisis_weaver
+					}
+				}
+				add_research_option = tech_darktec_crisis_weaver
+			}
+		}
+	}
+}
+
+# Reached level 4 - situation for the transformation
+country_event = {
+	id = darktec_crisis.40
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.40.name"
+	# Descs
+		desc = {
+			trigger = {
+				is_gestalt = no
+			}
+			text = darktec_crisis.40.desc.regular
+		}
+		desc = {
+			trigger = {
+				is_gestalt = yes
+			}
+			text = darktec_crisis.40.desc.gestalt
+		}
+	# /
+	picture = "GFX_evt_darktec_transformation"
+	show_sound = event_death_cult
+
+	is_triggered_only = yes
+
+	trigger = {
+		# recheck in case
+		NOT = {
+			has_crisis_level = darktec_crisis_postbaryonic_level_4
+		}
+	}
+
+	# Options
+		option = {
+			name = darktec_crisis.40.focus.transformation
+			custom_tooltip = darktec_crisis.40.focus.transformation.tooltip
+			hidden_effect = {
+				set_country_flag = darktec_situation_focus_transformation
+			}
+		}
+		option = {
+			name = darktec_crisis.40.focus.taint
+			custom_tooltip = darktec_crisis.40.focus.taint.tooltip
+			hidden_effect = {
+				set_country_flag = darktec_situation_focus_taint
+			}
+		}
+	# /
+
+	after = {
+		start_situation = {
+			type = situation_darktec_transformation
+			target = capital_scope
+			effect = {
+				save_event_target_as = new_situation
+			}
+		}
+		hidden_effect = {
+			event_target:new_situation = {
+				set_situation_locked = no
+			}
+			root = {
+				switch = {
+					trigger = has_country_flag
+					darktec_situation_focus_transformation = {
+						event_target:new_situation = {
+							set_situation_approach = situation_darktec_transformation_approach_transformation
+						}
+					}
+					darktec_situation_focus_taint = {
+						event_target:new_situation = {
+							set_situation_approach = situation_darktec_transformation_approach_taint
+						}
+					}
+				}
+			}
+		}
+
+	}
+}
+
+# Situation taint side - events (from 100 to 0)
+situation_event = {	# 80 - Teaser
+	id = darktec_crisis.40080
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.40080.name"
+	# Descs
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			text = darktec_crisis.40080.desc.regular
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			text = darktec_crisis.40080.desc.gestalt
+		}
+	# /
+	picture = {
+		trigger = {
+			always = yes
+		}
+		picture = GFX_evt_surreal_visions
+	}
+	show_sound = event_mystic_reveal
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_situation_locked = yes
+	}
+
+	# Options
+		option = {
+			name = darktec_crisis.40080.ok.regular
+			custom_tooltip = darktec_crisis.40080.ok.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.40080.ok.gestalt
+			custom_tooltip = darktec_crisis.40080.ok.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+	# /
+
+	after = {
+		set_situation_locked = no
+	}
+}
+situation_event = {	# 50 - Warning
+	id = darktec_crisis.40050
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.40050.name"
+	# Descs
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			text = darktec_crisis.40050.desc.regular
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			text = darktec_crisis.40050.desc.gestalt
+		}
+	# /
+	picture = {
+		trigger = {
+			always = yes
+		}
+		picture = GFX_evt_astral_rift_tomb
+	}
+	show_sound = event_mystic_reveal
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_situation_locked = yes
+	}
+
+	# Options
+		option = {
+			name = darktec_crisis.40050.regular.keep.approach
+			custom_tooltip = darktec_crisis.40050.regular.keep.approach.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.40050.regular.change.approach
+			custom_tooltip = darktec_crisis.40050.regular.change.approach.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			set_situation_approach = situation_darktec_transformation_approach_transformation
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.40050.gestalt.keep.approach
+			custom_tooltip = darktec_crisis.40050.gestalt.keep.approach.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.40050.gestalt.change.approach
+			custom_tooltip = darktec_crisis.40050.gestalt.change.approach.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			set_situation_approach = situation_darktec_transformation_approach_transformation
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+	# /
+
+	after = {
+		set_situation_locked = no
+	}
+}
+situation_event = {	# 30 - Warning 2
+	id = darktec_crisis.40030
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.40030.name"
+	# Descs
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			text = darktec_crisis.40030.desc.regular
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			text = darktec_crisis.40030.desc.gestalt
+		}
+	# /
+	picture = {
+		trigger = {
+			always = yes
+		}
+		picture = GFX_evt_surreal_visions
+	}
+	show_sound = event_mystic_reveal
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_situation_locked = yes
+	}
+
+	# Options
+		option = {
+			name = darktec_crisis.40030.ok.regular
+			custom_tooltip = darktec_crisis.40030.ok.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.40030.ok.gestalt
+			custom_tooltip = darktec_crisis.40030.ok.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+	# /
+
+	after = {
+		set_situation_locked = no
+	}
+}
+situation_event = {	# 10 - last chance
+	id = darktec_crisis.40010
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.40010.name"
+	# Descs
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			text = darktec_crisis.40010.desc.regular
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			text = darktec_crisis.40010.desc.gestalt
+		}
+	# /
+	picture = {
+		trigger = {
+			always = yes
+		}
+		picture = GFX_evt_shroudwalker_enclave
+	}
+	show_sound = event_mystic_reveal_light
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_situation_locked = yes
+	}
+
+	# Options
+		option = {
+			name = darktec_crisis.40010.regular.keep.approach
+			custom_tooltip = darktec_crisis.40010.regular.keep.approach.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.40010.regular.change.approach
+			custom_tooltip = darktec_crisis.40010.regular.change.approach.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			set_situation_approach = situation_darktec_transformation_approach_transformation
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.40010.gestalt.keep.approach
+			custom_tooltip = darktec_crisis.40010.gestalt.keep.approach.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.40010.gestalt.change.approach
+			custom_tooltip = darktec_crisis.40010.gestalt.change.approach.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			set_situation_approach = situation_darktec_transformation_approach_transformation
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+	# /
+
+	after = {
+		set_situation_locked = no
+	}
+}
+
+# Situation transformation side - events (from 100 to 200)
+situation_event = {	# 120 - Teaser
+	id = darktec_crisis.40120
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.40120.name"
+	# Descs
+		desc = {
+			trigger = {
+				owner = {
+					is_robot_empire = no
+				}
+			}
+			text = darktec_crisis.40120.desc.regular
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_robot_empire = yes
+				}
+			}
+			text = darktec_crisis.40120.desc.robotic
+		}
+	# /
+	picture = {
+		trigger = {
+			always = yes
+		}
+		picture = GFX_evt_surreal_visions
+	}
+	show_sound = event_mystic_reveal
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_situation_locked = yes
+	}
+
+	# Options
+		option = {
+			name = darktec_crisis.40120.ok.regular
+			custom_tooltip = darktec_crisis.40120.ok.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.40120.ok.gestalt
+			custom_tooltip = darktec_crisis.40120.ok.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+	# /
+
+	after = {
+		set_situation_locked = no
+	}
+}
+situation_event = {	# 150 - Warning
+	id = darktec_crisis.40150
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.40150.name"
+	# Descs
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			text = darktec_crisis.40150.desc.regular
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			text = darktec_crisis.40150.desc.gestalt
+		}
+	# /
+	picture = {
+		trigger = {
+			always = yes
+		}
+		picture = GFX_evt_genetic_ascension_mutation
+	}
+	show_sound = event_mystic_reveal
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_situation_locked = yes
+	}
+
+	# Options
+		option = {
+			name = darktec_crisis.40150.regular.keep.approach
+			custom_tooltip = darktec_crisis.40150.regular.keep.approach.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.40150.regular.change.approach
+			custom_tooltip = darktec_crisis.40150.regular.change.approach.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			set_situation_approach = situation_darktec_transformation_approach_taint
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.40150.gestalt.keep.approach
+			custom_tooltip = darktec_crisis.40150.gestalt.keep.approach.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.40150.gestalt.change.approach
+			custom_tooltip = darktec_crisis.40150.gestalt.change.approach.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			set_situation_approach = situation_darktec_transformation_approach_taint
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+	# /
+
+	after = {
+		set_situation_locked = no
+	}
+}
+situation_event = {	# 170 - Warning 2
+	id = darktec_crisis.40170
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.40170.name"
+	# Descs
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			text = darktec_crisis.40170.desc.regular
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			text = darktec_crisis.40170.desc.gestalt
+		}
+	# /
+	picture = {
+		trigger = {
+			always = yes
+		}
+		picture = GFX_evt_surreal_visions
+	}
+	show_sound = event_mystic_reveal
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_situation_locked = yes
+	}
+
+	# Options
+		option = {
+			name = darktec_crisis.40170.ok.regular
+			custom_tooltip = darktec_crisis.40170.ok.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.40170.ok.gestalt
+			custom_tooltip = darktec_crisis.40170.ok.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+	# /
+
+	after = {
+		set_situation_locked = no
+	}
+}
+situation_event = {	# 190 - last chance
+	id = darktec_crisis.40190
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.40190.name"
+	# Descs
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			text = darktec_crisis.40190.desc.regular
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			text = darktec_crisis.40190.desc.gestalt
+		}
+	# /
+	picture = {
+		trigger = {
+			always = yes
+		}
+		picture = GFX_evt_darktec_transformation
+	}
+	show_sound = event_mystic_reveal_light
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_situation_locked = yes
+	}
+
+	# Options
+		option = {
+			name = darktec_crisis.40190.ok.regular
+			custom_tooltip = darktec_crisis.40190.ok.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.40190.ok.gestalt
+			custom_tooltip = darktec_crisis.40190.ok.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+	# /
+
+	after = {
+		set_situation_locked = no
+	}
+}
+
+# Consequences midway
+# TODO - DISCARDED
+
+# Situation outcome - Tainted
+situation_event = {
+	id = darktec_crisis.40001
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.40001.name"
+	# Descs
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			text = darktec_crisis.40001.desc.regular
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			text = darktec_crisis.40001.desc.gestalt
+		}
+	# /
+	picture = {
+		trigger = {
+			always = yes
+		}
+		picture = GFX_evt_darktec_dark_sight_tainted
+	}
+	show_sound = event_death_cult
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_situation_locked = yes
+		owner = {
+			set_country_flag = darktec_entropic_taint
+		}
+	}
+
+	# Options
+		option = {
+			name = darktec_crisis.40001.ok.regular
+			custom_tooltip = darktec_crisis.important.decision.coming
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+		}
+		option = {
+			name = darktec_crisis.40001.ok.gestalt
+			custom_tooltip = darktec_crisis.important.decision.coming
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+		}
+	# /
+
+	after = {
+		owner = {
+			country_event = {
+				id = darktec_crisis.40002
+				days = 5
+			}
+		}
+		destroy_situation = this
+	}
+}
+
+# Tainted decision - chose if continuing or not
+country_event = {
+	id = darktec_crisis.40002
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.40002.name"
+	# Descs
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			text = darktec_crisis.40002.desc.regular
+		}
+
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			text = darktec_crisis.40002.desc.gestalt
+		}
+	# /
+	picture = GFX_evt_darktec_transformation
+	show_sound = event_mystic_reveal
+
+	is_triggered_only = yes
+
+	trigger = {
+		# recheck in case
+		always = yes
+	}
+
+	# Options
+		option = {
+			trigger = {
+				is_gestalt = no
+			}
+			name = darktec_crisis.40002.regular.continue.crisis
+			custom_tooltip = darktec_crisis.will.advance
+			
+			hidden_effect = {
+				set_country_flag = darktec_crisis_postbaryonic_level_4_unlocked
+			}
+		}
+		option = {
+			trigger = {
+				is_gestalt = no
+			}
+			name = darktec_crisis.40002.regular.stop.crisis
+			custom_tooltip = darktec_crisis.will.stop.definitive
+
+			hidden_effect = {
+				set_country_flag = darktec_crisis_redeemed
+			}
+		}
+
+		option = {
+			trigger = {
+				is_gestalt = yes
+			}
+			name = darktec_crisis.40002.gestalt.continue.crisis
+			custom_tooltip = darktec_crisis.will.advance
+
+			hidden_effect = {
+				set_country_flag = darktec_crisis_postbaryonic_level_4_unlocked
+			}
+		}
+		option = {
+			trigger = {
+				is_gestalt = yes
+			}
+			name = darktec_crisis.40002.gestalt.stop.crisis
+			custom_tooltip = darktec_crisis.will.stop.definitive
+
+			hidden_effect = {
+				set_country_flag = darktec_crisis_redeemed
+			}
+		}
+	# /
+}
+country_event = {	# reaffirmed
+	id = darktec_crisis.40003
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.40003.name"
+	# Descs
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			text = darktec_crisis.40003.desc.regular
+		}
+
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			text = darktec_crisis.40003.desc.gestalt
+		}
+	# /
+	picture = GFX_evt_darktec_dark_sight
+	show_sound = event_death_cult
+
+	is_triggered_only = yes
+
+	trigger = {
+		# recheck in case
+		always = yes
+	}
+
+	# Options
+		option = {
+			trigger = {
+				is_gestalt = no
+			}
+			name = darktec_crisis.40003.ok.regular
+			custom_tooltip = darktec_crisis.40003.ok.regular.tooltip
+		}
+
+		option = {
+			trigger = {
+				is_gestalt = yes
+			}
+			name = darktec_crisis.40003.ok.gestalt
+			custom_tooltip = darktec_crisis.40003.ok.gestalt.tooltip
+		}
+	# /
+}
+country_event = {	# rejected
+	id = darktec_crisis.40004
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.40004.name"
+	# Descs
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			text = darktec_crisis.40004.desc.regular
+		}
+
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			text = darktec_crisis.40004.desc.gestalt
+		}
+	# /
+	picture = GFX_evt_darktec_dark_sight_tainted
+	show_sound = event_mystic_reveal_light
+
+	is_triggered_only = yes
+
+	trigger = {
+		# recheck in case
+		always = yes
+	}
+
+	# Options
+		option = {
+			trigger = {
+				is_gestalt = no
+			}
+			name = darktec_crisis.40004.ok.regular
+			custom_tooltip = darktec_crisis.40004.ok.regular.tooltip
+		}
+
+		option = {
+			trigger = {
+				is_gestalt = yes
+			}
+			name = darktec_crisis.40004.ok.gestalt
+			custom_tooltip = darktec_crisis.40004.ok.gestalt.tooltip
+		}
+	# /
+	after = {
+		hidden_effect = {
+			set_country_flag = darktec_crisis_rejected
+		}
+	}
+}
+
+# Situation outcome - Transformed
+situation_event = {
+	id = darktec_crisis.40201
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.40201.name"
+	# Descs
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			text = darktec_crisis.40201.desc.regular
+		}
+
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			text = darktec_crisis.40201.desc.gestalt
+		}
+	# /
+	picture = {
+		trigger = {
+			always = yes
+		}
+		picture = GFX_evt_darktec_ghosts
+	}
+	show_sound = event_death_cult
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_situation_locked = yes
+		# Effect automatically scopes to the species
+		# Owner main species ALWAYS change, regardless of having entropic traits or not
+		owner = {
+			darktec_transform_species = yes
+			set_country_flag = darktec_entropic_transformation
+		}
+	}
+
+	# Options
+		option = {
+			name = darktec_crisis.40201.ok.regular
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+		}
+		option = {
+			name = darktec_crisis.40201.ok.gestalt
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+		}
+	# /
+
+	after = {
+		custom_tooltip = darktec_crisis.40201.transformed_and_important.decision.coming
+		owner = {
+			country_event = {
+				id = darktec_crisis.40211
+				days = 5
+			}
+		}
+		destroy_situation = this
+	}
+}
+
+# A Dark reflection - self dialogue
+country_event = {
+	id = darktec_crisis.40211
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.40211.name"
+	# Descs
+		desc = {
+			trigger = {
+				is_gestalt = no
+			}
+			text = darktec_crisis.40211.desc.regular
+		}
+
+		desc = {
+			trigger = {
+				is_gestalt = yes
+			}
+			text = darktec_crisis.40211.desc.gestalt
+		}
+	# /
+	location = capital_scope
+	show_sound = sw_evn_darkmatter_aftermath
+	diplomatic_title = darktec_crisis.40211.diplo.string
+
+	diplomatic = yes
+
+	is_triggered_only = yes
+
+	picture_event_data = {
+		# Using this just in case
+		portrait = this.ruler
+		room = this
+		planet_background = capital_scope
+	}
+
+	# Options
+		option = {
+			name = darktec_crisis.40211.regular.wonder
+			response_text = darktec_crisis.40211.regular.wonder.response
+			is_dialog_only = yes
+			trigger = {
+				is_gestalt = no
+			}
+		}
+		option = {
+			name = darktec_crisis.40211.regular.worry
+			response_text = darktec_crisis.40211.regular.worry.response
+			is_dialog_only = yes
+			trigger = {
+				is_gestalt = no
+			}
+		}
+		option = {
+			name = darktec_crisis.40211.regular.what_can_we_do
+			response_text = darktec_crisis.40211.regular.what_can_we_do.response
+			is_dialog_only = yes
+			trigger = {
+				is_gestalt = no
+			}
+		}
+
+		option = {
+			name = darktec_crisis.40211.gestalt.wonder
+			response_text = darktec_crisis.40211.gestalt.wonder.response
+			is_dialog_only = yes
+			trigger = {
+				is_gestalt = yes
+			}
+		}
+		option = {
+			name = darktec_crisis.40211.gestalt.worry
+			response_text = darktec_crisis.40211.gestalt.worry.response
+			is_dialog_only = yes
+			trigger = {
+				is_gestalt = yes
+			}
+		}
+		option = {
+			name = darktec_crisis.40211.gestalt.what_can_we_do
+			response_text = darktec_crisis.40211.gestalt.what_can_we_do.response
+			is_dialog_only = yes
+			trigger = {
+				is_gestalt = yes
+			}
+		}
+
+		option = {
+			name = darktec_crisis.40211.regular.decide
+			custom_tooltip = darktec_crisis.40211.decide.tooltip
+			trigger = {
+				is_gestalt = no
+			}
+			hidden_effect = {
+				country_event = {
+					id = darktec_crisis.40202
+				}
+			}
+		}
+		option = {
+			name = darktec_crisis.40211.gestalt.decide
+			custom_tooltip = darktec_crisis.40211.decide.tooltip
+			trigger = {
+				is_gestalt = yes
+			}
+			hidden_effect = {
+				country_event = {
+					id = darktec_crisis.40202
+				}
+			}
+		}
+	# /
+}
+
+# Transformational decision - chose if continuing or not
+country_event = {
+	id = darktec_crisis.40202
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.40202.name"
+	# Descs
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			text = darktec_crisis.40202.desc.regular
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			text = darktec_crisis.40202.desc.gestalt
+		}
+	# /
+	picture = GFX_evt_darktec_dark_sight_tainted
+	show_sound = event_mystic_reveal
+
+	is_triggered_only = yes
+
+	trigger = {
+		# recheck in case
+		always = yes
+	}
+
+	# Options
+		option = {
+			trigger = {
+				is_gestalt = no
+			}
+			name = darktec_crisis.40202.regular.continue.crisis
+			custom_tooltip = darktec_crisis.will.advance
+			
+			hidden_effect = {
+				set_country_flag = darktec_crisis_postbaryonic_level_4_unlocked
+			}
+		}
+		option = {
+			trigger = {
+				is_gestalt = no
+			}
+			name = darktec_crisis.40202.regular.stop.crisis
+			custom_tooltip = darktec_crisis.will.stop.definitive
+
+			hidden_effect = {
+				set_country_flag = darktec_crisis_redeemed
+			}
+		}
+
+		option = {
+			trigger = {
+				is_gestalt = yes
+			}
+			name = darktec_crisis.40202.gestalt.continue.crisis
+			custom_tooltip = darktec_crisis.will.advance
+
+			hidden_effect = {
+				set_country_flag = darktec_crisis_postbaryonic_level_4_unlocked
+			}
+		}
+		option = {
+			trigger = {
+				is_gestalt = yes
+			}
+			name = darktec_crisis.40202.gestalt.stop.crisis
+			custom_tooltip = darktec_crisis.will.stop.definitive
+
+			hidden_effect = {
+				set_country_flag = darktec_crisis_redeemed
+			}
+		}
+	# /
+}
+country_event = {	# reaffirmed
+	id = darktec_crisis.40203
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.40203.name"
+	# Descs
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			text = darktec_crisis.40203.desc.regular
+		}
+
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			text = darktec_crisis.40203.desc.gestalt
+		}
+	# /
+	picture = GFX_evt_darktec_dark_sight
+	show_sound = event_death_cult
+
+	is_triggered_only = yes
+
+	trigger = {
+		# recheck in case
+		always = yes
+	}
+
+	# Options
+		option = {
+			trigger = {
+				is_gestalt = no
+			}
+			name = darktec_crisis.40203.ok.regular
+			custom_tooltip = darktec_crisis.40203.ok.regular.tooltip
+		}
+
+		option = {
+			trigger = {
+				is_gestalt = yes
+			}
+			name = darktec_crisis.40203.ok.gestalt
+			custom_tooltip = darktec_crisis.40203.ok.gestalt.tooltip
+		}
+	# /
+
+	after = {
+		hidden_effect = {	# Entrophereal replication hint
+			country_event = {
+				id = darktec_crisis.403
+				days = 15
+				random = 5
+			}
+		}
+	}
+}
+country_event = {	# rejected
+	id = darktec_crisis.40204
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.40204.name"
+	# Descs
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			text = darktec_crisis.40204.desc.regular
+		}
+
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			text = darktec_crisis.40204.desc.gestalt
+		}
+	# /
+	picture = GFX_evt_darktec_dark_sight_transformed
+	show_sound = sw_evn_darkmatter_aftermath
+
+	is_triggered_only = yes
+
+	trigger = {
+		# recheck in case
+		always = yes
+	}
+
+	# Options
+		option = {
+			trigger = {
+				is_gestalt = no
+			}
+			name = darktec_crisis.40204.ok.regular
+			custom_tooltip = darktec_crisis.40204.ok.regular.tooltip
+		}
+
+		option = {
+			trigger = {
+				is_gestalt = yes
+			}
+			name = darktec_crisis.40204.ok.gestalt
+			custom_tooltip = darktec_crisis.40204.ok.gestalt.tooltip
+		}
+	# /
+
+	after = {
+		hidden_effect = {	# Entrophereal replication hint
+			set_country_flag = darktec_crisis_rejected
+			country_event = {
+				id = darktec_crisis.403
+				days = 15
+				random = 5
+			}
+		}
+	}
+}
+
+# Hint for entrophereal replication
+country_event = {
+	id = darktec_crisis.403
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.403.name"
+	# Descs
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+				owner_main_species = {
+					NOR = {
+						has_trait = trait_mechanical
+						has_trait = trait_machine_unit
+					}
+				}
+			}
+			text = darktec_crisis.403.desc.regular
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+				owner_main_species = {
+					NOR = {
+						has_trait = trait_mechanical
+						has_trait = trait_machine_unit
+					}
+				}
+			}
+			text = darktec_crisis.403.desc.regular.mechanical
+		}
+
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+				owner_main_species = {
+					NOR = {
+						has_trait = trait_mechanical
+						has_trait = trait_machine_unit
+					}
+				}
+			}
+			text = darktec_crisis.403.desc.gestalt
+		}
+
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+				owner_main_species = {
+					OR = {
+						has_trait = trait_mechanical
+						has_trait = trait_machine_unit
+					}
+				}
+			}
+			text = darktec_crisis.403.desc.gestalt.mechanical
+		}
+	# /
+	picture = GFX_evt_darktec_ghosts
+	show_sound = event_mystic_reveal
+
+	is_triggered_only = yes
+
+	trigger = {
+		# recheck in case
+		always = yes
+	}
+
+	# Options
+		option = {
+			trigger = {
+				is_gestalt = no
+			}
+			name = darktec_crisis.403.ok.regular
+			custom_tooltip = darktec_crisis.403.task_build_portal
+		}
+
+		option = {
+			trigger = {
+				is_gestalt = yes
+			}
+			name = darktec_crisis.403.ok.gestalt
+			custom_tooltip = darktec_crisis.403.task_build_portal
+		}
+	# /
+
+	after = {
+		hidden_effect = {
+			set_country_flag = darktec_please_build_portal
+		}
+	}
+}
+# First portal // ON_ACTION = on_building_complete
+planet_event = {
+	id = darktec_crisis.40301
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		OR = {
+			last_building_changed = building_darktec_umbral_portal_1
+			has_building = building_darktec_umbral_portal_1
+		}
+		exists = owner
+		owner = {
+			has_country_flag = darktec_please_build_portal
+		}
+	}
+
+	immediate = {
+		owner = {
+			hidden_effect = {
+				remove_country_flag = darktec_please_build_portal
+			}
+		}
+	}
+}
+
+# Continuation - Level 5 unlocked soon
+
+# TDISCARDED FOR NOW Other empires:  First consequences for other empires
+# TDISCARDED FOR NOW Other empires:  Secondary consequences for other empires
+# TDISCARDED FOR NOW Other empires: realize about what has happened (transformed)
+# TDISCARDED FOR NOW Other empires: realize about what has happened (tainted)
+event = {
+	id = darktec_crisis.405
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {
+	id = darktec_crisis.40501
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {
+	id = darktec_crisis.40502
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {
+	id = darktec_crisis.40503
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {
+	id = darktec_crisis.40504
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {
+	id = darktec_crisis.40505
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {
+	id = darktec_crisis.40506
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+
+
+# Reached level 5 - Built the anomaly
+country_event = {
+	id = darktec_crisis.50
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.50.name"
+	# Descs
+		desc = {
+			trigger = {
+				is_gestalt = no
+				has_country_flag = darktec_entropic_transformation
+			}
+			text = darktec_crisis.50.desc.regular.transformed
+		}
+		desc = {
+			trigger = {
+				is_gestalt = no
+				has_country_flag = darktec_entropic_taint
+			}
+			text = darktec_crisis.50.desc.regular.tainted
+		}
+		desc = {
+			trigger = {
+				is_gestalt = yes
+				has_country_flag = darktec_entropic_transformation
+			}
+			text = darktec_crisis.50.desc.gestalt.transformed
+		}
+		desc = {
+			trigger = {
+				is_gestalt = yes
+				has_country_flag = darktec_entropic_taint
+			}
+			text = darktec_crisis.50.desc.gestalt.tainted
+		}
+	# /
+	picture = GFX_evt_darktec_broken_sphere
+	show_sound = event_death_cult
+
+	is_triggered_only = yes
+
+	trigger = {
+		# recheck in case
+		NOT = {
+			has_crisis_level = darktec_crisis_postbaryonic_level_5
+		}
+	}
+
+	# Options
+		option = {
+			trigger = {
+				is_gestalt = no
+				has_country_flag = darktec_entropic_transformation
+			}
+			name = darktec_crisis.50.ok.regular.transformed
+			custom_tooltip = darktec_crisis.50.ok.tooltip
+		}
+		option = {
+			trigger = {
+				is_gestalt = no
+				has_country_flag = darktec_entropic_taint
+			}
+			name = darktec_crisis.50.ok.regular.tainted
+			custom_tooltip = darktec_crisis.50.ok.tooltip
+		}
+		option = {
+			trigger = {
+				is_gestalt = yes
+				has_country_flag = darktec_entropic_transformation
+			}
+			name = darktec_crisis.50.ok.gestalt.transformed
+			custom_tooltip = darktec_crisis.50.ok.tooltip
+		}
+		option = {
+			trigger = {
+				is_gestalt = yes
+				has_country_flag = darktec_entropic_taint
+			}
+			name = darktec_crisis.50.ok.gestalt.tainted
+			custom_tooltip = darktec_crisis.50.ok.tooltip
+		}
+	# /
+
+	after = {
+		hidden_effect = {
+			set_country_flag = darktec_crisis_postbaryonic_level_5_unlocked
+			set_country_flag = darktec_can_build_sphere
+		}
+	}
+}
+
+# Crisis - Built the sphere - starts situation
+country_event = {
+	id = darktec_crisis.5001
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.5001.name"
+	# Descs
+		desc = {
+			trigger = {
+				is_gestalt = no
+				has_country_flag = darktec_entropic_transformation
+			}
+			text = darktec_crisis.5001.desc.regular.transformed
+		}
+		desc = {
+			trigger = {
+				is_gestalt = no
+				has_country_flag = darktec_entropic_taint
+			}
+			text = darktec_crisis.5001.desc.regular.tainted
+		}
+		desc = {
+			trigger = {
+				is_gestalt = yes
+				has_country_flag = darktec_entropic_transformation
+			}
+			text = darktec_crisis.5001.desc.gestalt.transformed
+		}
+		desc = {
+			trigger = {
+				is_gestalt = yes
+				has_country_flag = darktec_entropic_taint
+			}
+			text = darktec_crisis.5001.desc.gestalt.tainted
+		}
+	# /
+	picture = GFX_evt_darktec_broken_sphere
+	show_sound = evn_ove_shroud_tunnel
+
+	is_triggered_only = yes
+
+	trigger = {
+		# recheck in case
+		has_crisis_level = darktec_crisis_postbaryonic_level_5
+		from = {
+			is_megastructure_type = darktec_sphere_0
+		}
+	}
+
+	# Options
+		option = {
+			trigger = {
+				is_gestalt = no
+			}
+			name = darktec_crisis.5001.ok.regular
+			custom_tooltip = darktec_crisis.5001.ok.tooltip
+		}
+		option = {
+			trigger = {
+				is_gestalt = yes
+			}
+			name = darktec_crisis.5001.ok.gestalt
+			custom_tooltip = darktec_crisis.5001.ok.tooltip
+		}
+	# /
+
+	after = {
+		# Starts situation
+		start_situation = {
+			type = situation_darktec_sphere
+			target = capital_scope
+			effect = {
+				set_situation_approach = situation_darktec_sphere_approach_standard
+			}
+		}
+		hidden_effect = {
+			every_playable_country = {
+				limit = {
+					is_ai = no
+					NOT = {
+						is_same_value = root
+					}
+				}
+				country_event = {
+					id = darktec_crisis.5002
+					days = 10
+				}
+			}
+		}
+	}
+}
+
+# Other empires: Crisis full on warning
+country_event = {
+	id = darktec_crisis.5002
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.5002.name"
+	# Descs
+		desc = {
+			trigger = {
+				NOR = {
+					is_player_crisis = yes
+					AND = {
+						is_subject = yes
+						overlord = {
+							is_same_value = root
+						}
+					}
+				}
+			}
+			text = darktec_crisis.5002.desc.regular
+		}
+		desc = {
+			trigger = {
+				is_subject = yes
+				overlord = {
+					is_same_value = root
+				}
+			}
+			text = darktec_crisis.5002.desc.subject_of_crisis
+		}
+		desc = {
+			trigger = {
+				is_player_crisis = yes
+			}
+			text = darktec_crisis.5002.desc.rival_crisis
+		}
+	# /
+	picture = GFX_evt_darktec_broken_sphere
+	show_sound = event_death_cult
+
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	# Options
+		option = {
+			trigger = {
+				NOR = {
+					is_player_crisis = yes
+					AND = {
+						is_subject = yes
+						overlord = {
+							is_same_value = root
+						}
+					}
+				}
+			}
+			name = darktec_crisis.5002.ok.regular
+		}
+		option = {
+			trigger = {
+				is_subject = yes
+				overlord = {
+					is_same_value = root
+				}
+			}
+			name = darktec_crisis.5002.ok.subject_of_crisis
+		}
+		option = {
+			trigger = {
+				is_subject = yes
+				overlord = {
+					NOT = {
+						is_same_value = root
+					}
+				}
+			}
+			name = darktec_crisis.5002.ok.subject_of_other
+		}
+		option = {
+			trigger = {
+				is_player_crisis = yes
+			}
+			name = darktec_crisis.5002.ok.rival_crisis
+		}
+	# /
+}
+
+# Crisis - The sphere
+situation_event = {	# 10% - goes up
+	id = darktec_crisis.55010
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.55010.name"
+	# Descs
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			text = darktec_crisis.55010.desc.regular
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			text = darktec_crisis.55010.desc.gestalt
+		}
+	# /
+	picture = {
+		trigger = {
+			always = yes
+		}
+		picture = GFX_evt_surreal_visions
+	}
+	show_sound = sw_evn_darkmatter_aftermath
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_situation_locked = yes
+		hidden_effect = {
+			owner = {
+				darktec_upgrade_sphere = {
+					OLD_TIER = 0
+					NEW_TIER = 1
+				}
+			}
+		}
+	}
+
+	# Options
+		option = {
+			name = darktec_crisis.55010.ok.regular
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.55010.ok.gestalt
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+	# /
+
+	after = {
+		custom_tooltip = darktec_crisis.55010.ok.sphere_grows
+		set_situation_locked = no
+	}
+}
+
+situation_event = {	# 20% - goes up
+	id = darktec_crisis.55020
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.55020.name"
+	# Descs
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			text = darktec_crisis.55020.desc.regular
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			text = darktec_crisis.55020.desc.gestalt
+		}
+	# /
+	picture = {
+		trigger = {
+			always = yes
+		}
+		picture = GFX_evt_darktec_broken_sphere
+	}
+	show_sound = event_mystic_reveal
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_situation_locked = yes
+		hidden_effect = {
+			owner = {
+				darktec_upgrade_sphere = {
+					OLD_TIER = 1
+					NEW_TIER = 2
+				}
+			}
+			set_timed_situation_flag = {
+				flag = situation_darktec_sphere_entropic_delay
+				years = 1
+			}
+		}
+	}
+
+	# Options
+		option = {
+			name = darktec_crisis.55020.ok.regular
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.55020.ok.gestalt
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+	# /
+
+	after = {
+		custom_tooltip = darktec_crisis.55020.ok.sphere_grows
+		set_situation_locked = no
+		hidden_effect = {
+			every_playable_country = {
+				limit = {
+					is_ai = no
+					NOT = {
+						is_same_value = root.owner
+					}
+				}
+				country_event = {
+					id = darktec_crisis.55021
+					days = 10
+				}
+			}
+		}
+	}
+}
+# Other empires: Gravity Anomalies
+country_event = {	# other empires
+	id = darktec_crisis.55021
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.55021.name"
+	# Descs
+		desc = {
+			trigger = {
+				is_gestalt = no
+			}
+			text = darktec_crisis.55021.desc.regular
+		}
+		desc = {
+			trigger = {
+				is_gestalt = yes
+			}
+			text = darktec_crisis.55021.desc.gestalt
+		}
+	# /
+	picture = GFX_evt_supernova
+	show_sound = event_super_explosion
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+		random_planet_within_border = {
+			limit = {
+				OR = {
+					is_barren = yes
+					is_planet_class = pc_frozen
+					is_planet_class = pc_toxic
+					is_planet_class = pc_molten
+					is_planet_class = pc_gas_giant
+				}
+			}
+			save_event_target_as = darktec_crushed_planet
+			change_pc = pc_shattered
+			clear_deposits = yes
+		}
+	}
+
+	# Options
+		option = {
+			trigger = {
+				is_gestalt = no
+			}
+			name = darktec_crisis.55021.ok.regular
+		}
+		option = {
+			trigger = {
+				is_gestalt = yes
+			}
+			name = darktec_crisis.55021.ok.gestalt
+		}
+	# /
+
+	after = {
+		custom_tooltip = darktec_crisis.warning.not_imminent
+	}
+}
+
+situation_event = {	 # 30% - goes up but slowdown - decision on what to do
+	id = darktec_crisis.55030
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.55030.name"
+	# Descs
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			text = darktec_crisis.55030.desc.regular
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			text = darktec_crisis.55030.desc.gestalt
+		}
+	# /
+	picture = {
+		trigger = {
+			always = yes
+		}
+		picture = GFX_evt_darktec_broken_sphere
+	}
+	show_sound = event_activating_unknown_technology
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_situation_locked = yes
+	}
+
+	# Options
+		option = {
+			name = darktec_crisis.55030.regular.do_nothing
+			custom_tooltip = darktec_crisis.55030.regular.do_nothing.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			hidden_effect = {
+				owner = {
+					set_country_flag = darktec_sphere_phase_1_did_nothing
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.55030.regular.overcharge_with_entropy
+			custom_tooltip = darktec_crisis.55030.regular.overcharge_with_entropy.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			hidden_effect = {
+				owner = {
+					set_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+				}
+				change_variable = {
+					which = situation_darktec_sphere_entropy_upkeep
+					value = 1
+				}
+				set_situation_flag = situation_darktec_sphere_entropic_haste
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.55030.regular.overcharge_with_dark_matter
+			custom_tooltip = darktec_crisis.55030.regular.overcharge_with_dark_matter.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			hidden_effect = {
+				owner = {
+					set_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+				}
+				change_variable = {
+					which = situation_darktec_sphere_dark_matter_upkeep
+					value = 1
+				}
+				set_situation_flag = situation_darktec_sphere_entropic_haste
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+
+		option = {
+			name = darktec_crisis.55030.gestalt.do_nothing
+			custom_tooltip = darktec_crisis.55030.gestalt.do_nothing.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			hidden_effect = {
+				owner = {
+					set_country_flag = darktec_sphere_phase_1_did_nothing
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.55030.gestalt.overcharge_with_entropy
+			custom_tooltip = darktec_crisis.55030.gestalt.overcharge_with_entropy.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			hidden_effect = {
+				owner = {
+					set_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+				}
+				change_variable = {
+					which = situation_darktec_sphere_entropy_upkeep
+					value = 1
+				}
+				set_situation_flag = situation_darktec_sphere_entropic_haste
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.55030.gestalt.overcharge_with_dark_matter
+			custom_tooltip = darktec_crisis.55030.gestalt.overcharge_with_dark_matter.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			hidden_effect = {
+				owner = {
+					set_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+				}
+				change_variable = {
+					which = situation_darktec_sphere_dark_matter_upkeep
+					value = 1
+				}
+				set_situation_flag = situation_darktec_sphere_entropic_haste
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+	# /
+
+	after = {
+		set_situation_locked = no
+		hidden_effect = {
+			owner = {
+				darktec_upgrade_sphere = {
+					OLD_TIER = 2
+					NEW_TIER = 3
+				}
+			}
+			set_situation_flag = situation_darktec_sphere_slowdown_1
+		}
+	}
+}
+
+situation_event = {	# 40% - goes up
+	id = darktec_crisis.55040
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.55040.name"
+	# Descs
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+					NOR = {
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+					}
+				}
+			}
+			text = darktec_crisis.55040.desc.regular.did_nothing
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+					has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+				}
+			}
+			text = darktec_crisis.55040.desc.regular.overcharge_with_entropy
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+					has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+				}
+			}
+			text = darktec_crisis.55040.desc.regular.overcharge_with_dark_matter
+		}
+
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+					NOR = {
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+					}
+				}
+			}
+			text = darktec_crisis.55040.desc.gestalt.did_nothing
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+					has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+				}
+			}
+			text = darktec_crisis.55040.desc.gestalt.overcharge_with_entropy
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+					has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+				}
+			}
+			text = darktec_crisis.55040.desc.gestalt.overcharge_with_dark_matter
+		}
+	# /
+	picture = {
+		trigger = {
+			always = yes
+		}
+		picture = GFX_evt_darktec_entropy
+	}
+	show_sound = event_mystic_reveal
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_situation_locked = yes
+		hidden_effect = {
+			owner = {
+				darktec_upgrade_sphere = {
+					OLD_TIER = 3
+					NEW_TIER = 4
+				}
+			}
+		}
+	}
+
+	# Options
+		option = {
+			name = darktec_crisis.55040.ok.regular.did_nothing
+			trigger = {
+				owner = {
+					is_gestalt = no
+					NOR = {
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+					}
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.55040.ok.regular.overcharge
+			trigger = {
+				owner = {
+					is_gestalt = no
+					OR = {
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+					}
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+
+		option = {
+			name = darktec_crisis.55040.ok.gestalt.did_nothing
+			trigger = {
+				owner = {
+					is_gestalt = yes
+					NOR = {
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+					}
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.55040.ok.gestalt.overcharge
+			trigger = {
+				owner = {
+					is_gestalt = yes
+					OR = {
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+					}
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+	# /
+
+	after = {
+		custom_tooltip = darktec_crisis.55040.ok.sphere_grows
+		set_situation_locked = no
+		hidden_effect = {
+			every_playable_country = {
+				limit = {
+					is_ai = no
+					NOT = {
+						is_same_value = root.owner
+					}
+				}
+				country_event = {
+					id = darktec_crisis.55041
+					days = 10
+				}
+			}
+		}
+	}
+}
+
+# Other empires: Matter destabilization
+country_event = {	# other empires
+	id = darktec_crisis.55041
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.55041.name"
+	# Descs
+		desc = {
+			trigger = {
+				is_gestalt = no
+			}
+			text = darktec_crisis.55041.desc.regular
+		}
+		desc = {
+			trigger = {
+				is_gestalt = yes
+			}
+			text = darktec_crisis.55041.desc.gestalt
+		}
+	# /
+	picture = GFX_evt_burning_settlement
+	show_sound = event_death_cult
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	# Options
+		option = {
+			trigger = {
+				is_gestalt = no
+			}
+			name = darktec_crisis.55041.ok.regular
+		}
+		option = {
+			trigger = {
+				is_gestalt = yes
+			}
+			name = darktec_crisis.55041.ok.gestalt
+		}
+	# /
+
+	after = {
+		custom_tooltip = darktec_crisis.warning.imminent
+	}
+}
+
+situation_event = {	# 50% - goes up
+	id = darktec_crisis.55050
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.55050.name"
+	# Descs
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+					NOR = {
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+					}
+				}
+			}
+			text = darktec_crisis.55050.desc.regular.did_nothing
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+					has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+				}
+			}
+			text = darktec_crisis.55050.desc.regular.overcharge_with_entropy
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+					has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+				}
+			}
+			text = darktec_crisis.55050.desc.regular.overcharge_with_dark_matter
+		}
+
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+					NOR = {
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+					}
+				}
+			}
+			text = darktec_crisis.55050.desc.gestalt.did_nothing
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+					has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+				}
+			}
+			text = darktec_crisis.55050.desc.gestalt.overcharge_with_entropy
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+					has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+				}
+			}
+			text = darktec_crisis.55050.desc.gestalt.overcharge_with_dark_matter
+		}
+	# /
+	picture = {
+		trigger = {
+			always = yes
+		}
+		picture = GFX_evt_black_hole
+	}
+	show_sound = event_death_cult
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_situation_locked = yes
+		hidden_effect = {
+			owner = {
+				darktec_upgrade_sphere = {
+					OLD_TIER = 4
+					NEW_TIER = 5
+				}
+			}
+		}
+	}
+
+	# Options
+		option = {
+			name = darktec_crisis.55050.ok.regular.did_nothing
+			trigger = {
+				owner = {
+					is_gestalt = no
+					NOR = {
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+					}
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.55050.ok.regular.overcharge
+			trigger = {
+				owner = {
+					is_gestalt = no
+					OR = {
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+					}
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+
+		option = {
+			name = darktec_crisis.55050.ok.gestalt.did_nothing
+			trigger = {
+				owner = {
+					is_gestalt = yes
+					NOR = {
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+					}
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.55050.ok.gestalt.overcharge
+			trigger = {
+				owner = {
+					is_gestalt = yes
+					OR = {
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+					}
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+	# /
+
+	after = {
+		custom_tooltip = darktec_crisis.55050.ok.sphere_grows
+		set_situation_locked = no
+	}
+}
+
+situation_event = {	 # 60% - goes up but slowdown - decision on what to do
+	id = darktec_crisis.55060
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.55060.name"
+	# Descs
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+					NOR = {
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+					}
+				}
+			}
+			text = darktec_crisis.55060.desc.regular.did_nothing
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+					has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+				}
+			}
+			text = darktec_crisis.55060.desc.regular.overcharge_with_entropy
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+					has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+				}
+			}
+			text = darktec_crisis.55060.desc.regular.overcharge_with_dark_matter
+		}
+
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+					NOR = {
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+					}
+				}
+			}
+			text = darktec_crisis.55060.desc.gestalt.did_nothing
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+					has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+				}
+			}
+			text = darktec_crisis.55060.desc.gestalt.overcharge_with_entropy
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+					has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+				}
+			}
+			text = darktec_crisis.55060.desc.gestalt.overcharge_with_dark_matter
+		}
+	# /
+	picture = {
+		trigger = {
+			always = yes
+		}
+		picture = GFX_evt_supernova
+	}
+	show_sound = event_activating_unknown_technology
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_situation_locked = yes
+	}
+
+	# Options
+		option = {
+			name = darktec_crisis.55060.regular.do_nothing
+			custom_tooltip = darktec_crisis.55060.do_nothing.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			hidden_effect = {
+				owner = {
+					set_country_flag = darktec_sphere_phase_2_did_nothing
+				}
+				change_variable = {
+					which = situation_darktec_sphere_entropy_upkeep
+					value = 1
+				}
+				change_variable = {
+					which = situation_darktec_sphere_dark_matter_upkeep
+					value = 1
+				}
+				remove_situation_flag = situation_darktec_sphere_entropic_haste
+				set_situation_flag = situation_darktec_sphere_entropic_delay
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.55060.regular.overcharge_with_entrophereals
+			custom_tooltip = darktec_crisis.55060.overcharge_with_entrophereals.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = no
+					has_country_flag = darktec_entropic_transformation
+				}
+			}
+			hidden_effect = {
+				owner = {
+					set_country_flag = darktec_sphere_phase_2_overcharge_with_entrophereals
+				}
+				remove_situation_flag = situation_darktec_sphere_entropic_delay
+				remove_situation_flag = situation_darktec_sphere_entropic_haste
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.55060.regular.overcharge_with_anchors
+			custom_tooltip = darktec_crisis.55060.overcharge_with_anchors.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			hidden_effect = {
+				owner = {
+					set_country_flag = darktec_sphere_phase_2_overcharge_with_entropy
+				}
+				change_variable = {
+					which = situation_darktec_sphere_entropy_upkeep
+					value = 4
+				}
+				remove_situation_flag = situation_darktec_sphere_entropic_delay
+				remove_situation_flag = situation_darktec_sphere_entropic_haste
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.55060.regular.overcharge_with_darkmatter_2
+			custom_tooltip = darktec_crisis.55060.overcharge_with_darkmatter_2.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = no
+				}
+			}
+			hidden_effect = {
+				owner = {
+					set_country_flag = darktec_sphere_phase_2_overcharge_with_dark_matter
+				}
+				change_variable = {
+					which = situation_darktec_sphere_dark_matter_upkeep
+					value = 4
+				}
+				remove_situation_flag = situation_darktec_sphere_entropic_delay
+				remove_situation_flag = situation_darktec_sphere_entropic_haste
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+
+		option = {
+			name = darktec_crisis.55060.gestalt.do_nothing
+			custom_tooltip = darktec_crisis.55060.do_nothing.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			hidden_effect = {
+				owner = {
+					set_country_flag = darktec_sphere_phase_2_did_nothing
+				}
+				change_variable = {
+					which = situation_darktec_sphere_entropy_upkeep
+					value = 1
+				}
+				change_variable = {
+					which = situation_darktec_sphere_dark_matter_upkeep
+					value = 1
+				}
+				remove_situation_flag = situation_darktec_sphere_entropic_haste
+				set_situation_flag = situation_darktec_sphere_entropic_delay
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.55060.gestalt.overcharge_with_entrophereals
+			custom_tooltip = darktec_crisis.55060.overcharge_with_entrophereals.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = yes
+					has_country_flag = darktec_entropic_transformation
+				}
+			}
+			hidden_effect = {
+				owner = {
+					set_country_flag = darktec_sphere_phase_2_overcharge_with_entrophereals
+				}
+				remove_situation_flag = situation_darktec_sphere_entropic_delay
+				remove_situation_flag = situation_darktec_sphere_entropic_haste
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.55060.gestalt.overcharge_with_anchors
+			custom_tooltip = darktec_crisis.55060.overcharge_with_anchors.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			hidden_effect = {
+				owner = {
+					set_country_flag = darktec_sphere_phase_2_overcharge_with_entropy
+				}
+				change_variable = {
+					which = situation_darktec_sphere_entropy_upkeep
+					value = 4
+				}
+				remove_situation_flag = situation_darktec_sphere_entropic_delay
+				remove_situation_flag = situation_darktec_sphere_entropic_haste
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.55060.gestalt.overcharge_with_darkmatter_2
+			custom_tooltip = darktec_crisis.55060.overcharge_with_darkmatter_2.tooltip
+			trigger = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			hidden_effect = {
+				owner = {
+					set_country_flag = darktec_sphere_phase_2_overcharge_with_dark_matter
+				}
+				change_variable = {
+					which = situation_darktec_sphere_dark_matter_upkeep
+					value = 4
+				}
+				remove_situation_flag = situation_darktec_sphere_entropic_delay
+				remove_situation_flag = situation_darktec_sphere_entropic_haste
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+	# /
+
+	after = {
+		set_situation_locked = no
+		hidden_effect = {
+			owner = {
+				darktec_upgrade_sphere = {
+					OLD_TIER = 5
+					NEW_TIER = 6
+				}
+				set_country_flag = darktec_sphere_terminal_allow_defeat
+			}
+			set_situation_flag = situation_darktec_sphere_slowdown_2
+
+			every_playable_country = {
+				limit = {
+					is_ai = no
+					NOT = {
+						is_same_value = root.owner
+					}
+				}
+				country_event = {
+					id = darktec_crisis.55061
+					days = 10
+				}
+			}
+		}
+	}
+}
+# Other empires: Crushing Reality
+country_event = {	# other empires
+	id = darktec_crisis.55061
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.55061.name"
+	# Descs
+		desc = {
+			trigger = {
+				is_gestalt = no
+			}
+			text = darktec_crisis.55061.desc.regular
+		}
+		desc = {
+			trigger = {
+				is_gestalt = yes
+			}
+			text = darktec_crisis.55061.desc.gestalt
+		}
+	# /
+	picture = GFX_evt_burning_city
+	show_sound = event_air_raid_siren
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	# Options
+		option = {
+			trigger = {
+				is_gestalt = no
+			}
+			name = darktec_crisis.55061.ok.regular
+		}
+		option = {
+			trigger = {
+				is_gestalt = yes
+			}
+			name = darktec_crisis.55061.ok.gestalt
+		}
+	# /
+
+	after = {
+		custom_tooltip = darktec_crisis.warning.react_now
+	}
+}
+
+situation_event = {	# 70% - goes up
+	id = darktec_crisis.55070
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.55070.name"
+	# Descs
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+					NOR = {
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entrophereals
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_dark_matter
+					}
+				}
+			}
+			text = darktec_crisis.55070.desc.regular.did_nothing
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+					OR = {
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entropy
+					}
+					NOT = {
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entrophereals
+					}
+				}
+			}
+			text = darktec_crisis.55070.desc.regular.overcharge_with_entropy
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+					OR = {
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_dark_matter
+					}
+					NOT = {
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entrophereals
+					}
+				}
+			}
+			text = darktec_crisis.55070.desc.regular.overcharge_with_dark_matter
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+					has_country_flag = darktec_sphere_phase_2_overcharge_with_entrophereals
+				}
+			}
+			text = darktec_crisis.55070.desc.regular.overcharge_with_entrophereals
+		}
+
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+					NOR = {
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entrophereals
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_dark_matter
+					}
+				}
+			}
+			text = darktec_crisis.55070.desc.gestalt.did_nothing
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+					OR = {
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entropy
+					}
+					NOT = {
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entrophereals
+					}
+				}
+			}
+			text = darktec_crisis.55070.desc.gestalt.overcharge_with_entropy
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+					OR = {
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_dark_matter
+					}
+					NOT = {
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entrophereals
+					}
+				}
+			}
+			text = darktec_crisis.55070.desc.gestalt.overcharge_with_dark_matter
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+					has_country_flag = darktec_sphere_phase_2_overcharge_with_entrophereals
+				}
+			}
+			text = darktec_crisis.55070.desc.gestalt.overcharge_with_entrophereals
+		}
+	# /
+	picture = {
+		trigger = {
+			always = yes
+		}
+		picture = GFX_evt_black_hole
+	}
+	show_sound = event_mystic_reveal
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_situation_locked = yes
+		hidden_effect = {
+			owner = {
+				darktec_upgrade_sphere = {
+					OLD_TIER = 6
+					NEW_TIER = 7
+				}
+			}
+			remove_situation_flag = situation_darktec_sphere_entropic_delay
+		}
+	}
+
+	# Options
+		option = {
+			name = darktec_crisis.55070.ok.regular.did_nothing
+			trigger = {
+				owner = {
+					is_gestalt = no
+					NOR = {
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entrophereals
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_dark_matter
+					}
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.55070.ok.regular.overcharge
+			trigger = {
+				owner = {
+					is_gestalt = no
+					OR = {
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_dark_matter
+					}
+					NOT = {
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entrophereals
+					}
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.55070.ok.regular.overcharge_with_entrophereals
+			trigger = {
+				owner = {
+					is_gestalt = no
+					has_country_flag = darktec_sphere_phase_2_overcharge_with_entrophereals
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+
+		option = {
+			name = darktec_crisis.55070.ok.gestalt.did_nothing
+			trigger = {
+				owner = {
+					is_gestalt = yes
+					NOR = {
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entrophereals
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_dark_matter
+					}
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.55070.ok.gestalt.overcharge
+			trigger = {
+				owner = {
+					is_gestalt = yes
+					OR = {
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_dark_matter
+					}
+					NOT = {
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entrophereals
+					}
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+		option = {
+			name = darktec_crisis.55070.ok.gestalt.overcharge_with_entrophereals
+			trigger = {
+				owner = {
+					is_gestalt = yes
+					has_country_flag = darktec_sphere_phase_2_overcharge_with_entrophereals
+				}
+			}
+			hidden_effect = {
+				# Just in case
+				set_situation_locked = no
+			}
+		}
+	# /
+
+	after = {
+		custom_tooltip = darktec_crisis.55070.ok.sphere_grows
+		set_situation_locked = no
+	}
+}
+
+situation_event = {	# 80% - Critical point
+	id = darktec_crisis.55080
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.55080.name"
+	# Descs
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+					NOR = {
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entrophereals
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_dark_matter
+					}
+				}
+			}
+			text = darktec_crisis.55080.desc.regular.did_nothing
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+					OR = {
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entropy
+					}
+					NOT = {
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entrophereals
+					}
+				}
+			}
+			text = darktec_crisis.55080.desc.regular.overcharge_with_entropy
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+					OR = {
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_dark_matter
+					}
+					NOT = {
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entrophereals
+					}
+				}
+			}
+			text = darktec_crisis.55080.desc.regular.overcharge_with_dark_matter
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = no
+					has_country_flag = darktec_sphere_phase_2_overcharge_with_entrophereals
+				}
+			}
+			text = darktec_crisis.55080.desc.regular.overcharge_with_entrophereals
+		}
+
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+					NOR = {
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entrophereals
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_dark_matter
+					}
+				}
+			}
+			text = darktec_crisis.55080.desc.gestalt.did_nothing
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+					OR = {
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entropy
+					}
+					NOT = {
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entrophereals
+					}
+				}
+			}
+			text = darktec_crisis.55080.desc.gestalt.overcharge_with_entropy
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+					OR = {
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_dark_matter
+					}
+					NOT = {
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entrophereals
+					}
+				}
+			}
+			text = darktec_crisis.55080.desc.gestalt.overcharge_with_dark_matter
+		}
+		desc = {
+			trigger = {
+				owner = {
+					is_gestalt = yes
+					has_country_flag = darktec_sphere_phase_2_overcharge_with_entrophereals
+				}
+			}
+			text = darktec_crisis.55080.desc.gestalt.overcharge_with_entrophereals
+		}
+	# /
+	picture = {
+		trigger = {
+			always = yes
+		}
+		picture = GFX_evt_black_hole
+	}
+	show_sound = event_death_cult
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_situation_locked = yes
+		hidden_effect = {
+			owner = {
+				darktec_upgrade_sphere = {
+					OLD_TIER = 7
+					NEW_TIER = 8
+				}
+			}
+		}
+	}
+
+	# Options
+		option = {
+			name = darktec_crisis.55080.ok.regular.did_nothing
+			trigger = {
+				owner = {
+					is_gestalt = no
+					NOR = {
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entrophereals
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_dark_matter
+					}
+				}
+			}
+			# Situation is locked and needs the project to continue
+		}
+		option = {
+			name = darktec_crisis.55080.ok.regular.overcharge
+			trigger = {
+				owner = {
+					is_gestalt = no
+					OR = {
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_dark_matter
+					}
+					NOT = {
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entrophereals
+					}
+				}
+			}
+			# Situation is locked and needs the project to continue
+		}
+		option = {
+			name = darktec_crisis.55080.ok.regular.overcharge_with_entrophereals
+			trigger = {
+				owner = {
+					is_gestalt = no
+					has_country_flag = darktec_sphere_phase_2_overcharge_with_entrophereals
+				}
+			}
+		}
+
+		option = {
+			name = darktec_crisis.55080.ok.gestalt.did_nothing
+			trigger = {
+				owner = {
+					is_gestalt = yes
+					NOR = {
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entrophereals
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_dark_matter
+					}
+				}
+			}
+			# Situation is locked and needs the project to continue
+		}
+		option = {
+			name = darktec_crisis.55080.ok.gestalt.overcharge
+			trigger = {
+				owner = {
+					is_gestalt = yes
+					OR = {
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entropy
+						has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_dark_matter
+					}
+					NOT = {
+						has_country_flag = darktec_sphere_phase_2_overcharge_with_entrophereals
+					}
+				}
+			}
+			# Situation is locked and needs the project to continue
+		}
+		option = {
+			name = darktec_crisis.55080.ok.gestalt.overcharge_with_entrophereals
+			trigger = {
+				owner = {
+					is_gestalt = yes
+					has_country_flag = darktec_sphere_phase_2_overcharge_with_entrophereals
+				}
+			}
+			# Situation is locked and needs the project to continue
+		}
+	# /
+
+	after = {
+		custom_tooltip = darktec_crisis.55080.ok.sphere_reached_critical_point
+		hidden_effect = {
+			owner = {
+				random_owned_megastructure = {
+					limit = {
+						OR = {	# Listing all just in case
+							is_megastructure_type = darktec_sphere_0
+							is_megastructure_type = darktec_sphere_1
+							is_megastructure_type = darktec_sphere_2
+							is_megastructure_type = darktec_sphere_3
+							is_megastructure_type = darktec_sphere_4
+							is_megastructure_type = darktec_sphere_5
+							is_megastructure_type = darktec_sphere_6
+							is_megastructure_type = darktec_sphere_7
+							is_megastructure_type = darktec_sphere_8
+						}
+					}
+					save_event_target_as = darktec_sphere
+				}
+			}
+		}
+		enable_special_project = {
+			name = DARKTEC_SPHERE_BREACHING
+			location = event_target:darktec_sphere
+			owner = root.owner
+		}
+	}
+}
+
+country_event = {	# 90% - researched special project
+	id = darktec_crisis.55090
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.55090.name"
+	# Descs
+		desc = {
+			trigger = {
+				is_gestalt = no
+			}
+			text = darktec_crisis.55090.desc.regular
+		}
+		desc = {
+			trigger = {
+				is_gestalt = yes
+			}
+			text = darktec_crisis.55090.desc.gestalt
+		}
+	# /
+	picture = GFX_evt_darktec_broken_sphere
+	show_sound = event_death_cult
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	# Options
+		option = {
+			trigger = {
+				is_gestalt = no
+			}
+			name = darktec_crisis.55090.ok.regular
+			hidden_effect = {
+				# Just in case
+				every_situation = {
+					limit = {
+						is_situation_type = situation_darktec_sphere
+					}
+					set_situation_locked = no
+					set_situation_flag = darktec_force_ending
+				}
+			}
+		}
+		option = {
+			trigger = {
+				is_gestalt = yes
+			}
+			name = darktec_crisis.55090.ok.gestalt
+			hidden_effect = {
+				# Just in case
+				every_situation = {
+					limit = {
+						is_situation_type = situation_darktec_sphere
+					}
+					set_situation_locked = no
+					set_situation_flag = darktec_force_ending
+				}
+			}
+		}
+	# /
+
+	after = {
+		custom_tooltip = darktec_crisis.ending.soon
+		hidden_effect = {
+			every_situation = {
+				limit = {
+					is_situation_type = situation_darktec_sphere
+				}
+				set_situation_locked = no
+				set_situation_flag = darktec_force_ending
+			}
+			every_playable_country = {
+				limit = {
+					is_ai = no
+					NOT = {
+						is_same_value = root.owner
+					}
+				}
+				country_event = {
+					id = darktec_crisis.55091
+					days = 2
+				}
+			}
+		}
+	}
+}
+
+# Other countries
+country_event = {	# 90% - Galaxy silent
+	id = darktec_crisis.55091
+	event_chain = darktec_crisis_chain
+	title = "darktec_crisis.55091.name"
+	# Descs
+		desc = {
+			trigger = {
+				is_gestalt = no
+			}
+			text = darktec_crisis.55091.desc.regular
+		}
+		desc = {
+			trigger = {
+				is_gestalt = yes
+			}
+			text = darktec_crisis.55091.desc.gestalt
+		}
+	# /
+	picture = GFX_evt_surreal_visions
+	show_sound = event_death_cult
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	# Options
+		option = {
+			trigger = {
+				is_gestalt = no
+			}
+			name = darktec_crisis.55091.ok.regular
+		}
+		option = {
+			trigger = {
+				is_gestalt = yes
+			}
+			name = darktec_crisis.55091.ok.gestalt
+		}
+	# /
+
+	after = {
+		custom_tooltip = darktec_crisis.ending.soon.from_other_empire
+	}
+}
+
+# Crisis - Ending sorting
+country_event = {
+	id = darktec_crisis.100
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+		# Ending 1A: Filling The Void (did nothing and did nothing)
+		if = {
+			limit = {
+				has_country_flag = darktec_sphere_phase_1_did_nothing
+				has_country_flag = darktec_sphere_phase_2_did_nothing
+			}
+			country_event = {
+				id = darktec_crisis_endings.10
+			}
+		}
+		# Ending 1B: Folded Dimensionality (did nothing and later used entropy)
+		else_if = {
+			limit = {
+				has_country_flag = darktec_sphere_phase_1_did_nothing
+				has_country_flag = darktec_sphere_phase_2_overcharge_with_entropy
+			}
+			country_event = {
+				id = darktec_crisis_endings.20
+			}
+		}
+		# Ending 1C:Back to the beginning? (did nothing and later used dark matter)
+		else_if = {
+			limit = {
+				has_country_flag = darktec_sphere_phase_1_did_nothing
+				has_country_flag = darktec_sphere_phase_2_overcharge_with_dark_matter
+			}
+			country_event = {
+				id = darktec_crisis_endings.30
+			}
+		}
+		# Assimilation group
+		# Ending 2A: A Galaxy of Ghosts (used entrophy and enthropereals)
+		else_if = {
+			limit = {
+				has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+				has_country_flag = darktec_sphere_phase_2_overcharge_with_entrophereals
+			}
+			country_event = {
+				id = darktec_crisis_endings.40
+			}
+		}
+		# Ending 2B: Hungering Nothingness (used dark matter and did nothing)
+		else_if = {
+			limit = {
+				has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+				has_country_flag = darktec_sphere_phase_2_overcharge_with_entrophereals
+			}
+			country_event = {
+				id = darktec_crisis_endings.50
+			}
+		}
+		# Ending 2C: Gods of the Void (did nothing and later used enthropereals)
+		else_if = {
+			limit = {
+				has_country_flag = darktec_sphere_phase_1_did_nothing
+				has_country_flag = darktec_sphere_phase_2_overcharge_with_entrophereals
+			}
+			country_event = {
+				id = darktec_crisis_endings.60
+			}
+		}
+		# Nihilism group
+		# Ending 3A: Void Collapse (overloaded twice with entropy)
+		else_if = {
+			limit = {
+				has_country_flag = darktec_sphere_phase_1_overcharge_with_entropy
+				has_country_flag = darktec_sphere_phase_2_overcharge_with_entropy
+			}
+			country_event = {
+				id = darktec_crisis_endings.70
+			}
+		}
+		# Ending 3B: Dark Silence (overloaded twice with dark matter)
+		else_if = {
+			limit = {
+				has_country_flag = darktec_sphere_phase_1_overcharge_with_dark_matter
+				has_country_flag = darktec_sphere_phase_2_overcharge_with_dark_matter
+			}
+			country_event = {
+				id = darktec_crisis_endings.80
+			}
+		}
+		# Ending 3C: Multidimensional Raiders (overloaded with a resource and enthropereals)
+		else = {	# Fallback - Just yeet out of the dimension hunting others
+			country_event = {
+				id = darktec_crisis_endings.90
+			}
+		}
+	}
+}
+
+# Crisis - Failure sorting
+
+# Crisis failure points
+# TODO Crisis: System with sphere conquered before critical point - stops situation
+# TODO Crisis: System retaken
+# TODO Crisis: System with sphere taken after critical point - instant defeat
+# TODO Crisis: Other empires realise you just vanished
+# TODO Crisis: Vassalized before sphere reached critical point
+# TODO Crisis: Released from vassalization
+event = {
+	id = darktec_crisis.600
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {
+	id = darktec_crisis.60001
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {
+	id = darktec_crisis.60002
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {
+	id = darktec_crisis.60003
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {
+	id = darktec_crisis.60004
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {
+	id = darktec_crisis.60005
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {
+	id = darktec_crisis.60006
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {
+	id = darktec_crisis.60007
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {
+	id = darktec_crisis.60008
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+
+event = {
+	id = darktec_crisis.610
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {
+	id = darktec_crisis.61001
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {
+	id = darktec_crisis.61002
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {
+	id = darktec_crisis.61003
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {
+	id = darktec_crisis.61004
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {
+	id = darktec_crisis.61005
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {
+	id = darktec_crisis.61006
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {
+	id = darktec_crisis.61007
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {
+	id = darktec_crisis.61008
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+
+namespace = darktec_crisis_endings
+
+# Sublimation group
+# Ending 1A: Filling The Void
+country_event = {
+	id = darktec_crisis_endings.10
+	event_chain = darktec_crisis_chain
+	title = darktec_crisis_endings.10.title
+	# Descs
+		desc = {
+			trigger = {
+				is_gestalt = no
+			}
+			text = darktec_crisis_endings.10.desc.regular
+		}
+		desc = {
+			trigger = {
+				is_gestalt = yes
+			}
+			text = darktec_crisis_endings.10.desc.gestalt
+		}
+	# /
+	picture = GFX_evt_black_hole
+	show_sound = event_death_cult
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	# Options
+		option = {
+			trigger = {
+				is_gestalt = no
+			}
+			name = darktec_crisis_endings.10.ok.regular
+		}
+		option = {
+			trigger = {
+				is_gestalt = yes
+			}
+			name = darktec_crisis_endings.10.ok.gestalt
+		}
+	# /
+
+	after = {
+		custom_tooltip = darktec_crisis_endings.10.tooltip
+		hidden_effect = {
+			save_event_target_as = crisis_country
+			event_target:crisis_country = {
+				win = yes
+				every_owned_megastructure = {
+					limit = {
+						darktec_is_crisis_sphere = yes
+					}
+					delete_megastructure = this
+				}
+				every_system_within_border = {
+					destroy_star_system = yes
+				}
+			}
+		}
+	}
+
+	# Note: No effects on the galaxy, only destroys all the planets of the empire.
+}
+
+event = {
+	id = darktec_crisis_endings.1001
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {
+	id = darktec_crisis_endings.1002
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {
+	id = darktec_crisis_endings.1003
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {
+	id = darktec_crisis_endings.1004
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {
+	id = darktec_crisis_endings.1005
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+
+# Ending 1B: Folded Dimensionality
+country_event = {
+	id = darktec_crisis_endings.20
+	event_chain = darktec_crisis_chain
+	title = darktec_crisis_endings.20.title
+	# Descs
+		desc = {
+			trigger = {
+				is_gestalt = no
+			}
+			text = darktec_crisis_endings.20.desc.regular
+		}
+		desc = {
+			trigger = {
+				is_gestalt = yes
+			}
+			text = darktec_crisis_endings.20.desc.gestalt
+		}
+	# /
+	picture = GFX_evt_vortex
+	show_sound = event_death_cult
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	# Options
+		option = {
+			trigger = {
+				is_gestalt = no
+			}
+			name = darktec_crisis_endings.20.ok.regular
+		}
+		option = {
+			trigger = {
+				is_gestalt = yes
+			}
+			name = darktec_crisis_endings.20.ok.gestalt
+		}
+	# /
+
+	after = {
+		custom_tooltip = darktec_crisis_endings.20.tooltip
+		hidden_effect = {
+			save_event_target_as = crisis_country
+			event_target:crisis_country = {
+				win = yes
+				every_controlled_fleet = {
+					destroy_fleet = this
+				}
+				every_owned_planet = {
+					destroy_colony = yes
+				}
+				every_owned_megastructure = {
+					limit = {
+						darktec_is_crisis_sphere = yes
+					}
+					delete_megastructure = this
+				}
+			}
+		}
+	}
+}
+event = {
+	id = darktec_crisis_endings.2001
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {
+	id = darktec_crisis_endings.2002
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {
+	id = darktec_crisis_endings.2003
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {
+	id = darktec_crisis_endings.2004
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {
+	id = darktec_crisis_endings.2005
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+
+# Ending 1C:Back to the beginning?
+country_event = {
+	id = darktec_crisis_endings.30
+	event_chain = darktec_crisis_chain
+	title = darktec_crisis_endings.30.title
+	# Descs
+		desc = {
+			trigger = {
+				is_gestalt = no
+			}
+			text = darktec_crisis_endings.30.desc.regular
+		}
+		desc = {
+			trigger = {
+				is_gestalt = yes
+			}
+			text = darktec_crisis_endings.30.desc.gestalt
+		}
+	# /
+	picture = GFX_evt_vortex
+	show_sound = event_death_cult
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	# Options
+		option = {
+			trigger = {
+				is_gestalt = no
+			}
+			name = darktec_crisis_endings.30.ok.regular
+		}
+		option = {
+			trigger = {
+				is_gestalt = yes
+			}
+			name = darktec_crisis_endings.30.ok.gestalt
+		}
+	# /
+
+	after = {
+		custom_tooltip = darktec_crisis_endings.30.tooltip
+		hidden_effect = {
+			save_event_target_as = crisis_country
+			event_target:crisis_country = {
+				win = yes
+				every_controlled_fleet = {
+					destroy_fleet = this
+				}
+				every_owned_planet = {
+					destroy_colony = yes
+				}
+				every_owned_megastructure = {
+					limit = {
+						darktec_is_crisis_sphere = yes
+					}
+					delete_megastructure = this
+				}
+			}
+			every_playable_country = {
+				every_war = {
+					end_war_effect = yes
+				}
+				every_owned_leader = {
+					kill_leader = {
+						show_notification = no
+					}
+				}
+				every_pool_leader = {
+					kill_leader = {
+						show_notification = no
+					}
+				}
+				# Alters the capital first just in case
+				capital_scope = {
+					solar_system = {
+						every_fleet_in_system = {
+							limit = {
+								OR = {
+									is_ship_class = shipclass_starbase
+									is_ship_class = shipclass_mining_station
+									is_ship_class = shipclass_research_station
+									is_ship_class = shipclass_observation_station
+								}
+							}
+							destroy_fleet = this
+						}
+					}
+					kill_all_pop = yes
+					clear_blockers = yes
+					generate_start_buildings_and_districts = yes
+					generate_start_pops = yes
+					# Just in case
+					set_owner = prev
+					set_capital = yes
+					owner = {
+						# Copied basically from federation memmers setup
+						create_starting_leaders = yes
+						country_event = { id = game_start.9 }
+						country_event = { id = game_start.33 days = 1 } # needs delay for system ownership to settle
+					}
+				}
+				every_system_within_border = {
+					limit = {
+						is_capital_system = no
+					}
+					# Remove starbases
+					every_fleet_in_system = {
+						limit = {
+							OR = {
+								is_ship_class = shipclass_starbase
+								is_ship_class = shipclass_mining_station
+								is_ship_class = shipclass_research_station
+								is_ship_class = shipclass_observation_station
+							}
+						}
+						destroy_fleet = this
+					}
+					# Destroy colonies
+					every_system_colony = {
+						remove_all_buildings = yes
+						remove_all_districts = yes
+						destroy_colony = yes
+					}
+					every_system_planet = {
+						limit = {
+							is_artificial = yes
+						}
+						remove_planet = yes
+					}
+					# Remove megas
+					every_system_megastructure = {
+						remove_megastructure = this
+					}
+				}
+				# Only the capital endures
+				every_system_within_border = {
+					limit = {
+						is_capital_system = yes
+					}
+					every_system_colony = {
+						limit = {
+							is_colony = yes
+							is_capital = no
+						}
+						destroy_colony = yes
+					}
+					every_system_planet = {
+						limit = {
+							is_artificial = yes
+						}
+						remove_planet = yes
+					}
+					# Remove megas
+					every_system_megastructure = {
+						remove_megastructure = this
+					}
+				}
+				every_galaxy_planet = {
+					limit = {
+						is_surveyed = {
+							who = prev
+							status = yes
+						}
+					}
+					set_surveyed = {
+						surveyed = no
+						surveyor = prev
+					}
+				}
+			}
+		}
+	}
+}
+event = {	# AUXILIARY EVENT
+	id = darktec_crisis_endings.3002
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {	# AUXILIARY EVENT
+	id = darktec_crisis_endings.3003
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {	# AUXILIARY EVENT
+	id = darktec_crisis_endings.3004
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {	# AUXILIARY EVENT
+	id = darktec_crisis_endings.3005
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {	# AUXILIARY EVENT - Spawn a void horror somewhere in the galaxy
+	id = darktec_crisis_endings.3010
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+
+# Assimilation group
+# Ending 2A: A Galaxy of Ghosts
+country_event = {
+	id = darktec_crisis_endings.40
+	event_chain = darktec_crisis_chain
+	title = darktec_crisis_endings.40.title
+	# Descs
+		desc = {
+			trigger = {
+				is_gestalt = no
+			}
+			text = darktec_crisis_endings.40.desc.regular
+		}
+		desc = {
+			trigger = {
+				is_gestalt = yes
+			}
+			text = darktec_crisis_endings.40.desc.gestalt
+		}
+	# /
+	picture = GFX_evt_darktec_ghosts
+	show_sound = event_death_cult
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	# Options
+		option = {
+			trigger = {
+				is_gestalt = no
+			}
+			name = darktec_crisis_endings.40.ok.regular
+		}
+		option = {
+			trigger = {
+				is_gestalt = yes
+			}
+			name = darktec_crisis_endings.40.ok.gestalt
+		}
+	# /
+
+	after = {
+		custom_tooltip = darktec_crisis_endings.40.tooltip
+		hidden_effect = {
+			save_event_target_as = crisis_country
+			event_target:crisis_country = {
+				win = yes
+				every_owned_megastructure = {
+					limit = {
+						darktec_is_crisis_sphere = yes
+					}
+					delete_megastructure = this
+				}
+			}
+			every_playable_country = {
+				darktec_transform_species = yes
+				set_country_flag = darktec_entropic_transformation
+				set_country_flag = darktec_can_build_anchors
+				set_country_flag = darktec_can_build_portals
+				if = {
+					limit = {
+						num_owned_planets > 1
+					}
+					random_owned_planet = {
+						limit = {
+							is_capital = no
+						}
+						solar_system = {
+							starbase = {
+								set_owner = event_target:crisis_country
+							}
+						}
+						set_owner = event_target:crisis_country
+					}
+				}
+			}
+		}
+	}
+}
+event = {	# AUXILIARY EVENT
+	id = darktec_crisis_endings.4001
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {	# AUXILIARY EVENT
+	id = darktec_crisis_endings.4002
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {	# AUXILIARY EVENT
+	id = darktec_crisis_endings.4003
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {	# AUXILIARY EVENT
+	id = darktec_crisis_endings.4004
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {	# AUXILIARY EVENT
+	id = darktec_crisis_endings.4005
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+
+# Ending 2B: Hungering Nothingness
+country_event = {
+	id = darktec_crisis_endings.50
+	event_chain = darktec_crisis_chain
+	title = darktec_crisis_endings.50.title
+	# Descs
+		desc = {
+			trigger = {
+				is_gestalt = no
+			}
+			text = darktec_crisis_endings.50.desc.regular
+		}
+		desc = {
+			trigger = {
+				is_gestalt = yes
+			}
+			text = darktec_crisis_endings.50.desc.gestalt
+		}
+	# /
+	picture = GFX_evt_dimensional_horror
+	show_sound = event_death_cult
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	# Options
+		option = {
+			trigger = {
+				is_gestalt = no
+			}
+			name = darktec_crisis_endings.50.ok.regular
+		}
+		option = {
+			trigger = {
+				is_gestalt = yes
+			}
+			name = darktec_crisis_endings.50.ok.gestalt
+		}
+	# /
+
+	after = {
+		custom_tooltip = darktec_crisis_endings.50.tooltip
+		hidden_effect = {
+			capital_scope = {
+				save_event_target_as = darktec_hungering_nothingness_spawn
+			}
+			save_event_target_as = crisis_country
+			event_target:crisis_country = {
+				win = yes
+				every_controlled_fleet = {
+					destroy_fleet = this
+				}
+				every_owned_planet = {
+					destroy_colony = yes
+				}
+				every_owned_megastructure = {
+					limit = {
+						darktec_is_crisis_sphere = yes
+					}
+					delete_megastructure = this
+				}
+			}
+			event_target:darktec_hungering_nothingness_spawn = {
+				create_country = {
+					name = "NAME_Eldritch_Horror"
+					type = guardian_horror
+					flag = {
+						icon = {
+							category = "zoological"
+							file = "flag_zoological_18.dds"
+						}
+						background = {
+							category = "backgrounds"
+							file = "00_solid.dds"
+						}
+						colors={
+							"black"
+							"black"
+							"null"
+							"null"
+						}
+					}
+				}
+				set_planet_flag = darktec_nothingness_planet
+					
+				last_created_country = {
+					save_global_event_target_as = darktec_nothingness_country
+					set_country_flag = darktec_nothingness_country
+				}
+				create_fleet = {
+					name = "NAME_Eldritch_Horror"
+					settings = {
+						spawn_debris = no
+						is_boss = yes
+					}
+					effect = {
+						set_owner = event_target:darktec_nothingness_country
+						create_ship = {
+							name = "NAME_Eldritch_Horror"
+							design = "NAME_Dimensional_Horror"
+							effect = { set_disabled = yes }
+						}
+						set_location = {
+							target = PREV
+							distance = 5
+							angle = 270
+						}
+					}
+				}
+				last_created_fleet = {
+					create_ambient_object = {
+						type = "horror_spawn_object"
+						location = THIS
+						use_3d_location = yes
+						duration = 10
+					}
+					add_modifier = {
+						modifier = darktec_modifier_fleet_hungering_void
+					}
+					fleet_event = { id = leviathans.3220 days = 8 }
+				}
+			}
+		}
+	}
+}
+event = {	# AUXILIARY EVENT
+	id = darktec_crisis_endings.5001
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {	# AUXILIARY EVENT
+	id = darktec_crisis_endings.5002
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {	# AUXILIARY EVENT
+	id = darktec_crisis_endings.5003
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {	# AUXILIARY EVENT
+	id = darktec_crisis_endings.5004
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {	# AUXILIARY EVENT
+	id = darktec_crisis_endings.5005
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+
+# Ending 2C: Gods of the Void
+country_event = {
+	id = darktec_crisis_endings.60
+	event_chain = darktec_crisis_chain
+	title = darktec_crisis_endings.60.title
+	# Descs
+		desc = {
+			trigger = {
+				is_gestalt = no
+			}
+			text = darktec_crisis_endings.60.desc.regular
+		}
+		desc = {
+			trigger = {
+				is_gestalt = yes
+			}
+			text = darktec_crisis_endings.60.desc.gestalt
+		}
+	# /
+	picture = GFX_evt_darktec_ghosts
+	show_sound = event_death_cult
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	# Options
+		option = {
+			trigger = {
+				is_gestalt = no
+			}
+			name = darktec_crisis_endings.60.ok.regular
+		}
+		option = {
+			trigger = {
+				is_gestalt = yes
+			}
+			name = darktec_crisis_endings.60.ok.gestalt
+		}
+	# /
+
+	after = {	# Vanished
+		custom_tooltip = darktec_crisis_endings.60.tooltip
+		hidden_effect = {
+			save_event_target_as = crisis_country
+			event_target:crisis_country = {
+				win = yes
+				every_controlled_fleet = {
+					destroy_fleet = this
+				}
+				every_owned_planet = {
+					destroy_colony = yes
+				}
+				every_owned_megastructure = {
+					limit = {
+						darktec_is_crisis_sphere = yes
+					}
+					delete_megastructure = this
+				}
+			}
+		}
+	}
+}
+event = {	# AUXILIARY EVENT
+	id = darktec_crisis_endings.6001
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {	# AUXILIARY EVENT
+	id = darktec_crisis_endings.6002
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {	# AUXILIARY EVENT
+	id = darktec_crisis_endings.6003
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {	# AUXILIARY EVENT
+	id = darktec_crisis_endings.6004
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {	# AUXILIARY EVENT
+	id = darktec_crisis_endings.6005
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+
+# Nihilism group
+# Ending 3A: Void Collapse
+country_event = {	# Event for crisis
+	id = darktec_crisis_endings.70
+	event_chain = darktec_crisis_chain
+	title = darktec_crisis_endings.70.title
+	# Descs
+		desc = {
+			trigger = {
+				is_gestalt = no
+			}
+			text = darktec_crisis_endings.70.desc.regular
+		}
+		desc = {
+			trigger = {
+				is_gestalt = yes
+			}
+			text = darktec_crisis_endings.70.desc.gestalt
+		}
+	# /
+	picture = GFX_evt_black_hole
+	show_sound = event_death_cult
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	# Options
+		option = {
+			trigger = {
+				is_gestalt = no
+			}
+			name = darktec_crisis_endings.70.ok.regular
+		}
+		option = {
+			trigger = {
+				is_gestalt = yes
+			}
+			name = darktec_crisis_endings.70.ok.gestalt
+		}
+	# /
+
+
+	after = {
+		custom_tooltip = darktec_crisis_endings.70.tooltip
+		hidden_effect = {
+			save_event_target_as = crisis_country
+			event_target:crisis_country = {
+				win = yes
+				every_controlled_fleet = {
+					destroy_fleet = this
+				}
+				every_owned_megastructure = {
+					limit = {
+						darktec_is_crisis_sphere = yes
+					}
+					delete_megastructure = this
+				}
+				every_system_within_border = {
+					destroy_star_system = yes
+				}
+			}
+			set_global_flag = darktec_collapse_ending
+			every_playable_country = {
+				limit = {
+					NOT = {
+						is_same_value = event_target:crisis_country
+					}
+				}
+				country_event = {
+					id = darktec_crisis_endings.7001
+				}
+			}
+		}
+	}
+}
+country_event = {	# Event for other countries after
+	id = darktec_crisis_endings.7001
+	event_chain = darktec_crisis_chain
+	title = darktec_crisis_endings.7001.title
+	# Descs
+		desc = {
+			trigger = {
+				is_gestalt = no
+			}
+			text = darktec_crisis_endings.7001.desc.regular
+		}
+		desc = {
+			trigger = {
+				is_gestalt = yes
+			}
+			text = darktec_crisis_endings.7001.desc.gestalt
+		}
+	# /
+	picture = GFX_evt_black_hole
+	show_sound = event_wind_ruins
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	# Options
+		option = {
+			trigger = {
+				is_gestalt = no
+			}
+			name = darktec_crisis_endings.7001.ok.regular
+		}
+		option = {
+			trigger = {
+				is_gestalt = yes
+			}
+			name = darktec_crisis_endings.7001.ok.gestalt
+		}
+	# /
+
+	after = {
+		custom_tooltip = darktec_crisis.we_are_defeated_void_collapse_now_what
+	}
+}
+event = {
+	id = darktec_crisis_endings.7010
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_global_flag = darktec_collapse_ending
+		NOT = {
+			has_global_flag = darktec_collapse_phase_1
+		}
+	}
+
+	immediate = {
+		set_global_flag = darktec_collapse_phase_1
+		darktec_void_collapse_galaxy_effect = yes
+		# TODO
+		every_playable_country = {
+			country_event = {
+				id = darktec_crisis_endings.7011
+				days = 10
+			}
+		}
+	}
+}
+country_event = {
+	id = darktec_crisis_endings.7011
+	event_chain = darktec_crisis_chain
+	title = darktec_crisis_endings.7011.title
+	# Descs
+		desc = {
+			trigger = {
+				is_gestalt = no
+			}
+			text = darktec_crisis_endings.7011.desc.regular
+		}
+		desc = {
+			trigger = {
+				is_gestalt = yes
+			}
+			text = darktec_crisis_endings.7011.desc.gestalt
+		}
+	# /
+	picture = GFX_evt_surreal_visions
+	show_sound = event_necrophage
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	# Options
+		option = {
+			trigger = {
+				is_gestalt = no
+			}
+			name = darktec_crisis_endings.7011.ok.regular
+		}
+		option = {
+			trigger = {
+				is_gestalt = yes
+			}
+			name = darktec_crisis_endings.7011.ok.gestalt
+		}
+	# /
+}
+
+event = {
+	id = darktec_crisis_endings.7020
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_global_flag = darktec_collapse_phase_1
+	}
+
+	immediate = {
+		# IMPROVE - REVIEW
+		while = {
+			count = 2
+			darktec_void_collapse_galaxy_effect = yes
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_global_flag = darktec_collapse_inevitable
+				}
+			}
+			every_playable_country = {
+				country_event = {
+					id = darktec_crisis_endings.7021
+					days = 10
+				}
+			}
+			set_global_flag = darktec_collapse_inevitable
+		}
+	}
+}
+country_event = {	# We are doomed
+	id = darktec_crisis_endings.7021
+	event_chain = darktec_crisis_chain
+	title = darktec_crisis_endings.7021.title
+	# Descs
+		desc = {
+			trigger = {
+				is_gestalt = no
+			}
+			text = darktec_crisis_endings.7021.desc.regular
+		}
+		desc = {
+			trigger = {
+				is_gestalt = yes
+			}
+			text = darktec_crisis_endings.7021.desc.gestalt
+		}
+	# /
+	picture = GFX_evt_black_hole
+	show_sound = event_necrophage
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = {
+			has_global_flag = darktec_collapse_inevitable
+		}
+	}
+
+	# Options
+		option = {
+			trigger = {
+				is_gestalt = no
+			}
+			name = darktec_crisis_endings.7021.ok.regular
+		}
+		option = {
+			trigger = {
+				is_gestalt = yes
+			}
+			name = darktec_crisis_endings.7021.ok.gestalt
+		}
+	# /
+
+	after = {
+		add_modifier = {
+			modifier = darktec_modifier_country_doomed_galaxy
+			days = -1
+		}
+	}
+}
+
+# Ending 3B: Dark Silence
+country_event = {
+	id = darktec_crisis_endings.80
+	event_chain = darktec_crisis_chain
+	title = darktec_crisis_endings.80.title
+	# Descs
+		desc = {
+			trigger = {
+				is_gestalt = no
+			}
+			text = darktec_crisis_endings.80.desc.regular
+		}
+		desc = {
+			trigger = {
+				is_gestalt = yes
+			}
+			text = darktec_crisis_endings.80.desc.gestalt
+		}
+	# /
+	picture = GFX_evt_darktec_dark_sight
+	show_sound = event_death_cult
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	# Options
+		option = {
+			trigger = {
+				is_gestalt = no
+			}
+			name = darktec_crisis_endings.80.ok.regular
+		}
+		option = {
+			trigger = {
+				is_gestalt = yes
+			}
+			name = darktec_crisis_endings.80.ok.gestalt
+		}
+	# /
+
+
+	after = {
+		custom_tooltip = darktec_crisis_endings.80.tooltip
+		hidden_effect = {
+			save_event_target_as = crisis_country
+			event_target:crisis_country = {
+				win = yes
+				every_owned_megastructure = {
+					limit = {
+						darktec_is_crisis_sphere = yes
+					}
+					delete_megastructure = this
+				}
+			}
+			every_playable_country = {
+				limit = {
+					NOT = {
+						is_same_value = event_target:crisis_country
+					}
+				}
+				destroy_country = yes
+			}
+			every_country = {
+				limit = {
+					is_ai = yes
+					NOT = {
+						is_same_value = event_target:crisis_country
+					}
+				}
+				destroy_country = yes
+			}
+		}
+	}
+}
+event = {	# AUXILIARY EVENT
+	id = darktec_crisis_endings.8001
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {	# AUXILIARY EVENT
+	id = darktec_crisis_endings.8002
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {	# AUXILIARY EVENT
+	id = darktec_crisis_endings.8003
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {	# AUXILIARY EVENT
+	id = darktec_crisis_endings.8004
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {	# AUXILIARY EVENT
+	id = darktec_crisis_endings.8005
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+
+# Ending 3C: Multidimensional Raiders
+country_event = {
+	id = darktec_crisis_endings.90
+	event_chain = darktec_crisis_chain
+	title = darktec_crisis_endings.90.title
+	# Descs
+		desc = {
+			trigger = {
+				is_gestalt = no
+			}
+			text = darktec_crisis_endings.90.desc.regular
+		}
+		desc = {
+			trigger = {
+				is_gestalt = yes
+			}
+			text = darktec_crisis_endings.90.desc.gestalt
+		}
+	# /
+	picture = GFX_evt_astral_rift_microverse
+	show_sound = event_death_cult
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	# Options
+		option = {
+			trigger = {
+				is_gestalt = no
+			}
+			name = darktec_crisis_endings.90.ok.regular
+		}
+		option = {
+			trigger = {
+				is_gestalt = yes
+			}
+			name = darktec_crisis_endings.90.ok.gestalt
+		}
+	# /
+
+	after = {
+		custom_tooltip = darktec_crisis_endings.90.tooltip
+		hidden_effect = {
+			save_event_target_as = crisis_country
+			event_target:crisis_country = {
+				win = yes
+				every_controlled_fleet = {
+					destroy_fleet = this
+				}
+				every_owned_megastructure = {
+					limit = {
+						darktec_is_crisis_sphere = yes
+					}
+					delete_megastructure = this
+				}
+				every_system_within_border = {
+					destroy_star_system = yes
+				}
+			}
+		}
+	}
+}
+event = {	# AUXILIARY EVENT
+	id = darktec_crisis_endings.9001
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {	# AUXILIARY EVENT
+	id = darktec_crisis_endings.9002
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {	# AUXILIARY EVENT
+	id = darktec_crisis_endings.9003
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {	# AUXILIARY EVENT
+	id = darktec_crisis_endings.9004
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+event = {	# AUXILIARY EVENT
+	id = darktec_crisis_endings.9005
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+
+# Defeat - Too many holes - In deficit of entropy for too long
+event = {	# AUXILIARY EVENT
+	id = darktec_crisis_endings.210
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+
+# Defeat - Disintegrating Essence - System took down for too long, anomaly decayed (entrophereal)
+event = {	# AUXILIARY EVENT
+	id = darktec_crisis_endings.220
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+
+# Defeat - Collapse of Reality - System took down for too long, anomaly decayed
+event = {	# AUXILIARY EVENT
+	id = darktec_crisis_endings.230
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+
+# Defeat - Coalesced Anomaly destroyed just before apogee
+event = {	# AUXILIARY EVENT
+	id = darktec_crisis_endings.240
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+	}
+}
+
+
+
+# Do not remove below v
