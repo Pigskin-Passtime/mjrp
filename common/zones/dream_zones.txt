@@ -1,0 +1,64 @@
+# dream_zones.txt
+# Contributors: Lord Roscoford
+
+
+zone_dreaming = {
+	icon = GFX_colony_type_urban
+	base_buildtime = @zone_buildtime
+	potential = { # planet scope
+		hidden_trigger = { exists = owner }
+		owner = {
+			has_ascension_perk = ap_dreaming_deep
+		}
+	}
+
+	unlock = { # planet scope
+		always = yes
+	}
+
+	resources = {
+		category = planet_zones
+		cost = {
+			minerals = @zone_cost
+		}
+	}
+
+	max_buildings = 3
+
+	zone_sets = {
+		urban
+		habitat_urban
+	}
+
+	include = {
+		all
+	}
+
+	excluded_building_sets = {
+		generator
+		mining
+		farming
+		knights
+		betharian
+	}
+
+	inline_script = {
+		script = jobs/zone_dreamers_add
+		AMOUNT = 100
+	}
+
+	planet_modifier = {
+		zone_building_slots_add = 3
+	}
+
+	triggered_desc = {
+		trigger = {
+			always = yes
+		}
+		text = job_dreamer_effect_desc
+	}
+
+	ai_priority = 2
+	ai_weight_coefficient = 0.5
+}
+

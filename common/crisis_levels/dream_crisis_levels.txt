@@ -1,0 +1,182 @@
+# dream_crisis_levels.txt
+# Contributors: Lord Roscoford
+
+crisis_dreaming_level_1 = {
+	# REQUIREMENTS
+	allow = {
+		custom_tooltip = {
+		}
+	}
+	required_crisis_currency = 0
+
+	# REWARDS
+	perks = {
+		menp_dream_sleepers_1
+		menp_dream_espionage_1
+		menp_dream_objectives_1
+	}
+
+	on_unlock = {
+		add_dreaming_level_1_perks = yes
+		hidden_effect = {
+			owner = {
+				begin_event_chain = {
+					event_chain = dreaming_chain
+					target = root
+				}
+				add_event_chain_counter = {
+					event_chain = "dreaming_chain"
+					counter = "dreaming_level_reached"
+					amount = 1
+				}
+				country_event = { id = dream.001 }
+				enable_special_project = {
+					name = "DREAM_CRISIS_SPECIAL_PROJECT_1"
+					owner = ROOT
+				}
+			}
+		}
+	}
+}
+
+crisis_dreaming_level_2 = {
+	# REQUIREMENTS
+	allow = {
+		custom_tooltip = {
+			success_text = crisis_level_2_req_clear_tooltip
+			fail_text = crisis_level_2_req_tooltip
+			has_country_flag = dreaming_crisis_special_project_1_complete
+		}
+	}
+	required_crisis_currency = 1000
+
+	# REWARDS
+	perks = {
+		menp_dream_edicts
+		menp_dream_sleepers_2
+		menp_dream_espionage_2
+		menp_dream_objectives_2
+	}
+
+	on_unlock = {
+		add_dreaming_level_2_perks = yes
+		hidden_effect = {
+			owner = {
+				country_event = { id = dream.002 }
+				enable_special_project = {
+					name = "DREAM_CRISIS_SPECIAL_PROJECT_2"
+					owner = ROOT
+				}
+			}
+		}
+	}
+}
+
+crisis_dreaming_level_3 = {
+	# REQUIREMENTS
+	allow = {
+		custom_tooltip = {
+			success_text = crisis_level_3_req_clear_tooltip
+			fail_text = crisis_level_3_req_tooltip
+			has_country_flag = dreaming_crisis_special_project_2_complete
+		}
+	}
+	required_crisis_currency = 4000
+
+	# REWARDS
+	perks = {
+		menp_dream_sleepers_3
+		menp_dream_espionage_3
+		menp_dream_objectives_3
+		menp_dream_trait
+	}
+
+	on_unlock = {
+		add_dreaming_level_3_perks = yes
+		hidden_effect = {
+			owner = {
+				country_event = { id = dream.030 }
+				enable_special_project = {
+					name = "DREAM_CRISIS_SPECIAL_PROJECT_3"
+					owner = ROOT
+				}
+			}
+		}
+	}
+}
+
+crisis_dreaming_level_4 = {
+	# REQUIREMENTS
+	allow = {
+		custom_tooltip = {
+			success_text = crisis_level_4_req_clear_tooltip
+			fail_text = crisis_level_4_req_tooltip
+			has_country_flag = dreaming_crisis_special_project_3_complete
+		}
+	}
+	required_crisis_currency = 8000
+
+	# REWARDS
+	perks = {
+		menp_dream_colony
+		menp_dream_sleepers_4
+		menp_dream_espionage_4
+		menp_dream_objectives_4
+	}
+
+	on_unlock = {
+		add_dreaming_level_4_perks = yes
+		hidden_effect = {
+			owner = {
+				country_event = { id = dream.004 }
+				enable_special_project = {
+					name = "DREAM_CRISIS_SPECIAL_PROJECT_4"
+					owner = ROOT
+				}
+			}
+		}
+	}
+}
+
+crisis_dreaming_level_5 = {
+	# REQUIREMENTS
+	allow = {
+		custom_tooltip = {
+			success_text = crisis_level_5_req_clear_tooltip
+			fail_text = crisis_level_5_req_tooltip
+			has_country_flag = dreaming_crisis_special_project_4_complete
+		}
+	}
+	required_crisis_currency = 16000
+
+	# REWARDS
+	perks = {
+		menp_dream_espionage_5
+		menp_dream_objectives_5
+	}
+
+	on_unlock = {
+		add_dreaming_level_5_perks = yes
+		hidden_effect = {
+			declare_crisis_effect = yes
+			every_playable_country = {
+				limit = {
+					is_galactic_community_member = no
+					NOT = {
+						is_same_value = owner
+						is_at_war_with = owner
+					}
+				}
+				join_war_on_side = {
+					war = event_target:crisis_war
+					side = event_target:community_war_leader
+				}
+			}
+			owner = {
+				country_event = { id = dream.005 }
+			}
+		}
+	}
+}
+
+

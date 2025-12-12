@@ -1,0 +1,151 @@
+# dream_situation_events.txt
+# Contributors: Lord Roscoford
+
+namespace = dream
+
+event = {
+	id = dream.400
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		any_country = {
+			has_ascension_perk = ap_dreaming_deep
+		}
+	}
+
+	immediate = {
+		every_country = {
+			limit = {
+				AND = {
+					has_ascension_perk = ap_dreaming_deep
+					NOT = {
+						country_has_situation = { SITUATION = situation_dreaming_deep }
+					}
+				}
+			}
+
+			start_situation = {
+				type = situation_dreaming_deep
+				target = this
+			}
+		}
+	}
+}
+
+event = {
+	id = dream.401
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		any_country = {
+			AND = {
+				has_ascension_perk = ap_dreaming_deep
+				country_has_situation = { SITUATION = situation_dreaming_deep }
+			}
+		}
+	}
+
+	immediate = {
+
+		# Every country which has dreaming deep situation - reset it
+		every_playable_country = {
+			limit = {
+				country_has_situation = { SITUATION = situation_dreaming_deep }
+			}
+
+			set_variable = {
+				which = globalDreamers
+				value = 0
+			}
+			set_variable = {
+				which = globalPop
+				value = 0
+			}
+
+			random_situation = {
+				limit = {
+					is_situation_type = situation_dreaming_deep
+				}
+
+				set_variable = {
+					which = situationProgress
+					value = trigger:situation_progress
+				}
+				multiply_variable = {
+					which = situationProgress
+					value = -1
+				}
+				add_situation_progress = situationProgress
+			}
+		}
+
+		# For every country - save the number of dreamers, and pop count
+		every_playable_country = {
+			export_trigger_value_to_variable = {
+				trigger = num_assigned_jobs
+				parameters = {
+					job = dreamer
+				}
+				variable = dreamerCount
+			}
+			export_trigger_value_to_variable = {
+				trigger = count_owned_pop_amount
+				variable = popCount
+			}
+
+			# And for every country which has the Dreaming Deep situation
+			every_playable_country = {
+				limit = {
+					country_has_situation = { SITUATION = situation_dreaming_deep }
+				}
+
+				change_variable = {
+					which = globalDreamers
+					value = prev.dreamerCount
+				}
+				change_variable = {
+					which = globalPop
+					value = prev.popCount
+				}
+			}
+		}
+
+		# Finally - set situation progress to the ratio of global pops to dreamer pops
+		every_playable_country = {
+			limit = {
+				country_has_situation = { SITUATION = situation_dreaming_deep }
+			}
+
+			random_situation = {
+				limit = {
+					is_situation_type = situation_dreaming_deep
+				}
+
+				set_variable = {
+					which = situationProgress
+					value = prev.globalDreamers
+				}
+				divide_variable = {
+					which = situationProgress
+					value = prev.globalPop
+				}
+				multiply_variable = {
+					which = situationProgress
+					value = 100
+				}
+				add_situation_progress = situationProgress
+			}
+		}
+	}
+}
+
+country_event = {
+	id = dream.402
+	is_triggered_only = yes
+	hide_window = yes
+
+
+}
+

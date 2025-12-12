@@ -1,0 +1,139 @@
+# dream_events.txt
+# Contributors: Lord Roscoford
+
+namespace = dream
+
+# event = {
+# 	id = dream.990
+# 	is_triggered_only = yes
+# 	hide_window = yes
+#
+# 	immediate = {
+# 		every_country = {
+# 			country_event = {
+# 				id = dream.999
+# 			}
+# 		}
+# 	}
+# }
+
+# Debug for changing policy quickly
+# country_event = {
+# 	id = dream.999
+# 	is_triggered_only = yes
+# 	hide_window = no
+# 	title = example_title
+# 	desc = example_desc
+#
+# 	trigger = {
+# 	}
+#
+# 	immediate = {
+# 		random_situation = {
+# 			limit = {
+# 				# is_situation_type = situation_dreaming_deep
+# 			}
+#
+# 			set_variable = {
+# 				which = customInfo
+# 				value = trigger:situation_progress
+# 			}
+# 			multiply_variable = {
+# 				which = customInfo
+# 				value = -1
+# 			}
+# 			add_situation_progress = customInfo
+# 			save_event_target_as = situationTarget
+# 			custom_tooltip = example_custom
+# 		}
+# 	}
+#
+# 	option = {
+# 		name = "example_custom"
+# 	}
+# }
+
+
+# Add Dreamer Leader Trait
+country_event = {
+	id = dream.030
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		AND = {
+			has_ascension_perk = ap_dreaming_deep
+			has_crisis_level = crisis_dreaming_level_2
+		}
+	}
+
+	immediate = {
+		every_owned_leader = {
+			limit = {
+				NOR = {
+					has_trait = leader_trait_dreamweaver
+					has_leader_flag = renowned_leader
+					has_leader_flag = legendary_leader
+				}
+				is_gestalt_node = no
+			}
+			add_trait = {
+				trait = leader_trait_dreamweaver
+				show_message = no
+			}
+		}
+		every_pool_leader = {
+			limit = {
+				NOT = { has_trait = leader_trait_dreamweaver }
+			}
+			add_trait = {
+				trait = leader_trait_dreamweaver
+				show_message = no
+			}
+		}
+		create_message = {
+			type = MESSAGE_ALL_GAINED_TRAIT
+			localization = MESSAGE_ALL_GAINED_TRAIT_DESC
+			days = @toast_message_days
+			variable = {
+				type = key
+				value = leader_trait_dreamweaver
+				localization = TRAIT
+			}
+			variable = {
+				key = TRAIT_KEY
+				value = leader_trait_dreamweaver
+			}
+			variable = {
+				key = "border"
+				value = "GFX_invisible"
+			}
+		}
+	}
+}
+
+country_event = {
+	id = dream.031
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		OR = {
+			has_ascension_perk = ap_dreaming_deep
+			has_crisis_level = crisis_dreaming_level_3
+		}
+		from = {
+			NOT = { leader_class = envoy }
+		}
+	}
+
+	immediate = {
+		from = {
+			add_trait = {
+				trait = leader_trait_dreamweaver
+				show_message = no
+			}
+		}
+	}
+}
+

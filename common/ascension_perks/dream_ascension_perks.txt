@@ -1,0 +1,61 @@
+# dream_ascension_perks.txt
+# Contributors: Lord Roscoford
+
+
+ap_dreaming_deep = {
+	potential = {
+		OR = {
+			has_nemesis = yes
+			has_biogenesis_dlc = yes
+			has_machine_age_dlc = yes
+		}
+
+		NOR = {
+			has_ascension_perk = ap_become_the_crisis
+			has_ascension_perk = ap_cosmogenesis
+			has_ascension_perk = ap_behemoths
+			has_ascension_perk = ap_defender_of_the_galaxy
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_ascension_perks_3"
+			num_ascension_perks > 2
+		}
+		custom_tooltip = {
+			fail_text = "requires_independence"
+			is_subject = no
+		}
+		custom_tooltip = {
+			fail_text = "must_not_be_custodian"
+			is_galactic_custodian = no
+		}
+		custom_tooltip = {
+			fail_text = "must_not_be_emperor"
+			is_galactic_emperor = no
+		}
+		custom_tooltip = {
+			fail_text = "must_not_be_crisis"
+			NOT = { has_country_flag = player_crisis_chosen}
+		}
+	}
+
+	on_enabled = {
+		hidden_effect = {
+			set_ai_personality = became_the_crisis
+			country_event = { id = timeline.69 } # Timeline Become the crisis
+			set_variable = {
+				which = dreamer_motes_produced
+				value = 0
+			}
+			set_country_flag = player_crisis_chosen
+		}
+		activate_crisis_progression = dream_path
+	}
+
+	ai_weight = {
+		factor = 0 # AI shouldn't take this perk, it will be extremely unfun
+	}
+}
+

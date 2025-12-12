@@ -1,0 +1,182 @@
+# dream_operation_events.txt
+# Contributors: Lord Roscoford
+
+namespace = dream_operation
+
+### Dreamwalking
+# Resolution
+espionage_operation_event = {
+	id = dream_operation.1000
+	title = dream_operation.1000.name
+	desc = dream_operation.1000.desc
+	espionage_operation = yes
+	picture = GFX_evt_infiltration_neutral
+	show_sound = event_default
+	is_triggered_only = yes
+
+	immediate = {
+		owner = {
+			complete_crisis_objective = crisobj_infiltrate_dreams
+		}
+	}
+
+	option = { name = EXCELLENT }
+}
+
+### Deep Dream
+# Resolution
+espionage_operation_event = {
+	id = dream_operation.1100
+	title = dream_operation.1100.name
+	desc = dream_operation.1100.desc
+	espionage_operation = yes
+	picture = GFX_evt_astral_rift_bleached_planet
+	show_sound = event_psionic
+	is_triggered_only = yes
+
+	immediate = {
+		owner = {
+			complete_crisis_objective = crisobj_infiltrate_dreams
+		}
+		target.owner = {
+			random_owned_planet = {
+				save_event_target_as = targetPlanet
+				limit = {
+					not = {
+						has_modifier = dreaming_deep
+					}
+				}
+				add_modifier = {
+					modifier = dreaming_deep
+				}
+			}
+		}
+	}
+
+
+
+	option = { name = EXCELLENT }
+}
+
+### Gate Weaving
+# Resolution
+espionage_operation_event = {
+	id = dream_operation.1200
+	title = dream_operation.1200.name
+	desc = dream_operation.1200.desc
+	espionage_operation = yes
+	picture = GFX_evt_alien_abduction
+	show_sound = event_psionic
+	is_triggered_only = yes
+
+	immediate = {
+		owner = {
+			complete_crisis_objective = crisobj_infiltrate_dreams
+			random_owned_planet = {
+				save_event_target_as = targetPlanet
+			}
+		}
+		target.owner = {
+			random_owned_planet = {
+				save_event_target_as = originPlanet
+				ordered_owned_pop_group = {
+					position = 0
+					order_by = trigger:pop_group_size
+					resettle_pop_group = {
+						AMOUNT = 200
+						POP_GROUP = this
+						PLANET = event_target:targetPlanet
+					}
+				}
+			}
+		}
+	}
+
+	option = { name = EXCELLENT }
+}
+
+### Tide of Lethargy
+# Resolution
+espionage_operation_event = {
+	id = dream_operation.1300
+	title = dream_operation.1300.name
+	desc = dream_operation.1300.desc
+	espionage_operation = yes
+	picture = GFX_evt_astral_rift_bleached_planet_2
+	show_sound = event_psionic
+	is_triggered_only = yes
+
+	immediate = {
+		owner = {
+			complete_crisis_objective = crisobj_infiltrate_dreams
+		}
+		target.owner = {
+			set_country_flag = tide_of_lethargy
+			save_event_target_as = targetEmpire
+			every_owned_planet = {
+				limit = {
+					not = {
+						has_modifier = dreaming_deep
+					}
+				}
+				add_modifier = {
+					modifier = dreaming_deep
+				}
+			}
+		}
+	}
+
+	option = { name = EXCELLENT }
+}
+
+event = {
+	id = dream_operation.1301
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_playable_country = {
+			has_country_flag = tide_of_lethargy
+		}
+	}
+
+	immediate = {
+		every_playable_country = {
+			limit = {
+				has_country_flag = tide_of_lethargy
+			}
+
+			every_owned_planet = {
+				limit = { NOT = { has_modifier = dreaming_deep } }
+				add_modifier = {
+					modifier = dreaming_deep
+				}
+			}
+		}
+	}
+}
+
+### Dream Weaving
+# Resolution
+espionage_operation_event = {
+	id = dream_operation.1400
+	title = dream_operation.1400.name
+	desc = dream_operation.1400.desc
+	espionage_operation = yes
+	picture = GFX_evt_astral_rift_ancient_battlegrounds
+	show_sound = event_psionic
+	is_triggered_only = yes
+
+	immediate = {
+		owner = {
+			complete_crisis_objective = crisobj_infiltrate_dreams
+		}
+		target = {
+			save_event_target_as = targetFleet
+			set_mia = mia_return_home
+		}
+	}
+
+	option = { name = EXCELLENT }
+}
+

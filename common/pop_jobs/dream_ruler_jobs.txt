@@ -1,0 +1,106 @@
+# dream_ruler_jobs.txt
+# Contributors: Lord Roscoford
+
+
+dreamer = {
+	category = ruler
+	can_set_priority = no
+
+	swappable_data = {
+		default = {
+			condition_string = RULER_JOB_TRIGGER
+			building_icon = building_fe_sky_dome
+		}
+	}
+	tags = { unity }
+
+	possible_pre_triggers = {
+		has_owner = yes
+		is_being_purged = no
+		is_being_assimilated = no
+		is_sapient = yes
+	}
+
+	# possible_precalc = can_fill_ruler_job
+	# possible = {
+	# 	complex_specialist_job_check_trigger = yes
+	# }
+
+	resources = {
+		category = planet_dreamers
+		# PRODUCES
+		produces = {
+			unity = 4
+			dream_motes = 1
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			owner = {
+				NOT = { has_ascension_perk = ap_dreaming_deep }
+			}
+		}
+
+		pop_bonus_workforce_mult = -0.1
+		pop_dreamer_bonus_workforce_mult = 0.1
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			owner = {
+				has_ascension_perk = ap_dreaming_deep
+				has_crisis_level = crisis_dreaming_level_3
+			}
+		}
+
+		pop_bonus_workforce_mult = 0.05
+		pop_dreamer_bonus_workforce_mult = -0.05
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			owner = {
+				has_ascension_perk = ap_dreaming_deep
+				has_crisis_level = crisis_dreaming_level_4
+			}
+		}
+
+		pop_workforce_add = 10
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			owner = {
+				has_edict = directed_dreaming_strategy
+			}
+		}
+		country_naval_cap_add = 1
+		mult = planet.modifier:job_dreamer_naval_cap_add
+	}
+
+	triggered_planet_modifier = {
+		modifier = {
+			planet_stability_add = 1
+		}
+		mult = planet.modifier:job_dreamer_stability_add
+	}
+
+
+	weight = {
+		weight = 10000
+	}
+
+	inline_script = "jobs/automodding_priority_unity"
+
+	promotion = {
+		time = @standard_promotion_time
+		effect = {
+			pop_amount_change_category = {
+				CATEGORY = ruler
+				AMOUNT = local_pop_amount
+			}
+		}
+	}
+}
+
