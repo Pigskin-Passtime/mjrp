@@ -1,0 +1,401 @@
+#########################################################################################
+# Coexistence Protocol
+# coex_crisis_events.txt
+# Author: SushiDragon
+#########################################################################################
+namespace = coex_crisis
+country_event = {
+	# Taking the AP - Start level 1
+	id = coex_crisis.1000
+	title = "coex_crisis.1000.name"
+	desc = coex_crisis.1000.desc
+	picture = GFX_evt_enclave_overlord
+	show_sound = event_death_cult
+	is_triggered_only = yes
+	event_chain = coexistence_chain
+	option = {
+		name = coex_crisis.1000.a
+		begin_event_chain = {
+			event_chain = coexistence_chain
+			target = root
+		}
+		add_event_chain_counter = {
+			event_chain = "coexistence_chain"
+			counter = "coexistence_level_reached"
+			amount = 1
+		}
+		custom_tooltip = coex_brain_relay_tech_unlock_tt
+		if = {
+			limit = {
+				NOT = {
+					has_technology = tech_psionic_theory
+				}
+			}
+			custom_tooltip = coex_psionic_theory_tech_unlock_tt
+		}
+	}
+}
+
+country_event = {
+	# Reaching Level 2
+	id = coex_crisis.7105
+	title = "coex_crisis.7105.name"
+	desc = coex_crisis.7105.desc
+	picture = GFX_evt_board_meeting
+	show_sound = event_death_cult
+	event_chain = coexistence_chain
+	is_triggered_only = yes
+	immediate = {
+		add_event_chain_counter = {
+			event_chain = "coexistence_chain"
+			counter = "coexistence_level_reached"
+			amount = 1
+		}
+	}
+	option = {
+		name = coex_crisis.7105.a
+	}
+}
+
+country_event = {
+	# Reaching Level 3
+	id = coex_crisis.7110
+	title = "coex_crisis.7110.name"
+	desc = coex_crisis.7110.desc
+	picture = GFX_evt_communication_event
+	show_sound = event_death_cult
+	event_chain = coexistence_chain
+	is_triggered_only = yes
+	immediate = {
+		add_event_chain_counter = {
+			event_chain = "coexistence_chain"
+			counter = "coexistence_level_reached"
+			amount = 1
+		}
+	}
+	option = {
+		name = coex_crisis.7110.a
+		#custom_tooltip = new_cosmogenesis_tech_tt
+	}
+}
+
+country_event = {
+	# Reaching Level 4
+	id = coex_crisis.7115
+	title = "coex_crisis.7115.name"
+	desc = coex_crisis.7115.desc
+	picture = GFX_evt_shroudwalker_enclave
+	show_sound = event_death_cult
+	event_chain = cosmogenesis_chain
+	is_triggered_only = yes
+	immediate = {
+		add_event_chain_counter = {
+			event_chain = "coexistence_chain"
+			counter = "coexistence_level_reached"
+			amount = 1
+		}
+	}
+	option = {
+		name = coex_crisis.7115.a
+	}
+}
+
+#Unlock Level 4 -> 5 special project
+country_event = {
+	id = coex_crisis.7300
+	title = "coex_crisis.7300.name"
+	desc = {
+		text = coex_crisis.7300.desc
+	}
+	picture = GFX_evt_spymaster
+	show_sound = event_necrophage
+	event_chain = cosmogenesis_chain
+	is_triggered_only = yes
+	option = {
+		name = ACKNOWLEDGED
+		root = {
+			enable_special_project = {
+				name = "COEX_CRISIS_SPECIAL_PROJECT_4"
+				owner = ROOT
+			}
+		}
+	}
+	after = {
+		custom_tooltip = can_advance_crisis_progression_final
+	}
+}
+
+country_event = {
+	# Reaching Level 5
+	id = coex_crisis.7120
+	title = "coex_crisis.7120.name"
+	desc = coex_crisis.7120.desc
+	picture = GFX_evt_hive_mind
+	show_sound = event_death_cult
+	event_chain = cosmogenesis_chain
+	is_triggered_only = yes
+	immediate = {
+		add_event_chain_counter = {
+			event_chain = "coexistence_chain"
+			counter = "coexistence_level_reached"
+			amount = 1
+		}
+	}
+	option = {
+		name = coex_crisis.7120.a
+		start_situation = {
+			type = coex_situation_crisis_enlightenment
+		}
+	}
+}
+
+country_event = {
+	#Cerebral relay captured
+	id = coex_crisis.7200
+	title = coex_crisis.7200.name
+	desc = coex_crisis.7200.desc
+	show_sound = event_super_explosion
+	picture = GFX_evt_the_beholder
+	location = from
+	trigger = {
+		from = {
+			has_megastructure_flag = coex_brain_relay
+		}
+		if = {
+			limit = {
+				has_crisis_level = coex_crisis_coexistence_level_1
+			}
+			NOT = {
+				from = {
+					has_megastructure_flag = coex_brain_relay_of@root
+				}
+			}
+		}
+	}
+	abort_trigger = {
+		OR = {
+			NOT = {
+				exists = from
+			}
+			NOT = {
+				exists = from.owner
+			}
+			from.owner = {
+				NOT = {
+					is_same_value = root
+				}
+			}
+		}
+	}
+	is_triggered_only = yes
+	immediate = {
+		from = {
+			solar_system = {
+				save_event_target_as = coex_destroyed_relay_system
+			}
+		}
+		if = {
+			limit = {
+				exists = fromfrom
+				fromfrom = {
+					has_megastructure_flag = coex_brain_relay_of@prev
+				}
+			}
+			fromfrom = {
+				save_event_target_as = coex_relay_builders
+			}
+		}
+		else = {
+			#fromfrom is not reliable/doesn't work at all
+			random_country = {
+				limit = {
+					from = {
+						has_megastructure_flag = coex_brain_relay_of@prev
+					}
+				}
+				save_event_target_as = coex_relay_builders
+			}
+		}
+	}
+	#It must be destroyed
+	option = {
+		name = coex_crisis.7200.A
+		if = {
+			limit = {
+				has_crisis_level = coex_crisis_coexistence_level_1
+			}
+			add_resource = {
+				coex_mental_authority = 600
+				alloys = 400
+			}
+		}
+		else = {
+			add_resource = {
+				influence = 50
+				alloys = 400
+			}
+		}
+		hidden_effect = {
+			from = {
+				remove_megastructure = this
+			}
+			if = {
+				limit = {
+					exists = event_target:coex_relay_builders
+				}
+				event_target:coex_relay_builders = {
+					country_event = {
+						id = coex_crisis.7220
+					}
+				}
+			}
+			every_playable_country = {
+				limit = {
+					has_country_flag = coex_relay_affected_by@from
+					# NOT = {
+					# 	is_same_value = root
+					# }
+				}
+				country_event = {
+					id = coex_crisis.7210
+				}
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+country_event = {
+	# Brain Relay destroyed (affected)
+	id = coex_crisis.7210
+	title = "coex_crisis.7210.name"
+	desc = "coex_crisis.7210.desc"
+	picture = GFX_evt_large_explosion
+	show_sound = event_death_cult
+	is_triggered_only = yes
+	immediate = {
+		add_opinion_modifier = {
+			who = event_target:coex_relay_builders
+			modifier = coex_brain_relay_removed
+		}
+		remove_opinion_modifier = {
+			who = event_target:coex_relay_builders
+			modifier = coex_affected_by_brain_relay_0
+		}
+		remove_opinion_modifier = {
+			who = event_target:coex_relay_builders
+			modifier = coex_affected_by_brain_relay_1
+		}
+		remove_opinion_modifier = {
+			who = event_target:coex_relay_builders
+			modifier = coex_affected_by_brain_relay_2
+		}
+		remove_opinion_modifier = {
+			who = event_target:coex_relay_builders
+			modifier = coex_affected_by_brain_relay_3
+		}
+		if = {
+			limit = {
+				has_overlord = event_target:coex_relay_builders
+			}
+			random_agreement = {
+				limit = {
+					owner = {
+						is_same_value = root.overlord
+					}
+					target = {
+						is_same_value = root
+					}
+				}
+				add_loyalty = -200
+				#should also remove subjugation during war
+			}
+		}
+	}
+	option = {
+		name = coex_crisis.7210.a
+	}
+	option = {
+		name = coex_crisis.7210.b
+	}
+}
+
+country_event = {
+	# Our Brain Relay destroyed
+	id = coex_crisis.7220
+	title = "coex_crisis.7220.name"
+	desc = "coex_crisis.7220.desc"
+	picture = GFX_evt_large_explosion
+	show_sound = event_death_cult
+	is_triggered_only = yes
+	option = {
+		name = coex_crisis.7220.a
+	}
+}
+
+country_event = {
+	id = coex_crisis.3000
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		FROMFROMFROM = {
+			save_event_target_as = coex_relay
+		}
+		random_country = {
+			limit = {
+				has_country_flag = coex_relay_affected_by@event_target:coex_relay
+			}
+			save_event_target_as = coex_relay_target
+		}
+		owner = {
+			country_event = {
+				id = coex_crisis.3001
+			}
+		}
+	}
+}
+
+#relay constructed
+country_event = {
+	id = coex_crisis.3001
+	picture = GFX_evt_megastructure_construction
+	show_sound = event_spy_orb_build_complete
+	is_triggered_only = yes
+	title = "coex_crisis.3001.name"
+	location = event_target:coex_relay
+	desc = {
+		text = "coex_crisis.3001.desc.target"
+		trigger = {
+			exists = event_target:coex_relay_target
+		}
+	}
+	desc = {
+		text = "coex_crisis.3001.desc.no_target"
+		trigger = {
+			NOT = {
+				exists = event_target:coex_relay_target
+			}
+		}
+	}
+	option = {
+		name = ACKNOWLEDGED
+	}
+}
+
+country_event = {
+	id = coex_crisis.6000
+	hide_window = yes
+	location = FROM
+	is_triggered_only = yes
+	trigger = {
+		last_increased_tech = coex_tech_brain_relay
+	}
+	immediate = {
+		set_variable = {
+			which = coex_brain_relay_counter
+			value = 0
+		}
+	}
+}

@@ -1,0 +1,267 @@
+coex_situation_crisis_subjugation = {
+	complete_icon_frame = GFX_situation_outcome_frame_red
+	complete_icon = GFX_situation_outcome_negative
+	fail_icon_frame = GFX_situation_outcome_frame_green
+	fail_icon = GFX_situation_outcome_meh
+	picture = GFX_evt_alien_propaganda
+	category = negative
+	on_start = {
+		# log = "[Root.Owner.GetName]"
+		random_country = {
+			limit = {
+				has_country_flag = coex_crisis_subjugating@root.owner
+			}
+			save_global_event_target_as = coex_subjugator
+		}
+	}
+	stages = {
+		stage_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_red
+			custom_tooltip = stage_unknown_effects
+			end = 30
+		}
+		stage_2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_red
+			custom_tooltip = stage_unknown_effects
+			# on_first_enter = {
+			# 	situation_event = {
+			# 		id = coex_situation.101
+			# 	}
+			# }
+			end = 60
+		}
+		stage_3 = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_red
+			custom_tooltip = stage_unknown_effects
+			# on_first_enter = {
+			# 	owner = {
+			# 		country_event = {
+			# 			id = coex_situation.102
+			# 		}
+			# 	}
+			# }
+			end = 100
+		}
+	}
+	initial_progress = 40
+	on_progress_complete = {
+		custom_tooltip = coex_situation_subjugation_subjugated_tooltip
+		hidden_effect = {
+			situation_event = {
+				id = coex_situation.103
+			}
+		}
+	}
+	on_fail = {
+		custom_tooltip = coex_situation_subjugation_finish_tooltip
+		hidden_effect = {
+			situation_event = {
+				id = coex_situation.104
+			}
+			event_target:coex_subjugator = {
+				country_event = {
+					id = coex_situation.111
+				}
+			}
+		}
+	}
+	approach = {
+		name = coex_approach_resist
+		icon = GFX_situation_approach_fist
+		icon_background = GFX_situation_approach_bg_red
+		default = yes
+		ai_weight = {
+			base = 10
+		}
+		allow = {
+			owner = {
+				has_resource = {
+					type = influence
+					amount > 10
+				}
+			}
+		}
+		on_select = {
+			custom_tooltip = coex_approach_resist_effect
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				influence = 6
+			}
+		}
+	}
+	approach = {
+		name = coex_approach_accept
+		icon = GFX_situation_approach_unity
+		icon_background = GFX_situation_approach_bg_green
+		on_select = {
+			custom_tooltip = coex_approach_accept_effect
+		}
+	}
+	monthly_progress = {
+		base = 5
+		modifier = {
+			desc = coex_string_situation_pathetic
+			add = 15
+			owner = {
+				relative_power = {
+					who = event_target:coex_subjugator
+					category = all
+					value = pathetic
+				}
+			}
+		}
+		modifier = {
+			desc = coex_string_situation_inferior
+			add = 10
+			owner = {
+				relative_power = {
+					who = event_target:coex_subjugator
+					category = all
+					value = inferior
+				}
+			}
+		}
+		modifier = {
+			desc = coex_string_situation_superior
+			add = -20
+			owner = {
+				relative_power = {
+					who = event_target:coex_subjugator
+					category = all
+					value = superior
+				}
+			}
+		}
+		modifier = {
+			desc = coex_string_situation_overwhelming
+			add = -40
+			owner = {
+				relative_power = {
+					who = event_target:coex_subjugator
+					category = all
+					value = overwhelming
+				}
+			}
+		}
+		modifier = {
+			desc = string_current_approach
+			add = -10
+			current_situation_approach = coex_approach_resist
+		}
+		modifier = {
+			desc = string_current_approach
+			add = 35
+			current_situation_approach = coex_approach_accept
+		}
+	}
+	abort_trigger = {
+		NOT = {
+			exists = event_target:coex_subjugator
+		}
+	}
+}
+
+coex_situation_crisis_enlightenment = {
+	complete_icon_frame = GFX_situation_outcome_frame_green
+	complete_icon = GFX_situation_outcome_positive
+	# fail_icon_frame = GFX_situation_outcome_frame_red
+	# fail_icon = GFX_situation_outcome_negative
+	picture = GFX_evt_overt_indoctrination
+	category = positive
+	stages = {
+		stage_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_red
+			custom_tooltip = stage_unknown_effects
+			end = 70
+		}
+		stage_2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_red
+			custom_tooltip = stage_unknown_effects
+			# on_first_enter = {
+			# 	situation_event = {
+			# 		id = coex_situation.201
+			# 	}
+			# }
+			end = 150
+		}
+		stage_3 = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_red
+			custom_tooltip = stage_unknown_effects
+			# on_first_enter = {
+			# 	owner = {
+			# 		country_event = {
+			# 			id = coex_situation.202
+			# 		}
+			# 	}
+			# }
+			end = 200
+		}
+	}
+	initial_progress = 10
+	on_progress_complete = {
+		custom_tooltip = coex_situation_enlightenment_tooltip
+		hidden_effect = {
+			situation_event = {
+				id = coex_situation.303
+			}
+		}
+	}
+	# on_fail = {
+	# 	custom_tooltip = coex_situation_enlightenment_failed_tooltip
+	# 	hidden_effect = {
+	# 		situation_event = { id = coex_situation.104 }
+	# 	}
+	# }
+	approach = {
+		name = coex_approach_continue
+		icon = GFX_situation_approach_unity
+		icon_background = GFX_situation_approach_bg_green
+		default = yes
+		allow = {
+			owner = {
+				has_megastructure = coex_enlightenment_array_3
+			}
+		}
+		on_select = {
+			custom_tooltip = coex_approach_continue_effect
+		}
+	}
+	approach = {
+		name = coex_approach_recover_array
+		icon = GFX_situation_approach_suspicious
+		icon_background = GFX_situation_approach_bg_yellow
+		potential = {
+			owner = {
+				NOT = {
+					has_megastructure = coex_enlightenment_array_3
+				}
+			}
+		}
+		on_select = {
+			custom_tooltip = coex_approach_recover_array_effect
+		}
+	}
+	monthly_progress = {
+		base = 0
+		modifier = {
+			desc = string_current_approach
+			add = 1
+			current_situation_approach = coex_approach_continue
+		}
+		# modifier = {
+		# 	desc = string_current_approach
+		# 	add = -0.2
+		# 	current_situation_approach = coex_approach_recover_array
+		# }
+	}
+	abort_trigger = {
+	}
+}

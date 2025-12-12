@@ -1,0 +1,275 @@
+coex_enlightenment_array_0 = {
+	entity = "coex_enlightenment_array_stage_0_entity"
+	construction_entity = "coex_enlightenment_array_stage_0_entity"
+	portrait = "GFX_megastructure_construction_background"
+	build_time = 1200
+	place_entity_on_planet_plane = no
+	entity_offset = {
+		x = -27
+		y = -27
+	}
+	resources = {
+		category = megastructures
+		#TODO: add cost for bioshipsets
+		cost = {
+			alloys = 6000
+		}
+	}
+	country_modifier = {
+		coex_brain_relay_megastructures_produces_mult = 1
+	}
+	# upgrade_from = {
+	# 	coex_enlightenment_array_ruined
+	# }
+	potential = {
+		has_menace_perk = menp_coex_mega_2
+		NOT = {
+			any_owned_megastructure = {
+					has_megastructure_flag = coex_enlightenment_array
+				}
+			}
+	}
+	placement_rules = {
+		planet_possible = {
+			custom_tooltip = {
+				fail_text = "requires_survey_not_habitable"
+				is_surveyed = {
+					# prevent leaking habitability information
+					who = prev.from
+					status = yes
+				}
+				colonizable_planet = no
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_anomaly"
+				NOT = {
+					has_anomaly = yes
+				}
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_minor_planetary_body"
+				NOR = {
+					is_asteroid = yes
+					is_moon = yes
+				}
+			}
+			custom_tooltip = {
+				fail_text = "must_build_around_star"
+				is_star = yes
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_astral_scar"
+				is_astral_scar = no
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_ring_world"
+				is_ringworld = no
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_existing_megastructure"
+				NOT = {
+					has_planet_flag = megastructure
+				}
+			}
+		}
+	}
+	on_build_complete = {
+		fromfrom = {
+			solar_system.star = {
+				create_ambient_object = {
+					type = "crisis_sphere_1"
+					location = this
+				}
+				last_created_ambient_object = {
+					set_ambient_object_flag = crisis_sphere_1_system_effect
+					set_location = {
+						target = prev
+						distance = 0
+						angle = random
+					}
+				}
+			}
+			every_country = {
+				limit = {
+					has_opinion_modifier = {
+						who = from
+						modifier = coex_affected_by_brain_relay_0
+					}
+				}
+				remove_opinion_modifier = {
+					who = from
+					modifier = coex_affected_by_brain_relay_0
+				}
+				add_opinion_modifier = {
+					who = from
+					modifier = coex_affected_by_brain_relay_1
+				}
+			}
+			set_megastructure_flag = coex_enlightenment_array
+		}
+	}
+}
+
+coex_enlightenment_array_1 = {
+	entity = "coex_enlightenment_array_stage_1_entity"
+	construction_entity = "coex_enlightenment_array_stage_1_entity"
+	portrait = "GFX_megastructure_construction_background"
+	build_time = 2000
+	victory_score = 1000
+	place_entity_on_planet_plane = no
+	entity_offset = {
+		x = -27
+		y = -27
+	}
+	resources = {
+		category = megastructures
+		cost = {
+			alloys = 10000
+		}
+		produces = {
+			influence = 2
+		}
+	}
+	country_modifier = {
+		coex_brain_relay_megastructures_produces_mult = 1.5
+	}
+	possible = {
+		from = {
+			has_menace_perk = menp_coex_mega_3
+		}
+	}
+	upgrade_from = {
+		coex_enlightenment_array_0
+	}
+	on_build_complete = {
+		fromfrom = {
+			set_megastructure_flag = coex_enlightenment_array
+			every_country = {
+				limit = {
+					has_opinion_modifier = {
+						who = from
+						modifier = coex_affected_by_brain_relay_1
+					}
+				}
+				remove_opinion_modifier = {
+					who = from
+					modifier = coex_affected_by_brain_relay_1
+				}
+				add_opinion_modifier = {
+					who = from
+					modifier = coex_affected_by_brain_relay_2
+				}
+			}
+		}
+		from = {
+			#	country_event = { id = crisis.6005 }
+		}
+	}
+}
+
+coex_enlightenment_array_2 = {
+	entity = "coex_enlightenment_array_stage_2_entity"
+	construction_entity = "coex_enlightenment_array_stage_2_entity"
+	portrait = "GFX_megastructure_construction_background"
+	build_time = 2000
+	victory_score = 2500
+	place_entity_on_planet_plane = no
+	entity_offset = {
+		x = -27
+		y = -27
+	}
+	resources = {
+		category = megastructures
+		cost = {
+			alloys = 12000
+		}
+	}
+	country_modifier = {
+		coex_brain_relay_megastructures_produces_mult = 2.3
+	}
+	possible = {
+		from = {
+			has_menace_perk = menp_coex_mega_3
+		}
+	}
+	upgrade_from = {
+		coex_enlightenment_array_1
+	}
+	on_build_complete = {
+		fromfrom = {
+			set_megastructure_flag = coex_enlightenment_array
+			every_country = {
+				limit = {
+					has_opinion_modifier = {
+						who = from
+						modifier = coex_affected_by_brain_relay_2
+					}
+				}
+				remove_opinion_modifier = {
+					who = from
+					modifier = coex_affected_by_brain_relay_2
+				}
+				add_opinion_modifier = {
+					who = from
+					modifier = coex_affected_by_brain_relay_3
+				}
+			}
+		}
+		from = {
+			#country_event = { id = crisis.6006 }
+			#country_event = { id = crisis.6150 days = 180 random = 480 }
+		}
+	}
+}
+
+coex_enlightenment_array_3 = {
+	entity = "coex_enlightenment_array_stage_3_entity"
+	construction_entity = "coex_enlightenment_array_stage_2_entity"
+	portrait = "GFX_megastructure_construction_background"
+	build_time = 3000
+	victory_score = 5000
+	place_entity_on_planet_plane = no
+	entity_offset = {
+		x = -27
+		y = -27
+	}
+	possible = {
+		from = {
+			has_menace_perk = menp_coex_mega_4
+		}
+	}
+	resources = {
+		category = megastructures
+		cost = {
+			alloys = 20000
+		}
+		produces = {
+			influence = 10
+		}
+	}
+	country_modifier = {
+		coex_brain_relay_megastructures_produces_mult = 5
+	}
+	upgrade_from = {
+		coex_enlightenment_array_2
+	}
+	on_build_complete = {
+		fromfrom = {
+			set_megastructure_flag = coex_enlightenment_array
+		}
+		from = {
+			country_event = {
+				id = coex_crisis.7300				#start special project to activate thing
+			}
+		}
+	}
+}
+
+
+# coex_enlightenment_array_ruined = {
+# 	entity = "dyson_sphere_destroyed_entity"
+# 	portrait = "GFX_megastructure_construction_background"
+# 	potential = {
+# 		always = no
+# 	}
+# }

@@ -1,0 +1,195 @@
+#########################################################################################
+# Coexistence Protocol
+# coex_situation_events.txt
+# Author: SushiDragon
+#########################################################################################
+namespace = coex_situation
+situation_event = {
+	#Subjugated
+	id = coex_situation.103
+	title = "coex_situation.103.name"
+	desc = coex_situation.103.desc
+	picture = GFX_evt_signing
+	show_sound = event_death_cult
+	is_triggered_only = yes
+	immediate = {
+		owner = {
+			set_country_flag = coex_subjugation_attempted
+			save_event_target_as = coex_subjugation_target
+		}
+		random_country = {
+			limit = {
+				has_country_flag = coex_crisis_subjugating@root.owner
+			}
+			country_event = {
+				id = coex_situation.110
+				days = 1				#Notify subjugator
+			}
+			root.owner = {
+				set_subject_of = {
+					who = prev
+					allow_instant_negotiation = yes
+					preset = preset_vassal_mean_01
+				}
+			}
+		}
+	}
+	option = {
+		name = ACKNOWLEDGED
+	}
+	after = {
+		destroy_situation = this
+	}
+}
+
+situation_event = {
+	#Resisted subjugation
+	id = coex_situation.104
+	title = "coex_situation.104.name"
+	desc = coex_situation.104.desc
+	picture = GFX_evt_one_sided_deal
+	show_sound = event_default
+	is_triggered_only = yes
+	immediate = {
+		owner = {
+			set_country_flag = coex_subjugation_attempted
+			save_event_target_as = coex_subjugation_target
+		}
+		random_country = {
+			limit = {
+				has_country_flag = coex_crisis_subjugating@root.owner
+			}
+			country_event = {
+				id = coex_situation.111
+				days = 1				#Notify resisted
+			}
+		}
+	}
+	option = {
+		name = coex_situation.104.a
+	}
+	after = {
+		destroy_situation = this
+	}
+}
+
+country_event = {
+	#Successful subjugation
+	id = coex_situation.110
+	title = coex_situation.110.name
+	desc = coex_situation.110.desc
+	picture = GFX_evt_signing
+	show_sound = event_default
+	is_triggered_only = yes
+	option = {
+		name = ACKNOWLEDGED
+	}
+}
+
+country_event = {
+	#Failed subjugation
+	id = coex_situation.111
+	title = coex_situation.111.name
+	desc = coex_situation.111.desc
+	picture = GFX_evt_one_sided_deal
+	show_sound = event_default
+	is_triggered_only = yes
+	option = {
+		name = UNFORTUNATE
+	}
+}
+
+#Enlightenment
+situation_event = {
+	id = coex_situation.303
+	title = "coex_situation.303.name"
+	desc = {
+		text = "coex_situation.303.desc"
+	}
+	picture = GFX_evt_vortex
+	show_sound = event_default
+	is_triggered_only = yes
+	immediate = {
+		owner = {
+			add_victory_score = {
+				source = enlightened_galaxy_score
+				score = 500000
+			}
+		}
+		# hidden_effect = {
+		# 	country_event = { id = timeline.34 } # Milestone Destroyed Galaxy
+		# }
+	}
+	option = {
+		name = coex_situation.303.a
+		owner = {
+			tooltip = {
+				win = yes
+			}
+			hidden_effect = {
+				country_event = {
+					id = coex_situation.304
+					days = 1					#Victory
+				}
+				every_system = {
+					limit = {
+						exists = starbase
+					}
+					starbase = {
+						set_owner = PREVPREV
+					}
+					every_system_colony = {
+						limit = {
+							exists = owner
+						}
+						set_owner = PREVPREV
+					}
+				}
+			}
+		}
+	}
+}
+
+#Victory
+country_event = {
+	id = coex_situation.304
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		every_playable_country = {
+			limit = {
+				is_ai = no
+				NOT = {
+					is_same_value = root
+				}
+			}
+			country_event = {
+				id = coex_situation.305
+			}
+		}
+		set_update_modifiers_batch = begin
+		set_update_modifiers_batch = end
+		every_country = {
+			limit = {
+				NOT = {
+					is_country_type = default
+				}
+			}
+			destroy_country = yes
+		}
+		win = yes
+	}
+}
+
+#Game over (Enlightened)
+country_event = {
+	id = coex_situation.305
+	title = "coex_situation.305.name"
+	desc = "coex_situation.305.desc"
+	picture = GFX_evt_supernova
+	show_sound = event_default
+	is_triggered_only = yes
+	option = {
+		name = coex_situation.305.a
+	}
+}

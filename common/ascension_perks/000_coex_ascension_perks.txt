@@ -1,0 +1,72 @@
+# CRISIS LEVELS
+# Levels can be unlocked in the order they are written in this file. A later listed level with lower requirements will not be unlocked until the previous levels have been unlocked.
+#
+# level_name = {
+#	perks = {
+#		menp_undertaker		# The menace perks that will be applied when the level is unlocked.
+#		menp_ship_chipper
+#	}
+#	required_menace = 0		# The required amount of Menace to unlock the level
+#	allow = { has_completed_special_project_in_log = CRISIS_SPECIAL_PROJECT_1 }	# You can only unlock this level when this trigger returns true
+#																			# scope COUNTRY, This = country trying to unlock the level
+#	on_unlock = { set_country_flag = CRISIS_LEVEL_FLAG }	# an effect that is triggered when you unlock the level
+#															# scope COUNTRY, This = country the level is being unlocked for
+# }
+coex_ap_coexistence_protocol = {
+	potential = {
+		OR = {
+			has_machine_age_dlc = yes
+			has_nemesis = yes
+			has_biogenesis_dlc = yes
+		}
+		has_utopia = yes
+		NOR = {
+			has_valid_civic = civic_fanatic_purifiers
+			has_valid_civic = civic_machine_terminator
+			has_valid_civic = civic_hive_devouring_swarm
+			has_ascension_perk = ap_become_the_crisis
+			has_ascension_perk = ap_cosmogenesis
+			has_ascension_perk = ap_defender_of_the_galaxy
+			has_ascension_perk = ap_behemoths
+			has_origin = origin_slavers			# No crisis for MSI
+			has_country_flag = player_crisis_chosen
+		}
+		is_ai = no		#Block AI unless support is added
+	}
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_ascension_perks_3"
+			num_ascension_perks > 2
+		}
+		custom_tooltip = {
+			fail_text = "requires_independence"
+			is_subject = no
+		}
+		custom_tooltip = {
+			fail_text = "must_not_be_custodian"
+			is_galactic_custodian = no
+		}
+		custom_tooltip = {
+			fail_text = "must_not_be_emperor"
+			is_galactic_emperor = no
+		}
+		custom_tooltip = {
+			fail_text = "coex_no_other_crisis"
+			NOT = {
+				any_playable_country = {
+					has_ascension_perk = coex_ap_coexistence_protocol
+				}
+			}
+		}
+	}
+	on_enabled = {
+		hidden_effect = {
+			set_variable = {
+				which = coex_brain_relay_mental_authority_produced
+				value = 0
+			}
+			set_country_flag = player_crisis_chosen
+		}
+		activate_crisis_progression = coexistence_path
+	}
+}

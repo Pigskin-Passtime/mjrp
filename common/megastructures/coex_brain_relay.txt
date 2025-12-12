@@ -1,0 +1,335 @@
+# Coexistence Protocol - Brain Relay Megastructure
+coex_brain_relay_0 = {
+	entity = "construction_platform_entity"
+	construction_entity = "construction_platform_entity"
+	portrait = "GFX_megastructure_construction_background"
+	place_entity_on_planet_plane = no
+	entity_offset = {
+		x = -17
+		y = -27
+	}
+	construction_blocks_and_blocked_by = none
+	build_time = 120
+	resources = {
+		category = coex_brain_relay_megastructures
+		cost = {
+			alloys = 700
+			unity = 2000
+		}
+		cost = {
+			trigger = {
+				country_uses_bio_ships = no
+			}
+			alloys = 700
+		}
+		cost = {
+			trigger = {
+				country_uses_bio_ships = yes
+			}
+			alloys = 700
+			mult = 0.5
+		}
+		cost = {
+			trigger = {
+				country_uses_bio_ships = yes
+			}
+			food = 700
+			mult = @halved_alloy_to_food_cost_ratio
+		}
+		upkeep = {
+			energy = 5
+		}
+	}
+	potential = {
+		has_federations_dlc = yes
+	}
+	prerequisites = {
+		"coex_tech_brain_relay"
+	}
+	possible = {
+		hidden_trigger = {
+			exists = starbase
+		}
+		custom_tooltip = {
+			fail_text = "requires_inside_border"
+			OR = {
+				is_inside_border = from
+				from = {
+					has_country_flag = owed_relay@prev.owner
+				}
+			}
+		}
+		custom_tooltip = {
+			fail_text = "requires_no_existing_megastructure"
+			has_no_non_gate_megastructure = yes
+			NOT = {
+				any_system_planet = {
+					is_planet_class = pc_cosmogenesis_world
+				}
+			}
+		}
+		# custom_tooltip = {
+		# 	fail_text = "requires_fewer_than_x_brain_relays"
+		# 	from = {
+		# 		check_variable = {
+		# 			which = coex_brain_relay_counter
+		# 			value <= value:coex_brain_relay_limit
+		# 		}
+		# 	}
+		#}
+	}
+	placement_rules = {
+		planet_possible = {
+			custom_tooltip = {
+				fail_text = "requires_survey_not_habitable"
+				OR = {
+					is_surveyed = {
+						# prevent leaking habitability information
+						who = prev.from
+						status = yes
+					}
+					solar_system = {
+						exists = owner
+					}
+				}
+				colonizable_planet = no
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_anomaly"
+				NOT = {
+					has_anomaly = yes
+				}
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_minor_planetary_body"
+				NOR = {
+					is_asteroid = yes
+					is_moon = yes
+				}
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_star"
+				is_star = no
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_astral_scar"
+				is_astral_scar = no
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_ring_world"
+				is_ringworld = no
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_existing_megastructure"
+				NOT = {
+					has_planet_flag = megastructure
+				}
+			}
+		}
+	}
+	# root = system
+	# from = country
+	ai_weight = {
+		factor = 15
+		modifier = {
+			factor = 0.1
+			starbase = {
+				NOT = {
+					has_starbase_size >= starbase_starfortress
+				}
+			}
+		}
+		modifier = {
+			factor = 0.1
+			any_neighbor_system = {
+				exists = owner
+				NOT = {
+					owner = {
+						is_same_value = from
+					}
+				}
+			}
+		}
+	}
+	on_build_start = {
+		if = {
+			limit = {
+				exists = from
+			}
+			from = {
+				change_variable = {
+					which = brain_relay_counter
+					value = 1
+				}
+			}
+		}
+	}
+	on_build_cancel = {
+		if = {
+			limit = {
+				exists = from
+			}
+			from = {
+				if = {
+					limit = {
+						check_variable = {
+							which = brain_relay_counter
+							value >= 1
+						}
+					}
+					change_variable = {
+						which = brain_relay_counter
+						value = -1
+					}
+				}
+			}
+		}
+	}
+	on_build_complete = {
+		fromfrom = {
+			set_megastructure_flag = coex_brain_relay
+			set_megastructure_flag = coex_brain_relay_of@prev.from
+		}
+	}
+}
+
+#Coexistence Protocol - Brain Relay
+coex_brain_relay_1 = {
+	entity = "coex_brain_relay_1_entity"
+	construction_entity = "coex_brain_relay_1_entity"
+	portrait = "GFX_megastructure_construction_background"
+	place_entity_on_planet_plane = no
+	entity_offset = {
+		x = -17
+		y = -27
+	}
+	build_time = 240
+	resources = {
+		category = coex_brain_relay_megastructures
+		cost = {
+			alloys = 600
+			unity = 500
+		}
+		cost = {
+			trigger = {
+				country_uses_bio_ships = no
+			}
+			alloys = 600
+		}
+		cost = {
+			trigger = {
+				country_uses_bio_ships = yes
+			}
+			alloys = 600
+			mult = 0.5
+		}
+		cost = {
+			trigger = {
+				country_uses_bio_ships = yes
+			}
+			food = 600
+			mult = @halved_alloy_to_food_cost_ratio
+		}
+		produces = {
+			coex_mental_authority = 10
+		}
+		upkeep = {
+			energy = 10
+		}
+	}
+	upgrade_from = {
+		coex_brain_relay_0
+	}
+	prerequisites = {
+		"coex_tech_brain_relay"
+	}
+	on_build_complete = {
+		fromfrom = {
+			set_megastructure_flag = coex_brain_relay
+			set_megastructure_flag = coex_brain_relay_of@prev.from
+		}
+		set_star_flag = coex_brain_relay_built
+		closest_system = {
+			max_steps = 10
+			limit = {
+				any_system_colony = {
+					exists = owner
+					owner = {
+						NOR = {
+							is_same_value = root.from
+							has_opinion_modifier = {
+								who = prev.from
+								modifier = coex_affected_by_brain_relay_0
+							}
+							has_opinion_modifier = {
+								who = prev.from
+								modifier = coex_affected_by_brain_relay_1
+							}
+							has_opinion_modifier = {
+								who = prev.from
+								modifier = coex_affected_by_brain_relay_2
+							}
+							has_opinion_modifier = {
+								who = prev.from
+								modifier = coex_affected_by_brain_relay_3
+							}
+						}
+						is_country_type = default
+					}
+				}
+			}
+			owner = {
+				remove_opinion_modifier = {
+					who = from
+					modifier = coex_brain_relay_removed
+				}
+				if = {
+					limit = {
+						from = {
+							has_megastructure = coex_enlightenment_array_3
+						}
+					}
+					add_opinion_modifier = {
+						modifier = coex_affected_by_brain_relay_3
+						who = from
+					}
+				}
+				else_if = {
+					limit = {
+						from = {
+							has_megastructure = coex_enlightenment_array_2
+						}
+					}
+					add_opinion_modifier = {
+						modifier = coex_affected_by_brain_relay_2
+						who = from
+					}
+				}
+				else_if = {
+					limit = {
+						from = {
+							has_megastructure = coex_enlightenment_array_1
+						}
+					}
+					add_opinion_modifier = {
+						modifier = coex_affected_by_brain_relay_1
+						who = from
+					}
+				}
+				else = {
+					add_opinion_modifier = {
+						modifier = coex_affected_by_brain_relay_0
+						who = from
+					}
+				}
+				set_country_flag = coex_relay_affected_by@prev.fromfrom
+			}
+		}
+		from = {
+			country_event = {
+				id = coex_crisis.3000
+				days = 1
+			}
+		}
+	}
+}

@@ -1,0 +1,444 @@
+#########################################################################################
+# Coexistence Protocol
+# coex_operations_events.txt
+# Author: SushiDragon
+#########################################################################################
+namespace = coex_operation
+##### Force Truce
+espionage_operation_event = {
+	id = coex_operation.101
+	title = coex_operation.101.name
+	desc = coex_operation.101.desc
+	picture = GFX_evt_spy_network
+	show_sound = event_spymaster
+	espionage_operation = yes
+	is_triggered_only = yes
+	option = {
+		name = ACKNOWLEDGED
+	}
+}
+
+### Force Truce - Stage 2
+espionage_operation_event = {
+	id = coex_operation.102
+	title = coex_operation.102.name
+	desc = coex_operation.102.desc
+	picture = GFX_evt_spymaster
+	show_sound = event_spymaster
+	espionage_operation = yes
+	is_triggered_only = yes
+	option = {
+		name = ACKNOWLEDGED
+	}
+}
+
+### Force Truce - Stage 3
+espionage_operation_event = {
+	id = coex_operation.103
+	title = coex_operation.103.name
+	picture = GFX_evt_intelligence_report
+	desc = {
+		text = coex_operation.103.desc
+		#trigger = {
+		#	target = { is_gestalt = no }
+		#}
+	}
+	# desc = {
+	# 	text = operation.6252.6.desc
+	# 	text = operation.6252.7.desc
+	# 	trigger = {
+	# 		target = { is_machine_empire = yes }
+	# 	}
+	# }
+	# desc = {
+	# 	text = operation.6252.8.desc
+	# 	text = operation.6252.9.desc
+	# 	trigger = {
+	# 		target = { is_hive_empire = yes }
+	# 	}
+	# }
+	show_sound = event_spymaster
+	espionage_operation = yes
+	is_triggered_only = yes
+	immediate = {
+		target = {
+			save_event_target_as = target_country
+			random_relation = {
+				limit = {
+					is_country_type = default
+					is_gestalt = no
+					NOT = {
+						is_country = root.target
+					}
+					has_communications = root.target
+					NOT = {
+						is_same_species = root.target
+					}
+				}
+				save_event_target_as = scandal_species
+			}
+		}
+	}
+	option = {
+		name = LAUNCH_OPERATION
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = coex_operation.104
+				}
+			}
+		}
+	}
+}
+
+### Force Truce - Conclusion
+country_event = {
+	id = coex_operation.104
+	title = coex_operation.104.name
+	desc = coex_operation.104.desc
+	picture = GFX_evt_hand_shake
+	show_sound = event_hand_shake
+	is_triggered_only = yes
+	option = {
+		name = EXCELLENT
+		set_truce = {
+			target = event_target:target_country
+			type = none
+		}
+		from.spynetwork = {
+			add_spy_network_level_on_success_effect = {
+				VALUE = -20
+			}
+		}
+		owner = {
+			complete_crisis_objective = coex_crisobj_espionage
+		}
+	}
+	after = {
+		hidden_effect = {
+			destroy_espionage_operation = from
+		}
+	}
+}
+
+##### Build Relay
+espionage_operation_event = {
+	id = coex_operation.301
+	title = coex_operation.301.name
+	desc = coex_operation.301.desc
+	picture = GFX_evt_spy_network
+	show_sound = event_spymaster
+	espionage_operation = yes
+	is_triggered_only = yes
+	option = {
+		name = ACKNOWLEDGED
+	}
+}
+
+### Build Relay - Stage 2
+espionage_operation_event = {
+	id = coex_operation.302
+	title = coex_operation.302.name
+	desc = coex_operation.302.desc
+	picture = GFX_evt_spymaster
+	show_sound = event_spymaster
+	espionage_operation = yes
+	is_triggered_only = yes
+	option = {
+		name = ACKNOWLEDGED
+	}
+}
+
+### Build Relay - Conclusion
+espionage_operation_event = {
+	id = coex_operation.303
+	title = coex_operation.303.name
+	desc = coex_operation.303.desc
+	picture = GFX_evt_one_sided_deal
+	show_sound = event_espionage_concluded
+	espionage_operation = yes
+	is_triggered_only = yes
+	immediate = {
+		set_espionage_operation_progress_locked = yes
+	}
+	option = {
+		name = LAUNCH_OPERATION
+		target = {
+			random_system_within_border = {
+				limit = {
+					has_astral_rift = no
+					has_no_non_gate_megastructure = yes
+					# count_archaeological_site = {
+					# 	limit = {
+					# 		is_site_completed = no
+					# 	}
+					# 	count = 0
+					# }
+					NOR = {
+						any_system_planet = {
+							is_astral_scar = yes
+						}
+						any_system_megastructure = {
+							OR = {
+								is_megastructure_type = gateway_0
+								is_megastructure_type = gateway_final
+								is_megastructure_type = gateway_derelict
+								is_megastructure_type = gateway_restored
+								is_megastructure_type = gateway_ruined
+								is_megastructure_type = coex_brain_relay_0
+								is_megastructure_type = coex_brain_relay_1
+							}
+						}
+						any_system_planet = {
+							OR = {
+								is_planet_class = pc_cosmogenesis_world
+								is_colonizable = yes
+								is_colony = yes
+							}
+						}
+					}
+				}
+				weights = {
+					base = 1
+					modifier = {
+						factor = 0.2
+						has_natural_wormhole = yes
+					}
+					modifier = {
+						factor = 0.3
+						starbase = {
+							has_starbase_size = starbase_starport
+						}
+					}
+					modifier = {
+						factor = 0.01
+						starbase = {
+							has_starbase_size = starbase_starfortress
+						}
+					}
+					modifier = {
+						factor = 0.001
+						starbase = {
+							has_starbase_size = starbase_citadel
+						}
+					}
+				}
+				starbase = {
+					set_owner = root.owner
+				}
+				random_system_planet = {
+					save_event_target_as = target_planet
+				}
+				spawn_megastructure = {
+					type = coex_brain_relay_0
+					owner = root.owner
+					planet = event_target:target_planet
+				}
+			}
+		}
+		owner = {
+			hidden_effect = {
+			if = {
+				limit = {
+					exists = event_target:target_planet
+				}
+				country_event = {
+					id = coex_operation.310
+				}
+				prev.target = {
+					country_event = {
+						id = coex_operation.320
+					}
+					set_country_flag = coex_espionage_relay_installed
+				}
+				else = {
+					country_event = {
+						id = coex_operation.311
+					}
+				}
+			}}
+			complete_crisis_objective = coex_crisobj_espionage
+		}
+	}
+	after = {
+		set_espionage_operation_progress_locked = no
+	}
+}
+
+#Success
+country_event = {
+	id = coex_operation.310
+	title = coex_operation.310.name
+	desc = coex_operation.310.desc
+	picture = GFX_evt_megastructure_construction
+	show_sound = event_ringworld_build_start
+
+	is_triggered_only = yes
+	option = {
+		name = ACKNOWLEDGED
+	}
+}
+
+#No system found
+country_event = {
+	id = coex_operation.311
+	title = coex_operation.311.name
+	desc = coex_operation.311.desc
+	picture = GFX_evt_star_chart
+	show_sound = event_default
+	is_triggered_only = yes
+	option = {
+		name = UNFORTUNATE
+	}
+}
+
+#Notify target on success
+country_event = {
+	id = coex_operation.320
+	title = coex_operation.320.name
+	desc = coex_operation.320.desc
+	picture = GFX_evt_one_sided_deal
+	is_triggered_only = yes
+	option = {
+		name = ACKNOWLEDGED
+	}
+}
+
+##### Force Subjugation
+espionage_operation_event = {
+	id = coex_operation.401
+	title = coex_operation.401.name
+	desc = coex_operation.401.desc
+	picture = GFX_evt_spy_network
+	show_sound = event_spymaster
+	is_triggered_only = yes
+	espionage_operation = yes
+	immediate = {
+		target = {
+			random_owned_leader = {
+				weights = {
+					base = 10
+					modifier = {
+						factor = 3
+						has_total_skill > 3
+					}
+					modifier = {
+						factor = 3
+						has_total_skill > 5
+					}
+					modifier = {
+						factor = 0.02
+						is_ruler = yes
+					}
+				}
+				set_leader_flag = coex_subjugation_target_leader@root.owner
+				save_event_target_as = coex_subjugation_target_leader
+			}
+		}
+	}
+	option = {
+		name = PROCEED
+	}
+}
+
+espionage_operation_event = {
+	id = coex_operation.402
+	title = coex_operation.402.name
+	desc = coex_operation.402.desc
+	picture = GFX_evt_intelligence_report
+	show_sound = event_spymaster
+	is_triggered_only = yes
+	espionage_operation = yes
+	immediate = {
+		target = {
+			random_owned_leader = {
+				limit = {
+					has_leader_flag = coex_subjugation_target_leader@root.owner
+				}
+				save_event_target_as = coex_subjugation_target_leader
+			}
+		}
+	}
+	option = {
+		name = ACKNOWLEDGED
+	}
+}
+
+espionage_operation_event = {
+	id = coex_operation.403
+	title = coex_operation.403.name
+	desc = coex_operation.403.desc
+	picture = GFX_evt_spymaster
+	show_sound = event_espionage_concluded
+	is_triggered_only = yes
+	espionage_operation = yes
+	immediate = {
+		set_espionage_operation_progress_locked = yes
+		target = {
+			random_owned_leader = {
+				limit = {
+					has_leader_flag = coex_subjugation_target_leader@root.owner
+				}
+				save_event_target_as = coex_subjugation_target_leader
+			}
+		}
+	}
+	option = {
+		name = LAUNCH_OPERATION
+		hidden_effect = {
+			target = {
+				set_country_flag = coex_crisis_subjugated
+				country_event = {
+					id = coex_operation.411
+					days = 1
+				}
+			}
+			owner = {
+				set_country_flag = coex_crisis_subjugating@root.target
+				complete_crisis_objective = coex_crisobj_espionage
+			}
+		}
+	}
+	after = {
+		set_espionage_operation_progress_locked = no
+	}
+}
+
+country_event = {
+	id = coex_operation.411
+	title = coex_operation.411.name
+	desc = coex_operation.411.desc
+	picture = GFX_evt_smear_campaign
+	show_sound = event_public_unrest
+	is_triggered_only = yes
+	immediate = {
+		start_situation = {
+			type = coex_situation_crisis_subjugation
+		}
+	}
+	option = {
+		name = coex_operation.411.a		#Resist
+		random_situation = {
+			limit = {
+				is_situation_type = coex_situation_crisis_subjugation
+			}
+			set_situation_approach = coex_approach_resist
+		}
+		ai_chance = {
+			factor = 5
+		}
+	}
+	option = {
+		#Accept
+		name = coex_operation.411.b
+		random_situation = {
+			limit = {
+				is_situation_type = coex_situation_crisis_subjugation
+			}
+			set_situation_approach = coex_approach_accept
+		}
+		ai_chance = {
+			factor = 0
+		}
+	}
+}

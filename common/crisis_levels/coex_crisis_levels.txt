@@ -1,0 +1,168 @@
+# CRISIS LEVELS
+# Levels can be unlocked in the order they are written in this file. A later listed level with lower requirements will not be unlocked until the previous levels have been unlocked.
+#
+# level_name = {
+#	perks = {
+#		menp_undertaker		# The menace perks that will be applied when the level is unlocked.
+#		menp_ship_chipper
+#	}
+#	required_menace = 0		# The required amount of Menace to unlock the level
+#	allow = { has_completed_special_project_in_log = CRISIS_SPECIAL_PROJECT_1 }	# You can only unlock this level when this trigger returns true
+#																			# scope COUNTRY, This = country trying to unlock the level
+#	on_unlock = { set_country_flag = CRISIS_LEVEL_FLAG }	# an effect that is triggered when you unlock the level
+#															# scope COUNTRY, This = country the level is being unlocked for
+# }
+coex_crisis_coexistence_level_1 = {
+	# REQUIREMENTS
+	required_crisis_currency = 0
+	# REWARDS
+	perks = {
+		menp_coex_mega_1
+		menp_coex_techs_1
+		menp_coex_operations_1
+		menp_coex_infiltration_1
+	}
+	on_unlock = {
+		add_coex_level_1_perks = yes
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = coex_crisis.1000
+				}
+			}
+		}
+	}
+}
+
+coex_crisis_coexistence_level_2 = {
+	# REQUIREMENTS
+	allow = {
+		custom_tooltip = {
+			success_text = coex_coexistence_level_2_req_clear_tooltip
+			fail_text = coex_coexistence_level_2_req_tooltip
+			has_megastructure = coex_brain_relay_1
+		}
+	}
+	required_crisis_currency = 2000
+	# REWARDS
+	perks = {
+		menp_coex_mega_2
+		menp_coex_features_2
+		menp_coex_operations_2
+	}
+	on_unlock = {
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = coex_crisis.7105
+				}
+			}
+		}
+	}
+}
+
+coex_crisis_coexistence_level_3 = {
+	# REQUIREMENTS
+	allow = {
+		custom_tooltip = {
+			success_text = coex_coexistence_level_3_req_clear_tooltip
+			fail_text = coex_coexistence_level_3_req_tooltip
+			has_megastructure = coex_enlightenment_array_0
+		}
+	}
+	required_crisis_currency = 6000
+	# REWARDS
+	perks = {
+		
+		menp_coex_mega_3
+		menp_coex_diplomacy_3
+		menp_coex_codebreaking_3
+
+	}
+	on_unlock = {
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = coex_crisis.7110
+				}
+			}
+		}
+	}
+}
+
+coex_crisis_coexistence_level_4 = {
+	# REQUIREMENTS
+	allow = {
+		custom_tooltip = {
+			success_text = coex_coexistence_level_4_req_clear_tooltip
+			fail_text = coex_coexistence_level_4_req_tooltip
+			has_megastructure = coex_enlightenment_array_2
+		}
+	}
+	required_crisis_currency = 18000
+	# REWARDS
+	perks = {
+		menp_coex_mega_4
+		menp_coex_operations_4
+	}
+	on_unlock = {
+		#add_coexistence_level_4_perks = yes
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = coex_crisis.7115
+				}
+			}
+		}
+	}
+}
+
+coex_crisis_coexistence_level_5 = {
+	# REQUIREMENTS
+	allow = {
+		custom_tooltip = {
+			success_text = coex_coexistence_level_5_req_clear_tooltip
+			fail_text = coex_coexistence_level_5_req_tooltip
+			has_megastructure = coex_enlightenment_array_3
+			has_country_flag = coex_crisis_special_project_4_complete
+		}
+		is_subject = no
+	}
+	required_crisis_currency = 45000
+	# REWARDS
+	perks = {
+		menp_coex_features_5
+		menp_coex_enlightenment_5
+	}
+	on_unlock = {
+		owner = {
+			if = {
+				limit = {
+					has_federation = yes
+				}
+				leave_alliance = {
+					override_requirements = yes
+				}
+			}
+			tooltip = {
+				if = {
+					limit = {
+						is_galactic_community_formed = yes
+						is_galactic_community_member = yes
+					}
+					remove_from_galactic_community = yes
+				}
+			}
+		}
+		hidden_effect = {
+			# force Declare Crisis resolution through an appropriate party
+			declare_crisis_effect = yes
+			owner = {
+				#end_event_chain = become_the_crisis_chain
+				country_event = {
+					id = coex_crisis.7120
+				}
+			}
+		}
+	}
+}
