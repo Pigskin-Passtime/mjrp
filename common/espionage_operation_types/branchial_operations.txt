@@ -1,0 +1,67 @@
+operation_branchial_redefine_empire = {
+	target = none
+	categories = { op_cat_sabotage op_cat_government }
+	picture = GFX_evt_hive_mind
+	desc = operation_branchial_redefine_empire_desc
+	stages = 3
+
+	resources = {
+		category = operations
+		cost = {
+			influence = 250
+		}
+		upkeep = {
+			energy = 20
+		}
+	}
+
+	spy_power_cost = 100
+
+	potential = {
+		owner = { has_crisis_perk = menp_branchial_features_4 }
+		target = {
+			is_primitive = no
+		}
+	}
+	allow = {
+		custom_tooltip = {
+			is_running_espionage_operation = no
+			fail_text = operation_one_at_a_time
+		}
+
+		custom_tooltip = {
+			target = {
+				NOR = {
+					has_country_flag = branchial_redefinition_infrastructure
+				}
+			}
+			fail_text = operation_has_branchial_redefinition_infrastructure
+		}
+	}
+	stage = { #Install operatives
+		difficulty = @diff_t1
+		icon = GFX_espionage_chapter_icon_surveillance
+		event = branchial_operation.1
+	}
+	stage = { #Target identified
+		difficulty = @diff_t3
+		icon = GFX_espionage_chapter_icon_target
+		event = branchial_operation.2
+	}
+	stage = { #Result
+		difficulty = @diff_t4
+		icon = GFX_espionage_chapter_icon_motion
+		event = branchial_operation.3
+	}
+	on_roll_failed = {
+		standard_espionage_operation_on_roll_failed = { RANDOM_EVENTS = operation_random_events_generic }
+	}
+	on_create = {
+		target = {
+			set_timed_country_flag = {
+				flag = espionage_operation_targeted_by@root.owner #Used in random Spy Network events
+				days = @operationTargetedByTimer
+			}
+		}
+	}
+}

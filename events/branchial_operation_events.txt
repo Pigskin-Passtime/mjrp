@@ -1,0 +1,74 @@
+namespace = branchial_operation
+
+espionage_operation_event = {
+	id = branchial_operation.1
+	title = branchial_operation.1.name
+	espionage_operation = yes
+	desc = branchial_operation.1.desc
+	picture = GFX_evt_spy_network
+	show_sound = event_default
+	is_triggered_only = yes
+
+	option = { name = ACKNOWLEDGED }
+}
+
+# Target identified
+espionage_operation_event = {
+	id = branchial_operation.2
+	title = branchial_operation.2.name
+	desc = branchial_operation.2.desc
+	espionage_operation = yes
+	picture = GFX_evt_acquire_asset
+	show_sound = event_default
+	is_triggered_only = yes
+
+	option = { name = GOOD }
+}
+
+# Result
+espionage_operation_event = {
+	id = branchial_operation.3
+	title = branchial_operation.3.name
+	desc = branchial_operation.3.desc
+	espionage_operation = yes
+	picture = GFX_evt_hive_mind
+	show_sound = event_default
+	is_triggered_only = yes
+
+	option = {
+		name = LAUNCH_OPERATION
+		hidden_effect = {
+			owner = {
+				country_event = { id = branchial_operation.4 days = 1 }
+			}
+		}
+	}
+
+	after = {
+		set_espionage_operation_progress_locked = no
+	}
+}
+
+# Finalé | from = operation
+country_event = {
+	id = branchial_operation.4
+	title = branchial_operation.4.name
+	desc = branchial_operation.4.desc
+	picture = GFX_evt_salute
+	location = from.target.capital_scope
+	show_sound = event_nem_asset_acquired_positive
+	is_triggered_only = yes
+
+	immediate = {
+		from.target = {
+			set_country_flag = branchial_redefinition_infrastructure
+		}
+	}
+
+	after = {
+		from.spynetwork = {
+			add_spy_network_level_on_success_effect = { VALUE = -80 }
+		}
+		destroy_espionage_operation = from
+	}
+}

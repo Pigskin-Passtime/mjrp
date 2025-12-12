@@ -1,0 +1,808 @@
+namespace = branchial_guardian
+#Infinite Empire Invades and sets up an outpost
+planet_event = {
+	id = branchial_guardian.1
+	hide_window = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	immediate = {
+		set_global_flag = branchial_empire_active
+		create_species = {
+			name = "Infinites"
+			class = random
+			namelist = Extradimensional
+			portrait = random
+			traits = random
+			effect = { save_event_target_as = branchial_species }
+		}
+		create_country = {
+			name = "The Infinite Empire"
+			type = branchial_virgin
+			flag = {
+				icon= {
+					category = "special"
+					file = "unknown.dds"
+				}
+				background= {
+					category = "backgrounds"
+					file = "circle.dds"
+				}
+				colors={
+					"blue"
+					"blue"
+					"blue"
+					"blue"
+				}
+			}
+			effect = {
+				set_country_flag = branchial_guardian_country
+				create_leader = {
+					name = random
+					class = commander
+					species = event_target:branchial_species
+					skill = 10
+					immortal = yes
+				}
+				assign_leader = last_created_leader
+				create_ship_design = { design = "NAME_Branchial_guardians_station" }
+				add_ship_design = last_created_design
+				set_hostile = root.owner
+			}
+		}
+		create_fleet = {
+			name = "Garrison Fleet"
+			settings = { spawn_debris = no }
+			effect = {
+				set_owner = last_created_country
+   	        	while = {
+   	    	    	count = 35
+   		        	create_ship = {
+	       	        	name = "?????"
+          		    	design = "NAME_branchial_guardians_large"
+    	    		}
+   	        	}
+    		    while = {
+    		    	count = 100
+	    	    	create_ship = {
+        			    name = "?????"
+           			    design = "NAME_branchial_guardians_small"
+        	    	}
+    		    }
+	    	    set_location = root
+        	    set_fleet_stance = aggressive
+        	    set_fleet_flag = branchial_and_researchable
+			}
+		}
+		create_fleet = {
+			name = "Invasion Fleet"
+			settings = { spawn_debris = no }
+			effect = {
+				set_owner = last_created_country
+   	        	while = {
+   	    	    	count = 50
+   		        	create_army_transport = {
+						ship_name = "Invasion Transport"
+						army_name = "Invasion Force"
+						army_type = branchial_empire_event_assault_army
+					}
+   	        	}
+	    	    set_location = root
+        	    set_fleet_stance = aggressive
+        	    set_fleet_flag = branchial_and_researchable
+			}
+		}
+		solar_system = {
+			starbase = { fleet = { destroy_fleet = this } }
+			create_starbase = {
+				size = branchial_guardians_station_large
+				owner = last_created_country
+			}
+		}
+	}
+}
+#Infinite Empire Custom Diplomacy
+country_event = {
+	id = branchial_guardian.2
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		has_global_flag = branchial_empire_active
+		from = {
+			is_country_type = branchial_virgin
+			has_country_flag = branchial_guardian_country
+		}
+		NOT = {
+			has_active_event = {
+				branchial_guardian.3
+			}
+		}
+	}
+	immediate = { 
+		from = {
+			owner = {
+				save_event_target_as = branchial_guardian_country
+			}
+		}
+		country_event = { id = branchial_guardian.3 }
+	}
+}
+#comms
+country_event = {
+	id = branchial_guardian.3
+	title = branchial_guardian.3.name
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_artist_window"
+	custom_gui_option = "enclave_artist_option"
+	picture_event_data = {
+		portrait = event_target:branchial_guardian_country.ruler
+		room = shroudwalkers_room
+	}
+	desc = branchial_guardian.3.desc
+	option = {#
+		name = branchial_guardian.3.a
+		response_text = branchial_guardian.3.a.response
+		is_dialog_only = yes
+	}
+	option = {#
+		name = branchial_guardian.3.b
+		response_text = branchial_guardian.3.b.response
+		is_dialog_only = yes
+	}
+	option = {#
+		name = branchial_guardian.3.c
+		response_text = branchial_guardian.3.c.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = GOODBYE
+		default_hide_option = yes
+	}
+}
+#Branchial Weaver stage II
+country_event = {
+	id = branchial_guardian.4
+	title = branchial_guardian.4.name
+	picture = GFX_evt_astral_rift_vortex
+	desc = branchial_guardian.4.desc
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = {#
+		name = branchial_guardian.4.a
+		add_resource = {
+			unity = 5000
+		}
+	}
+}
+#Branchial Weaver stage III-raid detected(first time only)
+country_event = {
+	id = branchial_guardian.5
+	title = branchial_guardian.5.name
+	picture = GFX_evt_death_from_above
+	desc = branchial_guardian.5.desc
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = {#
+		name = branchial_guardian.5.a
+	}
+}
+#Infinite Empire send out a raid force
+planet_event = {
+	id = branchial_guardian.6
+	title = branchial_guardian.6.name
+	picture = GFX_evt_fleet_evil
+	desc = branchial_guardian.6.desc
+	is_triggered_only = yes
+	location = this
+	immediate = {
+		create_country = {
+			name = "?????"
+			type = ruined_marauders
+			flag = {
+				icon= {
+					category = "special"
+					file = "unknown.dds"
+				}
+				background= {
+					category = "backgrounds"
+					file = "circle.dds"
+				}
+				colors={
+					"black"
+					"black"
+					"black"
+					"black"
+				}
+			}
+		}
+		create_fleet = {
+			name = "Unknown Fleet"
+			settings = { spawn_debris = no }
+			effect = {
+				set_owner = last_created_country
+   	        	while = {
+   	    	    	count = 5
+   		        	create_ship = {
+	       	        	name = "?????"
+          		    	design = "NAME_branchial_guardians_large"
+    	    		}
+   	        	}
+    		    while = {
+    		    	count = 10
+	    	    	create_ship = {
+        			    name = "?????"
+           			    design = "NAME_branchial_guardians_small"
+        	    	}
+    		    }
+	    	    set_location = root
+        	    set_fleet_stance = aggressive
+        	    set_fleet_flag = branchial_and_researchable
+        	    queue_actions = {
+        	    	find_closest_planet = {
+						trigger = {
+							id = branchial_guardian.1.a
+							is_same_value = root
+						}
+						found_planet = {
+							move_to = this
+							orbit_planet = this
+						}
+					}
+        	    }
+			}
+		}
+		create_fleet = {
+			name = "Unknown Army"
+			settings = { spawn_debris = no }
+			effect = {
+				set_owner = last_created_country
+   	        	while = {
+   	    	    	count = 5
+   		        	create_army_transport = {
+						ship_name = "?????"
+						army_name = "?????"
+						army_type = branchial_empire_event_assault_army
+					}
+   	        	}
+	    	    set_location = root
+        	    set_fleet_stance = aggressive
+        	    set_fleet_flag = branchial_and_researchable
+			}
+		}
+	}
+	option = {
+		name = branchial_guardian.6.a
+	}
+}
+#Defeated Raiding fleet
+country_event = {
+	id = branchial_guardian.7
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		has_ascension_perk = ap_branchialweaver
+		fromfromfrom = {
+			has_fleet_flag = branchial_and_researchable
+		}
+	}
+	immediate = {
+		add_resource = {
+			branchial_proficiency = 500
+		}
+		if = {
+			random_situation = {
+				limit = {
+					is_situation_type = situation_branchial_empire_counter
+				}
+				add_situation_progress = 50
+			}
+		}
+	}
+}
+#Infinite Empire introduces itself
+country_event = {
+	id = branchial_guardian.8
+	title = branchial_guardian.8.name
+	picture = GFX_evt_fallen_empire_awakes
+	desc = branchial_guardian.8.desc
+	is_triggered_only = yes
+	immediate = {
+		random_owned_planet = {
+			planet_event = { id = branchial_guardian.1 }
+		}
+	}
+	option = {
+		name = branchial_guardian.8.a
+		start_situation = {
+			type = situation_branchial_empire_counter
+			target = root
+		}
+	}
+}
+#choose a way to defeat the Infinite Empire
+country_event = {
+	id = branchial_guardian.9
+	title = branchial_guardian.9.name
+	picture = GFX_evt_fallen_empire_awakes
+	desc = branchial_guardian.9.desc
+	is_triggered_only = yes
+	option = {
+		name = branchial_guardian.9.a
+		set_country_flag = branchial_approach_yolo
+	}
+	option = {
+		name = branchial_guardian.9.b
+		set_country_flag = branchial_approach_sneek_attac
+		country_event = { id = branchial_guardian.10 }
+	}
+	option = {
+		name = branchial_guardian.9.c
+		set_country_flag = branchial_approach_NTR
+		trigger = {
+			any_owned_pop_group = {
+				species = {
+					has_trait = trait_psionic
+				}
+			}
+		}
+		country_event = { id = branchial_guardian.11 }
+	}
+}
+#contact the rebels
+country_event = {
+	id = branchial_guardian.10
+	title = branchial_guardian.10.name
+	is_triggered_only = yes
+	diplomatic = yes
+	diplomatic_title = BLANK_STRING
+	picture_event_data = {
+		portrait = shroud1
+		room = ethic_spaceship_room
+	}
+	desc = branchial_guardian.10.desc
+	option = {#
+		name = branchial_guardian.10.a
+		response_text = branchial_guardian.10.a.response
+		is_dialog_only = yes
+	}
+	option = {#
+		name = branchial_guardian.10.b
+		response_text = branchial_guardian.10.b.response
+		is_dialog_only = yes
+	}
+	option = {#
+		name = branchial_guardian.10.c
+		response_text = branchial_guardian.10.c.response
+	}
+}
+#contact the Weaver
+country_event = {
+	id = branchial_guardian.11
+	title = branchial_guardian.11.name
+	is_triggered_only = yes
+	diplomatic = yes
+	diplomatic_title = BLANK_STRING
+	picture_event_data = {
+		portrait = shroud1
+		room = shroud_room
+	}
+	desc = branchial_guardian.11.desc
+	option = {#
+		name = branchial_guardian.11.a
+		response_text = branchial_guardian.10.a.response
+		is_dialog_only = yes
+	}
+	option = {#
+		name = branchial_guardian.11.b
+		response_text = branchial_guardian.10.b.response
+		is_dialog_only = yes
+	}
+	option = {#
+		name = branchial_guardian.11.c
+		response_text = branchial_guardian.10.c.response
+	}
+}
+#Choose a place to attack
+country_event = {
+	id = branchial_guardian.12
+	hide_window = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	immediate = {
+		random_owned_planet = {
+			limit = {
+				is_colony = yes
+			}
+			planet_event = { id = branchial_guardian.13 }
+		}
+		country_event = { id = branchial_guardian.14 }
+	}
+}
+#spawn the Emperor
+planet_event = {
+	id = branchial_guardian.13
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		create_country = {
+			name = "The Infinite Empire"
+			type = branchial_chad
+			flag = {
+				icon= {
+					category = "special"
+					file = "unknown.dds"
+				}
+				background= {
+					category = "backgrounds"
+					file = "circle.dds"
+				}
+				colors={
+					"black"
+					"black"
+					"black"
+					"black"
+				}
+			}
+			effect = {
+				set_country_flag = branchial_guardian_country
+				create_ship_design = { design = "NAME_Branchial_guardians_station" }
+				add_ship_design = last_created_design
+				set_hostile = root.owner
+			}
+		}
+		create_fleet = {
+			name = "Conquest Fleet"
+			settings = { spawn_debris = no }
+			effect = {
+				set_owner = last_created_country
+   	        	while = {
+   	    	    	count = 75
+   		        	create_ship = {
+	       	        	name = "?????"
+          		    	design = "NAME_branchial_guardians_large"
+    	    		}
+   	        	}
+    		    while = {
+    		    	count = 200
+	    	    	create_ship = {
+        			    name = "?????"
+           			    design = "NAME_branchial_guardians_small"
+        	    	}
+    		    }
+	    	    set_location = root
+        	    set_fleet_stance = aggressive
+        	    set_fleet_flag = Branchial_conquest_fleet
+			}
+		}
+		create_fleet = {
+			name = "Conquest Army"
+			settings = { spawn_debris = no }
+			effect = {
+				set_owner = last_created_country
+   	        	while = {
+   	    	    	count = 5
+   		        	create_army_transport = {
+						ship_name = "?????"
+						army_name = "?????"
+						army_type = branchial_empire_event_assault_army
+					}
+   	        	}
+	    	    set_location = root
+        	    set_fleet_stance = aggressive
+			}
+		}
+		solar_system = {
+			starbase = { fleet = { destroy_fleet = this } }
+			create_starbase = {
+				size = branchial_guardians_station_large
+				owner = last_created_country
+			}
+		}
+		if = {
+			limit = {
+				owner = { has_country_flag = branchial_approach_sneek_attac }
+			}
+			root = {
+				planet_event = { id = branchial_guardian.15 }
+			}
+			country_event = { id = branchial_guardian.16 }
+		}
+		if = {
+			limit = {
+				owner = { has_country_flag = branchial_approach_NTR }
+			}
+			last_created_country = {
+				add_modifier = {
+					modifier = branchial_weaver_curse
+					days = -1
+				}
+			}
+		}
+	}
+}
+#Branchial Emperor Invades
+country_event = {
+	id = branchial_guardian.14
+	title = branchial_guardian.14.name
+	picture = GFX_evt_fallen_empire_awakes
+	desc = branchial_guardian.14.desc
+	is_triggered_only = yes
+	option = {
+		name = branchial_guardian.14.a
+	}
+}
+#spawn the rebels
+planet_event = {
+	id = branchial_guardian.15
+	hide_window = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	immediate = {
+		create_country = {
+			name = "The Rebels"
+			type = branchial_chad
+			flag = {
+				icon= {
+					category = "special"
+					file = "unknown.dds"
+				}
+				background= {
+					category = "backgrounds"
+					file = "circle.dds"
+				}
+				colors={
+					"red"
+					"red"
+					"black"
+					"black"
+				}
+			}
+			effect = {
+				set_country_flag = branchial_rebel_country
+			}
+		}
+		create_fleet = {
+			name = "Rebel Fleet"
+			settings = { spawn_debris = no }
+			effect = {
+				set_owner = last_created_country
+   	        	while = {
+   	    	    	count = 25
+   		        	create_ship = {
+	       	        	name = "?????"
+          		    	design = "NAME_branchial_guardians_large"
+    	    		}
+   	        	}
+    		    while = {
+    		    	count = 100
+	    	    	create_ship = {
+        			    name = "?????"
+           			    design = "NAME_branchial_guardians_small"
+        	    	}
+    		    }
+	    	    set_location = root
+        	    set_fleet_stance = aggressive
+        	    set_fleet_flag = Branchial_rebel_fleet
+			}
+		}
+		root.solar_system = {
+			random_fleet_in_system = {
+				limit = {
+					has_fleet_flag = Branchial_conquest_fleet
+				}
+				owner = {
+					set_hostile = last_created_country
+				}
+			}
+		}
+	}
+}
+#Rebels Arrive
+country_event = {
+	id = branchial_guardian.16
+	title = branchial_guardian.16.name
+	picture = GFX_evt_fallen_empire_awakes
+	desc = branchial_guardian.16.desc
+	is_triggered_only = yes
+	option = {
+		name = branchial_guardian.16.a
+	}
+}
+#The Emperor Defested
+country_event = {
+	id = branchial_guardian.17
+	title = branchial_guardian.17.name
+	picture = GFX_evt_fallen_empire_awakes
+	desc = branchial_guardian.17.desc
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		fromfromfrom = {
+			has_fleet_flag = Branchial_conquest_fleet
+		}
+	}
+	option = {
+		name = branchial_guardian.17.a
+		#give reward here
+		remove_global_flag = branchial_empire_active
+		set_country_flag = branchial_emperor_defeated
+	}
+}
+#The final attack-triggered using on_build in megastructures
+country_event = {
+	id = branchial_guardian.18
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		set_country_flag = declared_crisis
+		save_event_target_as = branchial_crisis
+		country_event = { id = branchial_guardian.19 } #player notification of declared a crisis
+		every_playable_country = {
+			limit = {
+				is_ai = no
+				NOT = { is_same_value = prev }
+			}
+			country_event = { id = branchial_guardian.20 } #notification of galactic crisis war
+		}
+		if = {
+			limit = { has_galactic_custodian = yes }
+			random_playable_country = {
+				limit = { is_galactic_custodian = yes }
+				save_event_target_as = community_war_leader
+				declare_war = {
+					target = event_target:branchial_crisis
+					name = {
+						key = "NAME_Declared_Crisis_War"
+						variable_string = "[This.MainDefender.GetAdj]"
+					}
+					attacker_war_goal = "wg_declared_crisis"
+				}
+			}
+			every_playable_country = {
+				limit = {
+					is_galactic_custodian = no
+					is_galactic_community_member = yes
+				}
+				join_war = event_target:community_war_leader # Should use different effect to ensure they only join the correct war
+			}
+		}
+		else = {
+			random_playable_country = {
+				limit = {
+					is_galactic_community_member = yes
+					galactic_community_rank = 1
+				}
+				save_event_target_as = community_war_leader
+				declare_war = {
+					target = event_target:branchial_crisis
+					name = {
+						key = "NAME_Declared_Crisis_War"
+						variable_string = "[This.MainDefender.GetAdj]"
+					}
+					attacker_war_goal = "wg_declared_crisis"
+				}
+				every_playable_country = {
+					limit = {
+						is_galactic_community_member = yes
+						NOT = { is_same_value = event_target:community_war_leader }
+					}
+					join_war = event_target:community_war_leader # Should use different	 effect to ensure they only join the correct war
+				}
+			}
+		}
+	}
+
+}
+#the final attack notification for player
+country_event = {
+	id = branchial_guardian.19
+	title = branchial_guardian.19.name
+	picture = GFX_evt_crisis_declared
+	desc = branchial_guardian.19.desc
+	is_triggered_only = yes
+	immediate = {
+		#spawn Infinite Empire Remnants
+		random_owned_planet = {
+			limit = {
+				is_colony = yes
+			}
+			planet_event = { id = branchial_guardian.21 }
+		}
+	}
+	option = {
+		name = branchial_guardian.19.a
+	}
+}
+#the final attack notification for other empires
+country_event = {
+	id = branchial_guardian.20
+	title = branchial_guardian.20.name
+	picture = GFX_evt_crisis_declared
+	desc = branchial_guardian.20.desc
+	is_triggered_only = yes
+	option = {
+		name = branchial_guardian.20.a
+	}
+}
+#The final attack
+planet_event = {
+	id = branchial_guardian.21
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		create_country = {
+			name = "The Infinite Empire Remnants"
+			type = branchial_chad
+			flag = {
+				icon= {
+					category = "special"
+					file = "unknown.dds"
+				}
+				background= {
+					category = "backgrounds"
+					file = "circle.dds"
+				}
+				colors={
+					"red"
+					"red"
+					"black"
+					"black"
+				}
+			}
+			effect = {
+				set_country_flag = branchial_guardian_country
+				create_ship_design = { design = "NAME_Branchial_guardians_station" }
+				add_ship_design = last_created_design
+				set_hostile = root.owner
+			}
+		}
+		create_fleet = {
+			name = "Remnant Fleet"
+			settings = { spawn_debris = no }
+			effect = {
+				set_owner = last_created_country
+   	        	while = {
+   	    	    	count = 45
+   		        	create_ship = {
+	       	        	name = "?????"
+          		    	design = "NAME_branchial_guardians_large"
+    	    		}
+   	        	}
+    		    while = {
+    		    	count = 120
+	    	    	create_ship = {
+        			    name = "?????"
+           			    design = "NAME_branchial_guardians_small"
+        	    	}
+    		    }
+	    	    set_location = root
+        	    set_fleet_stance = aggressive
+        	    set_fleet_flag = Branchial_conquest_fleet
+			}
+		}
+		create_fleet = {
+			name = "Remnant Army"
+			settings = { spawn_debris = no }
+			effect = {
+				set_owner = last_created_country
+   	        	while = {
+   	    	    	count = 5
+   		        	create_army_transport = {
+						ship_name = "?????"
+						army_name = "?????"
+						army_type = branchial_empire_event_assault_army
+					}
+   	        	}
+	    	    set_location = root
+        	    set_fleet_stance = aggressive
+			}
+		}
+		solar_system = {
+			starbase = { fleet = { destroy_fleet = this } }
+			create_starbase = {
+				size = branchial_guardians_station_large
+				owner = last_created_country
+			}
+		}
+	}
+}

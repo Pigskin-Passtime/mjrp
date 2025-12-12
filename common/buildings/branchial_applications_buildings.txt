@@ -1,0 +1,301 @@
+building_branchial_applications_facility_energy = {
+	base_buildtime = @b2_time
+	planet_limit = 1
+	category = resource
+
+	building_sets = {
+		generator
+	}
+
+	potential = {
+		exists = owner
+	}
+
+	allow = {
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = @b2_minerals
+			rare_crystals = @b2_rare_cost
+		}
+		cost = {
+			trigger = {
+				owner = { is_wilderness_empire = yes }
+			}
+			biomass = @b2_biomass
+		}
+		upkeep = {
+			energy = @b2_upkeep
+			rare_crystals = @b2_rare_upkeep
+		}
+	}
+
+	inline_script = {
+		script = buildings/on_all_wilderness_buildings_districts
+	}
+
+	planet_modifier = {
+		planet_technicians_branchial_proficiency_produces_add = 1
+		pop_technician_workforce_mult = 0.2
+	}
+
+	inline_script = {
+		script = jobs/technicians_add
+		AMOUNT = @fe_jobs
+	}
+
+	prerequisites = {
+		"tech_branchial_multiverse_facilities"
+	}
+}
+
+building_branchial_applications_facility_minerals = {
+	base_buildtime = @b2_time
+	planet_limit = 1
+	category = resource
+
+	building_sets = {
+		mining
+	}
+
+	potential = {
+		exists = owner
+	}
+
+	allow = {
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = @b2_minerals
+			volatile_motes = @b2_rare_cost
+		}
+		cost = {
+			trigger = {
+				owner = { is_wilderness_empire = yes }
+			}
+			biomass = @b2_biomass
+		}
+		upkeep = {
+			energy = @b2_upkeep
+			volatile_motes = @b2_rare_upkeep
+		}
+	}
+
+	inline_script = {
+		script = buildings/on_all_wilderness_buildings_districts
+	}
+
+	planet_modifier = {
+		planet_miners_branchial_proficiency_produces_add = 1
+		pop_miner_workforce_mult = 0.2
+	}
+
+	inline_script = {
+		script = jobs/miners_add
+		AMOUNT = @fe_jobs
+	}
+
+	prerequisites = {
+		"tech_branchial_multiverse_facilities"
+	}
+}
+
+building_branchial_applications_facility_food = {
+	base_buildtime = @b2_time
+	planet_limit = 1
+	category = resource
+
+	building_sets = {
+		farming
+	}
+
+	potential = {
+		exists = owner
+	}
+
+	allow = {
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = @b2_minerals
+			exotic_gases = @b2_rare_cost
+		}
+		cost = {
+			trigger = {
+				owner = { is_wilderness_empire = yes }
+			}
+			biomass = @b2_biomass
+		}
+		upkeep = {
+			energy = @b2_upkeep
+			exotic_gases = @b2_rare_upkeep
+		}
+	}
+
+	inline_script = {
+		script = buildings/on_all_wilderness_buildings_districts
+	}
+
+	planet_modifier = {
+		planet_farmers_branchial_proficiency_produces_add = 1
+		pop_farmer_workforce_mult = 0.2
+	}
+
+	inline_script = {
+		script = jobs/farmers_add
+		AMOUNT = @fe_jobs
+	}
+
+	prerequisites = {
+		"tech_branchial_multiverse_facilities"
+	}
+}
+
+building_branchial_applications_facility_alloys = {
+	base_buildtime = @b2_time
+	planet_limit = 1
+	category = manufacturing
+
+	building_sets = {
+		industrial
+		foundry
+	}
+
+	potential = {
+		exists = owner
+		NOR = {
+			has_modifier = resort_colony
+			has_modifier = slave_colony
+		}
+	}
+
+	allow = {
+	}
+
+	destroy_trigger = {
+		OR = {
+			has_modifier = resort_colony
+			has_modifier = slave_colony
+		}
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = @b3_minerals
+			exotic_gases = @b3_rare_cost
+		}
+		cost = {
+			trigger = {
+				owner = { is_wilderness_empire = yes }
+			}
+			biomass = @b3_biomass
+		}
+		upkeep = {
+			energy = @b3_upkeep
+			volatile_motes = @b3_rare_upkeep
+		}
+	}
+
+	inline_script = {
+		script = buildings/on_all_wilderness_buildings_districts
+	}
+
+	planet_modifier = {
+		planet_metallurgists_branchial_proficiency_produces_add = 1
+		pop_foundry_workforce_mult = 0.2
+	}
+
+	inline_script = {
+		script = jobs/foundry_add
+		AMOUNT = @fe_jobs
+	}
+
+	prerequisites = {
+		"tech_branchial_multiverse_facilities"
+	}
+}
+
+building_branchial_applications_facility_consumer = {
+	base_buildtime = @b2_time
+	planet_limit = 1
+	category = manufacturing
+
+	building_sets = {
+		industrial
+		foundry
+	}
+
+	potential = {
+		exists = owner
+		owner = {
+			OR = {
+				country_uses_consumer_goods = yes
+				has_origin = origin_fear_of_the_dark
+			}
+		}
+		NOR = {
+			has_modifier = resort_colony
+			has_modifier = slave_colony
+		}
+	}
+
+	allow = {
+	}
+
+	destroy_trigger = {
+		OR = {
+			has_modifier = resort_colony
+			has_modifier = slave_colony
+
+			owner = {
+				AND = {
+					country_uses_consumer_goods = no
+					NOT = { has_origin = origin_fear_of_the_dark }
+				}
+			}
+		}
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = @b3_minerals
+			exotic_gases = @b3_rare_cost
+		}
+		cost = {
+			trigger = {
+				owner = { is_wilderness_empire = yes }
+			}
+			biomass = @b3_biomass
+		}
+		upkeep = {
+			energy = @b3_upkeep
+			volatile_motes = @b3_rare_upkeep
+		}
+	}
+
+	inline_script = {
+		script = buildings/on_all_wilderness_buildings_districts
+	}
+
+	planet_modifier = {
+		planet_artisans_branchial_proficiency_produces_add = 1
+		pop_artisan_workforce_mult = 0.2
+	}
+
+	inline_script = {
+		script = jobs/factory_add
+		AMOUNT = @fe_jobs
+	}
+
+	prerequisites = {
+		"tech_branchial_multiverse_facilities"
+	}
+}

@@ -1,0 +1,261 @@
+namespace = branchial_ship
+#Branchial swimmer increases evasion
+ship_event = {
+	id = branchial_ship.1
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		OR = {
+			has_component = BRANCHIAL_DRIVE_3
+			has_component = BRANCHIAL_BIO_DRIVE_3
+		}
+	}
+	immediate = {
+		add_modifier = {
+			modifier = branchial_mirrage
+			days = 30
+		}
+	}
+}
+#Branchial Diver debuffs enemy ships
+ship_event = {
+	id = branchial_ship.2
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		OR = {
+			has_component = BRANCHIAL_DRIVE_4
+			has_component = BRANCHIAL_BIO_DRIVE_4
+		}
+	}
+	immediate = {
+		solar_system = {
+			random_fleet_in_system = {
+				limit = {
+					owner = { is_hostile_to = root.owner }
+				}
+				random_owned_ship = {
+					limit = {
+						not = {
+							has_modifier = branchial_fallout
+						}
+					}
+					add_modifier = {
+						modifier = branchial_fallout
+						days = 60
+					}
+				}
+			}
+		}
+	}
+}
+#jump drive consequences
+ship_event = {
+	id = branchial_ship.3
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		has_global_flag = branchial_empire_active
+		OR = {
+			has_component = BRANCHIAL_DRIVE_2
+			has_component = BRANCHIAL_BIO_DRIVE_2
+			has_component = BRANCHIAL_DRIVE_3
+			has_component = BRANCHIAL_BIO_DRIVE_3
+			has_component = BRANCHIAL_DRIVE_4
+			has_component = BRANCHIAL_BIO_DRIVE_4
+		}
+	}
+	immediate = {
+		random_list = {
+			3 = {
+				destroy_ship = this
+			}
+			97 = {}
+		}
+	}
+}
+#Branchial Redefiner Steals a Planet
+planet_event = {
+	id = branchial_ship.4
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				exists = owner
+				owner = { NOT = { is_same_value = from.owner } }
+			}
+			from.owner = {
+				country_event = { id = branchial_ship.5 }
+			}
+		}
+
+		if = {
+			limit = {
+				exists = owner
+				owner = {
+					NOT = { is_same_value = from.owner }
+					OR = {
+						is_country_type = default
+						is_country_type = fallen_empire
+						is_country_type = awakened_fallen_empire
+					}
+				}
+			}
+			# Generate threat
+			add_threat = { who = from.owner amount = 3 }
+			# modifier for allies + those upset by genocide
+			every_country = {
+				limit = {
+					NOR = {
+						is_same_value = from.owner
+						is_same_value = root.owner
+						AND = {
+							has_federation = yes
+							is_in_federation_with = from.owner
+						}
+					}
+					OR = {
+						has_communications = from.owner
+						has_communications = root.owner
+					}
+					OR = {
+						AND = {
+							has_federation = yes
+							is_in_federation_with = root.owner
+						}
+						has_ai_personality = awakened_fallen_empire_xenophile
+						AND = {
+							is_country_type = default
+							OR = {
+								is_egalitarian = yes
+								is_xenophile = yes
+								is_spiritualist = yes
+							}
+						}
+					}
+				}
+				add_opinion_modifier = {
+					modifier = opinion_swept_a_world
+					who = from.owner
+				}
+			}
+			# modifiers for victim
+			owner = {
+				add_opinion_modifier = {
+					modifier = opinion_swept_my_world
+					who = from.owner
+				}
+				if = {
+					limit = { NOT = { has_ethic = ethic_gestalt_consciousness } }
+					add_modifier = {
+						modifier = colossus_victim
+						days = 10800 # 30 years
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				exists = owner
+				owner = { is_country_type = primitive }
+			}
+			# modifier for allies + those upset by genocide
+			every_country = {
+				limit = {
+					NOT = { is_same_value = from.owner }
+					OR = {
+						has_communications = from.owner
+						has_communications = root.owner
+					}
+					is_country_type = default
+					NOR = {
+						is_xenophobe = yes
+						is_homicidal = yes
+						is_xenophile = yes
+					}
+				}
+				add_opinion_modifier = {
+					modifier = opinion_swept_a_primitive_world
+					who = from.owner
+				}
+			}
+			every_country = {
+				limit = {
+					NOT = { is_same_value = from.owner }
+					OR = {
+						has_communications = from.owner
+						has_communications = root.owner
+					}
+					OR = {
+						has_ai_personality = awakened_fallen_empire_xenophile
+						AND = {
+							is_country_type = default
+							is_xenophile = yes
+						}
+					}
+				}
+				add_opinion_modifier = {
+					modifier = opinion_swept_a_primitive_world_phile
+					who = from.owner
+				}
+			}
+		}
+		# Add war exhaustion to planet owner
+		owner = {
+			if = {
+				limit = { #isn't the case when the crisis bombards planets, for instance
+					is_at_war_with = from.fleet.owner
+				}
+				add_static_war_exhaustion = {
+					attacker = from.fleet.owner
+					location = root
+					value_for_planet_destruction = 1.0
+				}
+			}
+		}
+		set_owner = from.owner
+		every_owned_pop_group = {
+			pop_group_transfer_ethic = {
+				ETHOS = ethic_pacifist
+				percentage = 1
+			}
+		}
+		from.owner = {
+			if = {
+				limit = { has_ascension_perk = ap_branchialweaver }
+				complete_crisis_objective = branchial_crisobj_planet_redefinition
+			}
+		}
+	}
+}
+#planet steal notification
+country_event = {
+	id = branchial_ship.5
+	is_triggered_only = yes
+	title = "branchial_ship.5.name"
+	desc = "branchial_ship.5.desc"
+	picture = GFX_evt_planet_beam
+	show_sound = event_mystic_reveal
+	location = from
+	option = {
+		name = branchial_ship.5.a
+	}
+}
+#negate negative effects from jumping
+ship_event = {
+	id = branchial_ship.6
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		OR = {
+			has_component = BRANCHIAL_DRIVE_1
+			has_component = BRANCHIAL_BIO_DRIVE_1
+		}
+	}
+	immediate = {
+		remove_modifier = jump_drive_cooldown
+	}
+}

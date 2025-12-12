@@ -1,0 +1,77 @@
+namespace = branchial_objective
+
+event = {
+	id = branchial_objective.1
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_country = {
+			has_ascension_perk = ap_branchialweaver
+		}
+	}
+
+	immediate = {
+		every_playable_country = {
+			limit = {
+				has_ascension_perk = ap_branchialweaver
+			}
+			if = {
+				limit = {
+					NOT = { is_variable_set = branchialweaver_world_branchial_proficiency_produced }
+
+				}
+				set_variable = {
+					which = branchialweaver_world_branchial_proficiency_produced
+					value = 0
+				}
+			}
+			export_resource_income_to_variable = {
+				resource = branchial_proficiency
+				variable = branchialweaver_world_branchial_proficiency_produced
+			}
+			complete_crisis_objective = branchial_crisobj_multiverse_research
+		}
+	}
+}
+
+event = {
+	id = branchial_objective.2
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_country = {
+			has_ascension_perk = ap_branchialweaver
+		}
+		is_active_resolution = resolution_galacticstudies_extradimensional_experimentation
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				is_active_resolution = resolution_galacticstudies_extradimensional_experimentation
+			}
+			every_playable_country = {
+				limit = {
+					has_ascension_perk = ap_branchialweaver
+				}
+				complete_crisis_objective = branchial_crisobj_galcom_science_resolution
+			}
+		}
+	}
+}
+
+country_event = {
+	id = branchial_objective.3
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_ascension_perk = ap_branchialweaver
+	}
+
+	immediate = {
+		complete_crisis_objective = branchial_crisobj_astral_rifts
+	}
+}

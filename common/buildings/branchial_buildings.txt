@@ -1,0 +1,780 @@
+# Multiverse Analysis Plant
+building_branchial_multiverse_plant = {
+	base_buildtime = @b2_time
+	planet_limit = 1
+	category = research
+
+	building_sets = {
+		research
+	}
+
+	potential = {
+		exists = owner
+		NOR = {
+			has_modifier = resort_colony
+			has_modifier = slave_colony
+			has_modifier = penal_colony
+		}
+	}
+
+	allow = {
+	}
+
+	destroy_trigger = {
+		exists = owner
+		OR = {
+			has_modifier = resort_colony
+			has_modifier = slave_colony
+			has_modifier = penal_colony
+		}
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = @b2_minerals
+		}
+		cost = {
+			trigger = {
+				owner = { is_wilderness_empire = yes }
+			}
+			biomass = @b2_biomass
+		}
+		upkeep = {
+			energy = @b2_upkeep
+		}
+	}
+
+	inline_script = {
+		script = buildings/on_all_wilderness_buildings_districts
+	}
+
+	planet_modifier = {
+		planet_physicists_branchial_proficiency_produces_add = 2
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			physicist_is_dimensional_portal_researcher_trigger = yes
+		}
+		planet_physicists_branchial_proficiency_produces_add = 1
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			physicist_is_astral_researcher_trigger = yes
+		}
+		planet_physicists_branchial_proficiency_produces_add = 1
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			physicist_is_space_time_researcher_trigger = yes
+		}
+		planet_physicists_branchial_proficiency_produces_add = 1
+	}
+
+	inline_script = {
+		script = jobs/physicists_add
+		AMOUNT = @building_static_jobs
+	}
+
+	inline_script = {
+		script = districts/ai_research_physics_extra_weighting
+		AMOUNT = 10
+	}
+
+	prerequisites = {
+		"tech_branchial_multiverse_plant"
+	}
+}
+
+# Branchial Housing Buildings
+building_branchial_multiverse_housing = {
+	base_buildtime = @b2_time
+	planet_limit = 3
+	category = amenity
+
+	building_sets = {
+		government
+		urban
+		entertainment
+		resort
+	}
+
+	potential = {
+		NOR = {
+			has_modifier = slave_colony
+			has_modifier = penal_colony
+		}
+		exists = owner
+		owner = {
+			is_regular_empire = yes
+		}
+		NOT = { has_building = building_low_tech_capital }
+	}
+
+	destroy_trigger = {
+		exists = owner
+		OR = {
+			owner = { is_regular_empire = no }
+			has_modifier = slave_colony
+		}
+	}
+
+	convert_to = {
+		building_branchial_multiverse_sanctuary
+		building_branchial_multiverse_storage
+		building_branchial_multiverse_warren
+	}
+
+	planet_modifier = {
+		planet_housing_add = 5000
+		planet_amenities_add = 8000
+		pop_housing_usage_mult = -0.25
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				has_active_tradition = tr_domination_imperious_architecture
+			}
+		}
+		modifier = {
+			planet_housing_add = 100
+		}
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = @b2_minerals
+			rare_crystals = @b2_rare_cost
+		}
+		upkeep = {
+			energy = 3
+			rare_crystals = @b2_rare_upkeep
+		}
+	}
+
+	prerequisites = {
+		"tech_branchial_housing"
+	}
+
+	show_tech_unlock_if = {
+		owner = {
+			is_regular_empire = yes
+		}
+	}
+}
+
+building_branchial_multiverse_sanctuary = {
+	base_buildtime = @b2_time
+	category = unity
+
+	building_sets = {
+		urban
+		unity
+	}
+
+	potential = {
+		exists = owner
+		owner = {
+			has_valid_civic = civic_machine_servitor
+
+		}
+	}
+
+	destroy_trigger = {
+		exists = owner
+		NOT = { owner = { has_valid_civic = civic_machine_servitor } }
+	}
+
+	convert_to = {
+		building_branchial_multiverse_housing
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = @b2_minerals
+			exotic_gases = @b2_rare_cost
+		}
+		upkeep = {
+			energy = @b2_upkeep
+			exotic_gases = @b2_rare_upkeep
+		}
+	}
+
+	planet_modifier = {
+		job_bio_trophy_add = 7500
+	}
+
+	triggered_desc = {
+		text = job_bio_trophy_effect_desc
+	}
+
+	prerequisites = { "tech_branchial_housing" }
+
+	show_tech_unlock_if = {
+		owner = { has_valid_civic = civic_machine_servitor }
+	}
+
+	ai_weight_coefficient = 1.2
+
+	# Here we try to adress the second issue that the AI cant evaluate the pop job output of the bio trophy given the happiness trigger that was put inplace to guard against players exploiting bio trophies
+
+	#science
+	ai_resource_production = {
+		unity = 20
+		physics_research = 20
+
+		trigger = {
+			any_owned_pop_group = {
+				is_pop_category = bio_trophy_unemployment
+			}
+
+			planet_resource_compare = {
+				resource = physics_research
+				value >= 100
+				type = produces
+			}
+		}
+	}
+
+	#alloys
+	ai_resource_production = {
+		unity = 20
+		alloys = 20
+
+		trigger = {
+			any_owned_pop_group = {
+				is_pop_category = bio_trophy_unemployment
+			}
+
+			planet_resource_compare = {
+				resource = alloys
+				value >= 100
+				type = produces
+			}
+		}
+	}
+
+	#cgs
+	ai_resource_production = {
+		unity = 20
+		consumer_goods = 20
+
+		trigger = {
+			any_owned_pop_group = {
+				is_pop_category = bio_trophy_unemployment
+			}
+
+			planet_resource_compare = {
+				resource = consumer_goods
+				value >= 100
+				type = produces
+			}
+		}
+	}
+}
+
+building_branchial_multiverse_storage = {
+	base_buildtime = @b2_time
+	planet_limit = 3
+	category = amenity
+
+	building_sets = {
+		government
+		urban
+	}
+
+	potential = {
+		exists = owner
+		owner = {
+			is_machine_empire = yes
+		}
+	}
+
+	destroy_trigger = {
+		exists = owner
+		owner = { is_machine_empire = no }
+	}
+
+	convert_to = {
+		building_branchial_multiverse_housing
+		building_branchial_multiverse_warren
+	}
+
+	planet_modifier = {
+		planet_housing_add = 5000
+		planet_amenities_no_happiness_add = 8000
+		pop_housing_usage_mult = -0.25
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				has_active_tradition = tr_domination_imperious_architecture
+			}
+		}
+		modifier = {
+			planet_housing_add = 100
+		}
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = @b2_minerals
+			rare_crystals = @b2_rare_cost
+		}
+		upkeep = {
+			energy = 3
+			rare_crystals = @b2_rare_upkeep
+		}
+	}
+
+	prerequisites = {
+		"tech_branchial_housing"
+	}
+
+	show_tech_unlock_if = {
+		owner = {
+			is_machine_empire = yes
+		}
+	}
+}
+
+building_branchial_multiverse_warren = {
+	base_buildtime = @b2_time
+	planet_limit = 3
+	category = amenity
+
+	building_sets = {
+		government
+		urban
+	}
+
+	potential = {
+		exists = owner
+		owner = {
+			is_hive_empire = yes
+		}
+	}
+
+	destroy_trigger = {
+		exists = owner
+		owner = { is_hive_empire = no }
+	}
+
+	convert_to = {
+		building_branchial_multiverse_housing
+		building_branchial_multiverse_storage
+	}
+
+	planet_modifier = {
+		planet_housing_add = 5000
+		planet_amenities_no_happiness_add = 8000
+		pop_housing_usage_mult = -0.25
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				has_active_tradition = tr_domination_imperious_architecture
+			}
+		}
+		modifier = {
+			planet_housing_add = 100
+		}
+	}
+
+	inline_script = {
+		script = buildings/on_all_wilderness_buildings_districts
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = @b2_minerals
+			rare_crystals = @b2_rare_cost
+		}
+		cost = {
+			trigger = {
+				owner = { is_wilderness_empire = yes }
+			}
+			biomass = @b2_biomass
+		}
+		upkeep = {
+			energy = 3
+			rare_crystals = @b2_rare_upkeep
+		}
+	}
+
+	prerequisites = {
+		"tech_branchial_housing"
+	}
+
+	show_tech_unlock_if = {
+		owner = {
+			is_hive_empire = yes
+		}
+	}
+}
+
+# Branchial Enforcer Buildings
+building_branchial_multiverse_precinct = {
+	base_buildtime = @b2_time
+	planet_limit = 1
+	category = government
+
+	building_sets = {
+		government
+		urban
+	}
+
+	potential = {
+		owner = {
+			is_regular_empire = yes
+			NOT = { has_valid_civic = civic_civil_education }
+		}
+		NOT = { has_modifier = slave_colony }
+		if = {
+			limit = {
+				owner = { is_ai = yes }
+			}
+			NOT = { has_forbidden_jobs = enforcer }
+			NOT = { has_available_jobs = enforcer }
+		}
+	}
+
+	destroy_trigger = {
+		exists = owner
+		owner = {
+			OR = {
+				is_regular_empire = no
+				has_valid_civic = civic_civil_education
+			}
+		}
+	}
+
+	convert_to = {
+		building_branchial_multiverse_academy
+		building_branchial_multiverse_sentinel
+	}
+
+	planet_modifier = {
+		job_enforcer_add = @fe_jobs
+		planet_crime_add = -80
+		pop_government_ethic_attraction = 1
+		planet_enforcers_branchial_proficiency_produces_add = 1
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = @b3_minerals
+			volatile_motes = @b3_rare_cost
+		}
+		upkeep = {
+			energy = @b3_upkeep
+			volatile_motes = @b2_rare_upkeep
+		}
+	}
+
+	prerequisites = {
+		"tech_branchial_precinct"
+	}
+
+	triggered_desc = {
+		text = job_enforcer_effect_desc
+	}
+
+	show_tech_unlock_if = {
+		is_regular_empire = yes
+		NOT = { has_valid_civic = civic_civil_education }
+	}
+}
+
+building_branchial_multiverse_academy = {
+	base_buildtime = @b2_time
+	planet_limit = 1
+	category = government
+
+	building_sets = {
+		government
+		urban
+	}
+
+	potential = {
+		owner = {
+			is_regular_empire = yes
+			has_valid_civic = civic_civil_education
+		}
+		NOT = { has_modifier = slave_colony }
+	}
+
+	destroy_trigger = {
+		exists = owner
+		owner = {
+			OR = {
+				is_regular_empire = no
+				NOT = { has_valid_civic = civic_civil_education }
+			}
+		}
+	}
+
+	convert_to = {
+		building_branchial_multiverse_precinct
+		building_branchial_multiverse_sentinel
+	}
+
+	planet_modifier = {
+		job_enforcer_add = @fe_jobs
+		planet_crime_add = -80
+		pop_government_ethic_attraction = 1
+		planet_enforcers_branchial_proficiency_produces_add = 1
+		planet_civilians_branchial_proficiency_produces_add = 0.5
+		planet_civilians_physics_research_produces_add = 2
+		planet_civilians_society_research_produces_add = 2
+		planet_civilians_engineering_research_produces_add = 2
+		planet_civilians_consumer_goods_upkeep_add = 3
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = @b3_minerals
+			volatile_motes = @b3_rare_cost
+		}
+		upkeep = {
+			energy = @b3_upkeep
+			volatile_motes = @b2_rare_upkeep
+		}
+	}
+
+	prerequisites = {
+		"tech_branchial_precinct"
+	}
+
+	triggered_desc = {
+		text = job_educator_effect_desc
+	}
+
+	show_tech_unlock_if = {
+		is_regular_empire = yes
+		has_valid_civic = civic_civil_education
+	}
+}
+
+building_branchial_multiverse_sentinel = {
+	base_buildtime = @b2_time
+	planet_limit = 1
+	category = government
+
+	building_sets = {
+		government
+		urban
+	}
+
+	potential = {
+		owner = {
+			is_gestalt = yes
+		}
+	}
+
+	allow = {
+		hidden_trigger = {
+			OR = {
+				owner = { is_ai = no }
+				AND = {
+					NOT = { has_forbidden_jobs = patrol_drone }
+					NOT = { has_available_jobs = patrol_drone }
+				}
+			}
+		}
+	}
+
+	destroy_trigger = {
+		exists = owner
+		owner = {
+			is_gestalt = no
+		}
+	}
+
+	convert_to = {
+		building_branchial_multiverse_precinct
+		building_branchial_multiverse_academy
+	}
+
+	planet_modifier = {
+		job_patrol_drone_add = @fe_jobs
+		planet_crime_no_happiness_add = -80
+		pop_amenities_usage_no_happiness_mult = -0.5
+		planet_enforcers_branchial_proficiency_produces_add = 1
+	}
+
+	inline_script = {
+		script = buildings/on_all_wilderness_buildings_districts
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = @b3_minerals
+			volatile_motes = @b3_rare_cost
+		}
+		cost = {
+			trigger = {
+				owner = { is_wilderness_empire = yes }
+			}
+			biomass = @b3_biomass
+		}
+		upkeep = {
+			energy = @b3_upkeep
+			volatile_motes = @b2_rare_upkeep
+		}
+	}
+
+	prerequisites = {
+		"tech_branchial_precinct"
+	}
+
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = { is_wilderness_empire = no }
+		}
+		text = job_patrol_drone_effect_desc
+	}
+
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = { is_wilderness_empire = yes }
+		}
+		text = job_immunosymbiont_effect_desc
+	}
+
+	show_tech_unlock_if = {
+		is_gestalt = yes
+	}
+}
+
+#Branchial Redefinition Pylon
+building_branchial_redefinition_pylon = {
+	base_buildtime = @b3_time
+	planet_limit = 1
+	position_priority = 100
+	category = government
+
+	building_sets = {
+		government
+		urban
+	}
+
+	potential = {
+		exists = owner
+	}
+
+	planet_modifier = {
+		planet_max_districts_mult = 0.4
+		planet_building_refund_mult = 1
+		building_time_mult = -0.4
+	}
+
+	inline_script = {
+		script = buildings/on_all_wilderness_buildings_districts
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = @b5_minerals
+		}
+		cost = {
+			trigger = {
+				owner = { is_wilderness_empire = yes }
+			}
+			biomass = @b4_biomass
+		}
+		upkeep = {
+			energy = @b5_upkeep
+		}
+	}
+
+	prerequisites = {
+		"tech_branchial_redefinition_pylon"
+	}
+}
+
+#Branchial Anchor
+building_branchial_anchor = {
+	base_buildtime = @b3_time
+	planet_limit = 1
+	planetary_ftl_inhibitor = yes
+	position_priority = 100
+	can_be_ruined = no
+	category = army
+
+	building_sets = {
+		government
+		fortress
+	}
+
+	potential = {
+		exists = owner
+	}
+
+	allow = {
+		has_upgraded_capital = yes
+	}
+
+	inline_script = {
+		script = buildings/on_all_wilderness_buildings_districts
+	}
+
+	resources = {
+		category = planet_buildings_strongholds
+		cost = {
+			minerals = @b4_minerals
+			volatile_motes = @b4_rare_cost
+		}
+		cost = {
+			trigger = {
+				owner = { is_wilderness_empire = yes }
+			}
+			biomass = @b4_biomass
+		}
+		upkeep = {
+			energy = 1
+			volatile_motes = @b3_rare_upkeep
+		}
+	}
+
+	prerequisites = {
+		"tech_branchial_anchor"
+	}
+
+	planet_modifier = {
+		planet_orbital_bombardment_damage = -0.8
+		planet_soldiers_branchial_proficiency_produces_add = 1
+	}
+
+	inline_script = {
+		script = jobs/soldiers_add
+		AMOUNT = @fe2_jobs
+	}
+
+	on_built = {
+		set_planet_flag = colossus_immune
+	}
+
+	on_destroy = {
+		remove_planet_flag = colossus_immune
+	}
+}

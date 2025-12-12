@@ -1,0 +1,224 @@
+namespace = branchial_decision
+#fire control
+planet_event = {
+	id = branchial_decision.1
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		set_timed_planet_flag = {
+			flag = branchial_decision_cooldown
+			days = 3600
+		}
+		random_list = {
+			30 = {
+				add_deposit = d_branchial_data
+				planet_event = { id = branchial_decision.4 }
+			}
+			5 = {
+				add_deposit = d_branchial_data_big
+				planet_event = { id = branchial_decision.5 }
+			}
+			10 = {
+				factor = 0
+					owner = {
+						has_country_flag = dportal_country
+					}
+				} 
+				planet_event = { id = colony.3005 } 
+			}
+			5 = { planet_event = { id = branchial_decision.3 } }
+			25 = { planet_event = { id = branchial_decision.6 } }
+			5 = {
+				add_planet_devastation = 75
+				planet_event = { id = branchial_decision.7 }
+			}
+			10 = {
+				planet_event = { id = branchial_decision.2 }
+			}
+			10 = {
+				factor = 0
+				solar_system = {
+					count_neighbor_system = {
+						count = 1
+					}
+				}
+				solar_system = {
+					random_neighbor_system = {
+						remove_hyperlane = {
+							from = this
+							to = root.solar_system
+						}
+					}
+				}
+				planet_event = { id = branchial_decision.8 }
+			}
+		}
+		random_list = { #infinite empire roll
+			25 = {
+				planet_event = { id = branchial_guardian.6 }
+			}
+			75 = {}
+		}
+		owner = {
+			complete_crisis_objective = branchial_crisobj_probe_multiverse
+		}
+	}
+}
+
+planet_event = {
+	id = branchial_decision.2
+	title = branchial_decision.2.name
+	picture = GFX_evt_psionics
+	desc = branchial_decision.2.desc
+	is_triggered_only = yes
+	immediate = {
+		create_country = {
+			name = "NAME_Creatures_of_the_Shroud"
+			type = shroud_spirits
+			flag = {
+				icon = {
+					category = "special"
+					file = "the_shroud.dds"
+				}
+				background= {
+					category = "backgrounds"
+					file = "00_solid.dds"
+				}
+				colors={
+					"dark_purple"
+					"black"
+					"null"
+					"null"
+				}
+			}
+		}
+		last_created_country = {
+			establish_communications_no_message = root
+		}
+		create_fleet = {
+			name = "?????"
+			settings = {
+				spawn_debris = no
+				is_boss = yes
+			}
+			effect = {
+				set_owner = last_created_country
+				while = {
+					count = 10
+					create_ship = {
+						name = random
+						design = "NAME_Eradicator"
+						graphical_culture = "extra_dimensional_03"
+					}
+				}
+				while = {
+					count = 20
+					create_ship = {
+						name = random
+						design = "NAME_Annihilator"
+						graphical_culture = "extra_dimensional_03"
+					}
+				}
+				set_location = root
+				set_fleet_stance = aggressive
+				set_aggro_range_measure_from = return_point
+				set_aggro_range = 300
+			}
+		}
+	}
+	option = {
+		name = branchial_decision.2.a
+	}
+}
+
+planet_event = { #become better
+	id = branchial_decision.3
+	title = branchial_decision.3.name
+	picture = GFX_evt_psionics
+	desc = branchial_decision.3.desc
+	is_triggered_only = yes
+	immediate = {
+		every_system_planet = {
+			limit = {
+				NOT = { has_deposit_for = shipclass_research_station }
+				is_star = no
+				is_astral_scar = no
+				colonizable_planet = no
+			}
+			random_list = {
+				75 = { add_deposit = d_minerals_1 }
+				25 = { add_deposit = d_alloys_1 }
+			}
+		}
+		random_list = {
+			random_system_planet = {
+				limit = {
+					is_star = no
+					is_astral_scar = no
+					colonizable_planet = no
+				}
+				change_pc = pc_gaia
+				clear_blockers = yes
+				generate_start_deposits_and_blockers = yes
+			}
+		}
+	}
+	option = {
+		name = branchial_decision.3.a
+	}
+}
+
+planet_event = {
+	id = branchial_decision.4
+	title = branchial_decision.4.name
+	picture = GFX_evt_psionics
+	desc = branchial_decision.4.desc
+	is_triggered_only = yes
+	immediate = {
+
+	}
+}
+
+planet_event = {
+	id = branchial_decision.5
+	title = branchial_decision.5.name
+	picture = GFX_evt_psionics
+	desc = branchial_decision.5.desc
+	is_triggered_only = yes
+	immediate = {
+
+	}
+}
+
+planet_event = {
+	id = branchial_decision.6
+	title = branchial_decision.6.name
+	picture = GFX_evt_psionics
+	desc = branchial_decision.6.desc
+	is_triggered_only = yes
+	immediate = {
+
+	}
+}
+
+planet_event = {
+	id = branchial_decision.7
+	title = branchial_decision.7.name
+	picture = GFX_evt_psionics
+	desc = branchial_decision.7.desc
+	is_triggered_only = yes
+	immediate = {
+
+	}
+}
+
+planet_event = {
+	id = branchial_decision.8
+	title = branchial_decision.8.name
+	picture = GFX_evt_psionics
+	desc = branchial_decision.8.desc
+	is_triggered_only = yes
+	immediate = {
+
+	}
+}

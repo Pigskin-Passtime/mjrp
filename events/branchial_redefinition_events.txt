@@ -1,0 +1,3038 @@
+namespace = branchial_redefinition
+
+country_event = {
+	id = branchial_redefinition.1
+	title = "branchial_redefinition.1.name"
+	desc = "branchial_redefinition.1.desc"
+
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = root
+		planet_background = root.capital_scope
+		graphical_culture = root
+		room = root
+	}
+
+	is_triggered_only = yes
+
+	option = { # Redefine Leaders
+		name = branchial_redefinition.1.a
+		hidden_effect = {
+			country_event = { id = branchial_redefinition.11 }
+		}
+	}
+
+ 	option = { # Redefine Government
+ 		name = branchial_redefinition.1.b
+ 		hidden_effect = {
+ 			country_event = { id = branchial_redefinition.12 }
+ 		}
+ 	}
+
+ 	option = { # Redefine Pops
+ 		name = branchial_redefinition.1.c
+ 		hidden_effect = {
+ 			country_event = { id = branchial_redefinition.13 }
+ 		}
+ 	}
+
+ 	option = { # Redefine Planets
+ 		name = branchial_redefinition.1.d
+		allow = {
+			custom_tooltip = {
+				fail_text = "branchial_must_have_redefinition_pylon"
+				OR = {
+					any_owned_planet = {
+						has_building = building_branchial_redefinition_pylon
+					}
+					any_galaxy_planet = {
+						has_holding = { holding = holding_branchial_redefinition_pylon owner = root }
+					}
+					has_megastructure = branchial_weaver_5
+				}
+			}
+		}
+ 		hidden_effect = {
+ 			country_event = { id = branchial_redefinition.14 }
+ 		}
+ 	}
+
+ 	option = { # Redefine Empires
+ 		name = branchial_redefinition.1.e
+ 		allow = {
+ 			custom_tooltip = {
+ 				fail_text = "branchial_must_have_redefinition_infrastructure_in_empire"
+				OR = {
+					any_playable_country = {
+						has_country_flag = branchial_redefinition_infrastructure
+					}
+					has_megastructure = branchial_weaver_5
+				}
+ 			}
+ 		}
+ 		hidden_effect = {
+ 			country_event = { id = branchial_redefinition.15 }
+ 		}
+ 	}
+
+ 	option = { # Back
+ 		name = SETTINGS_BACK
+	}
+}
+
+country_event = { # Redefine Leaders
+ 	id = branchial_redefinition.11
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.11.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+ 	option = { # Remove Negative Traits
+ 		name = branchial_redefinition.11.a
+ 		hidden_effect = {
+ 			country_event = { id = branchial_redefinition.111 }
+ 		}
+ 	}
+
+ 	option = { # Change Veteran Class
+ 		name = branchial_redefinition.11.b
+ 		hidden_effect = {
+ 			country_event = { id = branchial_redefinition.112 }
+ 		}
+ 	}
+
+ 	option = { # Add Destiny Trait
+ 		name = branchial_redefinition.11.c
+ 		hidden_effect = {
+			if = {
+				limit = { is_gestalt = no }
+ 				country_event = { id = branchial_redefinition.113 }
+			}
+			else if = {
+ 		}
+ 	}
+
+ 	option = { # Multiverse Integration (Leader)
+ 		name = branchial_redefinition.11.d
+ 		allow = {
+ 			custom_tooltip = {
+ 				fail_text = "branchial_must_have_multiverse_integration"
+ 				has_crisis_perk = menp_branchial_features_5
+ 			}
+ 		}
+ 		hidden_effect = {
+			if = {
+				limit = { is_gestalt = no }
+				random_owned_leader = {
+					save_event_target_as = branchial_leader_1
+				}
+				random_owned_leader = {
+					save_event_target_as = branchial_leader_2
+				}
+				random_owned_leader = {
+					save_event_target_as = branchial_leader_3
+				}
+				
+			}
+			else if = {
+				limit = { is_gestalt = yes }
+				random_owned_leader = {
+					limit = { is_councilor = no }
+					save_event_target_as = branchial_leader_1
+				}
+				random_owned_leader = {
+					limit = { is_councilor = no }
+					save_event_target_as = branchial_leader_2
+				}
+				random_owned_leader = {
+					limit = { is_councilor = no }
+					save_event_target_as = branchial_leader_3
+				}
+				
+			}
+ 			country_event = { id = branchial_redefinition.114 }
+ 		}
+ 	}
+
+	option = { # Back
+ 		name = SETTINGS_BACK
+ 		hidden_effect = {
+ 			country_event = { id = branchial_redefinition.1 }
+ 		}
+ 	}
+}
+
+country_event = { # Remove Negative Traits
+ 	id = branchial_redefinition.111
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.111.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				num_leader_traits = {
+					value >= 1
+					negative = yes
+				}
+			}
+			save_event_target_as = branchial_leader_1
+		}
+		random_owned_leader = {
+			limit = {
+				NOR = {
+					is_same_value = event_target:branchial_leader_1
+				}
+				num_leader_traits = {
+					value >= 1
+					negative = yes
+				}
+			}
+			save_event_target_as = branchial_leader_2
+		}
+		random_owned_leader = {
+			limit = {
+				NOR = {
+					is_same_value = event_target:branchial_leader_1
+					is_same_value = event_target:branchial_leader_2
+				}
+				num_leader_traits = {
+					value >= 1
+					negative = yes
+				}
+			}
+			save_event_target_as = branchial_leader_3
+		}
+	}
+
+	option = {
+		name = event_target:branchial_leader_1.name
+		trigger = {
+			exists = event_target:branchial_leader_1
+		}
+		allow = {
+			AND = {
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 1000
+					mult = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cost_base|
+				}
+				resource_stockpile_compare = {
+					resource = unity
+					value >= 500
+				}
+				resource_stockpile_compare = {
+					resource = branchial_proficiency
+					value >= 250
+					mult = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cost_base|
+				}
+			}
+		}
+
+		event_target:branchial_leader_1 = {
+			save_event_target_as = branchial_selected_leader
+		}
+	}
+
+	option = {
+		name = event_target:branchial_leader_2.name
+		trigger = {
+			exists = event_target:branchial_leader_2
+		}
+		allow = {
+			AND = {
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 1000
+					mult = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cost_base|
+				}
+				resource_stockpile_compare = {
+					resource = unity
+					value >= 500
+				}
+				resource_stockpile_compare = {
+					resource = branchial_proficiency
+					value >= 250
+					mult = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cost_base|
+				}
+			}
+		}
+
+		event_target:branchial_leader_2 = {
+			save_event_target_as = branchial_selected_leader
+		}
+	}
+
+	option = {
+		name = event_target:branchial_leader_3.name
+		trigger = {
+			exists = event_target:branchial_leader_3
+		}
+		allow = {
+			AND = {
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 1000
+					mult = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cost_base|
+				}
+				resource_stockpile_compare = {
+					resource = unity
+					value >= 500
+				}
+				resource_stockpile_compare = {
+					resource = branchial_proficiency
+					value >= 250
+					mult = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cost_base|
+				}
+			}
+		}
+
+		event_target:branchial_leader_3 = {
+			save_event_target_as = branchial_selected_leader
+		}
+	}
+
+	option = { # Reroll
+		name = BRANCHIAL_REROLL
+		hidden_effect = {
+			country_event = { id = branchial_redefinition.111 }
+		}
+	}
+
+	option = { # Back
+ 		name = SETTINGS_BACK
+ 		hidden_effect = {
+ 			country_event = { id = branchial_redefinition.11 }
+ 		}
+ 	}
+
+	after = {
+		if = {
+			limit = {
+				exists = event_target:branchial_selected_leader
+			}
+			add_resource = {
+				energy = -1000
+				mult = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cost_base|
+			}
+			add_resource = {
+				unity = -500
+			}
+			add_resource = {
+				branchial_proficiency = -250
+				mult = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cost_base|
+			}
+			add_modifier = {
+				modifier = "branchial_redefinition_cooldown"
+				days = 720
+				time_multiplier = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cooldown_mult|
+			}
+
+			event_target:branchial_selected_leader = {
+				random_list = {
+					90 = { # Success
+						leader_event = { branchial_redefinition.1111 }
+					}
+					10 = { # Failure
+						random_list = {
+							75 = {
+								leader_event = { branchial_redefinition.115 }
+							}
+							25 = {
+								owner.capital_scope = {
+									planet_event = { id = branchial_guardian.6 }
+								}
+							}
+						}
+						modifier = {
+							factor = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_failure_risk_mult|
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+leader_event = { # Remove Negative Traits Success
+ 	id = branchial_redefinition.1111
+ 	title = "branchial_redefinition.1111.name"
+ 	desc = "branchial_redefinition.1111.desc"
+	picture = GFX_evt_a_rift_in_space
+	show_sound = event_mystic_reveal
+
+	is_triggered_only = yes
+
+	immediate = {
+		remove_all_negative_traits = yes
+	}
+}
+
+country_event = { # Change Veteran Class
+ 	id = branchial_redefinition.112
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.112.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				num_leader_traits = {
+					value = 1
+					contains_modifier = {
+						is_subclass = yes
+					}
+				}
+			}
+			save_event_target_as = branchial_leader_1
+		}
+		random_owned_leader = {
+			limit = {
+				NOR = {
+					is_same_value = event_target:branchial_leader_1
+				}
+				num_leader_traits = {
+					value = 1
+					contains_modifier = {
+						is_subclass = yes
+					}
+				}
+			}
+			save_event_target_as = branchial_leader_2
+		}
+		random_owned_leader = {
+			limit = {
+				NOR = {
+					is_same_value = event_target:branchial_leader_1
+					is_same_value = event_target:branchial_leader_2
+				}
+				num_leader_traits = {
+					value = 1
+					contains_modifier = {
+						is_subclass = yes
+					}
+				}
+			}
+			save_event_target_as = branchial_leader_3
+		}
+	}
+
+	option = {
+		name = event_target:branchial_leader_1.name
+		trigger = {
+			exists = event_target:branchial_leader_1
+		}
+		event_target:branchial_leader_1 = {
+			save_event_target_as = branchial_selected_leader
+		}
+		country_event = { id = branchial_redefinition.1121 }
+	}
+
+	option = {
+		name = event_target:branchial_leader_2.name
+		trigger = {
+			exists = event_target:branchial_leader_2
+		}
+		event_target:branchial_leader_2 = {
+			save_event_target_as = branchial_selected_leader
+		}
+		country_event = { id = branchial_redefinition.1121 }
+	}
+
+	option = {
+		name = event_target:branchial_leader_3.name
+		trigger = {
+			exists = event_target:branchial_leader_3
+		}
+		event_target:branchial_leader_3 = {
+			save_event_target_as = branchial_selected_leader
+		}
+		country_event = { id = branchial_redefinition.1121 }
+	}
+
+	option = { # Reroll
+		name = BRANCHIAL_REROLL
+		hidden_effect = {
+			country_event = { id = branchial_redefinition.112 }
+		}
+	}
+
+	option = { # Back
+ 		name = SETTINGS_BACK
+ 		hidden_effect = {
+ 			country_event = { id = branchial_redefinition.11 }
+ 		}
+ 	}
+}
+
+country_event = { # Select Veteran Class
+ 	id = branchial_redefinition.1121
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.1121.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	option = {
+		name = branchial_commander_admiral
+		trigger = {
+			exists = event_target:branchial_selected_leader
+			event_target:branchial_selected_leader = {
+				leader_class = commander
+				NOT = { has_trait = subclass_commander_admiral }
+			}
+		}
+		allow = {
+			AND = {
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 2500
+					mult = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cost_base|
+				}
+				resource_stockpile_compare = {
+					resource = unity
+					value >= 1000
+				}
+				resource_stockpile_compare = {
+					resource = branchial_proficiency
+					value >= 500
+					mult = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cost_base|
+				}
+			}
+		}
+
+		event_target:branchial_selected_leader = {
+			random_list = {
+				80 = { # Success
+					set_leader_flag = branchial_commander_admiral_selected
+					leader_event = { branchial_redefinition.11211 }
+				}
+				20 = { # Failure
+					random_list = {
+						75 = {
+							leader_event = { branchial_redefinition.115 }
+						}
+						25 = {
+							owner.capital_scope = {
+								planet_event = { id = branchial_guardian.6 }
+							}
+						}
+					}
+					modifier = {
+						factor = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_failure_risk_mult|
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = branchial_commander_general
+		trigger = {
+			exists = event_target:branchial_selected_leader
+			event_target:branchial_selected_leader = {
+				leader_class = commander
+				NOT = { has_trait = subclass_commander_general }
+			}
+		}
+		allow = {
+			AND = {
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 2500
+					mult = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cost_base|
+				}
+				resource_stockpile_compare = {
+					resource = unity
+					value >= 1000
+				}
+				resource_stockpile_compare = {
+					resource = branchial_proficiency
+					value >= 500
+					mult = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cost_base|
+				}
+			}
+		}
+
+		event_target:branchial_selected_leader = {
+			random_list = {
+				80 = { # Success
+					set_leader_flag = branchial_commander_general_selected
+					leader_event = { branchial_redefinition.11211 }
+				}
+				20 = { # Failure
+					random_list = {
+						75 = {
+							leader_event = { branchial_redefinition.115 }
+						}
+						25 = {
+							owner.capital_scope = {
+								planet_event = { id = branchial_guardian.6 }
+							}
+						}
+					}
+					modifier = {
+						factor = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_failure_risk_mult|
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = branchial_commander_governor
+		trigger = {
+			exists = event_target:branchial_selected_leader
+			event_target:branchial_selected_leader = {
+				leader_class = commander
+				NOT = { has_trait = subclass_commander_governor }
+			}
+		}
+		allow = {
+			AND = {
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 2500
+					mult = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cost_base|
+				}
+				resource_stockpile_compare = {
+					resource = unity
+					value >= 1000
+				}
+				resource_stockpile_compare = {
+					resource = branchial_proficiency
+					value >= 500
+					mult = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cost_base|
+				}
+			}
+		}
+
+		event_target:branchial_selected_leader = {
+			random_list = {
+				80 = { # Success
+					set_leader_flag = branchial_commander_governor_selected
+					leader_event = { branchial_redefinition.11211 }
+				}
+				20 = { # Failure
+					random_list = {
+						75 = {
+							leader_event = { branchial_redefinition.115 }
+						}
+						25 = {
+							owner.capital_scope = {
+								planet_event = { id = branchial_guardian.6 }
+							}
+						}
+					}
+					modifier = {
+						factor = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_failure_risk_mult|
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = branchial_commander_councilor
+		trigger = {
+			exists = event_target:branchial_selected_leader
+			event_target:branchial_selected_leader = {
+				leader_class = commander
+				NOT = { has_trait = subclass_commander_councilor }
+			}
+		}
+		allow = {
+			AND = {
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 2500
+					mult = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cost_base|
+				}
+				resource_stockpile_compare = {
+					resource = unity
+					value >= 1000
+				}
+				resource_stockpile_compare = {
+					resource = branchial_proficiency
+					value >= 500
+					mult = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cost_base|
+				}
+			}
+		}
+
+		event_target:branchial_selected_leader = {
+			random_list = {
+				80 = { # Success
+					set_leader_flag = branchial_commander_councilor_selected
+					leader_event = { branchial_redefinition.11211 }
+				}
+				20 = { # Failure
+					random_list = {
+						75 = {
+							leader_event = { branchial_redefinition.115 }
+						}
+						25 = {
+							owner.capital_scope = {
+								planet_event = { id = branchial_guardian.6 }
+							}
+						}
+					}
+					modifier = {
+						factor = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_failure_risk_mult|
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = branchial_official_delegate
+		trigger = {
+			exists = event_target:branchial_selected_leader
+			event_target:branchial_selected_leader = {
+				leader_class = official
+				NOT = { has_trait = subclass_official_delegate }
+			}
+		}
+		allow = {
+			AND = {
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 2500
+					mult = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cost_base|
+				}
+				resource_stockpile_compare = {
+					resource = unity
+					value >= 1000
+				}
+				resource_stockpile_compare = {
+					resource = branchial_proficiency
+					value >= 500
+					mult = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cost_base|
+				}
+			}
+		}
+
+		event_target:branchial_selected_leader = {
+			random_list = {
+				80 = { # Success
+					set_leader_flag = branchial_official_delegate_selected
+					leader_event = { branchial_redefinition.11211 }
+				}
+				20 = { # Failure
+					random_list = {
+						75 = {
+							leader_event = { branchial_redefinition.115 }
+						}
+						25 = {
+							owner.capital_scope = {
+								planet_event = { id = branchial_guardian.6 }
+							}
+						}
+					}
+					modifier = {
+						factor = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_failure_risk_mult|
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = branchial_official_governor
+		trigger = {
+			exists = event_target:branchial_selected_leader
+			event_target:branchial_selected_leader = {
+				leader_class = official
+				NOT = { has_trait = subclass_official_governor }
+			}
+		}
+		allow = {
+			AND = {
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 2500
+					mult = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cost_base|
+				}
+				resource_stockpile_compare = {
+					resource = unity
+					value >= 1000
+				}
+				resource_stockpile_compare = {
+					resource = branchial_proficiency
+					value >= 500
+					mult = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cost_base|
+				}
+			}
+		}
+
+		event_target:branchial_selected_leader = {
+			random_list = {
+				80 = { # Success
+					set_leader_flag = branchial_official_governor_selected
+					leader_event = { branchial_redefinition.11211 }
+				}
+				20 = { # Failure
+					random_list = {
+						75 = {
+							leader_event = { branchial_redefinition.115 }
+						}
+						25 = {
+							owner.capital_scope = {
+								planet_event = { id = branchial_guardian.6 }
+							}
+						}
+					}
+					modifier = {
+						factor = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_failure_risk_mult|
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = branchial_official_diplomacy_councilor
+		trigger = {
+			exists = event_target:branchial_selected_leader
+			event_target:branchial_selected_leader = {
+				leader_class = official
+				NOT = { has_trait = subclass_official_diplomacy_councilor }
+			}
+		}
+		allow = {
+			AND = {
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 2500
+					mult = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cost_base|
+				}
+				resource_stockpile_compare = {
+					resource = unity
+					value >= 1000
+				}
+				resource_stockpile_compare = {
+					resource = branchial_proficiency
+					value >= 500
+					mult = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cost_base|
+				}
+			}
+		}
+
+		event_target:branchial_selected_leader = {
+			random_list = {
+				80 = { # Success
+					set_leader_flag = branchial_official_diplomacy_councilor_selected
+					leader_event = { branchial_redefinition.11211 }
+				}
+				20 = { # Failure
+					random_list = {
+						75 = {
+							leader_event = { branchial_redefinition.115 }
+						}
+						25 = {
+							owner.capital_scope = {
+								planet_event = { id = branchial_guardian.6 }
+							}
+						}
+					}
+					modifier = {
+						factor = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_failure_risk_mult|
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = branchial_official_economy_councilor
+		trigger = {
+			exists = event_target:branchial_selected_leader
+			event_target:branchial_selected_leader = {
+				leader_class = official
+				NOT = { has_trait = subclass_official_economy_councilor }
+			}
+		}
+		allow = {
+			AND = {
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 2500
+					mult = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cost_base|
+				}
+				resource_stockpile_compare = {
+					resource = unity
+					value >= 1000
+				}
+				resource_stockpile_compare = {
+					resource = branchial_proficiency
+					value >= 500
+					mult = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cost_base|
+				}
+			}
+		}
+
+		event_target:branchial_selected_leader = {
+			random_list = {
+				80 = { # Success
+					set_leader_flag = branchial_official_economy_councilor_selected
+					leader_event = { branchial_redefinition.11211 }
+				}
+				20 = { # Failure
+					random_list = {
+						75 = {
+							leader_event = { branchial_redefinition.115 }
+						}
+						25 = {
+							owner.capital_scope = {
+								planet_event = { id = branchial_guardian.6 }
+							}
+						}
+					}
+					modifier = {
+						factor = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_failure_risk_mult|
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = branchial_scientist_explorer
+		trigger = {
+			exists = event_target:branchial_selected_leader
+			event_target:branchial_selected_leader = {
+				leader_class = scientist
+				NOT = { has_trait = subclass_scientist_explorer }
+			}
+		}
+		allow = {
+			AND = {
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 2500
+					mult = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cost_base|
+				}
+				resource_stockpile_compare = {
+					resource = unity
+					value >= 1000
+				}
+				resource_stockpile_compare = {
+					resource = branchial_proficiency
+					value >= 500
+					mult = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cost_base|
+				}
+			}
+		}
+
+		event_target:branchial_selected_leader = {
+			random_list = {
+				80 = { # Success
+					set_leader_flag = branchial_scientist_explorer_selected
+					leader_event = { branchial_redefinition.11211 }
+				}
+				20 = { # Failure
+					random_list = {
+						75 = {
+							leader_event = { branchial_redefinition.115 }
+						}
+						25 = {
+							owner.capital_scope = {
+								planet_event = { id = branchial_guardian.6 }
+							}
+						}
+					}
+					modifier = {
+						factor = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_failure_risk_mult|
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = branchial_scientist_scholar
+		trigger = {
+			exists = event_target:branchial_selected_leader
+			event_target:branchial_selected_leader = {
+				leader_class = scientist
+				NOT = { has_trait = subclass_scientist_scholar }
+			}
+		}
+		allow = {
+			AND = {
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 2500
+					mult = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cost_base|
+				}
+				resource_stockpile_compare = {
+					resource = unity
+					value >= 1000
+				}
+				resource_stockpile_compare = {
+					resource = branchial_proficiency
+					value >= 500
+					mult = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cost_base|
+				}
+			}
+		}
+
+		event_target:branchial_selected_leader = {
+			random_list = {
+				80 = { # Success
+					set_leader_flag = branchial_scientist_scholar_selected
+					leader_event = { branchial_redefinition.11211 }
+				}
+				20 = { # Failure
+					random_list = {
+						75 = {
+							leader_event = { branchial_redefinition.115 }
+						}
+						25 = {
+							owner.capital_scope = {
+								planet_event = { id = branchial_guardian.6 }
+							}
+						}
+					}
+					modifier = {
+						factor = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_failure_risk_mult|
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = branchial_scientist_governor
+		trigger = {
+			exists = event_target:branchial_selected_leader
+			event_target:branchial_selected_leader = {
+				leader_class = scientist
+				NOT = { has_trait = subclass_scientist_governor }
+			}
+		}
+		allow = {
+			AND = {
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 2500
+					mult = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cost_base|
+				}
+				resource_stockpile_compare = {
+					resource = unity
+					value >= 1000
+				}
+				resource_stockpile_compare = {
+					resource = branchial_proficiency
+					value >= 500
+					mult = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cost_base|
+				}
+			}
+		}
+
+		event_target:branchial_selected_leader = {
+			random_list = {
+				80 = { # Success
+					set_leader_flag = branchial_scientist_governor_selected
+					leader_event = { branchial_redefinition.11211 }
+				}
+				20 = { # Failure
+					random_list = {
+						75 = {
+							leader_event = { branchial_redefinition.115 }
+						}
+						25 = {
+							owner.capital_scope = {
+								planet_event = { id = branchial_guardian.6 }
+							}
+						}
+					}
+					modifier = {
+						factor = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_failure_risk_mult|
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = branchial_scientist_councilor
+		trigger = {
+			exists = event_target:branchial_selected_leader
+			event_target:branchial_selected_leader = {
+				leader_class = scientist
+				NOT = { has_trait = subclass_scientist_councilor }
+			}
+		}
+		allow = {
+			AND = {
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 2500
+					mult = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cost_base|
+				}
+				resource_stockpile_compare = {
+					resource = unity
+					value >= 1000
+				}
+				resource_stockpile_compare = {
+					resource = branchial_proficiency
+					value >= 500
+					mult = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cost_base|
+				}
+			}
+		}
+
+		event_target:branchial_selected_leader = {
+			random_list = {
+				80 = { # Success
+					set_leader_flag = branchial_scientist_councilor_selected
+					leader_event = { branchial_redefinition.11211 }
+				}
+				20 = { # Failure
+					random_list = {
+						75 = {
+							leader_event = { branchial_redefinition.115 }
+						}
+						25 = {
+							owner.capital_scope = {
+								planet_event = { id = branchial_guardian.6 }
+							}
+						}
+					}
+					modifier = {
+						factor = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_failure_risk_mult|
+					}
+				}
+			}
+		}
+	}
+
+	option = { # Back
+ 		name = SETTINGS_BACK
+ 		hidden_effect = {
+			set_country_flag = branchial_back
+ 			country_event = { id = branchial_redefinition.112 }
+ 		}
+ 	}
+
+	after = {
+		if = {
+			limit = { has_country_flag = branchial_back }
+			remove_country_flag = branchial_back
+		}
+		else = {
+			add_resource = {
+				energy = -2500
+				mult = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cost_base|
+			}
+			add_resource = {
+				unity = -1000
+			}
+			add_resource = {
+				branchial_proficiency = -500
+				mult = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cost_base|
+			}
+			add_modifier = {
+				modifier = "branchial_redefinition_cooldown"
+				days = 720
+				time_multiplier = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cooldown_mult|
+			}
+		}
+	}
+}
+
+leader_event = { # Change Veteran Class Success
+ 	id = branchial_redefinition.11211
+ 	title = "branchial_redefinition.11211.name"
+ 	desc = "branchial_redefinition.11211.desc"
+	picture = GFX_evt_a_rift_in_space
+	show_sound = event_mystic_reveal
+
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = { leader_class = commander }
+			if = {
+				limit = { has_trait = subclass_commander_admiral }
+				remove_trait = subclass_commander_admiral
+			}
+			if = {
+				limit = { has_trait = subclass_commander_general }
+				remove_trait = subclass_commander_general
+			}
+			if = {
+				limit = { has_trait = subclass_commander_governor }
+				remove_trait = subclass_commander_governor
+			}
+			if = {
+				limit = { has_trait = subclass_commander_councilor }
+				remove_trait = subclass_commander_councilor
+			}
+			if = {
+				limit = { has_leader_flag = branchial_commander_admiral_selected }
+				remove_leader_flag = branchial_commander_admiral_selected
+				add_trait = subclass_commander_admiral
+			}
+			if = {
+				limit = { has_leader_flag = branchial_commander_general_selected }
+				remove_leader_flag = branchial_commander_general_selected
+				add_trait = subclass_commander_general
+			}
+			if = {
+				limit = { has_leader_flag = branchial_commander_governor_selected }
+				remove_leader_flag = branchial_commander_governor_selected
+				add_trait = subclass_commander_governor
+			}
+			if = {
+				limit = { has_leader_flag = branchial_commander_councilor_selected }
+				remove_leader_flag = branchial_commander_councilor_selected
+				add_trait = subclass_commander_councilor
+			}
+		}
+		if = {
+			limit = { leader_class = scientist }
+			if = {
+				limit = { has_trait = subclass_scientist_explorer }
+				remove_trait = subclass_scientist_explorer
+			}
+			if = {
+				limit = { has_trait = subclass_scientist_scholar }
+				remove_trait = subclass_scientist_scholar
+			}
+			if = {
+				limit = { has_trait = subclass_scientist_governor }
+				remove_trait = subclass_scientist_governor
+			}
+			if = {
+				limit = { has_trait = subclass_scientist_councilor }
+				remove_trait = subclass_scientist_councilor
+			}
+			if = {
+				limit = { has_leader_flag = branchial_scientist_explorer_selected }
+ 				remove_leader_flag = branchial_scientist_explorer_selected
+				add_trait = subclass_scientist_explorer
+			}
+			if = {
+				limit = { has_leader_flag = branchial_scientist_scholar_selected }
+ 				remove_leader_flag = branchial_scientist_scholar_selected
+				add_trait = subclass_scientist_scholar
+			}
+			if = {
+				limit = { has_leader_flag = branchial_scientist_governor_selected }
+ 				remove_leader_flag = branchial_scientist_governor_selected
+				add_trait = subclass_scientist_governor
+			}
+			if = {
+				limit = { has_leader_flag = branchial_scientist_councilor_selected }
+				remove_leader_flag = branchial_scientist_councilor_selected
+				add_trait = subclass_scientist_councilor
+			}
+		}
+		if = {
+			limit = { leader_class = official }
+			if = {
+				limit = { has_trait = subclass_official_delegate }
+				remove_trait = subclass_official_delegate
+			}
+			if = {
+				limit = { has_trait = subclass_official_governor }
+				remove_trait = subclass_official_governor
+			}
+			if = {
+				limit = { has_trait = subclass_official_diplomacy_councilor }
+				remove_trait = subclass_official_diplomacy_councilor
+			}
+			if = {
+				limit = { has_trait = subclass_official_economy_councilor }
+				remove_trait = subclass_official_economy_councilor
+			}
+			if = {
+				limit = { has_leader_flag = branchial_official_delegate_selected }
+ 				remove_leader_flag = branchial_official_delegate_selected
+				add_trait = subclass_official_delegate
+			}
+			if = {
+				limit = { has_leader_flag = branchial_official_governor_selected }
+ 				remove_leader_flag = branchial_official_governor_selected
+				add_trait = subclass_official_governor
+			}
+			if = {
+				limit = { has_leader_flag = branchial_official_diplomacy_councilor_selected }
+ 				remove_leader_flag = branchial_official_diplomacy_councilor_selected
+				add_trait = subclass_official_diplomacy_councilor
+			}
+			if = {
+				limit = { has_leader_flag = branchial_official_economy_councilor_selected }
+ 				remove_leader_flag = branchial_official_economy_councilor_selected
+				add_trait = subclass_official_economy_councilor
+			}
+		}
+	}
+}
+
+country_event = { # Add Destiny Trait
+ 	id = branchial_redefinition.113
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.113.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				num_leader_traits = {
+					value <= 1
+					contains_modifier = {
+						leader_trait_type = destiny
+					}
+				}
+			}
+			save_event_target_as = branchial_leader_1
+		}
+		random_owned_leader = {
+			limit = {
+				NOR = {
+					is_same_value = event_target:branchial_leader_1
+				}
+				num_leader_traits = {
+					value <= 1
+					contains_modifier = {
+						leader_trait_type = destiny
+					}
+				}
+			}
+			save_event_target_as = branchial_leader_2
+		}
+		random_owned_leader = {
+			limit = {
+				NOR = {
+					is_same_value = event_target:branchial_leader_1
+					is_same_value = event_target:branchial_leader_2
+				}
+				num_leader_traits = {
+					value <= 1
+					contains_modifier = {
+						leader_trait_type = destiny
+					}
+				}
+			}
+			save_event_target_as = branchial_leader_3
+		}
+	}
+
+	option = {
+		name = event_target:branchial_leader_1.name
+		trigger = {
+			exists = event_target:branchial_leader_1
+		}
+		event_target:branchial_leader_1 = {
+			save_event_target_as = branchial_selected_leader
+		}
+		country_event = { id = branchial_redefinition.1131 }
+	}
+
+	option = {
+		name = event_target:branchial_leader_2.name
+		trigger = {
+			exists = event_target:branchial_leader_2
+		}
+		event_target:branchial_leader_2 = {
+			save_event_target_as = branchial_selected_leader
+		}
+		country_event = { id = branchial_redefinition.1131 }
+	}
+
+	option = {
+		name = event_target:branchial_leader_3.name
+		trigger = {
+			exists = event_target:branchial_leader_3
+		}
+		event_target:branchial_leader_3 = {
+			save_event_target_as = branchial_selected_leader
+		}
+		country_event = { id = branchial_redefinition.1131 }
+	}
+
+	option = { # Reroll
+		name = BRANCHIAL_REROLL
+		hidden_effect = {
+			country_event = { id = branchial_redefinition.113 }
+		}
+	}
+
+	option = { # Back
+ 		name = SETTINGS_BACK
+ 		hidden_effect = {
+ 			country_event = { id = branchial_redefinition.11 }
+ 		}
+ 	}
+}
+
+country_event = { # Select Destiny Trait
+ 	id = branchial_redefinition.1131
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.1131.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	after = {
+		add_modifier = {
+			modifier = "branchial_redefinition_cooldown"
+			days = 720
+			time_multiplier = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cooldown_mult|
+		}
+	}
+}
+
+leader_event = { # Add Destiny Trait Success
+ 	id = branchial_redefinition.11311
+ 	title = "branchial_redefinition.11311.name"
+ 	desc = "branchial_redefinition.11311.desc"
+	picture = GFX_evt_a_rift_in_space
+	show_sound = event_mystic_reveal
+
+	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+country_event = { # Multiverse Integration (Leader)
+ 	id = branchial_redefinition.114
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.114.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				NOT = { has_trait = leader_trait_branchial_singularity }
+			}
+			save_event_target_as = branchial_leader_1
+		}
+		random_owned_leader = {
+			limit = {
+				NOR = {
+					is_same_value = event_target:branchial_leader_1
+				}
+				NOT = { has_trait = leader_trait_branchial_singularity }
+			}
+			save_event_target_as = branchial_leader_2
+		}
+		random_owned_leader = {
+			limit = {
+				NOR = {
+					is_same_value = event_target:branchial_leader_1
+					is_same_value = event_target:branchial_leader_2
+				}
+				NOT = { has_trait = leader_trait_branchial_singularity }
+			}
+			save_event_target_as = branchial_leader_3
+		}
+	}
+
+	option = {
+		name = event_target:branchial_leader_1.name
+		trigger = {
+			exists = event_target:branchial_leader_1
+		}
+		event_target:branchial_leader_1 = {
+			save_event_target_as = branchial_selected_leader
+		}
+		country_event = { id = branchial_redefinition.1141 }
+	}
+
+	option = {
+		name = event_target:branchial_leader_2.name
+		trigger = {
+			exists = event_target:branchial_leader_2
+		}
+		event_target:branchial_leader_2 = {
+			save_event_target_as = branchial_selected_leader
+		}
+		country_event = { id = branchial_redefinition.1141 }
+	}
+
+	option = {
+		name = event_target:branchial_leader_3.name
+		trigger = {
+			exists = event_target:branchial_leader_3
+		}
+		event_target:branchial_leader_3 = {
+			save_event_target_as = branchial_selected_leader
+		}
+		country_event = { id = branchial_redefinition.1141 }
+	}
+
+	option = { # Reroll
+		name = BRANCHIAL_REROLL
+		hidden_effect = {
+			country_event = { id = branchial_redefinition.114 }
+		}
+	}
+
+	option = { # Back
+ 		name = SETTINGS_BACK
+ 		hidden_effect = {
+ 			country_event = { id = branchial_redefinition.11 }
+ 		}
+ 	}
+
+	after = {
+		add_modifier = {
+			modifier = "branchial_redefinition_cooldown"
+			days = 720
+			time_multiplier = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cooldown_mult|
+		}
+	}
+}
+
+leader_event = { # Multiverse Integration Success
+ 	id = branchial_redefinition.1141
+ 	title = "branchial_redefinition.1141.name"
+ 	desc = "branchial_redefinition.1141.desc"
+	picture = GFX_evt_a_rift_in_space
+	show_sound = event_mystic_reveal
+
+	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+leader_event = { # Redefine Leaders Failure
+ 	id = branchial_redefinition.115
+ 	title = "branchial_redefinition.115.name"
+ 	desc = "branchial_redefinition.115.desc"
+	picture = GFX_evt_a_rift_in_space
+	show_sound = event_mystic_reveal
+
+	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+country_event = { # Redefine Government
+ 	id = branchial_redefinition.12
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.12.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+ 	option = { # Pass Agenda
+ 		name = branchial_redefinition.11.a
+ 		hidden_effect = {
+ 			country_event = { id = branchial_redefinition.121 }
+ 		}
+ 	}
+
+ 	option = { # Remove Reform Cooldowns
+ 		name = branchial_redefinition.11.b
+ 		hidden_effect = {
+ 			country_event = { id = branchial_redefinition.122 }
+ 		}
+ 	}
+
+ 	option = { # Shift Government Ethic/Modify Consciousness/Modify Programming
+ 		name = branchial_redefinition.11.c
+ 		hidden_effect = {
+			if = {
+				limit = { is_regular_empire = yes }
+ 				country_event = { id = branchial_redefinition.1231 }
+			}
+			else if = {
+				limit = { is_hive_empire = yes }
+ 				country_event = { id = branchial_redefinition.1232 }
+			}
+			else if = {
+				limit = { is_machine_empire = yes }
+ 				country_event = { id = branchial_redefinition.1233 }
+			}
+ 		}
+ 	}
+
+ 	option = { # Multiverse Integration (Faction/Node)
+ 		name = branchial_redefinition.11.d
+ 		allow = {
+ 			custom_tooltip = {
+ 				fail_text = "branchial_must_have_multiverse_integration"
+ 				has_crisis_perk = menp_branchial_features_5
+ 			}
+ 		}
+ 		hidden_effect = {
+			if = {
+				limit = { is_gestalt = no }
+ 				country_event = { id = branchial_redefinition.1241 }
+			}
+			else if = {
+				limit = { is_gestalt = yes }
+ 				country_event = { id = branchial_redefinition.1242 }
+			}
+ 		}
+ 	}
+
+ 	option = { # Back
+ 		name = SETTINGS_BACK
+		hidden_effect = {
+ 			country_event = { id = branchial_redefinition.1 }
+ 		}
+ 	}
+}
+
+country_event = { # Pass Agenda Success
+ 	id = branchial_redefinition.121
+ 	title = "branchial_redefinition.121.name"
+ 	desc = "branchial_redefinition.121.desc"
+	picture = GFX_evt_a_rift_in_space
+	show_sound = event_mystic_reveal
+
+ 	is_triggered_only = yes
+
+	immediate = {
+		add_modifier = {
+			modifier = "branchial_redefinition_cooldown"
+			days = 1440
+			time_multiplier = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cooldown_mult|
+		}
+	}
+}
+
+country_event = { # Remove Reform Cooldowns Success
+ 	id = branchial_redefinition.122
+ 	title = "branchial_redefinition.122.name"
+ 	desc = "branchial_redefinition.122.desc"
+	picture = GFX_evt_a_rift_in_space
+	show_sound = event_mystic_reveal
+
+ 	is_triggered_only = yes
+
+	immediate = {
+		add_modifier = {
+			modifier = "branchial_redefinition_cooldown"
+			days = 1440
+			time_multiplier = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cooldown_mult|
+		}
+	}
+}
+
+country_event = { # Shift Government Ethic
+ 	id = branchial_redefinition.1231
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.1231.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+
+	after = {
+		add_modifier = {
+			modifier = "branchial_redefinition_cooldown"
+			days = 1440
+			time_multiplier = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cooldown_mult|
+		}
+	}
+}
+
+country_event = { # Shift Government Ethic Success
+ 	id = branchial_redefinition.12311
+ 	title = "branchial_redefinition.12311.name"
+ 	desc = "branchial_redefinition.12311.desc"
+	picture = GFX_evt_a_rift_in_space
+	show_sound = event_mystic_reveal
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+country_event = { # Modify Consciousness
+ 	id = branchial_redefinition.1232
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.1232.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+
+	after = {
+		add_modifier = {
+			modifier = "branchial_redefinition_cooldown"
+			days = 1440
+			time_multiplier = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cooldown_mult|
+		}
+	}
+}
+
+country_event = { # Modify Consciousness Success
+ 	id = branchial_redefinition.12321
+ 	title = "branchial_redefinition.12321.name"
+ 	desc = "branchial_redefinition.12321.desc"
+	picture = GFX_evt_a_rift_in_space
+	show_sound = event_mystic_reveal
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+country_event = { # Modify Programming
+ 	id = branchial_redefinition.1233
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.1233.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+
+	after = {
+		add_modifier = {
+			modifier = "branchial_redefinition_cooldown"
+			days = 1440
+			time_multiplier = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cooldown_mult|
+		}
+	}
+}
+
+country_event = { # Modify Programming Success
+ 	id = branchial_redefinition.12331
+ 	title = "branchial_redefinition.12331.name"
+ 	desc = "branchial_redefinition.12331.desc"
+	picture = GFX_evt_a_rift_in_space
+	show_sound = event_mystic_reveal
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+country_event = { # Multiverse Integration (Faction)
+ 	id = branchial_redefinition.1241
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.1241.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+
+	after = {
+		add_modifier = {
+			modifier = "branchial_redefinition_cooldown"
+			days = 1440
+			time_multiplier = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cooldown_mult|
+		}
+	}
+}
+
+country_event = { # Multiverse Integration Success
+ 	id = branchial_redefinition.12411
+ 	title = "branchial_redefinition.12411.name"
+ 	desc = "branchial_redefinition.12411.desc"
+	picture = GFX_evt_a_rift_in_space
+	show_sound = event_mystic_reveal
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+country_event = { # Multiverse Integration (Node)
+ 	id = branchial_redefinition.1242
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.1242.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+
+	after = {
+		add_modifier = {
+			modifier = "branchial_redefinition_cooldown"
+			days = 1440
+			time_multiplier = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cooldown_mult|
+		}
+	}
+}
+
+country_event = { # Multiverse Integration Success
+ 	id = branchial_redefinition.12421
+ 	title = "branchial_redefinition.12421.name"
+ 	desc = "branchial_redefinition.12421.desc"
+	picture = GFX_evt_a_rift_in_space
+	show_sound = event_mystic_reveal
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+country_event = { # Redefine Government Failure
+ 	id = branchial_redefinition.125
+ 	title = "branchial_redefinition.125.name"
+ 	desc = "branchial_redefinition.125.desc"
+	picture = GFX_evt_a_rift_in_space
+	show_sound = event_mystic_reveal
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+country_event = { # Redefine Pops
+ 	id = branchial_redefinition.13
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.13.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+ 	option = { # Shift Pop Ethics/Eliminate Deviancy
+ 		name = branchial_redefinition.11.a
+ 		hidden_effect = {
+			if = {
+				limit = { is_gestalt = no }
+ 				country_event = { id = branchial_redefinition.1311 }
+			}
+			else if = {
+				limit = { is_gestalt = yes }
+ 				country_event = { id = branchial_redefinition.1312 }
+			}
+ 		}
+ 	}
+
+ 	option = { # Summon or Delete Pops
+ 		name = branchial_redefinition.11.b
+ 		hidden_effect = {
+ 			country_event = { id = branchial_redefinition.132 }
+ 		}
+ 	}
+
+ 	option = { # Add Origin Trait
+ 		name = branchial_redefinition.11.c
+ 		hidden_effect = {
+ 			country_event = { id = branchial_redefinition.133 }
+ 		}
+ 	}
+
+ 	option = { # Multiverse Integration (Pops)
+ 		name = branchial_redefinition.11.d
+ 		allow = {
+ 			custom_tooltip = {
+ 				fail_text = "branchial_must_have_multiverse_integration"
+ 				has_crisis_perk = menp_branchial_features_5
+ 			}
+ 		}
+ 		hidden_effect = {
+ 			country_event = { id = branchial_redefinition.134 }
+ 		}
+ 	}
+
+	option = { # Back
+ 		name = SETTINGS_BACK
+ 		hidden_effect = {
+ 			country_event = { id = branchial_redefinition.1 }
+ 		}
+ 	}
+}
+
+country_event = { # Shift Pop Ethics
+ 	id = branchial_redefinition.1311
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.1311.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+country_event = { # Select Ethic
+ 	id = branchial_redefinition.13111
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.13111.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+
+	after = {
+		add_modifier = {
+			modifier = "branchial_redefinition_cooldown"
+			days = 2160
+			time_multiplier = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cooldown_mult|
+		}
+	}
+}
+
+country_event = { # Shift Pop Ethics Success
+ 	id = branchial_redefinition.131111
+ 	title = "branchial_redefinition.131111.name"
+ 	desc = "branchial_redefinition.131111.desc"
+	picture = GFX_evt_a_rift_in_space
+	show_sound = event_mystic_reveal
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+country_event = { # Eliminate Deviancy
+ 	id = branchial_redefinition.1312
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.1312.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+
+	after = {
+		add_modifier = {
+			modifier = "branchial_redefinition_cooldown"
+			days = 2160
+			time_multiplier = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cooldown_mult|
+		}
+	}
+}
+
+country_event = { # Eliminate Deviancy Success
+ 	id = branchial_redefinition.13121
+ 	title = "branchial_redefinition.13121.name"
+ 	desc = "branchial_redefinition.13121.desc"
+	picture = GFX_evt_a_rift_in_space
+	show_sound = event_mystic_reveal
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+country_event = { # Summon or Delete Pops
+ 	id = branchial_redefinition.132
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.132.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+country_event = { # Summon or Delete
+ 	id = branchial_redefinition.1321
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.1321.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+
+	after = {
+		add_modifier = {
+			modifier = "branchial_redefinition_cooldown"
+			days = 2160
+			time_multiplier = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cooldown_mult|
+		}
+	}
+}
+
+country_event = { # Summon or Delete Pops Success
+ 	id = branchial_redefinition.13211
+ 	title = "branchial_redefinition.13211.name"
+ 	desc = "branchial_redefinition.13211.desc"
+	picture = GFX_evt_a_rift_in_space
+	show_sound = event_mystic_reveal
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+country_event = { # Add Origin Trait
+ 	id = branchial_redefinition.133
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.133.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+country_event = { # Select Species
+ 	id = branchial_redefinition.1331
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.1331.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+country_event = { # Select Trait
+ 	id = branchial_redefinition.13311
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.13311.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+
+	after = {
+		add_modifier = {
+			modifier = "branchial_redefinition_cooldown"
+			days = 2160
+			time_multiplier = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cooldown_mult|
+		}
+	}
+}
+
+country_event = { # Add Origin Trait Success
+ 	id = branchial_redefinition.133111
+ 	title = "branchial_redefinition.133111.name"
+ 	desc = "branchial_redefinition.133111.desc"
+	picture = GFX_evt_a_rift_in_space
+	show_sound = event_mystic_reveal
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+country_event = { # Multiverse Integration (Pops)
+ 	id = branchial_redefinition.134
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.134.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+country_event = { # Select Species
+ 	id = branchial_redefinition.1341
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.1341.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+
+	after = {
+		add_modifier = {
+			modifier = "branchial_redefinition_cooldown"
+			days = 2160
+			time_multiplier = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cooldown_mult|
+		}
+	}
+}
+
+country_event = { # Multiverse Integration Success
+ 	id = branchial_redefinition.13411
+ 	title = "branchial_redefinition.13411.name"
+ 	desc = "branchial_redefinition.13411.desc"
+	picture = GFX_evt_a_rift_in_space
+	show_sound = event_mystic_reveal
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+country_event = { # Redefine Pops Failure
+ 	id = branchial_redefinition.135
+ 	title = "branchial_redefinition.135.name"
+ 	desc = "branchial_redefinition.135.desc"
+	picture = GFX_evt_a_rift_in_space
+	show_sound = event_mystic_reveal
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+country_event = { # Redefine Planets
+ 	id = branchial_redefinition.14
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.14.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+ 	option = { # Add Planetary Feature
+ 		name = branchial_redefinition.11.a
+ 		hidden_effect = {
+ 			country_event = { id = branchial_redefinition.141 }
+ 		}
+ 	}
+
+ 	option = { # Set Planet Size
+ 		name = branchial_redefinition.11.b
+ 		hidden_effect = {
+ 			country_event = { id = branchial_redefinition.142 }
+ 		}
+ 	}
+
+ 	option = { # Terraform to Ecumenopolis/Hive World/Machine World
+ 		name = branchial_redefinition.11.c
+ 		hidden_effect = {
+			if = {
+				limit = { is_regular_empire = yes }
+ 				country_event = { id = branchial_redefinition.1431 }
+			}
+			else if = {
+				limit = { is_hive_empire = yes }
+ 				country_event = { id = branchial_redefinition.1432 }
+			}
+			if = {
+				limit = { is_machine_empire = yes }
+ 				country_event = { id = branchial_redefinition.1433 }
+			}
+ 		}
+ 	}
+
+ 	option = { # Multiverse Integration (Planet)
+ 		name = branchial_redefinition.11.d
+ 		allow = {
+ 			custom_tooltip = {
+ 				fail_text = "branchial_must_have_multiverse_integration"
+ 				has_crisis_perk = menp_branchial_features_5
+ 			}
+ 		}
+ 		hidden_effect = {
+ 			country_event = { id = branchial_redefinition.144 }
+ 		}
+ 	}
+
+	option = { # Back
+ 		name = SETTINGS_BACK
+ 		hidden_effect = {
+ 			country_event = { id = branchial_redefinition.1 }
+ 		}
+ 	}
+}
+
+country_event = { # Add Planetary Feature
+ 	id = branchial_redefinition.141
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.141.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+country_event = { # Select Feature
+ 	id = branchial_redefinition.1411
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.1411.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+
+	after = {
+		add_modifier = {
+			modifier = "branchial_redefinition_cooldown"
+			days = 2880
+			time_multiplier = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cooldown_mult|
+		}
+	}
+}
+
+country_event = { # Add Planetary Feature Success
+ 	id = branchial_redefinition.14111
+ 	title = "branchial_redefinition.14111.name"
+ 	desc = "branchial_redefinition.14111.desc"
+	picture = GFX_evt_a_rift_in_space
+	show_sound = event_mystic_reveal
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+country_event = { # Set Planet Size
+ 	id = branchial_redefinition.142
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.142.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+country_event = { # Select Size
+ 	id = branchial_redefinition.1421
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.1421.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+
+	after = {
+		add_modifier = {
+			modifier = "branchial_redefinition_cooldown"
+			days = 2880
+			time_multiplier = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cooldown_mult|
+		}
+	}
+}
+
+country_event = { # Set Planet Size Success
+ 	id = branchial_redefinition.14211
+ 	title = "branchial_redefinition.14211.name"
+ 	desc = "branchial_redefinition.14211.desc"
+	picture = GFX_evt_a_rift_in_space
+	show_sound = event_mystic_reveal
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+country_event = { # Terraform to Ecumenopolis
+ 	id = branchial_redefinition.1431
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.1431.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+
+	after = {
+		add_modifier = {
+			modifier = "branchial_redefinition_cooldown"
+			days = 2880
+			time_multiplier = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cooldown_mult|
+		}
+	}
+}
+
+country_event = { # Terraform to Ecumenopolis Success
+ 	id = branchial_redefinition.14311
+ 	title = "branchial_redefinition.14311.name"
+ 	desc = "branchial_redefinition.14311.desc"
+	picture = GFX_evt_a_rift_in_space
+	show_sound = event_mystic_reveal
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+country_event = { # Terraform to Hive World
+ 	id = branchial_redefinition.1432
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.1432.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+
+	after = {
+		add_modifier = {
+			modifier = "branchial_redefinition_cooldown"
+			days = 2880
+			time_multiplier = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cooldown_mult|
+		}
+	}
+}
+
+country_event = { # Terraform to Hive World Success
+ 	id = branchial_redefinition.14321
+ 	title = "branchial_redefinition.14321.name"
+ 	desc = "branchial_redefinition.14321.desc"
+	picture = GFX_evt_a_rift_in_space
+	show_sound = event_mystic_reveal
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+country_event = { # Terraform to Machine World
+ 	id = branchial_redefinition.1433
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.1433.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+
+	after = {
+		add_modifier = {
+			modifier = "branchial_redefinition_cooldown"
+			days = 2880
+			time_multiplier = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cooldown_mult|
+		}
+	}
+}
+
+country_event = { # Terraform to Machine World Success
+ 	id = branchial_redefinition.14331
+ 	title = "branchial_redefinition.14331.name"
+ 	desc = "branchial_redefinition.14331.desc"
+	picture = GFX_evt_a_rift_in_space
+	show_sound = event_mystic_reveal
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+country_event = { # Multiverse Integration (Planet)
+ 	id = branchial_redefinition.144
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.144.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+
+	after = {
+		add_modifier = {
+			modifier = "branchial_redefinition_cooldown"
+			days = 2880
+			time_multiplier = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cooldown_mult|
+		}
+	}
+}
+
+country_event = { # Multiverse Integration Success
+ 	id = branchial_redefinition.1441
+ 	title = "branchial_redefinition.1441.name"
+ 	desc = "branchial_redefinition.1441.desc"
+	picture = GFX_evt_a_rift_in_space
+	show_sound = event_mystic_reveal
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+country_event = { # Redefine Planets Failure
+ 	id = branchial_redefinition.145
+ 	title = "branchial_redefinition.145.name"
+ 	desc = "branchial_redefinition.145.desc"
+	picture = GFX_evt_a_rift_in_space
+	show_sound = event_mystic_reveal
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+country_event = { # Redefine Empires
+ 	id = branchial_redefinition.15
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.15.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+ 	option = { # Shift Ideology/Modify Opinion
+ 		name = branchial_redefinition.15.a
+ 		hidden_effect = {
+ 			country_event = { id = branchial_redefinition.151 }
+ 		}
+ 	}
+
+ 	option = { # Make Special Subject
+ 		name = branchial_redefinition.11.b
+ 		hidden_effect = {
+ 			country_event = { id = branchial_redefinition.152 }
+ 		}
+ 	}
+
+ 	option = { # Integrate Empire
+ 		name = branchial_redefinition.11.c
+ 		hidden_effect = {
+ 			country_event = { id = branchial_redefinition.153 }
+ 		}
+ 	}
+
+ 	option = { # Multiverse Dissolution (Empire)
+ 		name = branchial_redefinition.11.d
+ 		allow = {
+ 			custom_tooltip = {
+ 				fail_text = "branchial_must_have_multiverse_integration"
+ 				has_crisis_perk = menp_branchial_features_5
+ 			}
+ 		}
+ 		hidden_effect = {
+ 			country_event = { id = branchial_redefinition.154 }
+ 		}
+ 	}
+
+	option = { # Back
+ 		name = SETTINGS_BACK
+ 		hidden_effect = {
+ 			country_event = { id = branchial_redefinition.1 }
+ 		}
+ 	}
+}
+
+country_event = { # Shift Ideology
+ 	id = branchial_redefinition.151
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.151.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+country_event = { # Select Ethic
+ 	id = branchial_redefinition.1511
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.1511.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+
+	after = {
+		add_modifier = {
+			modifier = "branchial_redefinition_cooldown"
+			days = 3600
+			time_multiplier = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cooldown_mult|
+		}
+	}
+}
+
+country_event = { # Select Opinion Bonus
+ 	id = branchial_redefinition.1512
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.1512.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+
+	after = {
+		add_modifier = {
+			modifier = "branchial_redefinition_cooldown"
+			days = 3600
+			time_multiplier = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cooldown_mult|
+		}
+	}
+}
+
+country_event = { # Shift Ideology Success
+ 	id = branchial_redefinition.15111
+ 	title = "branchial_redefinition.15111.name"
+ 	desc = "branchial_redefinition.15111.desc"
+	picture = GFX_evt_a_rift_in_space
+	show_sound = event_mystic_reveal
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+country_event = { # Modify Opinion Success
+ 	id = branchial_redefinition.15121
+ 	title = "branchial_redefinition.15121.name"
+ 	desc = "branchial_redefinition.15121.desc"
+	picture = GFX_evt_a_rift_in_space
+	show_sound = event_mystic_reveal
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+country_event = { # Make Special Subject
+ 	id = branchial_redefinition.152
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.152.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+country_event = { # Select Subject Type
+ 	id = branchial_redefinition.1521
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.1521.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+
+	after = {
+		add_modifier = {
+			modifier = "branchial_redefinition_cooldown"
+			days = 3600
+			time_multiplier = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cooldown_mult|
+		}
+	}
+}
+
+country_event = { # Make Special Subject Success
+ 	id = branchial_redefinition.15211
+ 	title = "branchial_redefinition.15211.name"
+ 	desc = "branchial_redefinition.15211.desc"
+	picture = GFX_evt_a_rift_in_space
+	show_sound = event_mystic_reveal
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+country_event = { # Integrate Empire
+ 	id = branchial_redefinition.153
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.153.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+
+	after = {
+		add_modifier = {
+			modifier = "branchial_redefinition_cooldown"
+			days = 3600
+			time_multiplier = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cooldown_mult|
+		}
+	}
+}
+
+country_event = { # Integrate Empire Success
+ 	id = branchial_redefinition.1531
+ 	title = "branchial_redefinition.1531.name"
+ 	desc = "branchial_redefinition.1531.desc"
+	picture = GFX_evt_a_rift_in_space
+	show_sound = event_mystic_reveal
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+country_event = { # Multiverse Dissolution (Empire)
+ 	id = branchial_redefinition.154
+ 	title = "branchial_redefinition.1.name"
+ 	desc = "branchial_redefinition.154.desc"
+
+ 	diplomatic = yes
+
+ 	picture_event_data = {
+ 		portrait = root
+ 		planet_background = root.capital_scope
+ 		graphical_culture = root
+ 		room = root
+ 	}
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+
+	after = {
+		add_modifier = {
+			modifier = "branchial_redefinition_cooldown"
+			days = 3600
+			time_multiplier = value:scripted_modifier_mult|MODIFIER|branchial_redefinition_cooldown_mult|
+		}
+	}
+}
+
+country_event = { # Multiverse Dissolution Success
+ 	id = branchial_redefinition.1541
+ 	title = "branchial_redefinition.1541.name"
+ 	desc = "branchial_redefinition.1541.desc"
+	picture = GFX_evt_a_rift_in_space
+	show_sound = event_mystic_reveal
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}
+
+country_event = { # Redefine Empire Failure
+ 	id = branchial_redefinition.155
+ 	title = "branchial_redefinition.155.name"
+ 	desc = "branchial_redefinition.155.desc"
+	picture = GFX_evt_a_rift_in_space
+	show_sound = event_mystic_reveal
+
+ 	is_triggered_only = yes
+
+	immediate = {
+
+	}
+}

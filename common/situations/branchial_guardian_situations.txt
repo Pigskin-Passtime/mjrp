@@ -1,0 +1,132 @@
+### Cybernetic Creed - Time to Cyberize
+situation_branchial_empire_counter = {
+	picture = GFX_evt_fallen_empire_awakes
+	category = positive
+	complete_icon_frame = GFX_situation_outcome_frame_green
+	complete_icon = GFX_situation_outcome_ascension
+	on_progress_complete = {
+		custom_tooltip = situation_branchial_empire_counter_complete
+		hidden_effect = {
+			owner = {
+				country_event = { id = branchial_guardian.9 }
+			}
+		}
+	}
+	stages = {
+		stage_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_blue
+			end = 50
+			custom_tooltip = stage_branchial_empire_hack_effects
+		}
+		stage_2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_blue
+			end = 333
+			on_first_enter = {
+				#owner = {
+				#	country_event = { id =  }
+				#}
+			}
+			custom_tooltip = stage_branchial_empire_lore_effects
+		}
+		stage_3 = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_blue
+			end = 666
+			on_first_enter = {
+				#owner = {
+				#	country_event = { id =  }
+				#}
+			}
+			custom_tooltip = stage_branchial_empire_weakness_effects
+		}
+		stage_4 = {
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_blue
+			end = 1000
+			on_first_enter = {
+				#owner = {
+				#	country_event = { id =  }
+				#}
+			}
+			custom_tooltip = stage_branchial_empire_secrets_effects
+		}
+	}
+	approach = {
+		name = situation_branchial_empire_counter_no_funding
+		icon = GFX_situation_approach_balance_sheet
+		icon_background = GFX_situation_approach_bg_yellow
+		potential = {
+		}
+		default = yes
+		ai_weight = {
+			base = 0
+		}
+		on_select = {
+			custom_tooltip = branchial_empire_counter_no_funding
+		}
+		modifier = {
+			country_physics_tech_research_speed = -0.1
+		}
+	}
+	approach = {
+		name = situation_branchial_empire_counter_funding
+		icon = GFX_situation_approach_energy_credits
+		icon_background = GFX_situation_approach_bg_green
+		potential = {
+			NOT = { current_stage = stage_1 }
+		}
+		on_select = {
+			custom_tooltip = branchial_empire_counter_funding
+		}
+		ai_weight = {
+			base = 10
+		}
+		modifier = {
+			country_physics_tech_research_speed = -0.1
+			country_energy_produces_mult = -0.1
+		}
+	}
+	approach = {
+		name = situation_branchial_empire_counter_immense_funding
+		icon = GFX_situation_approach_pop
+		icon_background = GFX_situation_approach_bg_green
+		potential = {
+			NOT = { current_stage = stage_1 }
+		}
+		on_select = {
+			custom_tooltip = branchial_empire_counter_immense_funding
+		}
+		ai_weight = {
+			base = 0
+		}
+		modifier = {
+			country_engineering_tech_research_speed = -0.2
+			planet_jobs_produces_mult = -0.2
+		}
+	}
+	on_monthly = {
+		events = {
+			#machine_age.2000 # Cyberize pops - situation is paused
+		}
+	}
+	monthly_progress = { #On average, the situation should take about 7 years to complete
+		base = 1
+		modifier = {
+			mult = 5
+			desc = branchial_empire_counter_immense_funding
+			current_situation_approach = situation_branchial_empire_counter_immense_funding
+		}
+		modifier = {
+			mult = 2
+			desc = branchial_empire_counter_funding
+			current_situation_approach = situation_branchial_empire_counter_funding
+		}
+		modifier = {
+			mult = 1.0
+			desc = branchial_empire_counter_no_funding
+			current_situation_approach = situation_branchial_empire_counter_no_funding
+		}
+	}
+}

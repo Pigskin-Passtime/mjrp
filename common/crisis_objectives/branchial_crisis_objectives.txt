@@ -1,0 +1,104 @@
+###############
+#
+# CRISIS OBJECTIVES
+# (Previously 'MEANS')
+#
+###############
+
+# crisobj_name = {
+#	reward = 1			# The menace reward given when this objective is completed
+# }
+#
+# OR
+#
+# crisobj_name = {
+#	potential = {}		# Potential trigger (This = country). Defines availability of this objective to the country. The trigger is evaluated daily.
+#	reward = {			# The base menace reward given when this objective is completed
+#		base = 100
+#
+#		modifier = {	# Modifier(s) that adjust the reward amount
+#			factor = 2
+#			owner = { is_xenophobe = yes }
+#		}
+#	}
+# }
+
+branchial_crisobj_multiverse_research = {
+	reward = {
+		base = 0
+		add = branchialweaver_world_branchial_proficiency_produced
+		round = yes 							#we don't want 3.124 menace
+		min = 0								#just in case
+	}
+	recurring = yes
+}
+
+branchial_crisobj_probe_multiverse = {
+	reward = {
+		base = 800
+		complex_trigger_modifier = { #subtract 25 for each playable country that exists
+			trigger = count_playable_country
+			mode = subtract
+			mult = 25
+		}
+		round_to = 25 	#we want a solid number
+		min = 400 		#and we don't want less than 400
+	}
+}
+
+branchial_crisobj_astral_rifts = {
+	potential = {
+		has_astral_planes_dlc = yes
+	}
+	reward = {
+		base = 800
+		complex_trigger_modifier = { #subtract 25 for each playable country that exists
+			trigger = count_playable_country
+			mode = subtract
+			mult = 25
+		}
+		round_to = 25	#we want a solid number
+		min = 400		#and we don't want less than 400
+	}
+}
+
+branchial_crisobj_redefinition_weapons = {
+	reward = {
+		base = 20000
+		divide = trigger:num_galaxy_systems 	#on huge, this is 20. On smallest, it is 100
+		round = yes 							#we don't want 3.124 menace
+		min = 20
+	}
+}
+
+
+branchial_crisobj_planet_redefinition = {
+	reward = {
+		base = 500000
+		divide = trigger:num_galaxy_systems 	#on huge, this is 500. On smallest, it is 2500
+		complex_trigger_modifier = { 			#fewer worlds => more menace from destroying one
+			trigger = check_galaxy_setup_value
+			parameters = { setting = habitable_worlds_scale }
+			mode = divide
+		}
+		round_to = 50 								#we don't want 127.5 menace
+		min = 500									#just in case
+	}
+}
+
+branchial_crisobj_galcom_science_resolution = {
+	potential = {
+		has_federations_dlc = yes
+	}
+	reward = {
+		base = 750
+		complex_trigger_modifier = { #subtract 25 for each playable country that exists
+			trigger = count_playable_country
+			mode = subtract
+			mult = 25
+		}
+		round_to = 25 	#we want a solid number
+		min = 250 		#and we don't want less than 250
+	}
+	recurring = yes
+}
