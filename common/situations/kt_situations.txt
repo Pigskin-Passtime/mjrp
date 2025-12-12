@@ -1,0 +1,160 @@
+
+kt_situation_sword_logic = {
+    picture = GFX_evt_fleet_evil #TODO: MORE UI, WHYYYY
+
+    complete_icon = GFX_situation_outcome_unknown
+    complete_icon_frame = GFX_situation_outcome_frame_green
+
+    monthly_progress = { base = 0 }
+    on_progress_complete = {}
+
+    stages = {
+        kt_situation_stage = {
+            icon = GFX_situation_stage_kt_swords #TODO: Fuck it please I just need to do this
+            icon_background = GFX_situation_stage_frame_green #TODO: Guess what idiot?
+            end = 100
+        }
+    }
+
+    approach = {
+        name = kt_situation_sword_logic_approach #
+        icon = GFX_situation_approach_kt_destroy #change colour?
+        icon_background = GFX_situation_approach_bg_green
+        default = yes
+		on_select = {
+			custom_tooltip = kt_situation_sword_logic_approach_tt
+		}
+	}
+
+
+	triggered_modifier = {
+		kt_wages_of_destruction_display = 1
+		multiplier = owner.kt_wages_of_destruction
+	}
+
+	triggered_modifier = {
+		kt_killing_momentum_effectiveness_display = 1
+		multiplier = owner.value:kt_killing_momentum_effectiveness
+	}
+
+	triggered_modifier = {
+		kt_wages_of_destruction_decay_display = 1
+		multiplier = owner.value:kt_killing_momentum_decay
+	}
+
+	#### Effects
+	
+	## Level 1
+	
+	# Weapon damage
+	triggered_modifier = {
+		ship_weapon_damage = 0.15
+		multiplier = owner.value:kt_killing_momentum_effectiveness
+	}
+
+	# Defense
+	triggered_modifier = {
+		ship_hull_mult =  0.04
+		ship_armor_mult = 0.04
+		ship_shield_mult = 0.04
+		multiplier = owner.value:kt_killing_momentum_effectiveness
+	}
+	
+	## Level 2
+
+	# Shieldbreaker
+	triggered_modifier = {
+		potential = {
+			owner = {
+				has_crisis_level = kt_crisis_killing_thought_level_2
+			}
+		}
+		ship_shield_penetration_add = 0.075
+		ship_shield_damage_mult = 0.15
+		ship_armor_penetration_add = 0.075
+		ship_armor_damage_mult = 0.15
+		multiplier = owner.value:kt_killing_momentum_effectiveness
+	}
+
+	# Machines of War
+	triggered_modifier = {
+		potential = {
+			owner = {
+				has_crisis_level = kt_crisis_killing_thought_level_2
+			}
+		}
+		starbase_shipyard_build_speed_mult = 0.2
+		multiplier = owner.value:kt_killing_momentum_effectiveness
+	}
+
+	## Level 3
+
+	# Killing Sustenance
+	triggered_modifier = {
+		potential = {
+			owner = {
+				has_crisis_level = kt_crisis_killing_thought_level_3
+			}
+		}
+		ships_upkeep_mult = -0.2
+		multiplier = owner.value:kt_killing_momentum_effectiveness
+	}
+
+	# Art of War
+	triggered_modifier = {
+		potential = {
+			owner = {
+				has_crisis_level = kt_crisis_killing_thought_level_3
+			}
+		}
+		planet_jobs_unity_produces_mult = 0.1
+		multiplier = owner.value:kt_killing_momentum_effectiveness
+	}
+
+	## Level 4
+
+	# Science of war
+	triggered_modifier = {
+		potential = {
+			owner = {
+				has_crisis_level = kt_crisis_killing_thought_level_4
+			}
+		}
+		planet_jobs_physics_research_produces_mult = 0.1
+		planet_jobs_engineering_research_produces_mult = 0.1
+		planet_jobs_society_research_produces_mult = 0.1
+		multiplier = owner.value:kt_killing_momentum_effectiveness
+	}
+
+	## Level 5
+
+	# To War!
+	triggered_modifier = {
+		potential = {
+			 owner = {
+				has_crisis_level = kt_crisis_killing_thought_level_5
+			 }
+		}
+		ship_speed_mult = 0.3
+		multiplier = owner.value:kt_killing_momentum_effectiveness
+	}
+}
+
+# Get math but revamp to 'resource' system. Killing & destroying builds resource, slowly declines over time
+# Speed and minimum value for decline of leaders depends on crisis level (higher level faster)
+# decline * 0.95^empires at war with you and 0.92^destroyed empires? Maybe more?
+# decline increased for every month you didn't do shit?
+# Add var laziness decay +1 each month (all events that add some wages of destruction set to 0) this happens after you do the decline calc
+# Find out how to do logistic growth
+# sqrt instead
+# pow = number exist
+# power for root = 0.52 (this is almost sqrt but gives negative numbers)
+# round_to = 0.01 to round to nearest %
+# to normalise 0 to 0
+# War declaration + 5
+# War draw + 10
+# War victory + 20
+# Per ship destroyed + 0.1
+# Planet destroyed + 10
+# planet conquered + 5
+# At start + 10

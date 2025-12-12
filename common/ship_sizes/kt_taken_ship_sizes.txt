@@ -1,0 +1,304 @@
+#kt_taken_ship_sizes.txt
+#Lithrandil2
+
+@kt_corvette_hp = 100
+
+@kt_destroyer_hp = 300
+
+@kt_cruiser_hp = 900
+
+
+@kt_battleship_hp = 1500
+
+@kt_titan_hp = 7500
+
+##################
+# COLOSSUS
+##################
+
+@colossus_collision_radius = 4
+@colossus_formation_priority = 4
+
+@colossus_hp = 30000
+@colossus_evasion = 2
+@colossus_build_time = 3600
+
+@colossus_upkeep_energy = 30
+@colossus_upkeep_alloys = 10
+
+@colossus_logistic_upkeep_trade = 10
+
+# I don't care about Corvette vs Frigate, both get turned into the same shit
+kt_taken_small = {
+	formation_priority = @corvette_formation_priority
+	graphical_culture = no
+	entity = kt_taken_ship_small_entity
+	max_speed = @speed_very_fast
+	acceleration = 0.35
+	rotation_speed = 0.1
+	collision_radius = @corvette_collision_radius
+	modifier = {
+		ship_evasion_add = @corvette_evasion
+		#ship_piracy_suppression_add = 10
+	}
+	max_hitpoints = @kt_corvette_hp
+	size_multiplier = 1
+	fleet_slot_size = 1
+	section_slots = { "mid" = { locator = "part1" } }
+	num_target_locators = 0
+	is_space_station = no
+	can_have_federation_design = no
+	#icon_frame = 2
+	icon = ship_size_military_1
+	base_buildtime = 30
+	default_behavior = swarm
+	combat_disengage_chance = 0.1
+	#enable_3dview_in_ship_browser = yes #if yes, ship design will have a 3d view in the ship browser
+
+	ship_roles = { gunship brawler }
+
+	class = shipclass_military
+	enable_default_design = yes
+	use_shipnames_from = corvette
+
+	prerequisites = {
+		kt_taken_basic_tech
+	}
+
+	required_component_set = "power_core"
+	required_component_set = "ftl_components"
+	required_component_set = "thruster_components"
+	required_component_set = "sensor_components"
+	required_component_set = "combat_computers"
+
+	resources = {
+		category = ships
+		upkeep = {
+			energy = @corvette_upkeep_energy
+			minerals = @corvette_upkeep_minerals
+		}
+	}
+	min_upgrade_cost = {
+		alloys = 1
+	}
+	available_to_everyone = yes
+}
+
+kt_taken_destroyer = {
+	entity = kt_taken_ship_destroyer_entity
+	graphical_culture = no
+	max_speed = @speed_fast
+	acceleration = 0.3
+	rotation_speed = 0.2
+	collision_radius = @destroyer_collision_radius
+	modifier = {
+		ship_evasion_add = @destroyer_evasion
+		#ship_piracy_suppression_add = 8
+	}
+	max_hitpoints = @kt_destroyer_hp
+	size_multiplier = 1
+	fleet_slot_size = 1
+	section_slots = { "bow" = { locator = "part1" } "stern" = { locator = "part2" } }
+	num_target_locators = 0
+	#icon_frame = 3
+	icon = ship_size_military_2
+	base_buildtime = 60
+	is_space_station = no
+	can_have_federation_design = no
+	default_behavior = line
+	ship_roles = { gunship brawler artillery explosive energy_torpedoes }
+	combat_disengage_chance = 0.1
+	#enable_3dview_in_ship_browser = yes #if yes, ship design will have a 3d view in the ship browser
+
+	prerequisites = {
+		kt_taken_basic_tech
+	}
+
+	class = shipclass_military
+	enable_default_design = yes
+	use_shipnames_from = destroyer
+
+	required_component_set = "power_core"
+	required_component_set = "ftl_components"
+	required_component_set = "thruster_components"
+	required_component_set = "sensor_components"
+	required_component_set = "combat_computers"
+
+	resources = {
+		category = ships
+		upkeep = {
+			energy = @destroyer_upkeep_energy
+			alloys = @destroyer_upkeep_alloys
+		}
+	}
+	available_to_everyone = yes
+}
+
+kt_taken_cruiser = {
+	entity = kt_taken_ship_cruiser_entity
+	graphical_culture = no
+	max_speed = @speed_fast
+	acceleration = 0.2
+	rotation_speed = 0.2
+	collision_radius = @destroyer_collision_radius
+	modifier = {
+		ship_evasion_add = @cruiser_evasion
+		#ship_piracy_suppression_add = 6
+	}
+	max_hitpoints = @kt_cruiser_hp
+	size_multiplier = 2
+	fleet_slot_size = 2
+	section_slots = { "bow" = { locator = "part1" } "mid" = { locator = "part2" } "stern" = { locator = "part3" } }
+	num_target_locators = 0
+	#icon_frame = 4
+	icon = ship_size_military_4
+	base_buildtime = 120
+	is_space_station = no
+	can_have_federation_design = no
+	components_add_to_cost = no
+	combat_disengage_chance = 0.1
+	#enable_3dview_in_ship_browser = yes #if yes, ship design will have a 3d view in the ship browser
+
+	default_behavior = line
+	ship_roles = { gunship brawler artillery }
+
+
+	prerequisites = {
+		kt_taken_basic_tech
+	}
+
+	class = shipclass_military
+	enable_default_design = yes
+	use_shipnames_from = cruiser
+
+	required_component_set = "power_core"
+	required_component_set = "ftl_components"
+	required_component_set = "thruster_components"
+	required_component_set = "sensor_components"
+	required_component_set = "combat_computers"
+
+	resources = {
+		category = ships
+		upkeep = {
+			energy = @cruiser_upkeep_energy
+			alloys = @cruiser_upkeep_alloys
+		}
+	}
+
+	available_to_everyone = yes
+}
+
+kt_taken_battleship = {
+	entity = kt_taken_ship_battleship_entity
+	formation_priority = @battleship_formation_priority
+	graphical_culture = no
+	max_speed = @speed_slow
+	acceleration = 0.2
+	rotation_speed = 0.15
+	collision_radius = @battleship_collision_radius
+	max_hitpoints = @kt_battleship_hp
+	use_shipnames_from = battleship
+	modifier = {
+		ship_evasion_add = @battleship_evasion
+		#ship_piracy_suppression_add = 4
+	}
+	size_multiplier = 4
+	fleet_slot_size = 4
+	section_slots = { "bow" = { locator = "part1" } "mid" = { locator = "part2" } "stern" = { locator = "part3" } }
+	num_target_locators = 4
+	is_space_station = no
+	icon = ship_size_military_8
+	base_buildtime = @battleship_build_time
+	can_have_federation_design = yes
+	enable_default_design = yes	#if yes, countries will have an auto-generated design at start
+	#enable_3dview_in_ship_browser = yes #if yes, ship design will have a 3d view in the ship browser
+
+	default_behavior = artillery
+
+	role_background = "GFX_role_selection_battleship"
+	ship_roles = { artillery carrier gunship }
+
+	prerequisites = {
+		kt_taken_basic_tech
+	}
+	combat_disengage_chance = 0.1
+
+	class = shipclass_military
+	construction_type = starbase_shipyard
+	required_component_set = "power_core"
+	required_component_set = "ftl_components"
+	required_component_set = "thruster_components"
+	required_component_set = "sensor_components"
+	required_component_set = "combat_computers"
+
+	resources = {
+		category = ships
+		upkeep = {
+			energy = @battleship_upkeep_energy
+			alloys = @battleship_upkeep_alloys
+		}
+	}
+
+	min_upgrade_cost = {
+		alloys = 8
+	}
+	available_to_everyone = yes
+}
+
+kt_taken_titan = {
+	entity = kt_taken_ship_titan_entity
+	formation_priority = @titan_formation_priority
+	graphical_culture = no
+	max_speed = @speed_slow
+	acceleration = 0.2
+	rotation_speed = 0.15
+	collision_radius = @titan_collision_radius
+	max_hitpoints = @titan_hp
+	use_shipnames_from = titan
+	modifier = {
+		ship_evasion_add = @titan_evasion
+	}
+	size_multiplier = 8
+	fleet_slot_size = 8
+	section_slots = { "bow" = { locator = "part1" } "mid" = { locator = "part2" } "stern" = { locator = "part3" } }
+	num_target_locators = 4
+	is_space_station = no
+	icon = ship_size_military_16
+	base_buildtime = @titan_build_time
+	can_have_federation_design = yes
+	enable_default_design = yes	#if yes, countries will have an auto-generated design at start
+	#enable_3dview_in_ship_browser = yes #if yes, ship design will have a 3d view in the ship browser
+	selectable = { host_has_dlc = "Apocalypse" }
+
+	default_behavior = artillery
+
+	role_background = "GFX_role_selection_titan"
+	ship_roles = { artillery gunship }
+
+	prerequisites = {
+		kt_taken_titan_tech
+	}
+
+	combat_disengage_chance = 0.1
+
+	class = shipclass_military
+	required_component_set = "power_core"
+	required_component_set = "ftl_components"
+	required_component_set = "thruster_components"
+	required_component_set = "sensor_components"
+	required_component_set = "combat_computers"
+	required_component_set = "ship_aura_components"
+
+	resources = {
+		category = ships
+		upkeep = {
+			energy = @titan_upkeep_energy
+			alloys = @titan_upkeep_alloys
+		}
+	}
+
+	min_upgrade_cost = {
+		alloys = 16
+	}
+	available_to_everyone = yes
+}

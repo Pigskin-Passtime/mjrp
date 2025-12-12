@@ -1,0 +1,173 @@
+# kt_crisis_levels.txt
+# Lithrandil2
+
+kt_crisis_killing_thought_level_1 = {
+	required_crisis_currency = 0
+
+	perks = {
+		kt_menp_everwar
+		kt_menp_killing_momentum
+		kt_menp_warlust
+		kt_menp_grand_armada
+	}
+
+	on_unlock = {
+		owner = {
+			begin_event_chain = {
+				event_chain = kt_killing_thought_chain
+				target = this
+			}
+			add_event_chain_counter = {
+				event_chain = "kt_killing_thought_chain"
+				counter = "kt_crisis_level_reached"
+				amount = 1
+			}
+			country_event = { id = kt.1 }
+		}
+	}
+}
+
+#Hmmm advancement needs Special Project for making Throne Worlds
+kt_crisis_killing_thought_level_2 = {
+	required_crisis_currency = 2000
+
+	allow = {
+		custom_tooltip = {
+			success_text = kt_killing_thought_level_2_req_clear_tooltip
+			fail_text = kt_killing_thought_level_2_req_tooltip
+			# add requirement
+			has_country_flag = kt_throne_world_cyst
+		}
+		hidden_trigger = {
+			NOT = {
+				has_active_event = {
+					kt.3 # success stage 2 event
+				}
+			}
+		}
+	}
+	perks = {
+		kt_menp_shieldbreaker
+		kt_menp_throne_world
+		kt_menp_machines_of_war
+		#kt_menp_knight_job
+	}
+
+	on_unlock = {
+		owner = {
+			add_event_chain_counter = {
+				event_chain = "kt_killing_thought_chain"
+				counter = "kt_crisis_level_reached"
+				amount = 1
+			}
+			country_event = { id = kt.10}
+		}
+	}
+}
+
+# Advancement needs taking
+kt_crisis_killing_thought_level_3 = {
+	required_crisis_currency = 6000
+
+	allow = {
+		custom_tooltip = {
+			success_text = kt_killing_thought_level_3_req_clear_tooltip
+			fail_text = kt_killing_thought_level_3_req_tooltip
+			# add requirement
+			has_country_flag = kt_taking_reshape
+		}
+	}
+
+	perks = {
+		kt_menp_taking
+		kt_menp_inexhaustible
+		kt_menp_art_of_war
+		kt_menp_killing_sustenance
+	}
+
+	on_unlock = {
+		owner = {
+			add_event_chain_counter = {
+				event_chain = "kt_killing_thought_chain"
+				counter = "kt_crisis_level_reached"
+				amount = 1
+			}
+			country_event = { id = kt.20}
+		}
+	}
+}
+
+# Advancement needs??? Galaxy Size divided by 200 destroyed empires 
+kt_crisis_killing_thought_level_4 = {
+	required_crisis_currency = 18000
+
+	allow = {
+		custom_tooltip = {
+			success_text = kt_killing_thought_level_4_req_clear_tooltip
+			fail_text = kt_killing_thought_level_4_req_tooltip
+			# add requirement
+			hidden_trigger = {
+				check_variable_arithmetic = {
+					which = value:kt_galaxy_size_coefficient
+					value <= kt_destroyed_empires
+				}
+			}
+		}
+	}
+
+	perks = {
+		kt_menp_wormhole_cutting
+		kt_menp_science_of_war
+		kt_menp_taking_titan
+		kt_menp_greater_tithe
+	}
+
+	on_unlock = {
+		owner = {
+			add_event_chain_counter = {
+				event_chain = "kt_killing_thought_chain"
+				counter = "kt_crisis_level_reached"
+				amount = 1
+			}
+			country_event = { id = kt.30 }
+		}
+	}
+}
+
+
+# The fuck is Sekhmet Project ^^
+kt_crisis_killing_thought_level_5 = {
+	required_crisis_currency = 45000
+
+	allow = {
+		custom_tooltip = {
+			success_text = kt_killing_thought_level_5_req_clear_tooltip
+			fail_text = kt_killing_thought_level_5_req_tooltip
+			# add requirement
+			hidden_trigger = { 
+				check_variable_arithmetic = {
+					which = value:kt_galaxy_size_coefficient
+					multiply = 2
+					value <= kt_destroyed_empires
+				}
+			}
+		}
+	}
+
+	perks = {
+		kt_menp_war_fever
+		kt_menp_bladed_ascension
+		kt_menp_to_war
+	}
+
+	on_unlock = {
+		owner = {
+			add_event_chain_counter = {
+				event_chain = "kt_killing_thought_chain"
+				counter = "kt_crisis_level_reached"
+				amount = 1
+			}
+			country_event = { id = kt.40}
+		}
+	}
+}

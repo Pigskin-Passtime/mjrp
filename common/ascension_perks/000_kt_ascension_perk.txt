@@ -1,0 +1,74 @@
+# kt_ascension_perks.txt
+# Lithrandil2
+
+kt_ap_embrace_sword_logic = {
+	potential = {
+		OR = {
+			has_nemesis = yes
+			has_biogenesis_dlc = yes
+			has_machine_age_dlc = yes
+		}
+		NOR = {
+			has_ascension_perk = ap_become_the_crisis
+			has_ascension_perk = ap_cosmogenesis
+			has_ascension_perk = ap_behemoths
+			has_ascension_perk = ap_defender_of_the_galaxy
+			is_megacorp = yes
+			has_origin = origin_slavers # No crisis for MSI
+			has_country_flag = player_crisis_chosen
+		}
+	}
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_ascension_perks_3"
+			num_ascension_perks > 2
+		}
+		custom_tooltip = {
+			fail_text = "requires_independence"
+			is_subject = no
+		}
+		custom_tooltip = {
+			fail_text = "must_not_be_custodian"
+			is_galactic_custodian = no
+		}
+		custom_tooltip = {
+			fail_text = "must_not_be_emperor"
+			is_galactic_emperor = no
+		}
+		NOR = {
+			has_ethic = ethic_xenophile
+			has_ethic = ethic_fanatic_xenophile
+			has_ethic = ethic_pacifist
+			has_ethic = ethic_fanatic_pacifist
+			has_ethic = ethic_egalitarian
+			has_ethic = ethic_fanatic_egalitarian
+			has_civic = civic_natural_design
+			
+		}
+		custom_tooltip = {
+			fail_text = "kt_must_not_be_kind"
+			NOR = {
+				has_civic = civic_machine_servitor
+				has_valid_civic = civic_hive_familiar_face
+				has_civic = civic_guided_sapience
+				has_civic = civic_hive_guided_sapience
+				has_civic = civic_machine_guided_sapience
+				has_civic = civic_hive_empath
+				has_origin = origin_fruitful
+			}
+		}
+	}
+	on_enabled = {
+		hidden_effect = {
+			set_variable = {
+				which = kt_knight_tithe_produced
+				value = 0
+			}
+		}
+		activate_crisis_progression = kt_killing_thought_path
+		set_country_flag = player_crisis_chosen
+	}
+	ai_weight = {
+		factor = 0
+	}
+}

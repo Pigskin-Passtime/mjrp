@@ -1,0 +1,241 @@
+#kt_script_values.txt
+#Lithrandil2
+
+
+# 1 on small, 5 on largest
+kt_galaxy_size_coefficient = {
+	modifier = {
+		galaxy_size = tiny 
+		set = 1
+	}
+	modifier = {
+		galaxy_size = small 
+		set = 2
+	}
+	modifier = {
+		galaxy_size = medium 
+		set = 3
+	}
+	modifier = {
+		galaxy_size = large 
+		set = 4
+	}
+	modifier = {
+		galaxy_size = huge 
+		set = 5
+	}
+}
+
+kt_galaxy_size_tenth = {
+	complex_trigger_modifier = {
+		trigger = num_galaxy_systems
+		mode = set
+	}
+	divide = 20
+}
+
+kt_wars = {
+	complex_trigger_modifier = {
+		trigger = count_war
+		mode = weight
+	}
+}
+
+kt_war_participants = {
+	complex_trigger_modifier = {
+		trigger = count_country
+		parameters = {
+			limit = {
+				is_at_war_with = from
+			}
+		}
+		mode = set
+	}
+}
+
+kt_effective_war_momentum = {
+	base = 0
+	complex_trigger_modifier = {
+		trigger = count_country
+		parameters = {
+			limit = {
+				is_at_war_with = from
+				relative_power = {
+					who = from 
+					value = pathetic
+				}
+			}
+		}
+		mult = 0.25
+		mode = add
+	}
+	complex_trigger_modifier = {
+		trigger = count_country
+		parameters = {
+			limit = {
+				is_at_war_with = from
+				relative_power = {
+					who = from 
+					value = inferior
+				}
+			}
+		}
+		mult = 0.5
+		mode = add
+	}
+	complex_trigger_modifier = {
+		trigger = count_country
+		parameters = {
+			limit = {
+				is_at_war_with = from
+				relative_power = {
+					who = from 
+					value = equivalent
+				}
+			}
+		}
+		mult = 1
+		mode = add
+	}
+	complex_trigger_modifier = {
+		trigger = count_country
+		parameters = {
+			limit = {
+				is_at_war_with = from
+				relative_power = {
+					who = from 
+					value = superior
+				}
+			}
+		}
+		mult = 2
+		mode = add
+	}
+	complex_trigger_modifier = {
+		trigger = count_country
+		parameters = {
+			limit = {
+				is_at_war_with = from
+				relative_power = {
+					who = from 
+					value = overwhelming
+				}
+			}
+		}
+		mult = 4
+		mode = add
+	}
+}
+
+kt_crisis_level_momentum_modifier = {
+	base = 0
+	modifier = {
+		owner = {
+			has_crisis_level = kt_crisis_killing_thought_level_2
+		}
+		add = 1
+	}
+	modifier = {
+		owner = {
+			has_crisis_level = kt_crisis_killing_thought_level_3
+		}
+		add = 1
+	}
+	modifier = {
+		owner = {
+			has_crisis_level = kt_crisis_killing_thought_level_4
+		}
+		add = 1
+	}
+	modifier = {
+		owner = {
+			has_crisis_level = kt_crisis_killing_thought_level_5
+		}
+		add = 1
+	}
+	# Getting enough wars and destroyed empires is very hard on tiny galaxies (No idea who plays'em but the bullying should not be unintended)
+	modifier = {
+		galaxy_size = tiny
+		divide = 2
+	}
+	modifier = {
+		galaxy_size = small
+		divide = 1.5
+	}
+}
+
+kt_crisis_level_5_requirement = {
+	base = 0
+	set = value:kt_galaxy_size_coefficient
+	mult = 2
+}
+
+kt_crisis_alt_ascension_requirement = {
+	base = 0
+	set = value:kt_galaxy_size_coefficient
+	mult = 4
+}
+
+kt_decay_mult = {
+	base = 1.5
+	pow = value:kt_crisis_level_momentum_modifier
+}
+
+kt_decay_mult_laziness = {
+	base = 1.1
+	pow = kt_time_decay
+}
+
+kt_decay_reduction_war = {
+	base = 0.95
+	pow = value:kt_war_participants
+}
+
+kt_decay_reduction_exterminated = {
+	base = 0.92
+	pow = kt_destroyed_empires
+}
+
+kt_killing_momentum_decay = {
+	base = 0.15
+
+	multiply = value:kt_decay_mult
+	multiply = value:kt_decay_reduction_war
+	multiply = value:kt_decay_reduction_exterminated
+
+	round_to = 0.01
+
+	modifier = {
+		has_country_flag = kt_decay_stasis
+		set = 0
+	}
+}
+
+kt_killing_momentum_effectiveness = {
+	base = 0
+	add = kt_wages_of_destruction
+	pow = 0.52
+	divide = 5
+	modifier = {
+		check_variable = {
+			which = kt_wages_of_destruction
+			value <=0
+		}
+		mult = -3
+	}
+
+	modifier = {
+		owner = {
+			has_crisis_level = kt_crisis_killing_thought_level_4
+		}
+		multiply = 1.5
+	}
+	modifier = {
+		owner = {
+			has_crisis_level = kt_crisis_killing_thought_level_5
+		}
+		multiply = 1.1
+	}
+
+	round_to = 0.01
+}

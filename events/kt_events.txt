@@ -1,0 +1,968 @@
+# kt_events.txt
+# Lithrandil2
+
+namespace = kt
+
+country_event = {
+	id = kt.1
+	title = "kt.1.name"
+	event_chain = kt_killing_thought_chain
+	
+
+	#### Individualistic Empires
+
+	## Ethics
+	desc = {
+		trigger = {
+			has_ethic = ethic_fanatic_militarist
+		}
+		text = kt.1.desc.mil
+	}
+	desc = {
+		trigger = {
+			AND = {
+				has_ethic = ethic_fanatic_authoritarian
+			}
+		}
+		text = kt.1.desc.auth
+	}
+	desc = {
+		trigger = {
+			has_ethic = ethic_fanatic_spiritualist
+		}
+		text = kt.1.desc.fth
+	}
+	desc = {
+		trigger = {
+			AND = {
+				OR = {
+					has_ethic = ethic_fanatic_xenophobe
+					is_fanatical = no
+				}
+				is_hive_empire = no
+			}
+		}
+		text = kt.1.desc.mix
+	}
+
+	#### Hive
+	desc = {
+		trigger = {
+			AND = {
+				is_hive_empire = yes
+				is_wilderness_empire = no
+			}
+		}
+		text = kt.1.desc.hive
+	}
+	desc = {
+		trigger = {
+			AND = {
+				is_wilderness_empire = yes
+			}
+		}
+		text = kt.1.desc.wild
+	}
+	
+	#### Machine Intelligence
+	desc = {
+		trigger = {
+			AND = {
+				is_machine_empire = yes
+			}
+		}
+		text = kt.1.desc.machine
+	}
+
+	# Check for better
+	picture = GFX_evt_fleet_evil 
+	show_sound = event_death_cult
+	is_triggered_only = yes
+
+	immediate = {
+		set_variable = {
+			which = kt_destroyed_empires 
+			value = 0
+		}
+		set_variable = {
+			which = kt_wages_of_destruction
+			value = 20
+		}
+		set_variable = {
+			which = kt_time_decay
+			value = 0
+		}
+		set_country_flag = kt_decay_stasis
+		country_event = {
+			id = kt.4
+			days = 7200 #3600 real release, the double is for early start
+		}
+		
+	}
+
+	option = {
+		name = kt.1.a
+
+		hidden_effect = {
+			start_situation = {
+				type = kt_situation_sword_logic
+				target = this
+			}
+			enable_special_project = {
+				name = "KT_CRISIS_CYST_WORLD_1"
+				owner = root
+			}
+		}
+	}
+}
+
+country_event = {
+	id = kt.2
+	is_triggered_only = yes
+	picture = GFX_evt_physics_research
+	title = "kt.2.name"
+	desc = kt.2.desc
+
+	option = {
+		name = kt.2.a
+		hidden_effect = {
+			enable_special_project = {
+				name = "KT_CRISIS_CYST_WORLD_2"
+				owner = root
+			}
+		}
+	}
+}
+
+country_event = {
+	id = kt.3
+	picture = GFX_evt_astral_rift_microverse
+	is_triggered_only = yes
+	title = "kt.3.name"
+	desc = kt.3.desc
+
+	option = {
+		name = kt.3.a
+		hidden_effect = {
+			set_country_flag = kt_throne_world_cyst
+		}
+	}
+}
+
+
+country_event = {
+	id = kt.4
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		remove_country_flag = kt_decay_stasis
+	}
+}
+# Ascension  to level 2
+country_event = {
+	id = kt.10
+	picture = GFX_evt_fleet_evil
+	is_triggered_only = yes
+	title = "kt.10.name"
+	desc = kt.10.desc
+
+	option = {
+		name = kt.10.a
+		hidden_effect = {
+			enable_special_project = {
+				name = "KT_CRISIS_TAKING_1"
+				owner = root
+			}
+		}
+	}
+}
+
+country_event = {
+	id = kt.11
+	picture = GFX_evt_astral_rift_vortex
+	is_triggered_only = yes
+	title = "kt.11.name"
+	desc = kt.11.desc
+
+	option = {
+		name = kt.11.a
+		hidden_effect = {
+			enable_special_project = {
+				name = "KT_CRISIS_TAKING_2"
+				location = root.capital_scope
+				owner = root
+			}	
+		}
+	}
+}
+
+country_event = {
+	id = kt.12
+	picture = GFX_evt_zro_2
+	is_triggered_only = yes
+	title = "kt.12.name"
+	desc = kt.12.desc
+
+	option = {
+		name = kt.12.a
+		hidden_effect = {
+			set_country_flag = kt_taking
+		}
+		add_tech_progress = {
+			tech = kt_taken_basic_tech
+			progress = 0.75
+		}
+	}
+}
+
+# Ascension to level 3
+country_event = {
+	id = kt.20
+	picture = GFX_evt_fleet_evil
+	is_triggered_only = yes
+	title = "kt.20.name"
+	desc = kt.20.desc
+
+	option = {
+		name = kt.20.a
+	}
+}
+
+# Ascension to level 4
+country_event = {
+	id = kt.30
+	picture = GFX_evt_fleet_evil
+	is_triggered_only = yes
+	title = "kt.30.name"
+	desc = kt.30.desc
+
+	immediate = {
+		hidden_effect = {
+			add_tech_progress = {
+				tech = kt_taken_titan_tech
+				progress = 0.9
+			}
+		}
+	}
+
+	option = {
+		name = kt.30.a
+	}
+}
+
+# Ascension to level 5
+country_event = {
+	id = kt.40
+	picture = GFX_evt_fleet_evil
+	is_triggered_only = yes
+	title = "kt.40.name"
+	desc = kt.40.desc
+
+	option = {
+		name = kt.40.a
+	}
+}
+
+# Victory Event
+country_event = {
+	id = kt.50
+	picture = GFX_evt_dead_city
+	is_triggered_only = yes
+	title = "kt.50.name"
+	desc = kt.50.desc
+
+	option = {
+		name = kt.50.a
+		tooltip = {
+			win = yes
+		}
+		country_event = {
+			id = kt.52
+		}
+		#destroy_country = yes
+	}
+	option = {
+		name = kt.50.b
+	}
+}
+
+# Victory Message! Yay
+country_event = {
+	id = kt.51
+	picture = GFX_evt_planet_beam
+	is_triggered_only = yes
+	title = "kt.51.name"
+	desc = kt.51.desc
+
+	option = {
+		name = kt.51.a
+	}
+}
+
+country_event = {
+	id = kt.52
+	picture = GFX_evt_supernova
+	is_triggered_only = yes
+	title = "kt.52.name"
+	desc = kt.52.desc
+	show_sound = event_default
+	event_chain = kt_killing_thought_chain
+
+	option = {
+		name = kt.52.a
+	}
+
+	after = {
+		hidden_effect = {
+			every_playable_country = {
+				limit = {
+					is_ai = no
+					NOT = { is_same_value = root }
+				}
+				country_event = { id = kt.51 }
+			}
+			set_update_modifiers_batch = begin
+			capital_scope.solar_system = {
+				save_event_target_as = looooooophelper
+			}
+			while = {
+				count = value:kt_galaxy_size_tenth # maybe needs 
+				event_target:looooooophelper = {
+					set_star_flag = kt_destroyed
+					destroy_star_system = yes
+					random_neighbor_system_euclidean = {
+						limit = {
+							NOT = {
+								has_star_flag = kt_destroyed
+							}
+						}
+						save_event_target_as = looooooophelper
+					}
+				}
+			}
+			set_update_modifiers_batch = end
+			destroy_country = yes
+		}
+		win = yes
+	}
+}
+
+# Adds throne world to the ruler if you are the war winner
+country_event = {
+	id = kt.100
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_crisis_level = kt_crisis_killing_thought_level_2
+		ruler = {
+			NOT = {
+				has_trait = kt_throne_world_trait
+			}
+		}
+	}
+
+	immediate= {
+		ruler = {
+			add_trait = { trait = kt_throne_world_trait }
+			create_message = {
+				type = KT_LEADER_CARVED_THRONE_WORLD
+				localization = KT_LEADER_CARVED_THRONE_WORLD_DESC
+				days = @toast_message_days
+				target = THIS
+			}
+		}
+		
+	}
+}
+
+# Adds throne world trait to admirals who win battles
+country_event = {
+	id = kt.101
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_crisis_level = kt_crisis_killing_thought_level_2
+		FromFrom = {
+			exists = leader
+			leader = {
+				NOT = {
+					has_trait = kt_throne_world_trait
+				}
+			}
+		}
+	}
+
+	immediate = {
+		leader = {
+			random_list = {
+				2 = {
+					modifier = {
+						add = 2
+						root = {
+							has_crisis_level = kt_crisis_killing_thought_level_3
+						}
+					}
+					modifier = {
+						add = 2
+						root = {
+							has_crisis_level = kt_crisis_killing_thought_level_4
+						}
+					}
+					modifier = {
+						mult = 2
+						root = {
+							has_crisis_level = kt_crisis_killing_thought_level_5
+						}
+					}
+					FromFrom = {
+						leader = {
+							add_trait = { trait = kt_throne_world_trait }
+							create_message = {
+								type = KT_LEADER_CARVED_THRONE_WORLD
+								localization = KT_LEADER_CARVED_THRONE_WORLD_DESC
+								days = @toast_message_days
+								target = THIS
+							}
+						}
+					}
+					
+				}
+				8 = {}
+			}
+		}
+	}
+}
+
+# Adds Throne World trait to generals who win battles
+country_event = {
+	id = kt.102
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_crisis_level = kt_crisis_killing_thought_level_2
+	}
+
+	immediate = {
+		FROMFROM = {
+			every_ground_combat_attacker = {
+				if = {
+					limit = { exists = leader }
+					leader = {
+						random_list = {
+							2 = {
+								modifier = {
+									add = 2
+									root = {
+										has_crisis_level = kt_crisis_killing_thought_level_3
+									}
+								}
+								modifier = {
+									add = 2
+									root = {
+										has_crisis_level = kt_crisis_killing_thought_level_4
+									}
+								}
+								modifier = {
+									mult = 2
+									root = {
+										has_crisis_level = kt_crisis_killing_thought_level_5
+									}
+								}
+								FromFrom = {
+									Leader = {
+										add_trait = { trait = kt_throne_world_trait }
+										create_message = {
+											type = KT_LEADER_CARVED_THRONE_WORLD
+											localization = KT_LEADER_CARVED_THRONE_WORLD_DESC
+											days = @toast_message_days
+											target = THIS
+										}
+									}
+								}
+							}
+							8 = {}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Revive on death Throne World
+# This = Country
+# From = Leader
+country_event = {
+	id = kt.110
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_crisis_level = kt_crisis_killing_thought_level_2
+		from = {
+			has_trait = kt_throne_world_trait
+		}
+	}
+
+	immediate = {
+		clone_leader = {
+			target = from
+			effect = {
+				set_years_served = from
+				restore_leader_location = yes		# TODO AUG-48742 Replace with code support
+			}
+		}
+		from = {
+			set_leader_flag = leader_death_events_blocked
+		}
+		create_message = {
+			type = KT_LEADER_BEAT_DEATH
+			localization = KT_LEADER_BEAT_DEATH_DESC
+			days = @toast_message_days
+			target = THIS
+		}
+	}
+}
+
+#### TAKING
+## Called from: on_ship_destroyed_perp
+# This = owner of ship 1 (combatant)
+# From = owner of ship 2 (destroyed)
+# FromFrom = ship 1
+# FromFromFrom = ship 2
+country_event = {
+	id = kt.500
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_ascension_perk = kt_ap_embrace_sword_logic
+	}
+	immediate = {
+		complete_crisis_objective = kt_crisobj_destroy_enemy_ships
+		add_variable = {
+			which = kt_wages_of_destruction
+			value = 0.2
+		}
+		set_variable = {
+			which = kt_time_decay
+			value = 0
+		}
+		random_list = {
+			0 = {
+				modifier = {
+					add = 10
+					has_crisis_level = kt_crisis_killing_thought_level_3
+				}
+				if = {
+					limit = {
+						fromfromfrom = {
+							ship_uses_corvette_components = yes
+						}
+					}
+					fromfrom = {
+						fleet = {
+							create_ship = {
+								name = random
+								random_existing_design = kt_taken_small
+							}
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						fromfromfrom = {
+							ship_uses_destroyer_components = yes
+						}
+					}
+					fromfrom = {
+						fleet = {
+							create_ship = {
+								name = random
+								random_existing_design = kt_taken_destroyer
+							}
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						fromfromfrom = {
+							ship_uses_cruiser_components = yes
+						}
+					}
+					fromfrom = {
+						fleet = {
+							create_ship = {
+								name = random
+								random_existing_design = kt_taken_cruiser
+							}
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						fromfromfrom = {
+							ship_uses_battleship_components = yes
+						}
+					}
+					fromfrom = {
+						fleet = {
+							create_ship = {
+								name = random
+								random_existing_design = kt_taken_battleship
+							}
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						has_crisis_level = kt_crisis_killing_thought_level_4
+						fromfromfrom = {
+							OR = {
+								ship_uses_titan_components = yes
+								ship_uses_colossus_components = yes
+								ship_uses_juggernaut_components = yes
+							}
+						}
+					}
+					random_list = {
+						1 = {
+							fromfrom = {
+								fleet = {
+									create_ship = {
+										name = random
+										random_existing_design = kt_taken_titan
+									}
+								}
+							}
+						}
+						1 = {}
+					}
+				}
+			}
+			90 = {}
+		}
+		
+	}
+}
+
+# war won
+country_event = {
+	id = kt.1001
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_ascension_perk = kt_ap_embrace_sword_logic
+	}
+
+	immediate = {
+		add_variable = {
+			which = kt_wages_of_destruction
+			value = 35
+		}
+		set_variable = {
+			which = kt_time_decay
+			value = 0
+		}
+	}
+}
+
+# war tied
+country_event = {
+	id = kt.1011
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		OR = {
+			has_ascension_perk = kt_ap_embrace_sword_logic
+			From = {
+				has_ascension_perk = kt_ap_embrace_sword_logic
+			}
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				has_ascension_perk = kt_ap_embrace_sword_logic
+			}
+
+			add_variable = {
+				which = kt_wages_of_destruction
+				value = 15
+			}
+			set_variable = {
+				which = kt_time_decay
+				value = 0
+			}
+		}
+		else_if = {
+			limit = {
+				from = {
+					has_ascension_perk = kt_ap_embrace_sword_logic
+				}
+			}
+			from = {
+				add_variable = {
+					which = kt_wages_of_destruction
+					value = 15
+				}
+				set_variable = {
+					which = kt_time_decay
+					value = 0
+				}
+			}
+		}
+		
+	}
+}
+
+# on destroying country Menace and permabuff
+#TODO: Fix whatever idiocy I made here
+country_event = {
+	id = kt.1020
+	trigger = {
+		OR = {
+			is_country_type = default
+			is_country_type = fallen_empire
+			is_country_type = awakened_fallen_empire
+		}
+		exists = from
+		from = {
+			has_ascension_perk = kt_ap_embrace_sword_logic
+		}
+	}
+	is_triggered_only = yes
+	hide_window = yes
+	immediate = {
+		from = {
+			add_variable = {
+				which = kt_wages_of_destruction
+				value = 20
+			}
+			set_variable = {
+				which = kt_time_decay
+				value = 0
+			}
+			add_event_chain_counter = {
+				event_chain = kt_killing_thought_chain
+				counter = kt_destroyed_empires
+				amount = 1
+			}
+			complete_crisis_objective = kt_crisobj_destroy_empires
+			change_variable = {
+				which = kt_destroyed_empires
+				value = 1
+			}
+		}
+	}
+}
+
+country_event = {
+	id = kt.1021
+	trigger = {
+		OR = {
+			is_country_type = default
+			is_country_type = fallen_empire
+			is_country_type = awakened_fallen_empire
+		}
+		exists = from
+		from = {
+			has_crisis_level = kt_crisis_killing_thought_level_5
+		}
+	}
+	is_triggered_only = yes
+	hide_window = yes
+	immediate = {
+		from = {
+			if = {
+				limit = {
+					OR = {
+						check_variable = {
+							which = kt_destroyed_empires
+							value >= value:kt_crisis_alt_ascension_requirement
+						}
+						root = {
+							OR = {
+								is_country_type = fallen_empire
+								is_country_type = awakened_fallen_empire
+							}
+						}
+					}
+				}
+				country_event = {
+					id = kt.50 days = 1
+				}
+			}
+		}
+	}
+}
+
+
+# monthly pulse crisis objective
+country_event = {
+	trigger = {
+		has_ascension_perk = kt_ap_embrace_sword_logic
+	}
+	id = kt.1030
+	is_triggered_only = yes
+	hide_window = yes
+	immediate = {
+		complete_crisis_objective = kt_crisobj_at_war
+		subtract_variable = {
+			which = kt_wages_of_destruction
+			value = value:kt_killing_momentum_decay
+		}
+		add_variable = {
+			which = kt_time_decay
+			value = 1
+		}
+	}
+}
+
+planet_event = {
+	trigger = {
+		from.owner = { has_ascension_perk = kt_ap_embrace_sword_logic }
+		is_colony = yes
+	}
+	id = kt.1040
+	is_triggered_only = yes
+	hide_window = yes
+	immediate = {
+		from.owner = {
+			complete_crisis_objective = kt_crisobj_destroy_worlds
+			add_variable = {
+				which = kt_wages_of_destruction
+				value = 15
+			}
+			set_variable = {
+				which = kt_time_decay
+				value = 0
+			}
+		}
+	}
+}
+
+planet_event = {
+	trigger = {
+		from = {
+			has_ascension_perk = kt_ap_embrace_sword_logic
+		}
+		OR = {
+			is_colony = yes
+			AND = {
+				exists = owner
+				owner = {
+					is_primitive = yes
+				}
+			}
+		}
+	}
+	id = kt.1050
+	is_triggered_only = yes
+	hide_window = yes
+	immediate = {
+		from = {
+			complete_crisis_objective = kt_crisobj_conquer_worlds
+			add_variable = {
+				which = kt_wages_of_destruction
+				value = 8
+			}
+			set_variable = {
+				which = kt_time_decay
+				value = 0
+			}
+		}
+	}
+}
+
+# monthly pulse crisis drawback
+country_event = {
+	trigger = {
+		has_crisis_level = kt_crisis_killing_thought_level_2
+		check_variable_arithmetic = {
+			which = kt_wages_of_destruction
+			add = value:kt_crisis_level_momentum_modifier
+			value <= -5
+		}
+	}
+
+	id = kt.2000
+	is_triggered_only = yes
+	hide_window = yes
+	immediate = {
+		random_list = {
+			5 = {
+				random_owned_leader = {
+					if = {
+						limit = {
+							has_trait = kt_throne_world_trait
+						}
+						remove_trait = kt_throne_world_trait
+						create_message = {
+							type = KT_LEADER_SUCCUMBED_LACK_TITHE
+							localization = KT_LEADER_CARVED_THRONE_WORLD_LOSS
+							days = @toast_message_days
+							target = this
+						}
+					}
+					else = {
+						kill_leader = { show_notification = yes }
+						create_message = {
+							type = KT_LEADER_SUCCUMBED_LACK_TITHE
+							localization = KT_LEADER_CARVED_THRONE_WORLD_DEATH
+							days = @toast_message_days
+							target = this
+						}
+					}
+				}
+			}
+			95 = {}
+		}
+	}
+}
+
+country_event = {
+	id = kt.2200
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_ascension_perk = kt_ap_embrace_sword_logic
+	}
+
+	immediate = {
+		add_variable = {
+			which = kt_wages_of_destruction
+			value = 8
+		}
+		set_variable = {
+			which = kt_time_decay
+			value = 0
+		}
+	}
+}
+
+starbase_event = {
+	id = kt.2300
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		from.owner = {
+			has_ascension_perk = kt_ap_embrace_sword_logic
+		}
+	}
+
+	immediate = {
+		from.owner = {
+			add_variable = {
+				which = kt_wages_of_destruction
+				value = 1
+			}
+			set_variable = {
+				which = kt_time_decay
+				value = 0
+			}
+		}
+	}
+}
