@@ -1,0 +1,277 @@
+# PHP Imperial Complex
+#
+# By The Bees Knees Reclaimer
+
+@phase_0_entity_x = -15
+@phase_0_entity_y = -5
+@entity_x = -15
+@entity_y = -15
+php_imperial_complex_0 = {
+	entity = "construction_platform_entity"
+	construction_entity = "construction_platform_entity"
+	portrait = "GFX_megastructure_construction_background"
+	place_entity_on_planet_plane = no
+	entity_offset = { x = @phase_0_entity_x y = @phase_0_entity_y }
+	build_time = 1800
+	resources = {
+		category = megastructures
+		cost = {
+			unity = 2500
+		}
+		cost = {
+			alloys = 5000
+		}
+
+		upkeep = {
+			energy = 20
+		}
+	}
+
+	custom_tooltip_requirements = "MEGASTRUCTURE_TOOLTIP_REQUIREMENTS_ONE_PER_COUNTRY"
+
+	potential = {
+		has_country_flag = php_imperial_complex_unlock_1
+		NOT = {
+			has_country_flag = php_imperial_complex_built
+		}
+	}
+
+	country_modifier = {
+		empire_size_mult = -0.05
+	}
+
+	possible = {
+		hidden_trigger = {
+			exists = starbase
+		}
+		custom_tooltip = {
+			fail_text = "requires_inside_border"
+			is_inside_border = from
+		}
+		custom_tooltip = {
+			fail_text = "requires_no_existing_megastructure"
+			has_no_non_gate_megastructure = yes
+			NOT = {
+				any_system_planet = {
+					is_planet_class = pc_cosmogenesis_world
+				}
+			}
+		}
+		custom_tooltip = {
+			fail_text = "requires_surveyed_system"
+			NOT = {
+				any_system_planet = {
+					is_surveyed = {
+						who = prev.from
+						status = no
+					}
+				}
+			}
+		}
+		custom_tooltip = {
+			fail_text = "requires_no_existing_imperial_complex"
+			from = {
+				NOT = { has_country_flag = php_imperial_complex_built }
+			}
+		}
+	}
+	
+	placement_rules = {
+		planet_possible = {
+			custom_tooltip = {
+				fail_text = "requires_survey_not_habitable"
+				is_surveyed = {
+					who = prev.from
+					status = yes
+				}
+				colonizable_planet = no
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_anomaly"
+				NOT = { has_anomaly = yes }
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_minor_planetary_body"
+				NOR = {
+					is_asteroid = yes
+					is_moon = yes
+				}
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_star"
+				is_star = no
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_astral_scar"
+				is_astral_scar = no
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_ring_world"
+				is_ringworld = no
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_existing_megastructure"
+				NOT = { has_planet_flag = megastructure }
+			}
+		}
+	}
+
+	on_build_start = {}
+	on_build_cancel = {}
+	on_build_complete = {
+		from = {
+			set_country_flag = php_imperial_complex_built
+		}
+	}
+}
+
+php_imperial_complex_1 = {
+	entity = "spyorb_phase_01_entity"
+	construction_entity = "spyorb_phase_01_construction_entity"
+	portrait = "GFX_megastructure_construction_background"
+	place_entity_on_planet_plane = no
+	entity_offset = { x = @entity_x y = @entity_y }
+	build_time = 1800
+	resources = {
+		category = megastructures
+		cost = {
+			unity = 2500
+		}
+		cost = {
+			alloys = 10000
+		}
+		upkeep = {
+			energy = 40
+		}
+	}
+
+	upgrade_from = {
+		php_imperial_complex_0
+	}
+
+	potential = {
+		has_country_flag = php_imperial_complex_unlock_1
+	}
+
+	country_modifier = {
+		empire_size_mult = -0.1
+	}
+}
+
+php_imperial_complex_2 = {
+	entity = "spyorb_phase_02_entity"
+	construction_entity = "spyorb_phase_02_construction_entity"
+	portrait = "GFX_megastructure_construction_background"
+	place_entity_on_planet_plane = no
+	entity_offset = { x = @entity_x y = @entity_y }
+	build_time = 1800
+	resources = {
+		category = megastructures
+		cost = {
+			unity = 2500
+		}
+		cost = {
+			alloys = 10000
+		}
+
+		upkeep = {
+			energy = 60
+		}
+	}
+
+	upgrade_from = {
+		php_imperial_complex_1
+	}
+
+	potential = {
+		has_country_flag = php_imperial_complex_unlock_1
+	}
+
+	country_modifier = {
+		empire_size_mult = -0.2
+	}
+
+	on_build_complete = {
+		owner = {
+			set_country_flag = php_complex_level_2_built
+		}
+	}
+}
+
+
+php_imperial_complex_3 = {
+	entity = "spyorb_phase_03_entity"
+	construction_entity = "spyorb_phase_03_construction_entity"
+	portrait = "GFX_megastructure_construction_background"
+	place_entity_on_planet_plane = no
+	entity_offset = { x = @entity_x y = @entity_y }
+	build_time = 1800
+	resources = {
+		category = megastructures
+		cost = {
+			unity = 2500
+		}
+		cost = {
+			alloys = 10000
+		}
+
+		upkeep = {
+			energy = 80
+		}
+	}
+	upgrade_from = {
+		php_imperial_complex_2
+	}
+
+	potential = {
+		has_country_flag = php_imperial_complex_unlock_2
+	}
+
+	country_modifier = {
+		empire_size_mult = -0.2
+		all_technology_research_speed = 0.1
+	}
+}
+
+php_imperial_complex_4 = {
+	entity = "spyorb_phase_04_entity"
+	construction_entity = "spyorb_phase_04_construction_entity"
+	portrait = "GFX_megastructure_spy_orb_background"
+	place_entity_on_planet_plane = no
+	entity_offset = { x = @entity_x y = @entity_y }
+	build_time = 1800
+	resources = {
+		category = megastructures
+		cost = {
+			unity = 2500
+		}
+		cost = {
+			alloys = 10000
+		}
+
+		upkeep = {
+			energy = 100
+		}
+	}
+	upgrade_from = {
+		php_imperial_complex_3
+	}
+
+	on_build_complete = {
+		owner = {
+			set_country_flag = php_complex_level_4_built
+		}
+		from = {
+			set_country_flag = has_built_or_repaired_megastructure
+		}
+	}
+
+	potential = {
+		has_country_flag = php_imperial_complex_unlock_2
+	}
+
+	country_modifier = {
+		empire_size_mult = -0.2
+		all_technology_research_speed = 0.2
+	}
+}

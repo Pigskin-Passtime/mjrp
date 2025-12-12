@@ -1,0 +1,132 @@
+# PHP Menace Objective Events
+#
+# By The Bees Knees Reclaimer
+
+namespace = php_objectives
+
+# Menace Objective - Own Systems
+# Fired from on_action on_monthly_pulse
+event = {
+	id = php_objectives.7000
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_country = {
+			has_ascension_perk = php_ap_phoenixprotocol
+		}
+	}
+
+	immediate = {
+		every_playable_country = {
+			if = {
+				limit = {
+					has_ascension_perk = php_ap_phoenixprotocol
+				}
+				complete_crisis_objective = php_crisobj_owned_systems
+			}
+		}
+	}
+}
+
+# Menace Objective - Own Planets
+# Fired from on_action on_monthly_pulse
+event = {
+	id = php_objectives.7005
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_country = {
+			has_ascension_perk = php_ap_phoenixprotocol
+		}
+	}
+
+	immediate = {
+		every_playable_country = {
+			if = {
+				limit = {
+					has_ascension_perk = php_ap_phoenixprotocol
+				}
+				complete_crisis_objective = php_crisobj_owned_planets
+			}
+		}
+	}
+}
+
+# Menace Objective - Have Fleet Power
+# Fired from on_action on_monthly_pulse
+event = {
+	id = php_objectives.7010
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_country = {
+			has_ascension_perk = php_ap_phoenixprotocol
+		}
+	}
+
+	immediate = {
+		every_playable_country = {
+			if = {
+				limit = {
+					has_ascension_perk = php_ap_phoenixprotocol
+				}
+				complete_crisis_objective = php_crisobj_fleet_power
+			}
+		}
+	}
+}
+
+
+# Menace Objective - Have Subjects
+# Fired from on_action 'on_monthly_pulse'
+event = {
+	id = php_objectives.7015
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_country = {
+			has_ascension_perk = php_ap_phoenixprotocol
+			is_overlord = yes
+		}
+	}
+
+	immediate = {
+		every_playable_country = {
+			if = {
+				limit = {
+					has_ascension_perk = php_ap_phoenixprotocol
+					is_overlord = yes
+				}
+				complete_crisis_objective = php_crisobj_num_subjects
+			}
+		}
+	}
+}
+
+# Menace Objective - Destroy empires
+country_event = {
+	id = php_objectives.7020
+	hide_window = yes
+	is_triggered_only = yes
+
+	# This = destroyed country
+	# From = optional, destroyer (country)
+
+	trigger = {
+		OR = {
+			is_country_type = default
+			is_country_type = fallen_empire
+			is_country_type = awakened_fallen_empire
+		}
+		exists = from
+		from = { has_ascension_perk = ap_become_the_crisis }
+	}
+
+	immediate = {
+		from = { complete_crisis_objective = crisobj_destroy_empires }
+	}
+}

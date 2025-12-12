@@ -1,0 +1,63 @@
+# PHP Situations
+#
+# By The Bees Knees Reclaimer
+
+php_galactic_devolution = {
+	picture = GFX_evt_city_ruins
+	complete_icon_frame = GFX_situation_outcome_frame_blue
+	complete_icon = GFX_situation_outcome_positive
+	on_progress_complete = {
+		owner = {
+			country_event = { id = php_crisis.9999 }
+		}
+		destroy_situation = this
+	}
+	stages = {
+		stage_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_blue
+			end = 240
+			custom_tooltip = php_devolution_stage_tooltip
+		}
+	}
+	approach = {
+		name = php_power_devolution_projector
+		icon = GFX_situation_approach_energy_credits
+		icon_background = GFX_situation_approach_bg_green
+		allow = {
+			owner = { has_megastructure = php_imperial_complex_4 }
+		}
+		on_select = {
+			custom_tooltip = php_devolution_progress
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				energy = 750
+			}
+		}
+	}
+	approach = {
+		name = php_pause_devolution
+		icon = GFX_situation_approach_shrug
+		icon_background = GFX_situation_approach_bg_red
+		default = yes
+		on_select = {
+			custom_tooltip = php_devolution_paused
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				energy = 0
+			}
+		}
+	}
+	monthly_progress = {
+		base = 0
+		modifier = {
+			add = 1
+			desc = php_power_beam_progress_desc
+			current_situation_approach = php_power_devolution_projector
+		}
+	}
+}

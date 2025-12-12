@@ -1,0 +1,163 @@
+# PHP Ascension Perks
+#
+# By The Bees Knees Reclaimer
+
+php_crisis_level_1 = {
+	# REQUIREMENTS
+	required_crisis_currency = 0
+
+	# REWARDS
+	perks = {
+		php_newfound_ambition
+		php_objectives
+		php_claimant_conquest
+		php_united_front
+	}
+
+	on_unlock = {
+		hidden_effect = {
+			owner = {
+				country_event = { id = php_crisis.9991 }
+				country_event = { id = php_crisis.1000 }
+			}
+		}
+	}
+}
+
+php_crisis_level_2 = {
+
+	required_crisis_currency = 2000
+
+	# REWARDS
+	perks = {
+		php_lasting_resilience
+		php_forged_destiny
+		php_dust_to_dust
+		php_repossession
+	}
+
+	allow = {
+		custom_tooltip = {
+			success_text =	php_level_2_req_clear_tooltip
+			fail_text =	php_level_2_req_tooltip
+			has_country_flag = php_society_study_completed
+		}
+	}
+
+	on_unlock = {
+		hidden_effect = {
+			owner = {
+				country_event = { id = php_crisis.9992 }
+				country_event = { id = php_crisis.1001 }
+			}
+		}
+	}
+}
+
+php_crisis_level_3 = {
+
+	required_crisis_currency = 6000
+
+	# REWARDS
+	perks = {
+		php_imperial_control_complex
+		php_energy_overdrive
+		php_lean_governance
+		php_iron_will
+	}
+
+	allow = {
+		custom_tooltip = {
+			success_text =	php_level_3_req_clear_tooltip
+			fail_text =	php_level_3_req_tooltip
+			has_country_flag = php_genetic_reset
+		}
+	}
+
+	on_unlock = {
+		hidden_effect = {
+			owner = {
+				country_event = { id = php_crisis.9993 }
+			}
+		}
+	}
+}
+
+php_crisis_level_4 = {
+	# REQUIREMENTS
+	allow = {
+		custom_tooltip = {
+			success_text =	php_level_4_req_clear_tooltip
+			fail_text =	php_level_4_req_tooltip
+			has_country_flag = php_complex_level_2_built
+		}
+	}
+
+	required_crisis_currency = 18000
+
+	# REWARDS
+	perks = {
+		php_devolution_projector_complex
+		php_high_society
+		php_imperial_subjugation
+		php_destructive_enforcement
+	}
+
+	on_unlock = {
+		hidden_effect = {
+			owner = {
+				country_event = { id = php_crisis.9994 }
+			}
+		}
+	}
+}
+
+php_crisis_level_5 = {
+	# REQUIREMENTS
+	allow = {
+		custom_tooltip = {
+			success_text =	php_level_5_req_clear_tooltip
+			fail_text =	php_level_5_req_tooltip
+			has_country_flag = php_complex_level_4_built
+		}
+
+		is_subject = no
+	}
+
+	required_crisis_currency = 45000
+
+	# REWARDS
+	perks = {
+		php_stolen_sapience
+		php_efficient_maintenance
+		php_gods_of_war
+		php_unstoppable_force
+	}
+
+	on_unlock = {
+		owner = {
+			if = {
+				limit = { has_federation = yes }
+				leave_alliance = { override_requirements = yes }
+			}
+			tooltip = {
+				if = {
+					limit = {
+						is_galactic_community_formed = yes
+						is_galactic_community_member = yes
+					}
+					remove_from_galactic_community = yes
+				}
+			}
+		}
+		hidden_effect = {
+			# Triggers galactic war
+			declare_crisis_effect = yes
+
+			owner = {
+				room_name_override = ""
+				country_event = { id = php_crisis.9995 }
+			}
+		}
+	}
+}
