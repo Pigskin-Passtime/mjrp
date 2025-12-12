@@ -1,0 +1,170 @@
+mgo_ap_occultism = {
+	potential = {
+		OR = {
+			has_machine_age_dlc = yes
+			has_nemesis = yes
+			has_biogenesis_dlc = yes
+		}
+		NOR = {
+			has_ascension_perk = ap_become_the_crisis
+			has_ascension_perk = ap_cosmogenesis
+			has_ascension_perk = ap_defender_of_the_galaxy
+			has_ascension_perk = ap_behemoths
+			has_origin = origin_slavers
+			has_origin = origin_demonic_invaders
+			has_country_flag = player_crisis_chosen
+		}
+		is_wilderness_empire = no
+	}
+
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_ascension_perks_3"
+			num_ascension_perks > 2
+		}
+		custom_tooltip = {
+			fail_text = "requires_independence"
+			is_subject = no
+		}
+		custom_tooltip = {
+			fail_text = "must_not_be_custodian"
+			is_galactic_custodian = no
+		}
+		custom_tooltip = {
+			fail_text = "must_not_be_emperor"
+			is_galactic_emperor = no
+		}
+	}
+
+	triggered_modifier = {
+		planet_jobs_society_research_produces_mult = 0.01
+		mult = owner.value:num_completed_archaeology_sites
+	}
+
+	triggered_modifier = {
+		potential = {
+			has_crisis_level = mgo_crisis_occultism_level_3
+		}
+		all_technology_research_speed = 0.01
+		mult = owner.mgo_crisis_rituals_counter
+	}
+
+	### INFERNAL EFFECTS ###
+	# Infernal Base Effect
+	triggered_modifier = {
+		potential = {
+			has_crisis_level = mgo_crisis_occultism_level_2
+			has_country_flag = mgo_crisis_infernal
+		}
+		planet_jobs_minerals_produces_mult = 0.20
+		planet_jobs_engineering_research_produces_mult = 0.20
+	}
+	# Dark Enlightenment
+	triggered_modifier = {
+		potential = {
+			has_crisis_level = mgo_crisis_occultism_level_3
+			has_country_flag = mgo_crisis_infernal
+		}
+		ship_weapon_damage = 0.000025
+		mult = value:total_occult_knowledge
+	}
+	# Dark Powers
+	triggered_modifier = {
+		potential = {
+			has_crisis_level = mgo_crisis_occultism_level_4
+			has_country_flag = mgo_crisis_infernal
+		}
+		ship_hull_mult = 0.0000125
+		mult = value:total_occult_knowledge
+	}
+
+	### PSIONIC EFFECTS ###
+	# Psioinic Base Effect
+	triggered_modifier = {
+		potential = {
+			has_crisis_level = mgo_crisis_occultism_level_2
+			has_country_flag = mgo_crisis_psionic
+		}
+		planet_jobs_energy_produces_mult = 0.20
+		planet_jobs_physics_research_produces_mult = 0.20
+	}
+	# Dark Enlightenment
+	triggered_modifier = {
+		potential = {
+			has_crisis_level = mgo_crisis_occultism_level_3
+			has_country_flag = mgo_crisis_psionic
+		}
+		ship_shield_mult = 0.000005
+		mult = value:total_occult_knowledge
+	}
+	# Dark Powers
+	triggered_modifier = {
+		potential = {
+			has_crisis_level = mgo_crisis_occultism_level_4
+			has_country_flag = mgo_crisis_psionic
+		}
+		weapon_type_energy_weapon_damage_mult = 0.000005
+		mult = value:total_occult_knowledge
+	}
+
+	### NECROMANCY EFFECTS ###
+
+	### VAMPIRIC EFFECTS ###
+
+	### LYCANTROPHY EFFECTS ###
+
+	### STORMBRIGNER EFFECTS ###
+
+	on_enabled = {
+		activate_crisis_progression = occultism_path
+		hidden_effect = {
+			country_event = {
+				id = mgo_crisis_rituals.1001
+			}
+		}
+	}
+
+	ai_weight = {
+		factor = 7.5
+		modifier = {
+			factor = 0
+			OR = {
+				is_egalitarian = yes
+				is_xenophile = yes
+			}
+		}
+		modifier = {
+			factor = 2
+			has_tradition = tr_discovery_finish
+		}
+		modifier = {
+			factor = 2
+			has_ascension_perk = ap_technological_ascendancy
+		}
+		modifier = {
+			factor = 2
+			has_ascension_perk = ap_enigmatic_engineering
+		}
+		modifier = {
+			factor = 2
+			vassals > 0
+			any_subject = {
+				any_agreement = {
+					has_active_specialization = specialist_scholarium
+				}
+			}
+		}
+		modifier = {
+			factor = 10
+			has_country_flag = whisperers_covenant_confirmed
+		}
+		modifier = {
+			factor = 0
+			galaxy_percentage < 0.1
+		}
+		modifier = {
+			factor = 2
+			galaxy_percentage > 0.2
+		}
+	}
+}

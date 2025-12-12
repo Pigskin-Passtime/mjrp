@@ -1,0 +1,159 @@
+# CRISIS LEVELS
+# Levels can be unlocked in the order they are written in this file. A later listed level with lower requirements will not be unlocked until the previous levels have been unlocked.
+#
+# level_name = {
+#	perks = {
+#		menp_undertaker		# The menace perks that will be applied when the level is unlocked.
+#		menp_ship_chipper
+#	}
+#	required_menace = 0		# The required amount of Menace to unlock the level
+#	allow = { has_completed_special_project_in_log = CRISIS_SPECIAL_PROJECT_1 }	# You can only unlock this level when this trigger returns true
+#																			# scope COUNTRY, This = country trying to unlock the level
+#	on_unlock = { set_country_flag = CRISIS_LEVEL_FLAG }	# an effect that is triggered when you unlock the level
+#															# scope COUNTRY, This = country the level is being unlocked for
+# }
+
+mgo_crisis_occultism_level_1 = {
+	# REQUIREMENTS
+	required_crisis_currency = 0
+
+	# REWARDS
+	perks = {
+		occultist_alternative_approach
+		occultist_ancient_stories 
+		occultist_galactic_history
+	}
+
+	on_unlock = {
+		set_country_flag = player_crisis_chosen
+		set_variable = {
+			which = mgo_has_pacified_demons
+			value = 0
+		}
+	}
+}
+
+mgo_crisis_occultism_level_2 = {
+	# REQUIREMENTS
+	allow = {
+		custom_tooltip = {
+			success_text = mgo_crisis_level_2_sp_req_clear_tooltip
+			fail_text =	mgo_crisis_level_2_sp_req_tooltip
+			has_country_flag = occult_crisis_special_project_1_complete
+		}
+		custom_tooltip = {
+			success_text = mgo_crisis_level_2_req_clear_tooltip
+			fail_text =	mgo_crisis_level_2_req_tooltip
+			has_country_flag = mgo_crisis_finished_contact
+		}
+	}
+	required_crisis_currency = 100
+
+	# REWARDS
+	perks = {
+		occultist_occult_rituals_1
+		occultist_hidden_teachings
+	}
+
+	on_unlock = {
+	}
+}
+
+mgo_crisis_occultism_level_3 = {
+	# REQUIREMENTS
+	allow = {
+		custom_tooltip = {
+			success_text = mgo_crisis_level_3_sp_req_clear_tooltip
+			fail_text =	mgo_crisis_level_3_sp_req_tooltip
+			has_country_flag = occult_crisis_special_project_2_complete
+		}
+		custom_tooltip = {
+			success_text =	mgo_crisis_level_3_req_clear_tooltip
+			fail_text =	mgo_crisis_level_3_req_tooltip
+			OR = {
+				has_country_flag = mgo_crisis_infernal
+				has_country_flag = mgo_crisis_psionic
+				has_country_flag = mgo_crisis_necromancy
+			}
+		}
+	}
+	required_crisis_currency = 500
+
+	# REWARDS
+	perks = {
+		occultist_flavor_rituals_1
+		occultist_unholy_covenant_1
+		occultist_dark_enlightenment
+		occultist_heretical_insights
+	}
+
+	on_unlock = {
+	}
+}
+
+mgo_crisis_occultism_level_4 = {
+	# REQUIREMENTS
+	allow = {
+		custom_tooltip = {
+			success_text =	mgo_crisis_level_4_req_clear_tooltip
+			fail_text =	mgo_crisis_level_4_req_tooltip
+			check_variable = {
+				which = mgo_crisis_rituals_counter
+				value > 4
+			}
+		}
+	}
+	required_crisis_currency = 10000
+
+	# REWARDS
+	perks = {
+		occultist_occult_rituals_2
+		occultist_unholy_covenant_2
+		occultist_dark_powers
+	}
+
+	on_unlock = {
+	}
+}
+
+mgo_crisis_occultism_level_5 = {
+	# REQUIREMENTS
+	allow = {
+		custom_tooltip = {
+			success_text =	mgo_crisis_level_5_req_clear_tooltip
+			fail_text =	mgo_crisis_level_5_req_tooltip
+			has_country_flag = mgo_crisis_has_summoned_demons
+		}
+		is_subject = no
+	}
+	required_crisis_currency = 10000
+
+	# REWARDS
+	perks = {
+		occultist_occult_rituals_3
+		occultist_flavor_rituals_2
+		occultist_greater_evil 
+		occultist_endbringer
+	}
+
+	on_unlock = {
+		owner = {
+			if = {
+				limit = { has_federation = yes }
+				leave_alliance = { override_requirements = yes }
+			}
+			tooltip = {
+				if = {
+					limit = {
+						is_galactic_community_formed = yes
+						is_galactic_community_member = yes
+					}
+					remove_from_galactic_community = yes
+				}
+			}
+		}
+		hidden_effect = {
+			declare_crisis_effect = yes
+		}
+	}
+}

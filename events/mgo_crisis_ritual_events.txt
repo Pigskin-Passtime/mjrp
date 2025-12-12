@@ -1,0 +1,2097 @@
+namespace = mgo_crisis_rituals
+
+### Ritual Selection Event
+country_event = {
+	id = mgo_crisis_rituals.000
+	title = mgo_crisis_rituals.000.name
+	desc = mgo_crisis_rituals.000.desc
+	picture = GFX_evt_necrophage
+	show_sound = event_alien_nature
+	
+	is_triggered_only = yes
+	hide_window = no
+
+	immediate = {
+		if = {
+			limit = {
+				has_country_flag = mgo_crisis_faster_rituals
+				is_variable_set = mgo_crisis_faster_rituals_variable			
+			}
+			if = {
+				limit = { 
+					check_variable = {
+						which = mgo_crisis_faster_rituals_variable
+						value > 0
+					}
+				}
+				change_variable = {
+					which = mgo_crisis_faster_rituals_variable
+					value = -1
+				}
+			}
+			else_if = {
+				limit = { 
+					check_variable = {
+						which = mgo_crisis_faster_rituals_variable
+						value <= 0
+					}
+				}
+				remove_country_flag = mgo_crisis_faster_rituals
+			}
+		}
+	}
+
+
+	option = {
+		name = mgo_crisis_rituals.000.a
+		trigger = {
+			has_country_flag = mgo_crisis_infernal
+			NOT = {
+				has_country_flag = mgo_planar_weakness_cooldown
+			}
+		}
+		start_situation = {
+			type = mgo_crisis_planar_weakness_infernal_situation
+		}
+	}
+
+	option = {
+		name = mgo_crisis_rituals.000.b
+		trigger = {
+			NOT = {
+				has_country_flag = mgo_planar_weakness_cooldown
+			}			
+			has_country_flag = mgo_crisis_psionic
+		}
+		start_situation = {
+			type = mgo_crisis_planar_weakness_psionic_situation
+		}
+	}
+
+	option = {
+		name = mgo_crisis_rituals.000.c
+		trigger = {
+			has_country_flag = mgo_crisis_necromancy
+			NOT = {
+				has_country_flag = mgo_planar_weakness_cooldown
+			}			
+		}
+		start_situation = {
+			type = mgo_crisis_planar_weakness_necromancy_situation
+		}
+	}
+
+	option = {
+		name = mgo_crisis_rituals.000.d
+		trigger = {
+			NOT = {
+				has_country_flag = mgo_demonic_pact_cooldown
+			}			
+			has_country_flag = mgo_crisis_infernal
+			has_crisis_perk = occultist_flavor_rituals_1
+		}
+		start_situation = {
+			type = mgo_crisis_demonic_pact_situation
+		}
+	}
+
+	option = {
+		name = mgo_crisis_rituals.000.e
+		trigger = {
+			NOT = {
+				has_country_flag = mgo_demonic_corruption_cooldown
+			}				
+			has_country_flag = mgo_crisis_infernal
+			has_crisis_perk = occultist_flavor_rituals_1
+		}
+		start_situation = {
+			type = mgo_crisis_demonic_corruption_situation
+		}
+	}
+
+	option = {
+		name = mgo_crisis_rituals.000.f
+		trigger = {
+			has_country_flag = mgo_crisis_infernal
+			has_crisis_perk = occultist_flavor_rituals_1
+		}
+		start_situation = {
+			type = mgo_crisis_scrying_situation
+		}
+	}
+
+	option = {
+		name = mgo_crisis_rituals.000.g
+		trigger = {
+			has_country_flag = mgo_crisis_infernal
+			has_crisis_perk = occultist_flavor_rituals_1
+		}
+		start_situation = {
+			type = mgo_crisis_precognition_situation
+		}
+	}
+
+	option = {
+		name = mgo_crisis_rituals.000.h
+		trigger = {			
+			has_country_flag = mgo_crisis_necromancy
+			has_crisis_perk = occultist_flavor_rituals_1
+		}
+		start_situation = {
+			type = mgo_crisis_life_after_death_situation
+		}
+	}
+
+	option = {
+		name = mgo_crisis_rituals.000.i
+		trigger = {
+			has_country_flag = mgo_crisis_necromancy
+			has_crisis_perk = occultist_flavor_rituals_1
+		}
+		start_situation = {
+			type = mgo_crisis_raise_the_dead_situation
+		}
+	}
+
+	option = {
+		name = mgo_crisis_rituals.000.j
+		trigger = {
+			NOT = {
+				has_country_flag = mgo_dark_visions_cooldown
+			}					
+			has_crisis_perk = occultist_occult_rituals_2
+		}
+		start_situation = {
+			type = mgo_crisis_dark_visions_situation
+		}
+	}
+
+	option = {
+		name = mgo_crisis_rituals.000.k
+		trigger = {
+			NOT = {
+				has_country_flag = mgo_summoning_ritual_cooldown
+			}				
+			has_crisis_perk = occultist_occult_rituals_2
+		}
+		start_situation = {
+			type = mgo_crisis_summoning_ritual_situation
+		}
+	}
+	
+	option = {
+		name = mgo_crisis_rituals.000.l
+		trigger = {
+			NOT = {
+				has_country_flag = mgo_mortal_chains_cooldown
+			}					
+			has_country_flag = mgo_crisis_infernal
+			has_crisis_perk = occultist_flavor_rituals_2
+		}
+		start_situation = {
+			type = mgo_crisis_mortal_chains_situation
+		}
+	}
+		
+	option = {
+		name = mgo_crisis_rituals.000.m
+		trigger = {
+			NOT = {
+				has_country_flag = mgo_apocalypse_cooldown
+			}					
+			has_country_flag = mgo_crisis_infernal
+			has_crisis_perk = occultist_flavor_rituals_2
+		}
+		start_situation = {
+			type = mgo_crisis_apocalypse_situation
+		}
+	}
+			
+	option = {
+		name = mgo_crisis_rituals.000.n
+		trigger = {
+			has_country_flag = mgo_crisis_psionic
+			has_crisis_perk = occultist_flavor_rituals_2
+		}
+		start_situation = {
+			type = mgo_crisis_psionic_bursts_situation
+		}
+	}		
+
+	option = {
+		name = mgo_crisis_rituals.000.o
+		trigger = {
+			has_country_flag = mgo_crisis_psionic
+			has_crisis_perk = occultist_flavor_rituals_2
+		}
+		start_situation = {
+			type = mgo_crisis_mental_plague_situation
+		}
+	}
+
+	option = {
+		name = mgo_crisis_rituals.000.p
+		trigger = {
+			has_country_flag = mgo_crisis_necromancy
+			has_crisis_perk = occultist_flavor_rituals_2
+		}
+		start_situation = {
+			type = mgo_crisis_legion_of_the_damned_situation
+		}
+	}
+
+	option = {
+		name = mgo_crisis_rituals.000.q
+		trigger = {
+			has_country_flag = mgo_crisis_necromancy
+			has_crisis_perk = occultist_occult_rituals_2
+		}
+		start_situation = {
+			type = mgo_crisis_curse_of_decay_situation
+		}
+	}
+
+	option = {
+		name = mgo_crisis_rituals.000.r
+		trigger = {
+			always = no
+			has_crisis_perk = occultist_occult_rituals_3
+		}
+		start_situation = {
+			type = mgo_crisis_netherrift_situation
+		}
+	}
+
+	option = {
+		name = mgo_crisis_rituals.000.s
+		trigger = {
+			NOT = {
+				has_country_flag = mgo_binding_ritual_cooldown
+			}					
+			has_crisis_perk = occultist_occult_rituals_3
+		}
+		start_situation = {
+			type = mgo_crisis_binding_ritual_situation
+		}
+	}
+
+	option = {
+		name = mgo_crisis_rituals.000.t
+		trigger = {
+			has_crisis_perk = occultist_occult_rituals_3
+		}
+		start_situation = {
+			type = mgo_crisis_unholy_apotheosis_situation
+		}
+	}
+}
+
+### Eldritch Contact Finisher
+situation_event = {
+	id = mgo_crisis_rituals.001
+	title = mgo_crisis_rituals.001.name
+	desc = mgo_crisis_rituals.001.desc
+	picture = GFX_evt_mysterious_signal
+	show_sound = event_alien_nature
+
+	is_triggered_only = yes
+	hide_window = no
+
+	option = {
+		name = mgo_crisis_rituals.001.a
+	}
+
+	after = {
+		owner = {
+			country_event = { id = mgo_crisis_perks.001 }
+			set_country_flag = mgo_crisis_finished_contact
+		}
+		destroy_situation = this
+	}	
+}
+
+### Planar Weakness First Finisher
+situation_event = {
+	id = mgo_crisis_rituals.002
+	title = mgo_crisis_rituals.002.name
+	desc = mgo_crisis_rituals.002.desc
+	picture = GFX_evt_cosmogenesis_crisis
+	show_sound = event_alien_nature
+
+	is_triggered_only = yes
+	hide_window = no
+
+	option = {
+		name = mgo_crisis_rituals.002.a
+		owner = {
+			set_country_flag = mgo_crisis_infernal
+		}
+	}
+
+	after = {
+		owner = {
+			country_event = { id = mgo_crisis_perks.001 }
+			set_country_flag = occult_crisis_finished_weakness
+			country_event = {
+				id = mgo_crisis_rituals.000
+				days = 10
+			}
+		}
+		destroy_situation = this		
+	}
+}
+
+### Planar Weakness Infernal Finisher
+situation_event = {
+	id = mgo_crisis_rituals.003
+	is_triggered_only = yes
+	hide_window = yes
+
+	after = {
+		owner = {
+			set_timed_country_flag = {
+				flag = mgo_planar_weakness_cooldown
+				years = 10
+			}
+			set_country_flag = mgo_crisis_faster_rituals
+			set_variable = {
+				which = mgo_crisis_faster_rituals_variable
+				value = 2
+			}
+			country_event = { id = mgo_crisis_perks.001 }
+			country_event = {
+				id = mgo_crisis_rituals.000
+				days = 360
+				random = 360
+			}
+		}
+		destroy_situation = this
+	}
+}
+
+### Planar Weakness Psionic Finisher
+situation_event = {
+	id = mgo_crisis_rituals.004
+	is_triggered_only = yes
+	hide_window = yes
+
+	after = {
+		owner = {
+			set_timed_country_flag = {
+				flag = mgo_planar_weakness_cooldown
+				years = 10
+			}
+			add_tech_progress = {
+				tech = tech_psi_jump_drive_1
+				progress = 0.05
+			}
+			country_event = { id = mgo_crisis_perks.001 }
+			country_event = {
+				id = mgo_crisis_rituals.000
+				days = 360
+				random = 360
+			}
+		}
+		destroy_situation = this
+	}
+}
+
+### Planar Weakness Necromancy Finisher
+situation_event = {
+	id = mgo_crisis_rituals.005
+	is_triggered_only = yes
+	hide_window = yes
+
+	after = {
+		owner = {
+			set_timed_country_flag = {
+				flag = mgo_planar_weakness_cooldown
+				years = 10
+			}			
+			country_event = { id = mgo_crisis_perks.001 }
+			country_event = {
+				id = mgo_crisis_rituals.000
+				days = 360
+				random = 360
+			}
+		}
+		destroy_situation = this
+	}
+}
+
+### Demonic Pact Finisher
+situation_event = {
+	id = mgo_crisis_rituals.006
+	is_triggered_only = yes
+	hide_window = yes
+
+	after = {
+		owner = {
+			set_timed_country_flag = {
+				flag = mgo_demonic_pact_cooldown
+				years = 10
+			}
+			country_event = {
+				id = mgo_crisis_rituals.106
+				days = 1
+			}
+			country_event = { id = mgo_crisis_perks.001 }
+			country_event = {
+				id = mgo_crisis_rituals.000
+				days = 360
+				random = 360
+			}
+		}
+		destroy_situation = this
+	}
+}
+
+### Demonic Corruption Finisher
+situation_event = {
+	id = mgo_crisis_rituals.007
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		owner = {
+			if = {
+				limit = {
+					NOT = {
+						is_variable_set = mgo_corruption_value
+					}
+				}
+				set_variable = {
+					which = mgo_corruption_value
+					value = 0
+				}
+			}
+
+			set_variable = {
+				which = mgo_corruption_value_helper
+				value = value:total_occult_knowledge
+			}
+			multiply_variable = {
+				which = mgo_corruption_value_helper
+				value = 0.0001
+			}
+			change_variable = {
+				which = mgo_corruption_value_helper
+				value = 1
+			}
+			round_variable = mgo_corruption_value_helper
+
+			change_variable = {
+				which = mgo_corruption_value
+				value = mgo_corruption_value_helper
+			}
+			add_modifier = {
+				modifier = mgo_crisis_infernal_demonic_corruption
+				mult = mgo_corruption_value
+			}
+		}
+	}
+
+	after = {
+		destroy_situation = this
+		owner = {
+			set_timed_country_flag = {
+				flag = mgo_demonic_corruption_cooldown
+				years = 10
+			}
+			country_event = { id = mgo_crisis_perks.001 }
+			country_event = {
+				id = mgo_crisis_rituals.000
+				days = 360
+				random = 360
+			}
+		}
+	}
+}
+
+### Scrying Finisher
+situation_event = {
+	id = mgo_crisis_rituals.008
+	is_triggered_only = yes
+	hide_window = yes
+
+	after = {
+		owner = {
+			country_event = { id = mgo_crisis_perks.001 }
+			country_event = {
+				id = mgo_crisis_rituals.000
+				days = 360
+				random = 360
+			}
+			set_variable = {
+				which = precognition_value
+				value = value:total_occult_knowledge
+			}
+			divide_variable = {
+				which = precognition_value
+				value = 3333
+			}
+			change_variable = {
+				which = precognition_value
+				value = mgo_crisis_rituals_counter
+			}
+			ceiling_variable = precognition_value
+			while = {
+				count = precognition_value
+				random_list = {
+					1 = {
+						add_random_research_option = {
+							add_progress = 0.25
+						}
+					}
+					1 = {
+						random_country = {
+							limit = {
+								is_default_or_fallen = yes
+							}
+							save_event_target_as = intel_target
+						}
+						add_intel = {
+							who = event_target:intel_target
+							amount = 10
+						}
+					}
+					1 = {
+						random_system = {
+							limit = {
+								is_surveyed = {
+									who = THIS
+									status = no
+								}
+							}
+							set_surveyed = {
+								surveyed = yes
+								surveyor = prev
+							}
+						}
+					}
+				}
+			}
+		}
+		destroy_situation = this
+	}
+}
+
+### Precognition Finisher
+situation_event = {
+	id = mgo_crisis_rituals.009
+	is_triggered_only = yes
+	hide_window = yes
+
+	after = {
+		owner = {
+			country_event = { id = mgo_crisis_perks.001 }
+			country_event = {
+				id = mgo_crisis_rituals.000
+				days = 360
+				random = 360
+			}
+			set_variable = {
+				which = precognition_value
+				value = value:total_occult_knowledge
+			}
+			divide_variable = {
+				which = precognition_value
+				value = 10000
+			}
+			change_variable = {
+				which = precognition_value
+				value = mgo_crisis_rituals_counter
+			}
+			ceiling_variable = precognition_value
+			add_modifier = {
+				modifier = mgo_crisis_psionic_precognition
+				years = 10
+				mult = precognition_value
+			}
+		}
+		destroy_situation = this
+	}
+}
+
+### Life after Death Finisher
+situation_event = {
+	id = mgo_crisis_rituals.010
+	is_triggered_only = yes
+	hide_window = yes
+
+	after = {
+		destroy_situation = this
+		owner = {
+			country_event = { id = mgo_crisis_perks.001 }
+			country_event = {
+				id = mgo_crisis_rituals.000
+				days = 360
+				random = 360
+			}
+		}
+	}
+}
+
+### Raise the Dead Finisher
+situation_event = {
+	id = mgo_crisis_rituals.011
+	is_triggered_only = yes
+	hide_window = yes
+
+	after = {
+		destroy_situation = this
+		owner = {
+			country_event = { id = mgo_crisis_perks.001 }
+			country_event = {
+				id = mgo_crisis_rituals.000
+				days = 360
+				random = 360
+			}
+		}
+	}
+}
+
+### Dark Visions Finisher
+situation_event = {
+	id = mgo_crisis_rituals.012
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		owner = {
+			country_event = {
+				id = mgo_crisis_rituals.112
+			}
+		}
+	}
+
+	after = {
+		owner = {
+			set_timed_country_flag = {
+				flag = mgo_dark_visions_cooldown
+				years = 15
+			}
+			country_event = { id = mgo_crisis_perks.001 }
+			country_event = {
+				id = mgo_crisis_rituals.000
+				days = 360
+				random = 360
+			}
+		}
+		destroy_situation = this
+	}
+}
+
+### Summoning Ritual Finisher
+situation_event = {
+	id = mgo_crisis_rituals.013
+	title = mgo_crisis_rituals.013.name
+	desc = mgo_crisis_rituals.013.desc
+	picture = GFX_evt_treasure_trove_pirate_fleet
+	show_sound = event_alien_nature
+
+	is_triggered_only = yes
+	hide_window = no
+
+	option = {
+		name = mgo_crisis_rituals.013.a
+	}
+
+	after = {
+		owner = {
+			set_timed_country_flag = {
+				flag = mgo_summoning_ritual_cooldown
+				years = 5
+			}
+			country_event = {
+				id = mgo_crisis_rituals.113
+			}
+			country_event = { id = mgo_crisis_perks.001 }
+			country_event = {
+				id = mgo_crisis_rituals.000
+				days = 360
+				random = 360
+			}
+		}
+		destroy_situation = this
+	}
+}
+
+### Mortal Chains Finisher
+situation_event = {
+	id = mgo_crisis_rituals.014
+	is_triggered_only = yes
+	hide_window = yes
+
+	after = {
+		owner = {
+			set_timed_country_flag = {
+				flag = mgo_mortal_chains_cooldown
+				years = 25
+			}
+			country_event = {
+				id = mgo_crisis_rituals.114
+				days = 30
+			}
+			country_event = { id = mgo_crisis_perks.001 }
+			country_event = {
+				id = mgo_crisis_rituals.000
+				days = 360
+				random = 360
+			}
+		}
+		destroy_situation = this
+	}
+}
+
+### Apocalypse Finisher
+situation_event = {
+	id = mgo_crisis_rituals.015
+	is_triggered_only = yes
+	hide_window = yes
+
+	after = {
+		owner = {
+			set_timed_country_flag = {
+				flag = mgo_apocalypse_cooldown
+				years = 25
+			}
+			country_event = {
+				id = mgo_crisis_rituals.115
+				days = 30
+			}
+			country_event = { id = mgo_crisis_perks.001 }
+			country_event = {
+				id = mgo_crisis_rituals.000
+				days = 360
+				random = 360
+			}
+		}
+		destroy_situation = this
+	}
+}
+
+### Psionic Bursts Finisher
+situation_event = {
+	id = mgo_crisis_rituals.016
+	is_triggered_only = yes
+	hide_window = yes
+
+	after = {
+		owner = {
+			country_event = { id = mgo_crisis_perks.001 }
+			country_event = {
+				id = mgo_crisis_rituals.000
+				days = 360
+				random = 360
+			}
+		}
+		destroy_situation = this
+	}
+}
+
+### Mental Plague Finisher
+situation_event = {
+	id = mgo_crisis_rituals.017
+	is_triggered_only = yes
+	hide_window = yes
+
+	after = {
+		owner = {
+			country_event = { id = mgo_crisis_perks.001 }
+			country_event = {
+				id = mgo_crisis_rituals.000
+				days = 360
+				random = 360
+			}
+		}
+		destroy_situation = this
+	}
+}
+
+### Legion of the Damned Finisher
+situation_event = {
+	id = mgo_crisis_rituals.018
+	is_triggered_only = yes
+	hide_window = yes
+
+	after = {
+		destroy_situation = this
+		owner = {
+			country_event = { id = mgo_crisis_perks.001 }
+			country_event = {
+				id = mgo_crisis_rituals.000
+				days = 360
+				random = 360
+			}
+		}
+	}
+}
+
+### Curse of Decay Finisher
+situation_event = {
+	id = mgo_crisis_rituals.019
+	is_triggered_only = yes
+	hide_window = yes
+
+	after = {
+		destroy_situation = this
+		owner = {
+			country_event = { id = mgo_crisis_perks.001 }
+			country_event = {
+				id = mgo_crisis_rituals.000
+				days = 360
+				random = 360
+			}
+		}
+	}
+}
+
+### Netherrift Finisher
+situation_event = {
+	id = mgo_crisis_rituals.020
+	is_triggered_only = yes
+	hide_window = yes
+
+	after = {
+		destroy_situation = this
+		owner = {
+			country_event = { id = mgo_crisis_perks.001 }
+			country_event = {
+				id = mgo_crisis_rituals.000
+				days = 360
+				random = 360
+			}
+		}
+	}
+}
+
+### Binding Ritual Finisher
+situation_event = {
+	id = mgo_crisis_rituals.021
+	title = mgo_crisis_rituals.021.name
+	desc = mgo_crisis_rituals.021.desc
+	picture = GFX_evt_knights
+	show_sound = event_alien_nature
+
+	is_triggered_only = yes
+	hide_window = no
+
+	option = {
+		name = mgo_crisis_rituals.021.a
+	}
+
+	after = {
+		owner = {
+			set_timed_country_flag = {
+				flag = mgo_binding_ritual_cooldown
+				years = 15
+			}
+			country_event = {
+				id = mgo_crisis_rituals.121
+			}
+			country_event = { id = mgo_crisis_perks.001 }
+			country_event = {
+				id = mgo_crisis_rituals.000
+				days = 360
+				random = 360
+			}
+		}
+		destroy_situation = this
+	}
+}
+
+### Unholy Apotheosis Finisher
+situation_event = {
+	id = mgo_crisis_rituals.022
+	is_triggered_only = yes
+	hide_window = yes
+
+	after = {
+		owner = {
+			country_event = {
+				id = mgo_crisis_rituals.122
+			}
+		}
+		
+		#Case 1: Bad Ending = Not Enough OK		immediate win, invaders stay, player disappears
+		#Case 2: Inf Ending = Infernal + OK		Take control of all Infernal Invaders and 5 "portals" open up, controlling them grants you massive buffs to everything, as well as periodically spawning reinforcements + automatically casting infernal rituals  
+		#Case 3: Psi Ending = Psionic + OK		immediate win, all invaders + player disappear
+		destroy_situation = this
+	}
+}
+
+
+### effect helper & loc events ###
+
+### Summoning Ritual Helper Event
+country_event = {
+	id = mgo_crisis_rituals.113
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+
+		if = {
+			limit = { NOT = {
+				has_country_flag = mgo_crisis_has_summoned_demons
+			} }
+			set_country_flag =  mgo_crisis_has_summoned_demons
+		}
+		if = {
+			limit = { NOT = {
+				any_country = {
+					has_country_flag = mgo_crisis_demonic_invaders
+				}
+			} }
+			create_demon_species_effect = yes
+			create_country = {
+				name = random
+				adjective = "NAME_Demon_Refugees"
+				authority = auth_dictatorial
+				ignore_initial_colony_error = yes
+				ethos = {
+					ethic = ethic_fanatic_xenophobe
+					ethic = random
+				}
+				civics = { 
+					civic = random
+					civic = random
+				}
+				species = last_created_species
+				flag = {
+					icon = {
+						category = "toxoid"
+						file = "toxoid_03.dds"
+					}
+					background = {
+						category = "backgrounds"
+						file = "flag_BG_24.dds"
+					}
+					colors = {
+						"red"
+						"black"
+						"null"
+						"null"
+					}
+				}
+				type = default
+				effect = {
+					save_event_target_as = invaders
+					save_global_event_target_as = mgo_crisis_demonic_invaders
+					set_country_flag = mgo_crisis_demonic_invaders
+					establish_communications_no_message = root
+					set_origin = origin_demonic_invaders
+
+					##Copy technology
+					copy_techs_from = {
+						target = root
+						except = {
+							# Horizon Signal
+							tech_akx_worm_1
+							tech_akx_worm_2
+							tech_akx_worm_3
+						}
+					}
+					IF = {
+						limit = {
+							root = {
+								has_technology = tech_weavers
+							}
+						}
+						give_technology = { tech = tech_destroyers }
+					}
+					IF = {
+						limit = {
+							root = {
+								has_technology = tech_stingers
+							}
+						}
+						give_technology = { tech = tech_battleships }
+					}
+					IF = {
+						limit = {
+							root = {
+								has_technology = tech_harbingers
+							}
+						}
+						give_technology = { tech = tech_cruisers }
+					}
+
+					
+
+					##Create fleets
+					set_variable = {
+						which = num_demon_fleets
+						value = trigger:max_naval_capacity
+					}
+					divide_variable = {
+						which = num_demon_fleets
+						value = 90
+					}
+					ceiling_variable = num_demon_fleets
+					while = {
+						count = num_demon_fleets
+						add_resource = { energy = 1000 } # Give some energy to pay for ship upkeep
+						random_list = {
+							5 = {
+								create_fleet = {
+									effect = {
+										set_owner = event_target:mgo_crisis_demonic_invaders
+										create_ship = {
+											name = random
+											design = "NAME_Ancestral_Glory"
+											graphical_culture = "pirate_01"
+										}
+										while = {
+											count = 24
+											create_ship = {
+												name = random
+												design = "NAME_Outrider"
+												graphical_culture = "pirate_01"
+											}
+										}
+										while = {
+											count = 12
+											create_ship = {
+												name = random
+												design = "NAME_Lancer"
+												graphical_culture = "pirate_01"
+											}
+										}
+										while = {
+											count = 6
+											create_ship = {
+												name = random
+												design = "NAME_Void_Champion"
+												graphical_culture = "pirate_01"
+											}
+										}
+									}
+								}
+							}
+							1 = {
+								create_fleet_from_naval_cap = 0.02
+							}
+							1 = {
+								create_fleet_from_naval_cap = 0.04
+							}
+							1 = {
+								create_fleet_from_naval_cap = 0.08
+							}
+							1 = {
+								create_fleet_from_naval_cap = 0.16
+							}
+							1 = {
+								create_fleet_from_naval_cap = 0.32
+							}
+						}
+						last_created_fleet = {
+							set_location = {
+								target = event_target:invaders_capital
+								distance = 10
+								angle = random
+							}
+						}
+					}
+
+					random_system = {
+						limit = {
+							NOT = {
+								any_system_planet = {
+									is_capital = yes
+								}
+							}
+							any_system_planet = {
+								colonizable_planet = yes
+							}
+						}
+						random_system_planet = {
+							limit = {
+								colonizable_planet = yes
+							}
+							create_colony = {
+								owner = event_target:invaders
+							}
+							set_owner = event_target:invaders
+							set_capital = yes
+							save_global_event_target_as = invaders_capital
+							while = {
+								count = 32
+								create_pop_group = {
+									species = last_created_species
+								}
+							}
+							remove_all_districts = yes
+							remove_all_buildings = yes
+							generate_start_buildings_and_districts = yes
+							remove_building = building_commercial_zone
+							add_building = building_holo_theatres
+							solar_system = {
+								if = {
+									limit = { exists = starbase }
+									starbase = {
+										set_owner = event_target:invaders
+											if = {
+												limit = { has_starbase_size = starbase_outpost }
+												set_starbase_size = starbase_starport
+												set_starbase_module = {
+													slot = 1
+													module = shipyard
+												}
+												set_starbase_module = {
+													slot = 2
+													module = shipyard
+												}
+											}
+											else_if = {
+												limit = {
+													NOT = { has_starbase_module = shipyard }
+												}
+												set_starbase_module = {
+													slot = 1
+													module = shipyard
+												}
+												set_starbase_module = {
+													slot = 2
+													module = shipyard
+												}
+											}
+									}
+								}
+								else = {
+									create_starbase = {
+										size = starbase_starport
+										module = shipyard
+										module = shipyard
+										owner = event_target:invaders
+									}
+								}
+								every_system_planet = {
+									limit = {
+										is_colony = yes
+										NOT = { is_same_value = event_target:invaders_capital }
+									}
+									set_owner = event_target:invaders
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		event_target:mgo_crisis_demonic_invaders = {
+			#Add Techs
+			set_variable = {
+				which = techs_per_time
+				value = trigger:years_passed
+			}
+			divide_variable = {
+				which = techs_per_time
+				value = 10
+			}
+			ceiling_variable = techs_per_time
+			while = {
+				count = techs_per_time
+				add_random_research_option = {
+					ignore_rare = no
+					add_progress = 100
+				}
+			}
+			multiply_variable = {
+				which = techs_per_time
+				value = trigger:is_difficulty
+			}
+			#Add Bonus NavCap
+			add_modifier = {
+				modifier = mgo_crisis_naval_cap_for_demons
+				mult = techs_per_time
+			}
+			##Add resources
+			add_resource = { minerals = 20000 }
+			add_resource = { energy = 20000 }
+			add_resource = { food = 9000 }
+			add_resource = { consumer_goods = 5000 }
+			add_resource = { alloys = 21000 }
+			add_resource = { influence = 1000 }
+			add_resource = { unity = 42000 }
+		}
+	}
+
+	after = {
+		event_target:mgo_crisis_demonic_invaders = {
+			every_playable_country = {
+				limit = {
+					NOR = {
+						has_origin = origin_demonic_invaders
+						has_origin = origin_demonic_incursion
+						is_fallen_empire = yes
+					}
+				}
+				while = {
+					count = 5
+					random_system_within_border = {
+						add_claims = {
+							who = event_target:mgo_crisis_demonic_invaders
+						}
+					}
+				}
+				prev = {
+					declare_war = {
+						target = prev
+						attacker_war_goal = wg_conquest
+					}
+				}
+			}
+			##Create fleets
+			set_variable = {
+				which = num_demon_fleets
+				value = trigger:max_naval_capacity
+			}
+			divide_variable = {
+				which = num_demon_fleets
+				value = 90
+			}
+			ceiling_variable = num_demon_fleets
+			while = {
+				count = num_demon_fleets
+
+				random_list = {
+					40 = {
+					}
+					55 = {
+						random_system = {
+							limit = {
+								NOT = {
+									any_system_planet = {
+										is_capital = yes
+									}
+								}
+							}
+							set_star_flag = mgo_crisis_portal
+						}
+					}
+					5 = {
+						random_system = {
+							limit = {
+								NOT = {
+									any_system_planet = {
+										is_capital = yes
+									}
+								}
+								any_system_planet = {
+									colonizable_planet = yes
+								}
+							}
+							random_system_planet = {
+								limit = {
+									colonizable_planet = yes
+								}
+								create_colony = {
+									owner = event_target:mgo_crisis_demonic_invaders
+								}
+								set_owner = event_target:mgo_crisis_demonic_invaders
+								event_target:mgo_crisis_demonic_invaders = {
+									owner_main_species = {
+										save_event_target_as = demon_species
+									}
+								}
+								while = {
+									count = 32
+									create_pop_group = {
+										species = event_target:demon_species
+									}
+								}
+								remove_all_districts = yes
+								remove_all_buildings = yes
+								generate_start_buildings_and_districts = yes
+								remove_building = building_commercial_zone
+								add_building = building_holo_theatres
+								solar_system = {
+									if = {
+										limit = { exists = starbase }
+										starbase = {
+											set_owner = event_target:mgo_crisis_demonic_invaders
+												if = {
+													limit = { has_starbase_size = starbase_outpost }
+													set_starbase_size = starbase_starport
+													set_starbase_module = {
+														slot = 1
+														module = shipyard
+													}
+													set_starbase_module = {
+														slot = 2
+														module = shipyard
+													}
+												}
+												else_if = {
+													limit = {
+														NOT = { has_starbase_module = shipyard }
+													}
+													set_starbase_module = {
+														slot = 1
+														module = shipyard
+													}
+													set_starbase_module = {
+														slot = 2
+														module = shipyard
+													}
+												}
+										}
+									}
+									else = {
+										create_starbase = {
+											size = starbase_starport
+											module = shipyard
+											module = shipyard
+											owner = event_target:mgo_crisis_demonic_invaders
+										}
+									}
+									every_system_planet = {
+										limit = {
+											is_colony = yes
+											NOT = { is_same_value = prevprev }
+										}
+										set_owner = event_target:mgo_crisis_demonic_invaders
+									}
+								}
+							}
+						}
+					}
+				}
+
+				random_list = {
+					5 = {
+						create_fleet = {
+							effect = {
+								set_owner = event_target:mgo_crisis_demonic_invaders
+								create_ship = {
+									name = random
+									design = "NAME_Ancestral_Glory"
+									graphical_culture = "pirate_01"
+								}
+								while = {
+									count = 24
+									create_ship = {
+										name = random
+										design = "NAME_Outrider"
+										graphical_culture = "pirate_01"
+									}
+								}
+								while = {
+									count = 12
+									create_ship = {
+										name = random
+										design = "NAME_Lancer"
+										graphical_culture = "pirate_01"
+									}
+								}
+								while = {
+									count = 6
+									create_ship = {
+										name = random
+										design = "NAME_Void_Champion"
+										graphical_culture = "pirate_01"
+									}
+								}
+							}
+						}
+					}
+					1 = {
+						create_fleet_from_naval_cap = 0.04
+					}
+					1 = {
+						create_fleet_from_naval_cap = 0.08
+					}
+					2 = {
+						create_fleet_from_naval_cap = 0.16
+					}
+					1 = {
+						create_fleet_from_naval_cap = 0.32
+					}
+				}
+				random_list = {
+					50 = {
+						random_system = {
+							limit = {
+								has_star_flag = mgo_crisis_portal
+							}
+							last_created_fleet = {
+								set_location = prev
+							}
+						}	
+					}
+					30 = {
+						random_owned_planet = {
+							last_created_fleet = {
+								set_location = prev
+							}
+						}
+					}
+					20 = {
+						last_created_fleet = {
+							set_location = {
+								target = event_target:invaders_capital
+								distance = 10
+								angle = random
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+}
+
+### Binding Ritual Helper Event
+country_event = {
+	id = mgo_crisis_rituals.121
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		random_country = {
+			limit = {
+				has_origin = origin_demonic_invaders
+				root = {
+					NOT = {
+						has_country_flag = mgo_crisis_pacified_@PREV
+					}
+				}
+			}
+			every_war = {
+				limit = {
+					any_attacker = {
+						is_same_empire = this
+					}
+				}
+				remove_war_participant = prev
+			}
+			if = {
+				limit = {
+					is_at_war_with = root
+				}
+				every_war = {
+					limit = {
+						any_war_participant = {
+							is_same_empire = this
+						}
+						any_war_participant = {
+							is_same_empire = root
+						}
+					}
+					remove_war_participant = prev
+				}
+			}
+			set_timed_country_flag = {
+				flag = mgo_crisis_pacified_by_@ROOT
+				years = 10
+			}
+			root = {
+				set_timed_country_flag = {
+					flag = mgo_crisis_pacified_@PREV
+					years = 10
+				} 				
+			}
+			join_war = root
+		}
+	}
+
+}
+
+country_event = {
+	id = mgo_crisis_rituals.106
+	title = mgo_crisis_rituals.106.name
+	desc = mgo_crisis_rituals.106.desc
+	picture = GFX_evt_necrophage
+	show_sound = event_alien_nature
+
+	is_triggered_only = yes
+	hide_window = no
+
+	immediate = {
+		set_variable = {
+			which = mgo_boon_value
+			value = value:total_occult_knowledge
+		}
+		multiply_variable = {
+			which = mgo_boon_value
+			value = 0.00001
+		}
+		change_variable = {
+			which = mgo_boon_value
+			value = 1
+		}
+	}
+
+	option = {
+		name = mgo_crisis_rituals.106.a
+		add_modifier = {
+			modifier = mgo_crisis_infernal_boon_wealth
+			years = 2
+			mult = mgo_boon_value
+			time_multiplier = mgo_boon_value
+		}
+	}
+	option = {
+		name = mgo_crisis_rituals.106.b
+		add_modifier = {
+			modifier = mgo_crisis_infernal_boon_strength
+			years = 2
+			mult = mgo_boon_value
+			time_multiplier = mgo_boon_value
+		}
+	}
+	option = {
+		name = mgo_crisis_rituals.106.c
+		add_modifier = {
+			modifier = mgo_crisis_infernal_boon_knowledge
+			years = 2
+			mult = mgo_boon_value
+			time_multiplier = mgo_boon_value
+		}
+	}
+
+	after = {
+		country_event = {
+			id = mgo_crisis_rituals.206
+		}
+	}
+}
+
+country_event = {
+	id = mgo_crisis_rituals.206
+	title = mgo_crisis_rituals.206.name
+	desc = mgo_crisis_rituals.206.desc
+	picture = GFX_evt_necrophage
+	show_sound = event_alien_nature
+
+	is_triggered_only = yes
+	hide_window = no
+
+	immediate = {
+		set_variable = {
+			which = mgo_price_value
+			value = value:total_occult_knowledge
+		}
+		multiply_variable = {
+			which = mgo_price_value
+			value = -0.00001
+		}
+		change_variable = {
+			which = mgo_price_value
+			value = 1
+		}
+		if = {
+			limit = {
+				check_variable = {
+					which = mgo_price_value
+					value < 0.01
+				}
+			}
+			set_variable = {
+				which = mgo_price_value
+				value = 0.01
+			}
+		}
+	}
+
+	option = {
+		name = mgo_crisis_rituals.206.a
+		add_modifier = {
+			modifier = mgo_crisis_infernal_price_life
+			years = 2.5
+			mult = mgo_price_value
+			time_multiplier = mgo_price_value
+		}
+	}
+	option = {
+		name = mgo_crisis_rituals.206.b
+		add_modifier = {
+			modifier = mgo_crisis_infernal_price_soul
+			years = 2.5
+			mult = mgo_price_value
+			time_multiplier = mgo_price_value
+		}
+	}
+	option = {
+		name = mgo_crisis_rituals.206.c
+		add_modifier = {
+			modifier = mgo_crisis_infernal_price_blood
+			years = 2.5
+			mult = mgo_price_value
+			time_multiplier = mgo_price_value
+		}
+	}
+
+}
+
+country_event = {
+	id = mgo_crisis_rituals.114
+	title = mgo_crisis_rituals.114.name
+	desc = mgo_crisis_rituals.114.desc
+	picture = GFX_evt_clocks
+	show_sound = event_alien_nature
+
+	is_triggered_only = yes
+	hide_window = no
+
+	### our enemies
+	option = {
+		trigger = {
+			is_at_war = yes
+		}
+		name = mgo_crisis_rituals.114.a
+		every_war = {
+			limit = {
+				is_war_participant = root
+			}
+			every_war_participant = {
+				limit = {
+					is_at_war_with = root
+					NOT = {
+						has_origin = origin_demonic_invaders
+					}
+				}
+				set_variable = {
+					which = mgo_mortal_chains_counter
+					value = 120
+				}
+				add_modifier = {
+					modifier = mgo_crisis_infernal_mortal_chains
+					months = 1
+					mult = mgo_mortal_chains_counter
+					time_multiplier = mgo_mortal_chains_counter
+				}
+				country_event = {
+					id = mgo_crisis_rituals.214
+					days = 30
+				}
+			}
+		}
+	}
+
+	### our rivals
+	option = {
+		trigger = {
+			check_variable_arithmetic = {
+				which = trigger:num_rivals
+				value > 0
+			}
+		}
+		name = mgo_crisis_rituals.114.b
+		every_rival_country = {
+			limit = {
+				is_at_war_with = root
+				NOT = {
+					has_origin = origin_demonic_invaders
+				}
+			}
+			set_variable = {
+				which = mgo_mortal_chains_counter
+				value = 120
+			}
+			add_modifier = {
+				modifier = mgo_crisis_infernal_mortal_chains
+				months = 1
+				mult = mgo_mortal_chains_counter
+				time_multiplier = mgo_mortal_chains_counter
+			}
+			country_event = {
+				id = mgo_crisis_rituals.214
+				days = 30
+			}
+		}				
+	}
+
+	### a random target 
+	option = {
+		name = mgo_crisis_rituals.114.d
+	}
+}
+
+country_event = {
+	id = mgo_crisis_rituals.214
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		change_variable = {
+			which = mgo_mortal_chains_counter
+			value = -1
+		}
+		if = {
+			limit = {
+				check_variable = {
+					which = mgo_mortal_chains_counter
+					value <= 0
+				}
+			}
+			remove_modifier = mgo_crisis_infernal_mortal_chains
+		}
+		else = {
+			add_modifier = {
+				modifier = mgo_crisis_infernal_mortal_chains
+				months = 1
+				mult = mgo_mortal_chains_counter
+				time_multiplier = mgo_mortal_chains_counter
+			}
+			country_event = {
+				id = mgo_crisis_rituals.214
+				days = 30
+			}
+		}
+	}
+}
+
+country_event = {
+	id = mgo_crisis_rituals.115
+	title = mgo_crisis_rituals.115.name
+	desc = mgo_crisis_rituals.115.desc
+	picture = GFX_evt_burning_settlement
+	show_sound = event_alien_nature
+
+	is_triggered_only = yes
+	hide_window = no
+
+	immediate = {
+		random_country = {
+			limit = {
+				is_default_or_fallen = yes
+				NOR = {
+					has_modifier = mgo_crisis_infernal_rain_of_fire
+					has_origin = origin_demonic_invaders
+					is_same_empire = root
+				}
+			}
+			save_event_target_as = mgo_infernal_first_apocalypse
+		}
+		random_country = {
+			limit = {
+				is_default_or_fallen = yes
+				NOR = {
+					has_modifier = mgo_crisis_infernal_rain_of_fire
+					has_origin = origin_demonic_invaders
+					is_same_empire = root
+					is_same_empire = event_target:mgo_infernal_first_apocalypse
+				}
+			}
+			save_event_target_as = mgo_infernal_second_apocalypse
+		}
+		random_country = {
+			limit = {
+				is_default_or_fallen = yes
+				NOR = {
+					has_modifier = mgo_crisis_infernal_rain_of_fire
+					has_origin = origin_demonic_invaders
+					is_same_empire = root
+					is_same_empire = event_target:mgo_infernal_first_apocalypse
+					is_same_empire = event_target:mgo_infernal_second_apocalypse
+				}
+			}
+			save_event_target_as = mgo_infernal_third_apocalypse
+		}
+	}
+
+	after = {
+		country_event = {
+			id = mgo_crisis_rituals.215
+			days = 30 
+		}
+	}
+
+	### a random target 
+	option = {
+		trigger = {
+			exists = event_target:mgo_infernal_first_apocalypse
+		}
+		event_target:mgo_infernal_first_apocalypse = {
+			add_modifier = {
+				modifier = mgo_crisis_infernal_rain_of_fire
+			}
+		}
+		name = mgo_crisis_rituals.115.a
+	}
+	### a random target 
+	option = {
+		trigger = {
+			exists = event_target:mgo_infernal_second_apocalypse
+		}
+		event_target:mgo_infernal_second_apocalypse = {
+			add_modifier = {
+				modifier = mgo_crisis_infernal_rain_of_fire
+			}
+		}
+		name = mgo_crisis_rituals.115.b
+	}
+	### a random target 
+	option = {
+		trigger = {
+			exists = event_target:mgo_infernal_third_apocalypse
+		}
+		event_target:mgo_infernal_third_apocalypse = {
+			add_modifier = {
+				modifier = mgo_crisis_infernal_rain_of_fire
+			}
+		}
+		name = mgo_crisis_rituals.115.c
+	}
+	### a random target 
+	option = {
+		name = mgo_crisis_rituals.115.d
+	}
+
+}
+
+country_event = {
+	id = mgo_crisis_rituals.215
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+
+		if = {
+			limit = {
+				NOT = {
+					is_variable_set = mgo_apocalypse_counter
+				}
+			}
+			set_variable = {
+				which = mgo_apocalypse_counter
+				value = 120
+			}
+		}
+		else = {
+			change_variable = {
+				which = mgo_apocalypse_counter
+				value = -1
+			}
+			if = {
+				limit = {
+					check_variable = {
+						which = mgo_apocalypse_counter
+						value > 0
+					}
+				}
+				country_event = {
+					id = mgo_crisis_rituals.215
+					days = 30
+				}
+			}
+		}
+		every_country = {
+			limit = {
+				is_default_or_fallen = yes
+				has_modifier = mgo_crisis_infernal_rain_of_fire
+			}
+			every_owned_planet = {
+				random_list = {
+					9 = {
+					}
+					1 = {
+						add_planet_devastation = 1
+					}
+				}
+				
+			}
+		}
+
+	}
+}
+
+country_event = {
+	id = mgo_crisis_rituals.112
+	title = mgo_crisis_rituals.112.name
+	desc = mgo_crisis_rituals.112.desc
+	picture = GFX_evt_surreal_visions
+	show_sound = event_alien_nature
+
+	is_triggered_only = yes
+	hide_window = no
+
+	immediate = {
+		set_variable = {
+			which = mgo_visions_reward_value
+			value = value:total_occult_knowledge
+		}
+		multiply_variable = {
+			which = mgo_visions_reward_value
+			value = 0.001
+		}
+		change_variable = {
+			which = mgo_visions_reward_value
+			value = 6
+		}
+		ceiling_variable = mgo_visions_reward_value
+		export_resource_income_to_variable = {
+			resource = unity
+			variable = mgo_visions_unity
+		}
+		export_resource_income_to_variable = {
+			resource = occult_knowledge
+			variable = mgo_visions_occult_knowledge
+		}
+		multiply_variable = {
+			which = mgo_visions_unity
+			value = mgo_visions_reward_value
+		}
+		multiply_variable = {
+			which = mgo_visions_occult_knowledge
+			value = mgo_visions_reward_value
+		}
+		ceiling_variable = mgo_visions_occult_knowledge
+		ceiling_variable = mgo_visions_unity
+	}
+
+	### tell me the amount!
+	option = {
+		name = mgo_crisis_rituals.112.a
+		add_resource = {
+			unity = 1
+			mult = mgo_visions_unity
+		}
+		add_resource = {
+			occult_knowledge = 1
+			mult = mgo_visions_occult_knowledge
+		}
+	}
+}
+
+country_event = {
+	id = mgo_crisis_rituals.1001
+	title = mgo_crisis_rituals.1001.name
+	desc = mgo_crisis_rituals.1001.desc
+	picture = GFX_evt_surreal_visions
+	show_sound = event_alien_nature
+
+	is_triggered_only = yes
+	hide_window = no
+
+	immediate = {
+	}
+
+	option = {
+		name = mgo_crisis_rituals.1001.a
+	}
+}
+
+country_event = { # ascend and win
+	id = mgo_crisis_rituals.122
+	title = mgo_crisis_rituals.122.name
+	desc = mgo_crisis_rituals.122.desc
+	picture = GFX_evt_surreal_visions
+	show_sound = event_alien_nature
+
+	is_triggered_only = yes
+
+	immediate = {
+	}
+
+	option = {
+		name = mgo_crisis_rituals.122.a
+		custom_tooltip = mgo_crisis_rituals.122.win
+	}
+
+	after = {
+		hidden_effect = {
+
+			event_target:global_event_country = {
+				while = {
+					count = 25
+					country_event = {
+						id = mgo_crisis_rituals.113
+						random = 1200
+					}
+				}
+			}
+			every_country = {
+				limit = {
+					is_country_type = default
+				}
+				country_event = { id = mgo_crisis_rituals.322 days = 5 }
+			}
+			win = yes
+			every_system_within_border = {
+				if = {
+					limit = { exists = starbase }
+					starbase = {
+						set_owner = event_target:mgo_crisis_demonic_invaders
+							if = {
+								limit = { has_starbase_size = starbase_outpost }
+								set_starbase_size = starbase_starport
+								set_starbase_module = {
+									slot = 1
+									module = shipyard
+								}
+								set_starbase_module = {
+									slot = 2
+									module = shipyard
+								}
+							}
+							else_if = {
+								limit = {
+									NOT = { has_starbase_module = shipyard }
+								}
+								set_starbase_module = {
+									slot = 1
+									module = shipyard
+								}
+								set_starbase_module = {
+									slot = 2
+									module = shipyard
+								}
+							}
+					}
+				}
+				else = {
+					create_starbase = {
+						size = starbase_starport
+						module = shipyard
+						module = shipyard
+						owner = event_target:mgo_crisis_demonic_invaders
+					}
+				}
+				every_fleet_in_system = {
+					set_owner = event_target:mgo_crisis_demonic_invaders
+				}
+				every_system_planet = {
+					limit = {
+						is_colony = yes
+						NOT = { is_same_value = event_target:invaders_capital }
+					}
+					set_owner = event_target:mgo_crisis_demonic_invaders
+				}	
+			}
+		}
+	}
+}
+
+country_event = { # Occultists are about to win the game!
+	id = mgo_crisis_rituals.222
+	title = mgo_crisis_rituals.222.name
+	desc = mgo_crisis_rituals.222.desc
+	picture = GFX_evt_black_hole
+	show_sound = event_death_cult
+
+	is_triggered_only = yes
+
+	option = {
+		name = mgo_crisis_rituals.222.a
+	}
+}
+
+country_event = { # Occultists won the game!
+	id = mgo_crisis_rituals.322
+	title = mgo_crisis_rituals.322.name
+	desc = mgo_crisis_rituals.322.desc
+	picture = GFX_evt_black_hole
+	show_sound = event_death_cult
+
+	is_triggered_only = yes
+
+	option = {
+		name = mgo_crisis_rituals.322.a
+	}
+
+}

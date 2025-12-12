@@ -1,0 +1,85 @@
+namespace = mgo_crisis_perks
+
+## occult researchers, traditions, techs
+event = {
+	id = mgo_crisis_perks.000
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_playable_country = {
+			has_ascension_perk = mgo_ap_occultism
+		}
+	}
+
+	immediate = {
+		every_playable_country = {
+			limit = {
+				has_ascension_perk = mgo_ap_occultism
+			}
+
+			# obj 1
+			if = {
+				limit = {
+					NOT = { is_variable_set = mgo_crisis_occult_knowledge_produced }
+				}
+				set_variable = {
+					which = mgo_crisis_occult_knowledge_produced
+					value = 0
+				}
+			}
+			export_resource_income_to_variable = {
+				resource = occult_knowledge
+				variable = mgo_crisis_occult_knowledge_produced
+			}
+			complete_crisis_objective = mgo_crisobj_occult_scientists
+
+			# obj 2
+			if = {
+				limit = {
+					has_crisis_perk = occultist_ancient_stories
+				}
+				complete_crisis_objective = mgo_crisobj_occult_ancient_stories
+			}
+
+			# obj 3
+			if = {
+				limit = {
+					has_crisis_perk = occultist_heretical_insights
+				}
+				complete_crisis_objective = mgo_crisobj_occult_dangerous_studies
+			}
+			
+		}
+	}
+}
+
+# woah, you just finished a ritual
+country_event = {
+	id = mgo_crisis_perks.001
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				NOT = {
+					is_variable_set = mgo_crisis_rituals_counter
+				}
+			}
+			set_variable = {
+				which = mgo_crisis_rituals_counter
+				value = 0
+			}
+		}
+		complete_crisis_objective = mgo_crisobj_complete_rituals
+		change_variable = {
+			which = mgo_crisis_rituals_counter
+			value = 1
+		}
+	}
+}
+
+## occult knowledge from completing rituals
+
+## occult knowledge for each pacified infernal invader
