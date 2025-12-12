@@ -314,6 +314,28 @@ ship_event = {
     }
 }
 
+# 4.2 fixup event to add flags
+country_event = {
+    id = condan_events.004
+    is_triggered_only = yes
+    hide_window = yes
+    fire_only_once = yes
+
+    trigger = {
+        condan_allowed_hard_requirements = yes
+        has_ascension_perk = ap_condan
+        NAND = {
+            has_country_flag = is_player_crisis
+            has_country_flag = player_crisis_chosen
+        }
+    }
+
+    immediate = {
+        set_country_flag = is_player_crisis
+        set_country_flag = player_crisis_chosen
+    }
+}
+
 # repair planet
 planet_event = {
     id = condan_events.010
@@ -915,8 +937,8 @@ country_event = {
     immediate = {
         log = "condan_events.052 - retake pre-purge"
         remove_country_flag = condan_former_owner
-        clear_planet_purge_type = yes
         FROMFROM = {
+            clear_planet_purge_type = yes
             remove_planet_flag = condan_won
             every_owned_pop_group = {
                 remove_pop_group_flag = event_purge
@@ -990,8 +1012,8 @@ country_event = {
     immediate = {
         log = "condan_events.052 - retake post purge"
         remove_country_flag = condan_former_owner
-        clear_planet_purge_type = yes
         FROMFROM = {
+            clear_planet_purge_type = yes
             remove_planet_flag = condan_purged
             every_owned_pop_group = { kill_all_pop = yes } # Kill Custodians
             while = {
@@ -1710,60 +1732,60 @@ country_event = {
         exists = event_target:condan_country
     }
     immediate = {
-        if = {
-            limit = { NOT = { is_variable_set = condan_boring_years}}
-            set_variable = { which = condan_boring_years value = 1 }
-        }
-        random_list = {
-            150 = {
-                modifier = { factor = value:condan_interesting_times_factor }
-                # Do nothing.
-                change_variable = {  which = condan_boring_years value = 1 }
-            }
-            # unhappy spiritualists
-            50 = {
-                modifier = {
-                    factor = 0
-                    is_spiritualist = no
-                }
-                modifier = {
-                    factor = 0
-                    has_country_flag = condan_spiritualist_event
-                }
-                set_variable = { which = condan_boring_years value = 1 }
-                country_event = { id = condan_comms.050 days = 30 random = 200 }
-            }
-            #unhappy xenophiles
-            50 = {
-                modifier = {
-                    factor = 0
-                    is_xenophile = no
-                }
-                modifier = {
-                    factor = 0
-                    has_country_flag = condan_xenophile_event
-                }
-                set_variable = { which = condan_boring_years value = 1 }
-                country_event = { id = condan_comms.060 days = 30 random = 200 }
-            }
-            # living metal
-            20 = {
-                modifier = {
-                    factor = 0
-                    NOT = { has_technology = tech_mine_living_metal }
-                }
-                modifier = {
-                    factor = 0
-                    NOT = { has_ascension_perk = ap_condan }
-                }
-                modifier = {
-                    factor = 0
-                    has_country_flag = condan_found_living_metal_2
-                }
-                set_variable = { which = condan_boring_years value = 1 }
-                country_event = { id = condan_comms.160 days = 100 random = 100 }
-            }
-        }
+       if = {
+           limit = { NOT = { is_variable_set = condan_boring_years}}
+           set_variable = { which = condan_boring_years value = 1 }
+       }
+       random_list = {
+           150 = {
+               modifier = { factor = value:condan_interesting_times_factor }
+               # Do nothing.
+               change_variable = {  which = condan_boring_years value = 1 }
+           }
+           # unhappy spiritualists
+           50 = {
+               modifier = {
+                   factor = 0
+                   is_spiritualist = no
+               }
+               modifier = {
+                   factor = 0
+                   has_country_flag = condan_spiritualist_event
+               }
+               set_variable = { which = condan_boring_years value = 1 }
+               country_event = { id = condan_comms.050 days = 30 random = 200 }
+           }
+           #unhappy xenophiles
+           50 = {
+               modifier = {
+                   factor = 0
+                   is_xenophile = no
+               }
+               modifier = {
+                   factor = 0
+                   has_country_flag = condan_xenophile_event
+               }
+               set_variable = { which = condan_boring_years value = 1 }
+               country_event = { id = condan_comms.060 days = 30 random = 200 }
+           }
+           # living metal
+           20 = {
+               modifier = {
+                   factor = 0
+                   NOT = { has_technology = tech_mine_living_metal }
+               }
+               modifier = {
+                   factor = 0
+                   NOT = { has_ascension_perk = ap_condan }
+               }
+               modifier = {
+                   factor = 0
+                   has_country_flag = condan_found_living_metal_2
+               }
+               set_variable = { which = condan_boring_years value = 1 }
+               country_event = { id = condan_comms.160 days = 100 random = 100 }
+           }
+       }
     }
 }
 
