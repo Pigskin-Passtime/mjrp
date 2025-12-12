@@ -1,0 +1,415 @@
+#########################################################################################
+# Value Extraction UnLimited
+# Contributors: MrArcaneGates
+#########################################################################################
+
+# yard stuff
+
+veu_decision_improve_mining = {
+	owned_planets_only = yes
+	sound = event_administrative_work
+	icon = decision_drilling_for_gas
+	enactment_time = 10
+
+	resources = {
+		category = decisions
+		cost = {
+			veu_waste = 100
+		}
+	}
+
+	potential = {
+		has_planet_flag = veu_yard_flag
+			NOT = {
+				has_deposit = d_space_ship_graveyard
+		}
+	}
+
+	allow = {
+		owner = {
+		has_menace_perk = menp_veu_features_3
+		}
+	}
+
+	effect = {
+		add_deposit = d_space_ship_graveyard
+	}
+
+	ai_weight = 1
+}
+
+veu_decision_improve_farming = {
+	owned_planets_only = yes
+	sound = event_administrative_work
+	icon = decision_cultivated_worldscaping
+	enactment_time = 10
+
+	resources = {
+		category = decisions
+		cost = {
+			veu_waste = 100
+		}
+	}
+
+	potential = {
+		has_planet_flag = veu_yard_flag
+			NOT = {
+				has_deposit = d_metallic_puddles
+		}
+	}
+
+	allow = {
+		owner = {
+		has_menace_perk = menp_veu_features_3
+		}
+	}
+
+	effect = {
+		add_deposit = d_metallic_puddles
+	}
+
+	ai_weight = 1
+}
+
+veu_decision_expand_mining = {
+	owned_planets_only = yes
+	sound = event_dig_site
+	icon = decision_strip_mining
+	enactment_time = 10
+
+	resources = {
+		category = decisions
+		cost = {
+			energy = 1000
+		}
+	}
+
+	potential = {
+		has_planet_flag = veu_yard_flag
+		is_artificial = no
+	}
+
+	allow = {
+		always = yes
+	}
+
+	effect = {
+		custom_tooltip = veu_decision_expand_mining_tt
+		add_deposit = d_rich_mountain
+	}
+
+	ai_weight = 1
+}
+
+veu_decision_expand_farming = {
+	owned_planets_only = yes
+	sound = event_dig_site
+	icon = decision_cultivated_worldscaping
+	enactment_time = 10
+
+	resources = {
+		category = decisions
+		cost = {
+			energy = 1000
+		}
+	}
+
+	potential = {
+		has_planet_flag = veu_yard_flag
+		is_artificial = no
+	}
+
+	allow = {
+		always = yes
+	}
+
+	effect = {
+		custom_tooltip = veu_decision_expand_farming_tt
+		add_deposit = d_black_soil
+	}
+
+	ai_weight = 0
+}
+
+veu_decision_expand_energy = {
+	owned_planets_only = yes
+	sound = event_dig_site
+	icon = decision_glitchy_matrix
+	enactment_time = 10
+
+	resources = {
+		category = decisions
+		cost = {
+			energy = 1000
+		}
+	}
+
+	potential = {
+		has_planet_flag = veu_yard_flag
+		is_artificial = no
+	}
+
+	allow = {
+		always = yes
+	}
+
+	effect = {
+		custom_tooltip = veu_decision_expand_energy_tt
+		add_deposit = d_geothermal_vent
+	}
+
+	ai_weight = 0
+}
+
+
+veu_decision_expand_yard = {
+	owned_planets_only = yes
+	icon = decision_resources
+
+	enactment_time = 360
+	resources = {
+		category = decisions
+		cost = {
+			influence = 75
+			energy = 2000
+			veu_waste = 50
+		}
+	}
+
+	potential = {
+		is_artificial = no
+		has_planet_flag = veu_yard_flag
+		owner = {
+			has_ascension_perk = veu_ap_veu
+		}
+		NOT = { has_designation = col_nanotech_world }
+	}
+
+	allow = {
+		owner = {
+		has_menace_perk = menp_veu_features_2
+		}
+	}
+
+	effect = {
+		custom_tooltip = veu_yard_expansion_tt
+		add_deposit = d_veu_yard_expansion
+	}
+
+	ai_weight = {
+		weight = 5
+		modifier = {
+			factor = 0
+			free_district_slots > 0
+			pop_amount < 5000 #carrying capacity bonus always good at that stage
+		}
+	}
+}
+
+veu_decision_expand_yard_big = {
+	owned_planets_only = yes
+	icon = decision_resources
+
+	enactment_time = 360
+	resources = {
+		category = decisions
+		cost = {
+			influence = 750
+			energy = 20000
+			veu_waste = 500
+		}
+	}
+
+	potential = {
+		is_artificial = no
+		has_planet_flag = veu_yard_flag
+		owner = {
+			has_ascension_perk = veu_ap_veu
+		}
+		NOT = { has_designation = col_nanotech_world }
+	}
+
+	allow = {
+		owner = {
+		has_menace_perk = menp_veu_features_2
+		}
+	}
+
+	effect = {
+		custom_tooltip = veu_yard_expansion_big_tt
+		add_deposit = d_veu_yard_expansion
+		add_deposit = d_veu_yard_expansion
+		add_deposit = d_veu_yard_expansion
+		add_deposit = d_veu_yard_expansion
+		add_deposit = d_veu_yard_expansion
+		add_deposit = d_veu_yard_expansion
+		add_deposit = d_veu_yard_expansion
+		add_deposit = d_veu_yard_expansion
+		add_deposit = d_veu_yard_expansion
+		add_deposit = d_veu_yard_expansion
+	}
+
+	ai_weight = {
+		weight = 5
+		modifier = {
+			factor = 0
+			free_district_slots > 0
+			pop_amount < 5000 #carrying capacity bonus always good at that stage
+		}
+	}
+}
+
+veu_decision_ring = {
+	owned_planets_only = yes
+	icon = decision_engineering_research
+
+	enactment_time = 360
+	resources = {
+		category = decisions
+		cost = {
+			influence = 75
+			energy = 2000
+			alloys = 1000
+		}
+	}
+
+	potential = {
+		is_artificial = no
+		has_planet_flag = veu_yard_flag
+		owner = {
+			has_ascension_perk = veu_ap_veu
+		}
+		NOT = { has_designation = col_nanotech_world }
+					NOT = {
+				has_deposit = d_veu_yard_ring
+		}
+	}
+
+	allow = {
+		has_planet_flag = has_megastructure
+		owner = {
+		has_menace_perk = menp_veu_features_3
+		}
+	}
+
+	effect = {
+		custom_tooltip = veu_yard_ring_tt
+		add_deposit = d_veu_yard_ring
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}
+
+# recycling stuff
+veu_decision_recycle_colony = {
+	icon = decision_burning_settlement
+	sound = event_structural_collapse
+
+	resources = {
+		category = decisions
+	}
+	owned_planets_only = yes
+
+	potential = {
+		owner = {
+			has_ascension_perk = veu_ap_veu
+		}
+		is_capital = no
+		NOT = {
+			has_planet_flag = being_recycled
+		}
+		NOT = {
+			has_planet_flag = veu_yard_flag
+		}
+		NOT = { has_designation = col_nanotech_world }
+	}
+
+	allow = {
+		owner = {
+		has_menace_perk = menp_veu_features_4
+		}
+	}
+
+	effect = {
+		custom_tooltip = veu_decision_recycle_colony_effect_desc
+		set_timed_planet_flag = {
+			days = 100
+			flag = recently_recycled_planet
+		}
+		hidden_effect = {
+			set_planet_flag = colony_event
+			set_planet_flag = being_recycled
+			add_modifier = {
+				modifier = being_recycled_modifier
+				days = -1
+			}
+			export_trigger_value_to_variable = {
+				trigger = planet_size
+				variable = num_districts_recycling
+			}
+			export_trigger_value_to_variable = {
+				trigger = count_deposits
+				parameters = {
+					type = d_veu_recycling_devastation
+				}
+				variable = num_recycling_blockers
+			}
+			if = {
+				limit = {
+					is_variable_set = num_recycling_blockers
+				}
+				subtract_variable = {
+					which = num_districts_recycling
+					value = num_recycling_blockers
+				}
+			}
+		}
+		owner = {
+			start_situation = {
+				type = veu_recycle_planet_situation
+				target = root
+			}
+		}
+	}
+
+	ai_weight = 0
+}
+
+# look how they axed my boy
+# this was supposed to be done by a custom ship
+
+veu_decision_recycle_planet = {
+	owned_planets_only = no
+	icon = decision_planet_beam
+
+	potential = {
+		exists = space_owner
+		space_owner = { has_menace_perk = menp_veu_ship_1 }
+		OR = {
+			is_planet_class = pc_habitat
+			is_planet_class = pc_frozen
+			is_planet_class = pc_toxic
+			is_planet_class = pc_barren_cold
+			is_planet_class = pc_barren
+			is_planet_class = pc_molten
+			is_planet_class = pc_gas_giant
+		}
+	}
+
+	effect = {
+		hidden_effect = {
+			space_owner = {
+				complete_crisis_objective = veu_crisobj_empty_planet_recycling
+			}
+		}
+		custom_tooltip = veu_recycle_planet_tt
+		change_pc = pc_shattered
+		hidden_effect = {
+			reset_planet = yes
+			clear_deposits = yes
+		}
+		change_planet_size = 1
+	}
+}

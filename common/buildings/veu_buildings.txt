@@ -1,0 +1,63 @@
+
+#########################################################################################
+# Value Extraction UnLimited
+# Contributors: MrArcaneGates
+#########################################################################################
+
+veu_building_waste = {
+    base_buildtime = @b1_time
+    planet_limit = 1
+
+    category = unity
+
+    building_sets = {
+		government
+		urban
+	}
+
+    potential = {
+		exists = owner
+		owner = {
+			has_menace_perk = menp_veu_buildings_1
+			}
+		}
+
+    allow = {
+		hidden_trigger = {
+			OR = {
+				owner = { is_ai = no }
+				NAND = {
+					free_district_slots = 0
+					free_building_slots <= 1
+				}
+			}
+		}
+	}
+
+    resources = {
+        category = planet_buildings
+        produces = {
+            veu_waste = 1
+        }
+        cost = {
+			minerals = @b1_minerals
+		}
+    }
+
+    triggered_planet_modifier = {
+		potential = {
+		exists = owner
+		owner = { has_menace_perk = menp_veu_buildings_1 }
+		 }
+		job_veurcc_add = 200
+	 }
+
+	triggered_desc = { # text to display if trigger returns true
+		trigger = {
+		exists = owner
+		owner = { has_menace_perk = menp_veu_buildings_1 }
+		}
+		text = job_veurcc_effect_desc
+	}
+
+}

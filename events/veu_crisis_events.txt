@@ -1,0 +1,801 @@
+#########################################################################################
+# Value Extraction UnLimited
+# Contributors: MrArcaneGates
+#########################################################################################
+
+namespace = veu_crisis
+
+country_event = { # Taking the AP - Start level 1
+	id = veu_crisis.1001
+	title = "veu_crisis.1001.name"
+	desc = veu_crisis.1001.desc
+	picture = GFX_evt_cosmogenesis_crisis
+	show_sound = event_death_cult
+	is_triggered_only = yes
+	event_chain = veu_chain
+
+	immediate = {
+		set_variable = {
+			which = num_veu_situations_ran
+			value = 1
+		}
+	}
+
+	option = {
+		name = veu_crisis.1001.a
+		begin_event_chain = {
+			event_chain = veu_chain
+			target = root
+		}
+		add_event_chain_counter = {
+			event_chain = "veu_chain"
+			counter = "veu_level_reached"
+			amount = 1
+		}
+		owner = { set_country_flag = veu_situation_happened }
+		start_situation = {
+			type = veu_waste_collection_situation
+		}
+
+		solar_system = {
+			spawn_planet = {
+				class = pc_nuked
+				location = root.home_planet
+				orbit_distance_offset = 3
+				orbit_angle_offset = 250
+				size = 5
+				init_effect = {
+					set_name = "veu_yard_name"
+					set_planet_entity = {
+						entity = "asteroid_01_entity"
+					}
+					generate_start_deposits_and_blockers = no
+					prevent_anomaly = yes
+					clear_blockers = yes
+					remove_all_buildings = yes
+					set_planet_flag = veu_yard_flag
+					add_modifier = {
+						modifier = veu_yard_modifier
+					}
+				}
+			}
+		}
+	}
+}
+
+
+country_event = { # Reaching Level 2
+	id = veu_crisis.1002
+	title = "veu_crisis.1002.name"
+	desc = veu_crisis.1002.desc
+	picture = GFX_evt_synaptic_lathe
+	show_sound = event_death_cult
+	event_chain = veu_chain
+
+	is_triggered_only = yes
+
+	immediate = {
+		add_event_chain_counter = {
+			event_chain = "veu_chain"
+			counter = "veu_level_reached"
+			amount = 1
+		}
+	}
+
+	option = {
+		name = veu_crisis.1002.a
+	}
+}
+
+country_event = { # Reaching Level 3
+	id = veu_crisis.1003
+	title = "veu_crisis.1003.name"
+	desc = veu_crisis.1003.desc
+	picture = GFX_evt_black_hole
+	show_sound = event_death_cult
+	event_chain = veu_chain
+
+	is_triggered_only = yes
+
+	immediate = {
+		add_event_chain_counter = {
+			event_chain = "veu_chain"
+			counter = "veu_level_reached"
+			amount = 1
+		}
+	}
+
+	option = {
+		name = veu_crisis.1003.a
+		custom_tooltip = veu_level_3_tt
+	}
+}
+
+country_event = { # Reaching Level 4
+	id = veu_crisis.1004
+	title = "veu_crisis.1004.name"
+	desc = veu_crisis.1004.desc
+	picture = GFX_evt_cosmogenesis_crisis
+	show_sound = event_death_cult
+	event_chain = veu_chain
+
+	is_triggered_only = yes
+
+	immediate = {
+		add_event_chain_counter = {
+			event_chain = "veu_chain"
+			counter = "veu_level_reached"
+			amount = 1
+		}
+	}
+
+	option = {
+		name = veu_crisis.1004.a
+		custom_tooltip = veu_level_4_tt
+	}
+}
+
+country_event = { # Reaching Level 5, spawning the pile
+	id = veu_crisis.1005
+	title = "veu_crisis.1005.name"
+	desc = veu_crisis.1005.desc
+	picture = GFX_evt_cosmogenesis_crisis
+	show_sound = event_death_cult
+	event_chain = veu_chain
+
+	is_triggered_only = yes
+
+	immediate = {
+		add_event_chain_counter = {
+			event_chain = "veu_chain"
+			counter = "veu_level_reached"
+			amount = 1
+		}
+		set_country_flag = veu_built_pile
+		solar_system = {
+			set_star_flag = veu_pile_system@root
+		}
+		capital_scope = {
+			solar_system = {
+				save_event_target_as = veu_pile_system
+				spawn_megastructure = {
+					type = "veu_pile_0"
+					planet = star
+					owner = root
+					graphical_culture = root
+					init_effect = {
+						set_megastructure_flag = veu_pile_of@root
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = veu_crisis.1005.a
+		custom_tooltip = veu_level_5_tt
+	}
+}
+
+# Complete first stage of the pile
+country_event = {
+	id = veu_crisis.6005
+	title = "veu_crisis.6005.name"
+	desc = "veu_crisis.6005.desc"
+	picture = GFX_evt_surreal_visions
+	show_sound = event_default
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = veu_building_pile
+		random_system = {
+			limit = { has_star_flag = veu_pile_system@root }
+			save_event_target_as = veu_pile_system
+		}
+	}
+
+	option = {
+		name = veu_crisis.6005.a
+	}
+}
+
+# Complete second stage of the pile
+country_event = {
+	id = veu_crisis.6006
+	title = "veu_crisis.6005.name"
+	desc = "veu_crisis.6006.desc"
+	picture = GFX_evt_psionics
+	show_sound = event_default
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = veu_pile_revealed
+		random_system = {
+			limit = { has_star_flag = veu_pile_system@root }
+			save_event_target_as = veu_pile_system
+
+		}
+		add_threat = { who = root amount = 1000 }
+		every_playable_country = {
+			limit = {
+				NOT = { is_same_value = root }
+			}
+			establish_communications_no_message = root
+			if = {
+				limit = {
+					has_opinion_modifier = {
+						who = root
+						modifier = opinion_destroying_systems
+					}
+				}
+				remove_opinion_modifier = {
+					who = root
+					modifier = opinion_destroying_systems
+				}
+			}
+			add_opinion_modifier = {
+				who = root
+				modifier = opinion_destroying_galaxy
+			}
+		}
+		every_country = {
+			limit = { is_fallen_empire = yes }
+			add_opinion_modifier = {
+				who = root
+				modifier = opinion_destroying_galaxy
+			}
+		}
+		every_playable_country = {
+			limit = {
+				is_ai = no
+				NOT = { has_country_flag = veu_built_pile }
+			}
+			country_event = { id = crisis.6015 }
+		}
+	}
+
+	option = {
+		name = veu_crisis.6006.a
+	}
+}
+
+# Complete third stage of the pile
+country_event = {
+	id = veu_crisis.6007
+	title = "veu_crisis.6005.name"
+	desc = "veu_crisis.6007.desc"
+	picture = GFX_evt_space_monster
+	show_sound = event_default
+
+	is_triggered_only = yes
+
+	option = {
+		name = veu_crisis.6007.a
+	}
+}
+
+# Complete pile - recycle galaxy
+
+country_event = {
+	id = veu_crisis.6050
+	title = "veu_crisis.6050.name"
+	desc = {
+		trigger = { is_gestalt = no }
+		text = "veu_crisis.6050.a.desc"
+	}
+	picture = GFX_evt_vortex
+	show_sound = event_default
+
+	is_triggered_only = yes
+
+	immediate = {
+		add_victory_score = {
+			source = destroyed_galaxy_score
+			score = 500000
+		}
+		hidden_effect = {
+			country_event = { id = timeline.34 } # Milestone Destroyed Galaxy
+		}
+	}
+
+	option = {
+		name = veu_crisis.6050.a
+		custom_tooltip = veu_crisis.6050.a.tooltip
+		hidden_effect = {
+			country_event = { id = veu_crisis.6052 days = 1 } # win delay because vanilla does it (for the brb achievement?) just to be safe
+		}
+		tooltip = { win = yes }
+	}
+}
+
+# Game over for other empires
+
+country_event = {
+	id = veu_crisis.6051
+	title = "veu_crisis.6051.name"
+	desc = "veu_crisis.6051.desc"
+	picture = GFX_evt_supernova
+	show_sound = event_default
+
+	is_triggered_only = yes
+
+	option = {
+		name = veu_crisis.6051.a
+	}
+}
+
+# Crisis Wins
+
+country_event = {
+	id = veu_crisis.6052
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		every_playable_country = {
+			limit = {
+				is_ai = no
+				NOT = { is_same_value = root }
+			}
+			country_event = { id = crisis.6051 }
+		}
+		set_update_modifiers_batch = begin
+		every_system = { destroy_star_system = yes }
+		set_update_modifiers_batch = end
+		every_country = {
+			limit = {
+				NOT = {
+					is_country_type = default
+				}
+			}
+			destroy_country = yes
+		}
+		win = yes
+	}
+}
+
+# NPC Crisis destroys pile
+starbase_event = {
+	id = veu_crisis.6099
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		exists = from
+		from.owner = {
+			OR = {
+				is_country_type = swarm
+				is_country_type = extradimensional
+				is_country_type = extradimensional_2
+				is_country_type = extradimensional_3
+				is_country_type = ai_empire
+				is_country_type = gray_goo
+			}
+		}
+		solar_system = {
+			has_star_flag = veu_pile_system@root.owner
+			any_system_megastructure = { has_megastructure_flag = veu_pile }
+		}
+	}
+
+	immediate = {
+		solar_system = {
+			system_event = { id = veu_crisis.6100 scopes = { from = root.owner } }
+		}
+	}
+}
+
+# Pile is destroyed
+system_event = {
+	id = veu_crisis.6100
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		any_system_megastructure = { has_megastructure_flag = veu_pile }
+	}
+
+	immediate = {
+		save_event_target_as = veu_pile_system
+		random_system_megastructure = {
+			limit = { has_megastructure_flag = veu_pile }
+			prev = {
+				spawn_megastructure = {
+					type = veu_pile_ruined
+					coords_from = prev
+					init_effect = {
+						if = {
+							limit = { exists = fromfrom }
+							set_megastructure_flag = veu_pile_of@fromfrom
+						}
+					}
+				}
+			}
+			switch = {
+				trigger = is_megastructure_type
+				veu_pile_0 = {
+					from = {
+						set_variable = {
+							which = veu_pile_destroy_reward
+							value = 1
+						}
+					}
+				}
+				veu_pile_1 = {
+					from = {
+						set_variable = {
+							which = veu_pile_destroy_reward
+							value = 1.5
+						}
+					}
+				}
+				veu_pile_2 = {
+					from = {
+						set_variable = {
+							which = veu_pile_destroy_reward
+							value = 2
+						}
+					}
+				}
+				veu_pile_3 = {
+					from = {
+						set_variable = {
+							which = veu_pile_destroy_reward
+							value = 3
+						}
+					}
+				}
+			}
+			remove_megastructure = this
+		}
+		from = { save_event_target_as = pile_destroyers }
+		fromfrom = { save_event_target_as = pile_builders }
+		from = { country_event = { id = veu_crisis.6102 } }
+		fromfrom = { country_event = { id = veu_crisis.6101 } }
+		every_playable_country = {
+			limit = {
+				is_ai = no
+				NOR = {
+					is_same_value = from
+					is_same_value = fromfrom
+				}
+			}
+			country_event = { id = veu_crisis.6103 }
+		}
+	}
+}
+
+# Pile is destroyed (Owner)
+country_event = {
+	id = veu_crisis.6101
+	title = "veu_crisis.6101.name"
+	desc = "veu_crisis.6101.desc"
+	picture = GFX_evt_ruined_system
+	show_sound = event_default
+
+	is_triggered_only = yes
+
+	immediate = {
+		remove_country_flag = veu_building_pile
+	}
+
+	option = {
+		name = veu_crisis.6101.a
+		custom_tooltip = veu_crisis.6101.a.tooltip
+	}
+}
+
+# Pile is destroyed (Destroyer)
+country_event = {
+	id = veu_crisis.6102
+	title = "veu_crisis.6101.name"
+	desc = {
+		trigger = {
+			NOT = { has_country_flag = veu_built_pile }
+		}
+		text = "veu_crisis.6102.a.desc"
+	}
+	desc = {
+		trigger = { has_country_flag = veu_built_pile }
+		text = "veu_crisis.6102.b.desc"
+	}
+	picture = GFX_evt_crisis_defeated
+	show_sound = event_default
+
+	is_triggered_only = yes
+
+	option = {
+		name = veu_crisis.6102.a
+		trigger = {
+			NOT = { has_country_flag = veu_built_pile }
+		}
+		add_resource = {
+			influence = 200
+			alloys = 5000
+			mult = veu_pile_destroy_reward
+		}
+		custom_tooltip = veu_pile_ruined_tt
+	}
+	option = {
+		name = veu_crisis.6102.b
+		trigger = { has_country_flag = veu_built_pile }
+		add_resource = {
+			veu_waste = 1000
+			mult = veu_pile_destroy_reward
+		}
+		custom_tooltip = veu_pile_ruined_tt
+	}
+	after = {
+		hidden_effect = {
+			clear_variable = veu_pile_destroy_reward
+		}
+	}
+}
+# Pile is destroyed (Others)
+country_event = {
+	id = veu_crisis.6103
+	title = "veu_crisis.6101.name"
+	desc = "veu_crisis.6103.desc"
+	picture = GFX_evt_crisis_defeated
+	show_sound = event_default
+
+	is_triggered_only = yes
+
+	option = {
+		name = veu_crisis.6103.a
+		trigger = {
+			NOT = { has_country_flag = veu_built_pile }
+		}
+	}
+	option = {
+		name = veu_crisis.6103.b
+		trigger = { has_country_flag = veu_built_pile }
+	}
+}
+
+# planet stuff
+
+namespace = veu_planet
+
+situation_event = {
+	id = veu_planet.185
+	title = "veu_planet.185.name"
+	desc = "veu_planet.185.desc"
+	picture = GFX_evt_shattered_planet
+	show_sound = event_super_explosion
+	situation = this
+	location = target
+
+	is_triggered_only = yes
+	trigger = {
+		owner = {
+			has_ascension_perk = veu_ap_veu
+		}
+	}
+
+	immediate = {
+		target = {
+			while = {
+				count = value:veu_recycling_districts
+				veu_recycle_world = yes
+			}
+			every_owned_pop_group = {
+				resettle_pop_group = {
+					POP_GROUP = this
+					PLANET = owner.capital_scope
+					AMOUNT = 100%
+				}
+			}
+			destroy_colony = yes
+			change_pc = pc_shattered
+			clear_deposits = yes
+		}
+	}
+
+	option = {
+		name = veu_planet.185.a
+		custom_tooltip = veu_planet.185.a.tooltip
+			owner = {
+				complete_crisis_objective = veu_crisobj_planet_recycling
+			}
+	}
+}
+
+situation_event = { #Every 6 months event recycling a planet
+	id = veu_planet.190
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		target = { NOT = { has_planet_flag = recently_recycled_planet } }
+	}
+
+	immediate = {
+		target = {
+			veu_recycle_world = yes
+		}
+	}
+}
+
+namespace = veu_situation
+
+country_event = {
+	id = veu_situation.5
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		owner = { set_country_flag = veu_situation_happened }
+		start_situation = {
+			type = veu_waste_collection_situation
+		}
+	}
+
+}
+
+situation_event = {
+	id = veu_situation.3005
+	title = veu_3005.name
+	desc = veu_3005.desc
+	picture = GFX_evt_crusher_droid
+	show_sound = event_dangerous_animals
+	situation = this
+
+	is_triggered_only = yes
+
+	option = {
+		name = veu_situation.3005.gather_waste
+		hidden_effect = {
+			set_situation_flag = veu_gather_waste
+		}
+		owner = {
+				complete_crisis_objective = veu_crisobj_situation
+		}
+	}
+
+	option = {
+		#unlock level 2
+		name = veu_situation.3005.lvl2
+		trigger = {
+			owner = {
+				NOT = {
+					has_country_flag = veu_lvl2_unlocked
+				}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				set_country_flag = veu_lvl2_unlocked
+			}
+		}
+	}
+
+	option = {
+		#unlock level 3
+		name = veu_situation.3005.lvl3
+		trigger = {
+			owner = {
+				has_country_flag = veu_lvl2_unlocked
+				NOT = {
+					has_country_flag = veu_lvl3_unlocked
+				}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				set_country_flag = veu_lvl3_unlocked
+			}
+		}
+	}
+
+		option = {
+		#unlock level 4
+		name = veu_situation.3005.lvl4
+		trigger = {
+			owner = {
+				has_country_flag = veu_lvl2_unlocked
+				has_country_flag = veu_lvl3_unlocked
+				NOT = {
+					has_country_flag = veu_lvl4_unlocked
+				}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				set_country_flag = veu_lvl4_unlocked
+			}
+		}
+	}
+
+		option = {
+		#unlock level 5
+		name = veu_situation.3005.lvl5
+		trigger = {
+			owner = {
+				has_country_flag = veu_lvl2_unlocked
+				has_country_flag = veu_lvl3_unlocked
+				has_country_flag = veu_lvl4_unlocked
+				NOT = {
+					has_country_flag = veu_lvl5_unlocked
+				}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				set_country_flag = veu_lvl5_unlocked
+			}
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			owner = {
+				change_variable = {
+					which = num_veu_situations_ran
+					value = 1
+				}
+				start_situation = {
+					type = veu_waste_collection_situation
+					target = this
+				}
+			}
+			destroy_situation = this
+		}
+	}
+}
+
+namespace = veu_bombardment
+
+planet_event = {
+	id = veu_bombardment.1001
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_orbital_bombardment_stance = veu_waste_bombing
+		OR = {
+			AND = {
+				planet_devastation >= 10
+				NOT = { is_variable_set = veu_bomb_blockers }
+			}
+			AND = {
+				is_variable_set = veu_bomb_blockers
+				check_variable_arithmetic = {
+					which = veu_bomb_blockers
+					add = 1
+					divide = trigger:planet_devastation
+					value <= 0.1
+				}
+			}
+		}
+	}
+
+	immediate = {
+		# Set variables
+		if = {
+			limit = {
+				NOT = { is_variable_set = veu_bomb_blockers }
+			}
+			set_variable = {
+				which = veu_bomb_blockers
+				value = 1
+			}
+		}
+		else = {
+			change_variable = {
+				which = veu_bomb_blockers
+				value = 1
+			}
+		}
+		# Add the blockers
+			add_blocker = {
+				type = d_veu_bombing_blocker
+				blocked_deposit = random
+			}
+	}
+}

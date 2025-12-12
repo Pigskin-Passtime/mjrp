@@ -1,0 +1,95 @@
+#########################################################################################
+# Value Extraction UnLimited
+# Contributors: MrArcaneGates
+#########################################################################################
+
+veurcc = {
+	category = specialist
+
+	tags = { unity pop_growth amenities }
+
+	possible_pre_triggers = {
+		has_owner = yes
+		is_being_purged = no
+		is_being_assimilated = no
+		is_enslaved = no
+	}
+
+	possible_precalc = can_fill_specialist_job
+	possible = {
+		hidden_trigger = { exists = owner }
+		owner = {
+			is_gestalt = no
+		}
+	}
+
+	resources = {
+		category = planet_bureaucrats
+		produces = {
+			trigger = { exists = owner }
+			unity = 3
+		}
+		produces = {
+			trigger = { 
+				exists = owner
+				owner = {
+					has_country_flag = veu_approach_efficient
+				}
+			 }
+			unity = 1
+		}
+		produces = {
+			trigger = {
+				has_councilor = { COUNCILOR = "veu_councilor_waste_collector" }
+			}
+			unity = @veu_councilor_bonus
+			mult = value:councilor_level|TYPE|veu_councilor_waste_collector|
+		}
+		produces = {
+			trigger = {
+				has_councilor = { COUNCILOR = "veu_councilor_waste_collector" }
+			}
+			trade = @veu_councilor_bonus
+			mult = value:councilor_level|TYPE|veu_councilor_waste_collector|
+		}
+		upkeep = {
+			energy = 2
+		}
+		upkeep = {
+			trigger = { 
+				exists = owner
+				owner = {
+					has_country_flag = veu_approach_drastic
+				}
+			 }
+			energy = 2
+		}
+	}
+
+	planet_modifier = {
+		pop_environment_tolerance = 0.025
+	}
+
+	country_modifier = {
+		veu_situation_progress_add = 0.1
+	}
+
+	weight = {
+		weight = @high_prio_specialist_job_weight
+		factor = 1.2
+		add = 5 
+		mult = value:job_weights_modifier|JOB|bureaucrat|RESOURCE|unity|
+	}
+
+	inline_script = "jobs/automodding_priority_unity"
+
+	promotion = {
+		time = @standard_promotion_time
+		effect = {
+			pop_amount_change_category = {
+				CATEGORY = specialist
+				AMOUNT = local_pop_amount
+			}
+		}
+	}
+}

@@ -1,0 +1,47 @@
+
+#########################################################################################
+# Value Extraction UnLimited
+# Contributors: MrArcaneGates
+#########################################################################################
+
+
+veu_waste_bombing = {
+	trigger = {
+		AND = {
+			owner = { has_menace_perk = menp_veu_features_4 }
+			controller = { has_menace_perk = menp_veu_features_4 }
+		}
+	}
+
+	default = no
+
+	stop_when_armies_dead = no
+	stop_when_ground_combat = no
+	abduct_pops = no
+
+	planet_damage = 2.0
+	army_damage = 0.5
+
+	kill_pop_chance = {
+		base = 0
+	}
+	min_pops_to_kill_pop = 2100
+	kill_pop_amount = { min = 0 max = 200 }
+
+	# root = fleet
+	# from = planet
+	ai_weight = {
+		weight = 50
+		modifier = {
+			factor = 0.01
+			exists = from
+			from = {
+				owner = { NOT = { is_hostile = root.owner } }
+				NAND = {
+					controller = { is_crisis_faction = yes }
+					planet_garrison_strength > 0
+				}
+			}
+		}
+	}
+}

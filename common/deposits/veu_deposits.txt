@@ -1,0 +1,135 @@
+#########################################################################################
+# Value Extraction UnLimited
+# Contributors: MrArcaneGates
+#########################################################################################
+
+d_veu_recycling_devastation = {
+	icon = d_radioactive_wasteland
+
+	time = 360
+
+	is_for_colonizable = yes
+	category = deposit_cat_blockers
+
+	potential = { always = no }
+
+	can_be_cleared = {
+		custom_tooltip = {
+			fail_text = veu_owner_no_veu_empire
+			exists = owner
+			owner = {
+					NOT = { has_ascension_perk = veu_ap_veu }
+				}
+			}
+		}
+
+
+	planet_modifier = {
+		planet_max_districts_add = -1
+		pop_environment_tolerance = -0.1
+	}
+
+	drop_weight = {
+		weight = 0
+	}
+
+	resources = {
+		category = deposit_blockers
+		cost = {
+			energy = 1000
+		}
+	}
+
+	ai_weight = {
+		weight = 2
+	}
+}
+
+d_veu_yard_expansion = {
+
+	icon = d_tradestation_interior
+
+	time = 360
+
+	is_for_colonizable = yes
+	category = deposit_cat_rare
+
+	potential = { always = no }
+
+	planet_modifier = {
+		planet_max_districts_add = 1
+	}
+
+}
+
+d_veu_yard_ring = {
+	icon = d_sky_mountain
+
+	time = 360
+
+	is_for_colonizable = yes
+	category = deposit_cat_rare
+
+	potential = { always = no }
+
+	planet_modifier = {
+		job_veurcc_add = 200
+		job_veurcc_per_pop = 0.04
+	}
+}
+
+d_veu_bombing_blocker = {
+	icon = d_radioactive_wasteland
+
+	time = 360
+
+	is_for_colonizable = yes
+	category = deposit_cat_blockers
+
+	potential = { always = no }
+
+	can_be_cleared = {
+			exists = owner
+			owner = {
+				has_ascension_perk = veu_ap_veu
+				}
+		}
+
+
+	planet_modifier = {
+		planet_max_districts_add = -1
+		pop_environment_tolerance = -0.1
+	}
+
+	drop_weight = {
+		weight = 0
+	}
+
+	on_cleared = {
+		if = {
+			limit = {
+				exists = owner
+				owner = {
+					has_ascension_perk = veu_ap_veu
+				}
+			}
+			owner = {
+				add_resource = {
+					veu_waste = 5
+				}
+			}
+		}
+	}
+
+	resources = {
+		category = deposit_blockers
+		cost = {
+			energy = 300
+		}
+	}
+
+	ai_weight = {
+		weight = 2
+	}
+}
+

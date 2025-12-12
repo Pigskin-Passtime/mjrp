@@ -1,0 +1,167 @@
+#########################################################################################
+# Value Extraction UnLimited
+# Contributors: MrArcaneGates
+#########################################################################################
+
+veu_pile_0 = {
+	entity = "dyson_sphere_phase_01_entity"
+	portrait = "GFX_megastructure_construction_background"
+	build_time = 3600
+	resources = {
+		category = megastructures
+		cost = {
+			veu_waste = 1000
+		}
+	}
+
+	country_modifier = {
+		country_naval_cap_add = 100
+	}
+
+	upgrade_from = {
+		veu_pile_ruined
+	}
+
+	potential = { #you may upgrade a ruined one if you have lost yours
+		has_menace_perk = menp_veu_features_5
+		NOT = {
+			any_owned_megastructure = {
+				OR = {
+					has_megastructure_flag = veu_pile
+					AND = {
+						is_megastructure_type = veu_pile_ruined
+						is_upgrading = yes
+					}
+				}
+			}
+		}
+	}
+
+	on_build_complete = {
+		fromfrom = {
+			set_megastructure_flag = veu_pile
+		}
+	}
+}
+
+veu_pile_1 = {
+	entity = "dyson_sphere_phase_02_entity"
+	construction_entity = "dyson_sphere_part_1_entity"
+	portrait = "GFX_megastructure_construction_background"
+	build_time = 3600
+	victory_score = 1000
+	resources = {
+		category = megastructures
+		cost = {
+			veu_waste = 2000
+		}
+	}
+
+	country_modifier = {
+		country_naval_cap_add = 150
+	}
+
+	upgrade_from = {
+		veu_pile_0
+	}
+
+	on_build_complete = {
+		fromfrom = { set_megastructure_flag = veu_pile }
+		from = {
+			country_event = { id = veu_crisis.6005 }
+		}
+	}
+}
+
+veu_pile_2 = {
+	entity = "dyson_sphere_phase_03_entity"
+	construction_entity = "dyson_sphere_part_2_entity"
+	portrait = "GFX_megastructure_construction_background"
+	build_time = 3600
+	victory_score = 2500
+	resources = {
+		category = megastructures
+		cost = {
+			veu_waste = 3000
+		}
+	}
+
+	country_modifier = {
+		country_naval_cap_add = 200
+	}
+
+	upgrade_from = {
+		veu_pile_1
+	}
+
+	on_build_complete = {
+		fromfrom = { set_megastructure_flag = veu_pile }
+		from = {
+			country_event = { id = veu_crisis.6006 }
+		}
+	}
+}
+
+veu_pile_3 = {
+	entity = "dyson_sphere_phase_04_entity"
+	construction_entity = "dyson_sphere_part_3_entity"
+	portrait = "GFX_megastructure_construction_background"
+	build_time = 3600
+	victory_score = 5000
+	resources = {
+		category = megastructures
+		cost = {
+			veu_waste = 4000
+		}
+	}
+
+	country_modifier = {
+		country_naval_cap_add = 250
+	}
+
+	upgrade_from = {
+		veu_pile_2
+	}
+
+	on_build_complete = {
+		fromfrom = { set_megastructure_flag = veu_pile }
+		from = {
+			country_event = { id = veu_crisis.6007 }
+		}
+	}
+}
+
+veu_pile_4 = {
+	entity = "dyson_sphere_phase_05_entity"
+	construction_entity = "dyson_sphere_part_4_entity"
+	portrait = "GFX_megastructure_construction_background"
+	build_time = 3600
+	victory_score = 10000
+	resources = {
+		category = megastructures
+		cost = {
+			veu_waste = 10000
+		}
+	}
+
+	upgrade_from = {
+		veu_pile_3
+	}
+
+	on_build_complete = {
+		fromfrom = { set_megastructure_flag = veu_pile }
+		from = {
+			country_event = { id = veu_crisis.6050 }
+		}
+	}
+}
+
+veu_pile_ruined = {
+	entity = "dyson_sphere_destroyed_entity"
+	portrait = "GFX_megastructure_construction_background"
+
+	potential = {
+		always = no
+	}
+}
+

@@ -1,0 +1,242 @@
+#########################################################################################
+# Value Extraction UnLimited
+# Contributors: MrArcaneGates
+#########################################################################################
+
+veu_waste_collection_situation = {
+	picture = GFX_evt_crusher_droid
+	complete_icon_frame = GFX_situation_outcome_frame_green
+	complete_icon = GFX_situation_outcome_eat
+	category = positive
+	initial_progress = 0
+
+	on_progress_complete = {
+		custom_tooltip = veu_waste_situation_outcome
+		hidden_effect = {
+			situation_event = { id = veu_situation.3005 }
+		}
+	}
+
+	on_start = {
+			set_situation_approach = veu_situation_efficient
+	}
+
+	stages = {
+		stage_1 = {
+			icon = GFX_situation_stage_eat
+			icon_background = GFX_situation_stage_frame_green
+			end = {
+				base = 250
+				mult = owner.num_veu_situations_ran
+				min = 150
+			}
+		}
+	}
+
+	approach = {
+		name = veu_situation_efficient
+		icon = GFX_situation_approach_hungry
+		icon_background = GFX_situation_approach_bg_yellow
+		on_select = {
+			custom_tooltip = veu_waste_situation_efficient_tooltip
+			owner = {
+				remove_country_flag = veu_approach_drastic
+				set_country_flag = veu_approach_efficient
+			}
+		}
+		default = yes
+	}
+
+	approach = {
+		name = veu_situation_drastic
+		icon = GFX_situation_approach_incorporate
+		icon_background = GFX_situation_approach_bg_yellow
+		on_select = {
+			custom_tooltip = veu_waste_situtation_drastic_tooltip
+			owner = {
+				remove_country_flag = veu_approach_efficient
+				set_country_flag = veu_approach_drastic
+			}
+		}
+		modifier = {
+			country_energy_produces_mult = -0.1
+			country_unity_produces_mult = -0.2
+		}
+	}
+
+	monthly_progress = {
+		modifier = {
+			add = owner.value:veurcc_job_number
+			desc = situation_wasteextractor_jobs_tt
+		}
+		
+		modifier = {
+			add = 0.8
+			desc = situation_toxic_knights_frugal_tt
+			current_situation_approach = veu_situation_efficient
+		}
+
+		modifier = {
+			add = 1.4
+			desc = situation_toxic_knights_frugal_tt
+			current_situation_approach = veu_situation_drastic
+		}
+	}
+}
+
+veu_recycle_planet_situation = {
+	complete_icon_frame = GFX_situation_outcome_frame_green
+	complete_icon = GFX_situation_exploding_planet
+	picture = {
+		trigger = {
+			target = { is_planet_class = pc_desert }
+		}
+		picture = GFX_evt_desert
+	}
+	picture = {
+		trigger = {
+			target = { is_planet_class = pc_tropical }
+		}
+		picture = GFX_evt_tropical
+	}
+	picture = {
+		trigger = {
+			target = { is_planet_class = pc_arid }
+		}
+		picture = GFX_evt_arid
+	}
+	picture = {
+		trigger = {
+			target = { is_planet_class = pc_continental }
+		}
+		picture = GFX_evt_continental
+	}
+	picture = {
+		trigger = {
+			target = { is_planet_class = pc_alpine }
+		}
+		picture = GFX_evt_alpine_city
+	}
+	picture = {
+		trigger = {
+			target = { is_planet_class = pc_savannah }
+		}
+		picture = GFX_evt_savannah
+	}
+	picture = {
+		trigger = {
+			target = { is_planet_class = pc_ocean }
+		}
+		picture = GFX_evt_ocean
+	}
+	picture = {
+		trigger = {
+			target = { is_planet_class = pc_tundra }
+		}
+		picture = GFX_evt_tundra
+	}
+	picture = {
+		trigger = {
+			target = { is_planet_class = pc_arctic }
+		}
+		picture = GFX_evt_arctic
+	}
+	picture = {
+		trigger = {
+			target = { is_planet_class = pc_gaia }
+		}
+		picture = GFX_evt_gaia
+	}
+	picture = {
+		trigger = {
+			target = { is_planet_class = pc_nuked }
+		}
+		picture = GFX_evt_tomb_world
+	}
+	picture = {
+		trigger = {
+			target = { is_planet_class = pc_hive }
+		}
+		picture = GFX_evt_infested
+	}
+	picture = {
+		trigger = {
+			target = { is_planet_class = pc_machine }
+		}
+		picture = GFX_evt_ai_planet
+	}
+	picture = {
+		trigger = {
+			target = { is_planet_class = pc_city }
+		}
+		picture = GFX_evt_city_planet
+	}
+
+	stages = {
+		stage_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_green
+			end = 100
+			custom_tooltip = stage_recycle
+		}
+	}
+
+	category = positive
+	initial_progress = 0
+
+	on_progress_complete = {
+		custom_tooltip = veu_recycle_finish_tooltip
+		hidden_effect = {
+			situation_event = { id = veu_planet.185 }
+		}
+	}
+	on_monthly = {
+		events = {
+			veu_planet.190 #Adds blockers and grants reward
+		}
+	}
+	on_abort = {
+		target = {
+			remove_planet_flag = being_recycled
+			remove_modifier = being_recycled_modifier
+		}
+	}
+	approach = {#Recycle
+		name = veu_approach_recycle
+		on_select = {
+			custom_tooltip = veu_colony_recycle_effect
+		}
+		default = yes
+		icon = GFX_situation_approach_amenities
+		icon_background = GFX_situation_approach_bg_green
+		ai_weight = {
+			base = 10
+		}
+	}
+	approach = {#Restraint
+		name = approach_restraint
+		on_select = {
+			custom_tooltip = veu_colony_recycle_restraint_effect
+			abort_situation = this
+		}
+		icon = GFX_situation_approach_influence
+		icon_background = GFX_situation_approach_bg_yellow
+		ai_weight = {
+			base = 10
+		}
+	}
+	monthly_progress = {
+		base = 0
+		modifier = {
+			add = value:veu_recycling_progress
+			desc = string_veu_recycling_progress
+		}
+	}
+
+	abort_trigger = {
+		OR = {
+			NOT = { exists = target.owner }
+			target.owner = { NOT = { is_same_value = root.owner } }
+		}
+	}
+}
