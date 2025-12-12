@@ -1,0 +1,2169 @@
+#########################################################################################
+# The Utopia Project
+# Author: TheRingBearer
+#########################################################################################
+namespace = tup_crisis_events
+# Scope Creeped Features that will not happen
+# AI taking this Crisis. There is not anything in particular that would stop them, but would need to play around with
+# some AI weights and have a yearly pulse that lets them spend some Utopic Energy.
+# Interactions with other Utopias. You'd think they'd be unified in purpose to accomplish this together. But that
+# requires a bit of extra work to make sure they all play nicely with each other. Also would be kind of unfair if 
+# they could pool their resources to make it happen.
+#########################################################################################
+# TODO: Make sure to no use debug numbers
+@tup_one_year_delay = 356
+@tup_two_year_delay = 712
+@tup_three_year_delay = 1068
+@tup_four_year_delay = 1424
+@tup_five_year_delay = 1780
+@tup_six_year_delay = 2136
+@tup_ten_year_delay = 3560
+# @tup_one_year_delay = 5
+# @tup_two_year_delay = 10
+# @tup_three_year_delay = 15
+# @tup_four_year_delay = 20
+# @tup_five_year_delay = 25
+# @tup_ten_year_delay = 30
+# Level 1 events
+country_event = {
+	# Taking the AP - Start level 1
+	id = tup_crisis_events.100
+	title = "tup_crisis_events.100.name"
+	desc = tup_crisis_events.100.desc
+	picture = GFX_evt_genetic_ascention_cloning
+	show_sound = event_death_cult
+	is_triggered_only = yes
+	option = {
+		name = INTRIGUING
+		enable_special_project = {
+			name = THE_UTOPIA_PROJECT
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = tup_crisis_events.101
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = tup_crisis_events.101
+	title = "tup_crisis_events.101.name"
+	desc = "tup_crisis_events.101.desc"
+	picture = GFX_tup_unity_symbol_gold
+	show_sound = event_default
+	is_triggered_only = yes
+	option = {
+		name = UNDERSTOOD
+		add_resource = {
+			tup_utopic_energy = 1
+		}
+	}
+	option = {
+		name = tup_crisis_events.summon_utopic_menu
+		add_resource = {
+			tup_utopic_energy = 1
+		}
+		country_event = {
+			id = tup_utopic_events.1000
+		}
+	}
+}
+
+country_event = {
+	id = tup_crisis_events.103
+	title = "tup_crisis_events.103.name"
+	desc = "tup_crisis_events.103.desc"
+	picture = GFX_tup_unity_symbol_gold
+	show_sound = event_default
+	is_triggered_only = yes
+	option = {
+		name = UNDERSTOOD
+		hidden_effect = {
+			country_event = {
+				id = tup_crisis_events.104
+			}
+		}
+	}
+}
+
+country_event = {
+	id = tup_crisis_events.104
+	title = "tup_crisis_events.104.name"
+	desc = "tup_crisis_events.104.desc"
+	picture = GFX_tup_unity_symbol_gold
+	show_sound = event_default
+	is_triggered_only = yes
+	option = {
+		name = "tup_crisis_events.104.option"
+		owner = {
+			country_event = {
+				id = tup_crisis_events.105
+				days = @tup_two_year_delay
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_crisis_events.1001
+				days = @tup_three_year_delay
+				random = @tup_ten_year_delay
+			}
+		}
+	}
+}
+
+country_event = {
+	id = tup_crisis_events.105
+	title = "tup_crisis_events.105.name"
+	desc = "tup_crisis_events.105.desc"
+	picture = GFX_evt_shroudwalker_enclave
+	show_sound = event_default
+	is_triggered_only = yes
+	option = {
+		name = UNDERSTOOD
+		owner = {
+			country_event = {
+				id = tup_crisis_events.106
+				days = 60
+			}
+		}
+	}
+}
+
+# Mysterious Shorud Entity provides Mcguffin
+country_event = {
+	id = tup_crisis_events.106
+	title = "tup_crisis_events.106.name"
+	desc = "tup_crisis_events.106.desc"
+	picture = GFX_evt_shrouded_planet
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+	option = {
+		name = tup_crisis_events.106.option.a
+		add_modifier = {
+			modifier = tup_debt_of_knowledge
+			years = 10
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_crisis_events.107
+			}
+		}
+	}
+	option = {
+		name = tup_crisis_events.106.option.b
+		add_modifier = {
+			modifier = tup_debt_of_mundane
+			years = 10
+		}
+		ordered_owned_pop_group = {
+			position = 5
+			order_by = trigger:pop_group_size
+			kill_pop_group = {
+				pop_group = THIS
+				percentage = 0.8
+			}
+		}
+		ordered_owned_pop_group = {
+			position = 4
+			order_by = trigger:pop_group_size
+			kill_pop_group = {
+				pop_group = THIS
+				percentage = 0.7
+			}
+		}
+		ordered_owned_pop_group = {
+			position = 3
+			order_by = trigger:pop_group_size
+			kill_pop_group = {
+				pop_group = THIS
+				percentage = 0.6
+			}
+		}
+		ordered_owned_pop_group = {
+			position = 2
+			order_by = trigger:pop_group_size
+			kill_pop_group = {
+				pop_group = THIS
+				percentage = 0.5
+			}
+		}
+		ordered_owned_pop_group = {
+			position = 1
+			order_by = trigger:pop_group_size
+			kill_pop_group = {
+				pop_group = THIS
+				percentage = 0.5
+			}
+		}
+		ordered_owned_pop_group = {
+			position = 0
+			order_by = trigger:pop_group_size
+			kill_pop_group = {
+				pop_group = THIS
+				percentage = 0.45
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_crisis_events.107
+			}
+		}
+	}
+	option = {
+		name = tup_crisis_events.106.option.c
+		add_modifier = {
+			modifier = tup_debt_of_exulted
+			years = 10
+		}
+		random_owned_leader = {
+			limit = {
+				is_ruler = no
+				leader_class = commander
+				is_councilor = no
+				NAND = {
+					has_trait = leader_trait_chosen
+					has_trait = leader_trait_eater_chosen
+					has_trait = leader_trait_composer_chosen
+					has_trait = leader_trait_instrument_chosen
+					has_trait = leader_trait_whisperers_chosen
+				}
+			}
+			kill_leader = {
+				show_notification = yes
+			}
+		}
+		random_owned_leader = {
+			limit = {
+				is_ruler = no
+				leader_class = official
+				is_councilor = no
+				NAND = {
+					has_trait = leader_trait_chosen
+					has_trait = leader_trait_eater_chosen
+					has_trait = leader_trait_composer_chosen
+					has_trait = leader_trait_instrument_chosen
+					has_trait = leader_trait_whisperers_chosen
+				}
+			}
+			kill_leader = {
+				show_notification = yes
+			}
+		}
+		random_owned_leader = {
+			limit = {
+				is_ruler = no
+				leader_class = scientist
+				is_councilor = no
+				NAND = {
+					has_trait = leader_trait_chosen
+					has_trait = leader_trait_eater_chosen
+					has_trait = leader_trait_composer_chosen
+					has_trait = leader_trait_instrument_chosen
+					has_trait = leader_trait_whisperers_chosen
+				}
+			}
+			kill_leader = {
+				show_notification = yes
+			}
+		}
+		random_owned_leader = {
+			limit = {
+				is_ruler = no
+				is_councilor = yes
+				NAND = {
+					has_trait = leader_trait_chosen
+					has_trait = leader_trait_eater_chosen
+					has_trait = leader_trait_composer_chosen
+					has_trait = leader_trait_instrument_chosen
+					has_trait = leader_trait_whisperers_chosen
+				}
+			}
+			kill_leader = {
+				show_notification = yes
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_crisis_events.107
+			}
+		}
+	}
+}
+
+# We know where to go from here. Lets find the 3 paragons
+country_event = {
+	id = tup_crisis_events.107
+	title = "tup_crisis_events.107.name"
+	desc = "tup_crisis_events.107.desc"
+	picture = GFX_evt_shrouded_planet
+	show_sound = event_default
+	is_triggered_only = yes
+	option = {
+		name = tup_crisis_events.107.option
+		hidden_effect = {
+			country_event = {
+				id = tup_crisis_events.108
+				days = 30
+			}
+		}
+	}
+}
+
+# Courage
+# This will actually branch if you are knights of the toxic god
+country_event = {
+	id = tup_crisis_events.108
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = {
+				has_origin = origin_toxic_knights
+			}
+			country_event = {
+				id = tup_crisis_events.109
+			}
+		}
+		else = {
+			country_event = {
+				id = tup_crisis_events.123
+				days = @tup_one_year_delay
+			}
+		}
+	}
+}
+
+# We are Knights of the Toxic God. We have Valor in spades
+country_event = {
+	id = tup_crisis_events.109
+	title = "tup_crisis_events.109.name"
+	desc = "tup_crisis_events.109.desc"
+	picture = GFX_evt_knights
+	show_sound = evn_tox_knights_of_the_toxic_god
+	is_triggered_only = yes
+	option = {
+		name = EXCELLENT
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier3unityreward
+			min = @tier4unitymin
+			max = @tier3unitymax
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_crisis_events.120
+				days = 30
+			}
+		}
+	}
+}
+
+# The Duel
+# Yes I know this event is out of order, but I needed to split the event up
+country_event = {
+	id = tup_crisis_events.123
+	title = tup_crisis_events.123.name
+	desc = tup_crisis_events.123.desc
+	picture = GFX_evt_frozen
+	show_sound = event_default
+	is_triggered_only = yes
+	immediate = {
+		ordered_owned_leader = {
+			limit = {
+				leader_class = commander
+			}
+			position = 0
+			order_by = trigger:has_base_skill
+			inverse = no
+			save_event_target_as = tup_commander_leader_duelist
+		}
+	}
+	option = {
+		name = CONTINUE
+		hidden_effect = {
+			country_event = {
+				id = tup_crisis_events.110
+			}
+		}
+	}
+}
+
+country_event = {
+	id = tup_crisis_events.110
+	title = "tup_crisis_events.110.name"
+	desc = "tup_crisis_events.110.desc"
+	picture = GFX_evt_astral_rift_psionic_stranger
+	show_sound = event_default
+	is_triggered_only = yes
+	immediate = {
+		ordered_owned_leader = {
+			limit = {
+				leader_class = commander
+			}
+			position = 0
+			order_by = trigger:has_base_skill
+			inverse = no
+			save_event_target_as = tup_commander_leader_duelist
+		}
+	}
+	option = {
+		name = tup_crisis_events.110.option.a
+		custom_tooltip = tup_crisis_events.110.option.a_tt
+		hidden_effect = {
+			country_event = {
+				id = tup_crisis_events.111
+			}
+		}
+	}
+	option = {
+		name = tup_crisis_events.110.option.b
+		custom_tooltip = tup_crisis_events.110.option.b_tt
+		hidden_effect = {
+			country_event = {
+				id = tup_crisis_events.118
+			}
+		}
+	}
+	option = {
+		name = tup_crisis_events.110.option.c
+		allow = {
+			is_pacifist = yes
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_crisis_events.119
+			}
+		}
+	}
+}
+
+# The Duel Outcome - Honorable
+# Determine outcome
+country_event = {
+	id = tup_crisis_events.111
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		generate_random_variable_value = yes
+		if = {
+			limit = {
+				is_militarist = yes
+			}
+			change_variable = {
+				which = random_number
+				value = 10
+			}
+		}
+		if = {
+			limit = {
+				is_pacifist = yes
+			}
+			change_variable = {
+				which = random_number
+				value = -10
+			}
+		}
+		if = {
+			limit = {
+				event_target:tup_commander_leader_duelist = {
+					OR = {
+						has_trait = trait_ruler_warlike
+						has_trait = leader_trait_army_veteran
+						has_trait = leader_trait_aggressive
+						has_trait = leader_trait_unyielding
+						has_trait = leader_trait_restrained
+					}
+				}
+			}
+			change_variable = {
+				which = random_number
+				value = 10
+			}
+		}
+		if = {
+			limit = {
+				event_target:tup_commander_leader_duelist = {
+					OR = {
+						has_trait = leader_trait_slippery
+						has_trait = leader_trait_towel
+						has_trait = leader_trait_resilient
+					}
+				}
+			}
+			change_variable = {
+				which = random_number
+				value = 10
+			}
+		}
+		if = {
+			limit = {
+				event_target:tup_commander_leader_duelist = {
+					OR = {
+						has_trait = leader_trait_chosen
+						has_trait = leader_trait_eater_chosen
+						has_trait = leader_trait_composer_chosen
+						has_trait = leader_trait_instrument_chosen
+						has_trait = leader_trait_whisperers_chosen
+					}
+				}
+			}
+			change_variable = {
+				which = random_number
+				value = 100
+			}
+		}
+		if = {
+			limit = {
+				event_target:tup_commander_leader_duelist = {
+					OR = {
+						has_trait = leader_trait_armchair_commander
+						has_trait = leader_trait_nervous
+						has_trait = leader_trait_lethargic
+						has_trait = leader_trait_cautious
+						has_trait = leader_trait_melancholic
+						has_trait = leader_trait_fallible
+						has_trait = leader_trait_slothful
+						has_trait = leader_trait_nervous
+						has_trait = leader_trait_lethargic
+						has_trait = leader_trait_traumatized
+					}
+				}
+			}
+			change_variable = {
+				which = random_number
+				value = -10
+			}
+		}
+		if = {
+			limit = {
+				event_target:tup_commander_leader_duelist = {
+					OR = {
+						has_trait = leader_trait_melancholic_2
+						has_trait = leader_trait_fallible_2
+						has_trait = leader_trait_slothful_2
+						has_trait = leader_trait_nervous_2
+						has_trait = leader_trait_lethargic_2
+						has_trait = leader_trait_traumatized_2
+					}
+				}
+			}
+			change_variable = {
+				which = random_number
+				value = -10
+			}
+		}
+		if = {
+			limit = {
+				event_target:tup_commander_leader_duelist = {
+					has_base_skill >= 5
+				}
+			}
+			change_variable = {
+				which = random_number
+				value = 5
+			}
+		}
+		if = {
+			limit = {
+				event_target:tup_commander_leader_duelist = {
+					has_base_skill >= 7
+				}
+			}
+			change_variable = {
+				which = random_number
+				value = 5
+			}
+		}
+		if = {
+			limit = {
+				event_target:tup_commander_leader_duelist = {
+					has_base_skill >= 10
+				}
+			}
+			change_variable = {
+				which = random_number
+				value = 5
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					which = random_number
+					value < 60
+				}
+			}
+			country_event = {
+				id = tup_crisis_events.112
+			}
+		}
+		else_if = {
+			limit = {
+				check_variable = {
+					which = random_number
+					value < 90
+				}
+			}
+			country_event = {
+				id = tup_crisis_events.113
+			}
+		}
+		else = {
+			country_event = {
+				id = tup_crisis_events.114
+			}
+		}
+		log = "Final Result of Duel: [This.random_number]"
+	}
+}
+
+# You got owned
+country_event = {
+	id = tup_crisis_events.112
+	title = "tup_crisis_events.112.name"
+	desc = "tup_crisis_events.112.desc"
+	picture = GFX_evt_gladiators
+	show_sound = event_default
+	is_triggered_only = yes
+	option = {
+		name = UNFORTUNATE
+		event_target:tup_commander_leader_duelist = {
+			kill_leader = {
+				show_notification = yes
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_crisis_events.120
+				days = @tup_one_year_delay
+			}
+		}
+	}
+}
+
+# Honorable Attempt
+country_event = {
+	id = tup_crisis_events.113
+	title = "tup_crisis_events.113.name"
+	desc = "tup_crisis_events.113.desc"
+	picture = GFX_evt_gladiators
+	show_sound = event_default
+	is_triggered_only = yes
+	option = {
+		name = UNFORTUNATE
+		event_target:tup_commander_leader_duelist = {
+			kill_leader = {
+				show_notification = yes
+			}
+		}
+		add_modifier = {
+			modifier = tup_honorable_duel
+			years = 25
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_crisis_events.120
+				days = @tup_one_year_delay
+			}
+		}
+	}
+}
+
+# Plot Twist!
+country_event = {
+	id = tup_crisis_events.114
+	title = "tup_crisis_events.114.name"
+	desc = "tup_crisis_events.114.desc"
+	picture = GFX_evt_gladiators
+	show_sound = event_default
+	is_triggered_only = yes
+	option = {
+		name = AMAZING
+		event_target:tup_commander_leader_duelist = {
+			add_skill = 10
+			random_list = {
+				1 = {
+					add_trait = {
+						trait = leader_trait_wrecker_2
+						show_message = yes
+					}
+				}
+				1 = {
+					add_trait = {
+						trait = leader_trait_artillerist_2
+						show_message = yes
+					}
+				}
+				1 = {
+					add_trait = {
+						trait = leader_trait_commanding_presence_2
+						show_message = yes
+					}
+				}
+			}
+			random_list = {
+				1 = {
+					add_trait = {
+						trait = leader_trait_home_guard_2
+						show_message = yes
+					}
+				}
+				1 = {
+					add_trait = {
+						trait = leader_trait_hardy_2
+						show_message = yes
+					}
+				}
+				1 = {
+					add_trait = {
+						trait = leader_trait_guardian_2
+						show_message = yes
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_crisis_events.120
+				days = @tup_one_year_delay
+			}
+		}
+	}
+}
+
+# The Duel Outcome - Dishonorable
+country_event = {
+	id = tup_crisis_events.118
+	title = "tup_crisis_events.118.name"
+	desc = "tup_crisis_events.118.desc"
+	picture = GFX_evt_psionics
+	show_sound = event_default
+	is_triggered_only = yes
+	option = {
+		name = tup_crisis_events.118.option
+		add_modifier = {
+			modifier = tup_dishonorable_duel
+			years = 10
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_crisis_events.120
+				days = @tup_two_year_delay
+			}
+		}
+	}
+}
+
+# The Duel Outcome - No Duel
+country_event = {
+	id = tup_crisis_events.119
+	title = "tup_crisis_events.119.name"
+	desc = "tup_crisis_events.119.desc"
+	picture = GFX_evt_unity_symbol
+	show_sound = event_default
+	is_triggered_only = yes
+	option = {
+		name = CURIOUS
+		hidden_effect = {
+			country_event = {
+				id = tup_crisis_events.120
+				days = @tup_three_year_delay
+			}
+		}
+	}
+}
+
+# Love
+country_event = {
+	id = tup_crisis_events.120
+	title = "tup_crisis_events.120.name"
+	desc = "tup_crisis_events.120.desc"
+	picture = GFX_evt_astral_rift_advisor_nice
+	show_sound = event_default
+	is_triggered_only = yes
+	option = {
+		name = tup_crisis_events.120.option.a
+		allow = {
+			resource_stockpile_compare = {
+				resource = energy
+				value > 65000
+			}
+		}
+		add_resource = {
+			energy = -65000
+		}
+	}
+	option = {
+		name = tup_crisis_events.120.option.b
+		add_modifier = {
+			modifier = tup_long_term_loan
+			years = 5
+		}
+	}
+	option = {
+		name = tup_crisis_events.120.option.c
+		add_modifier = {
+			modifier = tup_thief
+			years = 10
+		}
+	}
+	after = {
+		add_resource = {
+			engineering_research = 1000
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_crisis_events.121
+			}
+		}
+	}
+}
+
+country_event = {
+	id = tup_crisis_events.121
+	title = tup_crisis_events.121.name
+	desc = tup_crisis_events.121.desc
+	picture = GFX_evt_astral_rift_advisor_nice
+	show_sound = event_default
+	is_triggered_only = yes
+	option = {
+		name = tup_crisis_events.121.option.a
+		add_resource = {
+			alloys = 5000
+		}
+		add_monthly_resource_mult = {
+			resource = engineering_research
+			value = @tier3researchreward
+			min = @tier4researchmin
+			max = @tier4researchmax
+		}
+		add_monthly_resource_mult = {
+			resource = physics_research
+			value = @tier2researchreward
+			min = @tier3researchmin
+			max = @tier3researchmax
+		}
+		add_monthly_resource_mult = {
+			resource = society_research
+			value = @tier1researchreward
+			min = @tier2researchmin
+			max = @tier2researchmax
+		}
+		if = {
+			limit = {
+				has_technology = tech_self_aware_logic
+			}
+			add_research_option = tech_sapient_ai
+		}
+		else = {
+			give_technology = {
+				tech = tech_administrative_ai
+			}
+			give_technology = {
+				tech = tech_self_aware_logic
+			}
+		}
+	}
+	option = {
+		name = tup_crisis_events.121.option.b
+		add_monthly_resource_mult = {
+			resource = society_research
+			value = @tier4researchreward
+			min = @tier5researchmin
+			max = @tier4researchmax
+		}
+		add_modifier = {
+			modifier = tup_study_friend
+		}
+	}
+	option = {
+		name = tup_crisis_events.121.option.c
+		allow = {
+			has_grand_archive_dlc = yes
+			any_owned_megastructure = {
+				is_megastructure_type = grand_archive_0
+			}
+		}
+		add_modifier = {
+			modifier = tup_museum_friend
+		}
+		add_monthly_resource_mult = {
+			resource = society_research
+			value = @tier3researchreward
+			min = @tier4researchmin
+			max = @tier4researchmax
+		}
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier4unityreward
+			min = @tier5unitymin
+			max = @tier5unitymax
+		}
+	}
+	after = {
+		hidden_effect = {
+			country_event = {
+				id = tup_crisis_events.125
+				days = @tup_one_year_delay
+			}
+		}
+	}
+}
+
+# Truth
+country_event = {
+	id = tup_crisis_events.125
+	title = tup_crisis_events.125.name
+	desc = tup_crisis_events.125.desc
+	picture = GFX_evt_desert
+	show_sound = event_default
+	is_triggered_only = yes
+	option = {
+		name = CONTINUE
+		hidden_effect = {
+			country_event = {
+				id = tup_crisis_events.126
+			}
+		}
+	}
+}
+
+country_event = {
+	id = tup_crisis_events.126
+	title = tup_crisis_events.126.name
+	desc = tup_crisis_events.126.desc
+	picture = GFX_evt_barely_contained
+	show_sound = event_default
+	is_triggered_only = yes
+	option = {
+		name = tup_crisis_events.126.option.a
+		country_event = {
+			id = tup_crisis_events.130
+			days = @tup_one_year_delay
+		}
+	}
+	option = {
+		name = tup_crisis_events.126.option.b
+		allow = {
+			resource_stockpile_compare = {
+				resource = minerals
+				value > 7500
+			}
+			resource_stockpile_compare = {
+				resource = alloys
+				value > 2500
+			}
+			resource_stockpile_compare = {
+				resource = food
+				value > 10000
+			}
+		}
+		country_event = {
+			id = tup_crisis_events.130
+			days = @tup_four_year_delay
+		}
+		add_resource = {
+			minerals = -7500
+			alloys = -2500
+			food = -10000
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_crisis_events.127
+				days = @tup_five_year_delay
+				random = 90
+			}
+		}
+	}
+}
+
+country_event = {
+	id = tup_crisis_events.127
+	title = tup_crisis_events.127.name
+	desc = tup_crisis_events.127.desc
+	picture = GFX_evt_barely_contained
+	show_sound = event_default
+	is_triggered_only = yes
+	option = {
+		give_technology = {
+			tech = tech_telepathy
+		}
+		add_monthly_resource_mult = {
+			resource = society_research
+			value = @tier5researchreward
+			min = @tier5researchmin
+			max = @tier5researchmax
+		}
+		name = INTRIGUING
+	}
+}
+
+# Success!
+# The first Utopia Ascendant
+country_event = {
+	id = tup_crisis_events.130
+	title = "tup_crisis_events.130.name"
+	desc = "tup_crisis_events.130.desc"
+	picture = GFX_evt_psionics
+	show_sound = event_default
+	is_triggered_only = yes
+	immediate = {
+		ordered_owned_leader = {
+			limit = {
+				leader_class = scientist
+			}
+			position = 0
+			order_by = trigger:has_base_skill
+			inverse = no
+			save_event_target_as = tup_free_leader_upgrade
+		}
+	}
+	option = {
+		name = tup_crisis_events.130.option
+		event_target:tup_free_leader_upgrade = {
+			remove_trait = all_negative
+			add_trait = {
+				trait = tup_trait_utopia_ascendant_leader
+			}
+		}
+		add_resource = {
+			tup_utopic_energy = 2
+		}
+		hidden_effect = {
+			set_country_flag = tup_crisis_have_template
+		}
+	}
+}
+
+#########################################################################################
+# Level 2 events
+country_event = {
+	# Reaching Level 2
+	id = tup_crisis_events.200
+	title = "tup_crisis_events.200.name"
+	desc = tup_crisis_events.200.desc
+	picture = GFX_evt_three_sided_deal
+	show_sound = event_death_cult
+	is_triggered_only = yes
+	immediate = {
+		country_event = {
+			id = tup_crisis_events.1020
+			days = @tup_one_year_delay
+			random = @tup_three_year_delay
+		}
+	}
+	option = {
+		name = tup_crisis_events.200.a
+		start_situation = {
+			type = tup_situation_communal_reformation
+			target = root
+		}
+	}
+	option = {
+		name = tup_crisis_events.200.a2
+		start_situation = {
+			type = tup_situation_communal_reformation
+			target = root
+		}
+		country_event = {
+			id = tup_utopic_events.1000
+		}
+	}
+	option = {
+		name = tup_crisis_events.200.b
+		hidden_effect = {
+			country_event = {
+				id = tup_crisis_events.201
+				days = @tup_one_year_delay
+			}
+		}
+	}
+}
+
+country_event = {
+	# Delayed start of level 2
+	# Reuse the same text
+	id = tup_crisis_events.201
+	title = "tup_crisis_events.200.name"
+	desc = tup_crisis_events.200.desc
+	picture = GFX_evt_three_sided_deal
+	show_sound = event_death_cult
+	is_triggered_only = yes
+	option = {
+		name = tup_crisis_events.200.a
+		owner = {
+			start_situation = {
+				type = tup_situation_communal_reformation
+				target = root
+			}
+		}
+	}
+	option = {
+		name = tup_crisis_events.200.b
+		hidden_effect = {
+			country_event = {
+				id = tup_crisis_events.201
+				days = @tup_one_year_delay
+			}
+		}
+	}
+}
+
+#########################################################################################
+# Level 3 events
+country_event = {
+	# Reaching Level 3
+	id = tup_crisis_events.300
+	title = "tup_crisis_events.300.name"
+	desc = tup_crisis_events.300.desc
+	picture = GFX_evt_grand_speech
+	show_sound = event_celebration
+	is_triggered_only = yes
+	immediate = {
+		country_event = {
+			id = tup_crisis_events.1030
+			days = @tup_one_year_delay
+			random = @tup_ten_year_delay
+		}
+	}
+	option = {
+		name = tup_crisis_events.300.a
+		owner = {
+			add_modifier = {
+				modifier = tup_utopia_society
+			}
+			set_policy = {
+				policy = war_philosophy
+				option = unrestricted_wars
+				cooldown = yes
+			}
+			set_policy = {
+				policy = subjugation_war_terms
+				option = benevolent_terms
+				cooldown = yes
+			}
+			set_policy = {
+				policy = orbital_bombardment
+				option = orbital_bombardment_selective
+				cooldown = yes
+			}
+			set_policy = {
+				policy = orbital_bombardment_accept_surrender
+				option = orbital_bombardment_surrender_allowed
+				cooldown = yes
+			}
+			set_policy = {
+				policy = refugees
+				option = refugees_allowed
+				cooldown = yes
+			}
+			set_policy = {
+				policy = purge
+				option = purge_not_allowed
+				cooldown = yes
+			}
+			owner = {
+				every_owned_pop_species = {
+					modify_species = {
+						species = this
+						add_trait = tup_trait_utopia_ascendant
+					}
+				}
+				every_owned_pop_group = {
+					set_citizenship_type = {
+						type = citizenship_full
+						cooldown = yes
+					}
+					set_military_service_type = {
+						type = military_service_full
+						cooldown = yes
+					}
+					set_population_controls = {
+						type = population_control_no
+						cooldown = yes
+					}
+					set_migration_controls = {
+						type = migration_control_no
+						cooldown = yes
+					}
+					set_colonization_controls = {
+						type = colonization_control_no
+						cooldown = yes
+					}
+					set_living_standard = {
+						type = living_standard_utopian
+						cooldown = yes
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = tup_crisis_events.summon_utopic_menu
+		country_event = {
+			id = tup_utopic_events.1000
+		}
+		owner = {
+			add_modifier = {
+				modifier = tup_utopia_society
+			}
+			set_policy = {
+				policy = war_philosophy
+				option = unrestricted_wars
+				cooldown = yes
+			}
+			set_policy = {
+				policy = subjugation_war_terms
+				option = benevolent_terms
+				cooldown = yes
+			}
+			set_policy = {
+				policy = orbital_bombardment
+				option = orbital_bombardment_selective
+				cooldown = yes
+			}
+			set_policy = {
+				policy = orbital_bombardment_accept_surrender
+				option = orbital_bombardment_surrender_allowed
+				cooldown = yes
+			}
+			set_policy = {
+				policy = refugees
+				option = refugees_allowed
+				cooldown = yes
+			}
+			set_policy = {
+				policy = purge
+				option = purge_not_allowed
+				cooldown = yes
+			}
+			owner = {
+				every_owned_pop_species = {
+					modify_species = {
+						species = this
+						add_trait = tup_trait_utopia_ascendant
+					}
+				}
+				every_owned_pop_group = {
+					set_citizenship_type = {
+						type = citizenship_full
+						cooldown = yes
+					}
+					set_military_service_type = {
+						type = military_service_full
+						cooldown = yes
+					}
+					set_population_controls = {
+						type = population_control_no
+						cooldown = yes
+					}
+					set_migration_controls = {
+						type = migration_control_no
+						cooldown = yes
+					}
+					set_colonization_controls = {
+						type = colonization_control_no
+						cooldown = yes
+					}
+					set_living_standard = {
+						type = living_standard_utopian
+						cooldown = yes
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = tup_crisis_events.305
+	title = "tup_crisis_events.305.name"
+	desc = tup_crisis_events.305.desc
+	picture = GFX_evt_dyson_swarm
+	show_sound = event_death_cult
+	is_triggered_only = yes
+	trigger = {
+		owner = {
+			count_owned_megastructure = {
+				limit = {
+					OR = {
+						is_megastructure_type = tup_utopic_dyson_swarm
+						is_megastructure_type = tup_utopic_dyson_swarm_alt
+					}
+				}
+				count = 1
+			}
+		}
+	}
+	option = {
+		name = EXCELLENT
+	}
+}
+
+# Compute total Utopic Energy Production from Utopic Dyson Swarms
+country_event = {
+	id = tup_crisis_events.306
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		owner = {
+			has_country_flag = tup_crisis_chosen
+			any_owned_megastructure = {
+				OR = {
+					is_megastructure_type = tup_utopic_dyson_swarm
+					is_megastructure_type = tup_utopic_dyson_swarm_alt
+				}
+			}
+		}
+	}
+	immediate = {
+		owner = {
+			set_variable = {
+				which = tup_current_number_of_utopic_dyson_swarms
+				value = 0
+			}
+		}
+		every_owned_megastructure = {
+			limit = {
+				OR = {
+					is_megastructure_type = tup_utopic_dyson_swarm
+					is_megastructure_type = tup_utopic_dyson_swarm_alt
+				}
+			}
+			owner = {
+				complete_crisis_objective = tup_crisobj_utopic_energy_swarms
+				change_variable = {
+					which = tup_current_number_of_utopic_dyson_swarms
+					value = 1
+				}
+			}
+		}
+	}
+}
+
+# Compute total Utopic Energy Production from Vassals
+country_event = {
+	id = tup_crisis_events.307
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		owner = {
+			has_country_flag = tup_crisis_chosen
+			any_subject = {
+				has_country_flag = tup_loyal_vassal
+			}
+		}
+	}
+	immediate = {
+		every_subject = {
+			limit = {
+				has_country_flag = tup_loyal_vassal
+			}
+			overlord = {
+				complete_crisis_objective = tup_crisobj_utopic_energy_vassals
+			}
+		}
+	}
+}
+
+# Compute total Utopic Energy Production from Edict
+country_event = {
+	id = tup_crisis_events.308
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		owner = {
+			has_country_flag = tup_crisis_chosen
+		}
+	}
+	immediate = {
+		if = {
+			limit = {
+				has_edict = tup_the_utopia_project_edict_generate
+			}
+			complete_crisis_objective = tup_crisobj_utopic_energy_edict_generation
+		}
+	}
+}
+
+# Updates any new pops or leaders to being utopia ascendants after crisis level 3
+country_event = {
+	id = tup_crisis_events.309
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		owner = {
+			OR = {
+				has_country_flag = tup_loyal_vassal
+				AND = {
+					has_country_flag = tup_crisis_chosen
+					OR = {
+						has_country_flag = tup_crisis_level_3
+						has_country_flag = tup_crisis_level_4
+						has_country_flag = tup_crisis_level_5
+					}
+				}
+			}
+		}
+	}
+	immediate = {
+		if = {
+			limit = {
+				NOT = {
+					has_modifier = tup_utopia_society
+				}
+			}
+			add_modifier = {
+				modifier = tup_utopia_society
+			}
+		}
+		every_owned_pop_group = {
+			if = {
+				limit = {
+					NOT = {
+						has_trait = tup_trait_utopia_ascendant
+					}
+				}
+				modify_species = {
+					species = this
+					add_trait = tup_trait_utopia_ascendant
+				}
+				modify_species = {
+					species = this
+					add_trait = trait_psionic
+				}
+			}
+		}
+		every_owned_leader = {
+			if = {
+				limit = {
+					NOT = {
+						has_trait = tup_trait_utopia_ascendant_leader
+					}
+				}
+				add_trait = {
+					trait = leader_trait_eager
+				}
+				add_trait = {
+					trait = leader_trait_adaptable
+				}
+				add_trait = {
+					trait = leader_trait_psionic
+				}
+				add_trait = {
+					trait = tup_trait_utopia_ascendant_leader
+				}
+			}
+		}
+	}
+}
+
+# Nags the player once every 10 years if they did not open up the Utopic Menu
+# Can be dismissed to stop nagging
+# This event is triggered every 5 years
+country_event = {
+	id = tup_crisis_events.320
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		owner = {
+			has_country_flag = tup_crisis_chosen
+			NOT = {
+				has_country_flag = tup_utopic_menu_no_nagging
+			}
+		}
+	}
+	immediate = {
+		if = {
+			limit = {
+				has_country_flag = tup_has_opened_utopic_menu
+			}
+			remove_country_flag = tup_has_opened_utopic_menu
+		}
+		else = {
+			country_event = {
+				id = tup_crisis_events.321
+			}
+		}
+	}
+}
+
+country_event = {
+	id = tup_crisis_events.321
+	title = "tup_crisis_events.321.name"
+	desc = tup_crisis_events.321.desc
+	picture = GFX_tup_unity_symbol_gold
+	show_sound = event_default
+	is_triggered_only = yes
+	option = {
+		name = tup_crisis_events.321.a
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1000
+			}
+		}
+	}
+	option = {
+		name = tup_crisis_events.321.b
+		hidden_effect = {
+			set_country_flag = tup_has_opened_utopic_menu
+		}
+	}
+	option = {
+		name = tup_crisis_events.321.c
+		hidden_effect = {
+			set_country_flag = tup_utopic_menu_no_nagging
+		}
+	}
+}
+
+# A Megastructure has been built
+# Root = Country
+# From = Megastructure
+# FromFrom = System
+# FromFromFrom = Fleet
+country_event = {
+	id = tup_crisis_events.310
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		owner = {
+			has_country_flag = tup_crisis_chosen
+			FROM = {
+				OR = {
+					is_megastructure_type = tup_utopic_dyson_swarm
+					is_megastructure_type = tup_utopic_dyson_swarm_alt
+				}
+			}
+		}
+	}
+	immediate = {
+		change_variable = {
+			which = tup_current_number_of_utopic_dyson_swarms
+			value = 1
+		}
+	}
+}
+
+#########################################################################################
+# Level 4 events
+country_event = {
+	# Reaching Level 4
+	id = tup_crisis_events.400
+	title = "tup_crisis_events.400.name"
+	desc = tup_crisis_events.400.desc
+	picture = GFX_evt_megastructure_construction
+	show_sound = event_death_cult
+	is_triggered_only = yes
+	immediate = {
+		solar_system = {
+			set_star_flag = tup_unification_engine_system@root
+		}
+		hidden_effect = {
+			owner = {
+				set_country_flag = tup_built_unification_engine
+			}
+		}
+		capital_scope = {
+			solar_system = {
+				spawn_megastructure = {
+					type = "tup_unification_engine_0"
+					planet = star
+					owner = root
+					graphical_culture = root
+					orbit_distance = 50
+				}
+			}
+		}
+	}
+	option = {
+		name = EXCELLENT
+	}
+	option = {
+		name = tup_crisis_events.summon_utopic_menu
+		country_event = {
+			id = tup_utopic_events.1000
+		}
+	}
+}
+
+# Utopic Dyson Swarm Megastructure Destroyed (HIDDEN)
+system_event = {
+	id = tup_crisis_events.419
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		any_system_megastructure = {
+			OR = {
+				is_megastructure_type = tup_utopic_dyson_swarm
+				is_megastructure_type = tup_utopic_dyson_swarm_alt
+			}
+		}
+	}
+	immediate = {
+		random_system_megastructure = {
+			limit = {
+				OR = {
+					is_megastructure_type = tup_utopic_dyson_swarm
+					is_megastructure_type = tup_utopic_dyson_swarm_alt
+				}
+			}
+			remove_megastructure = this
+		}
+		save_event_target_as = tup_message_system_target
+		FROMFROM = {
+			create_message = {
+				type = TUP_MESSAGE_LOST_MEGASTRUCTURE
+				localization = TUP_MESSAGE_LOST_MEGASTRUCTURE_DESC
+				days = 7
+				target = event_target:tup_message_system_target
+			}
+			change_variable = {
+				which = tup_current_number_of_utopic_dyson_swarms
+				value = -1
+			}
+		}
+	}
+}
+
+# Crisis Megastructure Destroyed (HIDDEN)
+system_event = {
+	id = tup_crisis_events.420
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		any_system_megastructure = {
+			has_megastructure_flag = tup_unification_engine
+		}
+		NOT = {
+			any_system_megastructure = {
+				is_megastructure_type = tup_unification_engine_ruined
+			}
+		}
+	}
+	immediate = {
+		save_event_target_as = tup_crisis_system
+		random_system_megastructure = {
+			limit = {
+				has_megastructure_flag = tup_unification_engine
+			}
+			prev = {
+				spawn_megastructure = {
+					type = tup_unification_engine_ruined
+					coords_from = prev
+					init_effect = {
+						if = {
+							limit = {
+								exists = fromfrom
+							}
+							set_megastructure_flag = tup_unification_engine
+						}
+					}
+					orbit_distance = 50
+				}
+			}
+			switch = {
+				trigger = is_megastructure_type
+				tup_unification_engine_0 = {
+					from = {
+						set_variable = {
+							which = tup_unification_engine_destroy_reward
+							value = 1
+						}
+					}
+				}
+			}
+			remove_megastructure = this
+		}
+		from = {
+			save_event_target_as = tup_unification_engine_destroyers
+		}
+		fromfrom = {
+			save_event_target_as = tup_unification_engine_builders
+		}
+		from = {
+			country_event = {
+				id = tup_crisis_events.422
+			}
+		}
+		fromfrom = {
+			country_event = {
+				id = tup_crisis_events.421
+			}
+		}
+		every_playable_country = {
+			limit = {
+				is_ai = no
+				NOR = {
+					is_same_value = from
+					is_same_value = fromfrom
+				}
+			}
+			country_event = {
+				id = tup_crisis_events.423
+			}
+		}
+	}
+}
+
+# Crisis Megastructure Destroyed (Owner)
+country_event = {
+	id = tup_crisis_events.421
+	title = "tup_crisis_events.421.name"
+	desc = "tup_crisis_events.421.desc"
+	picture = GFX_evt_ruined_system
+	show_sound = event_default
+	is_triggered_only = yes
+	option = {
+		name = crisis.6101.a
+		custom_tooltip = crisis.6101.a.tooltip
+	}
+}
+
+# Crisis Megastructure Destroyed (Destroyer)
+country_event = {
+	id = tup_crisis_events.422
+	title = "tup_crisis_events.422.name"
+	desc = {
+		trigger = {
+			NOT = {
+				has_country_flag = tup_built_unification_engine
+			}
+		}
+		text = "tup_crisis_events.422.a.desc"
+	}
+	desc = {
+		trigger = {
+			has_country_flag = tup_built_unification_engine
+		}
+		text = "tup_crisis_events.422.b.desc"
+	}
+	picture = GFX_evt_crisis_defeated
+	show_sound = event_default
+	is_triggered_only = yes
+	option = {
+		name = crisis.6102.a
+		trigger = {
+			NOT = {
+				has_country_flag = tup_built_unification_engine
+			}
+		}
+		add_resource = {
+			influence = 200
+			alloys = 5000
+			mult = tup_unification_engine_destroy_reward
+		}
+		custom_tooltip = tup_unification_engine_ruined_tt
+	}
+	option = {
+		name = crisis.6102.b
+		trigger = {
+			has_country_flag = tup_built_unification_engine
+		}
+		add_resource = {
+			tup_utopic_energy = 500
+			mult = tup_unification_engine_destroy_reward
+		}
+		custom_tooltip = tup_unification_engine_ruined_tt
+	}
+	after = {
+		hidden_effect = {
+			clear_variable = tup_unification_engine_destroy_reward
+		}
+	}
+}
+
+# Crisis Megastructure Destroyed (Others)
+country_event = {
+	id = tup_crisis_events.423
+	title = "tup_crisis_events.423.name"
+	desc = "tup_crisis_events.423.desc"
+	picture = GFX_evt_crisis_defeated
+	show_sound = event_default
+	is_triggered_only = yes
+	option = {
+		name = GOOD
+		trigger = {
+			NOT = {
+				has_country_flag = tup_built_unification_engine
+			}
+		}
+	}
+	option = {
+		name = crisis.6103.b
+		trigger = {
+			has_country_flag = tup_built_unification_engine
+		}
+	}
+}
+
+# The base mega structure has been completed
+country_event = {
+	id = tup_crisis_events.450
+	title = "tup_crisis_events.450.name"
+	desc = tup_crisis_events.450.desc
+	picture = GFX_evt_interstellar_assembly
+	show_sound = event_death_cult
+	is_triggered_only = yes
+	trigger = {
+		NOT = {
+			has_country_flag = tup_unification_engine_test_1
+		}
+	}
+	immediate = {
+		set_country_flag = tup_unification_engine_test_1
+	}
+	option = {
+		name = EXCELLENT
+	}
+}
+
+# First Test
+country_event = {
+	id = tup_crisis_events.460
+	title = "tup_crisis_events.460.name"
+	desc = tup_crisis_events.460.desc
+	picture = GFX_evt_shroudwalker_enclave
+	show_sound = event_death_cult
+	is_triggered_only = yes
+	trigger = {
+		NOT = {
+			has_country_flag = tup_unification_engine_test_2
+		}
+	}
+	immediate = {
+		set_country_flag = tup_unification_engine_test_2
+		add_modifier = {
+			modifier = tup_hostile_utopic_stability_cooldown
+			years = 6
+		}
+	}
+	option = {
+		name = tup_crisis_events.460.a
+		hidden_effect = {
+			tup_trigger_hostile_stability_events = yes
+		}
+	}
+}
+
+# Second Test
+country_event = {
+	id = tup_crisis_events.470
+	title = "tup_crisis_events.460.name"
+	desc = tup_crisis_events.460.desc
+	picture = GFX_evt_shroudwalker_enclave
+	show_sound = event_death_cult
+	is_triggered_only = yes
+	trigger = {
+		NOT = {
+			has_country_flag = tup_unification_engine_test_3
+		}
+	}
+	immediate = {
+		set_country_flag = tup_unification_engine_test_3
+		add_modifier = {
+			modifier = tup_hostile_utopic_resource_cooldown
+			years = 6
+		}
+		hidden_effect = {
+			every_playable_country = {
+				remove_opinion_modifier = {
+					who = FROM
+					modifier = tup_opinion_crisis_test_1
+				}
+			}
+			every_playable_country = {
+				limit = {
+					NOR = {
+						has_country_flag = tup_crisis_chosen
+						has_country_flag = tup_loyal_vassal
+					}
+				}
+				add_opinion_modifier = {
+					who = FROM
+					modifier = tup_opinion_crisis_test_2
+				}
+			}
+		}
+	}
+	option = {
+		name = tup_crisis_events.460.a
+		hidden_effect = {
+			tup_trigger_hostile_resource_events = yes
+		}
+	}
+}
+
+# Third Test
+country_event = {
+	id = tup_crisis_events.480
+	title = "tup_crisis_events.460.name"
+	desc = tup_crisis_events.460.desc
+	picture = GFX_evt_shroudwalker_enclave
+	show_sound = event_death_cult
+	is_triggered_only = yes
+	trigger = {
+		NOT = {
+			has_country_flag = tup_unification_engine_test_4
+		}
+	}
+	immediate = {
+		set_country_flag = tup_unification_engine_test_4
+		add_modifier = {
+			modifier = tup_hostile_utopic_combat_cooldown
+			years = 6
+		}
+		hidden_effect = {
+			every_playable_country = {
+				remove_opinion_modifier = {
+					who = FROM
+					modifier = tup_opinion_crisis_test_2
+				}
+			}
+			every_playable_country = {
+				limit = {
+					NOR = {
+						has_country_flag = tup_crisis_chosen
+						has_country_flag = tup_loyal_vassal
+					}
+				}
+				add_opinion_modifier = {
+					who = FROM
+					modifier = tup_opinion_crisis_test_3
+				}
+			}
+		}
+	}
+	option = {
+		name = tup_crisis_events.460.a
+		hidden_effect = {
+			tup_trigger_hostile_combat_events = yes
+		}
+	}
+}
+
+# Final Test
+country_event = {
+	id = tup_crisis_events.490
+	title = "tup_crisis_events.460.name"
+	desc = tup_crisis_events.460.desc
+	picture = GFX_evt_shroudwalker_enclave
+	show_sound = event_death_cult
+	is_triggered_only = yes
+	trigger = {
+		NOT = {
+			has_country_flag = tup_unification_engine_test_5
+		}
+	}
+	immediate = {
+		set_country_flag = tup_unification_engine_test_5
+		add_modifier = {
+			modifier = tup_hostile_utopic_discord_cooldown
+			years = 6
+		}
+		hidden_effect = {
+			every_playable_country = {
+				remove_opinion_modifier = {
+					who = FROM
+					modifier = tup_opinion_crisis_test_3
+				}
+			}
+			every_playable_country = {
+				limit = {
+					NOR = {
+						has_country_flag = tup_crisis_chosen
+						has_country_flag = tup_loyal_vassal
+					}
+				}
+				add_opinion_modifier = {
+					who = FROM
+					modifier = tup_opinion_crisis_test_4
+				}
+			}
+		}
+	}
+	option = {
+		name = tup_crisis_events.460.a
+		hidden_effect = {
+			tup_trigger_hostile_discord_events = yes
+		}
+	}
+}
+
+#########################################################################################
+# Level 5 events
+country_event = {
+	id = tup_crisis_events.500
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		# Delay the event by one day so you can enjoy the test before you get lvl 5 crisis spammed
+		country_event = {
+			id = tup_crisis_events.501
+			days = 1
+		}
+	}
+}
+
+country_event = {
+	id = tup_crisis_events.501
+	title = "tup_crisis_events.500.name"
+	desc = tup_crisis_events.500.desc
+	picture = GFX_evt_interstellar_assembly
+	show_sound = event_death_cult
+	is_triggered_only = yes
+	immediate = {
+		hidden_effect = {
+			every_playable_country = {
+				remove_opinion_modifier = {
+					who = FROM
+					modifier = tup_opinion_crisis_test_4
+				}
+			}
+			every_playable_country = {
+				limit = {
+					NOR = {
+						has_country_flag = tup_crisis_chosen
+						has_country_flag = tup_loyal_vassal
+					}
+				}
+				add_opinion_modifier = {
+					who = FROM
+					modifier = tup_opinion_crisis_existential_threat
+				}
+			}
+		}
+	}
+	option = {
+		name = tup_crisis_events.500.option
+	}
+	option = {
+		name = tup_crisis_events.summon_utopic_menu
+		country_event = {
+			id = tup_utopic_events.1000
+		}
+	}
+}
+
+country_event = {
+	id = tup_crisis_events.502
+	title = "tup_crisis_events.502.name"
+	desc = tup_crisis_events.502.desc
+	picture = GFX_evt_interstellar_assembly
+	show_sound = event_death_cult
+	is_triggered_only = yes
+	option = {
+		name = WORRYING
+	}
+}
+
+# The Unification Engine is Fully Operational. Just add energy
+country_event = {
+	id = tup_crisis_events.510
+	title = "tup_crisis_events.510.name"
+	desc = tup_crisis_events.510.desc
+	picture = GFX_evt_interstellar_assembly
+	show_sound = event_death_cult
+	is_triggered_only = yes
+	trigger = {
+		NOT = {
+			has_country_flag = tup_unification_engine_test_6
+		}
+	}
+	immediate = {
+		set_country_flag = tup_unification_engine_test_6
+	}
+	option = {
+		name = tup_crisis_events.510.a
+	}
+}
+
+# Victory
+country_event = {
+	id = tup_crisis_events.600
+	title = "tup_crisis_events.600.name"
+	desc = tup_crisis_events.600.desc
+	picture = GFX_tup_unity_symbol_gold
+	show_sound = event_death_cult
+	is_triggered_only = yes
+	option = {
+		name = tup_crisis_events.600.a
+		owner = {
+			win = yes
+		}
+	}
+}
+
+# Game over Man, game over
+country_event = {
+	id = tup_crisis_events.601
+	title = "tup_crisis_events.601.name"
+	desc = tup_crisis_events.601.desc
+	picture = GFX_tup_unity_symbol_gold
+	show_sound = event_death_cult
+	is_triggered_only = yes
+	option = {
+		name = tup_crisis_events.601.a
+	}
+}
+
+#########################################################################################
+# Random Lecture Events
+country_event = {
+	id = tup_crisis_events.1001
+	title = tup_lecture_name
+	desc = tup_lecture_1
+	picture = GFX_evt_shroudwalker_teachers
+	show_sound = evn_ove_three_sided_deal
+	is_triggered_only = yes
+	option = {
+		name = INTRIGUING
+		hidden_effect = {
+		}
+	}
+}
+
+country_event = {
+	id = tup_crisis_events.1020
+	title = tup_lecture_name
+	desc = tup_lecture_20
+	picture = GFX_evt_one_sided_deal
+	show_sound = evn_ove_three_sided_deal
+	is_triggered_only = yes
+	option = {
+		name = INTRIGUING
+		hidden_effect = {
+			country_event = {
+				id = tup_crisis_events.1021
+				days = @tup_three_year_delay
+				random = @tup_ten_year_delay
+			}
+		}
+	}
+}
+
+country_event = {
+	id = tup_crisis_events.1021
+	title = tup_lecture_name
+	desc = tup_lecture_21
+	picture = GFX_evt_shroudwalker_teachers
+	show_sound = evn_ove_three_sided_deal
+	is_triggered_only = yes
+	option = {
+		name = INTRIGUING
+	}
+}
+
+country_event = {
+	id = tup_crisis_events.1030
+	title = tup_lecture_name
+	desc = tup_lecture_final
+	picture = GFX_evt_shroudwalker_teachers
+	show_sound = evn_ove_three_sided_deal
+	is_triggered_only = yes
+	option = {
+		name = INTRIGUING
+	}
+}

@@ -1,0 +1,573 @@
+#########################################################################################
+# The Utopia Project
+# Author: TheRingBearer
+#########################################################################################
+namespace = tup_situation_events
+#########################################################################################
+situation_event = {
+	id = tup_situation_events.100
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		owner = {
+			random_list = {
+				1 = {
+				}
+				5 = {
+					country_event = {
+						id = tup_situation_events.110
+					}
+				}
+				5 = {
+					country_event = {
+						id = tup_situation_events.111
+					}
+				}
+				5 = {
+					country_event = {
+						id = tup_situation_events.112
+					}
+				}
+				5 = {
+					country_event = {
+						id = tup_situation_events.113
+					}
+				}
+				5 = {
+					country_event = {
+						id = tup_situation_events.114
+					}
+				}
+				5 = {
+					country_event = {
+						id = tup_situation_events.115
+					}
+				}
+				5 = {
+					country_event = {
+						id = tup_situation_events.116
+					}
+				}
+				5 = {
+					country_event = {
+						id = tup_situation_events.117
+					}
+				}
+			}
+		}
+	}
+}
+
+# List of possible random situation events
+# Stability - GFX_evt_civil_action event_public_unrest_01
+# Mob rule - GFX_evt_dark_alley event_criminal_activity
+# Pirates - GFX_evt_pirate_armada event_space_battle
+# devestation - GFX_evt_night_raid event_red_alert
+# loss of Unity - GFX_evt_assembly_fight event_public_unrest_01
+# Death of Converted pops - GFX_evt_undertaker event_bad_omen
+# Bonus conversion - GFX_evt_happy_reunion evn_hand_shake_01
+# Demands for more more Amenties - GFX_evt_civil_action evn_galactic_market_01
+country_event = {
+	id = tup_situation_events.110
+	title = tup_situation_events.110
+	desc = tup_situation_events.110.desc
+	picture = GFX_evt_civil_action
+	show_sound = event_public_unrest
+	is_triggered_only = yes
+	immediate = {
+		random_owned_planet = {
+			save_event_target_as = tup_situation_target
+		}
+	}
+	option = {
+		name = UNFORTUNATE
+		event_target:tup_situation_target = {
+			add_modifier = {
+				modifier = tup_situation_stability
+				years = 5
+			}
+		}
+	}
+}
+
+country_event = {
+	id = tup_situation_events.111
+	title = tup_situation_events.111
+	desc = tup_situation_events.111.desc
+	picture = GFX_evt_dark_alley
+	show_sound = event_criminal_activity
+	is_triggered_only = yes
+	immediate = {
+		random_owned_planet = {
+			save_event_target_as = tup_situation_target
+		}
+	}
+	option = {
+		name = UNFORTUNATE
+		event_target:tup_situation_target = {
+			set_planet_flag = criminal_underworld_event_up
+			add_modifier = {
+				modifier = tup_situation_stability
+				years = 5
+			}
+			add_modifier = {
+				modifier = criminal_underworld
+				days = -1
+			}
+		}
+	}
+}
+
+country_event = {
+	id = tup_situation_events.112
+	title = tup_situation_events.112
+	desc = tup_situation_events.112.desc
+	picture = GFX_evt_pirate_armada
+	show_sound = event_space_battle
+	is_triggered_only = yes
+	immediate = {
+		owner_species = {
+			save_event_target_as = owner_species
+		}
+		random_system_within_border = {
+			save_event_target_as = pirate_system
+			create_normal_pirate_country = yes
+			tup_create_pirate_fleet = yes
+		}
+	}
+	option = {
+		name = UNFORTUNATE
+	}
+}
+
+country_event = {
+	id = tup_situation_events.113
+	title = tup_situation_events.113
+	desc = tup_situation_events.113.desc
+	picture = GFX_evt_night_raid
+	show_sound = event_red_alert
+	is_triggered_only = yes
+	immediate = {
+		random_owned_planet = {
+			save_event_target_as = tup_situation_target
+		}
+	}
+	option = {
+		name = UNFORTUNATE
+		event_target:tup_situation_target = {
+			add_planet_devastation = 50
+			ordered_owned_pop_group = {
+				limit = {
+					}
+				position = 0
+				order_by = trigger:pop_group_size
+				kill_pop_group = {
+					pop_group = this
+					percentage = 0.20
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = tup_situation_events.114
+	title = tup_situation_events.114
+	desc = tup_situation_events.114.desc
+	picture = GFX_evt_assembly_fight
+	show_sound = event_public_unrest
+	is_triggered_only = yes
+	option = {
+		name = UNFORTUNATE
+		owner = {
+			add_modifier = {
+				modifier = tup_situation_unity
+				years = 5
+			}
+			add_resource = {
+				unity = -10000
+			}
+		}
+	}
+}
+
+country_event = {
+	id = tup_situation_events.115
+	title = tup_situation_events.115
+	desc = tup_situation_events.115.desc
+	picture = GFX_evt_undertaker
+	show_sound = event_bad_omen
+	is_triggered_only = yes
+	trigger = {
+		any_owned_pop_group = {
+			has_trait = tup_trait_utopia_ascendant
+		}
+	}
+	option = {
+		name = UNFORTUNATE
+		random_owned_pop_group = {
+			limit = {
+				has_trait = tup_trait_utopia_ascendant
+			}
+			kill_pop_group = {
+				pop_group = this
+				percentage = 0.1
+			}
+		}
+		random_owned_pop_group = {
+			limit = {
+				has_trait = tup_trait_utopia_ascendant
+			}
+			kill_pop_group = {
+				pop_group = this
+				percentage = 0.1
+			}
+		}
+		random_owned_pop_group = {
+			limit = {
+				has_trait = tup_trait_utopia_ascendant
+			}
+			kill_pop_group = {
+				pop_group = this
+				percentage = 0.1
+			}
+		}
+		random_owned_pop_group = {
+			limit = {
+				has_trait = tup_trait_utopia_ascendant
+			}
+			kill_pop_group = {
+				pop_group = this
+				percentage = 0.1
+			}
+		}
+		random_owned_pop_group = {
+			limit = {
+				has_trait = tup_trait_utopia_ascendant
+			}
+			kill_pop_group = {
+				pop_group = this
+				percentage = 0.1
+			}
+		}
+		random_situation = {
+			limit = {
+				is_situation_type = tup_situation_communal_reformation
+			}
+			add_situation_progress = 5
+		}
+	}
+}
+
+country_event = {
+	id = tup_situation_events.116
+	title = tup_situation_events.116
+	desc = tup_situation_events.116.desc
+	picture = GFX_evt_happy_reunion
+	show_sound = event_default
+	is_triggered_only = yes
+	immediate = {
+		random_owned_leader = {
+			save_event_target_as = tup_situation_target
+		}
+	}
+	option = {
+		name = EXCELLENT
+		random_owned_pop_group = {
+			limit = {
+				NOT = {
+					has_trait = tup_trait_utopia_ascendant
+				}
+			}
+			modify_species = {
+				species = this
+				add_trait = tup_trait_utopia_ascendant
+			}
+		}
+		random_owned_pop_group = {
+			limit = {
+				NOT = {
+					has_trait = tup_trait_utopia_ascendant
+				}
+			}
+			modify_species = {
+				species = this
+				add_trait = tup_trait_utopia_ascendant
+			}
+		}
+		random_owned_pop_group = {
+			limit = {
+				NOT = {
+					has_trait = tup_trait_utopia_ascendant
+				}
+			}
+			modify_species = {
+				species = this
+				add_trait = tup_trait_utopia_ascendant
+			}
+		}
+		random_situation = {
+			limit = {
+				is_situation_type = tup_situation_communal_reformation
+			}
+			add_situation_progress = 10
+		}
+		event_target:tup_situation_target = {
+			add_skill = 1
+		}
+	}
+}
+
+country_event = {
+	id = tup_situation_events.117
+	title = tup_situation_events.117
+	desc = tup_situation_events.117.desc
+	picture = GFX_evt_civil_action
+	show_sound = event_galactic_market
+	is_triggered_only = yes
+	immediate = {
+		random_owned_planet = {
+			save_event_target_as = tup_situation_target
+		}
+	}
+	option = {
+		name = tup_situation_events.117.agree
+		allow = {
+			has_resource = {
+				type = energy
+				amount >= 10000
+			}
+			has_resource = {
+				type = consumer_goods
+				amount >= 5000
+			}
+		}
+		event_target:tup_situation_target = {
+			add_modifier = {
+				modifier = tup_situation_ammenities
+				years = 5
+			}
+		}
+		random_situation = {
+			limit = {
+				is_situation_type = tup_situation_communal_reformation
+			}
+			add_situation_progress = 5
+		}
+		add_resource = {
+			energy = -10000
+			consumer_goods = -5000
+		}
+	}
+	option = {
+		name = tup_situation_events.117.disagree
+		event_target:tup_situation_target = {
+			add_modifier = {
+				modifier = tup_situation_ammenities_refused
+				years = 5
+			}
+		}
+		random_situation = {
+			limit = {
+				is_situation_type = tup_situation_communal_reformation
+			}
+			add_situation_progress = -10
+		}
+	}
+}
+
+situation_event = {
+	id = tup_situation_events.120
+	title = tup_situation_events.120
+	desc = tup_situation_events.120.desc
+	picture = GFX_evt_genetic_ascention_cloning
+	show_sound = event_default
+	is_triggered_only = yes
+	immediate = {
+		owner = {
+			set_variable = {
+				which = tup_number_of_pops_to_convert
+				value = value:num_pop_groups
+			}
+			divide_variable = {
+				which = tup_number_of_pops_to_convert
+				value = 5
+			}
+			ceiling_variable = tup_number_of_pops_to_convert
+		}
+	}
+	option = {
+		name = EXCELLENT
+		owner = {
+			while = {
+				count = tup_number_of_pops_to_convert
+				random_owned_pop_group = {
+					limit = {
+						NOT = {
+							has_trait = tup_trait_utopia_ascendant
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = tup_trait_utopia_ascendant
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_modifier = tup_situation_communal_reformation_progress_2
+				}
+				add_modifier = {
+					modifier = tup_situation_communal_reformation_progress_3
+				}
+			}
+			else_if = {
+				limit = {
+					has_modifier = tup_situation_communal_reformation_progress_1
+				}
+				add_modifier = {
+					modifier = tup_situation_communal_reformation_progress_2
+				}
+			}
+			else = {
+				add_modifier = {
+					modifier = tup_situation_communal_reformation_progress_1
+				}
+			}
+		}
+	}
+}
+
+###########################################################################
+# Situation complete
+situation_event = {
+	id = tup_situation_events.200
+	title = "tup_situation_events.200.name"
+	desc = tup_situation_events.200.desc
+	picture = GFX_evt_pirate_armada
+	show_sound = event_space_battle
+	is_triggered_only = yes
+	immediate = {
+		owner = {
+			save_event_target_as = pirate_target
+			owner_species = {
+				save_event_target_as = owner_species
+			}
+			random_system_within_border = {
+				limit = {
+					is_capital_system = no
+				}
+				save_event_target_as = pirate_system
+				create_normal_pirate_country = yes
+				tup_create_pirate_base = yes
+				tup_create_pirate_fleet_2 = yes
+			}
+		}
+	}
+	option = {
+		name = tup_situation_events.200.a
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = {
+						owner = {
+							any_system_within_border = {
+								any_fleet_in_system = {
+									has_fleet_flag = tup_rebellion_pirate_station
+								}
+							}
+						}
+					}
+				}
+				owner = {
+					country_event = {
+						id = tup_situation_events.206
+						days = 1
+					}
+				}
+			}
+		}
+	}
+	after = {
+		destroy_situation = this
+	}
+}
+
+# This = owner of fleet 1 (winner)
+# From = owner of fleet 2 (loser)
+# FromFrom = fleet 1
+# FromFromFrom = fleet 2
+# This fires whenever a fleet is finished with a combat through any means (emergency ftl, destroyed, disabled)
+country_event = {
+	id = tup_situation_events.205
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		FromFromFrom = {
+			has_fleet_flag = tup_rebellion_pirate_station
+		}
+	}
+	immediate = {
+		FromFromFrom = {
+			remove_fleet_flag = tup_rebellion_pirate_station
+		}
+		every_playable_country = {
+			limit = {
+				has_country_flag = tup_crisis_chosen
+				has_country_flag = tup_crisis_level_2
+				NOT = {
+					any_system_within_border = {
+						any_fleet_in_system = {
+							has_fleet_flag = tup_rebellion_pirate_station
+						}
+					}
+				}
+			}
+			country_event = {
+				id = tup_situation_events.206
+			}
+		}
+	}
+}
+
+country_event = {
+	id = tup_situation_events.206
+	title = tup_situation_events.206.name
+	desc = tup_situation_events.206.desc
+	picture = GFX_evt_cover_blown
+	show_sound = event_salute
+	is_triggered_only = yes
+	immediate = {
+	}
+	option = {
+		name = EXCELLENT
+		hidden_effect = {
+			owner = {
+				set_country_flag = tup_crisis_have_completed_reformation
+				every_owned_planet = {
+					remove_modifier = tup_situation_ammenities_refused
+					remove_modifier = tup_situation_ammenities
+					remove_modifier = tup_situation_unity
+					remove_modifier = tup_situation_stability
+					remove_modifier = crime_wave
+					remove_modifier = criminal_underworld
+				}
+				remove_modifier = tup_situation_communal_reformation_progress_1
+				remove_modifier = tup_situation_communal_reformation_progress_2
+				remove_modifier = tup_situation_communal_reformation_progress_3
+				remove_modifier = tup_situation_unity
+				every_owned_pop_group = {
+					limit = {
+						NOT = {
+							has_trait = tup_trait_utopia_ascendant
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = tup_trait_utopia_ascendant
+					}
+				}
+			}
+		}
+	}
+}

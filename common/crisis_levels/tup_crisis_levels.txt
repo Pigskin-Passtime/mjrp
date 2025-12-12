@@ -1,0 +1,204 @@
+#########################################################################################
+# The Utopia Project
+# Author: TheRingBearer
+#########################################################################################
+# CRISIS LEVELS
+# Levels can be unlocked in the order they are written in this file. A later listed level with lower requirements will not be unlocked until the previous levels have been unlocked.
+#
+# level_name = {
+#	perks = {
+#		menp_undertaker		# The menace perks that will be applied when the level is unlocked.
+#		menp_ship_chipper
+#	}
+#	required_menace = 0		# The required amount of Menace to unlock the level
+#	allow = { has_completed_special_project_in_log = CRISIS_SPECIAL_PROJECT_1 }	# You can only unlock this level when this trigger returns true
+#																			# scope COUNTRY, This = country trying to unlock the level
+#	on_unlock = { set_country_flag = CRISIS_LEVEL_FLAG }	# an effect that is triggered when you unlock the level
+#															# scope COUNTRY, This = country the level is being unlocked for
+# }
+
+tup_crisis_utopiaproject_level_1 = {
+	# REQUIREMENTS
+	required_crisis_currency = 0
+
+	# REWARDS
+	perks = {
+		tup_crisis_features_1_utopic_energy
+		tup_crisis_features_1_leader_adjustments
+	}
+
+	on_unlock = {
+		add_utopiaproject_level_1_perks = yes
+		hidden_effect = {
+			owner = {
+				country_event = { id = tup_crisis_events.100 } 
+			}
+		}
+	}
+}
+
+tup_crisis_utopiaproject_level_2 = {
+	# REQUIREMENTS
+	allow = {
+		custom_tooltip = {
+			success_text = tup_crisis_level_2a_req_clear_tooltip
+			fail_text =	tup_crisis_level_2a_req_tooltip
+			has_country_flag = tup_crisis_have_completed_preliminary_special_project
+		}
+		custom_tooltip = {
+			success_text = tup_crisis_level_2b_req_clear_tooltip
+			fail_text =	tup_crisis_level_2b_req_tooltip
+			has_country_flag = tup_crisis_have_template
+		}
+	}
+	required_crisis_currency = 0
+
+	# REWARDS
+	perks = {
+		tup_crisis_features_2_empire_stability
+		tup_crisis_features_2_further_leader_adjustments
+	}
+
+	on_unlock = {
+		add_utopiaproject_level_2_perks = yes
+		hidden_effect = {
+			owner = {
+				country_event = { id = tup_crisis_events.200 } 
+			}
+		}
+	}
+}
+
+tup_crisis_utopiaproject_level_3 = {
+	# REQUIREMENTS
+	allow = {
+		custom_tooltip = {
+			success_text = tup_crisis_level_3_req_clear_tooltip
+			fail_text =	tup_crisis_level_3_req_tooltip
+			has_country_flag = tup_crisis_have_completed_reformation
+		}
+	}
+	required_crisis_currency = 0
+
+	# REWARDS
+	perks = {
+		tup_crisis_features_3_powering_utopia
+		tup_crisis_features_3_welcoming_into_the_fold
+		tup_crisis_features_3_the_perfect_society
+		tup_crisis_features_3_unity_in_vision
+	}
+
+	on_unlock = {
+		add_utopiaproject_level_3_perks = yes
+		hidden_effect = {
+			owner = {
+				country_event = { id = tup_crisis_events.300 } 
+			}
+		}
+	}
+}
+
+tup_crisis_utopiaproject_level_4 = {
+	# REQUIREMENTS
+	allow = {
+		custom_tooltip = {
+			success_text = tup_crisis_level_4_req_clear_tooltip
+			fail_text =	tup_crisis_level_4_req_tooltip
+			any_subject = {
+				has_country_flag = tup_loyal_vassal
+			}
+		}
+		custom_tooltip = {
+			success_text = tup_crisis_level_4_req2_clear_tooltip
+			fail_text =	tup_crisis_level_4_req2_tooltip
+			count_owned_megastructure = {
+				count >= 5
+				limit = {
+					OR = {
+						is_megastructure_type = tup_utopic_dyson_swarm
+						is_megastructure_type = tup_utopic_dyson_swarm_alt
+					}
+				}
+			}
+		}
+	}
+	required_crisis_currency = 40
+
+	# REWARDS
+	perks = {
+		tup_crisis_features_4_unification_engine
+	}
+
+	on_unlock = {
+		add_utopiaproject_level_4_perks = yes
+		hidden_effect = {
+			owner = {
+				country_event = { id = tup_crisis_events.400 } 
+			}
+		}
+	}
+}
+
+tup_crisis_utopiaproject_level_5 = {
+	# REQUIREMENTS
+	allow = {
+		custom_tooltip = {
+			success_text = tup_crisis_level_5_req2_clear_tooltip
+			fail_text =	tup_crisis_level_5_req2_tooltip
+			has_country_flag = tup_unification_engine_test_2
+		}
+		custom_tooltip = {
+			success_text = tup_crisis_level_5_req3_clear_tooltip
+			fail_text =	tup_crisis_level_5_req3_tooltip
+			has_country_flag = tup_unification_engine_test_3
+		}
+		custom_tooltip = {
+			success_text = tup_crisis_level_5_req4_clear_tooltip
+			fail_text =	tup_crisis_level_5_req4_tooltip
+			has_country_flag = tup_unification_engine_test_4
+		}
+		custom_tooltip = {
+			success_text = tup_crisis_level_5_req5_clear_tooltip
+			fail_text =	tup_crisis_level_5_req5_tooltip
+			has_country_flag = tup_unification_engine_test_5
+		}
+		custom_tooltip = {
+			success_text = tup_crisis_level_5_req_clear_tooltip
+			fail_text =	tup_crisis_level_5_req_tooltip
+			has_megastructure = tup_unification_engine_1
+		}
+		is_subject = no
+	}
+	required_crisis_currency = 0
+
+	# REWARDS
+	perks = {
+		tup_crisis_features_5_unification_engine_effects
+	}
+
+	on_unlock = {
+		add_utopiaproject_level_5_perks = yes
+		hidden_effect = {
+			owner = {
+				country_event = { id = tup_crisis_events.500 } 
+			}
+
+			declare_crisis_effect = yes
+			every_playable_country = {
+				limit = {
+					is_galactic_community_member = no
+					NOR = {
+						is_same_value = owner
+						is_at_war_with = owner
+					}
+				}
+				join_war_on_side = {
+					war = event_target:crisis_war
+					side = event_target:community_war_leader
+				}
+				country_event = { id = tup_crisis_events.502 days = 30 } 
+			}
+		}
+	}
+
+}

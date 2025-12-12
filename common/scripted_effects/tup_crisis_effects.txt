@@ -1,0 +1,1235 @@
+#########################################################################################
+# The Utopia Project
+# Author: TheRingBearer
+#########################################################################################
+# generate_random_variable_value = { 
+# 	variable = "my_variable"  #Name of variable
+# 	digits = "4" #Number of digits
+#   }
+generate_random_variable_value = {
+	set_variable = {
+		which = random_number
+		value = 0
+	}
+	set_variable = {
+		which = random_number_temp
+		value = 0
+	}
+	set_variable = {
+		which = random_number_digits
+		value = 1
+	}
+	while = {
+		count = 2
+		random_list = {
+			1 = {
+				set_variable = {
+					which = random_number_temp
+					value = 0
+				}
+			}
+			1 = {
+				set_variable = {
+					which = random_number_temp
+					value = 1
+				}
+			}
+			1 = {
+				set_variable = {
+					which = random_number_temp
+					value = 2
+				}
+			}
+			1 = {
+				set_variable = {
+					which = random_number_temp
+					value = 3
+				}
+			}
+			1 = {
+				set_variable = {
+					which = random_number_temp
+					value = 4
+				}
+			}
+			1 = {
+				set_variable = {
+					which = random_number_temp
+					value = 5
+				}
+			}
+			1 = {
+				set_variable = {
+					which = random_number_temp
+					value = 6
+				}
+			}
+			1 = {
+				set_variable = {
+					which = random_number_temp
+					value = 7
+				}
+			}
+			1 = {
+				set_variable = {
+					which = random_number_temp
+					value = 8
+				}
+			}
+			1 = {
+				set_variable = {
+					which = random_number_temp
+					value = 9
+				}
+			}
+		}
+		multiply_variable = {
+			which = random_number_temp
+			value = random_number_digits
+		}
+		change_variable = {
+			which = random_number
+			value = random_number_temp
+		}
+		multiply_variable = {
+			which = random_number_digits
+			value = 10
+		}
+	}
+	set_variable = {
+		which = random_number_temp
+		value = 0
+	}
+	set_variable = {
+		which = random_number_digits
+		value = 0
+	}
+}
+
+add_utopiaproject_level_1_perks = {
+	set_country_flag = tup_crisis_level_1
+}
+
+add_utopiaproject_level_2_perks = {
+	set_country_flag = tup_crisis_level_2
+	remove_country_flag = tup_crisis_level_1
+}
+
+add_utopiaproject_level_3_perks = {
+	set_country_flag = tup_crisis_level_3
+	remove_country_flag = tup_crisis_level_2
+	add_research_option = tech_mega_engineering
+}
+
+add_utopiaproject_level_4_perks = {
+	set_country_flag = tup_crisis_level_4
+	remove_country_flag = tup_crisis_level_3
+}
+
+add_utopiaproject_level_5_perks = {
+	set_country_flag = tup_crisis_level_5
+	remove_country_flag = tup_crisis_level_4
+}
+
+tup_increase_buy_utopic_energy_costs = {
+	if = {
+		limit = {
+			check_variable = {
+				which = tup_utopic_energy_cost
+				value < 10000
+			}
+		}
+		change_variable = {
+				which = tup_utopic_energy_cost
+				value = 500
+			}
+	}
+	else_if = {
+		limit = {
+			check_variable = {
+				which = tup_utopic_energy_cost
+				value < 25000
+			}
+		}
+		change_variable = {
+			which = tup_utopic_energy_cost
+			value = 750
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = {
+				which = tup_utopic_energy_cost
+				value < 50000
+			}
+		}
+		change_variable = {
+			which = tup_utopic_energy_cost
+			value = 1000
+		}
+	}
+	else = {
+		change_variable = {
+			which = tup_utopic_energy_cost
+			value = 5000
+		}
+	}
+}
+
+tup_add_improve_leader_perks_1 = {
+	remove_trait = all_negative
+	if = {
+		limit = {
+			NOT = {
+				has_leader_flag = tup_leader_improved_1
+			}
+		}
+		add_trait = {
+			trait = leader_trait_eager
+			show_message = yes
+		}
+		add_trait = {
+			trait = leader_trait_adaptable
+			show_message = yes
+		}
+	}
+
+	set_leader_flag = tup_leader_improved_1
+}
+
+tup_add_improve_leader_perks_2 = {
+	tup_add_improve_leader_perks_1 = yes
+	add_trait = {
+		trait = tup_trait_utopia_ascendant_leader
+		show_message = yes
+	}
+	if = {
+		limit = {
+			leader_class = commander
+			NOT = {
+				has_leader_flag = tup_leader_improved_2
+			}
+		}
+		if = {
+			limit = {
+				NAND = {
+					has_trait = leader_trait_aggressive
+					has_trait = leader_trait_cautious
+				}
+			}
+			random_list = {
+				1 = {
+					add_trait = {
+						trait = leader_trait_aggressive
+						show_message = yes
+					}
+				}
+				1 = {
+					add_trait = {
+						trait = leader_trait_cautious
+						show_message = yes
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				NAND = {
+					has_trait = leader_trait_trickster
+					has_trait = leader_trait_unyielding
+				}
+			}
+			random_list = {
+				1 = {
+					add_trait = {
+						trait = leader_trait_trickster
+						show_message = yes
+					}
+				}
+				1 = {
+					add_trait = {
+						trait = leader_trait_unyielding
+						show_message = yes
+					}
+				}
+			}
+		}
+	}
+	if = {
+		limit = {
+			leader_class = official
+			NOT = {
+				has_leader_flag = tup_leader_improved_2
+			}
+		}
+		add_trait = {
+					trait = leader_trait_bureaucrat
+					show_message = yes
+				}
+		# Yeah... just going to make leader_trait_entrepreneur the fallback if there is a conflict
+		random_list = {
+			25 = {
+				if = {
+					limit = {
+						NAND = {
+							has_trait = leader_trait_capitalist
+							has_trait = leader_trait_capitalist_2
+						}
+					}
+					add_trait = {
+						trait = leader_trait_capitalist
+						show_message = yes
+					}
+				}
+				else = {
+					add_trait = {
+						trait = leader_trait_entrepreneur
+						show_message = yes
+					}
+				}
+			}
+			25 = {
+				if = {
+					limit = {
+						NAND = {
+							has_trait = leader_trait_private_mines
+							has_trait = leader_trait_private_mines_2
+						}
+					}
+					add_trait = {
+						trait = leader_trait_private_mines
+						show_message = yes
+					}
+				}
+				else = {
+					add_trait = {
+						trait = leader_trait_entrepreneur
+						show_message = yes
+					}
+				}
+			}
+			25 = {
+				if = {
+					limit = {
+						NAND = {
+							has_trait = leader_trait_homesteader
+							has_trait = leader_trait_homesteader_2
+						}
+					}
+					add_trait = {
+						trait = leader_trait_homesteader
+						show_message = yes
+					}
+				}
+				else = {
+					add_trait = {
+						trait = leader_trait_entrepreneur
+						show_message = yes
+					}
+				}
+			}
+			25 = {
+				if = {
+					limit = {
+						NAND = {
+							has_trait = leader_trait_scrapper
+							has_trait = leader_trait_scrapper_2
+						}
+					}
+					add_trait = {
+						trait = leader_trait_scrapper
+						show_message = yes
+					}
+				}
+				else = {
+					add_trait = {
+						trait = leader_trait_entrepreneur
+						show_message = yes
+					}
+				}
+			}
+			25 = {
+				if = {
+					limit = {
+						NAND = {
+							has_trait = leader_trait_entrepreneur
+							has_trait = leader_trait_entrepreneur_2
+						}
+					}
+					add_trait = {
+						trait = leader_trait_entrepreneur
+						show_message = yes
+					}
+				}
+				else = {
+					add_trait = {
+						trait = leader_trait_capitalist
+						show_message = yes
+					}
+				}
+			}
+		}
+	}
+	if = {
+		limit = {
+			leader_class = scientist
+			NOT = {
+				has_leader_flag = tup_leader_improved_2
+			}
+		}
+		random_list = {
+			25 = {
+				add_trait = {
+					trait = leader_trait_roamer
+					show_message = yes
+				}
+			}
+			25 = {
+				add_trait = {
+					trait = leader_trait_meticulous
+					show_message = yes
+				}
+			}
+			25 = {
+				add_trait = {
+					trait = leader_trait_carefree
+					show_message = yes
+				}
+			}
+			25 = {
+				add_trait = {
+					trait = leader_trait_archaeologist
+					show_message = yes
+				}
+			}
+		}
+		random_list = {
+			25 = {
+				add_trait = {
+					trait = leader_trait_expertise_materials
+					show_message = yes
+				}
+			}
+			25 = {
+				add_trait = {
+					trait = leader_trait_expertise_propulsion
+					show_message = yes
+				}
+			}
+			25 = {
+				add_trait = {
+					trait = leader_trait_expertise_voidcraft
+					show_message = yes
+				}
+			}
+			25 = {
+				add_trait = {
+					trait = leader_trait_expertise_industry
+					show_message = yes
+				}
+			}
+			25 = {
+				add_trait = {
+					trait = leader_trait_expertise_field_manipulation
+					show_message = yes
+				}
+			}
+			25 = {
+				add_trait = {
+					trait = leader_trait_expertise_particles
+					show_message = yes
+				}
+			}
+			25 = {
+				add_trait = {
+					trait = leader_trait_expertise_computing
+					show_message = yes
+				}
+			}
+			25 = {
+				add_trait = {
+					trait = leader_trait_expertise_psionics
+					show_message = yes
+				}
+			}
+			25 = {
+				add_trait = {
+					trait = leader_trait_expertise_new_worlds
+					show_message = yes
+				}
+			}
+			25 = {
+				add_trait = {
+					trait = leader_trait_expertise_statecraft
+					show_message = yes
+				}
+			}
+			25 = {
+				add_trait = {
+					trait = leader_trait_expertise_biology
+					show_message = yes
+				}
+			}
+			25 = {
+				add_trait = {
+					trait = leader_trait_expertise_military_theory
+					show_message = yes
+				}
+			}
+		}
+	}
+
+	set_leader_flag = tup_leader_improved_2
+}
+
+tup_add_improve_leader_perks_3 = {
+	tup_add_improve_leader_perks_2 = yes
+	if = {
+		limit = {
+			leader_class = commander
+			NOT = {
+				has_leader_flag = tup_leader_improved_3
+			}
+		}
+		add_skill = 1
+		random_list = {
+			1 = { add_trait = { trait = leader_trait_wrecker_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_artillerist_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_commanding_presence_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_corsair_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_demolisher_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_shipbreaker_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_artillery_specialization_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_carrier_specialization_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_rocketry_specialization_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_gunship_specialization_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_juryrigger_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_surgical_bombardment_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_scout_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_gale_speed_2 show_message = yes }}
+			1 = { add_trait = { trait = trait_ruler_fortifier_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_armada_logistician_2 show_message = yes }}
+			1 = { add_trait = { trait = trait_ruler_military_pioneer_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_intimidator_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_border_guard_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_crew_trainer_2 show_message = yes }}
+
+			1 = { add_trait = { trait = leader_trait_home_guard_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_hardy_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_martinet_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_warden_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_reinforcer_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_guardian_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_conscripter_2 show_message = yes }}
+		}
+	}
+	if = {
+		limit = {
+			leader_class = official
+			NOT = {
+				has_leader_flag = tup_leader_improved_3
+			}
+		}
+		add_skill = 1
+		random_list = {
+			1 = { add_trait = { trait = leader_trait_trade_focus_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_cultural_focus_2 show_message = yes }}
+			1 = { add_trait = { trait = trait_ruler_investor_2 show_message = yes }}
+			1 = { add_trait = { trait = trait_ruler_architectural_sense_2 show_message = yes }}
+			1 = { add_trait = { trait = trait_ruler_deep_connections_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_reformer_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_mining_focus_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_generator_focus_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_farming_focus_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_settler_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_cartographer_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_forge_focus_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_industrial_focus_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_refinement_focus_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_shadow_broker_2 show_message = yes }}
+		}
+	}
+	if = {
+		limit = {
+			leader_class = scientist
+			NOT = {
+				has_leader_flag = tup_leader_improved_3
+			}
+		}
+		add_skill = 1
+		random_list = {
+			1 = { add_trait = { trait = leader_trait_collaborator_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_manufacturer_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_salvager_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_space_miner_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_inquisitive_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_maniacal_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_science_communicator_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_engineering_focus_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_physics_focus_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_society_focus_2 show_message = yes }}
+			1 = { add_trait = { trait = leader_trait_salvager_2 show_message = yes }}
+		}
+	}
+	set_leader_flag = tup_leader_improved_3
+}
+
+tup_convert_vassal_to_loyal_vassal = {
+	set_country_flag = tup_loyal_vassal
+
+	every_agreement = {
+		limit = {
+			agreement_preset = preset_vassal
+		}
+		set_agreement_preset = {
+			preset = tup_preset_loyal_vassal
+		}
+	}
+
+	every_playable_country = {
+		remove_opinion_modifier = {
+			who = FROM
+			modifier = tup_opinion_discord
+		}
+		remove_opinion_modifier = {
+			who = FROM
+			modifier = tup_opinion_brainwasher
+		}
+		remove_opinion_modifier = {
+			who = FROM
+			modifier = tup_opinion_crisis_test_1
+		}
+		remove_opinion_modifier = {
+			who = FROM
+			modifier = tup_opinion_crisis_test_2
+		}
+		remove_opinion_modifier = {
+			who = FROM
+			modifier = tup_opinion_crisis_test_3
+		}
+		remove_opinion_modifier = {
+			who = FROM
+			modifier = tup_opinion_crisis_test_4
+		}
+		remove_opinion_modifier = {
+			who = FROM
+			modifier = tup_opinion_crisis_existential_threat
+		}
+	}
+
+	add_modifier = {
+		modifier = tup_utopia_society
+		years = -1
+	}
+	if = {
+		limit = {
+			is_egalitarian = no
+		}
+		shift_ethic = ethic_egalitarian
+	}
+	
+	every_owned_pop_group = {
+		modify_species = {
+			species = this
+			add_trait = tup_trait_utopia_ascendant
+		}
+		modify_species = {
+			species = this
+			add_trait = trait_psionic
+		}
+	}
+	every_owned_leader = {
+		add_trait = {
+			trait = leader_trait_eager
+		}
+		add_trait = {
+			trait = leader_trait_adaptable
+		}
+		add_trait = {
+			trait = leader_trait_psionic
+		}
+		add_trait = {
+			trait = tup_trait_utopia_ascendant_leader
+		}
+	}
+}
+
+
+tup_trigger_hostile_stability_events = {
+	every_playable_country = {
+		limit = {
+			NOR = {
+				has_country_flag = tup_crisis_chosen
+				has_country_flag = tup_loyal_vassal
+			}
+		}
+		country_event = {
+			id = tup_utopic_events.1120
+			days = 5
+		}
+	}
+	random_playable_country = {
+		limit = {
+			is_fallen_empire = no
+			NOR = {
+				has_country_flag = tup_crisis_chosen
+				has_country_flag = tup_loyal_vassal
+			}
+		}
+		random_planet_within_border = {
+			limit = {
+				is_capital = no
+				is_colony = yes
+			}
+			planet_event = {
+				id = tup_utopic_events.1121
+				days = 5
+				random = 10
+			}
+		}
+	}
+}
+tup_trigger_hostile_resource_events = {
+	every_playable_country = {
+		limit = {
+			NOR = {
+				has_country_flag = tup_crisis_chosen
+				has_country_flag = tup_loyal_vassal
+			}
+		}
+		country_event = {
+			id = tup_utopic_events.1130
+			days = 5
+		}
+	}
+	random_playable_country = {
+		limit = {
+			is_fallen_empire = no
+			NOR = {
+				has_country_flag = tup_crisis_chosen
+				has_country_flag = tup_loyal_vassal
+			}
+		}
+		random_planet_within_border = {
+			limit = {
+				is_capital = no
+				is_colony = yes
+			}
+			planet_event = {
+				id = tup_utopic_events.1131
+				days = 5
+				random = 10
+			}
+		}
+	}
+}
+tup_trigger_hostile_combat_events = {
+	every_playable_country = {
+		limit = {
+			NOR = {
+				has_country_flag = tup_crisis_chosen
+				has_country_flag = tup_loyal_vassal
+			}
+		}
+		country_event = {
+			id = tup_utopic_events.1150
+			days = 5
+		}
+	}
+	random_playable_country = {
+		limit = {
+			is_fallen_empire = no
+			NOR = {
+				has_country_flag = tup_crisis_chosen
+				has_country_flag = tup_loyal_vassal
+			}
+		}
+		country_event = {
+			id = tup_utopic_events.1151
+			days = 5
+			random = 10
+		}
+	}
+}
+tup_trigger_hostile_discord_events = {
+	every_playable_country = {
+		limit = {
+			NOR = {
+				has_country_flag = tup_crisis_chosen
+				has_country_flag = tup_loyal_vassal
+			}
+		}
+		country_event = {
+			id = tup_utopic_events.1160
+			days = 5
+		}
+	}
+	random_playable_country = {
+		limit = {
+			is_fallen_empire = no
+			NOR = {
+				has_country_flag = tup_crisis_chosen
+				has_country_flag = tup_loyal_vassal
+			}
+		}
+		country_event = {
+			id = tup_utopic_events.1161
+			days = 5
+			random = 10
+		}
+	}
+}
+
+
+
+
+###########################################
+# Situation Scripted Effects
+# Check for Global Flag: year_2200_start, year_2225_start, year_2250_start, year_2275_start, year_2300_start
+tup_create_pirate_base = {
+	create_fleet = {
+		name = "NAME_Pirate_Station"
+		effect = {
+			set_owner = event_target:pirate_band
+			create_ship = {
+				name = random
+				design = "NAME_Pirate_Nest"
+				graphical_culture = "pirate_01"
+			}
+			set_location = event_target:pirate_home
+			set_fleet_flag = tup_rebellion_pirate_station
+		}
+	}
+}
+
+tup_create_pirate_fleet = {
+	event_target:pirate_band = {
+		create_leader = {
+			class = commander
+			species = owner_main_species
+			name = random
+			skill = 1
+		}
+		ROOT = {
+			export_trigger_value_to_variable = {
+				trigger = years_passed
+				variable = tup_years_passed_as_variable
+			}
+			if = {
+				limit = {
+					has_global_flag = year_2225_start
+				}
+				change_variable = {
+					which = tup_years_passed_as_variable
+					value = 25
+				}
+			}
+			if = {
+				limit = {
+					has_global_flag = year_2250_start
+				}
+				change_variable = {
+					which = tup_years_passed_as_variable
+					value = 50
+				}
+			}
+			if = {
+				limit = {
+					has_global_flag = year_2275_start
+				}
+				change_variable = {
+					which = tup_years_passed_as_variable
+					value = 75
+				}
+			}
+			if = {
+				limit = {
+					has_global_flag = year_2300_start
+				}
+				change_variable = {
+					which = tup_years_passed_as_variable
+					value = 100
+				}
+			}
+		}
+
+		create_fleet = {
+			name = "NAME_Pirate_Fleet"
+			effect = {
+				set_owner = event_target:pirate_band
+				if = {
+					limit = {
+					}
+					create_pirate_ships_0 = yes
+				}
+				if = {
+					limit = {
+						ROOT = {
+							check_variable_arithmetic  = {
+							which = tup_years_passed_as_variable
+							value > 20
+							}
+						}
+					}
+					create_pirate_ships_1 = yes
+				}
+				if = {
+					limit = {
+						ROOT = {
+							check_variable_arithmetic  = {
+							which = tup_years_passed_as_variable
+							value > 40
+							}
+						}
+					}
+					create_pirate_ships_2 = yes
+				}
+				if = {
+					limit = {
+						ROOT = {
+							check_variable_arithmetic  = {
+							which = tup_years_passed_as_variable
+							value > 50
+							}
+						}
+					}
+					create_pirate_ships_3 = yes
+				}
+				if = {
+					limit = {
+						ROOT = {
+							check_variable_arithmetic  = {
+							which = tup_years_passed_as_variable
+							value > 60
+							}
+						}
+					}
+					create_pirate_ships_4 = yes
+				}
+				if = {
+					limit = {
+						ROOT = {
+							check_variable_arithmetic  = {
+							which = tup_years_passed_as_variable
+							value > 80
+							}
+						}
+					}
+					create_pirate_ships_5 = yes
+				}
+				if = {
+					limit = {
+						ROOT = {
+							check_variable_arithmetic  = {
+							which = tup_years_passed_as_variable
+							value > 95
+							}
+						}
+					}
+					create_pirate_ships_6 = yes
+				}
+				if = {
+					limit = {
+						ROOT = {
+							check_variable_arithmetic  = {
+							which = tup_years_passed_as_variable
+							value > 105
+							}
+						}
+					}
+					create_pirate_ships_7 = yes
+				}
+				if = {
+					limit = {
+						ROOT = {
+							check_variable_arithmetic  = {
+							which = tup_years_passed_as_variable
+							value > 130
+							}
+						}
+					}
+					create_pirate_ships_8 = yes
+				}
+				if = {
+					limit = {
+						ROOT = {
+							check_variable_arithmetic  = {
+							which = tup_years_passed_as_variable
+							value > 150
+							}
+						}
+					}
+					create_pirate_ships_9 = yes
+				}
+				if = {
+					limit = {
+						ROOT = {
+							check_variable_arithmetic  = {
+							which = tup_years_passed_as_variable
+							value > 200
+							}
+						}
+					}
+					create_pirate_ships_10 = yes
+				}
+				if = {
+					limit = {
+						ROOT = {
+							check_variable_arithmetic  = {
+							which = tup_years_passed_as_variable
+							value > 233
+							}
+						}
+					}
+					create_pirate_ships_10 = yes
+				}
+				if = {
+					limit = {
+						ROOT = {
+							check_variable_arithmetic  = {
+							which = tup_years_passed_as_variable
+							value > 266
+							}
+						}
+					}
+					create_pirate_ships_9 = yes
+				}
+				if = {
+					limit = {
+						ROOT = {
+							check_variable_arithmetic  = {
+							which = tup_years_passed_as_variable
+							value > 300
+							}
+						}
+					}
+					create_pirate_ships_8 = yes
+				}
+				assign_leader = last_created_leader
+				set_location = event_target:pirate_home
+				set_fleet_stance = aggressive
+				set_aggro_range_measure_from = self
+				set_aggro_range = 800
+			}
+		}
+	}
+}
+
+tup_create_pirate_fleet_2 = {
+	event_target:pirate_band = {
+		create_leader = {
+			class = commander
+			species = owner_main_species
+			name = random
+			skill = 1
+		}
+		ROOT = {
+			export_trigger_value_to_variable = {
+				trigger = years_passed
+				variable = tup_years_passed_as_variable
+			}
+			if = {
+				limit = {
+					has_global_flag = year_2225_start
+				}
+				change_variable = {
+					which = tup_years_passed_as_variable
+					value = 25
+				}
+			}
+			if = {
+				limit = {
+					has_global_flag = year_2250_start
+				}
+				change_variable = {
+					which = tup_years_passed_as_variable
+					value = 50
+				}
+			}
+			if = {
+				limit = {
+					has_global_flag = year_2275_start
+				}
+				change_variable = {
+					which = tup_years_passed_as_variable
+					value = 75
+				}
+			}
+			if = {
+				limit = {
+					has_global_flag = year_2300_start
+				}
+				change_variable = {
+					which = tup_years_passed_as_variable
+					value = 100
+				}
+			}
+		}
+		create_fleet = {
+			name = "NAME_Pirate_Fleet"
+			effect = {
+				set_owner = event_target:pirate_band
+				if = {
+					limit = {
+					}
+					create_pirate_ships_0 = yes
+					create_pirate_ships_0 = yes
+				}
+				if = {
+					limit = {
+						ROOT = {
+							check_variable_arithmetic  = {
+							which = tup_years_passed_as_variable
+							value > 10
+							}
+						}
+					}
+					create_pirate_ships_1 = yes
+					create_pirate_ships_1 = yes
+				}
+				if = {
+					limit = {
+						ROOT = {
+							check_variable_arithmetic  = {
+							which = tup_years_passed_as_variable
+							value > 22
+							}
+						}
+					}
+					create_pirate_ships_0 = yes
+					create_pirate_ships_2 = yes
+				}
+				if = {
+					limit = {
+						ROOT = {
+							check_variable_arithmetic  = {
+							which = tup_years_passed_as_variable
+							value > 34
+							}
+						}
+					}
+					create_pirate_ships_1 = yes
+					create_pirate_ships_3 = yes
+				}
+				if = {
+					limit = {
+						ROOT = {
+							check_variable_arithmetic  = {
+							which = tup_years_passed_as_variable
+							value > 50
+							}
+						}
+					}
+					create_pirate_ships_2= yes
+					create_pirate_ships_4 = yes
+				}
+				if = {
+					limit = {
+						ROOT = {
+							check_variable_arithmetic  = {
+							which = tup_years_passed_as_variable
+							value > 75
+							}
+						}
+					}
+					create_pirate_ships_3 = yes
+					create_pirate_ships_5 = yes
+				}
+				if = {
+					limit = {
+						ROOT = {
+							check_variable_arithmetic  = {
+							which = tup_years_passed_as_variable
+							value > 100
+							}
+						}
+					}
+					create_pirate_ships_4 = yes
+					create_pirate_ships_6 = yes
+				}
+				if = {
+					limit = {
+						check_variable_arithmetic  = {
+							which = tup_years_passed_as_variable
+							value > 125
+						}
+					}
+					create_pirate_ships_5 = yes
+					create_pirate_ships_7 = yes
+				}
+				if = {
+					limit = {
+						ROOT = {
+							check_variable_arithmetic  = {
+							which = tup_years_passed_as_variable
+							value > 150
+							}
+						}
+					}
+					create_pirate_ships_6 = yes
+					create_pirate_ships_8 = yes
+				}
+				if = {
+					limit = {
+						ROOT = {
+							check_variable_arithmetic  = {
+							which = tup_years_passed_as_variable
+							value > 175
+							}
+						}
+					}
+					create_pirate_ships_9 = yes
+				}
+				if = {
+					limit = {
+						ROOT = {
+							check_variable_arithmetic  = {
+							which = tup_years_passed_as_variable
+							value > 200
+							}
+						}
+					}
+					create_pirate_ships_10 = yes
+				}
+				if = {
+					limit = {
+						ROOT = {
+							check_variable_arithmetic  = {
+							which = tup_years_passed_as_variable
+							value > 233
+							}
+						}
+					}
+					create_pirate_ships_10 = yes
+				}
+				if = {
+					limit = {
+						ROOT = {
+							check_variable_arithmetic  = {
+							which = tup_years_passed_as_variable
+							value > 266
+							}
+						}
+					}
+					create_pirate_ships_9 = yes
+				}
+				if = {
+					limit = {
+						ROOT = {
+							check_variable_arithmetic  = {
+							which = tup_years_passed_as_variable
+							value > 300
+							}
+						}
+					}
+					create_pirate_ships_8 = yes
+				}
+				assign_leader = last_created_leader
+				set_location = event_target:pirate_home
+				set_fleet_stance = aggressive
+				set_aggro_range_measure_from = self
+				set_aggro_range = 800
+			}
+		}
+	}
+}

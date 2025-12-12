@@ -1,0 +1,82 @@
+#########################################################################################
+# The Utopia Project
+# Author: TheRingBearer
+#########################################################################################
+tup_ap_utopia_project = {
+	potential = {
+		has_utopia = yes
+		OR = {
+			has_machine_age_dlc = yes
+			has_nemesis = yes
+			has_biogenesis_dlc = yes
+		}
+		NOR = {
+			has_ascension_perk = ap_become_the_crisis
+			has_ascension_perk = ap_cosmogenesis
+			has_ascension_perk = ap_defender_of_the_galaxy
+			has_ascension_perk = ap_behemoths
+			has_origin = origin_slavers			# No crisis for MSI
+			has_country_flag = player_crisis_chosen
+		}
+		is_wilderness_empire = no
+	}
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_ascension_perks_3"
+			num_ascension_perks > 2
+		}
+		custom_tooltip = {
+			fail_text = "requires_independence"
+			is_subject = no
+		}
+		custom_tooltip = {
+			fail_text = "must_not_be_custodian"
+			is_galactic_custodian = no
+		}
+		custom_tooltip = {
+			fail_text = "must_not_be_emperor"
+			is_galactic_emperor = no
+		}
+		is_egalitarian = yes
+		is_xenophobe = no
+		is_homicidal = no
+		OR = {
+			has_ascension_perk = ap_mind_over_matter
+			has_origin = origin_shroudwalker_apprentice
+		}
+		has_tradition = tr_psionics_finish
+	}
+	on_enabled = {
+		activate_crisis_progression = utopia_project_path
+		set_country_flag = player_crisis_chosen
+		set_country_flag = tup_crisis_chosen
+		set_country_flag = tup_has_opened_utopic_menu
+		hidden_effect = {
+			set_variable = {
+				which = tup_utopic_energy_cost
+				value = 500
+			}
+			set_variable = { 
+				which = tup_current_number_of_utopic_dyson_swarms 
+				value = 0 
+			}
+			# How many systems there are in the galaxy per size
+			# Tiny = 200
+			# Small = 400
+			# Medium = 600
+			# Large  = 800
+			# Huge = 1000
+			switch = {
+					trigger = galaxy_size
+					huge = { set_variable = { which = tup_utopic_dyson_swarms_for_victory value = 100 }}
+					large = { set_variable = { which = tup_utopic_dyson_swarms_for_victory value = 80 }}
+					medium = { set_variable = { which = tup_utopic_dyson_swarms_for_victory value = 60 }}
+					small = { set_variable = { which = tup_utopic_dyson_swarms_for_victory value = 50 }}
+					tiny = { set_variable = { which = tup_utopic_dyson_swarms_for_victory value = 40 }}
+				}
+		}
+	}
+	ai_weight = {
+		factor = 0
+	}
+}

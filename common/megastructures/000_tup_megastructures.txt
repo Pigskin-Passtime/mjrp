@@ -1,0 +1,482 @@
+#########################################################################################
+# The Utopia Project
+# Author: TheRingBearer
+#########################################################################################
+tup_utopic_dyson_swarm = {
+	entity = "dyson_swarm_phase_3_entity"
+	construction_entity = "dyson_swarm_phase_1_entity"
+	portrait = "GFX_megastructure_dyson_swarm_background"
+	entity_offset = {
+		x = 0.1
+		y = 0.1
+	}
+	rotate_to_center = no
+	scale_offset = yes
+	place_entity_on_planet_plane = yes
+	show_in_outliner = no
+	use_planet_resource = yes
+	build_time = 1300	# almost 4 years
+	resources = {
+		category = megastructures
+		cost = {
+			unity = 5000
+			alloys = 2500
+		}
+		produces = {
+			energy = 40
+		}
+		upkeep = {
+			alloys = 14
+		}
+	}
+	construction_blocks_and_blocked_by = none
+	custom_tooltip_requirements = "MEGASTRUCTURE_TOOLTIP_REQUIREMENTS_DYSON_SWARM"
+	dismantle_potential = {
+		always = no
+	}
+	potential = {
+		has_machine_age_dlc = yes
+		OR = {
+			has_country_flag = tup_crisis_level_3
+			has_country_flag = tup_crisis_level_4
+			has_country_flag = tup_crisis_level_5
+		}
+	}
+	possible = {
+		hidden_trigger = {
+			exists = starbase
+		}
+		custom_tooltip = {
+			fail_text = "requires_inside_border"
+			is_inside_border = from
+		}
+		custom_tooltip = {
+			fail_text = "requires_surveyed_system"
+			NOT = {
+				any_system_planet = {
+					is_surveyed = {
+						who = prev.from
+						status = no
+					}
+				}
+			}
+		}
+		custom_tooltip = {
+			fail_text = "requires_no_binary_trinary"
+			NOR = {
+				is_star_class = sc_binary_1
+				is_star_class = sc_binary_2
+				is_star_class = sc_binary_3
+				is_star_class = sc_binary_4
+				is_star_class = sc_binary_5
+				is_star_class = sc_binary_6
+				is_star_class = sc_binary_7
+				is_star_class = sc_binary_8
+				is_star_class = sc_binary_9
+				is_star_class = sc_binary_10
+				is_star_class = sc_trinary_1
+				is_star_class = sc_trinary_2
+				is_star_class = sc_trinary_3
+				is_star_class = sc_trinary_4
+			}
+		}
+		custom_tooltip = {
+			fail_text = "requires_no_black_hole_neutron_star_pulsar"
+			NOT = {
+				is_star_class = sc_black_hole
+				is_star_class = sc_neutron_star
+				is_star_class = sc_pulsar
+			}
+		}
+	}
+	placement_rules = {
+		planet_possible = {
+			custom_tooltip = {
+				fail_text = "must_build_around_star"
+				is_star = yes
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_anomaly"
+				NOT = {
+					has_anomaly = yes
+				}
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_existing_megastructure"
+				NOR = {
+					has_planet_flag = megastructure
+					has_planet_flag = has_megastructure
+				}
+			}
+			if = {
+				limit = {
+					from = {
+						is_ai = yes
+					}
+				}
+				NOR = {
+					has_deposit = d_energy_1
+					has_deposit = d_energy_2
+				}
+			}
+		}
+	}
+	country_modifier = {
+		custom_tooltip = tup_utopic_dyson_swarm_mod_tooltip
+	}
+	# root = system
+	# from = country
+	ai_weight = {
+		factor = 4
+	}
+	on_build_complete = {
+		from = {
+			country_event = {
+				id = tup_crisis_events.305
+			}
+		}
+		fromfrom.planet = {
+			set_planet_flag = has_megastructure
+			if = {
+				limit = {
+					has_orbital_station = yes
+				}
+				orbital_station = {
+					dismantle = yes
+				}
+			}
+		}
+	}
+}
+
+tup_utopic_dyson_swarm_alt = {
+	entity = "dyson_sphere_phase_02_entity"
+	construction_entity = "dyson_swarm_phase_1_entity"
+	portrait = "GFX_megastructure_dyson_swarm_background"
+	entity_offset = {
+		x = 0.1
+		y = 0.1
+	}
+	rotate_to_center = no
+	scale_offset = yes
+	place_entity_on_planet_plane = yes
+	show_in_outliner = no
+	use_planet_resource = yes
+	build_time = 1300	# almost 4 years
+	resources = {
+		category = megastructures
+		cost = {
+			unity = 5000
+			alloys = 2500
+		}
+		produces = {
+			energy = 40
+		}
+		upkeep = {
+			alloys = 14
+		}
+	}
+	construction_blocks_and_blocked_by = none
+	custom_tooltip_requirements = "MEGASTRUCTURE_TOOLTIP_REQUIREMENTS_DYSON_SWARM"
+	dismantle_potential = {
+		always = no
+	}
+	potential = {
+		has_machine_age_dlc = no
+		OR = {
+			has_country_flag = tup_crisis_level_3
+			has_country_flag = tup_crisis_level_4
+			has_country_flag = tup_crisis_level_5
+		}
+	}
+	possible = {
+		hidden_trigger = {
+			exists = starbase
+		}
+		custom_tooltip = {
+			fail_text = "requires_inside_border"
+			is_inside_border = from
+		}
+		custom_tooltip = {
+			fail_text = "requires_surveyed_system"
+			NOT = {
+				any_system_planet = {
+					is_surveyed = {
+						who = prev.from
+						status = no
+					}
+				}
+			}
+		}
+		custom_tooltip = {
+			fail_text = "requires_no_binary_trinary"
+			NOR = {
+				is_star_class = sc_binary_1
+				is_star_class = sc_binary_2
+				is_star_class = sc_binary_3
+				is_star_class = sc_binary_4
+				is_star_class = sc_binary_5
+				is_star_class = sc_binary_6
+				is_star_class = sc_binary_7
+				is_star_class = sc_binary_8
+				is_star_class = sc_binary_9
+				is_star_class = sc_binary_10
+				is_star_class = sc_trinary_1
+				is_star_class = sc_trinary_2
+				is_star_class = sc_trinary_3
+				is_star_class = sc_trinary_4
+			}
+		}
+		custom_tooltip = {
+			fail_text = "requires_no_black_hole_neutron_star_pulsar"
+			NOT = {
+				is_star_class = sc_black_hole
+				is_star_class = sc_neutron_star
+				is_star_class = sc_pulsar
+			}
+		}
+	}
+	placement_rules = {
+		planet_possible = {
+			custom_tooltip = {
+				fail_text = "must_build_around_star"
+				is_star = yes
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_anomaly"
+				NOT = {
+					has_anomaly = yes
+				}
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_existing_megastructure"
+				NOR = {
+					has_planet_flag = megastructure
+					has_planet_flag = has_megastructure
+				}
+			}
+			if = {
+				limit = {
+					from = {
+						is_ai = yes
+					}
+				}
+				NOR = {
+					has_deposit = d_energy_1
+					has_deposit = d_energy_2
+				}
+			}
+		}
+	}
+	country_modifier = {
+		custom_tooltip = tup_utopic_dyson_swarm_mod_tooltip
+	}
+	# root = system
+	# from = country
+	ai_weight = {
+		factor = 4
+	}
+	on_build_complete = {
+		from = {
+			country_event = {
+				id = tup_crisis_events.305
+			}
+		}
+		fromfrom.planet = {
+			set_planet_flag = has_megastructure
+			if = {
+				limit = {
+					has_orbital_station = yes
+				}
+				orbital_station = {
+					dismantle = yes
+				}
+			}
+		}
+	}
+}
+
+tup_unification_engine_ruined = {
+	entity = "dyson_sphere_destroyed_entity"
+	portrait = "GFX_megastructure_construction_background"
+	potential = {
+		always = no
+	}
+}
+
+tup_unification_engine_0 = {
+	entity = "construction_platform_entity"
+	construction_entity = "construction_platform_entity"
+	portrait = "GFX_megastructure_construction_background"
+	build_time = 3600
+	resources = {
+		category = megastructures
+		cost = {
+			minerals = 5000
+			alloys = 2500
+			unity = 5000
+		}
+	}
+	country_modifier = {
+	}
+	upgrade_from = {
+		tup_unification_engine_ruined
+	}
+	potential = {
+		#you may upgrade a ruined one if you have lost yours
+		has_crisis_level = tup_crisis_utopiaproject_level_5
+		NOT = {
+			any_owned_megastructure = {
+				OR = {
+					has_megastructure_flag = tup_unification_engine
+					AND = {
+						is_megastructure_type = tup_unification_engine_ruined
+						is_upgrading = yes
+					}
+				}
+			}
+		}
+	}
+	on_build_complete = {
+		fromfrom = {
+			set_megastructure_flag = tup_unification_engine
+		}
+	}
+}
+
+# Can now do the tests
+tup_unification_engine_1 = {
+	entity = "interstellar_assembly_stage_2_entity"
+	construction_entity = "interstellar_assembly_stage_2_entity"
+	portrait = "GFX_megastructure_interstellar_assembly_background"
+	build_time = 3600
+	resources = {
+		category = megastructures
+		cost = {
+			unity = 10000
+			alloys = 5000
+			rare_crystals = 500
+			exotic_gases = 500
+			volatile_motes = 500
+			sr_zro = 250
+		}
+		produces = {
+			unity = 50
+		}
+	}
+	country_modifier = {
+		planet_amenities_mult = 0.05
+	}
+	upgrade_from = {
+		tup_unification_engine_0
+	}
+	on_build_complete = {
+		fromfrom = {
+			set_megastructure_flag = tup_unification_engine
+		}
+		from = {
+			country_event = {
+				id = tup_crisis_events.450
+			}
+		}
+	}
+}
+
+# One final upgrade during Crisis Level 5 before the win condition is available
+tup_unification_engine_2 = {
+	entity = "interstellar_assembly_stage_4_entity"
+	construction_entity = "interstellar_assembly_stage_4_entity"
+	portrait = "GFX_megastructure_interstellar_assembly_background"
+	build_time = 3600
+	possible = {
+		from = {
+			has_country_flag = tup_crisis_level_5
+		}
+	}
+	resources = {
+		category = megastructures
+		cost = {
+			unity = 25000
+			alloys = 10000
+			rare_crystals = 1500
+			exotic_gases = 1500
+			volatile_motes = 1500
+			sr_zro = 750
+			tup_utopic_energy = 500
+		}
+		produces = {
+			unity = 500
+		}
+	}
+	country_modifier = {
+		country_naval_cap_add = 50
+		planet_amenities_mult = 0.05
+		planetary_ascension_cost_mult = -0.1
+		megastructure_build_speed_mult = 0.1
+		megastructures_cost_mult = -0.1
+	}
+	upgrade_from = {
+		tup_unification_engine_1
+	}
+	on_build_complete = {
+		fromfrom = {
+			set_megastructure_flag = tup_unification_engine
+		}
+		from = {
+			country_event = {
+				id = tup_crisis_events.510
+			}
+		}
+	}
+}
+
+# Victory upon being built
+tup_unification_engine_3 = {
+	entity = "interstellar_assembly_stage_4_entity"
+	construction_entity = "interstellar_assembly_stage_4_entity"
+	portrait = "GFX_megastructure_interstellar_assembly_background"
+	build_time = 3600
+	resources = {
+		category = megastructures
+		cost = {
+			unity = 60000
+			alloys = 18000
+			sr_zro = 1000
+			tup_utopic_energy = 1200
+		}
+	}
+	possible = {
+		custom_tooltip = {
+			# success_text will never show
+			success_text = tup_build_final_unification_engine_req_clear_tooltip
+			fail_text = tup_build_final_unification_engine_req_tooltip
+			owner = {
+				check_variable = {
+					which = tup_current_number_of_utopic_dyson_swarms
+					value >= tup_utopic_dyson_swarms_for_victory
+				}
+			}
+		}
+	}
+	upgrade_from = {
+		tup_unification_engine_2
+	}
+	on_build_complete = {
+		from = {
+			country_event = {
+				id = tup_crisis_events.600
+			}
+			every_playable_country = {
+				limit = {
+					is_ai = no
+					NOT = {
+						is_same_value = FROM
+					}
+				}
+				country_event = {
+					id = tup_crisis_events.601
+				}
+			}
+		}
+	}
+}

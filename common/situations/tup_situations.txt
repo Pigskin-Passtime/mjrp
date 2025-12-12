@@ -1,0 +1,145 @@
+#########################################################################################
+# The Utopia Project
+# Author: TheRingBearer
+#########################################################################################
+tup_situation_communal_reformation = {
+	picture = GFX_evt_grand_speech
+	complete_icon_frame = GFX_situation_outcome_frame_blue
+	complete_icon = GFX_situation_outcome_unknown
+	on_progress_complete = {
+		custom_tooltip = tup_situation_communal_reformation_outcome
+		hidden_effect = {
+			situation_event = {
+				id = tup_situation_events.200
+			}
+		}
+		set_situation_locked = yes
+	}
+	stages = {
+		tup_situation_stage_0_desc = {
+			end = 150
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_green
+			on_first_enter = {
+			}
+		}
+		tup_situation_stage_1_desc = {
+			end = 250
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_green
+			on_first_enter = {
+				situation_event = {
+					id = tup_situation_events.120
+				}
+			}
+		}
+		tup_situation_stage_2_desc = {
+			end = 350
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_green
+			on_first_enter = {
+				situation_event = {
+					id = tup_situation_events.120
+				}
+			}
+		}
+		tup_situation_stage_3_desc = {
+			end = 450
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_green
+			on_first_enter = {
+				situation_event = {
+					id = tup_situation_events.120
+				}
+			}
+		}
+		tup_situation_stage_final_desc = {
+			end = 600
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_green
+			on_first_enter = {
+				situation_event = {
+					id = tup_situation_events.120
+				}
+			}
+		}
+	}
+	# The format of this tooltip in the progress bar could be better, but it contains useful info
+	approach = {
+		name = tup_situation_approach_slow
+		icon = GFX_situation_approach_balance_sheet
+		icon_background = GFX_situation_approach_bg_green
+		on_select = {
+			custom_tooltip = tup_situation_approach_slow_tt
+		}
+		modifier = {
+			country_energy_produces_mult = -0.1
+			country_unity_produces_mult = -0.15
+			country_base_influence_produces_add = -0.75
+			planet_crime_add = 20
+			planet_stability_add = -5
+			council_agenda_progress_speed = -0.1
+		}
+	}
+	approach = {
+		name = tup_situation_approach_regular
+		icon = GFX_situation_approach_balance_sheet
+		icon_background = GFX_situation_approach_bg_yellow
+		default = yes
+		on_select = {
+			custom_tooltip = tup_situation_approach_regular_tt
+		}
+		modifier = {
+			country_energy_produces_mult = -0.15
+			country_unity_produces_mult = -0.25
+			country_base_influence_produces_add = -1
+			planet_crime_add = 40
+			planet_stability_add = -10
+			council_agenda_progress_speed = -0.25
+		}
+	}
+	approach = {
+		name = tup_situation_approach_fast
+		icon = GFX_situation_approach_balance_sheet
+		icon_background = GFX_situation_approach_bg_red
+		on_select = {
+			custom_tooltip = tup_situation_approach_fast_tt
+		}
+		resources = {
+			category = situations
+		}
+		modifier = {
+			country_energy_produces_mult = -0.30
+			country_unity_produces_mult = -0.60
+			country_base_influence_produces_add = -2
+			planet_crime_add = 80
+			planet_stability_add = -20
+			council_agenda_progress_speed = -0.5
+		}
+	}
+	# Bad event roughly once every 3 years
+	on_monthly = {
+		random_events = {
+			32 = 0
+			1 = tup_situation_events.100
+		}
+	}
+	monthly_progress = {
+		base = 2.5
+		modifier = {
+			add = 0.0
+			desc = tup_situation_approach_slow
+			current_situation_approach = tup_situation_approach_slow
+		}
+		modifier = {
+			add = 2.5
+			desc = tup_situation_approach_regular
+			current_situation_approach = tup_situation_approach_regular
+		}
+		modifier = {
+			add = 4.5
+			desc = tup_situation_approach_fast
+			current_situation_approach = tup_situation_approach_fast
+		}
+	}
+}

@@ -1,0 +1,2320 @@
+#########################################################################################
+# The Utopia Project
+# Author: TheRingBearer
+#########################################################################################
+namespace = tup_utopic_events
+#########################################################################################
+# TODO: Make sure to no use debug numbers
+@tup_one_year_delay = 356
+@tup_two_year_delay = 712
+@tup_three_year_delay = 1068
+@tup_four_year_delay = 1424
+@tup_five_year_delay = 1780
+@tup_six_year_delay = 2137 # +1 so that the message reminder is absolutely after it is complete
+@tup_ten_year_delay = 3560
+# @tup_one_year_delay = 3
+# @tup_two_year_delay = 7
+# @tup_three_year_delay = 10
+# @tup_four_year_delay = 14
+# @tup_five_year_delay = 17
+# @tup_six_year_delay = 21
+# @tup_ten_year_delay = 35
+# This is the Main Menu of your Utopic Crisis Powers
+country_event = {
+	id = tup_utopic_events.1000
+	title = "tup_utopic_events.utopic_energy_menu.name"
+	desc = tup_utopic_events.1000.desc
+	picture = GFX_tup_unity_symbol_gold
+	show_sound = event_default
+	is_triggered_only = yes
+	immediate = {
+		export_resource_stockpile_to_variable = {
+			resource = tup_utopic_energy
+			variable = tup_current_utopic_energy_stockpile
+		}
+		set_country_flag = tup_has_opened_utopic_menu
+	}
+	option = {
+		name = tup_utopic_events.1000.leaders
+		trigger = {
+			OR = {
+				has_country_flag = tup_crisis_level_1
+				has_country_flag = tup_crisis_level_2
+				has_country_flag = tup_crisis_level_3
+				has_country_flag = tup_crisis_level_4
+				has_country_flag = tup_crisis_level_5
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1001
+			}
+		}
+	}
+	option = {
+		name = tup_utopic_events.1000.defensive
+		trigger = {
+			OR = {
+				has_country_flag = tup_crisis_level_2
+				has_country_flag = tup_crisis_level_3
+				has_country_flag = tup_crisis_level_4
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1005
+			}
+		}
+	}
+	option = {
+		name = tup_utopic_events.1000.vassals
+		trigger = {
+			OR = {
+				has_country_flag = tup_crisis_level_3
+				has_country_flag = tup_crisis_level_4
+				has_country_flag = tup_crisis_level_5
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1013
+			}
+		}
+	}
+	option = {
+		name = tup_utopic_events.1000.offensive
+		trigger = {
+			owner = {
+				has_country_flag = tup_crisis_level_5
+			}
+		}
+		allow = {
+			any_owned_megastructure = {
+					has_megastructure_flag = tup_unification_engine
+				}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1010
+			}
+		}
+	}
+	option = {
+		name = tup_utopic_events.1000.buyperks
+		trigger = {
+			OR = {
+				has_country_flag = tup_crisis_level_2
+				has_country_flag = tup_crisis_level_3
+				has_country_flag = tup_crisis_level_4
+				has_country_flag = tup_crisis_level_5
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1020
+			}
+		}
+	}
+	option = {
+		name = tup_utopic_events.1000.testengine
+		trigger = {
+			owner = {
+				has_country_flag = tup_crisis_level_4
+				NOT = {
+					has_country_flag = tup_crisis_level_5
+				}
+			}
+		}
+		allow = {
+			any_owned_megastructure = {
+				is_megastructure_type = tup_unification_engine_1
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1017
+			}
+		}
+	}
+	option = {
+		name = tup_utopic_events.1000.buy
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1015
+			}
+		}
+	}
+	option = {
+		name = tup_utopic_events.1000.exit
+		default_hide_option = yes
+	}
+}
+
+# Leader Improvements
+country_event = {
+	id = tup_utopic_events.1001
+	title = "tup_utopic_events.utopic_energy_menu.name"
+	desc = tup_utopic_events.1001.desc
+	picture = GFX_tup_unity_symbol_gold
+	show_sound = event_default
+	is_triggered_only = yes
+	immediate = {
+		export_resource_stockpile_to_variable = {
+			resource = tup_utopic_energy
+			variable = tup_current_utopic_energy_stockpile
+		}
+		ordered_owned_leader = {
+			limit = {
+				leader_class = commander
+				num_leader_traits = {
+					value > 0
+					negative = yes
+				}
+			}
+			position = 0
+			order_by = trigger:has_base_skill
+			inverse = no
+			save_event_target_as = tup_commander_leader_neg
+		}
+		ordered_owned_leader = {
+			limit = {
+				leader_class = official
+				num_leader_traits = {
+					value > 0
+					negative = yes
+				}
+			}
+			position = 0
+			order_by = trigger:has_base_skill
+			inverse = no
+			save_event_target_as = tup_official_leader_neg
+		}
+		ordered_owned_leader = {
+			limit = {
+				leader_class = scientist
+				num_leader_traits = {
+					value > 0
+					negative = yes
+				}
+			}
+			position = 0
+			order_by = trigger:has_base_skill
+			inverse = no
+			save_event_target_as = tup_scientist_leader_neg
+		}
+		ordered_owned_leader = {
+			limit = {
+				leader_class = commander
+				NOT = {
+					has_leader_flag = tup_leader_improved_1
+				}
+			}
+			position = 0
+			order_by = trigger:has_base_skill
+			inverse = no
+			save_event_target_as = tup_commander_leader_imp_1
+		}
+		ordered_owned_leader = {
+			limit = {
+				leader_class = official
+				NOT = {
+					has_leader_flag = tup_leader_improved_1
+				}
+			}
+			position = 0
+			order_by = trigger:has_base_skill
+			inverse = no
+			save_event_target_as = tup_official_leader_imp_1
+		}
+		ordered_owned_leader = {
+			limit = {
+				leader_class = scientist
+				NOT = {
+					has_leader_flag = tup_leader_improved_1
+				}
+			}
+			position = 0
+			order_by = trigger:has_base_skill
+			inverse = no
+			save_event_target_as = tup_scientist_leader_imp_1
+		}
+		ordered_owned_leader = {
+			limit = {
+				leader_class = commander
+				NOT = {
+					has_leader_flag = tup_leader_improved_2
+				}
+			}
+			position = 0
+			order_by = trigger:has_base_skill
+			inverse = no
+			save_event_target_as = tup_commander_leader_imp_2
+		}
+		ordered_owned_leader = {
+			limit = {
+				leader_class = official
+				NOT = {
+					has_leader_flag = tup_leader_improved_2
+				}
+			}
+			position = 0
+			order_by = trigger:has_base_skill
+			inverse = no
+			save_event_target_as = tup_official_leader_imp_2
+		}
+		ordered_owned_leader = {
+			limit = {
+				leader_class = scientist
+				NOT = {
+					has_leader_flag = tup_leader_improved_2
+				}
+			}
+			position = 0
+			order_by = trigger:has_base_skill
+			inverse = no
+			save_event_target_as = tup_scientist_leader_imp_2
+		}
+		ordered_owned_leader = {
+			limit = {
+				leader_class = commander
+				NOT = {
+					has_leader_flag = tup_leader_improved_3
+				}
+			}
+			position = 0
+			order_by = trigger:has_base_skill
+			inverse = no
+			save_event_target_as = tup_commander_leader_imp_3
+		}
+		ordered_owned_leader = {
+			limit = {
+				leader_class = official
+				NOT = {
+					has_leader_flag = tup_leader_improved_3
+				}
+			}
+			position = 0
+			order_by = trigger:has_base_skill
+			inverse = no
+			save_event_target_as = tup_official_leader_imp_3
+		}
+		ordered_owned_leader = {
+			limit = {
+				leader_class = scientist
+				NOT = {
+					has_leader_flag = tup_leader_improved_3
+				}
+			}
+			position = 0
+			order_by = trigger:has_base_skill
+			inverse = no
+			save_event_target_as = tup_scientist_leader_imp_3
+		}
+	}
+	# Commander
+	option = {
+		name = tup_utopic_events.1001.commander_neg
+		trigger = {
+			exists = event_target:tup_commander_leader_neg
+			event_target:tup_commander_leader_neg = {
+				num_leader_traits = {
+					value > 0
+					negative = yes
+				}
+			}
+			OR = {
+				has_country_flag = tup_crisis_level_1
+				has_country_flag = tup_crisis_level_2
+			}
+		}
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = tup_utopic_energy
+					value >= 1
+				}
+			}
+		}
+		event_target:tup_commander_leader_neg = {
+			remove_trait = all_negative
+		}
+		owner = {
+			add_resource = {
+				tup_utopic_energy = -1
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1001
+			}
+		}
+	}
+	option = {
+		name = tup_utopic_events.1001.commander_imp
+		custom_tooltip = tup_utopic_events.1001.commander_imp_tt
+		trigger = {
+			exists = event_target:tup_commander_leader_imp_1
+			event_target:tup_commander_leader_imp_1 = {
+				NOT = {
+					has_leader_flag = tup_leader_improved_1
+				}
+			}
+			has_country_flag = tup_crisis_level_1
+		}
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = tup_utopic_energy
+					value >= 2
+				}
+			}
+		}
+		
+		owner = {
+			add_resource = {
+				tup_utopic_energy = -2
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1001
+			}
+			event_target:tup_commander_leader_imp_1 = {
+				tup_add_improve_leader_perks_1 = yes
+			}
+		}
+	}
+	option = {
+		name = tup_utopic_events.1001.commander_imp2
+		custom_tooltip = tup_utopic_events.1001.commander_imp2_tt
+		trigger = {
+			exists = event_target:tup_commander_leader_imp_2
+			event_target:tup_commander_leader_imp_2 = {
+				NOT = {
+					has_leader_flag = tup_leader_improved_2
+				}
+			}
+			has_country_flag = tup_crisis_level_2
+		}
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = tup_utopic_energy
+					value >= 3
+				}
+			}
+		}
+		
+		owner = {
+			add_resource = {
+				tup_utopic_energy = -3
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1001
+			}
+			event_target:tup_commander_leader_imp_2 = {
+				tup_add_improve_leader_perks_2 = yes
+			}
+		}
+	}
+	option = {
+		name = tup_utopic_events.1001.commander_imp3
+		custom_tooltip = tup_utopic_events.1001.commander_imp3_tt
+		trigger = {
+			exists = event_target:tup_commander_leader_imp_3
+			event_target:tup_commander_leader_imp_3 = {
+				NOT = {
+					has_leader_flag = tup_leader_improved_3
+				}
+			}
+			OR = {
+				has_country_flag = tup_crisis_level_3
+				has_country_flag = tup_crisis_level_4
+				has_country_flag = tup_crisis_level_5
+			}
+		}
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = tup_utopic_energy
+					value >= 5
+				}
+			}
+		}
+		
+		owner = {
+			add_resource = {
+				tup_utopic_energy = -5
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1001
+			}
+			event_target:tup_commander_leader_imp_3 = {
+				tup_add_improve_leader_perks_3 = yes
+			}
+		}
+	}
+	# Official
+	option = {
+		name = tup_utopic_events.1001.official_neg
+		trigger = {
+			exists = event_target:tup_official_leader_neg
+			event_target:tup_official_leader_neg = {
+				num_leader_traits = {
+					value > 0
+					negative = yes
+				}
+			}
+			OR = {
+				has_country_flag = tup_crisis_level_1
+				has_country_flag = tup_crisis_level_2
+			}
+		}
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = tup_utopic_energy
+					value >= 1
+				}
+			}
+		}
+		event_target:tup_official_leader_neg = {
+			remove_trait = all_negative
+		}
+		owner = {
+			add_resource = {
+				tup_utopic_energy = -1
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1001
+			}
+		}
+	}
+	option = {
+		name = tup_utopic_events.1001.official_imp
+		custom_tooltip = tup_utopic_events.1001.official_imp_tt
+		trigger = {
+			exists = event_target:tup_official_leader_imp_1
+			event_target:tup_official_leader_imp_1 = {
+				NOT = {
+					has_leader_flag = tup_leader_improved_1
+				}
+			}
+			has_country_flag = tup_crisis_level_1
+		}
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = tup_utopic_energy
+					value >= 2
+				}
+			}
+		}
+		
+		owner = {
+			add_resource = {
+				tup_utopic_energy = -2
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1001
+			}
+			event_target:tup_official_leader_imp_1 = {
+				tup_add_improve_leader_perks_1 = yes
+			}
+		}
+	}
+	option = {
+		name = tup_utopic_events.1001.official_imp2
+		custom_tooltip = tup_utopic_events.1001.official_imp2_tt
+		trigger = {
+			exists = event_target:tup_official_leader_imp_2
+			event_target:tup_official_leader_imp_2 = {
+				NOT = {
+					has_leader_flag = tup_leader_improved_2
+				}
+			}
+			has_country_flag = tup_crisis_level_2
+		}
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = tup_utopic_energy
+					value >= 3
+				}
+			}
+		}
+		
+		owner = {
+			add_resource = {
+				tup_utopic_energy = -3
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1001
+			}
+			event_target:tup_official_leader_imp_2 = {
+				tup_add_improve_leader_perks_2 = yes
+			}
+		}
+	}
+	option = {
+		name = tup_utopic_events.1001.official_imp3
+		custom_tooltip = tup_utopic_events.1001.official_imp3_tt
+		trigger = {
+			exists = event_target:tup_official_leader_imp_3
+			event_target:tup_official_leader_imp_3 = {
+				NOT = {
+					has_leader_flag = tup_leader_improved_3
+				}
+			}
+			OR = {
+				has_country_flag = tup_crisis_level_3
+				has_country_flag = tup_crisis_level_4
+				has_country_flag = tup_crisis_level_5
+			}
+		}
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = tup_utopic_energy
+					value >= 5
+				}
+			}
+		}
+		
+		owner = {
+			add_resource = {
+				tup_utopic_energy = -5
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1001
+			}
+			event_target:tup_official_leader_imp_3 = {
+				tup_add_improve_leader_perks_3 = yes
+			}
+		}
+	}
+	# Scientist
+	option = {
+		name = tup_utopic_events.1001.scientist_neg
+		trigger = {
+			exists = event_target:tup_scientist_leader_neg
+			event_target:tup_scientist_leader_neg = {
+				num_leader_traits = {
+					value > 0
+					negative = yes
+				}
+			}
+			OR = {
+				has_country_flag = tup_crisis_level_1
+				has_country_flag = tup_crisis_level_2
+			}
+		}
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = tup_utopic_energy
+					value >= 1
+				}
+			}
+		}
+		event_target:tup_scientist_leader_neg = {
+			remove_trait = all_negative
+		}
+		owner = {
+			add_resource = {
+				tup_utopic_energy = -1
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1001
+			}
+		}
+	}
+	option = {
+		name = tup_utopic_events.1001.scientist_imp
+		custom_tooltip = tup_utopic_events.1001.scientist_imp_tt
+		trigger = {
+			exists = event_target:tup_scientist_leader_imp_1
+			event_target:tup_scientist_leader_imp_1 = {
+				NOT = {
+					has_leader_flag = tup_leader_improved_1
+				}
+			}
+			has_country_flag = tup_crisis_level_1
+		}
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = tup_utopic_energy
+					value >= 2
+				}
+			}
+		}
+		
+		owner = {
+			add_resource = {
+				tup_utopic_energy = -2
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1001
+			}
+			event_target:tup_scientist_leader_imp_1 = {
+				tup_add_improve_leader_perks_1 = yes
+			}
+		}
+	}
+	option = {
+		name = tup_utopic_events.1001.scientist_imp2
+		custom_tooltip = tup_utopic_events.1001.scientist_imp2_tt
+		trigger = {
+			exists = event_target:tup_scientist_leader_imp_2
+			event_target:tup_scientist_leader_imp_2 = {
+				NOT = {
+					has_leader_flag = tup_leader_improved_2
+				}
+			}
+			has_country_flag = tup_crisis_level_2
+		}
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = tup_utopic_energy
+					value >= 3
+				}
+			}
+		}
+		
+		owner = {
+			add_resource = {
+				tup_utopic_energy = -3
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1001
+			}
+			event_target:tup_scientist_leader_imp_2 = {
+				tup_add_improve_leader_perks_2 = yes
+			}
+		}
+	}
+	option = {
+		name = tup_utopic_events.1001.scientist_imp3
+		custom_tooltip = tup_utopic_events.1001.scientist_imp3_tt
+		trigger = {
+			exists = event_target:tup_scientist_leader_imp_3
+			event_target:tup_scientist_leader_imp_3 = {
+				NOT = {
+					has_leader_flag = tup_leader_improved_3
+				}
+			}
+			OR = {
+				has_country_flag = tup_crisis_level_3
+				has_country_flag = tup_crisis_level_4
+				has_country_flag = tup_crisis_level_5
+			}
+		}
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = tup_utopic_energy
+					value >= 5
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				tup_utopic_energy = -5
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1001
+			}
+			event_target:tup_scientist_leader_imp_3 = {
+				tup_add_improve_leader_perks_3 = yes
+			}
+		}
+	}
+	# Remove All negative traits
+	option = {
+		name = tup_utopic_events.1001.leaders
+		trigger = {
+			any_owned_leader = {
+				num_leader_traits = {
+					value > 0
+					negative = yes
+				}
+			}
+			OR = {
+				has_country_flag = tup_crisis_level_2
+				has_country_flag = tup_crisis_level_3
+				has_country_flag = tup_crisis_level_4
+				has_country_flag = tup_crisis_level_5
+			}
+		}
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = tup_utopic_energy
+					value >= 5
+				}
+			}
+		}
+		every_owned_leader = {
+			remove_trait = all_negative
+		}
+		owner = {
+			add_resource = {
+				tup_utopic_energy = -5
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1001
+			}
+		}
+	}
+	option = {
+		name = tup_utopic_events.1000.back
+		default_hide_option = yes
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1000
+			}
+		}
+	}
+}
+
+# Empire Boost
+country_event = {
+	id = tup_utopic_events.1005
+	title = "tup_utopic_events.utopic_energy_menu.name"
+	desc = tup_utopic_events.1005.desc
+	picture = GFX_tup_unity_symbol_gold
+	show_sound = event_default
+	is_triggered_only = yes
+	immediate = {
+		export_resource_stockpile_to_variable = {
+			resource = tup_utopic_energy
+			variable = tup_current_utopic_energy_stockpile
+		}
+	}
+	option = {
+		name = tup_utopic_events.1005.stability
+		trigger = {
+			has_country_flag = tup_crisis_level_2
+		}
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = tup_utopic_energy
+					value >= 5
+				}
+				NOT = {
+					has_modifier = tup_utopic_stability_boost
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				tup_utopic_energy = -5
+			}
+			add_modifier = {
+				modifier = tup_utopic_stability_boost
+				years = 6
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1005
+			}
+			country_event = {
+				id = tup_utopic_events.1172
+				days = @tup_six_year_delay
+			}
+		}
+	}
+	option = {
+		name = tup_utopic_events.1005.basicresourceboost
+		trigger = {
+			OR = {
+				has_country_flag = tup_crisis_level_3
+				has_country_flag = tup_crisis_level_4
+			}
+		}
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = tup_utopic_energy
+					value >= 5
+				}
+				NOT = {
+					has_modifier = tup_utopic_basic_resource_boost
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				tup_utopic_energy = -5
+			}
+			add_modifier = {
+				modifier = tup_utopic_basic_resource_boost
+				years = 6
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1005
+			}
+			country_event = {
+				id = tup_utopic_events.1171
+				days = @tup_six_year_delay
+			}
+		}
+	}
+	option = {
+		name = tup_utopic_events.1005.advresourceboost
+		trigger = {
+			OR = {
+				has_country_flag = tup_crisis_level_3
+				has_country_flag = tup_crisis_level_4
+			}
+		}
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = tup_utopic_energy
+					value >= 8
+				}
+				NOT = {
+					has_modifier = tup_utopic_adv_resource_boost
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				tup_utopic_energy = -8
+			}
+			add_modifier = {
+				modifier = tup_utopic_adv_resource_boost
+				years = 6
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1005
+			}
+			country_event = {
+				id = tup_utopic_events.1171
+				days = @tup_six_year_delay
+			}
+		}
+	}
+	option = {
+		name = tup_utopic_events.1005.combatboost
+		trigger = {
+			OR = {
+				has_country_flag = tup_crisis_level_3
+				has_country_flag = tup_crisis_level_4
+			}
+		}
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = tup_utopic_energy
+					value >= 12
+				}
+				NOT = {
+					has_modifier = tup_utopic_combat_boost
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				tup_utopic_energy = -12
+			}
+			add_modifier = {
+				modifier = tup_utopic_combat_boost
+				years = 6
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1005
+			}
+			country_event = {
+				id = tup_utopic_events.1171
+				days = @tup_six_year_delay
+			}
+		}
+	}
+	option = {
+		name = tup_utopic_events.1000.back
+		default_hide_option = yes
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1000
+			}
+		}
+	}
+}
+
+# Hostile unification Actions
+country_event = {
+	id = tup_utopic_events.1010
+	title = "tup_utopic_events.utopic_energy_menu.name"
+	desc = tup_utopic_events.1010.desc
+	picture = GFX_tup_unity_symbol_gold
+	show_sound = event_default
+	is_triggered_only = yes
+	immediate = {
+		export_resource_stockpile_to_variable = {
+			resource = tup_utopic_energy
+			variable = tup_current_utopic_energy_stockpile
+		}
+	}
+	option = {
+		name = tup_utopic_events.1010.stability
+		custom_tooltip = tup_utopic_events.1010.stability_tt
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = tup_utopic_energy
+					value >= 55
+				}
+				NOT = {
+					has_modifier = tup_hostile_utopic_stability_cooldown
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				tup_utopic_energy = -55
+			}
+			add_modifier = {
+				modifier = tup_hostile_utopic_stability_cooldown
+				years = 6
+			}
+		}
+		hidden_effect = {
+			tup_trigger_hostile_stability_events = yes
+			country_event = {
+				id = tup_utopic_events.1010
+			}
+			country_event = {
+				id = tup_utopic_events.1170
+				days = @tup_six_year_delay
+			}
+		}
+	}
+	option = {
+		name = tup_utopic_events.1010.resource
+		custom_tooltip = tup_utopic_events.1010.resource_tt
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = tup_utopic_energy
+					value >= 55
+				}
+				NOT = {
+					has_modifier = tup_hostile_utopic_resource_cooldown
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				tup_utopic_energy = -55
+			}
+			add_modifier = {
+				modifier = tup_hostile_utopic_resource_cooldown
+				years = 6
+			}
+		}
+		hidden_effect = {
+			tup_trigger_hostile_resource_events = yes
+			country_event = {
+				id = tup_utopic_events.1010
+			}
+			country_event = {
+				id = tup_utopic_events.1170
+				days = @tup_six_year_delay
+			}
+		}
+	}
+	option = {
+		name = tup_utopic_events.1010.combat
+		custom_tooltip = tup_utopic_events.1010.combat_tt
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = tup_utopic_energy
+					value >= 75
+				}
+				NOT = {
+					has_modifier = tup_hostile_utopic_combat_cooldown
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				tup_utopic_energy = -75
+			}
+			add_modifier = {
+				modifier = tup_hostile_utopic_combat_cooldown
+				years = 6
+			}
+		}
+		hidden_effect = {
+			tup_trigger_hostile_combat_events = yes
+			country_event = {
+				id = tup_utopic_events.1010
+			}
+			country_event = {
+				id = tup_utopic_events.1170
+				days = @tup_six_year_delay
+			}
+		}
+	}
+	option = {
+		name = tup_utopic_events.1010.discord
+		custom_tooltip = tup_utopic_events.1010.discord_tt
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = tup_utopic_energy
+					value >= 50
+				}
+				NOT = {
+					has_modifier = tup_hostile_utopic_discord_cooldown
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				tup_utopic_energy = -50
+			}
+			add_modifier = {
+				modifier = tup_hostile_utopic_discord_cooldown
+				years = 6
+			}
+		}
+		hidden_effect = {
+			tup_trigger_hostile_discord_events = yes
+			country_event = {
+				id = tup_utopic_events.1010
+			}
+			country_event = {
+				id = tup_utopic_events.1170
+				days = @tup_six_year_delay
+			}
+		}
+	}
+	option = {
+		name = tup_utopic_events.1000.back
+		default_hide_option = yes
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1000
+			}
+		}
+	}
+}
+# Engine Tests
+country_event = {
+	id = tup_utopic_events.1017
+	title = "tup_utopic_events.utopic_energy_menu.name"
+	desc = tup_utopic_events.1017.desc
+	picture = GFX_tup_unity_symbol_gold
+	show_sound = event_default
+	is_triggered_only = yes
+	immediate = {
+		export_resource_stockpile_to_variable = {
+			resource = tup_utopic_energy
+			variable = tup_current_utopic_energy_stockpile
+		}
+	}
+	option = {
+		name = tup_utopic_events.1017.stability
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = tup_utopic_energy
+					value >= 25
+				}
+				NOR = {
+					has_country_flag = tup_unification_engine_test_2
+					has_special_project = THE_UTOPIA_PROJECT_TEST1
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				tup_utopic_energy = -25
+			}
+			enable_special_project = {
+				name = THE_UTOPIA_PROJECT_TEST1
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1017
+			}
+		}
+	}
+	option = {
+		name = tup_utopic_events.1017.resource
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = tup_utopic_energy
+					value >= 30
+				}
+				NOR = {
+					has_country_flag = tup_unification_engine_test_3
+					has_special_project = THE_UTOPIA_PROJECT_TEST2
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				tup_utopic_energy = -30
+			}
+			enable_special_project = {
+				name = THE_UTOPIA_PROJECT_TEST2
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1017
+			}
+		}
+	}
+	option = {
+		name = tup_utopic_events.1017.combat
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = tup_utopic_energy
+					value >= 40
+				}
+				NOR = {
+					has_country_flag = tup_unification_engine_test_4
+					has_special_project = THE_UTOPIA_PROJECT_TEST3
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				tup_utopic_energy = -40
+			}
+			enable_special_project = {
+				name = THE_UTOPIA_PROJECT_TEST3
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1017
+			}
+		}
+	}
+	option = {
+		name = tup_utopic_events.1017.discord
+				allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = tup_utopic_energy
+					value >= 25
+				}
+				NOR = {
+					has_country_flag = tup_unification_engine_test_5
+					has_special_project = THE_UTOPIA_PROJECT_TEST4
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				tup_utopic_energy = -25
+			}
+			enable_special_project = {
+				name = THE_UTOPIA_PROJECT_TEST4
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1017
+			}
+		}
+	}
+	option = {
+		name = tup_utopic_events.1000.back
+		default_hide_option = yes
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1000
+			}
+		}
+	}
+}
+
+# Loyal Vassalization
+country_event = {
+	id = tup_utopic_events.1013
+	title = "tup_utopic_events.utopic_energy_menu.name"
+	desc = tup_utopic_events.1013.desc
+	picture = GFX_tup_unity_symbol_gold
+	show_sound = event_default
+	is_triggered_only = yes
+	immediate = {
+		export_resource_stockpile_to_variable = {
+			resource = tup_utopic_energy
+			variable = tup_current_utopic_energy_stockpile
+		}
+		every_subject = {
+			limit = {
+				NOR = {
+					has_country_flag = tup_loyal_vassal
+					has_modifier = tup_loyal_vassal_cooldown
+				}
+			}
+			IF = {
+				limit = {
+					NOT = {
+						exists = event_target:tup_loyal_vassalization_target_1
+					}
+					
+
+				}
+				save_event_target_as = tup_loyal_vassalization_target_1
+			}
+			ELSE_IF = {
+				limit = {
+					NAND = {
+						exists = event_target:tup_loyal_vassalization_target_2
+						is_same_empire = event_target:tup_loyal_vassalization_target_1
+					}
+				}
+				save_event_target_as = tup_loyal_vassalization_target_2
+			}
+			ELSE_IF = {
+				limit = {
+					NAND = {
+						exists = event_target:tup_loyal_vassalization_target_3
+						is_same_empire = event_target:tup_loyal_vassalization_target_1
+						is_same_empire = event_target:tup_loyal_vassalization_target_2
+					}
+				}
+				save_event_target_as = tup_loyal_vassalization_target_3
+			}
+		}
+	}
+	option = {
+		name = tup_utopic_events.1013.loyalvassal_target1
+		custom_tooltip = tup_utopic_events.1013.loyalvassal_target_tt
+		trigger = {
+			exists = event_target:tup_loyal_vassalization_target_1
+			event_target:tup_loyal_vassalization_target_1 = {
+				NOR = {
+					has_country_flag = tup_loyal_vassal
+					has_modifier = tup_loyal_vassal_cooldown
+				}
+			}
+		}
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = tup_utopic_energy
+					value >= 10
+				}
+				NOT = {
+					has_modifier = tup_loyal_vassal_cooldown
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				tup_utopic_energy = -10
+			}
+			add_modifier = {
+				modifier = tup_loyal_vassal_cooldown
+				years = 4
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1013
+			}
+			country_event = {
+				id = tup_utopic_events.1170
+				days = @tup_four_year_delay
+			}
+			event_target:tup_loyal_vassalization_target_1 = {
+				country_event = {
+					id = tup_utopic_events.1050
+					years = 4
+				}
+				add_modifier = {
+					modifier = tup_loyal_vassal_cooldown
+					years = 4
+				}
+			}
+		}
+	}
+	option = {
+		name = tup_utopic_events.1013.loyalvassal_target2
+		custom_tooltip = tup_utopic_events.1013.loyalvassal_target_tt
+		trigger = {
+			exists = event_target:tup_loyal_vassalization_target_2
+			event_target:tup_loyal_vassalization_target_2 = {
+				NOR = {
+					has_country_flag = tup_loyal_vassal
+					has_modifier = tup_loyal_vassal_cooldown
+				}
+			}
+		}
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = tup_utopic_energy
+					value >= 10
+				}
+				NOT = {
+					has_modifier = tup_loyal_vassal_cooldown
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				tup_utopic_energy = -10
+			}
+			add_modifier = {
+				modifier = tup_loyal_vassal_cooldown
+				years = 4
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1013
+			}
+			country_event = {
+				id = tup_utopic_events.1170
+				days = @tup_four_year_delay
+			}
+			event_target:tup_loyal_vassalization_target_2 = {
+				country_event = {
+					id = tup_utopic_events.1050
+					years = 4
+				}
+				add_modifier = {
+					modifier = tup_loyal_vassal_cooldown
+					years = 4
+				}
+			}
+		}
+	}
+	option = {
+		name = tup_utopic_events.1013.loyalvassal_target3
+		custom_tooltip = tup_utopic_events.1013.loyalvassal_target_tt
+		trigger = {
+			exists = event_target:tup_loyal_vassalization_target_3
+			event_target:tup_loyal_vassalization_target_3 = {
+				NOR = {
+					has_country_flag = tup_loyal_vassal
+				}
+			}
+		}
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = tup_utopic_energy
+					value >= 10
+				}
+				NOT = {
+					has_modifier = tup_loyal_vassal_cooldown
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				tup_utopic_energy = -10
+			}
+			add_modifier = {
+				modifier = tup_loyal_vassal_cooldown
+				years = 4
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1013
+			}
+			country_event = {
+				id = tup_utopic_events.1170
+				days = @tup_four_year_delay
+			}
+			event_target:tup_loyal_vassalization_target_3 = {
+				country_event = {
+					id = tup_utopic_events.1050
+					years = 4
+				}
+				add_modifier = {
+					modifier = tup_loyal_vassal_cooldown
+					years = 4
+				}
+			}
+		}
+	}
+	option = {
+		name = tup_utopic_events.1000.back
+		default_hide_option = yes
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1000
+			}
+		}
+	}
+}
+
+# Buy Utopic Energy
+country_event = {
+	id = tup_utopic_events.1015
+	title = "tup_utopic_events.utopic_energy_menu.name"
+	desc = tup_utopic_events.1015.desc
+	picture = GFX_tup_unity_symbol_gold
+	show_sound = event_default
+	is_triggered_only = yes
+	immediate = {
+		export_resource_stockpile_to_variable = {
+			resource = tup_utopic_energy
+			variable = tup_current_utopic_energy_stockpile
+		}
+	}
+	option = {
+		name = tup_utopic_events.1015.buy
+		if = {
+			limit = {
+				NOT = {
+					has_modifier = tup_utopic_perks_utopiceff
+				}
+			}
+			custom_tooltip  = tup_utopic_events.1015.buy_tt1
+		} else = {
+			custom_tooltip  = tup_utopic_events.1015.buy_tt2
+		}
+		
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = energy
+					value >= tup_utopic_energy_cost
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				energy = -1
+				mult = tup_utopic_energy_cost
+			}
+			
+			hidden_effect = {
+				complete_crisis_objective = tup_crisobj_utopic_energy_buy
+				tup_increase_buy_utopic_energy_costs = yes
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1015
+			}
+		}
+	}
+	option = {
+		name = tup_utopic_events.1000.back
+		default_hide_option = yes
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1000
+			}
+		}
+	}
+}
+
+# Unlock Perks
+country_event = {
+	id = tup_utopic_events.1020
+	title = "tup_utopic_events.utopic_energy_menu.name"
+	desc = tup_utopic_events.1020.desc
+	picture = GFX_tup_unity_symbol_gold
+	show_sound = event_default
+	is_triggered_only = yes
+	immediate = {
+		export_resource_stockpile_to_variable = {
+			resource = tup_utopic_energy
+			variable = tup_current_utopic_energy_stockpile
+		}
+	}
+	# +1 leaders available, +1 leader Capacity, +1 effective leader skill
+	option = {
+		name = tup_utopic_events.1020.perk1
+		allow = {
+			owner = {
+				NOT = {
+					has_modifier = tup_utopic_perks_leaders
+				}
+				resource_stockpile_compare = {
+					resource = tup_utopic_energy
+					value >= 4
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				tup_utopic_energy = -4
+			}
+			add_modifier = {
+				modifier = tup_utopic_perks_leaders
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1020
+			}
+		}
+	}
+	# Sleeper Agents (+1 Encrypt/Decrypt Bonus infiltrate speed)
+	option = {
+		name = tup_utopic_events.1020.perk2
+		allow = {
+			owner = {
+				custom_tooltip = {
+					success_text = tup_utopic_events.1020.perk2_req_clear_tooltip
+					fail_text =	tup_utopic_events.1020.perk2_req_tooltip
+					OR = {
+						has_country_flag = tup_crisis_level_2
+						has_country_flag = tup_crisis_level_3
+						has_country_flag = tup_crisis_level_4
+						has_country_flag = tup_crisis_level_5
+					}
+				}
+				NOT = {
+					has_modifier = tup_utopic_perks_spies
+				}
+				resource_stockpile_compare = {
+					resource = tup_utopic_energy
+					value >= 6
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				tup_utopic_energy = -6
+			}
+			add_modifier = {
+				modifier = tup_utopic_perks_spies
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1020
+			}
+		}
+	}
+	# +1 modify point, +1 trait picks
+	option = {
+		name = tup_utopic_events.1020.perk3
+		allow = {
+			owner = {
+				custom_tooltip = {
+					success_text = tup_utopic_events.1020.perk3_req_clear_tooltip
+					fail_text =	tup_utopic_events.1020.perk3_req_tooltip
+					OR = {
+						has_country_flag = tup_crisis_level_3
+						has_country_flag = tup_crisis_level_4
+						has_country_flag = tup_crisis_level_5
+					}
+				}
+				NOT = {
+					has_modifier = tup_utopic_perks_genetics
+				}
+				resource_stockpile_compare = {
+					resource = tup_utopic_energy
+					value >= 10
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				tup_utopic_energy = -10
+			}
+			add_modifier = {
+				modifier = tup_utopic_perks_genetics
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1020
+			}
+		}
+	}
+	# Bonus Megastructure build speed, Megastructure Upkeep reduction, gain Mega-Engineering research option
+	option = {
+		name = tup_utopic_events.1020.perk4
+		allow = {
+			owner = {
+				custom_tooltip = {
+					success_text = tup_utopic_events.1020.perk4_req_clear_tooltip
+					fail_text =	tup_utopic_events.1020.perk4_req_tooltip
+					OR = {
+						has_country_flag = tup_crisis_level_4
+						has_country_flag = tup_crisis_level_5
+					}
+				}
+				NOT = {
+					has_modifier = tup_utopic_perks_megabuilders
+				}
+				resource_stockpile_compare = {
+					resource = tup_utopic_energy
+					value >= 20
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				tup_utopic_energy = -20
+			}
+			add_modifier = {
+				modifier = tup_utopic_perks_megabuilders
+			}
+			add_research_option = tech_mega_engineering
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1020
+			}
+		}
+	}
+	# Utopic Generation Efficency
+	option = {
+		name = tup_utopic_events.1020.perk5
+		allow = {
+			owner = {
+				custom_tooltip = {
+					success_text = tup_utopic_events.1020.perk5_req_clear_tooltip
+					fail_text =	tup_utopic_events.1020.perk5_req_tooltip
+					has_country_flag = tup_crisis_level_5
+				}
+				NOT = {
+					has_modifier = tup_utopic_perks_utopiceff
+				}
+				resource_stockpile_compare = {
+					resource = tup_utopic_energy
+					value >= 85
+				}
+			}
+		}
+		custom_tooltip = tup_utopic_events.1020.perk5_tt
+		owner = {
+			add_resource = {
+				tup_utopic_energy = -85
+			}
+			add_modifier = {
+				modifier = tup_utopic_perks_utopiceff
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1020
+			}
+		}
+	}
+	option = {
+		name = tup_utopic_events.1000.back
+		default_hide_option = yes
+		hidden_effect = {
+			country_event = {
+				id = tup_utopic_events.1000
+			}
+		}
+	}
+}
+
+
+########################################################
+# Utopic Events
+# Loyal Vassalization
+# This event is triggered by the Vassal
+country_event = {
+	id = tup_utopic_events.1050
+	title = "tup_utopic_events.1050.name"
+	desc = tup_utopic_events.1050.desc
+	picture = GFX_tup_unity_symbol_gold
+	show_sound = event_default
+	is_triggered_only = yes
+	trigger = {
+		is_subject = yes
+		overlord = {
+			OR = {
+				has_country_flag = tup_crisis_level_3
+				has_country_flag = tup_crisis_level_4
+				has_country_flag = tup_crisis_level_5
+			}
+		}
+	}
+	immediate = {
+		FROM = {
+			country_event = {
+				id = tup_utopic_events.1051
+			}
+		}
+		owner = {
+			tup_convert_vassal_to_loyal_vassal = yes
+			add_opinion_modifier = {
+				who = FROM
+				modifier = tup_opinion_loyal_vassal
+			}
+			save_event_target_as = tup_loyal_vassal
+			FROM = {
+				add_opinion_modifier = {
+					who = event_target:tup_loyal_vassal
+					modifier = tup_opinion_loyal_vassal
+				}
+			}
+		}
+	}
+	option = {
+		name = INCREDIBLE
+	}
+}
+
+# This event is triggered by the Overlord
+country_event = {
+	id = tup_utopic_events.1051
+	title = "tup_utopic_events.1051.name"
+	desc = tup_utopic_events.1051.desc
+	picture = GFX_tup_unity_symbol_gold
+	show_sound = event_default
+	is_triggered_only = yes
+	immediate = {
+		every_playable_country = {
+			limit = {
+				NOR = {
+					has_country_flag = tup_crisis_chosen
+					has_country_flag = tup_loyal_vassal
+				}
+			}
+			add_opinion_modifier = {
+				who = FROM
+				modifier = tup_opinion_brainwasher
+			}
+		}
+	}
+	option = {
+		name = AMAZING
+	}
+}
+
+## Informational Crime and Stability Debuff
+country_event = {
+	id = tup_utopic_events.1120
+	title = "tup_utopic_events.1120.name"
+	desc = tup_utopic_events.1120.desc
+	picture = GFX_evt_worrying_signal
+	show_sound = event_psionic
+	is_triggered_only = yes
+	option = {
+		name = DISCONCERTING
+		owner = {
+			add_modifier = {
+				modifier = tup_hostile_utopic_stability
+				years = 6
+			}
+		}
+	}
+}
+
+# Bonus Effect
+planet_event = {
+	id = tup_utopic_events.1121
+	title = "tup_utopic_events.1121.name"
+	desc = tup_utopic_events.1121.desc
+	picture = GFX_evt_dark_alley
+	show_sound = event_criminal_activity
+	is_triggered_only = yes
+	immediate = {
+		FROM = {
+			country_event = {
+				id = tup_utopic_events.1122
+			}
+		}
+		set_planet_flag = criminal_underworld_event_up
+	}
+	option = {
+		name = CURSES
+		if = {
+			limit = {
+				owner = {
+					NOT = {
+						has_ethic = ethic_gestalt_consciousness
+					}
+				}
+			}
+			add_modifier = {
+				modifier = criminal_underworld
+				days = -1
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					is_hive_empire = yes
+				}
+			}
+			add_modifier = {
+				modifier = drone_deviancy
+				days = -1
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					is_machine_empire = yes
+				}
+			}
+			add_modifier = {
+				modifier = drone_corruption
+				days = -1
+			}
+		}
+		add_modifier = {
+			modifier = tup_hostile_utopic_stability_target
+			years = 5
+		}
+	}
+}
+
+# Let the Crisis Empire know what happened
+country_event = {
+	id = tup_utopic_events.1122
+	title = "tup_utopic_events.1122.name"
+	desc = tup_utopic_events.1122.desc
+	picture = GFX_evt_dark_alley
+	show_sound = event_criminal_activity
+	is_triggered_only = yes
+	option = {
+		name = AMAZING
+	}
+}
+
+# Informational Resource Debuff
+country_event = {
+	id = tup_utopic_events.1130
+	title = "tup_utopic_events.1130.name"
+	desc = tup_utopic_events.1130.desc
+	picture = GFX_evt_worrying_signal
+	show_sound = event_psionic
+	is_triggered_only = yes
+	option = {
+		name = DISCONCERTING
+		owner = {
+			add_modifier = {
+				modifier = tup_hostile_utopic_resource
+				years = 6
+			}
+		}
+	}
+}
+
+# Bonus Effect
+planet_event = {
+	id = tup_utopic_events.1131
+	title = "tup_utopic_events.1131.name"
+	desc = tup_utopic_events.1131.desc
+	picture = GFX_evt_deficit
+	show_sound = event_bad_omen
+	is_triggered_only = yes
+	immediate = {
+		FROM = {
+			country_event = {
+				id = tup_utopic_events.1132
+			}
+		}
+	}
+	option = {
+		name = CURSES
+		add_modifier = {
+			modifier = tup_hostile_utopic_resource_target
+			years = 5
+		}
+		owner = {
+			add_modifier = {
+				modifier = tup_hostile_utopic_resource_empire_target
+				years = 5
+			}
+		}
+	}
+}
+
+# Let the Crisis Empire know what happened
+country_event = {
+	id = tup_utopic_events.1132
+	title = "tup_utopic_events.1132.name"
+	desc = tup_utopic_events.1132.desc
+	picture = GFX_evt_deficit
+	show_sound = event_bad_omen
+	is_triggered_only = yes
+	option = {
+		name = AMAZING
+	}
+}
+
+# Informational Combat Debuff
+country_event = {
+	id = tup_utopic_events.1150
+	title = "tup_utopic_events.1150.name"
+	desc = tup_utopic_events.1150.desc
+	picture = GFX_evt_worrying_signal
+	show_sound = event_psionic
+	is_triggered_only = yes
+	option = {
+		name = DISCONCERTING
+		owner = {
+			add_modifier = {
+				modifier = tup_hostile_utopic_combat
+				years = 6
+			}
+		}
+	}
+}
+
+# Deserters
+country_event = {
+	id = tup_utopic_events.1151
+	title = "tup_utopic_events.1151.name"
+	desc = tup_utopic_events.1151.desc
+	picture = GFX_evt_sabotaged_ship
+	show_sound = event_red_alert
+	is_triggered_only = yes
+	immediate = {
+		FROM = {
+			country_event = {
+				id = tup_utopic_events.1152
+			}
+		}
+		set_variable = {
+			which = tup_total_num_valid_ships
+			value = 0
+		}
+		save_event_target_as = tup_target_country
+		every_owned_ship = {
+			limit = {
+				is_designable = yes
+				is_in_combat = no
+				is_owned_by = PREV
+				OR = {
+					is_ship_size = corvette
+					is_ship_size = frigate
+					is_ship_size = destroyer
+					is_ship_size = cruiser
+				}
+			}
+			event_target:tup_target_country = {
+				change_variable  = {
+					which = tup_total_num_valid_ships
+					value = 1
+				}
+			}
+		}
+		set_variable = {
+			which = tup_num_targeted_ships
+			value = tup_total_num_valid_ships
+		}
+		divide_variable = {
+			which = tup_num_targeted_ships
+			value = 4
+		}
+		if = {
+			limit = {
+				is_at_war = yes
+			}
+			divide_variable = {
+				which = tup_num_targeted_ships
+				value = 1.4
+			}
+		}
+	}
+	option = {
+		name = DISCONCERTING
+		owner = {
+			random_owned_leader = {
+				limit = {
+					is_ruler = no
+					NOR = {
+						has_leader_flag = renowned_leader
+						has_leader_flag = legendary_leader
+						has_trait = trait_imperial_heir
+						has_trait = leader_trait_chosen
+						has_trait = leader_trait_eater_chosen
+						has_trait = leader_trait_composer_chosen
+						has_trait = leader_trait_instrument_chosen
+						has_trait = leader_trait_whisperers_chosen
+					}
+				}
+				kill_leader = {
+					show_notification = yes
+					fire = yes
+				}
+			}
+			if = {
+				limit = {
+					num_owned_leaders > 10
+				}
+				random_owned_leader = {
+					limit = {
+						is_ruler = no
+						is_councilor = no
+						NOR = {
+							has_leader_flag = renowned_leader
+							has_leader_flag = legendary_leader
+							has_trait = trait_imperial_heir
+							has_trait = leader_trait_chosen
+							has_trait = leader_trait_eater_chosen
+							has_trait = leader_trait_composer_chosen
+							has_trait = leader_trait_instrument_chosen
+							has_trait = leader_trait_whisperers_chosen
+							has_base_skill > 8
+						}
+					}
+					kill_leader = {
+						show_notification = yes
+						fire = yes
+					}
+				}
+			}if = {
+				limit = {
+					num_owned_leaders > 20
+				}
+				random_owned_leader = {
+					limit = {
+						is_ruler = no
+						is_councilor = no
+						NOR = {
+							has_leader_flag = renowned_leader
+							has_leader_flag = legendary_leader
+							has_trait = trait_imperial_heir
+							has_trait = leader_trait_chosen
+							has_trait = leader_trait_eater_chosen
+							has_trait = leader_trait_composer_chosen
+							has_trait = leader_trait_instrument_chosen
+							has_trait = leader_trait_whisperers_chosen
+							has_base_skill > 7
+						}
+					}
+					kill_leader = {
+						show_notification = yes
+						fire = yes
+					}
+				}
+			}
+			while = {
+				count = tup_num_targeted_ships
+				random_owned_ship = {
+					limit = {
+						is_designable = yes
+						is_in_combat = no
+						is_owned_by = PREV
+						OR = {
+							is_ship_size = corvette
+							is_ship_size = frigate
+							is_ship_size = destroyer
+							is_ship_size = cruiser
+						}
+					}
+					delete_ship = this
+				}
+			}
+		}
+	}
+}
+
+# Let the Crisis Empire know what happened
+country_event = {
+	id = tup_utopic_events.1152
+	title = "tup_utopic_events.1152.name"
+	desc = tup_utopic_events.1152.desc
+	picture = GFX_evt_sabotaged_ship
+	show_sound = event_default
+	is_triggered_only = yes
+	option = {
+		name = AMAZING
+	}
+}
+
+# Distrust and Discord
+country_event = {
+	id = tup_utopic_events.1160
+	title = "tup_utopic_events.1160.name"
+	desc = tup_utopic_events.1160.desc
+	picture = GFX_evt_worrying_signal
+	show_sound = event_psionic
+	is_triggered_only = yes
+	immediate = {
+		every_playable_country = {
+			limit = {
+			}
+			every_playable_country = {
+				limit = {
+				}
+				add_opinion_modifier = {
+					who = FROM
+					modifier = tup_opinion_discord
+				}
+			}
+		}
+		add_modifier = {
+			modifier = tup_hostile_utopic_discord
+			years = 6
+		}
+	}
+	option = {
+		name = DISCONCERTING
+	}
+}
+
+# Harsher Discord
+country_event = {
+	id = tup_utopic_events.1161
+	title = "tup_utopic_events.1161.name"
+	desc = {
+		trigger = {
+			owner = {
+				has_federation = yes
+			}
+		}
+		text = tup_utopic_events.1161.desc.fed
+	}
+	desc = {
+		trigger = {
+			owner = {
+				has_federation = no
+			}
+		}
+		text = tup_utopic_events.1161.desc.nofed
+	}
+	picture = GFX_evt_smear_campaign
+	show_sound = event_administrative_work
+	is_triggered_only = yes
+	immediate = {
+		random_playable_country = {
+			limit = {
+				NOT = {
+					has_country_flag = tup_crisis_chosen
+				}
+			}
+			save_global_event_target_as = tup_global_diplomatic_smear_target
+		}
+		FROM = {
+			country_event = {
+				id = tup_utopic_events.1162
+			}
+		}
+	}
+	option = {
+		name = DISCONCERTING
+		add_modifier = {
+			modifier = tup_hostile_utopic_discord_target
+			years = 5
+		}
+		if = {
+			limit = {
+				owner = {
+					has_federation = yes
+				}
+			}
+			federation = {
+				add_cohesion = -50
+			}
+		}
+		event_target:tup_global_diplomatic_smear_target = {
+			country_event = {
+				id = envoy_events.101
+			}
+		}
+	}
+}
+
+# Let the Crisis Empire know what happened
+country_event = {
+	id = tup_utopic_events.1162
+	title = "tup_utopic_events.1162.name"
+	desc = tup_utopic_events.1162.desc
+	picture = GFX_evt_smear_campaign
+	show_sound = event_administrative_work
+	is_triggered_only = yes
+	immediate = {
+	}
+	option = {
+		name = AMAZING
+	}
+}
+
+# A message that a Utopic Power is now available
+country_event = {
+	id = tup_utopic_events.1170
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		create_message = {
+			type = TUP_MESSAGE_UTOPIC_POWER_AVAILABLE
+			localization = TUP_MESSAGE_UTOPIC_POWER_AVAILABLE_DESC
+			days = 7
+		}
+	}
+}
+# Like the above, but does not trigger in Crisis Level 4
+country_event = {
+	id = tup_utopic_events.1171
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		NOT = {
+			has_country_flag = tup_crisis_level_5
+		}
+	}
+	immediate = {
+		create_message = {
+			type = TUP_MESSAGE_UTOPIC_POWER_AVAILABLE
+			localization = TUP_MESSAGE_UTOPIC_POWER_AVAILABLE_DESC
+			days = 7
+		}
+	}
+}
+country_event = {
+	id = tup_utopic_events.1172
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		NOT = {
+			has_country_flag = tup_crisis_level_2
+		}
+	}
+	immediate = {
+		create_message = {
+			type = TUP_MESSAGE_UTOPIC_POWER_AVAILABLE
+			localization = TUP_MESSAGE_UTOPIC_POWER_AVAILABLE_DESC
+			days = 7
+		}
+	}
+}
