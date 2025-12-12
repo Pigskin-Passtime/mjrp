@@ -1,0 +1,76 @@
+entity = {
+	name = "mjarchitect_great_host_entity"
+	pdxmesh = "mjarchitect_great_host_mesh"
+
+	locator = { name = "part1" 	position = { 0 0 0 } }
+	
+	default_state = "idle"
+	state = { name = "idle" state_time = 5.0
+		event = { time = 0 particle = "mjarchitect_great_host_effect" keep_particle = yes trigger_once = yes }
+		event = { trigger_once = yes sound = { soundeffect = "amb_large_crystal_station_idle" } }
+		event = { time = 0.0 node = "effect_locator" particle = "wormhole_idle_particle"  keep_particle = yes trigger_once = yes }
+	}
+	
+	state = { name = "death"
+		event = { time = 0.0 particle = "energy_core2_expand_on_death" keep_particle = yes trigger_once = yes }
+		event = { time = 1.9 particle = "crystal_station_explosion_particle" keep_particle = yes trigger_once = yes }
+		event = { trigger_once = yes sound = { soundeffect = "amb_large_crystal_station_death" } }
+		event = { trigger_once = yes sound = { soundeffect = "distance_amb_large_crystal_station_death" } }
+	}
+	
+	attach = { main = "mjarchitect_great_host_rings_entity" }
+	attach = { main = "mjarchitect_great_host_portal_entity" }
+	attach = { main = "mjarchitect_great_host_portal_entity" }
+	scale = 15
+}
+
+entity = {
+	name = "mjarchitect_great_host_ruined_entity"
+	pdxmesh = "mjarchitect_great_host_ruined_mesh"
+
+	locator = { name = "part1" 	position = { 0 0 0 } }
+	
+	default_state = "idle"
+	state = { name = "idle" state_time = 5.0
+	}
+	
+	state = { name = "death"
+	}
+
+	scale = 15
+}
+
+entity = {
+	name = "mjarchitect_great_host_rings_entity"
+	pdxmesh = "mjarchitect_great_host_rings_mesh"
+
+	default_state = "idle"
+	state = { name = "idle" }
+	state = { name = "death"
+	}
+}
+
+entity = {
+	name = "mjarchitect_great_host_portal_entity"
+	pdxmesh = "wormhole_rings_mesh"
+
+	#locator = { name = "root" position = { 0 0 0 } }
+
+	default_state = "start"
+	state = { name = "start" state_time = 5 looping = no next_state = start2
+		event = { trigger_once = yes sound = { soundeffect = "amb_natural_wormhole" } }
+		event = { trigger_once = yes sound = { soundeffect = "amb_natural_wormhole_thunder" } }
+	}
+
+	scale = 13.0
+
+	game_data = {
+		uv_animation_speed   = -0.05
+		uv_animation_direction  = { 0.4 0.4 }
+		bloom_factor = 1.0
+	}
+
+	attach = { root = "natural_wormhole_stretched_ring_entity" }
+
+
+}

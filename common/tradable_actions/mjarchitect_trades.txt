@@ -1,0 +1,90 @@
+trade_action_mjarchitect_pop_offering = {
+	fire_and_forget = yes
+
+	potential = {
+		FROM = { has_crisis_perk = mjarchitect_crisis_perk_10 }
+	}
+
+	on_traded_effect = {
+		custom_tooltip = trade_action_mjarchitect_pop_offering_tt
+		ROOT = {
+			hidden_effect = {
+				export_trigger_value_to_variable = {
+					trigger = count_owned_pop_amount
+					variable = mjarchitect_pops_before_killing
+					rounded = yes
+				}
+				every_owned_pop_job = {
+					kill_assigned_pop_amount = {
+						percentage = 0.05
+					}
+				}
+				export_trigger_value_to_variable = {
+					trigger = count_owned_pop_amount
+					variable = mjarchitect_pops_after_killing
+					rounded = yes
+				}
+				set_variable = {
+					which = mjarchitect_num_pops_sacrificed_empirewide
+					value = mjarchitect_pops_before_killing
+				}
+				subtract_variable = {
+					which = mjarchitect_num_pops_sacrificed_empirewide
+					value = mjarchitect_pops_after_killing
+				}
+
+				FROM = {
+					set_variable = {
+						which = mjarchitect_pops_killed_as_tithe
+						value = 0
+					}
+					change_variable = {
+						which = mjarchitect_pops_killed_as_tithe
+						value = prev.mjarchitect_num_pops_sacrificed_empirewide
+					}
+					# divide_variable = {
+					# 	which = mjarchitect_pops_killed_as_tithe
+					# 	value = 100
+					# }
+					mjarchitect_resource_reward_effect_hidden = {
+						COGNITIVE_MATTER_VALUE = 0.5
+						COGNITIVE_MATTER_MULT = mjarchitect_pops_killed_as_tithe
+						SATISFACTION_VALUE = 0.05
+						SATISFACTION_MULT = mjarchitect_pops_killed_as_tithe
+						SATISFACTION_CAP = 15
+					}
+
+					set_variable = {
+						which = mjarchitect_num_cm_gained
+						value = 0.5
+					}
+					multiply_variable = {
+						which = mjarchitect_num_cm_gained
+						value = mjarchitect_pops_killed_as_tithe
+					}
+
+					change_variable = {
+						which = mjarchitect_num_sacrificed_new
+						value = mjarchitect_pops_killed_as_tithe
+					}
+
+					create_message = {
+							type = MESSAGE_MJARCHITECT_TITHE_PAID_DEAL
+							localization = MESSAGE_MJARCHITECT_TITHE_PAID_DEAL
+							days = 60
+							variable = {
+								type = key
+								value = mjarchitect_num_cm_gained
+								localization = NUM_CM
+							}
+					}
+				}
+			}
+		}
+		FROM = {}
+	}
+
+	ai_weight = {
+		weight = 40
+	}
+}

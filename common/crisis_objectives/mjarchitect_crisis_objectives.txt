@@ -1,0 +1,132 @@
+###############
+#
+# CRISIS OBJECTIVES
+# (Previously 'MEANS')
+#
+###############
+
+# crisobj_name = {
+#	reward = 1			# The menace reward given when this objective is completed
+# }
+#
+# OR
+#
+# crisobj_name = {
+#	potential = {}		# Potential trigger (This = country). Defines availability of this objective to the country. The trigger is evaluated daily.
+#	reward = {			# The base menace reward given when this objective is completed
+#		base = 100
+#
+#		modifier = {	# Modifier(s) that adjust the reward amount
+#			factor = 2
+#			owner = { is_xenophobe = yes }
+#		}
+#	}
+# }
+
+# Produce Cognitive Matter from Conduit of Ruin jobs
+mjarchitect_crisobj_conduit_jobs = {
+	reward = {
+		base = 0
+		add = mjarchitect_conduit_jobs
+		round = yes 							#we don't want 3.124 menace
+		min = 0								#just in case
+	}
+	recurring = yes
+}
+
+# Produce Cognitive Matter from Pops with the Conduit of Ruin trait
+mjarchitect_crisobj_conduit_pops = {
+	reward = {
+		base = 0
+		add = mjarchitect_conduit_pops
+		round = yes 							#we don't want 3.124 menace
+		min = 0								#just in case
+	}
+	recurring = yes
+}
+
+# Have Void-thrall subjects
+mjarchitect_crisobj_have_shroudthralls = {
+	reward = {
+		base = 0
+		add = mjarchitect_num_cm_gained
+		round = yes 							#we don't want 3.124 menace
+		min = 0								#just in case
+	}
+	recurring = yes
+}
+
+# Purge Pops with Shroud Sacrifice purging
+mjarchitect_crisobj_shroud_purge = {
+	reward = {
+		base = 3000
+		divide = trigger:num_galaxy_systems 	#on huge, this is 3. On smallest, it is 15
+		complex_trigger_modifier = { 			#fewer worlds => more menace from purging
+			trigger = check_galaxy_setup_value
+			parameters = { setting = habitable_worlds_scale }
+			mode = divide
+		}
+		round = yes 							#we don't want 3.124 menace
+		min = 3									#just in case
+	}
+}
+
+# Sacrifice Pops with decision/edict
+mjarchitect_crisobj_sacrifice_pops = {
+	reward = {
+		base = 3000
+		divide = trigger:num_galaxy_systems 	#on huge, this is 3. On smallest, it is 15
+		complex_trigger_modifier = { 			#fewer worlds => more menace from purging
+			trigger = check_galaxy_setup_value
+			parameters = { setting = habitable_worlds_scale }
+			mode = divide
+		}
+		round = yes 							#we don't want 3.124 menace
+		min = 3									#just in case
+	}
+}
+
+# Populace Offering trade action
+mjarchitect_crisobj_offering = {
+	reward = {
+		base = 6000
+		divide = trigger:num_galaxy_systems 	#on huge, this is 6. On smallest, it is 30
+		complex_trigger_modifier = { 			#fewer worlds => more menace from purging
+			trigger = check_galaxy_setup_value
+			parameters = { setting = habitable_worlds_scale }
+			mode = divide
+		}
+		round = yes 							#we don't want 3.124 menace
+		min = 3									#just in case
+	}
+}
+
+# Use Mark of Ruin decision
+mjarchitect_crisobj_markofruin = {
+	reward = {
+		base = 20000
+		divide = trigger:num_galaxy_systems 	#on huge, this is 20. On smallest, it is 100
+		complex_trigger_modifier = { 			#fewer worlds => more menace from destroying one
+			trigger = check_galaxy_setup_value
+			parameters = { setting = habitable_worlds_scale }
+			mode = divide
+		}
+		round_to = 50 								#we don't want 127.5 menace
+		min = 100									#just in case
+	}
+}
+
+# Activate Beacons of the Veil / Dimensional Percolaters
+mjarchitect_crisobj_beacons = {
+	reward = {
+		base = 600
+		complex_trigger_modifier = { #subtract 50 for each playable country that exists
+			trigger = count_playable_country
+			mode = subtract
+			mult = 50
+		}
+		round_to = 200 	#we want a solid number
+		min = 100		#and we don't want less than 200
+	}
+	recurring = yes
+}

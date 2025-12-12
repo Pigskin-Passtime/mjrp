@@ -1,0 +1,78 @@
+mjarchitect_great_host_system = {
+	name = "MJARCHITECT_ZENITH_OF_RUIN"
+	
+	class = "sc_mjarchitect_great_host"
+	
+	flags = { mjarchitect_host_system }
+	init_effect = {
+	}
+	
+	planet = {
+		name = "MJARCHITECT_ZENITH_OF_RUIN"
+		class = "pc_black_hole"
+		orbit_distance = 0
+		orbit_angle = 0
+		size = 1
+		has_ring = no
+
+		init_effect = {
+			prevent_anomaly = yes
+			clear_deposits = yes
+			save_event_target_as = mjarchitect_host_target
+		}
+	}
+
+	init_effect = {
+		spawn_megastructure = {
+			type = mjarchitect_great_host_ruined
+			planet = event_target:mjarchitect_host_target
+
+			init_effect = {
+				create_ambient_object = {
+					type = "large_debris_object"
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 20
+						angle = 20
+					}
+				}
+				create_ambient_object = {
+					type = "large_debris_object"
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 20
+						angle = 150
+					}
+				}
+				create_ambient_object = {
+					type = "medium_debris_01_object"
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 35
+						angle = 90
+					}
+				}
+				create_ambient_object = {
+					type = "medium_debris_02_object"
+					location = this
+				}
+				last_created_ambient_object = {
+					set_location = {
+						target = prev
+						distance = 3
+						angle = 270
+					}
+				}
+			}
+		}
+	}
+}

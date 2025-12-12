@@ -1,0 +1,699 @@
+##########################################
+## Architect of Ruin - Ending Events
+## By MadeinCanada
+##########################################
+
+namespace = mjarchitect_end
+
+# On enter stage 2
+situation_event = { 
+	id = mjarchitect_end.10
+	title = "mjarchitect_end.10.name"
+	desc = "mjarchitect_end.10.desc"
+	picture = GFX_evt_cosmic_storms_calibration
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		# removed, as of now
+	}
+
+	option = {
+		name = "mjarchitect_end.10.a"
+	}
+}
+
+# On enter stage 3
+situation_event = { 
+	id = mjarchitect_end.15
+	title = "mjarchitect_end.15.name"
+	desc = "mjarchitect_end.15.desc"
+	picture = GFX_evt_cosmic_storms_celestial_storm
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		# removed, as of now
+	}
+
+	option = {
+		name = "mjarchitect_end.15.a"
+	}
+}
+
+# Monthly check for CM stockpile
+event = {
+	id = mjarchitect_end.50
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+		exists = event_target:mjarchitect_crisis_empire
+	}
+
+	immediate = {
+		event_target:mjarchitect_crisis_empire = {
+			export_resource_stockpile_to_variable = {
+				resource = mjarchitect_cognitive_matter
+				variable = mjarchitect_num_cognitive_matter
+			}
+
+			if = {
+				limit = {
+					OR = {
+						has_country_flag = mjarchitect_path_2_sp_completed
+						has_country_flag = mjarchitect_path_3_sp_completed
+					}
+				}
+				country_event = {
+					id = mjarchitect_end.130
+				}
+			}
+			else = {}
+
+			set_variable = {
+				which = mjarchitect_num_cognitive_matter_situation_progress
+				value = mjarchitect_num_cognitive_matter
+			}
+			divide_variable = {
+				which = mjarchitect_num_cognitive_matter_situation_progress
+				value = 100000
+			}
+
+			if = {
+				limit = {
+					check_variable = {
+						which = mjarchitect_num_cognitive_matter_situation_progress
+						value > 1
+					}
+				}
+				set_variable = {
+					which = mjarchitect_num_cognitive_matter_situation_progress
+					value = 1
+				}
+			}
+		}
+	}
+}
+
+# Herald of Ruin Situation Succeeds - GATEKEEPER
+country_event = {
+	id = mjarchitect_end.100
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+
+	immediate = {
+		set_country_flag = mjarchitect_interactions_blocked
+		if = {
+			limit = {
+				has_country_flag = mjarchitect_path_1_selected
+			}
+			country_event = {
+				id = mjarchitect_end.105
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = mjarchitect_path_2_selected
+			}
+			country_event = {
+				id = mjarchitect_end.135
+			}
+		}
+		else = {}
+	}
+}
+
+## PATH 1 ##
+
+# Path 1 - Architect Arrives from the Great Host
+country_event = {
+	id = mjarchitect_end.105
+	is_triggered_only = yes
+	title = "mjarchitect_end.105.name"
+	desc = "mjarchitect_end.105.desc"
+	picture = GFX_evt_dimensional_horror
+	location = event_target:mjarchitect_great_host_star
+	
+	trigger = {
+		mjarchitect_is_crisis = yes
+	}
+
+	immediate = {
+		every_playable_country = {
+			limit = {
+				NOT = { is_same_value = root }
+			}
+			country_event = {
+				id = mjarchitect_end.120
+			}
+		}
+	}
+
+	option = {
+		name = "mjarchitect_end.105.a"
+		mjarchitect_spawn_architect = yes
+		hidden_effect = {
+			country_event = {
+				id = mjarchitect_end.110
+				days = 90
+			}
+		}
+	}
+}
+
+# Path 1 - If Architect not engaged, trigger end, otherwise check in 90 days
+country_event = {
+	id = mjarchitect_end.110
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+
+	immediate = {
+		event_target:mjarchitect_architect_fleet = {
+			if = {
+				limit = {
+					is_in_combat = yes
+				}
+				root = {
+					country_event = {
+						id = mjarchitect_end.110
+						days = 90
+					}
+				}
+			}
+			else = {
+				root = {
+					country_event = {
+						id = mjarchitect_end.115
+					}
+				}
+			}
+		}
+	}
+}
+
+# ENDING 1
+country_event = {
+	id = mjarchitect_end.115
+	is_triggered_only = yes
+	title = "mjarchitect_end.115.name"
+	desc = "mjarchitect_end.115.desc"
+	picture = GFX_evt_cosmic_storms_nexus_storm
+	
+	trigger = {
+		mjarchitect_is_crisis = yes
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = "mjarchitect_end.115.a"
+		custom_tooltip = crisis.7516.tt
+	}
+
+	after = {
+		hidden_effect = {
+			end_event_chain = "mjarchitect_chain"
+			every_country = {
+				limit = {
+					NOR = {
+						has_country_flag = mjarchitect_chosen_of_the_architect
+						is_country_type = mjarchitect_entity_country
+					}
+				}
+				destroy_country = yes
+			}
+			win = yes
+			date_distortion = yes
+		}
+	}
+}
+
+# Path 1/2 - Architect Arrives
+country_event = {
+	id = mjarchitect_end.120
+	is_triggered_only = yes
+	title = "mjarchitect_end.120.name"
+	desc = "mjarchitect_end.120.desc"
+	picture = GFX_evt_dimensional_horror
+	
+	trigger = {
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = "mjarchitect_end.120.a"
+	}
+}
+
+## PATH 2 ##
+
+# Path 2 - SP Completed
+country_event = {
+	id = mjarchitect_end.125
+	is_triggered_only = yes
+	title = "mjarchitect_end.125.name"
+	desc = "mjarchitect_end.125.desc"
+	picture = GFX_evt_cosmic_storms_nexus_storm
+	
+	trigger = {
+		mjarchitect_is_crisis = yes
+	}
+
+	immediate = {
+		set_country_flag = mjarchitect_path_2_sp_completed
+		export_resource_stockpile_to_variable = {
+			resource = mjarchitect_cognitive_matter
+			variable = mjarchitect_num_cognitive_matter
+		}
+		divide_variable = {
+			which = mjarchitect_num_cognitive_matter
+			value = 1000
+		}
+	}
+
+	option = {
+		name = "mjarchitect_end.125.a"
+		add_modifier = {
+			modifier = mjarchitect_usurpation_boon
+			multiplier = mjarchitect_num_cognitive_matter
+		}
+	}
+}
+
+# Path 2/3 - Monthly Check for CM
+country_event = {
+	id = mjarchitect_end.130
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+		OR = {
+			has_country_flag = mjarchitect_path_2_sp_completed
+			has_country_flag = mjarchitect_path_3_sp_completed
+		}
+	}
+
+	immediate = {
+			remove_modifier = mjarchitect_usurpation_boon
+
+			set_variable = {
+				which = mjarchitect_num_cognitive_matter_usurpation
+				value = mjarchitect_num_cognitive_matter
+			}
+			divide_variable = {
+				which = mjarchitect_num_cognitive_matter_usurpation
+				value = 1000
+			}
+			if = {
+				limit = {
+					check_variable = {
+						which = mjarchitect_num_cognitive_matter_usurpation
+						value > 100
+					}
+				}
+				set_variable = {
+					which = mjarchitect_num_cognitive_matter_usurpation
+					value = 100
+				}
+			}
+
+			add_modifier = {
+				modifier = mjarchitect_usurpation_boon
+				multiplier = mjarchitect_num_cognitive_matter_usurpation
+			}
+	}
+}
+
+# Path 2 - Architect Arrives from the Great Host
+country_event = {
+	id = mjarchitect_end.135
+	is_triggered_only = yes
+	title = "mjarchitect_end.105.name"
+	desc = "mjarchitect_end.135.desc"
+	picture = GFX_evt_dimensional_horror
+	
+	trigger = {
+		mjarchitect_is_crisis = yes
+	}
+
+	immediate = {
+		every_playable_country = {
+			limit = {
+				NOT = { is_same_value = root }
+			}
+			country_event = {
+				id = mjarchitect_end.120
+			}
+		}
+	}
+
+	option = {
+		name = "mjarchitect_end.135.a"
+		mjarchitect_spawn_architect = yes
+		custom_tooltip = mjarchitect_path_2_30_days
+		event_target:mjarchitect_entity_country = {
+			set_faction_hostility = {
+				set_hostile = yes
+				target = root
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = mjarchitect_end.140
+				days = 90
+			}
+		}
+	}
+
+	option = {
+		name = "mjarchitect_end.135.b"
+		mjarchitect_spawn_architect = yes
+		custom_tooltip = mjarchitect_path_2b
+		hidden_effect = {
+			country_event = {
+				id = mjarchitect_end.110
+				days = 90
+			}
+		}
+	}
+}
+
+# Path 2 - If Architect not engaged, trigger end, otherwise check in 90 days
+country_event = {
+	id = mjarchitect_end.140
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+
+	immediate = {
+		event_target:mjarchitect_architect_fleet = {
+			if = {
+				limit = {
+					is_in_combat = yes
+				}
+				root = {
+					country_event = {
+						id = mjarchitect_end.140
+						days = 90
+					}
+				}
+			}
+			else = {
+				root = {
+					country_event = {
+						id = mjarchitect_end.150
+					}
+				}
+			}
+		}
+	}
+}
+
+# ENDING 2a/b
+country_event = {
+	id = mjarchitect_end.145
+	is_triggered_only = yes
+	title = "mjarchitect_end.145.name"
+	desc = "mjarchitect_end.145.desc"
+	picture = GFX_evt_cosmic_storms_gravity_storm
+	
+	trigger = {
+		mjarchitect_is_crisis = yes
+		from = { is_country_type = mjarchitect_entity_country }
+		fromfromfrom = { has_ship_flag = mjarchitect_architect_ship }
+	}
+
+	immediate = {
+		every_playable_country = {
+			limit = {
+				NOT = { is_same_value = root }
+			}
+			country_event = {
+				id = mjarchitect_end.155
+			}
+		}
+	}
+
+	option = {
+		name = "mjarchitect_end.145.a" # Keep the Microcosm
+		custom_tooltip = mjarchitect_end.145.tt2
+		add_relic = r_mjarchitect_microcosm
+		add_monthly_resource_mult = {
+				resource = energy
+				value = 100
+				min = 25000
+				max = 50000
+		}
+		add_monthly_resource_mult = {
+				resource = minerals
+				value = 100
+				min = 25000
+				max = 50000
+		}
+		every_country = {
+			set_truce = {
+				target = root
+				type = war
+			}
+			add_opinion_modifier = {
+				modifier = mjarchitect_microcosm_architect_opinion_modifier
+				who = root
+			}
+		}
+		hidden_effect = {
+			every_playable_country = {
+				limit = {
+					NOT = { is_same_value = root }
+				}
+				set_subject_of = {
+					who = root
+					preset = preset_vassal
+					allow_instant_negotiation = no
+				}
+			}
+			every_agreement = {
+				add_loyalty = 300
+			}
+		}
+		win = yes
+	}
+
+	option = {
+		name = "mjarchitect_end.145.b" # Put it somewhere it will never be found
+		custom_tooltip = mjarchitect_end.145.tt
+		add_monthly_resource_mult = {
+				resource = influence
+				value = 240
+				min = 500
+				max = 1000
+		}
+		add_monthly_resource_mult = {
+				resource = unity
+				value = 240
+				min = 100000
+				max = 900000
+		}
+		add_monthly_resource_mult = {
+				resource = energy
+				value = 100
+				min = 25000
+				max = 50000
+		}
+		add_monthly_resource_mult = {
+				resource = minerals
+				value = 100
+				min = 25000
+				max = 50000
+		}
+		every_country = {
+			set_truce = {
+				target = root
+				type = war
+			}
+			add_opinion_modifier = {
+				modifier = mjarchitect_stopped_architect_opinion_modifier
+				who = root
+			}
+		}
+	}
+
+	after = {
+		end_event_chain = "mjarchitect_chain"
+		hidden_effect = {
+			set_global_flag = mjarchitect_killed
+			random_country = {
+				limit = {
+					is_country_type = mjarchitect_entity_country
+				}
+				destroy_country = yes
+			}
+		}
+	}
+}
+
+# ENDING 2c
+country_event = {
+	id = mjarchitect_end.150
+	is_triggered_only = yes
+	title = "mjarchitect_end.115.name"
+	desc = "mjarchitect_end.150.desc"
+	picture = GFX_evt_cosmic_storms_nexus_storm
+	
+	trigger = {
+		mjarchitect_is_crisis = yes
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = "mjarchitect_end.150.a"
+		custom_tooltip = mjarchitect_end.150.tt
+	}
+
+	after = {
+		hidden_effect = {
+			every_country = {
+				limit = {
+					NOT = {
+						is_country_type = mjarchitect_entity_country
+					}
+				}
+				destroy_country = yes
+			}
+			event_target:mjarchitect_entity_country = {
+				win = yes
+			}
+			date_distortion = yes
+		}
+	}
+}
+
+# Path 2/3 - Architect Defeated
+country_event = {
+	id = mjarchitect_end.155
+	is_triggered_only = yes
+	title = "mjarchitect_end.155.name"
+	desc = "mjarchitect_end.155.desc"
+	picture = GFX_evt_cosmic_storms_gravity_storm
+	
+	trigger = {
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = "mjarchitect_end.155.a"
+	}
+}
+
+# ## PATH 3 ##
+
+# # Path 3 - Galaxy Learns of Your Plan
+# country_event = {
+# 	id = mjarchitect_end.160
+# 	is_triggered_only = yes
+# 	title = "mjarchitect_end.160.name"
+# 	desc = "mjarchitect_end.160.desc"
+# 	picture = GFX_evt_crisis_declared
+	
+# 	trigger = {
+# 	}
+
+# 	immediate = {
+# 	}
+
+# 	option = {
+# 		name = "mjarchitect_end.160.a"
+# 	}
+# 	option = {
+# 		name = "mjarchitect_end.160.b"
+# 	}
+# }
+
+# # Path 3 - SP Completed
+# country_event = {
+# 	id = mjarchitect_end.165
+# 	is_triggered_only = yes
+# 	title = "mjarchitect_end.125.name"
+# 	desc = "mjarchitect_end.165.desc"
+# 	picture = GFX_evt_cosmic_storms_nexus_storm
+	
+# 	trigger = {
+# 		mjarchitect_is_crisis = yes
+# 	}
+
+# 	immediate = {
+# 		set_country_flag = mjarchitect_path_3_sp_completed
+# 		export_resource_stockpile_to_variable = {
+# 			resource = mjarchitect_cognitive_matter
+# 			variable = mjarchitect_num_cognitive_matter
+# 		}
+# 	}
+
+# 	option = {
+# 		name = "mjarchitect_end.165.a"
+# 		add_modifier = {
+# 			modifier = mjarchitect_usurpation_boon
+# 			multiplier = mjarchitect_num_cognitive_matter
+# 		}
+# 	}
+# }
+
+# # Path 3 - Architect Arrives from the Great Host
+# country_event = {
+# 	id = mjarchitect_end.170
+# 	is_triggered_only = yes
+# 	title = "mjarchitect_end.105.name"
+# 	desc = "mjarchitect_end.170.desc"
+# 	picture = GFX_evt_dimensional_horror
+	
+# 	trigger = {
+# 		mjarchitect_is_crisis = yes
+# 	}
+
+# 	immediate = {
+# 		every_playable_country = {
+# 			limit = {
+# 				NOT = { is_same_value = root }
+# 			}
+# 			country_event = {
+# 				id = mjarchitect_end.175
+# 			}
+# 		}
+# 	}
+
+# 	option = {
+# 		name = "mjarchitect_end.170.a"
+# 		custom_tooltip = mjarchitect_path_3_30_days
+# 		event_target:mjarchitect_entity_country = {
+# 			set_faction_hostility = {
+# 				set_hostile = yes
+# 				target = root
+# 			}
+# 		}
+# 		hidden_effect = {
+# 			country_event = {
+# 				id = mjarchitect_end.140
+# 				days = 90
+# 			}
+# 		}
+# 	}
+# }

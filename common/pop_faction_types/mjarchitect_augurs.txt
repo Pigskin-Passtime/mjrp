@@ -1,0 +1,1024 @@
+
+mjarchitect_augurs = {
+	election_header = "GFX_faction_header_cyan"
+	guiding_ethic = ethic_authoritarian
+	use_guiding_ethic_as_pop_filter = no
+	visual_ethic = "totalitarian_visual_ethic"
+	can_rename = no
+
+	unique = yes
+	support_multiplier = 2.5
+
+	resources = {
+		category = pop_factions
+		produces = {
+			trigger = {
+				owner = {
+					NOR = {
+						has_civic = civic_crowdsourcing
+						has_civic = civic_corporate_crowdsourcing
+					}
+				}
+			}
+			unity = @faction_base_output
+		}
+		produces = {
+			trigger = {
+				owner = {
+					has_country_flag = mjarchitect_blessing_1_unlocked
+				}
+			}
+			mjarchitect_cognitive_matter = @faction_major_output
+		}
+		produces = {
+			trigger = {
+				owner = {
+					OR = {
+						has_civic = civic_crowdsourcing
+						has_civic = civic_corporate_crowdsourcing
+					}
+				}
+			}
+			physics_research = @faction_major_output
+			society_research = @faction_minor_output
+			mult = @crowdsourcing_multiplier
+		}
+	}
+
+	extortion_resource = {
+		category = pop_factions
+		produces = {
+			trigger = {
+				owner = {
+					NOR = {
+						has_civic = civic_crowdsourcing
+						has_civic = civic_corporate_crowdsourcing
+					}
+				}
+				is_lithoid_empire = no
+			}
+			food = @faction_base_output
+			mult = @faction_extortion_food_ratio
+		}
+		produces = {
+			trigger = {
+				owner = {
+					NOR = {
+						has_civic = civic_crowdsourcing
+						has_civic = civic_corporate_crowdsourcing
+					}
+				}
+				is_lithoid_empire = yes
+			}
+			minerals = @faction_base_output
+			mult = @faction_extortion_minerals_ratio
+		}
+		produces = {
+			trigger = {
+				owner = {
+					OR = {
+						has_civic = civic_crowdsourcing
+						has_civic = civic_corporate_crowdsourcing
+					}
+				}
+			}
+			physics_research = @faction_major_output
+			society_research = @faction_minor_output
+			mult = @faction_extortion_crowdsourcing_ratio
+		}
+	}
+
+	is_potential = {
+		has_crisis_perk = mjarchitect_crisis_perk_3
+		has_country_flag = mjarchitect_augurs_established
+	}
+
+	parameters = {
+		empire = {
+			type = country
+			valid_objects = {
+				is_same_value = root
+			}
+		}
+	}
+
+	can_join_pre_triggers = {
+		is_enslaved = no
+		is_being_purged = no
+	}
+
+	can_join_faction = {
+		can_think = yes
+	}
+
+	attraction = {
+		base = 105
+
+		modifier = {
+			factor = 1.25
+			exists = from
+			from = {
+				exists = leader
+				leader = { is_ruler = yes }
+			}
+		}
+		modifier = {
+			factor = 2
+			has_trait = trait_mjarchitect_conduit_of_ruin
+		}
+		# modifier = {
+		# 	factor = 5
+		# 	has_job_type = mjarchitect_conduit
+		# }
+	}
+
+	leader = {
+		base = 100
+		modifier = {
+			factor = 0.5
+			species = {
+				has_trait = "trait_mechanical"
+			}
+			owner = {
+				is_individual_machine = no
+			}
+		}
+
+		modifier = {
+			factor = 0.0
+			is_event_leader = yes
+		}
+	}
+
+	## Base Demands
+
+	demand = {
+		title = "MJARCHITECT_AUGURS_AUTH"
+		unfulfilled_title = "MJARCHITECT_AUGURS_AUTH_UNFULFILLED"
+		desc = "MJARCHITECT_AUGURS_AUTH_DESC"
+
+		unfulfilled_effect = -5
+		fulfilled_effect = 5
+
+		# Conditions for demand to appear
+		potential = {
+			exists = owner
+			owner = {
+				is_gestalt = no
+			}
+		}
+
+		# Conditions to fulfill
+		trigger = {
+			owner = {
+				is_authoritarian = yes
+			}
+		}
+	}
+
+	# demand = {
+	# 	title = "MJARCHITECT_AUGURS_COUNCIL"
+	# 	unfulfilled_title = "MJARCHITECT_AUGURS_COUNCIL_UNFULFILLED"
+	# 	desc = "MJARCHITECT_AUGURS_COUNCIL_DESC"
+
+	# 	unfulfilled_effect = -10
+	# 	fulfilled_effect = 5
+
+	# 	# Conditions for demand to appear
+	# 	potential = {
+	# 		exists = owner
+	# 		owner = {
+	# 			is_gestalt = no
+	# 		}
+	# 	}
+
+	# 	# Conditions to fulfill
+	# 	trigger = {
+	# 		owner = {
+	# 			OR = {
+	# 				is_ethic_represented_on_council = ethic_spiritualist
+	# 				is_ethic_represented_on_council = ethic_authoritarian
+	# 			}
+	# 		}
+	# 	}
+	# }
+
+	# demand = {
+	# 	title = "MJARCHITECT_AUGURS_CAPITAL"
+	# 	unfulfilled_title = "MJARCHITECT_AUGURS_CAPITAL_UNFULFILLED"
+	# 	desc = "MJARCHITECT_AUGURS_CAPITAL_DESC"
+
+	# 	unfulfilled_effect = -10
+	# 	fulfilled_effect = 10
+
+	# 	# Conditions for demand to appear
+	# 	potential = {
+	# 		exists = owner
+	# 	}
+
+	# 	# Conditions to fulfill
+	# 	trigger = {
+	# 		owner = {
+	# 			capital_scope = {
+	# 				# num_pops_with_job_tag = { tags = { mjarchitect_crisis } value >= 600 } # apparently, tag doesnt work? since its a custom tag
+
+	# 				count_owned_pop_job = {
+	# 					count = 600
+	# 					limit = {
+	# 						has_job_type = mjarchitect_conduit
+	# 					}
+	# 				}
+					
+	# 				# look at num_jobs_with_tag in script_values, todo: test
+	# 			}
+	# 		}
+	# 	}
+	# }
+
+	demand = {
+		title = "MJARCHITECT_AUGURS_CONDUITS"
+		unfulfilled_title = "MJARCHITECT_AUGURS_CONDUITS_UNFULFILLED"
+		desc = "MJARCHITECT_AUGURS_CONDUITS_DESC"
+
+		unfulfilled_effect = -5
+		fulfilled_effect = 10
+
+		# Conditions for demand to appear
+		potential = {
+			exists = owner
+		}
+
+		# Conditions to fulfill
+		trigger = {
+			owner = {
+				pop_amount_percentage = {
+					percentage > 0.09
+					limit = {
+						has_trait = trait_mjarchitect_conduit_of_ruin
+					}
+				}
+			}
+		}
+	}
+	
+	demand = {
+		title = "MJARCHITECT_AUGURS_POSITIVE_SATISFACTION"
+		unfulfilled_title = "MJARCHITECT_AUGURS_POSITIVE_SATISFACTION_UNFULFILLED"
+		desc = "MJARCHITECT_AUGURS_POSITIVE_SATISFACTION_DESC"
+
+		unfulfilled_effect = -20
+		fulfilled_effect = 5
+
+		# Conditions for demand to appear
+		potential = {
+			exists = owner
+		}
+
+		# Conditions to fulfill
+		trigger = {
+			owner = {
+				check_variable = {
+					which = mjarchitect_satisfaction
+					value > 149
+				}
+			}
+		}
+	}
+
+	demand = {
+		title = "MJARCHITECT_AUGURS_MILESTONE_1"
+		unfulfilled_title = "MJARCHITECT_AUGURS_MILESTONE_1_UNFULFILLED"
+		desc = "MJARCHITECT_AUGURS_MILESTONE_1_DESC"
+
+		unfulfilled_effect = -0.001
+		fulfilled_effect = 5
+
+		# Conditions for demand to appear
+		potential = {
+			exists = owner
+			owner = {
+				check_variable = {
+					which = mjarchitect_satisfaction
+					value >= 168
+				}
+				check_variable = {
+					which = mjarchitect_satisfaction
+					value < 218
+				}
+			}
+		}
+
+		# Conditions to fulfill
+		trigger = {
+			owner = {
+				check_variable = {
+					which = mjarchitect_satisfaction
+					value >= 168
+				}
+			}
+		}
+	}
+
+	demand = {
+		title = "MJARCHITECT_AUGURS_MILESTONE_2"
+		unfulfilled_title = "MJARCHITECT_AUGURS_MILESTONE_2_UNFULFILLED"
+		desc = "MJARCHITECT_AUGURS_MILESTONE_2_DESC"
+
+		unfulfilled_effect = -0.001
+		fulfilled_effect = 10
+
+		# Conditions for demand to appear
+		potential = {
+			exists = owner
+			owner = {
+				check_variable = {
+					which = mjarchitect_satisfaction
+					value >= 218
+				}
+				check_variable = {
+					which = mjarchitect_satisfaction
+					value < 268
+				}
+			}
+		}
+
+		# Conditions to fulfill
+		trigger = {
+			owner = {
+				check_variable = {
+					which = mjarchitect_satisfaction
+					value >= 218
+				}
+			}
+		}
+	}
+
+	demand = {
+		title = "MJARCHITECT_AUGURS_MILESTONE_3"
+		unfulfilled_title = "MJARCHITECT_AUGURS_MILESTONE_3_UNFULFILLED"
+		desc = "MJARCHITECT_AUGURS_MILESTONE_3_DESC"
+
+		unfulfilled_effect = -0.001
+		fulfilled_effect = 20
+
+		# Conditions for demand to appear
+		potential = {
+			exists = owner
+			owner = {
+				check_variable = {
+					which = mjarchitect_satisfaction
+					value >= 268
+				}
+			}
+		}
+
+		# Conditions to fulfill
+		trigger = {
+			owner = {
+				check_variable = {
+					which = mjarchitect_satisfaction
+					value >= 268
+				}
+			}
+		}
+	}
+
+	demand = {
+		title = "MJARCHITECT_AUGURS_MILESTONE_4"
+		unfulfilled_title = "MJARCHITECT_AUGURS_MILESTONE_4_UNFULFILLED"
+		desc = "MJARCHITECT_AUGURS_MILESTONE_4_DESC"
+
+		unfulfilled_effect = -5
+		fulfilled_effect = 0.001
+
+		# Conditions for demand to appear
+		potential = {
+			exists = owner
+			owner = {
+				check_variable = {
+					which = mjarchitect_satisfaction
+					value <= 130
+				}
+				check_variable = {
+					which = mjarchitect_satisfaction
+					value > 80
+				}
+			}
+		}
+
+		# Conditions to fulfill
+		trigger = {
+			owner = {
+				check_variable = {
+					which = mjarchitect_satisfaction
+					value > 130
+				}
+			}
+		}
+	}
+
+	demand = {
+		title = "MJARCHITECT_AUGURS_MILESTONE_5"
+		unfulfilled_title = "MJARCHITECT_AUGURS_MILESTONE_5_UNFULFILLED"
+		desc = "MJARCHITECT_AUGURS_MILESTONE_5_DESC"
+
+		unfulfilled_effect = -15
+		fulfilled_effect = 0.001
+
+		# Conditions for demand to appear
+		potential = {
+			exists = owner
+			owner = {
+				check_variable = {
+					which = mjarchitect_satisfaction
+					value <= 80
+				}
+				check_variable = {
+					which = mjarchitect_satisfaction
+					value > 30
+				}
+			}
+		}
+
+		# Conditions to fulfill
+		trigger = {
+			owner = {
+				check_variable = {
+					which = mjarchitect_satisfaction
+					value > 80
+				}
+			}
+		}
+	}
+
+	demand = {
+		title = "MJARCHITECT_AUGURS_MILESTONE_6"
+		unfulfilled_title = "MJARCHITECT_AUGURS_MILESTONE_6_UNFULFILLED"
+		desc = "MJARCHITECT_AUGURS_MILESTONE_6_DESC"
+
+		unfulfilled_effect = -30
+		fulfilled_effect = 0.001
+
+		# Conditions for demand to appear
+		potential = {
+			exists = owner
+			owner = {
+				check_variable = {
+					which = mjarchitect_satisfaction
+					value <= 30
+				}
+			}
+		}
+
+		# Conditions to fulfill
+		trigger = {
+			owner = {
+				check_variable = {
+					which = mjarchitect_satisfaction
+					value > 30
+				}
+			}
+		}
+	}
+
+	demand = {
+		title = "MJARCHITECT_AUGURS_RECENT_REQUEST"
+		unfulfilled_title = "MJARCHITECT_AUGURS_RECENT_REQUEST_UNFULFILLED"
+		desc = "MJARCHITECT_AUGURS_RECENT_REQUEST_DESC"
+
+		unfulfilled_effect = -5
+		fulfilled_effect = 10
+
+		# Conditions for demand to appear
+		potential = {
+			exists = owner
+		}
+
+		# Conditions to fulfill
+		trigger = {
+			owner = {
+				has_country_flag = mjarchitect_recently_completed_request
+			}
+		}
+	}
+
+	## Level 2 Crisis Demands
+
+	demand = {
+		title = "MJARCHITECT_AUGURS_RECENT_OFFERING"
+		unfulfilled_title = "MJARCHITECT_AUGURS_RECENT_OFFERING_UNFULFILLED"
+		desc = "MJARCHITECT_AUGURS_RECENT_OFFERING_DESC"
+
+		unfulfilled_effect = -10
+		fulfilled_effect = 15
+
+		# Conditions for demand to appear
+		potential = {
+			exists = owner
+			owner = {
+				has_crisis_level = crisis_mjarchitect_level_2
+			}
+		}
+
+		# Conditions to fulfill
+		trigger = {
+			owner = {
+				has_country_flag = mjarchitect_recently_sacrificed
+			}
+		}
+	}
+	
+	demand = {
+		title = "MJARCHITECT_AUGURS_BEACONS"
+		unfulfilled_title = "MJARCHITECT_AUGURS_BEACONS_UNFULFILLED"
+		desc = "MJARCHITECT_AUGURS_BEACONS_DESC"
+
+		unfulfilled_effect = -5
+		fulfilled_effect = 5
+
+		# Conditions for demand to appear
+		potential = {
+			exists = owner
+			owner = {
+				has_crisis_level = crisis_mjarchitect_level_2
+			}
+		}
+
+		# Conditions to fulfill
+		trigger = {
+			owner = {
+				count_owned_megastructure = {
+					count = 3
+					limit = {
+						is_megastructure_type = mjarchitect_celestial_beacon
+					}
+				}
+			}
+		}
+	}
+
+	demand = {
+		title = "MJARCHITECT_AUGURS_BLESSING"
+		unfulfilled_title = "MJARCHITECT_AUGURS_BLESSING_UNFULFILLED"
+		desc = "MJARCHITECT_AUGURS_BLESSING_DESC"
+
+		unfulfilled_effect = -15
+		fulfilled_effect = 10
+
+		# Conditions for demand to appear
+		potential = {
+			exists = owner
+			owner = {
+				has_crisis_level = crisis_mjarchitect_level_2
+			}
+		}
+
+		# Conditions to fulfill
+		trigger = {
+			owner = {
+				has_country_flag = mjarchitect_blessing_1_unlocked
+			}
+		}
+	}
+
+	## Level 3 Crisis Demands
+
+	demand = {
+		title = "MJARCHITECT_AUGURS_RECENTLY_HOLLOWED"
+		unfulfilled_title = "MJARCHITECT_AUGURS_RECENTLY_HOLLOWED_UNFULFILLED"
+		desc = "MJARCHITECT_AUGURS_RECENTLY_HOLLOWED_DESC"
+
+		unfulfilled_effect = -20
+		fulfilled_effect = 10
+
+		# Conditions for demand to appear
+		potential = {
+			exists = owner
+			owner = {
+				has_crisis_level = crisis_mjarchitect_level_3
+			}
+		}
+
+		# Conditions to fulfill
+		trigger = {
+			owner = {
+				has_country_flag = mjarchitect_recently_formed_hollow_world
+			}
+		}
+	}
+
+	demand = {
+		title = "MJARCHITECT_AUGURS_VOIDTHRALLS"
+		unfulfilled_title = "MJARCHITECT_AUGURS_VOIDTHRALLS_UNFULFILLED"
+		desc = "MJARCHITECT_AUGURS_VOIDTHRALLS_DESC"
+
+		unfulfilled_effect = -10
+		fulfilled_effect = 15
+
+		# Conditions for demand to appear
+		potential = {
+			exists = owner
+			owner = {
+				has_crisis_level = crisis_mjarchitect_level_3
+			}
+		}
+
+		# Conditions to fulfill
+		trigger = {
+			owner = {
+				count_subject = {
+					count = 2
+					limit = {
+						any_agreement = {
+							agreement_preset = preset_mjarchitect_voidthrall
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	# demand = {
+	# 	title = "MJARCHITECT_AUGURS_RECENT_WHISPERS"
+	# 	unfulfilled_title = "MJARCHITECT_AUGURS_RECENT_WHISPERS_UNFULFILLED"
+	# 	desc = "MJARCHITECT_AUGURS_RECENT_WHISPERS_DESC"
+
+	# 	unfulfilled_effect = -10
+	# 	fulfilled_effect = 10
+
+	# 	# Conditions for demand to appear
+	# 	potential = {
+	# 		exists = owner
+	# 		owner = {
+	# 			has_crisis_level = crisis_mjarchitect_level_3
+	# 		}
+	# 	}
+
+	# 	# Conditions to fulfill
+	# 	trigger = {
+	# 		owner = {
+	# 			has_country_flag = mjarchitect_recently_spread_augurs
+	# 		}
+	# 	}
+	# }
+
+	## Level 5 Crisis Demands
+
+	demand = {
+		title = "MJARCHITECT_AUGURS_ENDING_1"
+		unfulfilled_title = "MJARCHITECT_AUGURS_ENDING_1_UNFULFILLED"
+		desc = "MJARCHITECT_AUGURS_ENDING_1_DESC"
+
+		unfulfilled_effect = -0.001
+		fulfilled_effect = 50
+
+		# Conditions for demand to appear
+		potential = {
+			exists = owner
+			owner = {
+				has_crisis_level = crisis_mjarchitect_level_5
+				has_country_flag = mjarchitect_ending_option_1
+			}
+		}
+
+		# Conditions to fulfill
+		trigger = {
+			owner = {
+				has_country_flag = mjarchitect_ending_option_1
+			}
+		}
+	}
+
+	demand = {
+		title = "MJARCHITECT_AUGURS_ENDING_2"
+		unfulfilled_title = "MJARCHITECT_AUGURS_ENDING_2_UNFULFILLED"
+		desc = "MJARCHITECT_AUGURS_ENDING_2_DESC"
+
+		unfulfilled_effect = -50
+		fulfilled_effect = 0.001
+
+		# Conditions for demand to appear
+		potential = {
+			exists = owner
+			owner = {
+				has_crisis_level = crisis_mjarchitect_level_5
+				has_country_flag = mjarchitect_ending_option_2
+			}
+		}
+
+		# Conditions to fulfill
+		trigger = {
+			always = no
+		}
+	}
+
+	demand = {
+		title = "MJARCHITECT_AUGURS_ENDING_3"
+		unfulfilled_title = "MJARCHITECT_AUGURS_ENDING_3_UNFULFILLED"
+		desc = "MJARCHITECT_AUGURS_ENDING_3_DESC"
+
+		unfulfilled_effect = -75
+		fulfilled_effect = 0.001
+
+		# Conditions for demand to appear
+		potential = {
+			exists = owner
+			owner = {
+				has_crisis_level = crisis_mjarchitect_level_5
+				has_country_flag = mjarchitect_ending_option_3
+			}
+		}
+
+		# Conditions to fulfill
+		trigger = {
+			always = no
+		}
+	}
+
+
+	# Faction Demands for Ruler and Council positions.
+	inline_script = {
+		script = "paragon/global_faction_demands"
+		ETHIC = ethic_authoritarian
+		ETHIC_FANATIC = ethic_fanatic_authoritarian
+		ETHIC_OPPOSED = ethic_egalitarian
+	}
+
+	on_create = {
+		pop_faction_event = { id = factions.0 }
+	}
+
+	on_destroy = {
+		if = {
+			limit = {
+				has_modifier = promoted_authoritarian
+			}
+			remove_modifier = promoted_authoritarian
+		}
+		if = {
+			limit = {
+				has_modifier = suppressed_authoritarian
+			}
+			remove_modifier = suppressed_authoritarian
+		}
+	}
+
+	actions = {
+		embrace_faction = {
+			title = "EMBRACE_FACTION"
+			description = "EMBRACE_FACTION_DESC"
+
+			cost = {
+				unity = 5000
+			}
+
+			potential = {
+				exists = owner
+				owner = {
+					OR = {
+						is_subject = no
+						NOT = { any_agreement = { agreement_preset = preset_dominion } }
+					}
+				}
+			}
+
+			valid = {
+				custom_tooltip = {
+					fail_text = EMBRACE_FACTION_COOLDOWN
+					parameter:empire = {
+						NOT = { has_modifier = embraced_faction_timer }
+					}
+				}
+				support > 0.20
+				parameter:empire = {
+					NOT = { has_ethic = "ethic_fanatic_authoritarian" }
+				}
+			}
+
+			effect = {
+				add_modifier = { modifier = embraced_faction days = 3600 }
+				owner = { set_country_flag = has_embraced_faction }
+				parameter:empire = {
+					shift_ethic = ethic_fanatic_authoritarian
+					hidden_effect = {
+						add_modifier = { modifier = embraced_faction_timer days = 3600 }
+						every_pop_faction = {
+							limit = { NOT = { is_same_value = root } }
+							add_modifier = { modifier = embraced_another_faction days = 3600 }
+						}
+					}
+				}
+				hidden_effect = {
+					save_event_target_as = TargetFaction
+					parameter:empire = {
+						every_relation = {
+							limit = {
+								is_ai = no
+								is_country_type = default
+								has_communications = prev
+								has_intel_level = {
+									who = prev
+									category = government
+									level >= 1
+								}
+							}
+							country_event = { id = factions.2000 }
+						}
+					}
+				}
+			}
+
+			ai_weight = {
+				base = 1
+				modifier = {
+					factor = 0
+					support < 0.50
+					owner = {
+						has_ethic = ethic_authoritarian
+					}
+				}
+				modifier = {
+					factor = 0
+					owner = { has_valid_civic = civic_fanatic_purifiers }
+				}
+				modifier = {
+					factor = 0
+					owner = {
+						count_pop_faction = {
+							count < 4
+						}
+					}
+				}
+			}
+		}
+		promote_faction = {
+			title = "PROMOTE_FACTION"
+			description = "PROMOTE_FACTION_DESC"
+
+			potential = {
+				exists = owner
+				parameter:empire = {
+					NOR = {
+						has_modifier = suppressed_authoritarian
+						has_modifier = promoted_authoritarian
+					}
+				}
+			}
+
+			effect = {
+				owner = { set_country_flag = has_promoted_faction }
+				parameter:empire = {
+					add_modifier = { modifier = promoted_authoritarian days = -1 }
+				}
+			}
+
+			ai_weight = {
+				base = 0
+			}
+		}
+		cancel_promote_faction = {
+			title = "CANCEL_PROMOTE_FACTION"
+			description = "CANCEL_PROMOTE_FACTION_DESC"
+
+			potential = {
+				exists = owner
+				parameter:empire = {
+					has_modifier = promoted_authoritarian
+				}
+			}
+
+			effect = {
+				parameter:empire = {
+					remove_modifier = promoted_authoritarian
+				}
+			}
+
+			ai_weight = {
+				base = 0
+			}
+		}
+		suppress_faction = {
+			title = "SUPPRESS_FACTION"
+			description = "SUPPRESS_FACTION_DESC"
+
+			potential = {
+				exists = owner
+				parameter:empire = {
+					NOR = {
+						has_modifier = suppressed_authoritarian
+						has_modifier = promoted_authoritarian
+					}
+				}
+			}
+
+			effect = {
+				add_modifier = { modifier = suppressed_faction days = -1 }
+				parameter:empire = {
+					add_modifier = { modifier = suppressed_authoritarian days = -1 }
+				}
+			}
+
+			ai_weight = {
+				base = 0
+			}
+		}
+		cancel_suppress_faction = {
+			title = "CANCEL_SUPPRESS_FACTION"
+			description = "CANCEL_SUPPRESS_FACTION_DESC"
+
+			potential = {
+				exists = owner
+				parameter:empire = {
+					has_modifier = suppressed_authoritarian
+				}
+			}
+
+			effect = {
+				remove_modifier = suppressed_faction
+				parameter:empire = {
+					remove_modifier = suppressed_authoritarian
+				}
+			}
+
+			ai_weight = {
+				base = 0
+			}
+		}
+		# Faction Extortion Buttons
+		extort_faction = {
+			title = "EXTORT_FACTION"
+			description = "EXTORT_FACTION_DESC"
+
+			potential = {
+				exists = owner
+				owner = {
+					is_oligarchic_authority = yes
+					has_country_flag = cyber_collectivist
+					NOR = {
+						has_valid_civic = civic_crowdsourcing
+						has_valid_civic = civic_corporate_crowdsourcing
+					}
+				}
+				is_faction_extorted = no
+			}
+
+			effect = {
+				set_faction_extorted = yes
+				custom_tooltip = food_extortion_tt
+				custom_tooltip = ONLY_ONE_EXTORTED_FACTION_TT
+			}
+
+			ai_weight = {
+				base = 0
+			}
+		}
+		extort_faction_crowdsourcing = { #Crowdsourcing version
+			title = "EXTORT_FACTION"
+			description = "EXTORT_FACTION_DESC"
+
+			potential = {
+				exists = owner
+				owner = {
+					is_oligarchic_authority = yes
+					has_country_flag = cyber_collectivist
+					OR = {
+						has_valid_civic = civic_crowdsourcing
+						has_valid_civic = civic_corporate_crowdsourcing
+					}
+				}
+				is_faction_extorted = no
+			}
+
+			effect = {
+				set_faction_extorted = yes
+				custom_tooltip = crowdsourced_extortion_tt
+				custom_tooltip = ONLY_ONE_EXTORTED_FACTION_TT
+			}
+
+			ai_weight = {
+				base = 0
+			}
+		}
+		cancel_extort_faction = {
+			title = "CANCEL_EXTORT_FACTION"
+			description = "CANCEL_EXTORT_FACTION_DESC"
+
+			potential = {
+				exists = owner
+				owner = {
+					is_oligarchic_authority = yes
+					has_country_flag = cyber_collectivist
+				}
+				is_faction_extorted = yes
+			}
+
+			effect = {
+				set_faction_extorted = no
+			}
+
+			ai_weight = {
+				base = 0
+			}
+		}
+	}
+}

@@ -1,0 +1,1836 @@
+mjarchitect_create_entity_country = {
+	create_country = {
+		name = MJARCHITECT_NAME
+		species = last_created_species
+		flag = { 
+			icon = {
+				category = "mjarchitect"
+				file = "mjarchitect_flag.dds"
+			}
+			background = {
+				category = "backgrounds"
+				file = "circle.dds"
+			}
+			colors = {
+				"dark_red" 
+				"intense_burgundy"
+				"null"
+				"null"
+			}
+		}
+		type = mjarchitect_entity_country
+		name_list = ROOT
+		auto_delete = no
+		effect = {
+			save_global_event_target_as = mjarchitect_entity_country
+			set_country_flag = mjarchitect_entity_country
+			establish_communications_no_message = root
+			set_faction_hostility = {
+				set_friendly = yes
+				target = root
+			}
+		}
+	}
+}
+
+mjarchitect_boon_select_effect = {
+	add_modifier = {
+		modifier = mjarchitect_boon_$NUM$
+		days = $TIME$
+	}
+	set_timed_country_flag = {
+		flag = mjarchitect_boon_$NUM$_active
+		days = $TIME$
+	}
+
+	set_timed_country_flag = {
+		flag = mjarchitect_boon_time_remaining_5years
+		days = 360
+	}
+	set_timed_country_flag = {
+		flag = mjarchitect_boon_time_remaining_4years
+		days = 720
+	}
+	set_timed_country_flag = {
+		flag = mjarchitect_boon_time_remaining_3years
+		days = 1080
+	}
+	set_timed_country_flag = {
+		flag = mjarchitect_boon_time_remaining_2years
+		days = 1440
+	}
+	set_timed_country_flag = {
+		flag = mjarchitect_boon_time_remaining_1years
+		days = 1800
+	}
+}
+
+mjarchitect_convert_percentage_pops = {
+	while = {
+				limit = {
+					pop_amount_percentage = {
+						percentage < $PERCENT$
+						limit = {
+							has_trait = trait_mjarchitect_conduit_of_ruin
+						}
+					}
+				}
+				random_owned_pop_group = {
+					limit = {
+						is_sapient = yes
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_mjarchitect_conduit_of_ruin
+						add_traits_at_start_of_list = yes
+					}
+				}
+	}
+}
+
+mjarchitect_veil_cloud_map_effect = {
+	solar_system = {
+		set_star_flag = mjarchitect_beacon_afflicted_system
+		add_modifier = {
+			modifier = $MODIFIER$
+		}
+		# Temporarily set system ownership to Architect
+		starbase.owner = {
+			save_event_target_as = mjarchitect_system_owner
+		}
+		if = {
+				limit = {
+					exists = starbase
+				}
+				starbase.solar_system = {
+					save_event_target_as = mjarchitect_beacon_afflicted_system
+				}
+				starbase.owner = {
+					save_event_target_as = mjarchitect_system_owner
+					root = { save_event_target_as = mjarchitect_beacon_builder }
+				}
+				starbase = { set_owner = event_target:mjarchitect_entity_country }
+				# Re-set owner [must be done 1 day later, as must trigger after fog machine enabled]
+				system_event = {
+					id = mjarchitect.0
+					days = 1
+				}
+			}
+			else = {
+				create_starbase = {
+					size = starbase_outpost
+					owner = event_target:mjarchitect_entity_country
+				}
+				system_event = {
+					id = mjarchitect.1
+					days = 1
+				}
+		}
+		# Finds all systems within set radius
+		every_neighbor_system_euclidean = {
+			limit = {
+				distance = {
+					source = prev
+					max_distance <= $RADIUS$
+					type = euclidean
+				}
+			}
+			set_star_flag = mjarchitect_beacon_afflicted_system
+			add_modifier = {
+				modifier = $MODIFIER$
+			}
+			# GFX
+			# every_ambient_object = {
+			# 	limit = { has_ambient_object_flag = mjarchitect_veil_beacon_effect }
+			# 	destroy_ambient_object = this
+			# }
+			# random_system_planet = {
+			# 	limit = {
+			# 		is_star = yes
+			# 	}
+			# 	create_ambient_object = {
+			# 		type = mjarchitect_veil_effect_2
+			# 		location = this
+			# 		use_3d_location = yes
+			# 	}
+			# 	last_created_ambient_object = {	
+			# 		set_ambient_object_flag = mjarchitect_veil_beacon_effect
+			# 	}
+			# }
+			every_system_colony = {
+				limit = {
+					any_owned_pop_group = {
+						is_sapient = yes
+					}
+				}
+				# Change Pops to have the Veiled trait
+				random_list = {
+					10 = {
+						mjarchitect_convert_percentage_pops = {
+							PERCENT = 0.75
+						}
+					}
+					20 = {
+						mjarchitect_convert_percentage_pops = {
+							PERCENT = 0.66
+						}
+					}
+					30 = {
+						mjarchitect_convert_percentage_pops = {
+							PERCENT = 0.50
+						}
+					}
+					30 = {
+						mjarchitect_convert_percentage_pops = {
+							PERCENT = 0.33
+						}
+					}
+					10 = {
+						mjarchitect_convert_percentage_pops = {
+							PERCENT = 0.25
+						}
+					}
+				}
+				# Low chance to turn into Veiled World # todo! if not artificial
+				random_list = {
+					80 = {}
+					20 = {
+						change_pc = pc_mjarchitect_veiled
+					}
+				}
+			}
+			# Temporarily set system owners to Architect, saving previous owner
+			if = {
+				limit = {
+					exists = starbase
+				}
+				starbase.solar_system = {
+					save_event_target_as = mjarchitect_beacon_afflicted_system
+				}
+				starbase.owner = {
+					save_event_target_as = mjarchitect_system_owner
+					root = { save_event_target_as = mjarchitect_beacon_builder }
+					country_event = {
+						id = mjarchitect.7
+					}
+				}
+				starbase = { set_owner = event_target:mjarchitect_entity_country }
+				# Re-set owner [must be done 1 day later, as must trigger after fog machine enabled]
+				system_event = {
+					id = mjarchitect.0
+					days = 1
+				}
+			}
+			else = {
+				create_starbase = {
+					size = starbase_outpost
+					owner = event_target:mjarchitect_entity_country
+				}
+				system_event = {
+					id = mjarchitect.1
+					days = 1
+				}
+			}
+		}
+		# Also set all systems with existing gfx + adjacent beacon to the Architect, so that they
+		# keep their existing storms
+		every_system = {
+			limit = {
+				has_megastructure = mjarchitect_celestial_beacon
+			}
+			every_neighbor_system_euclidean = {
+				limit = {
+						distance = {
+							source = prev
+							max_distance <= $RADIUS$
+							type = euclidean
+						}
+				}
+				mjarchitect_update_miasma_systems = yes
+			}
+			mjarchitect_update_miasma_systems = yes
+		}
+		# Enable fog machine
+		event_target:mjarchitect_entity_country = {
+			activate_fog_machine = mjarchitect_veil_storm
+			fog_machine_auto_tracking = yes
+			fog_machine_auto_tracking = no
+		}
+	}
+}
+
+mjarchitect_update_miasma_systems = {
+			if = {
+				limit = {
+					exists = starbase
+				}
+				starbase.owner = {
+					save_event_target_as = mjarchitect_system_owner
+				}
+				starbase = { set_owner = event_target:mjarchitect_entity_country }
+				# Re-set owner [must be done 1 day later, as must trigger after fog machine enabled]
+				system_event = {
+					id = mjarchitect.0
+					days = 1
+				}
+			}
+			else = {
+				create_starbase = {
+					size = starbase_outpost
+					owner = event_target:mjarchitect_entity_country
+				}
+				system_event = {
+					id = mjarchitect.1
+					days = 1
+				}
+	}
+}
+
+mjarchitect_check_miasma = {
+	every_system = {
+			limit = {
+				has_star_flag = mjarchitect_beacon_afflicted_system
+				OR = {
+					any_neighbor_system_euclidean = {
+						distance = {
+							source = prev
+							max_distance <= $RADIUS$
+							type = euclidean
+						}
+						has_megastructure = mjarchitect_celestial_beacon
+					}
+					has_star_flag = mjarchitect_beacon_afflicted_system_piercer
+				}
+
+			}
+			mjarchitect_update_miasma_systems = yes
+	}
+
+	event_target:mjarchitect_entity_country = {
+			activate_fog_machine = mjarchitect_veil_storm
+			fog_machine_auto_tracking = yes
+			fog_machine_auto_tracking = no
+	}
+
+	every_system = {
+			limit = {
+				has_star_flag = mjarchitect_beacon_afflicted_system
+				NOR = {
+					any_neighbor_system_euclidean = {
+						distance = {
+							source = prev
+							max_distance <= $RADIUS$
+							type = euclidean
+						}
+						has_megastructure = mjarchitect_celestial_beacon
+					}
+					has_star_flag = mjarchitect_beacon_afflicted_system_piercer
+				}
+			}
+			remove_star_flag = mjarchitect_beacon_afflicted_system
+			# every_ambient_object = {
+			# 	limit = { has_ambient_object_flag = mjarchitect_veil_beacon_effect }
+			# 	destroy_ambient_object = this
+			# }
+			remove_modifier = mjarchitect_veiled_system
+			remove_modifier = mjarchitect_veiled_system_piercer
+	}
+}
+
+mjarchitect_update_sacrifical_unhappiness = {
+	if = {
+		limit = {
+			has_modifier = mjarchitect_planet_sacrifices_penalties
+		}
+		remove_modifier = mjarchitect_planet_sacrifices_penalties
+	}
+	add_modifier = {
+		modifier = mjarchitect_planet_sacrifices_penalties
+		days = 360
+		multiplier = $EFFECT_MULT$
+		time_multiplier = $LENGTH_MULT$
+	}
+}
+
+mjarchitect_resource_reward_effect = {
+		mjarchitect_resource_reward_effect_hidden = {
+			SATISFACTION_VALUE = $SATISFACTION_VALUE$
+			SATISFACTION_MULT = $SATISFACTION_MULT$
+			SATISFACTION_CAP = $SATISFACTION_CAP$
+			COGNITIVE_MATTER_VALUE = $COGNITIVE_MATTER_VALUE$
+			COGNITIVE_MATTER_MULT = $COGNITIVE_MATTER_MULT$
+		}
+
+		mjarchitect_resource_reward_effect_tt = {
+			SATISFACTION_VALUE = $SATISFACTION_VALUE$
+			COGNITIVE_MATTER_VALUE = $COGNITIVE_MATTER_VALUE$
+		}
+}
+
+mjarchitect_resource_reward_effect_hidden = {
+		hidden_effect = {
+			# Cognitive Matter
+			set_variable = {
+				which = mjarchitect_cm_gained
+				value = $COGNITIVE_MATTER_VALUE$
+			}
+			multiply_variable = {
+				which = mjarchitect_cm_gained
+				value = $COGNITIVE_MATTER_MULT$
+			}
+			add_resource = {
+				mjarchitect_cognitive_matter = 1
+				mult = mjarchitect_cm_gained
+			}
+			
+			# Satisfaction
+			set_variable = {
+				which = mjarchitect_satisfaction_gained
+				value = $SATISFACTION_VALUE$
+			}
+			multiply_variable = {
+				which = mjarchitect_satisfaction_gained
+				value = $SATISFACTION_MULT$
+			}
+			if = {
+				limit = {
+					check_variable = {
+						which = mjarchitect_satisfaction_gained
+						value > $SATISFACTION_CAP$
+					}
+				}
+				set_variable = {
+					which = mjarchitect_satisfaction_gained
+					value = $SATISFACTION_CAP$
+				}
+			}
+
+			change_variable = {
+				which = mjarchitect_satisfaction
+				value = mjarchitect_satisfaction_gained
+			}
+			change_variable = {
+				which = mjarchitect_satisfaction_display
+				value = mjarchitect_satisfaction_gained
+			}
+		}
+}
+
+mjarchitect_resource_reward_effect_tt = {
+	custom_tooltip_with_params = {
+			description = "MJARCHITECT_SATISFACTION_ADD"
+			description_parameters = {
+				"SATISFACTION_VALUE" = $SATISFACTION_VALUE$ # Satisfaction per X
+			}
+		}
+		custom_tooltip_with_params = {
+			description = "MJARCHITECT_COGNITIVE_MATTER_ADD"
+			description_parameters = {
+				"COGNITIVE_MATTER_VALUE" = $COGNITIVE_MATTER_VALUE$ # CM per X
+			}
+		}
+}
+
+mjarchitect_satisfaction_reward_effect = {
+		hidden_effect = {
+			set_variable = {
+				which = mjarchitect_satisfaction_gained
+				value = $SATISFACTION_VALUE$
+			}
+			multiply_variable = {
+				which = mjarchitect_satisfaction_gained
+				value = $SATISFACTION_MULT$
+			}
+			if = {
+				limit = {
+					check_variable = {
+						which = mjarchitect_satisfaction_gained
+						value > $SATISFACTION_CAP$
+					}
+				}
+				set_variable = {
+					which = mjarchitect_satisfaction_gained
+					value = $SATISFACTION_CAP$
+				}
+			}
+
+			change_variable = {
+				which = mjarchitect_satisfaction
+				value = mjarchitect_satisfaction_gained
+			}
+			change_variable = {
+				which = mjarchitect_satisfaction_display
+				value = mjarchitect_satisfaction_gained
+			}
+		}
+
+		mjarchitect_satisfaction_reward_effect_tt = {
+			SATISFACTION_VALUE = $SATISFACTION_VALUE$
+		}
+}
+
+mjarchitect_satisfaction_reward_effect_tt = {
+	custom_tooltip_with_params = {
+			description = "MJARCHITECT_SATISFACTION_ADD"
+			description_parameters = {
+				"SATISFACTION_VALUE" = $SATISFACTION_VALUE$ # Satisfaction per X
+			}
+		}
+}
+
+mjarchitect_satisfaction_reward_effect_static = {
+	hidden_effect = {
+		change_variable = {
+			which = mjarchitect_satisfaction
+			value = $SATISFACTION_VALUE$
+		}
+		change_variable = {
+			which = mjarchitect_satisfaction_display
+			value = $SATISFACTION_VALUE$
+		}
+	}
+
+	mjarchitect_satisfaction_reward_effect_tt_static = {
+		SATISFACTION_VALUE = $SATISFACTION_VALUE$
+	}
+}
+
+mjarchitect_satisfaction_reward_effect_static_hidden = {
+	hidden_effect = {
+		change_variable = {
+			which = mjarchitect_satisfaction
+			value = $SATISFACTION_VALUE$
+		}
+		change_variable = {
+			which = mjarchitect_satisfaction_display
+			value = $SATISFACTION_VALUE$
+		}
+	}
+}
+
+mjarchitect_satisfaction_reward_effect_tt_static = {
+	custom_tooltip_with_params = {
+			description = "MJARCHITECT_SATISFACTION_ADD_STATIC"
+			description_parameters = {
+				"SATISFACTION_VALUE" = $SATISFACTION_VALUE$
+			}
+		}
+}
+
+# REQUESTS
+mjarchitect_check_request_progress = {
+	switch = {
+		trigger = has_country_flag
+
+		mjarchitect_request_1_active = {
+			export_resource_stockpile_to_variable = {
+				resource = mjarchitect_cognitive_matter
+				variable = mjarchitect_num_cm_final
+			}
+			subtract_variable = {
+				which = mjarchitect_num_cm_final
+				value = mjarchitect_num_cm_initial
+			}
+			set_variable = {
+				which = mjarchitect_request_current_num
+				value = mjarchitect_num_cm_final
+			}
+		}
+		mjarchitect_request_2_active = {
+			set_variable = {
+				which = mjarchitect_request_current_num
+				value = mjarchitect_satisfaction
+			}
+		}
+		mjarchitect_request_3_active = {
+			set_variable = {
+				which = mjarchitect_num_beacons_final
+				value = mjarchitect_num_beacons
+			}
+			subtract_variable = {
+				which = mjarchitect_num_beacons_final
+				value = mjarchitect_num_beacons_initial
+			}
+			set_variable = {
+				which = mjarchitect_request_current_num
+				value = mjarchitect_num_beacons_final
+			}
+		}
+		mjarchitect_request_4_active = {
+			set_variable = {
+				which = mjarchitect_num_thralls_final
+				value = 0
+			}
+			every_subject = {
+				limit = {
+					any_agreement = {
+						agreement_preset = preset_mjarchitect_voidthrall
+					}
+				}
+				owner = {
+					change_variable = {
+						which = mjarchitect_num_thralls_final
+						value = 1
+					}
+				}
+			}
+			subtract_variable = {
+				which = mjarchitect_num_thralls_final
+				value = mjarchitect_num_thralls_initial
+			}
+			set_variable = {
+				which = mjarchitect_request_current_num
+				value = mjarchitect_num_thralls_final
+			}
+		}
+		mjarchitect_request_5_active = {
+			set_variable = {
+				which = mjarchitect_request_current_num
+				value = mjarchitect_num_veiled_worlds_new
+			}
+		}
+		mjarchitect_request_6_active = {
+			set_variable = {
+				which = mjarchitect_request_current_num
+				value = mjarchitect_num_sacrificed_new
+			}
+		}
+		mjarchitect_request_7_active = {
+			set_variable = {
+				which = mjarchitect_request_current_num
+				value = mjarchitect_wars_won_new
+			}
+		}
+		# 8
+		# 9
+		# 10
+		mjarchitect_request_11_active = {
+			set_variable = {
+				which = mjarchitect_techs_final
+				value = trigger:num_researched_techs
+			}
+			subtract_variable = {
+				which = mjarchitect_techs_final
+				value = mjarchitect_techs_initial
+			}
+			set_variable = {
+				which = mjarchitect_request_current_num
+				value = mjarchitect_techs_final
+			}
+		}
+		mjarchitect_request_12_active = {
+			set_variable = {
+				which = mjarchitect_physics_income_final
+				value = trigger:stored_physics_points
+			}
+			subtract_variable = {
+				which = mjarchitect_physics_income_final
+				value = mjarchitect_physics_income_initial
+			}
+			set_variable = {
+				which = mjarchitect_request_current_num
+				value = mjarchitect_physics_income_final
+			}
+		}
+		# 13
+		# 14
+		# 15
+		# 16
+		mjarchitect_request_17_active = {
+			export_resource_stockpile_to_variable = {
+				resource = mjarchitect_cognitive_matter
+				variable = mjarchitect_num_cm_final
+			}
+			subtract_variable = {
+				which = mjarchitect_num_cm_final
+				value = mjarchitect_num_cm_initial
+			}
+			set_variable = {
+				which = mjarchitect_request_current_num
+				value = mjarchitect_num_cm_final
+			}
+		}
+		mjarchitect_request_18_active = {
+			set_variable = {
+				which = mjarchitect_num_beacons_final
+				value = mjarchitect_num_beacons
+			}
+			subtract_variable = {
+				which = mjarchitect_num_beacons_final
+				value = mjarchitect_num_beacons_initial
+			}
+			set_variable = {
+				which = mjarchitect_request_current_num
+				value = mjarchitect_num_beacons_final
+			}
+		}
+		mjarchitect_request_19_active = {
+			set_variable = {
+				which = mjarchitect_request_current_num
+				value = mjarchitect_num_veiled_worlds_new
+			}
+		}
+		mjarchitect_request_20_active = {
+			set_variable = {
+				which = mjarchitect_request_current_num
+				value = mjarchitect_num_sacrificed_new
+			}
+		}
+		mjarchitect_request_21_active = {
+			set_variable = {
+				which = mjarchitect_techs_final
+				value = trigger:num_researched_techs
+			}
+			subtract_variable = {
+				which = mjarchitect_techs_final
+				value = mjarchitect_techs_initial
+			}
+			set_variable = {
+				which = mjarchitect_request_current_num
+				value = mjarchitect_techs_final
+			}
+		}
+		mjarchitect_request_22_active = {
+			set_variable = {
+				which = mjarchitect_physics_income_final
+				value = trigger:stored_physics_points
+			}
+			subtract_variable = {
+				which = mjarchitect_physics_income_final
+				value = mjarchitect_physics_income_initial
+			}
+			set_variable = {
+				which = mjarchitect_request_current_num
+				value = mjarchitect_physics_income_final
+			}
+		}
+	}
+}
+
+mjarchitect_set_new_request = {
+	random_list = {
+		10 = {
+			mjarchitect_create_request = {
+				NUM = 1
+				TIME = 7
+				TARGET = 2000
+			}
+			modifier = {
+				factor = 0
+				NOT = { has_country_flag = mjarchitect_hard_mode_active }
+			}
+		}
+		10 = {
+			mjarchitect_create_request = {
+				NUM = 2
+				TIME = 7
+				TARGET = 218
+			}
+		}
+		10 = {
+			mjarchitect_create_request = {
+				NUM = 3
+				TIME = 7
+				TARGET = 2
+			}
+			modifier = {
+				factor = 0
+				NOT = { has_country_flag = mjarchitect_hard_mode_active }
+			}
+			modifier = {
+				factor = 0
+				NOT = { has_crisis_perk = mjarchitect_crisis_perk_6 }
+			}
+		}
+		10 = {
+			mjarchitect_create_request = {
+				NUM = 4
+				TIME = 7
+				TARGET = 1
+			}
+			modifier = {
+				factor = 0
+				# Requires at least 1 non-FE empire that isn't a Voidthrall of root
+				NOT = {
+					any_playable_country = {
+						OR = {
+							root = {
+								NOT = {
+									has_subject = prev
+								}
+							}
+							AND = {
+								root = {
+									has_subject = prev
+								}
+								any_agreement = {
+									NOT = { agreement_preset = preset_mjarchitect_voidthrall }
+								}
+							}
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { has_crisis_perk = mjarchitect_crisis_perk_9 }
+			}
+		}
+		10 = {
+			mjarchitect_create_request = {
+				NUM = 5
+				TIME = 7
+				TARGET = 4
+			}
+			modifier = {
+				factor = 0
+				NOT = { has_country_flag = mjarchitect_hard_mode_active }
+			}
+			modifier = {
+				factor = 0
+				NOT = { has_crisis_perk = mjarchitect_crisis_perk_8 }
+			}
+		}
+		10 = {
+			mjarchitect_create_request = {
+				NUM = 6
+				TIME = 7
+				TARGET = 7500
+			}
+			modifier = {
+				factor = 0
+				NOT = { has_country_flag = mjarchitect_hard_mode_active }
+			}
+		}
+		10 = {
+			mjarchitect_create_request = {
+				NUM = 7
+				TIME = 7
+				TARGET = 1
+			}
+			modifier = {
+				factor = 0
+				# Requires at least 1 empire that isn't a subject of root
+				NOT = {
+					any_country = {
+						OR = {
+							is_fallen_empire = yes
+							is_country_type = default
+						}
+						root = {
+							NOT = {
+								has_subject = prev
+							}
+						}
+					}
+				}
+			}
+		}
+		# 10 = {
+		# 	mjarchitect_create_request = {
+		# 		NUM = 8
+		# 		TIME = 7
+		# 		TARGET = 2
+		# 	}
+		# }
+		# 10 = {
+		# 	mjarchitect_create_request = {
+		# 		NUM = 9
+		# 		TIME = 7
+		# 		TARGET = 1
+		# 	}
+		# 	modifier = {
+		# 		factor = 0
+		# 		# Requires at least 1 Augur-less empire
+		# 		NOT = {
+		# 			any_playable_country = {
+		# 				NOT = { has_faction = mjarchitect_augurs }
+		# 			}
+		# 		}
+		# 	}
+		# }
+		# 10 = {
+		# 	mjarchitect_create_request = {
+		# 		NUM = 10
+		#		TIME = 7
+		#		TARGET = 2
+		# 	}
+		# }
+		10 = {
+			mjarchitect_create_request = {
+				NUM = 11
+				TIME = 7
+				TARGET = 10
+			}
+			modifier = {
+				factor = 0
+				NOT = { has_country_flag = mjarchitect_hard_mode_active }
+			}
+		}
+		# 10 = {
+		# 	mjarchitect_create_request = {
+		# 		NUM = 12
+		# 		TIME = 7
+		# 		TARGET = 500
+		# 	}
+		# 	modifier = {
+		# 		factor = 0
+		# 		NOT = { has_country_flag = mjarchitect_hard_mode_active }
+		# 	}
+		# }
+		# 10 = {
+		# 	mjarchitect_create_request = {
+		# 		NUM = 13
+		#		TIME = 7
+		#		TARGET = 10
+		# 	}
+		# }
+		# 10 = {
+		# 	mjarchitect_create_request = {
+		# 		NUM = 14
+		# 		TIME = 7
+		# 		TARGET = 5000
+		# 	}
+		# }
+		# 10 = {
+		# 	mjarchitect_create_request = {
+		# 		NUM = 15
+		# 		TIME = 7
+		# 		TARGET = 2000
+		# 	}
+		# }
+		# 10 = {
+		# 	mjarchitect_create_request = {
+		# 		NUM = 16
+		# 		TIME = 7
+		# 		TARGET = 5000
+		# 	}
+		# }
+
+		10 = {
+			mjarchitect_create_request = {
+				NUM = 17
+				TIME = 7
+				TARGET = 1000
+			}
+			modifier = {
+				factor = 0
+				has_country_flag = mjarchitect_hard_mode_active
+			}
+		}
+		10 = {
+			mjarchitect_create_request = {
+				NUM = 18
+				TIME = 7
+				TARGET = 1
+			}
+			modifier = {
+				factor = 0
+				has_country_flag = mjarchitect_hard_mode_active
+			}
+			modifier = {
+				factor = 0
+				NOT = { has_crisis_perk = mjarchitect_crisis_perk_6 }
+			}
+		}
+		10 = {
+			mjarchitect_create_request = {
+				NUM = 19
+				TIME = 7
+				TARGET = 2
+			}
+			modifier = {
+				factor = 0
+				has_country_flag = mjarchitect_hard_mode_active
+			}
+			modifier = {
+				factor = 0
+				NOT = { has_crisis_perk = mjarchitect_crisis_perk_8 }
+			}
+		}
+		10 = {
+			mjarchitect_create_request = {
+				NUM = 20
+				TIME = 7
+				TARGET = 3000
+			}
+			modifier = {
+				factor = 0
+				has_country_flag = mjarchitect_hard_mode_active
+			}
+		}
+		10 = {
+			mjarchitect_create_request = {
+				NUM = 21
+				TIME = 7
+				TARGET = 5
+			}
+			modifier = {
+				factor = 0
+				has_country_flag = mjarchitect_hard_mode_active
+			}
+		}
+		# 10 = {
+		# 	mjarchitect_create_request = {
+		# 		NUM = 22
+		# 		TIME = 7
+		# 		TARGET = 100
+		# 	}
+		# 	modifier = {
+		# 		factor = 0
+		# 		has_country_flag = mjarchitect_hard_mode_active
+		# 	}
+		# }
+		# 10 = {
+		# 	mjarchitect_create_request = {
+		# 		NUM = 23
+		# 		TIME = 7
+		# 		TARGET = 5
+		# 	}
+		# 	modifier = {
+		# 		factor = 0
+		# 		has_country_flag = mjarchitect_hard_mode_active
+		# 	}
+		# }
+		# 10 = {
+		# 	mjarchitect_create_request = {
+		# 		NUM = 24
+		# 		TIME = 7
+		# 		TARGET = 2000
+		# 	}
+		# 	modifier = {
+		# 		factor = 0
+		# 		has_country_flag = mjarchitect_hard_mode_active
+		# 	}
+		# }
+		# 10 = {
+		# 	mjarchitect_create_request = {
+		# 		NUM = 25
+		# 		TIME = 7
+		# 		TARGET = 700
+		# 	}
+		# 	modifier = {
+		# 		factor = 0
+		# 		has_country_flag = mjarchitect_hard_mode_active
+		# 	}
+		# }
+		# 10 = {
+		# 	mjarchitect_create_request = {
+		# 		NUM = 26
+		# 		TIME = 7
+		# 		TARGET = 2500
+		# 	}
+		# 	modifier = {
+		# 		factor = 0
+		# 		has_country_flag = mjarchitect_hard_mode_active
+		# 	}
+		# }
+	}
+}
+
+mjarchitect_create_request = {
+	# mjarchitect_set_request_timers = {
+	# 	YEARS = $TIME$
+	# }
+	mjarchitect_set_request_timers_static = yes
+	# Set variable for retriggering the gatekeeper to be 5 days before the flag runs out
+	set_variable = {
+		which = mjarchitect_request_length
+		value = 360
+	}
+	multiply_variable = {
+		which = mjarchitect_request_length
+		value = $TIME$
+	}
+	subtract_variable = {
+		which = mjarchitect_request_length
+		value = 5
+	}
+
+	set_variable = {
+		which = mjarchitect_request_event_cooldown
+		value = mjarchitect_request_length
+	}
+	subtract_variable = {
+		which = mjarchitect_request_event_cooldown
+		value = 1
+	}
+	# Set request vars and flag
+	set_timed_country_flag = {
+		flag = mjarchitect_request_$NUM$_active
+		years = $TIME$
+	}
+	set_timed_country_flag = {
+		flag = mjarchitect_request_active
+		days = mjarchitect_request_event_cooldown
+	}
+
+	set_variable = {
+		which = mjarchitect_request_target_num
+		value = $TARGET$
+	}
+	set_variable = {
+		which = mjarchitect_request_current_num
+		value = 0
+	}
+	country_event = {
+		id = mjarchitect_ui.110
+		days = mjarchitect_request_length
+	}
+	create_message = {
+		type = MESSAGE_MJARCHITECT_NEW_REQUEST
+		localization = MESSAGE_MJARCHITECT_NEW_REQUEST
+		days = 60
+		target = root
+	}
+
+	# BELOW are values to compare against when request time is over #
+
+	export_resource_stockpile_to_variable = {
+		resource = mjarchitect_cognitive_matter
+		variable = mjarchitect_num_cm_initial
+	}
+
+	set_variable = {
+		which = mjarchitect_num_beacons_initial
+		value = mjarchitect_num_beacons
+	}
+
+	set_variable = {
+		which = mjarchitect_num_thralls_initial
+		value = 0
+	}
+	every_subject = {
+		limit = {
+			any_agreement = {
+				agreement_preset = preset_mjarchitect_voidthrall
+			}
+		}
+		owner = {
+			change_variable = {
+				which = mjarchitect_num_thralls_initial
+				value = 1
+			}
+		}
+	}
+
+	set_variable = {
+		which = mjarchitect_num_veiled_worlds_new
+		value = 0
+	}
+
+	set_variable = {
+		which = mjarchitect_wars_won_new
+		value = 0
+	}
+
+	set_variable = {
+		which = mjarchitect_techs_initial
+		value = trigger:num_researched_techs
+	}
+
+	set_variable = {
+		which = mjarchitect_physics_income_initial
+		value = trigger:stored_physics_points
+	}
+}
+
+# As each request now has 7 years, there is no need to dynamically assign different flags
+mjarchitect_set_request_timers_static = {
+	set_timed_country_flag = {
+		flag = mjarchitect_request_time_remaining_7years
+		days = 360
+	}
+	set_timed_country_flag = {
+		flag = mjarchitect_request_time_remaining_6years
+		days = 720
+	}
+	set_timed_country_flag = {
+		flag = mjarchitect_request_time_remaining_5years
+		days = 1080
+	}
+	set_timed_country_flag = {
+		flag = mjarchitect_request_time_remaining_4years
+		days = 1440
+	}
+	set_timed_country_flag = {
+		flag = mjarchitect_request_time_remaining_3years
+		days = 1800
+	}
+	set_timed_country_flag = {
+		flag = mjarchitect_request_time_remaining_2years
+		days = 2160
+	}
+	set_timed_country_flag = {
+		flag = mjarchitect_request_time_remaining_1years
+		days = 2520
+	}
+}
+
+# # not in use
+# mjarchitect_set_request_timers = {
+# 	set_variable = {
+# 		which = mjarchitect_request_year_value
+# 		value = $YEARS$
+# 	}
+# 	set_variable = {
+# 		which = mjarchitect_request_flag_length
+# 		value = $FLAG_LENGTH$
+# 	}
+# 	while = {
+# 		limit = {
+# 			check_variable = {
+# 				which = mjarchitect_request_year_value
+# 				value > 0
+# 			}
+# 		}
+# 		mjarchitect_request_timer_flags = {
+# 			YEARS = mjarchitect_request_year_value
+# 			FLAG_LENGTH = mjarchitect_request_flag_length
+# 		}
+# 		subtract_variable = {
+# 			which = mjarchitect_request_year_value
+# 			value = 1
+# 		}
+# 		change_variable = {
+# 			which = mjarchitect_request_flag_length
+# 			value = 1
+# 		}
+# 	}
+# }
+
+# # not in use
+# mjarchitect_request_timer_flags = {
+# 	set_timed_country_flag = {
+# 		flag = mjarchitect_request_time_remaining_$YEARS$years
+# 		years = $FLAG_LENGTH$
+# 	}
+# }
+
+# REWARDS
+mjarchitect_clear_reward_flags = {
+	remove_country_flag = mjarchitect_reward_1_option
+	remove_country_flag = mjarchitect_reward_2_option
+	remove_country_flag = mjarchitect_reward_3_option
+	remove_country_flag = mjarchitect_reward_4_option
+	remove_country_flag = mjarchitect_reward_5_option
+	remove_country_flag = mjarchitect_reward_6_option
+	remove_country_flag = mjarchitect_reward_7_option
+	remove_country_flag = mjarchitect_reward_8_option
+	remove_country_flag = mjarchitect_reward_9_option
+	remove_country_flag = mjarchitect_reward_11_option
+	remove_country_flag = mjarchitect_reward_12_option
+	remove_country_flag = mjarchitect_reward_13_option
+	remove_country_flag = mjarchitect_reward_14_option
+	remove_country_flag = mjarchitect_reward_15_option
+	remove_country_flag = mjarchitect_reward_16_option
+	remove_country_flag = mjarchitect_reward_17_option
+	remove_country_flag = mjarchitect_reward_18_option
+	remove_country_flag = mjarchitect_reward_19_option
+	remove_country_flag = mjarchitect_reward_20_option
+}
+
+mjarchitect_generate_reward_options = {
+	random_list = {
+		10 = {
+			set_country_flag = mjarchitect_reward_1_option
+		}
+		10 = {
+			set_country_flag = mjarchitect_reward_2_option
+		}
+		10 = {
+			set_country_flag = mjarchitect_reward_3_option
+		}
+		10 = {
+			set_country_flag = mjarchitect_reward_4_option
+		}
+		# 10 = {
+		# 	set_country_flag = mjarchitect_reward_5_option
+		# }
+		10 = {
+			set_country_flag = mjarchitect_reward_6_option
+		}
+		10 = {
+			set_country_flag = mjarchitect_reward_7_option
+			modifier = {
+				factor = 0
+				AND = {
+					has_technology = tech_jump_drive_1
+					has_technology = tech_psi_jump_drive_1
+					has_technology = tech_mjarchitect_veilwalkers
+				}
+			}
+		}
+		10 = {
+			set_country_flag = mjarchitect_reward_8_option
+			modifier = {
+				factor = 0
+				AND = {
+					has_technology = tech_advanced_metallurgy_1
+					has_technology = tech_consumer_good_refinement_1
+					has_technology = tech_mjarchitect_veilforges
+				}
+			}
+		}
+		# 10 = {
+		# 	set_country_flag = mjarchitect_reward_9_option
+		# }
+		10 = {
+			set_country_flag = mjarchitect_reward_10_option
+		}
+		10 = {
+			set_country_flag = mjarchitect_reward_11_option
+		}
+		10 = {
+			set_country_flag = mjarchitect_reward_12_option
+		}
+		# 10 = {
+		# 	set_country_flag = mjarchitect_reward_13_option
+		# }
+		10 = {
+			set_country_flag = mjarchitect_reward_14_option
+		}
+		# 10 = {
+		# 	set_country_flag = mjarchitect_reward_15_option
+		# }
+		10 = {
+			set_country_flag = mjarchitect_reward_16_option
+		}
+		10 = {
+			set_country_flag = mjarchitect_reward_17_option
+		}
+		10 = {
+			set_country_flag = mjarchitect_reward_18_option
+		}
+		10 = {
+			set_country_flag = mjarchitect_reward_19_option
+		}
+		10 = {
+			set_country_flag = mjarchitect_reward_20_option
+		}
+	}
+}
+
+mjarchitect_give_rare_techs = {
+	while = {
+		count = $NUM$
+		random_list = {
+			10 = {
+				give_technology = { tech = tech_dragon_armor message = yes }
+				modifier = {
+					factor = 0
+					NOR = {
+						has_leviathans = yes
+						has_aquatics = yes
+						has_machine_age_dlc = yes
+					}
+				}
+			}
+			10 = {
+				give_technology = { tech = tech_enigmatic_encoder message = yes }
+				modifier = {
+					factor = 0
+					NOR = {
+						has_leviathans = yes
+						has_machine_age_dlc = yes
+					}
+				}
+			}
+			10 = {
+				give_technology = { tech = tech_enigmatic_decoder message = yes }
+				modifier = {
+					factor = 0
+					NOR = {
+						has_leviathans = yes
+						has_machine_age_dlc = yes
+					}
+				}
+			}
+			10 = {
+				give_technology = { tech = tech_synth_queen_knowledge message = yes }
+				modifier = {
+					factor = 0
+					NOT = {
+						has_machine_age_dlc = yes
+					}
+				}
+			}
+			10 = {
+				give_technology = { tech = tech_leviathan_techgenesis message = yes }
+				modifier = {
+					factor = 0
+					NOT = {
+						has_machine_age_dlc = yes
+					}
+				}
+			}
+			10 = {
+				give_technology = { tech = tech_dark_matter_deflector message = yes }
+			}
+			10 = {
+				give_technology = { tech = tech_dark_matter_power_core message = yes }
+			}
+			10 = {
+				give_technology = { tech = tech_dark_matter_propulsion message = yes }
+			}
+			10 = {
+				give_technology = { tech = tech_mine_dark_matter message = yes }
+			}
+			10 = {
+				give_technology = { tech = tech_existential_campaigns message = yes }
+			}
+			10 = {
+				give_technology = { tech = tech_ascension_theory message = yes }
+			}
+			10 = {
+				give_technology = { tech = tech_covenant_composer message = yes }
+			}
+			10 = {
+				give_technology = { tech = tech_covenant_eater message = yes }
+			}
+			10 = {
+				give_technology = { tech = tech_covenant_instrument message = yes }
+			}
+			10 = {
+				give_technology = { tech = tech_covenant_whisperers message = yes }
+			}
+			10 = {
+				give_technology = { tech = tech_secrets_cybrex message = yes }
+			}
+			10 = {
+				give_technology = { tech = tech_secrets_league message = yes }
+			}
+			10 = {
+				give_technology = { tech = tech_secrets_irassian message = yes }
+			}
+			10 = {
+				give_technology = { tech = tech_secrets_vultaum message = yes }
+			}
+			10 = {
+				give_technology = { tech = tech_secrets_yuht message = yes }
+			}
+			10 = {
+				give_technology = { tech = tech_secrets_baol message = yes }
+				modifier = {
+					factor = 0
+					NOT = {
+						has_ancrel = yes
+					}
+				}
+			}
+			10 = {
+				give_technology = { tech = tech_secrets_zroni message = yes }
+				modifier = {
+					factor = 0
+					NOT = {
+						has_ancrel = yes
+					}
+				}
+			}
+		}
+	}
+}
+
+# PUNISHMENTS
+mjarchitect_clear_punishment_flags = {
+	remove_country_flag = mjarchitect_punishment_1
+	remove_country_flag = mjarchitect_punishment_2
+	remove_country_flag = mjarchitect_punishment_3
+	remove_country_flag = mjarchitect_punishment_4
+	remove_country_flag = mjarchitect_punishment_5
+	remove_country_flag = mjarchitect_punishment_6
+	remove_country_flag = mjarchitect_punishment_7
+	remove_country_flag = mjarchitect_punishment_8
+	remove_country_flag = mjarchitect_punishment_9
+	remove_country_flag = mjarchitect_punishment_10
+	remove_country_flag = mjarchitect_punishment_11
+	remove_country_flag = mjarchitect_punishment_12
+	remove_country_flag = mjarchitect_punishment_13
+	remove_country_flag = mjarchitect_punishment_14
+	remove_country_flag = mjarchitect_punishment_15
+	remove_country_flag = mjarchitect_punishment_16
+	remove_country_flag = mjarchitect_punishment_17
+	remove_country_flag = mjarchitect_punishment_18
+}
+
+mjarchitect_generate_punishment = {
+	random_list = {
+		10 = {
+			set_country_flag = mjarchitect_punishment_1
+		}
+		10 = {
+			set_country_flag = mjarchitect_punishment_2
+		}
+		10 = {
+			set_country_flag = mjarchitect_punishment_3
+		}
+		10 = {
+			set_country_flag = mjarchitect_punishment_4
+		}
+		10 = {
+			set_country_flag = mjarchitect_punishment_5
+		}
+		10 = {
+			set_country_flag = mjarchitect_punishment_6
+		}
+		10 = {
+			set_country_flag = mjarchitect_punishment_7
+		}
+		10 = {
+			set_country_flag = mjarchitect_punishment_8
+		}
+		# 10 = {
+		# 	set_country_flag = mjarchitect_punishment_9
+		# }
+		10 = {
+			set_country_flag = mjarchitect_punishment_10
+		}
+		10 = {
+			set_country_flag = mjarchitect_punishment_11
+		}
+		10 = {
+			set_country_flag = mjarchitect_punishment_12
+		}
+		# 10 = {
+		# 	set_country_flag = mjarchitect_punishment_13
+		# }
+		10 = {
+			set_country_flag = mjarchitect_punishment_14
+		}
+		# 10 = {
+		# 	set_country_flag = mjarchitect_punishment_15
+		# }
+		10 = {
+			set_country_flag = mjarchitect_punishment_16
+		}
+		# 10 = {
+		# 	set_country_flag = mjarchitect_punishment_17
+		# }
+		10 = {
+			set_country_flag = mjarchitect_punishment_18
+		}
+	}
+}
+
+mjarchitect_storm_punishment = {
+	while = {
+		count = $NUM$
+		random_owned_starbase = {
+			limit = {
+				solar_system = {
+					NOR = {
+						has_modifier = mjarchitect_veiled_system
+						has_modifier = mjarchitect_veiled_system_piercer
+					}
+				}
+			}
+			solar_system = {
+				add_modifier = {
+					modifier = mjarchitect_veiled_system_negative
+					days = 3600
+				}
+				add_modifier = {
+					modifier = turbulent_nebula
+					days = 3600
+				}
+				create_ambient_object = {
+					type = mjarchitect_veil_effect_1
+					location = this
+					use_3d_location = yes
+				}
+				last_created_ambient_object = {	
+					set_ambient_object_flag = mjarchitect_storm_bad_effect
+				}
+				system_event = {
+					id = mjarchitect.11
+					days = 3600
+				}
+			}
+		}
+	}
+}
+
+mjarchitect_ownership_punishment = {
+	while = {
+		count = $NUM$
+		random_owned_starbase = {
+			limit = {
+				solar_system = { NOT = { any_system_planet = { is_colony = yes } } }
+			}
+			set_owner = event_target:mjarchitect_entity_country
+			solar_system = {
+				system_event = {
+					id = mjarchitect.0
+					days = 3600
+				}
+			}
+		}
+	}
+}
+
+mjarchitect_check_satisfaction = {
+		if = {
+			limit = {
+				check_variable = {
+					which = mjarchitect_satisfaction_display
+					value > 150
+				}
+			}
+			set_variable = {
+				which = mjarchitect_satisfaction_display
+				value = 150
+			}
+		}
+		else_if = {
+			limit = {
+				check_variable = {
+					which = mjarchitect_satisfaction_display
+					value < -150
+				}
+			}
+			set_variable = {
+				which = mjarchitect_satisfaction_display
+				value = -150
+			}
+		}
+
+		if = {
+			limit = {
+				check_variable = {
+					which = mjarchitect_satisfaction
+					value > 300
+				}
+			}
+			set_variable = {
+				which = mjarchitect_satisfaction
+				value = 300
+			}
+		}
+		else_if = {
+			limit = {
+				check_variable = {
+					which = mjarchitect_satisfaction
+					value < 0
+				}
+			}
+			set_variable = {
+				which = mjarchitect_satisfaction
+				value = 0
+			}
+		}
+
+		round_variable_to_closest = {
+			which = mjarchitect_satisfaction
+			value = 0.25
+		}
+		round_variable_to_closest = {
+			which = mjarchitect_satisfaction_display
+			value = 0.25
+		}
+}
+
+crisis_mjarchitect_level_5_unlock_effect = {
+	# Leave federation and GC
+	owner = {
+			if = {
+				limit = { has_federation = yes }
+				leave_alliance = { override_requirements = yes }
+			}
+			tooltip = {
+				if = {
+					limit = {
+						is_galactic_community_formed = yes
+						is_galactic_community_member = yes
+					}
+					remove_from_galactic_community = yes
+				}
+			}
+			every_playable_country = {
+				limit = {
+					has_defensive_pact = root
+				}
+				clear_relations = {
+					target = prev
+					relations = {
+						defensive_pact
+					}
+				}
+			}
+		
+			country_event = {
+				id = mjarchitect_unlock.25
+			}
+			set_country_flag = mjarchitect_chosen_of_the_architect
+			set_global_flag = mjarchitect_crisis_stage_5_active
+			save_global_event_target_as = mjarchitect_crisis_empire
+			random_megastructure = {
+				limit = {
+					has_megastructure_flag = mjarchitect_great_host_structure
+				}
+				solar_system = {
+					random_system_planet = {
+						save_global_event_target_as = mjarchitect_great_host_star
+					}
+				}
+			}
+	}
+}
+
+mjarchitect_spawn_architect = {
+	event_target:mjarchitect_great_host_star = {
+			create_fleet = {
+				name = "NAME_MJARCHITECT_ARCHITECT_FLEET"
+				settings = {
+					can_disband = no
+				}
+				effect = {
+					set_owner = event_target:mjarchitect_entity_country
+					# set_owner = root
+					set_fleet_flag = mjarchitect_entity
+					create_ship = {
+						name = "NAME_MJARCHITECT_ARCHITECT_SHIP"
+						design = "NAME_MJARCHITECT_ARCHITECT_ITSELF"
+						effect = {
+							set_ship_flag = mjarchitect_architect_ship
+						}
+					}
+					set_location = {
+						target = event_target:mjarchitect_great_host_star
+						distance = 0
+						angle = 90
+						direction = in_system
+					}
+					set_fleet_stance = aggressive
+					save_global_event_target_as = mjarchitect_architect_fleet
+				}
+			}
+	}
+}
+
+# BLESSINGS
+mjarchitect_blessing_core_effect = {
+	set_country_flag = mjarchitect_blessing_$NUM$_unlocked
+	add_modifier = {
+		modifier = mjarchitect_blessing_$NUM$_modifier
+	}
+}
+
+mjarchitect_blessing_1_effect = {
+	hidden_effect = {
+		mjarchitect_blessing_core_effect = {
+			NUM = 1
+		}
+	}
+}
+
+mjarchitect_blessing_2_effect = {
+	hidden_effect = {
+		mjarchitect_blessing_core_effect = {
+			NUM = 2
+		}
+		add_modifier = {
+			modifier = mjarchitect_blessing_tradition_boon
+			multiplier = trigger:num_tradition_categories
+		}
+	}
+}
+
+mjarchitect_blessing_3_effect = {
+	hidden_effect = {
+		mjarchitect_blessing_core_effect = {
+			NUM = 3
+		}
+	}
+}
+
+mjarchitect_blessing_4_effect = {
+	hidden_effect = {
+		mjarchitect_blessing_core_effect = {
+			NUM = 4
+		}
+	}
+}
+
+mjarchitect_blessing_5_effect = {
+	hidden_effect = {
+		set_country_flag = mjarchitect_blessing_5_unlocked
+	}
+}
+
+mjarchitect_blessing_6_effect = {
+	hidden_effect = {
+		set_country_flag = mjarchitect_blessing_6_unlocked
+	}
+}
+
+mjarchitect_blessing_7_effect = {
+	hidden_effect = {
+		mjarchitect_blessing_core_effect = {
+			NUM = 7
+		}
+	}
+}
+
+mjarchitect_blessing_8_effect = {
+	hidden_effect = {
+		mjarchitect_blessing_core_effect = {
+			NUM = 8
+		}
+		set_variable = {
+			which = mjarchitect_blessing8_requests_counter
+			value = 1
+		}
+		add_modifier = {
+			modifier = mjarchitect_blessing_request_boon
+			multiplier = mjarchitect_blessing8_requests_counter
+		}
+	}
+}
+
+mjarchitect_blessing_9_effect = {
+	hidden_effect = {
+		mjarchitect_blessing_core_effect = {
+			NUM = 9
+		}
+	}
+}
+
+mjarchitect_blessing_10_effect = {
+	hidden_effect = {
+		mjarchitect_blessing_core_effect = {
+			NUM = 10
+		}
+		subtract_variable = {
+			which = mjarchitect_satisfaction_decay
+			value = 1
+		}
+	}
+}
+
+# ----------------------------------------------------------
+
+debug_host_object = {
+	capital_scope = {
+		solar_system = {
+			random_system_planet = {
+				create_ambient_object = {
+					type = mjarchitect_architect_hull_entity
+					location = THIS
+				}
+			}
+		}
+	}
+}
+
+debug_host_system = {
+	capital_scope = {
+		solar_system = {
+			spawn_system = {
+				min_jumps = 1
+				max_jumps = 1
+				initializer = mjarchitect_great_host_system
+				is_discovered = no
+			}
+		}
+	}
+}

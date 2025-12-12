@@ -1,0 +1,328 @@
+mjarchitect_summon_architect_crisis_empire = {
+	picture = GFX_evt_cosmic_storms_gravity_storm
+	complete_icon_frame = GFX_situation_outcome_frame_green
+	complete_icon = GFX_situation_outcome_ascension
+	category = positive
+
+	on_progress_complete = {
+		custom_tooltip = mjarchitect_summon_architect_outcome
+		hidden_effect = {
+			owner = { country_event = { id = mjarchitect_end.100 }}
+			# set_situation_locked = yes
+			destroy_situation = root
+		}
+	}
+
+	stages = {
+		stage_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_magenta
+			end = 100
+			# custom_tooltip = mjarchitect_summon_architect_stage_1
+		}
+		stage_2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_magenta
+			end = 200
+			on_first_enter = {
+				# situation_event = { id = mjarchitect_end.10 }
+			}
+			# custom_tooltip = mjarchitect_summon_architect_stage_2
+		}
+		stage_3 = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_magenta
+			end = 300
+			on_first_enter = {
+				# situation_event = { id = mjarchitect_end.15 }
+			}
+			# custom_tooltip = mjarchitect_summon_architect_stage_3
+		}
+	}
+
+	approach = {
+		name = mjarchitect_summon_architect_crisis_empire_approach
+		icon = GFX_situation_approach_this_is_fine
+		icon_background = GFX_situation_approach_bg_green
+		on_select = {
+			custom_tooltip = mjarchitect_summon_architect_crisis_empire_approach_tt
+		}
+		default = yes
+	}
+
+	on_monthly = {
+	}
+
+	monthly_progress = {
+		base = 0.5
+		modifier = {
+			add = owner.mjarchitect_num_cognitive_matter_situation_progress
+			desc = mjarchitect_stockpiled_matter_tt
+		}
+		modifier = {
+			add = 50
+			desc = mjarchitect_situation_debug
+			has_global_flag = debug
+		}
+	}
+
+	abort_trigger = {
+		NOT = {
+			has_global_flag = mjarchitect_crisis_stage_5_active
+		}
+	}
+}
+
+mjarchitect_summon_architect_default = {
+	picture = GFX_evt_cosmic_storms_gravity_storm
+	complete_icon_frame = GFX_situation_outcome_frame_red
+	complete_icon = GFX_situation_outcome_negative
+	category = negative
+
+	on_progress_complete = {
+		custom_tooltip = mjarchitect_summon_architect_outcome_default
+		hidden_effect = {
+			destroy_situation = root
+		}
+	}
+
+	stages = {
+		stage_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_red
+			end = 100
+		}
+		stage_2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_red
+			end = 200
+			# custom_tooltip = mjarchitect_summon_architect_stage_2
+		}
+		stage_3 = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_red
+			end = 300
+			# custom_tooltip = mjarchitect_summon_architect_stage_3
+		}
+	}
+
+	approach = {
+		name = mjarchitect_summon_architect_default_approach
+		icon = GFX_situation_approach_this_is_fine
+		icon_background = GFX_situation_approach_bg_red
+		on_select = {
+			custom_tooltip = mjarchitect_summon_architect_default_approach_tt
+		}
+		default = yes
+	}
+
+	on_monthly = {
+	}
+
+	monthly_progress = {
+		base = 0.25
+		modifier = {
+			add = event_target:mjarchitect_crisis_empire.mjarchitect_num_cognitive_matter_situation_progress
+			desc = mjarchitect_stockpiled_matter_tt
+		}
+		modifier = {
+			add = 50
+			desc = mjarchitect_situation_debug
+			has_global_flag = debug
+		}
+	}
+
+	abort_trigger = {
+		NOT = {
+			has_global_flag = mjarchitect_crisis_stage_5_active
+		}
+	}
+}
+
+mjarchitect_locate_great_host = {
+	picture = GFX_evt_astral_rift_microverse
+	complete_icon_frame = GFX_situation_outcome_frame_green
+	complete_icon = GFX_situation_outcome_unknown
+	category = positive
+
+	on_progress_complete = {
+		custom_tooltip = mjarchitect_locate_great_host_outcome
+		hidden_effect = {
+			owner = { country_event = { id = mjarchitect_unlock.45 }}
+			destroy_situation = root
+		}
+	}
+
+	stages = {
+		stage_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_blue
+			end = 25
+			on_first_enter = {
+			}
+		}
+		stage_2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_blue
+			end = 100
+			on_first_enter = {
+				# situation_event = { id = mjarchitect_unlock.40 }
+			}
+		}
+	}
+
+	approach = {
+		name = mjarchitect_locate_great_host_approach_default
+		icon = GFX_situation_approach_influence
+		icon_background = GFX_situation_approach_bg_yellow
+		on_select = {
+			custom_tooltip = mjarchitect_locate_great_host_approach_default_tt
+		}
+		default = yes
+	}
+	approach = {
+		name = mjarchitect_locate_great_host_approach_devote_research
+		icon = GFX_situation_approach_research
+		icon_background = GFX_situation_approach_bg_green
+		on_select = {
+		}
+
+		target_modifier = {
+			all_technology_research_speed = -0.10
+		}
+	}
+	approach = {
+		name = mjarchitect_locate_great_host_approach_augurs
+		icon = GFX_situation_approach_handshake
+		icon_background = GFX_situation_approach_bg_green
+		on_select = {
+		}
+
+		resources = {
+			category = situations
+			upkeep = {
+				energy = 45
+				influence = 1
+			}
+		}
+	}
+
+	on_monthly = {
+	}
+
+	monthly_progress = {
+		base = 1.5
+		modifier = {
+			desc = string_current_approach
+			current_situation_approach = mjarchitect_locate_great_host_approach_devote_research
+			add = 1
+		}
+		modifier = {
+			desc = string_current_approach
+			current_situation_approach = mjarchitect_locate_great_host_approach_augurs
+			add = 2
+		}
+		modifier = {
+			add = 50
+			desc = mjarchitect_situation_debug
+			has_global_flag = debug
+		}
+	}
+}
+
+mjarchitect_repair_great_host = {
+	picture = GFX_evt_cosmic_storms_magnetic_storm
+	complete_icon_frame = GFX_situation_outcome_frame_green
+	complete_icon = GFX_situation_outcome_positive
+	category = positive
+
+	on_progress_complete = {
+		custom_tooltip = mjarchitect_repair_great_host_outcome
+		hidden_effect = {
+			owner = { country_event = { id = mjarchitect_unlock.70 }}
+			destroy_situation = root
+		}
+	}
+
+	stages = {
+		stage_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_blue
+			end = 34
+			on_first_enter = {
+			}
+		}
+		stage_2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_blue
+			end = 67
+			on_first_enter = {
+				# situation_event = { id = mjarchitect_unlock.60 }
+			}
+		}
+		stage_3 = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_blue
+			end = 100
+			on_first_enter = {
+				# situation_event = { id = mjarchitect_unlock.65 }
+			}
+		}
+	}
+
+	approach = {
+		name = mjarchitect_repair_great_host_approach_default
+		icon = GFX_situation_approach_influence
+		icon_background = GFX_situation_approach_bg_yellow
+		on_select = {
+			custom_tooltip = mjarchitect_locate_great_host_approach_default_tt
+		}
+		default = yes
+	}
+	approach = {
+		name = mjarchitect_repair_great_host_approach_redirect_resources
+		icon = GFX_situation_approach_alloys
+		icon_background = GFX_situation_approach_bg_green
+		on_select = {
+		}
+
+		target_modifier = {
+			planet_jobs_alloys_produces_mult = -0.25
+			planet_jobs_energy_produces_mult = -0.25
+		}
+	}
+	approach = {
+		name = mjarchitect_repair_great_host_approach_focus_construction
+		icon = GFX_situation_approach_scales
+		icon_background = GFX_situation_approach_bg_green
+		on_select = {
+		}
+
+		target_modifier = {
+			megastructure_build_speed_mult = -0.75
+			starbase_shipyard_build_speed_mult = -0.75
+		}
+	}
+
+	on_monthly = {
+	}
+
+	monthly_progress = {
+		base = 0.25
+		modifier = {
+			desc = string_current_approach
+			current_situation_approach = mjarchitect_repair_great_host_approach_redirect_resources
+			add = 0.25
+		}
+		modifier = {
+			desc = string_current_approach
+			current_situation_approach = mjarchitect_repair_great_host_approach_focus_construction
+			add = 0.75
+		}
+		modifier = {
+			add = 50
+			desc = mjarchitect_situation_debug
+			has_global_flag = debug
+		}
+	}
+}

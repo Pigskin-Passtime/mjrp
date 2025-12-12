@@ -1,0 +1,108 @@
+
+mjarchitect_any_boon_active = {
+	OR = {
+                        has_country_flag = mjarchitect_boon_1_active
+                        has_country_flag = mjarchitect_boon_2_active
+                        has_country_flag = mjarchitect_boon_3_active
+                        has_country_flag = mjarchitect_boon_4_active
+                        has_country_flag = mjarchitect_boon_5_active
+                        has_country_flag = mjarchitect_boon_6_active
+                        has_country_flag = mjarchitect_boon_7_active
+                        has_country_flag = mjarchitect_boon_8_active
+                        has_country_flag = mjarchitect_boon_9_active
+    }
+}
+
+mjarchitect_any_request_active = {
+    OR = {
+                        has_country_flag = mjarchitect_request_1_active
+                        has_country_flag = mjarchitect_request_2_active
+                        has_country_flag = mjarchitect_request_3_active
+                        has_country_flag = mjarchitect_request_4_active
+                        has_country_flag = mjarchitect_request_5_active
+                        has_country_flag = mjarchitect_request_6_active
+                        has_country_flag = mjarchitect_request_7_active
+                        has_country_flag = mjarchitect_request_8_active
+                        has_country_flag = mjarchitect_request_9_active
+                        has_country_flag = mjarchitect_request_10_active
+                        has_country_flag = mjarchitect_request_11_active
+                        has_country_flag = mjarchitect_request_12_active
+                        has_country_flag = mjarchitect_request_13_active
+                        has_country_flag = mjarchitect_request_14_active
+                        has_country_flag = mjarchitect_request_15_active
+                        has_country_flag = mjarchitect_request_16_active
+						has_country_flag = mjarchitect_request_17_active
+						has_country_flag = mjarchitect_request_18_active
+						has_country_flag = mjarchitect_request_19_active
+						has_country_flag = mjarchitect_request_20_active
+						has_country_flag = mjarchitect_request_21_active
+						has_country_flag = mjarchitect_request_22_active
+						has_country_flag = mjarchitect_request_23_active
+						has_country_flag = mjarchitect_request_24_active
+						has_country_flag = mjarchitect_request_25_active
+						has_country_flag = mjarchitect_request_26_active
+    }
+}
+
+mjarchitect_is_crisis = {
+    has_ascension_perk = mjarchitect_ap_architectofruin
+    # OR = {
+    #     has_ascension_perk = mjarchitect_ap_architectofruin
+    #     has_country_flag = mjarchitect_crisis
+    # }
+}
+
+can_destroy_planet_with_PLANET_KILLER_MJARCHITECT_VEIL_WEAPON = {
+    custom_tooltip = {
+		fail_text = is_not_artificial_or_crisis
+		NOR = {
+			is_artificial = yes
+			is_planet_class = pc_ai
+			is_planet_class = pc_infested
+		}
+	}
+	custom_tooltip = {
+		fail_text = is_not_hostile_or_primitive
+		OR = {
+			planet_is_hostile_or_crisis = yes
+			AND = {
+				exists = owner
+				owner = {
+					is_country_type = primitive
+				}
+			}
+		}
+	}
+	custom_tooltip = {
+		fail_text = lathe_cant_colossus
+		NOT = { is_planet_class = pc_cosmogenesis_world }
+	}
+	custom_tooltip = {
+		fail_text = fotd_cant_collossus
+		NOT = { has_planet_flag = fotd_seperatist_planet@from.owner }
+		exists = from.owner
+		from.owner = {
+			NOT = { has_country_flag = fotd_seperatist_country@from.owner }
+		}
+	}
+	if = {
+		limit = {
+			exists = owner
+			owner = { is_country_type = primitive }
+		}
+		custom_tooltip = {
+			fail_text = primitives_not_full_interference
+			from.owner = {
+				has_policy_flag = interference_aggressive
+			}
+		}
+	}
+	custom_tooltip = {
+		fail_text = is_shielded
+		NOR = {
+			is_planet_class = pc_shielded
+			is_planet_class = pc_ringworld_shielded
+			is_planet_class = pc_habitat_shielded
+		}
+	}
+}

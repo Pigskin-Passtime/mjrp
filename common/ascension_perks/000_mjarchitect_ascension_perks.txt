@@ -1,0 +1,75 @@
+mjarchitect_ap_architectofruin = {
+	potential = {
+		OR = {
+			has_machine_age_dlc = yes
+			has_nemesis = yes
+			has_biogenesis_dlc = yes
+		}
+		NOR = {
+			has_ascension_perk = ap_become_the_crisis
+			has_ascension_perk = ap_cosmogenesis
+			has_ascension_perk = ap_defender_of_the_galaxy
+			has_ascension_perk = ap_behemoths
+			has_origin = origin_slavers # No crisis for MSI
+			has_country_flag = player_crisis_chosen
+		}
+		is_wilderness_empire = no
+	}
+
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_ascension_perks_3"
+			num_ascension_perks > 2
+		}
+		custom_tooltip = {
+			fail_text = "requires_independence"
+			is_subject = no
+		}
+		custom_tooltip = {
+			fail_text = "must_not_be_custodian"
+			is_galactic_custodian = no
+		}
+		custom_tooltip = {
+			fail_text = "must_not_be_emperor"
+			is_galactic_emperor = no
+		}
+		# Currently only available for non-gestalts
+		custom_tooltip = {
+			fail_text = "must_be_individualist"
+			is_gestalt = no
+		}
+	}
+
+	on_enabled = {
+		hidden_effect = {
+			set_variable = {
+				which = mjarchitect_satisfaction_decay
+				value = 0.00
+			}
+			set_variable = {
+				which = mjarchitect_satisfaction
+				value = 225
+			}
+			set_variable = {
+				which = mjarchitect_satisfaction_display
+				value = 75
+			}
+			set_variable = {
+				which = mjarchitect_conduit_pops
+				value = 0
+			}
+			set_variable = {
+				which = mjarchitect_conduit_jobs
+				value = 0
+			}
+			country_event = { id = mjarchitect_unlock.0 }
+		}
+		activate_crisis_progression = mjarchitect_path
+		custom_tooltip = mjarchitect_path_desc
+	}
+
+	ai_weight = {
+		factor = 0 # No fun for the ai :wilted_rose:
+	}
+}
+

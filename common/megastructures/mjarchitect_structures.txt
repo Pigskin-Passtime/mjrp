@@ -1,0 +1,360 @@
+mjarchitect_celestial_beacon_ruined = {
+	entity = "mjarchitect_veil_frame_entity"
+	construction_entity = "mjarchitect_veil_frame_entity"
+	portrait = "GFX_megastructure_construction_background"
+	show_in_outliner = no
+	build_time = 1800
+	resources = {
+		category = megastructures
+		cost = {
+			unity = 2500
+			alloys = 5000
+		}
+	}
+
+	construction_blocks_and_blocked_by = self_type
+
+	dismantle_cost = {
+		category = megastructures
+		cost = {
+			energy = 500
+		}
+	}
+
+	dismantle_time = 360
+
+
+	dismantle_potential = {
+		always = yes
+	}
+
+	dismantle_possible = {
+		always = yes
+	}
+
+	on_dismantle_complete = {
+	}
+
+
+	potential = {
+		always = no
+	}
+
+	on_build_complete = {
+	}
+}
+
+mjarchitect_celestial_beacon = {
+	entity = mjarchitect_veil_portal_entity
+	construction_entity = mjarchitect_veil_frame_entity
+	portrait = "GFX_mjarchitect_megastructure_beacon_bg"
+	show_galactic_map_icon = yes
+	show_in_outliner = yes
+	place_entity_on_planet_plane = yes
+	build_time = 1800
+	resources = {
+		category = megastructures
+		cost = {
+			unity = 2500
+			alloys = 5000
+		}
+
+		upkeep = {
+			energy = 5
+		}
+	}
+	construction_blocks_and_blocked_by = self_type
+
+	dismantle_cost = {
+		category = megastructures
+		cost = {
+			energy = 500
+		}
+	}
+
+	dismantle_time = 360
+
+
+	dismantle_potential = {
+		always = no
+	}
+
+	dismantle_possible = {
+		always = no
+	}
+
+	on_dismantle_complete = {
+	}
+
+	potential = {
+		has_crisis_perk = mjarchitect_crisis_perk_6
+	}
+
+	possible = {
+		hidden_trigger = {
+			exists = starbase
+		}
+		custom_tooltip = {
+			fail_text = "requires_inside_border_or_subject"
+			OR = {
+				is_inside_border = from
+				AND = {
+					exists = owner
+					owner = {
+						is_subject = yes
+						overlord = { is_same_value = from }
+					}
+				}
+			}
+		}
+		custom_tooltip = {
+			fail_text = "requires_no_binary_trinary"
+			NOR = {
+				is_star_class = sc_binary_1
+				is_star_class = sc_binary_2
+				is_star_class = sc_binary_3
+				is_star_class = sc_binary_4
+				is_star_class = sc_binary_5
+				is_star_class = sc_binary_6
+				is_star_class = sc_binary_7
+				is_star_class = sc_binary_8
+				is_star_class = sc_binary_9
+				is_star_class = sc_binary_10
+				is_star_class = sc_trinary_1
+				is_star_class = sc_trinary_2
+				is_star_class = sc_trinary_3
+				is_star_class = sc_trinary_4
+			}
+		}
+		custom_tooltip = {
+			fail_text = "mjarchitect_requires_no_existing_beacon"
+			NOR = {
+				has_megastructure = mjarchitect_celestial_beacon
+			}
+		}
+	}
+
+	placement_rules = {
+		planet_possible = {
+			custom_tooltip = {
+				fail_text = "must_build_around_star"
+				is_star = yes
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_anomaly"
+				NOT = { has_anomaly = yes }
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_existing_megastructure"
+				NOR = {
+					has_planet_flag = megastructure
+					has_planet_flag = has_megastructure
+				}
+			}
+		}
+	}
+
+	# root = system
+	# from = country
+	ai_weight = {
+		factor = 0
+	}
+
+	on_build_queued = {
+	}
+	on_build_unqueued = {
+	}
+	on_build_complete = {
+		# Set system flags
+		set_star_flag = mjarchitect_beacon_system
+		# set_star_flag = mjarchitect_active_beacon_of_@from
+
+		# Remove various debris
+		every_system_ambient_object = {
+			limit = {
+				OR = {
+					is_ambient_object_type = large_debris_object
+					is_ambient_object_type = medium_debris_01_object
+					is_ambient_object_type = medium_debris_02_object
+					is_ambient_object_type = small_debris_object
+				}
+			}
+			destroy_ambient_object = this
+		}
+		fromfrom.planet = {
+			if = {
+				limit = { has_orbital_station = yes }
+				orbital_station = {
+					dismantle = yes
+				}
+			}
+		}
+
+		# Change star
+		fromfrom.planet = {
+			change_pc = pc_black_hole
+			set_planet_size = 10
+			create_ambient_object = {
+				type = "star_explosion"
+				play_animation_once = yes
+				location = this
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 0
+					angle = random
+				}
+			}
+		}
+		set_star_class = sc_black_hole
+
+		# Give rewards + change owner
+		fromfrom = {
+			owner = {
+				change_variable = {
+					which = mjarchitect_num_beacons
+					value = 1
+				}
+				mjarchitect_satisfaction_reward_effect_static = {
+					SATISFACTION_VALUE = 40
+				}
+				complete_crisis_objective = mjarchitect_crisobj_beacons
+			}
+			# solar_system.starbase = {
+			# 	set_owner = event_target:mjarchitect_entity_country
+			# }
+			set_owner = event_target:mjarchitect_entity_country
+		}
+
+		# System effects
+		if = {
+			limit = {
+				fromfrom.owner = { has_country_flag = mjarchitect_blessing_4_unlocked }
+			}
+			mjarchitect_veil_cloud_map_effect = {
+				RADIUS = 150
+				MODIFIER = mjarchitect_veiled_system
+			}
+		}
+		else = {
+			mjarchitect_veil_cloud_map_effect = {
+				RADIUS = 75
+				MODIFIER = mjarchitect_veiled_system
+			}
+		}
+	}
+}
+
+mjarchitect_great_host_ruined = {
+	entity = "mjarchitect_great_host_ruined_entity"
+	construction_entity = "mjarchitect_great_host_ruined_entity"
+	portrait = "GFX_megastructure_construction_background"
+	show_in_outliner = yes
+	build_time = 3600
+	resources = {
+		category = megastructures
+		cost = {
+			alloys = 10000
+		}
+	}
+
+	potential = {
+		always = no
+	}
+
+	on_build_complete = {
+		fromfrom = { set_megastructure_flag = mjarchitect_great_host_structure }
+	}
+}
+
+mjarchitect_great_host = {
+	entity = "mjarchitect_great_host_entity"
+	construction_entity = "mjarchitect_great_host_entity"
+	portrait = "GFX_mjarchitect_megastructure_host_bg"
+	show_in_outliner = yes
+	build_time = 3600
+	victory_score = 10000
+	resources = {
+		category = megastructures
+		cost = {
+			alloys = 10000
+		}
+	}
+
+	potential = {
+		always = no
+	}
+
+	on_build_complete = {
+		fromfrom = { set_megastructure_flag = mjarchitect_great_host_structure }
+	}
+}
+
+mjarchitect_piercer = {
+	entity = "mjarchitect_piercer_ship_entity"
+	construction_entity = "mjarchitect_piercer_ship_entity"
+	portrait = "GFX_megastructure_construction_background"
+	# entity_offset = { x = -10 y = -20 }
+	place_entity_on_planet_plane = no
+	build_type = outside_gravity_well
+	build_time = 1800
+	show_in_outliner = no
+	resources = {
+		category = megastructures
+		cost = {
+			alloys = 5000
+		}
+	}
+
+	potential = {
+		has_crisis_perk = mjarchitect_crisis_perk_13
+	}
+
+	possible = {
+		hidden_trigger = {
+			exists = starbase
+		}
+		custom_tooltip = {
+			fail_text = "requires_inside_border"
+			is_inside_border = from
+		}
+		fromfrom.owner = {
+			check_variable = {
+				which = mjarchitect_num_beacons
+				value > mjarchitect_num_piercers
+			}
+		}
+	}
+
+	construction_blocks_and_blocked_by = self_type
+	custom_tooltip_requirements = "MEGASTRUCTURE_TOOLTIP_REQUIREMENTS_OUTSIDE_GRAVITY_WELL"
+
+	on_build_complete = {
+		create_fleet = {
+			name = "NAME_MJARCHITECT_PIERCER"
+			settings = {
+				can_disband = no
+			}
+			effect = {
+				set_owner = root
+				set_fleet_flag = mjarchitect_piercer
+				create_ship = {
+					name = "NAME_MJARCHITECT_PERCOLATER"
+					design = "NAME_MJARCHITECT_PIERCER_DESIGN"
+				}
+				set_location = fromfrom
+				set_fleet_stance = passive
+			}
+		}
+
+		remove_megastructure = fromfrom
+
+		from = {
+			change_variable = {
+				which = mjarchitect_num_piercers
+				value = 1
+			}
+		}
+	}
+}

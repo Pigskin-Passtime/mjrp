@@ -1,0 +1,48 @@
+mjarchitect_veil_storm = {
+	textures = {
+		opacity_texture = "gfx/map/mjarchitect_veil/mjarchitect_veil_storm_map_alpha.dds"
+		diffuse_texture = "gfx/map/mjarchitect_veil/mjarchitect_veil_storm_map.dds"
+		lightning_texture_atlas = "gfx/map/mjarchitect_veil/noalpha.dds"
+		lightning_horisontal_tiles = 2
+		lightning_vertical_tiles = 2
+	}
+
+	parameters = {
+		min_size = 55.0
+		max_size = 65.0
+		size_change_speed = 0.1
+		rotation_speed = 0.1
+		counter_rotation_speed = 0.02
+		min_opacity = 0.8
+		max_opacity = 1
+		opacity_change_speed = 0.05
+		lightning_intencity_min = 0.9
+		lightning_intencity_max = 1.0
+		lightning_duration_min = 0.8
+		lightning_duration_max = 1.2
+		lightning_switch_interval_min = 0.50
+		lightning_switch_interval_max = 1.0
+		size_change_reversion = yes
+		opacity_change_reversion = yes
+	}
+
+	ambient_object = {
+		type = mjarchitect_veil_effect_2
+		scale = 1
+		centric = yes
+	}
+
+	# Effect firing when a new galactic object is covered with fog
+	# This = galactic object
+	# From = Country owning the galactic object
+	on_system_added = {
+		set_star_flag = mjarchitect_beacon_radius_system
+	}
+
+	# Effect firing when a galactic object is uncovered from fog
+	# This = galactic object
+	# From = Country owning the galactic object
+	on_system_removed = {
+		remove_star_flag = mjarchitect_beacon_radius_system
+	}
+}

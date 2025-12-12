@@ -1,0 +1,250 @@
+entity = {
+	name = "mjarchitect_veil_portal_entity"
+	pdxmesh = "mjarchitect_veil_portal_mesh"
+	
+	scale = 2
+	default_state = "idle"
+	state = { name = "idle" state_time = 5
+		event = { time = 0 particle = "black_hole_particle" trigger_once = yes keep_particle = yes }
+		# event = { trigger_once = yes sound = { soundeffect = "blackhole_hum_idle" } }
+		event = { time = 0 particle = "mjarchitect_portal_effect" keep_particle = yes trigger_once = yes sound = { soundeffect = "blackhole_hum_idle" } }
+	}
+	locator = { name = "centre" }
+	attach = { "centre" = "mjarchitect_veil_frame_entity" }
+	attach = { "centre" = "mjarchitect_veil_system_effect_entity" }
+	
+	game_data = {
+		size = 1.0
+		bloom_factor = 10
+	}
+	cull_radius = 500
+}
+
+entity = {
+	name = "mjarchitect_veil_frame_entity"
+	pdxmesh = "mjarchitect_veil_frame_mesh"
+	
+	scale = 1.25
+	default_state = "idle"
+	state = { name = "idle"
+		#event = { time = 0 node = "light_locator_01" particle = "ship_light_blue_effect" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "light_locator_02" particle = "ship_light_blue_effect" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "light_locator_03" particle = "ship_light_blue_effect" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "light_locator_04" particle = "ship_light_blue_effect" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "light_locator_05" particle = "ship_light_blue_effect" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "light_locator_06" particle = "ship_light_blue_effect" keep_particle = yes trigger_once = yes }
+	}
+	
+		meshsettings = {
+			name = "gateway_bottomShapeShape"
+			index = 0
+			texture_diffuse = "mjarchitect_beacon_diffuse.dds"
+			texture_normal = "mjarchitect_beacon_normal.dds"
+			texture_specular = "mjarchitect_beacon_specular.dds"
+			shader = "PdxMeshShip"
+		}
+		
+	# attach = { portal_joint = "gateway_portal_entity" }
+}
+
+# Celestial Beacon System Effects
+entity = {
+	name = "mjarchitect_veil_system_effect_entity"
+	locator = { name = "core" position = { 0 -5 0 }}
+	scale = 15
+	attach = { "core" = "mjarchitect_system_outer_entity" }
+	attach = { "core" = "mjarchitect_systemS_mesh_entity" }
+	attach = { "core" = "mjarchitect_systemXS_mesh_entity" }
+	attach = { "core" = "mjarchitect_systemPoints_mesh_entity" }
+
+	default_state = "idle"
+	state = { name = "idle" 		state_time = 5
+		event = { time = 0 node = "core" particle = "mjarchitect_veil_system_effect" keep_particle = yes trigger_once = yes }
+		start_event = {
+			trigger_once = yes
+			sound = { soundeffect = "sfx_amb_gravity_storm" }
+            }
+        }
+
+	cull_radius = 20000
+}
+
+# Beacon-adjacent System Effects
+entity = {
+	name = "mjarchitect_veil_system_effect_2_entity"
+	locator = { name = "core" position = { 0 -5 0 }}
+	scale = 10
+	attach = { "core" = "mjarchitect_system_outer_entity" }
+	attach = { "core" = "mjarchitect_systemS_mesh_entity" }
+	attach = { "core" = "mjarchitect_systemXS_mesh_entity" }
+
+	default_state = "idle"
+	state = { name = "idle" 		state_time = 5
+		event = { time = 0 node = "core" particle = "mjarchitect_veil_system_effect" keep_particle = yes trigger_once = yes }
+		start_event = {
+			trigger_once = yes
+			sound = { soundeffect = "sfx_amb_gravity_storm" }
+            }
+        }
+
+	cull_radius = 20000
+}
+
+entity = {
+	name = "mjarchitect_systemL_mesh_entity"
+	pdxmesh = "mjarchitect_systemL_mesh"
+	locator = { name = "root" position = { 0 0 0 }}
+
+
+	game_data = {
+
+		bloom_factor			= 1.55
+		uv_animation_speed 		= .045
+		uv_animation_direction 	= { .4 -0.9 }
+	}
+
+	scale = 1.75
+	erosion_in = 2
+	erosion_out = 2
+
+	default_state = "idle"
+
+	cull_radius = 20000
+}
+entity = {
+	name = "mjarchitect_systemM_mesh_entity"
+	pdxmesh = "mjarchitect_systemM_mesh"
+	locator = { name = "root" position = { 0 0 0 }}
+
+
+	game_data = {
+
+		bloom_factor			= 1.35
+		uv_animation_speed 		= .035
+		uv_animation_direction 	= { .55 -1 }
+	}
+
+	scale = 1.75
+	erosion_in = 2
+	erosion_out = 2
+
+	default_state = "idle"
+
+	cull_radius = 20000
+}
+
+entity = {
+	name = "mjarchitect_systemS_mesh_entity"
+	pdxmesh = "mjarchitect_systemS_mesh"
+	locator = { name = "root" position = { 0 0 0 }}
+
+
+	game_data = {
+
+		bloom_factor			= .6
+		uv_animation_speed 		= .04
+		uv_animation_direction 	= { .4 -1.25 }
+	}
+
+	scale = 1.75
+	erosion_in = 2
+	erosion_out = 2
+
+	default_state = "idle"
+
+	cull_radius = 20000
+}
+
+entity = {
+	name = "mjarchitect_systemXS_mesh_entity"
+	pdxmesh = "mjarchitect_XS_mesh"
+	locator = { name = "root" position = { 0 0 0 }}
+
+
+	game_data = {
+
+		bloom_factor			= .4
+		uv_animation_speed 		= .05
+		uv_animation_direction 	= { .5 -1.5 }
+	}
+
+	scale = 1.75
+	erosion_in = 2
+	erosion_out = 2
+
+	default_state = "idle"
+
+	cull_radius = 20000
+}
+
+entity = {
+	name = "mjarchitect_systemPoints_mesh_entity"
+	pdxmesh = "mjarchitect_systemPoints_mesh"
+	locator = { name = "root" position = { 0 0 0 }}
+
+
+	game_data = {
+
+		bloom_factor			= .9
+		uv_animation_speed 		= .015
+		uv_animation_direction 	= { 1 0 }
+	}
+
+	scale = 1.75
+	erosion_in = 2
+	erosion_out = 2
+
+	default_state = "idle"
+
+	cull_radius = 20000
+}
+
+entity = {
+	name = "mjarchitect_system_outer_core_entity"
+	pdxmesh = "mjarchitect_system_outer_mesh"
+	
+		game_data = {
+		bloom_factor			= 1
+		uv_animation_speed 		= 0.04
+		uv_animation_direction 	= { -0.2 -1 }
+		}
+}
+
+entity = {
+	name = "mjarchitect_system_outer_entity"
+	locator = { name = "core" position = { 0 -5 0 }}
+	scale = 20
+
+	default_state = "idle"
+	state = { name = "idle" 		state_time = 5
+		event = { time = 0 node = "core" particle = "mjarchitect_veil_outer_effect" keep_particle = yes trigger_once = yes }
+		start_event = { 
+			trigger_once = yes 
+			sound = { soundeffect = "sfx_amb_psi_storm_1" } 
+            }
+        }
+	
+	attach = { core = "mjarchitect_system_outer_core_entity" }
+
+	cull_radius = 20000
+}
+
+entity = {
+	name = "mjarchitect_veiled_planet_effect_entity"
+	pdxmesh = "mjarchitect_veil_portal_mesh"
+	
+	scale = 0.5
+	default_state = "idle"
+	state = { name = "idle" state_time = 5
+		event = { time = 0 particle = "black_hole_particle" trigger_once = yes keep_particle = yes }
+		event = { trigger_once = yes sound = { soundeffect = "blackhole_hum_idle" } }
+		event = { time = 0 particle = "mjarchitect_portal_effect" keep_particle = yes trigger_once = yes sound = { soundeffect = "blackhole_hum_idle" } }
+	}
+	locator = { name = "centre" }
+	
+	game_data = {
+		size = 1.0
+		bloom_factor = 10
+	}
+	cull_radius = 500
+}

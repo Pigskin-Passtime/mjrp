@@ -1,0 +1,547 @@
+##########################################
+## Architect of Ruin - Crisis Unlock Events
+## By MadeinCanada
+##########################################
+
+namespace = mjarchitect_unlock
+
+# Unlocking the AP
+country_event = {
+	id = mjarchitect_unlock.0
+	is_triggered_only = yes
+	title = "mjarchitect_unlock.0.name"
+	desc = "mjarchitect_unlock.0.desc"
+	picture = GFX_evt_cosmic_storms_shroud_storm
+	show_sound = event_activating_unknown_technology
+	
+	trigger = {
+		has_ascension_perk = mjarchitect_ap_architectofruin
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = "mjarchitect_unlock.0.a"
+		begin_event_chain = {
+			event_chain = "mjarchitect_chain"
+			target = this
+		}
+		capital_scope = {
+			enable_special_project = {
+				name = "MJARCHITECT_INITIAL_PROJECT"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Completing the SP
+country_event = {
+	id = mjarchitect_unlock.5
+	is_triggered_only = yes
+	title = "mjarchitect_unlock.5.name"
+	desc = "mjarchitect_unlock.5.desc"
+	picture = GFX_evt_dimensional_horror
+	show_sound = event_activating_unknown_technology
+	
+	trigger = {
+		has_ascension_perk = mjarchitect_ap_architectofruin
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = "mjarchitect_unlock.5.a"
+		hidden_effect = {
+			country_event = {
+				id = mjarchitect_unlock.10
+			}
+		}
+	}
+}
+
+# Making the Pact
+country_event = {
+	id = mjarchitect_unlock.10
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_artist_window"
+	custom_gui_option = "enclave_artist_option"
+	picture_event_data = {
+		portrait = shroud1
+		room = cosmic_storm_room
+    }
+
+	title = mjarchitect_unlock.10.name
+	desc = mjarchitect_unlock.10.desc
+	
+	trigger = {
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = "mjarchitect_unlock.10.a"
+		hidden_effect = {
+			country_event = {
+				id = mjarchitect_unlock.11
+			}
+		}
+	}
+}
+
+# Making the Pact 2
+country_event = {
+	id = mjarchitect_unlock.11
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_artist_window"
+	custom_gui_option = "enclave_artist_option"
+	picture_event_data = {
+		portrait = shroud1
+		room = cosmic_storm_room
+    }
+
+	title = mjarchitect_unlock.10.name
+	desc = mjarchitect_unlock.11.desc
+	
+	trigger = {
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = "mjarchitect_unlock.11.a"
+		response_text = mjarchitect_unlock.11.a_reply
+		is_dialog_only = yes
+	}
+	option = {
+		name = "mjarchitect_unlock.11.b"
+		response_text = mjarchitect_unlock.11.b_reply
+		set_country_flag = mjarchitect_initial_chain_complete
+		hidden_effect = {
+			# country_event = {
+			# 	id = mjarchitect_unlock.15
+			# }
+			country_event = {
+				id = mjarchitect_unlock.20
+				days = 30
+			}
+			country_event = {
+				id = mjarchitect_ui.110 # Request gatekeeper
+				days = 30
+				random = 30
+			}
+			mjarchitect_create_entity_country = yes
+		}
+	}
+}
+
+# Popup about the Architect UI + buildings
+country_event = {
+	id = mjarchitect_unlock.15
+	is_triggered_only = yes
+	title = "mjarchitect_unlock.15.name"
+	desc = "mjarchitect_unlock.15.desc"
+	picture = GFX_evt_cosmic_storms_the_storm_speaks
+	
+	trigger = {
+		has_ascension_perk = mjarchitect_ap_architectofruin
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = "mjarchitect_unlock.15.a"
+	}
+}
+
+# Augurs of the Architect Established
+country_event = {
+	id = mjarchitect_unlock.20
+	is_triggered_only = yes
+	title = "mjarchitect_unlock.20.name"
+	desc = "mjarchitect_unlock.20.desc"
+	picture = GFX_evt_conclave
+	
+	trigger = {
+		has_ascension_perk = mjarchitect_ap_architectofruin
+	}
+
+	immediate = {
+		set_country_flag = mjarchitect_augurs_established
+	}
+
+	option = {
+		name = "mjarchitect_unlock.20.a"
+		hidden_effect = {
+			enable_faction_of_type = mjarchitect_augurs
+		}
+	}
+}
+
+# Piercing the Veil - Level 5 Crisis Reached
+country_event = {
+	id = mjarchitect_unlock.25
+	is_triggered_only = yes
+	title = "mjarchitect_unlock.25.name"
+	desc = "mjarchitect_unlock.25.desc"
+	picture = GFX_evt_cosmic_storms_gravity_storm
+	
+	trigger = {
+		mjarchitect_is_crisis = yes
+	}
+
+	immediate = {
+	}
+
+	after = {
+		mjarchitect_satisfaction_reward_effect_static = {
+			SATISFACTION_VALUE = 50
+		}
+	}
+
+	option = {
+		name = "mjarchitect_unlock.25.a" # Follow the Architect
+		custom_tooltip = mjarchitect_path_1
+		set_country_flag = mjarchitect_path_1_selected
+		start_situation = {
+			type = mjarchitect_summon_architect_crisis_empire
+			target = root
+		}
+		hidden_effect = {
+			every_playable_country = {
+				limit = {
+					NOT = { is_same_value = root }
+				}
+				start_situation = {
+					type = mjarchitect_summon_architect_default
+					target = root
+				}
+			}
+			declare_crisis_effect = yes
+		}
+	}
+	option = {
+		name = "mjarchitect_unlock.25.b" # Usurping the Architect
+		custom_tooltip = mjarchitect_path_2
+		set_country_flag = mjarchitect_path_2_selected
+		start_situation = {
+			type = mjarchitect_summon_architect_crisis_empire
+			target = root
+		}
+		event_target:mjarchitect_great_host_star = {
+			enable_special_project = {
+				name = MJARCHITECT_USURPING_THE_ARCHITECT
+				location = this
+			}
+		}
+		hidden_effect = {
+			every_playable_country = {
+				limit = {
+					NOT = { is_same_value = root }
+				}
+				start_situation = {
+					type = mjarchitect_summon_architect_default
+					target = root
+				}
+			}
+			declare_crisis_effect = yes
+		}
+	}
+	# option = {
+	# 	name = "mjarchitect_unlock.25.c" # Slaying the Architect
+	# 	custom_tooltip = mjarchitect_path_3
+	# 	set_country_flag = mjarchitect_path_3_selected
+	# 	start_situation = {
+	# 		type = mjarchitect_summon_architect_crisis_empire
+	# 		target = root
+	# 	}
+	# 	event_target:mjarchitect_great_host_star = {
+	# 		enable_special_project = {
+	# 			name = MJARCHITECT_SLAYING_THE_ARCHITECT
+	# 			location = this
+	# 		}
+	# 	}
+	# 	hidden_effect = {
+	# 		every_playable_country = {
+	# 			limit = {
+	# 				NOT = { is_same_value = root }
+	# 			}
+	# 			start_situation = {
+	# 				type = mjarchitect_summon_architect_default
+	# 				target = root
+	# 			}
+	# 			country_event = {
+	# 				id = mjarchitect_end.160
+	# 				days = 5
+	# 			}
+	# 		}
+	# 	}
+	# }
+}
+
+# # Declared a Crisis
+# country_event = {
+# 	id = mjarchitect_unlock.30
+# 	is_triggered_only = yes
+# 	title = "mjarchitect_unlock.30.name"
+# 	desc = "mjarchitect_unlock.30.desc"
+# 	picture = GFX_evt_crisis_declared
+	
+# 	trigger = {
+# 	}
+
+# 	immediate = {
+# 		if = {
+# 			limit = { has_galactic_custodian = yes }
+# 			random_playable_country = {
+# 				limit = { is_galactic_custodian = yes }
+# 				save_event_target_as = community_war_leader
+# 				declare_war = {
+# 					target = event_target:mjarchitect_crisis_empire
+# 					name = {
+# 						key = "NAME_Declared_Crisis_War"
+# 						variable_string = "[This.MainDefender.GetAdj]"
+# 					}
+# 					attacker_war_goal = "wg_declared_crisis"
+# 				}
+# 			}
+# 			every_playable_country = {
+# 				limit = {
+# 					is_galactic_custodian = no
+# 					is_galactic_community_member = yes
+# 				}
+# 				join_war = event_target:community_war_leader # Should use different effect to ensure they only join the correct war
+# 			}
+# 		}
+# 		else = {
+# 			random_playable_country = {
+# 				limit = {
+# 					is_galactic_community_member = yes
+# 					galactic_community_rank = 1
+# 				}
+# 				save_event_target_as = community_war_leader
+# 				declare_war = {
+# 					target = event_target:mjarchitect_crisis_empire
+# 					name = {
+# 						key = "NAME_Declared_Crisis_War"
+# 						variable_string = "[This.MainDefender.GetAdj]"
+# 					}
+# 					attacker_war_goal = "wg_declared_crisis"
+# 				}
+# 				every_playable_country = {
+# 					limit = {
+# 						is_galactic_community_member = yes
+# 						NOT = { is_same_value = event_target:community_war_leader }
+# 					}
+# 					join_war = event_target:community_war_leader # Should use different	 effect to ensure they only join the correct war
+# 				}
+# 			}
+# 		}
+# 	}
+
+# 	option = {
+# 		name = "mjarchitect_unlock.30.a"
+# 		trigger = {
+# 			has_country_flag = mjarchitect_chosen_of_the_architect
+# 		}
+# 	}
+# 	option = {
+# 		name = "mjarchitect_unlock.30.b"
+# 		trigger = {
+# 			NOT = { has_country_flag = mjarchitect_chosen_of_the_architect }
+# 		}
+# 	}
+# }
+
+# Level 2 Crisis Reached - Situation to Locate the Host
+country_event = {
+	id = mjarchitect_unlock.35
+	title = "mjarchitect_unlock.35.name"
+	desc = "mjarchitect_unlock.35.desc"
+	picture = GFX_evt_astral_rift_microverse
+	show_sound = event_death_cult
+
+	is_triggered_only = yes
+
+	immediate = {
+	}
+
+	option = {
+		name = mjarchitect_unlock.35.a
+		start_situation = {
+			type = mjarchitect_locate_great_host
+			target = root
+		}
+		custom_tooltip = new_crisis_perks_tt
+	}
+}
+
+# Great Host Located
+country_event = {
+	id = mjarchitect_unlock.45
+	title = "mjarchitect_unlock.45.name"
+	desc = "mjarchitect_unlock.45.desc"
+	picture = GFX_evt_astral_rift_microverse
+	show_sound = event_death_cult
+	location = event_target:mjarchitect_great_host
+
+	is_triggered_only = yes
+
+	after = {
+		mjarchitect_satisfaction_reward_effect_static = {
+			SATISFACTION_VALUE = 50
+		}
+	}
+
+	immediate = {
+		random_system_within_border = {
+			save_event_target_as = mjarchitect_host_spawn_system
+		}
+		event_target:mjarchitect_host_spawn_system = {
+			spawn_system = {
+				min_distance = 10
+				max_distance = 30
+				max_jumps = 0
+				initializer = "mjarchitect_great_host_system"
+				is_discovered = yes
+			}
+			last_created_system = {
+				save_event_target_as = mjarchitect_great_host
+			}
+			if = {
+				limit = { last_created_system = { NOT = { has_hyperlane_to = prev } } }
+					add_hyperlane = {
+						from = this
+						to = last_created_system
+					}
+				}
+			else = {
+				add_extra_hyperlane_to_spawned_system_effect = yes
+			}
+		}
+	}
+
+	option = {
+		name = mjarchitect_unlock.45.a
+		set_country_flag = mjarchitect_great_host_located
+		create_point_of_interest = {
+			id = mjarchitect_great_host
+			name = "mjarchitect_great_host_poi"
+			desc = "mjarchitect_great_host_poi_desc"
+			event_chain = mjarchitect_chain
+			location = event_target:mjarchitect_great_host
+		}
+	}
+}
+
+# Level 4 Crisis Reached - Situation to Repair the Host
+country_event = {
+	id = mjarchitect_unlock.55
+	title = "mjarchitect_unlock.55.name"
+	desc = "mjarchitect_unlock.55.desc"
+	picture = GFX_evt_cosmic_storms_magnetic_storm
+	show_sound = event_death_cult
+
+	is_triggered_only = yes
+
+	immediate = {
+	}
+
+	option = {
+		name = mjarchitect_unlock.55.a
+		start_situation = {
+			type = mjarchitect_repair_great_host
+			target = root
+		}
+		custom_tooltip = new_crisis_perks_tt
+	}
+}
+
+# On stage 2 enter, repairing the host
+situation_event = { 
+	id = mjarchitect_unlock.60
+	title = "mjarchitect_unlock.60.name"
+	desc = "mjarchitect_unlock.60.desc"
+	picture = GFX_evt_cosmic_storms_electric_storm
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = "mjarchitect_unlock.60.a"
+	}
+}
+
+# On stage 3 enter, repairing the host
+situation_event = { 
+	id = mjarchitect_unlock.65
+	title = "mjarchitect_unlock.65.name"
+	desc = "mjarchitect_unlock.65.desc"
+	picture = GFX_evt_cosmic_storms_calibration
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = "mjarchitect_unlock.65.a"
+	}
+}
+
+# Great Host Restored
+country_event = {
+	id = mjarchitect_unlock.70
+	title = "mjarchitect_unlock.70.name"
+	desc = "mjarchitect_unlock.70.desc"
+	picture = GFX_evt_cosmic_storms_fleets_of_the_thrice_damned
+	show_sound = event_death_cult
+	location = event_target:mjarchitect_great_host
+
+	is_triggered_only = yes
+
+	after = {
+		mjarchitect_satisfaction_reward_effect_static = {
+			SATISFACTION_VALUE = 50
+		}
+	}
+
+	immediate = {
+		random_megastructure = {
+			limit = {
+				is_megastructure_type = mjarchitect_great_host_ruined
+			}
+			save_event_target_as = mjarchitect_great_host
+
+			solar_system = {
+				spawn_megastructure = {
+					type = mjarchitect_great_host
+					coords_from = prev
+					init_effect = {
+						set_megastructure_flag = mjarchitect_great_host_structure
+					}
+				}
+			}
+			remove_megastructure = this
+		}
+	}
+
+	option = {
+		name = mjarchitect_unlock.70.a
+		set_country_flag = mjarchitect_great_host_restored
+	}
+}

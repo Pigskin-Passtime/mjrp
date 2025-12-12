@@ -1,0 +1,676 @@
+##########################################
+## Architect of Ruin - Interface Events
+## By MadeinCanada
+##########################################
+
+namespace = mjarchitect_ui
+
+## MAIN UI ##
+
+# Trigger AOR UI
+country_event = {
+	id = mjarchitect_ui.0
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+		NOT = {
+			has_country_flag = mjarchitect_ui_opened
+		}
+		from = {
+			is_country_type = mjarchitect_entity_country
+		}
+	}
+
+	immediate = {
+		set_country_flag = mjarchitect_ui_opened
+		if = {
+			limit = {
+				has_country_flag = mjarchitect_initial_chain_complete
+			}
+			country_event = {
+				id = mjarchitect_ui.100 # Check all values
+			}
+			country_event = {
+				id = mjarchitect_ui.1
+				scopes = {
+					from = root
+				}
+			}
+		}
+		else = {
+			country_event = {
+				id = mjarchitect_ui.2
+			}
+		}
+	}
+}
+
+# Main AOR UI
+country_event = {
+	id = mjarchitect_ui.1
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "mjarchitect_interface_window"
+	picture_event_data = {
+		# portrait = event_target:mjarchitect_entity@root
+		# planet_background = pc_habitat
+		# room = machine_room
+		portrait = shroud1
+		room = cosmic_storm_room
+    }
+
+	title = mjarchitect_ui.1.title
+	desc = mjarchitect_ui.1.desc
+	
+	trigger = {
+	}
+
+	immediate = {
+	}
+
+	after = {
+		remove_country_flag = mjarchitect_ui_opened
+	}
+
+	option = {
+		name = OK
+	}
+}
+
+# AOR UI - Other Empires
+country_event = {
+	id = mjarchitect_ui.2
+	is_triggered_only = yes
+	diplomatic = yes
+	picture_event_data = {
+		# portrait = event_target:mjarchitect_entity@root
+		# planet_background = pc_habitat
+		# room = machine_room
+		portrait = shroud1
+		room = cosmic_storm_room
+    }
+	custom_gui = "enclave_artist_window"
+	custom_gui_option = "enclave_artist_option"
+
+	title = mjarchitect_ui.2.title
+	desc = mjarchitect_ui.2.desc
+	
+	trigger = {
+	}
+
+	immediate = {
+	}
+
+	after = {
+		remove_country_flag = mjarchitect_ui_opened
+	}
+
+	option = {
+		name = "mjarchitect_ui.2.a"
+	}
+}
+
+# List of Boons UI
+country_event = {
+	id = mjarchitect_ui.5
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "mjarchitect_boons_window"
+	picture_event_data = {
+		portrait = root
+		room = root
+    }
+
+	title = mjarchitect_ui.5.title
+	desc = mjarchitect_ui.5.desc
+	
+	trigger = {
+	}
+
+	immediate = {
+	}
+
+	after = {
+		remove_country_flag = mjarchitect_boons_list_displayed
+	}
+
+	option = {
+		name = "mjarchitect_ui.5.cancel"
+		custom_gui = "mjarchitect_boons_window_option"
+		
+	}
+	option = {
+		name = "mjarchitect_ui.5.a"
+		custom_gui = "mjarchitect_boons_window_option"
+		allow = {
+			NOT = { has_country_flag = mjarchitect_boon_1_active }
+		}
+		hidden_effect = {
+			mjarchitect_boon_select_effect = {
+				NUM = 1
+				TIME = 1800
+			}
+			country_event = {
+				id = mjarchitect.15
+				days = 1800
+			}
+		}
+		custom_tooltip = mjarchitect_boon_1_tt
+	}
+	option = {
+		name = "mjarchitect_ui.5.b"
+		custom_gui = "mjarchitect_boons_window_option"
+		allow = {
+			NOT = { has_country_flag = mjarchitect_boon_2_active }
+		}
+		hidden_effect = {
+			mjarchitect_boon_select_effect = {
+				NUM = 2
+				TIME = 1800
+			}
+			country_event = {
+				id = mjarchitect.15
+				days = 1800
+			}
+		}
+		custom_tooltip = mjarchitect_boon_2_tt
+	}
+	option = {
+		name = "mjarchitect_ui.5.c"
+		custom_gui = "mjarchitect_boons_window_option"
+		allow = {
+			NOT = { has_country_flag = mjarchitect_boon_3_active }
+		}
+		hidden_effect = {
+			mjarchitect_boon_select_effect = {
+				NUM = 3
+				TIME = 1800
+			}
+			country_event = {
+				id = mjarchitect.15
+				days = 1800
+			}
+		}
+		custom_tooltip = mjarchitect_boon_3_tt
+	}
+	option = {
+		name = "mjarchitect_ui.5.d"
+		custom_gui = "mjarchitect_boons_window_option"
+		allow = {
+			NOT = { has_country_flag = mjarchitect_boon_4_active }
+		}
+		hidden_effect = {
+			mjarchitect_boon_select_effect = {
+				NUM = 4
+				TIME = 1800
+			}
+			country_event = {
+				id = mjarchitect.15
+				days = 1800
+			}
+		}
+		custom_tooltip = mjarchitect_boon_4_tt
+	}
+	option = {
+		name = "mjarchitect_ui.5.e"
+		custom_gui = "mjarchitect_boons_window_option"
+		allow = {
+			NOT = { has_country_flag = mjarchitect_boon_5_active }
+		}
+		hidden_effect = {
+			mjarchitect_boon_select_effect = {
+				NUM = 5
+				TIME = 1800
+			}
+			country_event = {
+				id = mjarchitect.15
+				days = 1800
+			}
+		}
+		custom_tooltip = mjarchitect_boon_5_tt
+	}
+	option = {
+		name = "mjarchitect_ui.5.f"
+		custom_gui = "mjarchitect_boons_window_option"
+		allow = {
+			NOT = { has_country_flag = mjarchitect_boon_6_active }
+		}
+		hidden_effect = {
+			mjarchitect_boon_select_effect = {
+				NUM = 6
+				TIME = 1800
+			}
+			country_event = {
+				id = mjarchitect.15
+				days = 1800
+			}
+		}
+		custom_tooltip = mjarchitect_boon_6_tt
+	}
+	option = {
+		name = "mjarchitect_ui.5.g"
+		custom_gui = "mjarchitect_boons_window_option"
+		allow = {
+			NOT = { has_country_flag = mjarchitect_boon_7_active }
+		}
+		hidden_effect = {
+			mjarchitect_boon_select_effect = {
+				NUM = 7
+				TIME = 1800
+			}
+			country_event = {
+				id = mjarchitect.15
+				days = 1800
+			}
+		}
+		custom_tooltip = mjarchitect_boon_7_tt
+	}
+	option = {
+		name = "mjarchitect_ui.5.h"
+		custom_gui = "mjarchitect_boons_window_option"
+		allow = {
+			custom_tooltip = {
+				fail_text = MJARCHITECT_BOON_SATIS_REQ
+				NOT = {
+					has_country_flag = mjarchitect_boon_9_active
+				}
+				check_variable = {
+					which = mjarchitect_satisfaction
+					value >= 268
+				}
+			}
+		}
+		hidden_effect = {
+			mjarchitect_boon_select_effect = {
+				NUM = 8
+				TIME = 1800
+			}
+			country_event = {
+				id = mjarchitect.15
+				days = 1800
+			}
+		}
+		custom_tooltip = mjarchitect_boon_8_tt
+	}
+	option = {
+		name = "mjarchitect_ui.5.i"
+		custom_gui = "mjarchitect_boons_window_option"
+		allow = {
+			custom_tooltip = {
+				fail_text = MJARCHITECT_BOON_SATIS_REQ
+				NOT = {
+					has_country_flag = mjarchitect_boon_9_active
+				}
+				check_variable = {
+					which = mjarchitect_satisfaction
+					value >= 268
+				}
+			}
+		}
+		hidden_effect = {
+			mjarchitect_boon_select_effect = {
+				NUM = 9
+				TIME = 1800
+			}
+			country_event = {
+				id = mjarchitect.15
+				days = 1800
+			}
+		}
+		custom_tooltip = mjarchitect_boon_9_tt
+	}
+}
+
+## GUI-RELATED EVENTS ##
+
+# Check values before main UI opens
+country_event = {
+	id = mjarchitect_ui.100
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+	}
+
+	immediate = {
+		mjarchitect_check_satisfaction = yes
+	}
+}
+
+# Monthly value updates
+event = {
+	id = mjarchitect_ui.105
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+		any_playable_country = {
+			has_country_flag = mjarchitect_initial_chain_complete
+		}
+	}
+
+	immediate = {
+		every_playable_country = {
+			limit = {
+				has_country_flag = mjarchitect_initial_chain_complete
+			}
+
+			subtract_variable = {
+				which = mjarchitect_satisfaction_display
+				value = mjarchitect_satisfaction_decay
+			}
+			subtract_variable = {
+				which = mjarchitect_satisfaction
+				value = mjarchitect_satisfaction_decay
+			}
+
+			mjarchitect_check_satisfaction = yes
+		}
+	}
+}
+
+# GATEKEEPER - Check Architect's Requests
+country_event = {
+	id = mjarchitect_ui.110
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+		has_country_flag = mjarchitect_initial_chain_complete
+	}
+
+	immediate = {
+		# Set new request if none already active
+		if = {
+			limit = {
+				NOT = { mjarchitect_any_request_active = yes }
+			}
+			mjarchitect_set_new_request = yes
+		}
+		else = {
+			# Check values
+			mjarchitect_check_request_progress = yes
+			# If request exists and target met, trigger success event
+			if = {
+				limit = {
+					check_variable = {
+						which = mjarchitect_request_current_num
+						value >= mjarchitect_request_target_num
+					}
+				}
+				country_event = {
+					id = mjarchitect_ui.115
+				}
+				country_event = {
+					id = mjarchitect_ui.110
+					days = 60
+					random = 30
+				}
+			}
+			# Otherwise trigger fail event
+			else = {
+				country_event = {
+					id = mjarchitect_ui.120
+				}
+				country_event = {
+					id = mjarchitect_ui.110
+					days = 60
+					random = 30
+				}
+			}
+		}
+	}
+}
+
+# Request Period Over - SUCCESS
+country_event = {
+	id = mjarchitect_ui.115
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_artist_window"
+	picture_event_data = {
+		portrait = shroud1
+		room = cosmic_storm_room
+    }
+
+	title = mjarchitect_unlock.10.name
+	desc = mjarchitect_ui.115.desc
+	
+	trigger = {
+		NOR = {
+			has_country_flag = mjarchitect_request_active
+			has_country_flag = mjarchitect_interactions_blocked
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			mjarchitect_satisfaction_reward_effect_static = {
+				SATISFACTION_VALUE = 10
+			}
+		}
+	}
+
+	immediate = {
+		set_timed_country_flag = {
+			flag = mjarchitect_recently_completed_request
+			years = 5
+		}
+		if = {
+			limit = { has_country_flag = mjarchitect_blessing_5_unlocked }
+			change_variable = {
+				which = mjarchitect_blessing8_requests_counter
+				value = 1
+			}
+			remove_modifier = mjarchitect_blessing_request_boon
+			add_modifier = {
+				modifier = mjarchitect_blessing_request_boon
+				multiplier = mjarchitect_blessing8_requests_counter
+			}
+		}
+		else = {}
+
+		mjarchitect_clear_reward_flags = yes
+		if = {
+			limit = {
+				has_country_flag = mjarchitect_blessing_6_unlocked 
+			}
+			while = {
+				count = 3
+				mjarchitect_generate_reward_options = yes
+			}
+		}
+		else = {
+			while = {
+				count = 2
+				mjarchitect_generate_reward_options = yes
+			}
+		}
+	}
+
+	inline_script = {
+		script = mjarchitect/mjarchitect_reward_options
+	}
+}
+
+# Reward from random on_monthly
+country_event = {
+	id = mjarchitect_ui.116
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_artist_window"
+	picture_event_data = {
+		portrait = shroud1
+		room = cosmic_storm_room
+    }
+
+	title = mjarchitect_unlock.10.name
+	desc = mjarchitect_ui.116.desc
+	
+	trigger = {
+		NOT = { has_country_flag = mjarchitect_interactions_blocked }
+	}
+
+	after = {
+	}
+
+	immediate = {
+		mjarchitect_clear_reward_flags = yes
+		if = {
+			limit = {
+				has_country_flag = mjarchitect_blessing_6_unlocked 
+			}
+			while = {
+				count = 3
+				mjarchitect_generate_reward_options = yes
+			}
+		}
+		else = {
+			while = {
+				count = 2
+				mjarchitect_generate_reward_options = yes
+			}
+		}
+
+		set_timed_country_flag = {
+			flag = mjarchitect_monthly_gift_cooldown
+			days = 360
+		}
+	}
+
+	inline_script = {
+		script = mjarchitect/mjarchitect_reward_options
+	}			
+}
+
+# Request Period Over - FAILURE
+country_event = {
+	id = mjarchitect_ui.120
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_artist_window"
+	picture_event_data = {
+		portrait = shroud1
+		room = cosmic_storm_room
+    }
+
+	title = mjarchitect_unlock.10.name
+	desc = mjarchitect_ui.120.desc
+	
+	trigger = {
+		NOR = {
+			has_country_flag = mjarchitect_request_active
+			has_country_flag = mjarchitect_interactions_blocked
+		}
+	}
+
+	immediate = {
+		mjarchitect_clear_punishment_flags = yes
+		mjarchitect_generate_punishment = yes
+	}
+	
+	after = {
+		if = {
+			limit = { NOT = { has_country_flag = mjarchitect_blessing_10_unlocked } }
+			custom_tooltip = mjarchitect_ui.120.after.tt
+			hidden_effect = {
+				mjarchitect_satisfaction_reward_effect_static_hidden = {
+					SATISFACTION_VALUE = -10
+				}
+			}
+		}
+		else = {}
+	}
+
+	inline_script = {
+		script = mjarchitect/mjarchitect_punishment_options
+	}	
+}
+
+# Punishment from random on_monthly
+country_event = {
+	id = mjarchitect_ui.121
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_artist_window"
+	picture_event_data = {
+		portrait = shroud1
+		room = cosmic_storm_room
+    }
+
+	title = mjarchitect_unlock.10.name
+	desc = mjarchitect_ui.121.desc
+	
+	trigger = {
+		NOT = { has_country_flag = mjarchitect_interactions_blocked }
+	}
+
+	immediate = {
+		mjarchitect_clear_punishment_flags = yes
+		mjarchitect_generate_punishment = yes
+
+		set_timed_country_flag = {
+			flag = mjarchitect_monthly_gift_cooldown
+			days = 360
+		}
+	}
+
+	inline_script = {
+		script = mjarchitect/mjarchitect_punishment_options
+	}	
+}
+
+# Trigger AOR UI - RELIC
+country_event = {
+	id = mjarchitect_ui.200
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+		NOT = {
+			has_country_flag = mjarchitect_ui_opened
+		}
+	}
+
+	immediate = {
+		set_country_flag = mjarchitect_ui_opened
+		set_country_flag = mjarchitect_relic_ui
+		country_event = {
+			id = mjarchitect_ui.205
+		}
+	}
+}
+
+# Main AOR UI - RELIC
+country_event = {
+	id = mjarchitect_ui.205
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "mjarchitect_interface_window"
+	picture_event_data = {
+		# portrait = event_target:mjarchitect_entity@root
+		# planet_background = pc_habitat
+		# room = machine_room
+		portrait = shroud1
+		room = cosmic_storm_room
+    }
+
+	title = mjarchitect_ui.1.title
+	desc = mjarchitect_ui.1.desc
+	
+	trigger = {
+	}
+
+	immediate = {
+	}
+
+	after = {
+		remove_country_flag = mjarchitect_ui_opened
+		remove_country_flag = mjarchitect_relic_ui
+	}
+
+	option = {
+		name = OK
+	}
+}

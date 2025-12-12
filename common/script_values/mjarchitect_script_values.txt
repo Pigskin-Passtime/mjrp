@@ -1,0 +1,62 @@
+
+mjarchitect_local_pops_conduit_effect = {
+	base = 2000
+	complex_trigger_modifier = {
+		trigger = count_owned_pop_amount
+		trigger_scope = planet
+		mode = add
+	}
+	divide = 2000
+	floor = yes
+}
+
+mjarchitect_local_pops_sacrifice_cost_mult = {
+	complex_trigger_modifier = {
+		trigger = count_owned_pop_amount
+		trigger_scope = planet
+		mode = add
+	}
+	divide = 100
+	floor = yes
+}
+
+mjarchitect_sacrifice_penalty_length_mult = {
+	base = 4
+	add = mjarchitect_recent_sacrifices_local
+}
+
+mjarchitect_num_conduits = {
+    complex_trigger_modifier = {
+        trigger = num_pops_with_job_tag
+		trigger_scope = country
+        parameters = {
+			tags = { mjarchitect_crisis }
+		}
+        mode = add
+    }
+}
+
+mjarchitect_num_ruin_pops = {
+	complex_trigger_modifier = {
+		trigger = count_owned_pop_amount
+		parameters = {
+			limit = {
+				has_trait = trait_mjarchitect_conduit_of_ruin
+			}
+		}
+		mode = add
+	}
+	divide = 100
+	floor = yes
+}
+
+mjarchitect_cognitive_matter_income = {
+	complex_trigger_modifier = {
+		trigger = resource_revenue_compare
+		parameters = {
+			resource = mjarchitect_cognitive_matter
+		}
+		mode = add
+	}
+	divide = 100
+}

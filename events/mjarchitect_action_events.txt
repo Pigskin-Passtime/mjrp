@@ -1,0 +1,851 @@
+##########################################
+## Architect of Ruin - Action Events
+## By MadeinCanada
+##########################################
+
+namespace = mjarchitect
+
+# When building Beacon of the Veil - re-set system ownership
+system_event = {
+	id = mjarchitect.0
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		every_fleet_in_system = {
+			limit = {
+				OR = {
+					is_ship_class = shipclass_starbase
+					is_ship_class = shipclass_mining_station
+					is_ship_class = shipclass_research_station
+					is_ship_class = shipclass_military_station
+				}
+				is_owned_by = event_target:mjarchitect_entity_country
+			}
+			set_owner = event_target:mjarchitect_system_owner
+		}
+	}
+}
+
+# When building Beacon of the Veil - remove starbase 
+system_event = {
+	id = mjarchitect.1
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		every_fleet_in_system = {
+			limit = {
+				is_ship_class = shipclass_starbase
+				is_owned_by = event_target:mjarchitect_entity_country
+			}
+			delete_fleet = this
+		}
+	}
+}
+
+# Triggered by sacrifice - occurs every 5 years to reduce mjarchitect_recent_sacrifices_local by 1
+# to represent the sacrifices' impact lessening
+planet_event = {
+	id = mjarchitect.2
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				check_variable = {
+					which = mjarchitect_recent_sacrifices_local
+					value > 0
+				}
+			}
+			subtract_variable = {
+				which = mjarchitect_recent_sacrifices_local
+				value = 1
+			}
+			planet_event = {
+				id = mjarchitect.2
+				days = 1800
+			}
+		}
+		else = {
+			remove_planet_flag = mjarchitect_sacrifice_tally_loop_ongoing
+		}
+	}
+}
+
+# When activating a Dimensional Piercer - create temporary miasma
+# Fired from 'on_mjarchitect_piercer_activated'
+planet_event = {
+	id = mjarchitect.3
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		from.owner = {
+			mjarchitect_is_crisis = yes
+		}
+	}
+
+	immediate = {
+		save_event_target_as = mjarchitect_piercer_target
+		solar_system = {
+			set_timed_star_flag = {
+				flag = mjarchitect_beacon_afflicted_system_piercer
+				days = 3600
+			}
+		}
+		from.owner = {
+			country_event = {
+				id = mjarchitect.13
+				days = 3601
+			}
+			subtract_variable = {
+				which = mjarchitect_num_piercers
+				value = 1
+			}
+			add_resource = {
+                mjarchitect_cognitive_matter = -750
+            }
+			owner = {
+				mjarchitect_satisfaction_reward_effect_static = {
+					SATISFACTION_VALUE = 40
+				}
+				complete_crisis_objective = mjarchitect_crisobj_beacons
+			}
+		}
+		from = {
+			if = {
+				limit = {
+					from.owner = { has_country_flag = mjarchitect_blessing_4_unlocked }
+				}
+				mjarchitect_veil_cloud_map_effect = {
+					RADIUS = 150
+					MODIFIER = mjarchitect_veiled_system
+				}
+			}
+			else = {
+				mjarchitect_veil_cloud_map_effect = {
+					RADIUS = 75
+					MODIFIER = mjarchitect_veiled_system_piercer
+				}
+			}
+
+			create_ambient_object = {
+					type = "star_explosion"
+					play_animation_once = yes
+					location = this
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 0
+					angle = random
+				}
+			}
+			delete_fleet = this
+		}
+	}
+}
+
+# On war won - increase tally for Architect
+country_event = {
+	id = mjarchitect.4
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		change_variable = {
+			which = mjarchitect_wars_won_new
+			value = 1
+		}
+	}
+}
+
+# Beacon of the Veil Captured
+country_event = {
+	id = mjarchitect.5
+	title = mjarchitect.5.name
+	desc = mjarchitect.5.desc
+	show_sound = event_super_explosion
+	picture = GFX_evt_cosmic_storms_shroud_storm
+	location = from
+
+	trigger = {
+		from = { is_megastructure_type = mjarchitect_celestial_beacon }
+		this = {
+			NOT = {
+				is_country_type = mjarchitect_entity_country
+			}
+		}
+	}
+
+	abort_trigger = {
+		OR = {
+			NOT = { exists = from }
+			NOT = { exists = from.owner }
+			from.owner = { NOT = { is_same_value = root } }
+		}
+	}
+
+	is_triggered_only = yes
+
+	immediate = {
+	}
+
+	# Destroy It
+	option = {
+		name = mjarchitect.5.a
+
+		if = {
+			limit = {
+				mjarchitect_is_crisis = yes
+			}
+			add_resource = {
+				mjarchitect_cognitive_matter = 1000
+				alloys = 5000
+			}
+		}
+		else = {
+			add_resource = {
+				influence = 200
+				alloys = 5000
+			}
+		}
+		# custom_tooltip = aetherophasic_engine_ruined_tt
+
+		hidden_effect = {
+			from = {
+				solar_system = {
+					spawn_megastructure = {
+						type = mjarchitect_celestial_beacon_ruined
+						coords_from = prev
+					}
+					random_system_ambient_object = {
+						limit = {
+							has_ambient_object_flag = mjarchitect_veil_beacon_effect
+						}
+						destroy_ambient_object = this
+					}
+					remove_star_flag = mjarchitect_beacon_system
+				}
+				remove_megastructure = this
+			}
+			if = {
+				limit = { exists = fromfrom }
+				fromfrom = { country_event = { id = mjarchitect.6 } }
+			}
+			if = {
+				limit = {
+					fromfrom.owner = { has_country_flag = mjarchitect_blessing_4_unlocked }
+				}
+				mjarchitect_check_miasma = {
+					RADIUS = 150
+				}
+			}
+			else = {
+				mjarchitect_check_miasma = {
+					RADIUS = 75
+				}
+			}
+		}
+
+		ai_chance = {
+			factor = 10
+		}
+	}
+
+	# Keep it [if crisis]
+	option = {
+		name = mjarchitect.5.b
+
+		trigger = {
+			mjarchitect_is_crisis = yes
+		}
+		mjarchitect_satisfaction_reward_effect_static = {
+			SATISFACTION_VALUE = 40
+		}
+		complete_crisis_objective = mjarchitect_crisobj_beacons
+		from.solar_system.starbase = {
+			set_owner = event_target:mjarchitect_entity_country
+		}
+
+		ai_chance = {
+			factor = 1000
+		}
+	}
+}
+
+# Our Beacon has been taken!
+country_event = {
+	id = mjarchitect.6
+	is_triggered_only = yes
+	title = "mjarchitect.6.name"
+	desc = "mjarchitect.6.desc"
+	picture = GFX_evt_cosmic_storms_shroud_storm
+	show_sound = event_activating_unknown_technology
+	
+	trigger = {
+	}
+
+	immediate = {
+		subtract_variable = {
+			which = mjarchitect_num_beacons
+			value = 1
+		}
+	}
+
+	option = {
+		name = "mjarchitect.6.a"
+		custom_tooltip = mjarchitect.6.tt
+		hidden_effect = {
+			mjarchitect_satisfaction_reward_effect_static = {
+				SATISFACTION_VALUE = -10
+			}
+		}
+	}
+}
+
+# Beacon is affecting our systems
+country_event = {
+	id = mjarchitect.7
+	is_triggered_only = yes
+	title = "mjarchitect.7.name"
+	desc = "mjarchitect.7.desc"
+	picture = GFX_evt_cosmic_storms_shroud_storm
+	show_sound = event_activating_unknown_technology
+	location = event_target:mjarchitect_beacon_afflicted_system
+	
+	trigger = {
+		NOR = {
+			has_country_flag = mjarchitect_recently_informed_of_beacon
+			mjarchitect_is_crisis = yes
+		}
+	}
+
+	immediate = {
+		set_timed_country_flag = {
+			flag = mjarchitect_recently_informed_of_beacon
+			days = 30
+		}
+	}
+
+	option = {
+		name = "mjarchitect.7.a"
+	}
+}
+
+# Selecting new tradition - update blessing 2 modifier
+country_event = {
+	id = mjarchitect.8
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_flag = mjarchitect_blessing_2_unlocked
+	}
+
+	immediate = {
+		remove_modifier = mjarchitect_blessing_tradition_boon
+		add_modifier = {
+			modifier = mjarchitect_blessing_tradition_boon
+			multiplier = trigger:num_tradition_categories
+		}
+	}
+}
+
+# On new tech researched - gain CM as per blessing
+country_event = {
+	id = mjarchitect.9
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_country_flag = mjarchitect_blessing_7_unlocked
+	}
+	
+	immediate = {
+		add_resource = {
+			mjarchitect_cognitive_matter = 100
+		}
+	}
+}
+
+# On opinion boon ends; penalty given
+country_event = {
+	id = mjarchitect.10
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		every_country = {
+			add_opinion_modifier = {
+				modifier = opinion_mjarchitect_reward_12_penalty
+				who = root
+			}
+		}
+	}
+}
+
+# Punishment end - remove storm
+system_event = {
+	id = mjarchitect.11
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		every_ambient_object = {
+			limit = { has_ambient_object_flag = mjarchitect_storm_bad_effect }
+			destroy_ambient_object = this
+		}
+	}
+}
+
+# Yearly check for random reward/punishment
+event = {
+	id = mjarchitect.12
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		any_country = {
+			mjarchitect_is_crisis = yes
+			has_country_flag = mjarchitect_initial_chain_complete
+		}
+	}
+	
+	immediate = {
+		every_playable_country = {
+			if = {
+				limit = {
+					mjarchitect_is_crisis = yes
+				}
+				random_list = {
+					75 = {}
+					15 = {
+						country_event = {
+							id = mjarchitect_ui.116
+						}
+						modifier = {
+							factor = 0
+							OR = {
+								NOT = {
+									check_variable = {
+										which = mjarchitect_satisfaction
+										value >= 168
+									}
+								}
+								has_country_flag = mjarchitect_monthly_gift_cooldown
+							}
+						}
+						modifier = {
+							factor = 1.5
+							check_variable = {
+								which = mjarchitect_satisfaction
+								value >= 218
+							}
+						}
+						modifier = {
+							factor = 1.75
+							check_variable = {
+								which = mjarchitect_satisfaction
+								value >= 268
+							}
+						}
+					}
+					15 = {
+						country_event = {
+							id = mjarchitect_ui.121
+						}
+						modifier = {
+							factor = 0
+							OR = {
+								NOT = {
+									check_variable = {
+										which = mjarchitect_satisfaction
+										value <= 130
+									}
+								}
+								has_country_flag = mjarchitect_monthly_gift_cooldown
+							}
+						}
+						modifier = {
+							factor = 2
+							check_variable = {
+								which = mjarchitect_satisfaction
+								value <= 80
+							}
+						}
+						modifier = {
+							factor = 1.5
+							check_variable = {
+								which = mjarchitect_satisfaction
+								value <= 30
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# On piercer miasma ends
+country_event = {
+	id = mjarchitect.13
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		if = {
+				limit = {
+					has_country_flag = mjarchitect_blessing_4_unlocked
+				}
+				mjarchitect_check_miasma = {
+					RADIUS = 150
+				}
+			}
+			else = {
+				mjarchitect_check_miasma = {
+					RADIUS = 75
+				}
+			}
+		create_message = {
+					type = MESSAGE_MJARCHITECT_MIASMA_SUBSIDED
+					localization = MESSAGE_MJARCHITECT_MIASMA_SUBSIDED
+					days = 60
+					target = event_target:mjarchitect_piercer_target
+					variable = {
+						type = name
+						localization = STAR
+						scope = event_target:mjarchitect_piercer_target
+					}
+		}
+	}
+}
+
+# Using Shredder PK
+planet_event = {
+	id = mjarchitect.14
+	hide_window = yes
+	is_triggered_only = yes
+
+	# This/Root = planet that have been fired upon
+	# From = fleet that fired
+
+	trigger = {
+		from.owner = { mjarchitect_is_crisis = yes }
+	}
+
+	immediate = {
+		# Find number of Pops changed
+			set_variable = {
+				which = mjarchitect_num_pops_affected
+				value = trigger:pop_amount
+			}
+			divide_variable = {
+				which = mjarchitect_num_pops_affected
+				value = 2
+			}
+		# Satisfaction reward
+		from.owner = {
+			hidden_effect = {
+				change_variable = {
+					which = mjarchitect_num_veiled_worlds_new
+					value = 1
+				}
+				complete_crisis_objective = mjarchitect_crisobj_markofruin
+			}
+			mjarchitect_satisfaction_reward_effect = {
+				SATISFACTION_VALUE = 0.1
+				SATISFACTION_MULT = root.mjarchitect_num_pops_affected
+				SATISFACTION_CAP = 30
+			}
+		}
+		hidden_effect = {
+			change_pc = pc_mjarchitect_veiled
+			# Convert ~50% of the Pops to have the Veiled trait
+			mjarchitect_convert_percentage_pops = {
+				PERCENT = 0.50
+			}
+		}
+	}
+}
+
+# On boon ends
+country_event = {
+	id = mjarchitect.15
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		create_message = {
+					type = MESSAGE_MJARCHITECT_BOON_OVER
+					localization = MESSAGE_MJARCHITECT_BOON_OVER
+					days = 60
+		}
+	}
+}
+
+# Menace Objective - Cognitive Matter from Traits and Jobs
+# Fired from on_action 'on_monthly_pulse'
+event = {
+	id = mjarchitect.100
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_playable_country = {
+			mjarchitect_is_crisis = yes
+		}
+	}
+
+	immediate = {
+		every_playable_country = {
+			limit = {
+				mjarchitect_is_crisis = yes
+			}
+			# Traits
+			set_variable = {
+				which = mjarchitect_conduit_pops
+				value = value:mjarchitect_num_ruin_pops
+			}
+			complete_crisis_objective = mjarchitect_crisobj_conduit_pops
+			# Jobs
+			export_resource_income_to_variable = {
+				resource = mjarchitect_cognitive_matter
+				variable = mjarchitect_conduit_jobs
+			}
+			complete_crisis_objective = mjarchitect_crisobj_conduit_jobs
+			# Take away from stockpile, as resource would otherwise be gained from the job output + the above effect,
+			# so this will prevent the income from being doubled
+			add_resource = {
+				mjarchitect_cognitive_matter = -1
+				multiplier = mjarchitect_conduit_jobs
+			}
+		}
+	}
+}
+
+# Menace Objective - Have Voidthralls
+# Fired from on_action 'on_yearly_pulse'
+event = {
+	id = mjarchitect.105
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_country = {
+			mjarchitect_is_crisis = yes
+			any_subject = {
+				any_agreement = {
+					agreement_preset = preset_mjarchitect_voidthrall
+				}
+			}
+		}
+	}
+
+	immediate = {
+		every_playable_country = {
+			if = {
+				limit = {
+					mjarchitect_is_crisis = yes
+				}
+				every_subject = {
+					limit = {
+						any_agreement = {
+							agreement_preset = preset_mjarchitect_voidthrall
+						}
+					}
+					prev = {
+						country_event = {
+							id = mjarchitect.115
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Menace Objective - Purge Pops with Sacrifices
+# Fired from on_action 'on_pop_purged'
+planet_event = {
+	id = mjarchitect.110
+	hide_window = yes
+	is_triggered_only = yes
+
+	# This = Planet scope
+	# From = Country
+	# FromFrom = Pop
+
+	trigger = {
+		from = {
+			has_crisis_perk = mjarchitect_crisis_perk_4
+		}
+		fromfrom = {
+			has_purge_type = { country = from type = purge_mjarchitect_sacrifice }
+		}
+	}
+
+	immediate = {
+		while = {
+			count = value:per_100_local_pop_amount
+			from = {
+				complete_crisis_objective = mjarchitect_crisobj_shroud_purge
+				change_variable = {
+					which = mjarchitect_num_sacrificed_new
+					value = 100
+				}
+			}
+		}
+	}
+}
+
+# Sacrifices from Voidthralls
+country_event = {
+	id = mjarchitect.115
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+	}
+
+	immediate = {
+		set_variable = {
+			which = mjarchitect_pops_killed_as_tithe
+			value = 0
+		}
+		every_subject = {
+			limit = {
+				any_agreement = {
+					agreement_preset = preset_mjarchitect_voidthrall
+				}
+			}
+			export_trigger_value_to_variable = {
+				trigger = count_owned_pop_amount
+				variable = mjarchitect_pops_before_killing
+				rounded = yes
+			}
+			if = {
+				limit = {
+					root = { NOT = { has_country_flag = mjarchitect_blessing_6_unlocked } }
+				}
+				every_owned_pop_job = {
+					kill_assigned_pop_amount = {
+						percentage = 0.05
+					}
+				}
+			}
+			else = {
+				every_owned_pop_job = {
+					kill_assigned_pop_amount = {
+						percentage = 0.10
+					}
+				}
+			}
+			export_trigger_value_to_variable = {
+				trigger = count_owned_pop_amount
+				variable = mjarchitect_pops_after_killing
+				rounded = yes
+			}
+			set_variable = {
+				which = mjarchitect_num_pops_sacrificed_empirewide
+				value = mjarchitect_pops_before_killing
+			}
+			subtract_variable = {
+				which = mjarchitect_num_pops_sacrificed_empirewide
+				value = mjarchitect_pops_after_killing
+			}
+
+			change_variable = {
+				which = prev.mjarchitect_pops_killed_as_tithe
+				value = mjarchitect_num_pops_sacrificed_empirewide
+			}
+			create_message = {
+				type = MESSAGE_MJARCHITECT_TITHE_PAID_SUBJECT
+				localization = MESSAGE_MJARCHITECT_TITHE_PAID_SUBJECT
+				days = 60
+				variable = {
+					type = key
+					value = mjarchitect_num_pops_sacrificed_empirewide
+					localization = NUM_POPS
+				}
+			}
+		}
+
+		change_variable = {
+			which = mjarchitect_num_sacrificed_new
+			value = mjarchitect_pops_killed_as_tithe
+		}
+
+		# divide_variable = {
+		# 	which = mjarchitect_pops_killed_as_tithe
+		# 	value = 100
+		# }
+		mjarchitect_resource_reward_effect = {
+			COGNITIVE_MATTER_VALUE = 0.5
+			COGNITIVE_MATTER_MULT = mjarchitect_pops_killed_as_tithe
+			SATISFACTION_VALUE = 0.05
+			SATISFACTION_MULT = mjarchitect_num_pops_sacrificed
+			SATISFACTION_CAP = 40
+		}
+
+		set_variable = {
+			which = mjarchitect_num_cm_gained
+			value = 0.5
+		}
+		multiply_variable = {
+			which = mjarchitect_num_cm_gained
+			value = mjarchitect_pops_killed_as_tithe
+		}
+
+		create_message = {
+				type = MESSAGE_MJARCHITECT_TITHE_PAID_OVERLORD
+				localization = MESSAGE_MJARCHITECT_TITHE_PAID_OVERLORD
+				days = 60
+				variable = {
+					type = key
+					value = mjarchitect_num_cm_gained
+					localization = NUM_CM
+				}
+		}
+
+		complete_crisis_objective = mjarchitect_crisobj_have_shroudthralls
+		# Take away from stockpile, as resource would otherwise be gained from the job output + the above effect,
+		# so this will prevent the income from being doubled
+		add_resource = {
+			mjarchitect_cognitive_matter = -1
+			multiplier = mjarchitect_num_cm_gained
+		}
+	}
+}

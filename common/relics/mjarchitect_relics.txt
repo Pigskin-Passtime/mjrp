@@ -1,0 +1,42 @@
+r_mjarchitect_microcosm = {
+	activation_duration = @triumph_duration
+	portrait = "GFX_mjarchitect_microcosm"
+	sound = "relic_activation_extradimensional_warlock"
+
+	resources = {
+		category = relics
+		cost = {
+			mjarchitect_cognitive_matter = 5000
+		}
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			always = yes
+		}
+		planet_jobs_produces_mult = 0.75
+		country_base_influence_produces_add = 2
+	}
+
+	score = 50000
+
+	active_effect = {
+		custom_tooltip = r_mjarchitect_microcosm_tt
+		custom_tooltip = relic_triumph_cooldown
+		hidden_effect = {
+			country_event = { id = mjarchitect_ui.200 }
+			add_modifier = {
+				modifier = "relic_activation_cooldown"
+				days = @triumph_duration
+			}
+		}
+	}
+
+	# Possible check for activation
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_relic_no_cooldown"
+			NOT = { has_modifier = relic_activation_cooldown }
+		}
+	}
+}

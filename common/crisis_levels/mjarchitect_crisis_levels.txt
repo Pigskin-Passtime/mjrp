@@ -1,0 +1,196 @@
+# CRISIS LEVELS
+# Levels can be unlocked in the order they are written in this file. A later listed level with lower requirements will not be unlocked until the previous levels have been unlocked.
+#
+# level_name = {
+#	perks = {
+#		menp_undertaker		# The menace perks that will be applied when the level is unlocked.
+#		menp_ship_chipper
+#	}
+#	required_menace = 0		# The required amount of Menace to unlock the level
+#	allow = { has_completed_special_project_in_log = CRISIS_SPECIAL_PROJECT_1 }	# You can only unlock this level when this trigger returns true
+#																			# scope COUNTRY, This = country trying to unlock the level
+#	on_unlock = { set_country_flag = CRISIS_LEVEL_FLAG }	# an effect that is triggered when you unlock the level
+#															# scope COUNTRY, This = country the level is being unlocked for
+# }
+
+crisis_mjarchitect_level_1 = {
+	# REQUIREMENTS
+	required_crisis_currency = 0
+	allow = {
+		custom_tooltip = {
+			success_text = crisis_mjarchitect_level_1_req_clear_tt
+			fail_text =	crisis_mjarchitect_level_1_req_tt
+			has_country_flag = mjarchitect_initial_chain_complete
+		}
+	}
+
+	# REWARDS
+	perks = {
+		mjarchitect_crisis_perk_1
+		mjarchitect_crisis_perk_2
+		mjarchitect_crisis_perk_3
+	}
+
+	on_unlock = {
+		hidden_effect = {
+			owner = {
+				create_message = {
+					type = MESSAGE_MJARCHITECT_LEVELUP
+					localization = MESSAGE_MJARCHITECT_LEVELUP
+					days = 30
+					target = root
+				}
+			}
+		}
+	}
+}
+
+crisis_mjarchitect_level_2 = {
+	# REQUIREMENTS
+	allow = {
+	}
+	required_crisis_currency = 1000
+
+	# REWARDS
+	perks = {
+		mjarchitect_crisis_perk_4
+		# mjarchitect_crisis_perk_5
+		mjarchitect_crisis_perk_6
+		mjarchitect_crisis_perk_7
+	}
+
+	on_unlock = {
+		hidden_effect = {
+			owner = {
+				create_message = {
+					type = MESSAGE_MJARCHITECT_LEVELUP
+					localization = MESSAGE_MJARCHITECT_LEVELUP
+					days = 30
+					target = root
+				}
+				country_event = { id = mjarchitect_unlock.35 }
+				change_variable = {
+					which = mjarchitect_satisfaction_decay
+					value = 0.25
+				}
+			}
+		}
+	}
+}
+
+crisis_mjarchitect_level_3 = {
+	# REQUIREMENTS
+	allow = {
+		custom_tooltip = {
+			success_text =	crisis_mjarchitect_level_2_req_clear_tt
+			fail_text =	crisis_mjarchitect_level_2_req_tt
+			has_country_flag = mjarchitect_great_host_located
+		}
+	}
+	required_crisis_currency = 5000
+
+	# REWARDS
+	perks = {
+		mjarchitect_crisis_perk_8
+		mjarchitect_crisis_perk_9
+		mjarchitect_crisis_perk_10
+		mjarchitect_crisis_perk_11
+	}
+
+	on_unlock = {
+		hidden_effect = {
+			owner = {
+				create_message = {
+					type = MESSAGE_MJARCHITECT_LEVELUP
+					localization = MESSAGE_MJARCHITECT_LEVELUP
+					days = 30
+					target = root
+				}
+				change_variable = {
+					which = mjarchitect_satisfaction_decay
+					value = 0.50
+				}
+			}
+		}
+	}
+}
+
+crisis_mjarchitect_level_4 = {
+	# REQUIREMENTS
+	allow = {
+	}
+	required_crisis_currency = 15000
+
+	# REWARDS
+	perks = {
+		mjarchitect_crisis_perk_12
+		mjarchitect_crisis_perk_13
+		mjarchitect_crisis_perk_14
+	}
+
+	on_unlock = {
+		hidden_effect = {
+			owner = {
+				create_message = {
+					type = MESSAGE_MJARCHITECT_LEVELUP
+					localization = MESSAGE_MJARCHITECT_LEVELUP
+					days = 30
+					target = root
+				}
+				country_event = { id = mjarchitect_unlock.55 }
+				change_variable = {
+					which = mjarchitect_satisfaction_decay
+					value = 0.75
+				}
+			}
+		}
+	}
+}
+
+crisis_mjarchitect_level_5 = {
+	# REQUIREMENTS
+	allow = {
+		custom_tooltip = {
+			success_text =	crisis_mjarchitect_level_5_req_clear_tt
+			fail_text =	crisis_mjarchitect_level_5_req_tt
+			has_country_flag = mjarchitect_great_host_restored
+		}
+		is_subject = no
+		custom_tooltip = {
+			fail_text = crisis_mjarchitect_level_5_one_crisis_only
+			NOT = {
+				any_playable_country = {
+					has_country_flag = mjarchitect_chosen_of_the_architect
+					NOT = { is_same_value = root.owner }
+				}
+			}
+		}
+	}
+	required_crisis_currency = 30000
+
+	# REWARDS
+	perks = {
+		mjarchitect_crisis_perk_15
+		mjarchitect_crisis_perk_16
+		mjarchitect_crisis_perk_17
+		mjarchitect_crisis_perk_18
+	}
+
+	on_unlock = {
+		crisis_mjarchitect_level_5_unlock_effect = yes
+		hidden_effect = {
+			owner = {
+				create_message = {
+					type = MESSAGE_MJARCHITECT_LEVELUP
+					localization = MESSAGE_MJARCHITECT_LEVELUP
+					days = 30
+					target = root
+				}
+				change_variable = {
+					which = mjarchitect_satisfaction_decay
+					value = 0.5
+				}
+			}
+		}
+	}
+}

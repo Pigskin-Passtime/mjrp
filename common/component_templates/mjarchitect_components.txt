@@ -1,0 +1,77 @@
+utility_component_template = {
+	key = "MJARCHITECT_PIERCER_BEACON"
+	size = large
+	icon = GFX_ship_part_mjarchitect_piercing_beacon
+	icon_frame = 1
+	power = 0
+
+	scripted_action = {
+		scope = planet
+
+		possible = {
+			is_star = yes
+			solar_system = {
+				NOR = {
+					has_megastructure = mjarchitect_celestial_beacon
+					has_megastructure = mjarchitect_great_host
+				}
+			}
+		}
+
+		button_clickable = {
+			owner = {
+				has_resource = { type = mjarchitect_cognitive_matter amount >= 750 }
+			}
+		}
+
+		name = on_mjarchitect_piercer_activated
+		tooltip = mjarchitect_pierce_ship_button
+		icon = GFX_mjarchitect_fleetaction_pierce
+		icon_selected = GFX_mjarchitect_fleetaction_pierce_active
+
+		activity_key = mjarchitect_piercer_action_activity_key
+		context_menu_name = mjarchitect_piercer_context_menu_title
+		progress_activity_key = mjarchitect_piercer_action_progress_activity_key
+		required_progress = 60
+	}
+
+	ai_weight = {
+		factor = 0
+	}
+}
+
+weapon_component_template = {
+	key = "PLANET_KILLER_MJARCHITECT_VEIL_WEAPON"
+	size = planet_killer
+	type = planet_killer
+	use_ship_main_target = no
+	prerequisites = { "tech_mjarchitect_veil_weapon" }
+	power = -7500
+	
+	valid_for_country = {
+	}
+	
+	resources = {
+		category = ship_components
+		cost = {
+			alloys = 500
+		}		
+		upkeep = {
+			energy = 3
+		}
+	}
+	
+	windup = { min = 90.0 max = 0.0 }
+	total_fire_time = 30
+	icon = GFX_ship_part_cleanser
+	icon_frame = 1
+	size_restriction = { colossus }
+
+	component_set = "PLANET_KILLER_MJARCHITECT_VEIL_WEAPON"
+	
+	ai_weight = {
+		factor = 1
+	}
+
+	planet_destruction_gfx = "mjarchitect_veiled_weapon_gfx"
+}
