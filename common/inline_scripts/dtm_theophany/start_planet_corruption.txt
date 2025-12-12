@@ -1,0 +1,44 @@
+hidden_effect = {
+	if = {
+		limit = {
+			has_planet_flag = dtm_theophany_corruption_complete
+		}
+		# nothing
+	}
+	else_if = {
+		limit = {
+			has_planet_flag = dtm_theophany_corruption_started
+		}
+		event_target:global_event_country = {
+		#owner = {
+			random_situation = {
+				limit = {
+					is_situation_type = dtm_theophany_corruption_planet
+					has_situation_flag = dtm_theophany_corruption_planet@$PLANET$
+				}
+				add_situation_progress = $AMOUNT$
+			}
+			# $PLANET$ = {
+			# }
+		}
+		dtm_theophany_increase_corruption_planet = {
+			AMOUNT = $AMOUNT$
+		}
+	}
+	else = {
+		event_target:global_event_country = {
+		#owner = {
+			start_situation = {
+				type = dtm_theophany_corruption_planet
+				target = $PLANET$
+				effect = {
+					set_situation_flag = dtm_theophany_corruption_planet@$PLANET$
+					add_situation_progress = $AMOUNT$
+				}
+			}
+		}
+		dtm_theophany_increase_corruption_planet = {
+			AMOUNT = $AMOUNT$
+		}
+	}
+}

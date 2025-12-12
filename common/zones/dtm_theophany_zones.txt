@@ -1,0 +1,509 @@
+# primary activity: sacrifical, indulging , grove tending, shroud sightseeing? farsighting, missionary -> change the icon of district
+# primary job: crusader, fire, nihilist, tech guru, ( different kinds of civilians?) -> have job swaps and different job building icons
+# secondary: alloys, cg ,unity research, minerals, food, energy ( with telepaths? )
+# zone sets: dtm_shardworld_primary_1, dtm_shardworld_primary_2, dtm_shardworld_secondary
+# meaning: 		activity 				, actual job, 			, supporting 
+# 
+zone_dtm_theophany_missionary = {
+	icon = GFX_colony_type_fortress
+	included_building_sets = {
+		unity
+		origin
+		government
+	}
+	# basic setup with TT 
+	inline_script = {
+		script = dtm_theophany/zone_setup
+		ZONE_SET = dtm_shardworld_primary_1
+		ZONE = zone_dtm_theophany_missionary
+	}
+	# pilgrims give country wide governing ethics attraction and crime reduction
+}
+
+zone_dtm_theophany_farsight = {
+	icon = GFX_colony_type_bureaucratic
+	included_building_sets = {
+		unity
+		origin
+		government
+	}
+	# basic setup with TT 
+	inline_script = {
+		script = dtm_theophany/zone_setup
+		ZONE_SET = dtm_shardworld_primary_1
+		ZONE = zone_dtm_theophany_none
+	}
+	triggered_district_planet_modifier = {
+		potential = {
+			owner = {
+				is_gestalt = no
+			}
+		}
+		planet_dtm_pilgrims_dtm_faith_produces_add = 0.5
+	}
+	# 	swap_type = district_arcology_religious
+	# swap_type_weight = 5 
+	# pilgrims give faith
+}
+
+zone_dtm_theophany_tender = {
+	icon = GFX_colony_type_farm
+	included_building_sets = {
+		unity
+		origin
+		government
+		farming
+	}
+	# basic setup with TT 
+	inline_script = {
+		script = dtm_theophany/zone_setup
+		ZONE_SET = dtm_shardworld_primary_1
+		ZONE = zone_dtm_theophany_tender
+	}
+	swap_type = district_craglands
+	swap_type_weight = 5
+	# zro from farmers !
+}
+
+zone_dtm_theophany_indulgence = {
+	icon = GFX_colony_type_resort
+	included_building_sets = {
+		unity
+		origin
+		government
+		entertainment
+		trade
+	}
+	# basic setup with TT 
+	inline_script = {
+		script = dtm_theophany/zone_setup
+		ZONE_SET = dtm_shardworld_primary_1
+		ZONE = zone_dtm_theophany_none
+	}
+	triggered_district_planet_modifier = {
+		potential = {
+			owner = {
+				is_gestalt = no
+			}
+		}
+		planet_dtm_pilgrims_trade_produces_add = 0.5
+	}
+	triggered_district_planet_modifier = {
+		potential = {
+			owner = {
+				is_gestalt = yes
+			}
+		}
+		planet_maintenance_drones_trade_produces_add = 0.5
+	}
+	swap_type = district_resort
+	swap_type_weight = 5
+}
+
+zone_dtm_theophany_sacrifice = {
+	icon = GFX_colony_type_dying
+	included_building_sets = {
+		unity
+		origin
+		government
+		fortress
+	}
+	# basic setup with TT 
+	inline_script = {
+		script = dtm_theophany/zone_setup
+		ZONE_SET = dtm_shardworld_primary_1
+		ZONE = zone_dtm_theophany_none
+	}
+	triggered_planet_modifier = {
+		potential = {
+			always = yes
+		}
+		logistic_growth_mult = -1
+	}
+	triggered_district_planet_modifier = {
+		potential = {
+			owner = {
+				is_gestalt = no
+			}
+		}
+		planet_dtm_pilgrims_unity_produces_add = 1
+	}
+	triggered_district_planet_modifier = {
+		potential = {
+			owner = {
+				is_gestalt = yes
+			}
+		}
+		planet_maintenance_drones_unity_produces_add = 1
+	}
+	swap_type = district_resort
+	swap_type_weight = 5
+	# pilgrims give can be sacrificed for?
+}
+
+# primary job: crusader, fire, nihilist, tech guru
+zone_dtm_theophany_techno = {
+	icon = GFX_colony_type_research
+	included_building_sets = {
+		unity
+		origin
+		government
+		research
+		engineering
+	}
+	# basic setup with TT 
+	inline_script = {
+		script = dtm_theophany/zone_setup
+		ZONE_SET = dtm_shardworld_primary_2
+		ZONE = zone_dtm_theophany_none
+	}
+	triggered_district_planet_modifier = {
+		potential = {
+			owner = {
+				is_gestalt = no
+			}
+		}
+		planet_dtm_pilgrims_engineering_research_produces_add = 1
+	}
+	triggered_district_planet_modifier = {
+		potential = {
+			owner = {
+				is_gestalt = yes
+			}
+		}
+		planet_maintenance_drones_engineering_research_produces_add = 1
+	}
+}
+
+zone_dtm_theophany_nihilist = {
+	icon = GFX_colony_type_research
+	included_building_sets = {
+		unity
+		origin
+		government
+		research
+		physics
+	}
+	# basic setup with TT 
+	inline_script = {
+		script = dtm_theophany/zone_setup
+		ZONE_SET = dtm_shardworld_primary_2
+		ZONE = zone_dtm_theophany_none
+	}
+	triggered_district_planet_modifier = {
+		potential = {
+			owner = {
+				is_gestalt = no
+			}
+		}
+		planet_dtm_pilgrims_physics_research_produces_add = 1
+	}
+	triggered_district_planet_modifier = {
+		potential = {
+			owner = {
+				is_gestalt = yes
+			}
+		}
+		planet_maintenance_drones_physics_research_produces_add = 1
+	}
+}
+
+zone_dtm_theophany_arsonist = {
+	icon = GFX_colony_type_industrial
+	included_building_sets = {
+		unity
+		origin
+		government
+		industrial
+	}
+	# basic setup with TT 
+	inline_script = {
+		script = dtm_theophany/zone_setup
+		ZONE_SET = dtm_shardworld_primary_2
+		ZONE = zone_dtm_theophany_arsonist
+	}
+	# pilgrims give local alloy and cg output
+}
+
+zone_dtm_theophany_crusader = {
+	icon = GFX_colony_type_fortress
+	included_building_sets = {
+		unity
+		origin
+		government
+		fortress
+	}
+	# basic setup with TT 
+	inline_script = {
+		script = dtm_theophany/zone_setup
+		ZONE_SET = dtm_shardworld_primary_2
+		ZONE = zone_dtm_theophany_crusader
+	}
+	swap_type = district_orders_demesne
+	swap_type_weight = 10
+	# pilgrims give ship damage
+}
+
+# secondary: alloys, cg ,unity research, minerals, food, energy ( with telepaths? )
+zone_dtm_theophany_industrial = {
+	inline_script = {
+		script = zones/shared_industrial_zone
+		AMOUNT = @scaling_district_2_jobs
+	}
+	zone_sets = {
+		dtm_shardworld_secondary
+	}
+	inline_script = {
+		script = dtm_theophany/zone_telepath_add
+	}
+	inline_script = {
+		script = zones/shared_city_non_urban_zone_modifiers
+	}
+	swap_type = district_arcology_civilian_industry
+	swap_type_weight = 5
+}
+
+zone_dtm_theophany_foundry = {
+	inline_script = {
+		script = zones/shared_industrial_foundry_zone
+		AMOUNT = @scaling_district_1_job
+	}
+	zone_sets = {
+		dtm_shardworld_secondary
+	}
+	inline_script = {
+		script = dtm_theophany/zone_telepath_add
+	}
+	inline_script = {
+		script = zones/shared_city_non_urban_zone_modifiers
+	}
+	swap_type = district_arcology_arms_industry
+	swap_type_weight = 5
+}
+
+zone_dtm_theophany_factory = {
+	inline_script = {
+		script = zones/shared_industrial_factory_zone
+		AMOUNT = @scaling_district_1_job
+	}
+	zone_sets = {
+		dtm_shardworld_secondary
+	}
+	inline_script = {
+		script = dtm_theophany/zone_telepath_add
+	}
+	inline_script = {
+		script = zones/shared_city_non_urban_zone_modifiers
+	}
+	swap_type = district_arcology_civilian_industry
+	swap_type_weight = 5
+}
+
+zone_dtm_theophany_research = {
+	inline_script = {
+		script = zones/shared_research_zone
+		AMOUNT = @scaling_district_3_jobs
+	}
+	zone_sets = {
+		dtm_shardworld_secondary
+	}
+	inline_script = {
+		script = dtm_theophany/zone_telepath_add
+	}
+	inline_script = {
+		script = zones/shared_city_non_urban_zone_modifiers
+	}
+	swap_type = district_rw_science
+	swap_type_weight = 5
+}
+
+zone_dtm_theophany_research_physics = {
+	inline_script = {
+		script = zones/shared_research_physics_zone
+		AMOUNT = @scaling_district_1_job
+	}
+	zone_sets = {
+		dtm_shardworld_secondary
+	}
+	inline_script = {
+		script = dtm_theophany/zone_telepath_add
+	}
+	inline_script = {
+		script = zones/shared_research_zone_modifiers
+	}
+	ai_priority = 15
+	swap_type = district_rw_science
+	swap_type_weight = 5
+}
+
+zone_dtm_theophany_research_society = {
+	inline_script = {
+		script = zones/shared_research_society_zone
+		AMOUNT = @scaling_district_1_job
+	}
+	zone_sets = {
+		dtm_shardworld_secondary
+	}
+	inline_script = {
+		script = dtm_theophany/zone_telepath_add
+	}
+	inline_script = {
+		script = zones/shared_research_zone_modifiers
+	}
+	ai_priority = 15
+	swap_type = district_rw_science
+	swap_type_weight = 5
+}
+
+zone_dtm_theophany_research_engineering = {
+	inline_script = {
+		script = zones/shared_research_engineering_zone
+		AMOUNT = @scaling_district_1_job
+	}
+	zone_sets = {
+		dtm_shardworld_secondary
+	}
+	inline_script = {
+		script = dtm_theophany/zone_telepath_add
+	}
+	inline_script = {
+		script = zones/shared_research_zone_modifiers
+	}
+	swap_type = district_rw_science
+	swap_type_weight = 5
+	ai_priority = 15
+}
+
+zone_dtm_theophany_unity = {
+	inline_script = {
+		script = zones/shared_unity_zone
+		AMOUNT = @scaling_district_1_job
+	}
+	zone_sets = {
+		dtm_shardworld_secondary
+	}
+	inline_script = {
+		script = dtm_theophany/zone_telepath_add
+	}
+	inline_script = {
+		script = zones/shared_city_non_urban_zone_modifiers
+	}
+	convert_to = {
+		zone_unity_spiritualist
+		zone_unity_bio_trophy
+	}
+	swap_type = district_arcology_administrative
+	swap_type_weight = 5
+}
+
+zone_dtm_theophany_unity_spiritualist = {
+	inline_script = {
+		script = zones/shared_unity_spiritualist_zone
+		AMOUNT = @scaling_district_1_job
+	}
+	zone_sets = {
+		dtm_shardworld_secondary
+	}
+	inline_script = {
+		script = dtm_theophany/zone_telepath_add
+	}
+	inline_script = {
+		script = zones/shared_city_non_urban_zone_modifiers
+	}
+	convert_to = {
+		zone_unity
+		zone_unity_bio_trophy
+	}
+	swap_type = district_arcology_administrative
+	swap_type_weight = 5
+}
+
+zone_dtm_theophany_fortress = {
+	inline_script = {
+		script = zones/shared_fortress_zone
+		AMOUNT = @scaling_district_1_job
+	}
+	inline_script = {
+		script = dtm_theophany/zone_telepath_add
+	}
+	zone_sets = {
+		dtm_shardworld_secondary
+	}
+	inline_script = {
+		script = zones/shared_city_non_urban_zone_modifiers
+	}
+	swap_type = district_arcology_housing
+	swap_type_weight = 5
+}
+
+zone_dtm_theophany_trade = {
+	inline_script = {
+		script = zones/shared_trade_zone
+		AMOUNT = @scaling_district_1_job
+	}
+	zone_sets = {
+		dtm_shardworld_secondary
+	}
+	inline_script = {
+		script = dtm_theophany/zone_telepath_add
+	}
+	inline_script = {
+		script = zones/shared_city_non_urban_zone_modifiers
+	}
+	swap_type = district_rw_commercial
+	swap_type_weight = 5
+}
+
+zone_dtm_theophany_minerals = {
+	inline_script = {
+		script = zones/shared_minerals_zone
+		AMOUNT = @scaling_district_1_job
+	}
+	zone_sets = {
+		dtm_shardworld_secondary
+	}
+	inline_script = {
+		script = dtm_theophany/zone_telepath_add
+	}
+	inline_script = {
+		script = zones/shared_city_non_urban_zone_modifiers
+	}
+	swap_type = district_mining
+	swap_type_weight = 5
+}
+
+zone_dtm_theophany_energy = {
+	inline_script = {
+		script = zones/shared_energy_zone
+		AMOUNT = @scaling_district_1_job
+	}
+	zone_sets = {
+		dtm_shardworld_secondary
+	}
+	inline_script = {
+		script = dtm_theophany/zone_telepath_add
+	}
+	inline_script = {
+		script = zones/shared_city_non_urban_zone_modifiers
+	}
+	swap_type = district_generator
+	swap_type_weight = 5
+}
+
+zone_dtm_theophany_food = {
+	inline_script = {
+		script = zones/shared_food_zone
+		AMOUNT = @scaling_district_1_job
+	}
+	zone_sets = {
+		dtm_shardworld_secondary
+	}
+	inline_script = {
+		script = dtm_theophany/zone_telepath_add
+	}
+	inline_script = {
+		script = zones/shared_city_non_urban_zone_modifiers
+	}
+	swap_type = district_farming
+	swap_type_weight = 5
+}

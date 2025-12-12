@@ -1,0 +1,773 @@
+@base_moon_distance = 10
+dtm_central_crystal_init_01 = {
+	#class = "sc_rift_star"
+	class = "sc_black_hole"
+	name = "NAME_dtm_tower_defense"	# Dreams Unbound
+	usage = misc_system_init
+	usage_odds = 0
+	asteroid_belt = {
+		type = rocky_asteroid_belt
+		radius = 190
+	}
+	asteroid_belt = {
+		type = icy_asteroid_belt
+		radius = 240
+	}
+	flags = {
+		#empire_home_system
+		crisis_spawn_exclude
+		dtm_theophany_core_system
+		dtm_theophany_endgame_center
+		cosmogenesis_project		# cosmogenesis special ending regarding black hole in the middle?
+	}
+	planet = {
+		name = "NAME_dtm_tower_defense"
+		class = pc_black_hole
+		orbit_distance = 0
+		orbit_angle = 1
+		size = 150
+		has_ring = no
+		init_effect = {
+			clear_deposits = yes
+		}
+	}
+	change_orbit = 45
+	planet = {
+		count = 2
+		class = pc_ice_asteroid
+		orbit_distance = {
+			min = 130
+			max = 140
+		}
+		orbit_angle = {
+			min = 90
+			max = 270
+		}
+		init_effect = {
+			clear_deposits = yes
+		}
+	}
+	init_effect = {
+		create_ambient_object = {
+			type = dtm_psi_storm_1			# planet
+			location = star
+			scale = 15
+			use_3d_location = yes
+			#entity_scale_to_size = yes
+		}
+		last_created_ambient_object = {
+			set_location = {
+				target = star
+				distance = 0
+				angle = random
+			}
+		}
+		create_ambient_object = {
+			type = dtm_theophany_space_storm_1			# planet
+			location = star
+			#scale = 0.3
+			use_3d_location = yes
+			#entity_scale_to_size = yes
+		}
+		last_created_ambient_object = {
+			set_location = {
+				target = star
+				distance = 0
+				angle = random
+			}
+		}
+		set_star_flag = dtm_theophany_corruption_complete
+		add_modifier = {
+			modifier = dtm_theophany_system_corruption_final
+		}
+		dtm_theophany_create_shroud_countries = yes
+		# event_target:dtm_theophany_shroud_country = {
+		# 	create_ship_design = {
+		# 		design = NAME_dtm_FE_Starbase
+		# 	}
+		# 	add_ship_design = last_created_design
+		# }
+		random_system_planet = {
+			limit = {
+				NOT = {
+					is_planet_class = pc_black_hole
+				}
+			}
+			if = {
+				limit = {
+					host_has_dlc = "Astral Planes"
+				}
+				create_ambient_object = {
+					type = dtm_theophany_crystal
+					#use_3d_location = yes
+					location = this
+					# entity_offset = {
+					# 	min = 20
+					# 	max = 20
+					# }
+					# entity_offset_angle = {
+					# 	min = <int>
+					# 	max = <int>
+					# }
+					# entity_offset_height = {
+					# 	min = 40
+					# 	max = 40
+					# }
+				}
+			}
+			else = {
+				create_ambient_object = {
+					type = dtm_theophany_crystal_alt
+					location = this
+				}
+			}
+			# create_starbase = {
+			# 	size = dtm_orbital_ring
+			# 	owner = event_target:dtm_theophany_shroud_country
+			# 	#design = NAME_dtm_FE_Starbase
+			# 	effect = {
+			# 		while = {
+			# 			count = 20
+			# 			create_ship = {
+			# 				name = NAME_dtm_theophany_defense
+			# 				design = NAME_dtm_theophany_defense
+			# 			}
+			# 		}
+			# 	}
+			# }
+			remove_planet = yes
+		}
+		# last_created_fleet = {
+		# 	set_location = {
+		# 		target = star
+		# 		distance = 300
+		# 		# angle = <int/random>
+		# 		#direction = <in_system/out_system>
+		# 	}
+		# }
+	}
+}
+
+# weird systems at the core
+# Single habitat at the center and a tinty dying star
+# gaia world at the border and complete destruction of a sol system clone
+# (The prison: genocidal empire unleashed)
+# Giant shroud entity system with nothing but shrouded worlds and zro
+# The storage: neatly assorted types of worlds: toxic, gas, molten, barren, other suns, pulsars,  center is "Register" normal sun with huge science deposit
+# maybe each sun has different type of planet -> more sciency
+dtm_central_crystal_init_02 = {
+	#class = "sc_rift_star"
+	class = "sc_black_hole"
+	name = "NAME_dtm_the_beginning"	# The Beginning
+	usage = misc_system_init
+	usage_odds = 0
+	flags = {
+		dtm_theophany_core_system
+		unique_system
+	}
+	planet = {
+		name = "NAME_dtm_the_beginning"
+		class = pc_black_hole
+		orbit_distance = 0
+		orbit_angle = 1
+		size = 30
+		has_ring = no
+		init_effect = {
+			clear_deposits = yes
+		}
+	}
+	change_orbit = 12
+	planet = {
+		class = pc_habitat
+		name = "NAME_dtm_after_the_fall"		# after the end lol
+		orbit_distance = {
+			min = 12
+			max = 14
+		}
+		orbit_angle = {
+			min = 90
+			max = 270
+		}
+		init_effect = {
+			set_planet_size = 12
+			create_late_pre_ftl_empire = yes
+			last_created_country = {
+				set_name = "NAME_dtm_the_mourning"
+				capital_scope = {
+					create_pop = {
+						species = owner_main_species
+					}
+				}
+			}
+		}
+	}
+	init_effect = {
+		star = {
+			set_planet_size = 1
+		}
+		dtm_theophany_create_wormhole = yes
+	}
+}
+
+dtm_central_crystal_init_03 = {
+	name = "NAME_dtm_Sol_nubibus"	# clouded sol
+	class = "sc_g"
+	asteroid_belt = {
+		type = rocky_asteroid_belt
+		radius = 145
+	}
+	asteroid_belt = {
+		type = icy_asteroid_belt
+		radius = 290
+	}
+	flags = {
+		empire_home_system
+		sol_system
+		sol
+		dtm_theophany_core_system
+		unique_system
+	}
+	usage = misc_system_init
+	init_effect = {
+		generate_home_system_resources = yes
+		every_system_planet = {
+			limit = {
+				is_planet_class = pc_shrouded
+			}
+			random_list = {
+				50 = {
+				}
+				50 = {
+					add_deposit = d_zro_deposit_1
+				}
+			}
+		}
+	}
+	planet = {
+		name = "NAME_Sol"
+		class = "pc_g_star"
+		orbit_distance = 0
+		orbit_angle = 1
+		size = 30
+		has_ring = no
+	}
+	planet = {
+		name = "NAME_Mercury"
+		class = "pc_shrouded"
+		orbit_distance = 40
+		orbit_angle = 15
+		size = 10
+		has_ring = no
+		init_effect = {
+			set_planet_entity = {
+				entity = molten_planet_mercury_entity
+				atmosphere_color = {
+					0.8
+					0.1
+					0.2
+				}
+				atmosphere_intensity = 0.1
+				atmosphere_width = 1
+			}
+		}
+	}
+	planet = {
+		name = "NAME_Venus"
+		class = "pc_shrouded"
+		orbit_distance = 25
+		orbit_angle = 125
+		size = 17
+		has_ring = no
+		init_effect = {
+			set_planet_entity = {
+				entity = toxic_planet_venus_entity
+				atmosphere_color = {
+					0.854
+					0.072
+					0.7
+				}
+				atmosphere_intensity = 0.2
+				atmosphere_width = 1
+			}
+		}
+	}
+	planet = {
+		name = "NAME_Earth"
+		class = "pc_shrouded"
+		orbit_distance = 25
+		orbit_angle = 120
+		size = 18
+		starting_planet = yes
+		has_ring = no
+		entity = "continental_planet_earth_entity"
+		deposit_blockers = none
+		modifiers = none
+		flags = {
+			planet_earth
+		}
+		init_effect = {
+			prevent_anomaly = yes
+		}
+		moon = {
+			name = "NAME_Luna"
+			class = "pc_shrouded"
+			size = 5
+			orbit_distance = 12
+			orbit_angle = 40
+			has_ring = no
+			entity = "cold_barren_planet_luna_entity"
+		}
+	}
+	planet = {
+		name = "NAME_Mars"
+		class = "pc_shrouded"
+		orbit_distance = 25
+		orbit_angle = 60
+		size = 13
+		has_ring = no
+		entity = "barren_planet_mars_entity"
+		flags = {
+			planet_mars
+		}
+		init_effect = {
+		}
+	}
+	planet = {
+		name = "NAME_1_Ceres"
+		class = "pc_asteroid"
+		orbit_distance = 30
+		orbit_angle = -210
+		size = 5
+		has_ring = no
+	}
+	planet = {
+		name = "NAME_2_Pallas"
+		class = "pc_asteroid"
+		orbit_distance = 0
+		orbit_angle = -95
+		size = 5
+		has_ring = no
+	}
+	planet = {
+		name = "NAME_3_Juno"
+		class = "pc_asteroid"
+		orbit_distance = 0
+		orbit_angle = 285
+		size = 5
+		has_ring = no
+	}
+	planet = {
+		name = "NAME_4_Vesta"
+		class = "pc_asteroid"
+		orbit_distance = 0
+		orbit_angle = -80
+		size = 5
+		has_ring = no
+	}
+	planet = {
+		name = "NAME_Jupiter"
+		class = "pc_shrouded"
+		orbit_distance = 40
+		orbit_angle = -160
+		size = 35
+		has_ring = no
+		entity = "gas_giant_jupiter_entity"
+		change_orbit = 6
+		moon = {
+			name = "NAME_Io"
+			class = "pc_shrouded"
+			size = 6
+			orbit_distance = 10
+			orbit_angle = 110
+			has_ring = no
+		}
+		moon = {
+			name = "NAME_Europa"
+			class = "pc_shrouded"
+			size = 6
+			orbit_distance = 2.5
+			orbit_angle = 190
+			has_ring = no
+		}
+		moon = {
+			name = "NAME_Ganymede"
+			class = "pc_shrouded"
+			size = 9
+			orbit_distance = 2.5
+			orbit_angle = 80
+			has_ring = no
+		}
+		moon = {
+			name = "NAME_Callisto"
+			class = "pc_shrouded"
+			size = 7
+			orbit_distance = 2.5
+			orbit_angle = -155
+			has_ring = no
+		}
+	}
+	planet = {
+		name = "NAME_Saturn"
+		class = "pc_shrouded"
+		orbit_distance = 25
+		orbit_angle = 170
+		size = 30
+		has_ring = yes
+		entity = "gas_giant_05_entity"
+		change_orbit = 7
+		moon = {
+			name = "NAME_Titan"
+			class = "pc_shrouded"
+			size = 8
+			orbit_distance = 12
+			orbit_angle = 320
+			has_ring = no
+		}
+	}
+	planet = {
+		name = "NAME_Uranus"
+		class = "pc_shrouded"
+		orbit_distance = 25
+		orbit_angle = 125
+		size = 20
+		has_ring = no
+		init_effect = {
+			set_planet_entity = {
+				entity = gas_giant_uranus_entity
+				atmosphere_color = {
+					0.548
+					0.519
+					0.9
+				}
+				atmosphere_intensity = 0.1
+				atmosphere_width = 1
+			}
+		}
+	}
+	planet = {
+		name = "NAME_Neptune"
+		class = "pc_shrouded"
+		orbit_distance = 25
+		orbit_angle = -195
+		size = 20
+		has_ring = no
+		change_orbit = 4
+		moon = {
+			name = "NAME_Triton"
+			class = "pc_shrouded"
+			size = 6
+			orbit_distance = 7
+			orbit_angle = 115
+			has_ring = no
+		}
+		init_effect = {
+			set_planet_entity = {
+				entity = gas_giant_neptune_entity
+				atmosphere_color = {
+					0.626
+					0.782
+					0.9
+				}
+				atmosphere_intensity = 0.1
+				atmosphere_width = 1
+			}
+		}
+	}
+	planet = {
+		name = "NAME_134340_Pluto"
+		class = "pc_asteroid"
+		orbit_distance = 30
+		orbit_angle = -210
+		size = 5
+		has_ring = no
+	}
+	planet = {
+		name = "NAME_136472_Makemake"
+		class = "pc_ice_asteroid"
+		orbit_distance = 0
+		orbit_angle = -95
+		size = 5
+		has_ring = no
+	}
+	planet = {
+		name = "NAME_136108_Haumea"
+		class = "pc_ice_asteroid"
+		orbit_distance = 0
+		orbit_angle = 285
+		size = 5
+		has_ring = no
+	}
+	planet = {
+		name = "NAME_20000_Varuna"
+		class = "pc_ice_asteroid"
+		orbit_distance = 0
+		orbit_angle = -80
+		size = 5
+		has_ring = no
+	}
+	init_effect = {
+		set_star_flag = dtm_theophany_corruption_complete
+		add_modifier = {
+			modifier = dtm_theophany_system_corruption_final
+		}
+		create_ambient_object = {
+			type = dtm_theophany_space_storm_1			# planet
+			location = star
+			#scale = 0.3
+			use_3d_location = yes
+			#entity_scale_to_size = yes
+		}
+		last_created_ambient_object = {
+			set_location = {
+				target = star
+				distance = 0
+				angle = random
+			}
+		}
+		dtm_theophany_create_wormhole = yes
+	}
+}
+
+dtm_central_crystal_init_04 = {
+	name = "NAME_dtm_third_warehouse"	# third warehosue lmao
+	class = "rl_trinary_stars"
+	# asteroid_belt = {
+	# 	type = rocky_asteroid_belt
+	# 	radius = 145
+	# }
+	# asteroid_belt = {
+	# 	type = icy_asteroid_belt
+	# 	radius = 290
+	# }
+	flags = {
+		dtm_theophany_core_system
+		unique_system
+	}
+	usage = misc_system_init
+	init_effect = {
+	}
+	planet = {
+		count = 1
+		class = pc_g_star
+		name = "NAME_dtm_register"
+		orbit_distance = 0
+		orbit_angle = 0
+		size = {
+			min = 20
+			max = 30
+		}
+		has_ring = no
+		init_effect = {
+			clear_deposits = yes
+			add_deposit = d_dtm_register
+			add_deposit = d_trade_value_1
+			set_planet_entity = {
+				entity = machine_planet
+				atmosphere_color = {
+					0.626
+					0.782
+					0.9
+				}
+				atmosphere_intensity = 0.1
+				atmosphere_width = 1
+			}
+		}
+	}
+	# planet = {
+	# 	count = 1
+	#	class = pc_ai
+	# 	name = "NAME_dtm_register"
+	# 	orbit_distance = 0
+	# 	orbit_angle = 0
+	# 	size = {
+	# 		min = 30
+	# 		max = 35
+	# 	}
+	# 	has_ring = no
+	# 	init_effect = {
+	# 		add_deposit = d_dtm_register
+	# 	}
+	# }
+	planet = {
+		count = 1
+		class = star
+		name = "NAME_dtm_decorations"
+		orbit_distance = 220
+		orbit_angle = {
+			min = 90
+			max = 270
+		}
+		size = {
+			min = 20
+			max = 30
+		}
+		has_ring = no
+		satellite_naming_policy = upper_case_roman_numerals
+		change_orbit = 30
+		planet = {
+			class = pc_toxic
+			count = {
+				min = 5
+				max = 6
+			}
+			orbit_angle = {
+				min = 90
+				max = 270
+			}
+			orbit_distance = 0
+			satellite_naming_policy = lower_case_latin_letters
+			#change_orbit = @base_moon_distance
+			# moon = {
+			# 	count = {
+			# 		min = 0
+			# 		max = 1
+			# 	}
+			# 	orbit_angle = {
+			# 		min = 90
+			# 		max = 270
+			# 	}
+			# 	orbit_distance = 3
+			# }
+		}
+		change_orbit = 30
+		planet = {
+			class = pc_gas_giant
+			count = {
+				min = 2
+				max = 3
+			}
+			orbit_angle = {
+				min = 90
+				max = 270
+			}
+			orbit_distance = 0
+			satellite_naming_policy = lower_case_latin_letters
+			#change_orbit = @base_moon_distance
+			# moon = {
+			# 	count = {
+			# 		min = 0
+			# 		max = 1
+			# 	}
+			# 	orbit_angle = {
+			# 		min = 90
+			# 		max = 270
+			# 	}
+			# 	orbit_distance = 3
+			# }
+		}
+	}
+	planet = {
+		count = 1
+		class = star
+		name = "NAME_dtm_decorations_2"
+		orbit_distance = 0
+		orbit_angle = {
+			min = 90
+			max = 270
+		}
+		size = {
+			min = 15
+			max = 30
+		}
+		has_ring = no
+		satellite_naming_policy = upper_case_roman_numerals
+		change_orbit = 25
+		planet = {
+			class = pc_barren
+			count = {
+				min = 1
+				max = 4
+			}
+			orbit_angle = {
+				min = 0
+				max = 360
+			}
+			orbit_distance = 0
+			satellite_naming_policy = lower_case_latin_letters
+			#change_orbit = @base_moon_distance
+			# moon = {
+			# 	count = {
+			# 		min = 0
+			# 		max = 1
+			# 	}
+			# 	orbit_angle = {
+			# 		min = 90
+			# 		max = 270
+			# 	}
+			# 	orbit_distance = 3
+			# }
+		}
+		change_orbit = 25
+		planet = {
+			class = pc_broken
+			count = {
+				min = 3
+				max = 5
+			}
+			orbit_angle = {
+				min = 0
+				max = 360
+			}
+			orbit_distance = 0
+			satellite_naming_policy = lower_case_latin_letters
+			#change_orbit = @base_moon_distance
+			# moon = {
+			# 	count = {
+			# 		min = 0
+			# 		max = 1
+			# 	}
+			# 	orbit_angle = {
+			# 		min = 90
+			# 		max = 270
+			# 	}
+			# 	orbit_distance = 3
+			# }
+		}
+	}
+	#change_orbit = -200
+	# planet = {
+	# 	class = pc_a_star
+	# 	count = {
+	# 		min = 3
+	# 		max = 4
+	# 	}
+	# 	#orbit_distance = 15
+	# 	orbit_angle = {
+	# 		min = 90
+	# 		max = 270
+	# 	}
+	# 	change_orbit = @base_moon_distance
+	# 	# moon = {
+	# 	# 	count = {
+	# 	# 		min = 0
+	# 	# 		max = 1
+	# 	# 	}
+	# 	# 	orbit_angle = {
+	# 	# 		min = 90
+	# 	# 		max = 270
+	# 	# 	}
+	# 	# 	orbit_distance = 3
+	# 	# }
+	# }
+	init_effect = {
+		dtm_theophany_create_wormhole = yes
+		# set_star_flag = dtm_theophany_corruption_complete
+		# add_modifier = {
+		# 	modifier = dtm_theophany_system_corruption_final
+		# }
+		# create_ambient_object = {
+		# 	type = dtm_theophany_space_storm_1			# planet
+		# 	location = star
+		# 	#scale = 0.3
+		# 	use_3d_location = yes
+		# 	#entity_scale_to_size = yes
+		# }
+		# last_created_ambient_object = {
+		# 	set_location = {
+		# 		target = star
+		# 		distance = 0
+		# 		angle = random
+		# 	}
+		# }
+	}
+}

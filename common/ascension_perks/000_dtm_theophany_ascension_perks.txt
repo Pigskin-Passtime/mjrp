@@ -1,0 +1,102 @@
+ap_dtm_theophany = {
+	potential = {
+		# Needed because of Ascension
+		has_utopia = yes
+		# Needed for legendary trait or not?
+		# has_paragon_dlc = yes
+		OR = {			
+			has_nemesis = yes
+			has_machine_age_dlc = yes
+			has_biogenesis_dlc = yes
+		}
+		NOR = {
+			has_ascension_perk = ap_become_the_crisis
+			has_ascension_perk = ap_cosmogenesis
+			has_ascension_perk = ap_behemoths
+			has_ascension_perk = ap_defender_of_the_galaxy
+			has_origin = origin_slavers
+			has_country_flag = player_crisis_chosen
+		}
+		is_wilderness_empire = no
+		NOT = {
+			# has_global_flag = dtm_theophany_galactic_core_spawned # the final system spawned 
+			has_global_flag = ap_dtm_theophany_active # only one can have it
+		}
+	}
+	possible = {
+		has_psionic_ascension = yes
+		custom_tooltip = {
+			fail_text = "requires_independence"
+			is_subject = no
+		}
+		custom_tooltip = {
+			fail_text = "must_not_be_custodian"
+			is_galactic_custodian = no
+		}
+		custom_tooltip = {
+			fail_text = "must_not_be_emperor"
+			is_galactic_emperor = no
+		}
+		# teacher of the shroud can take this as first pick lol
+		custom_tooltip = {
+			fail_text = "requires_ascension_perks_3"
+			num_ascension_perks > 2
+		}
+		# as long as you are psionic who cares? their are some really cool non spirualist psionics builds
+	}
+	on_enabled = {
+		hidden_effect = {			
+			#Do we need our own personality or can we just use this one?
+			#Now that AI does not get to play it, it doesn't matter
+			set_ai_personality = became_the_crisis
+			country_event = { id = dtm_theophany_timeline.1 } # Timeline Found our God
+			set_global_flag = ap_dtm_theophany_active			# global flag to comply with MJ rules
+			set_country_flag = player_crisis_chosen
+		}
+		activate_crisis_progression = dtm_theophany_path
+	}
+	ai_weight = {
+		factor = 0 # dont want the AI stealing this perk from players
+		# factor = 7.5
+		# modifier = {
+		# 	factor = 0.5
+		# 	NOR = {
+		# 		is_militarist = yes
+		# 		is_xenophobe = yes				
+		# 	}
+		# }
+		# modifier = {
+		# 	factor = 10
+		# 	is_homicidal = yes
+		# }
+		# modifier = {
+		# 	factor = 4
+		# 	is_spiritualist = yes
+		# }
+		# modifier = {
+		# 	factor = 2
+		# 	has_tradition = tr_supremacy_finish
+		# }
+		# modifier = {
+		# 	factor = 0.5
+		# 	galaxy_percentage < 0.1
+		# }
+		# modifier = {
+		# 	factor = 2
+		# 	galaxy_percentage > 0.2
+		# }
+		# modifier = {
+		# 	factor = 0
+		# 	count_playable_country = {
+		# 		count > 1
+		# 		limit = {
+		# 			has_ascension_perk = ap_dtm_theophany
+		# 		}
+		# 	}
+		# }
+		# modifier = {
+		# 	factor = 0
+		# 	blocks_disruptive_gameplay = yes
+		# }
+	}
+}

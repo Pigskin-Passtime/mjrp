@@ -1,0 +1,72 @@
+
+building_dtm_theophany_corruptor = {
+	base_buildtime = @b2_time
+	can_build = yes
+	can_be_disabled = yes
+	can_be_ruined = yes
+	can_demolish = yes
+	category = resource
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = 500
+		}
+		upkeep = {
+			energy = @b2_upkeep
+		}
+	}
+	#empire_limit = 1
+	planet_limit = 1
+	potential = {
+		exists = owner
+		owner = {
+			dtm_theophany_perk_cor1  =yes
+		}
+	}
+	building_sets = {
+		government
+		
+	}
+	# allow = {
+	# 	exists = owner
+	# hidden_trigger = {
+	# 	owner = {
+	# 		is_ai = no
+	# 	}
+	# }
+	# }
+	planet_modifier = {
+		dtm_theophany_corruption_add = 0.01
+	}
+	planet_modifier = {
+		job_telepath_add = 500
+	}
+	
+	triggered_country_modifier = {
+		# only if over 50 corruption
+		potential = {
+			check_variable = {
+				which = dtm_theophany_planet_corruption
+				value > 50
+			}
+		}
+		#planet_crime_mult = 0.2
+		country_base_dtm_faith_produces_add = 20
+	}
+	# triggered_planet_modifier = {
+	# 	psionic_pop_bonus_workforce_mult = 1
+	# 	mult = value:psionic_workforce_from_telepaths
+	# 	# This is on the building instead of the jobs to prevent an infinite workforce loop
+	# }
+	
+	triggered_desc = {
+		text = job_telepath_effect_desc
+	}
+	on_built = {
+		inline_script = {
+			script = dtm_theophany/start_planet_corruption
+			AMOUNT = 1
+			PLANET = root
+		}
+	}
+}

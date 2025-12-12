@@ -1,0 +1,77 @@
+voidlure_dtm_theophany_corrupter = {
+	icon = "GFX_dtm_theophany_corruption_module"
+	construction_days = @b1_time
+	potential = {
+		exists = owner
+		owner = {
+			dtm_theophany_perk_cor1 = yes
+		}
+	}
+	possible = {
+		always = yes
+	}
+	resources = {
+		category = starbase_buildings
+		cost = {
+			sr_zro = 100
+		}
+		upkeep = {
+			energy = 2
+		}
+	}
+	system_modifier = {
+		dtm_theophany_corruption_add = 0.005
+	}
+	triggered_system_modifier = {
+		potential = {
+			owner = {
+				has_policy_flag = dtm_theophany_corruption_shrouding
+			}
+		}
+		dtm_theophany_corruption_add = 0.01
+	}
+	
+	desc = {
+		trigger = {
+			NOT = {
+				has_starbase_flag = capture_cooldown_for_voidlure_dtm_theophany_corrupter
+			}
+		}
+		text = capture_cooldown_for_voidlure_dtm_theophany_corrupter_desc
+	}
+	on_finished = {
+		owner = {
+			set_country_flag = voidlure_built_voidlure_dtm_theophany_corrupter
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_starbase_flag = recently_built_voidlure_dtm_theophany_corrupter
+				}
+			}
+			set_timed_starbase_flag = {
+				flag = recently_built_voidlure_dtm_theophany_corrupter
+				days = @voidlure_dtm_theophany_corrupter_cd
+			}
+			set_timed_starbase_flag = {
+				flag = capture_cooldown_for_voidlure_dtm_theophany_corrupter
+				days = @voidlure_dtm_theophany_corrupter_cd
+			}
+			starbase_event = {
+				id = dtm_theophany_corruption.501
+				days = @voidlure_dtm_theophany_corrupter_cd
+			}
+		}
+		inline_script = {
+			script = dtm_theophany/start_system_corruption
+			AMOUNT = 1
+			SYSTEM = solar_system
+		}
+	}
+	scripted_effect_cooldown = @voidlure_dtm_theophany_corrupter_cd
+	scripted_effect_cooldown_flag = capture_cooldown_for_voidlure_dtm_theophany_corrupter
+	scripted_effect_cooldown_flag_desc = capture_cooldown_for_voidlure_dtm_theophany_corrupter_desc
+	ai_weight = {
+		weight = 100		#use same weight here - ai weighting is done in starbase_types.txt
+	}
+}

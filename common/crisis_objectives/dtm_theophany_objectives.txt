@@ -1,0 +1,89 @@
+crisobj_dtm_theophany_priest_jobs = {
+	reward = {
+		base = 1
+	}
+	recurring = yes
+}
+
+crisobj_dtm_theophany_pilgrim_jobs = {
+	reward = {
+		base = 1
+	}
+	recurring = yes
+}
+
+crisobj_dtm_theophany_subjugate_heretics = {
+	reward = {
+		base = 500
+		complex_trigger_modifier = { #subtract 25 for each playable country that exists
+			trigger = count_playable_country
+			mode = subtract
+			mult = 25
+		}
+		round_to = 50 	#we want a solid number
+		min = 100 		#and we don't want less than 100
+	}
+}
+
+crisobj_dtm_theophany_leading_the_blind = {
+	reward = {
+		base = 50
+		complex_trigger_modifier = { #subtract 2.5 for each playable country that exists
+			trigger = count_playable_country
+			mode = subtract
+			mult = 2.5
+		}
+		round_to = 5 	#we want a solid number
+		min = 10 		#and we don't want less than 10
+	}
+	recurring = yes
+}
+
+crisobj_dtm_theophany_destroy_ai = {
+	reward = {
+		base = 1000
+		complex_trigger_modifier = { #subtract 50 for each playable country that exists
+			trigger = count_playable_country
+			mode = subtract
+			mult = 50
+		}
+		min = 100 		#and we don't want less than 100
+	}
+}
+
+crisobj_dtm_theophany_divine_enforcer = {
+	reward = {
+		base = 100000
+		divide = trigger:num_galaxy_systems 	#on huge, this is 100. On smallest, it is 500
+		complex_trigger_modifier = { 			#fewer worlds => more menace from destroying one
+			trigger = check_galaxy_setup_value
+			parameters = { setting = habitable_worlds_scale }
+			mode = divide
+		}
+		round_to = 50 								#we don't want 127.5 menace
+		min = 100									#just in case
+	}
+}
+
+crisobj_dtm_theophany_shrouding_worlds = {
+	reward = {
+		base = 100000
+		divide = trigger:num_galaxy_systems 	#on huge, this is 100. On smallest, it is 500
+		complex_trigger_modifier = { 			#fewer worlds => more menace from destroying one
+			trigger = check_galaxy_setup_value
+			parameters = { setting = habitable_worlds_scale }
+			mode = divide
+		}
+		round_to = 50 								#we don't want 127.5 menace
+		min = 100									#just in case
+	}
+}
+
+crisobj_dtm_theophany_shrouding_systems = {
+	reward = {
+		base = 100000
+		divide = trigger:num_galaxy_systems 	#on huge, this is 100. On smallest, it is 500
+		round_to = 50 								#we don't want 127.5 menace
+		min = 100									#just in case
+	}
+}

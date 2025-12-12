@@ -1,0 +1,78 @@
+dtm_theophany_corruption_growth = {
+	base = 0
+	add = modifier:dtm_theophany_corruption_add
+	mult = 100	# percentage multiplier
+}
+
+dtm_theophany_corruption_growth_system = {
+	base = 0
+	add = value:dtm_theophany_corruption_growth
+	add = -0.4	# natural decay of systems
+}
+
+dtm_theophany_city_districts = {
+	base = 0
+	complex_trigger_modifier = {
+		trigger = num_districts
+		parameters = {
+			type = dtm_shardworld_district_city
+		}
+		mode = add
+	}
+}
+
+# unfortunately this will also count entertainers and such, as they also have the unity tag -.- but this might be tolerable
+# fix this shit 
+dtm_theophany_num_priests_and_telepaths = {
+	base = 0
+	complex_trigger_modifier = {
+   		trigger = resource_income_compare
+   		parameters = {
+   		   	resource = dtm_faith
+   		}
+   		mode = add
+	}
+	mult = 12 # yearly
+	# idfk 
+	# complex_trigger_modifier = {
+	# 	trigger = count_owned_pop_amount
+	# 	parameters = {
+	# 		limit = {
+	# 			OR = {
+	# 				has_job_type = telepath
+	# 				has_job_type = bureaucrat
+	# 			}
+	# 		}
+	# 	}
+	# 	mode = add
+	# }
+	# tags or other method
+	# complex_trigger_modifier = {
+	# 	trigger = num_country_pops_with_job_tag
+	# 	parameters = {
+	# 		tags = {
+	# 			unity
+	# 			#dtm_pilgrim
+	# 		}
+	# 	}
+	# 	mode = subtract
+	# }
+	# divide = 100
+	# round = yes
+}
+
+dtm_theophany_num_pilgrims = {
+	base = 0
+	complex_trigger_modifier = {
+		trigger = num_country_pops_with_job_tag
+		parameters = {
+			tags = {
+				unity
+				#dtm_pilgrim
+			}
+		}
+		mode = add
+	}
+	divide = 100
+	round = yes
+}

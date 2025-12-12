@@ -1,0 +1,325 @@
+crisis_dtm_theophany_level_1 = {
+	# REQUIREMENTS
+	required_crisis_currency = 0
+	# REWARDS
+	perks = {
+		menp_dtm_theophany_1a
+		menp_dtm_theophany_1b
+		menp_dtm_theophany_1c
+	}
+	on_unlock = {
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = dtm_theophany_stages.10
+				}
+			}
+		}
+	}
+}
+
+crisis_dtm_theophany_level_2 = {
+	# REQUIREMENTS
+	allow = {
+		custom_tooltip = {
+			success_text = crisis_dtm_theophany_level_2_req_clear_tooltip
+			fail_text = crisis_dtm_theophany_level_2_req_tooltip
+			has_country_flag = crisis_dtm_theophany_special_project_1_complete
+		}
+	}
+	required_crisis_currency = 3000
+	# REWARDS
+	perks = {
+		menp_dtm_theophany_2a
+		menp_dtm_theophany_2b
+		menp_dtm_theophany_2c
+	}
+	on_unlock = {
+		hidden_effect = {
+			owner = {
+				add_event_chain_counter = {
+					event_chain = "dtm_theophany_chain"
+					counter = "crisis_level_reached"
+					amount = 1
+				}
+				# Making sure no new covenant can be formed
+				set_country_flag = has_shroud_patron
+				# Removing all traces of former Covenants
+				remove_country_flag = composer_covenant_confirmed
+				remove_country_flag = composer_covenant_rank_1
+				remove_country_flag = composer_covenant_rank_2
+				remove_country_flag = composer_covenant_rank_3
+				remove_country_flag = composer_covenant_rank_4
+				remove_country_flag = instrument_covenant_confirmed
+				remove_country_flag = instrument_covenant_rank_1
+				remove_country_flag = instrument_covenant_rank_2
+				remove_country_flag = instrument_covenant_rank_3
+				remove_country_flag = instrument_covenant_rank_4
+				remove_country_flag = eater_covenant_confirmed
+				remove_country_flag = eater_covenant_rank_1
+				remove_country_flag = eater_covenant_rank_2
+				remove_country_flag = eater_covenant_rank_3
+				remove_country_flag = eater_covenant_rank_4
+				remove_country_flag = whisperers_covenant_confirmed
+				remove_country_flag = whisperers_covenant_rank_1
+				remove_country_flag = whisperers_covenant_rank_2
+				remove_country_flag = whisperers_covenant_rank_3
+				remove_country_flag = whisperers_covenant_rank_4
+				remove_modifier = covenant_composer_of_strands_0
+				remove_modifier = covenant_composer_of_strands
+				remove_modifier = covenant_instrument_of_desire_0
+				remove_modifier = covenant_instrument_of_desire
+				remove_modifier = covenant_eater_of_worlds_0
+				remove_modifier = covenant_eater_of_worlds
+				remove_modifier = covenant_eater_of_worlds_debuff_0
+				remove_modifier = covenant_eater_of_worlds_debuff
+				remove_modifier = covenant_whisperers_in_the_void_0
+				remove_modifier = covenant_whisperers_in_the_void
+				remove_modifier = covenant_whisperers_in_the_void_0_fircon
+				remove_modifier = covenant_whisperers_in_the_void_fircon
+				end_event_chain = composer_covenant_chain
+				end_event_chain = instrument_covenant_chain
+				end_event_chain = eater_covenant_chain
+				end_event_chain = whisperers_covenant_chain
+				if = {
+					limit = {
+						any_owned_leader = {
+							OR = {
+								has_trait = leader_trait_composer_chosen
+								has_trait = leader_trait_instrument_chosen
+								has_trait = leader_trait_eater_chosen
+								has_trait = leader_trait_whisperers_chosen
+							}
+						}
+					}
+					random_owned_leader = {
+						limit = {
+							OR = {
+								has_trait = leader_trait_composer_chosen
+								has_trait = leader_trait_instrument_chosen
+								has_trait = leader_trait_eater_chosen
+								has_trait = leader_trait_whisperers_chosen
+							}
+						}
+						remove_trait = leader_trait_composer_chosen
+						remove_trait = leader_trait_instrument_chosen
+						remove_trait = leader_trait_eater_chosen
+						remove_trait = leader_trait_whisperers_chosen
+					}
+				}
+				# Removing End of Cycle
+				if = {
+					limit = {
+						has_country_flag = covenant_end_of_the_cycle
+					}
+					remove_country_flag = covenant_end_of_the_cycle
+					remove_modifier = covenant_end_of_the_cycle
+					# To prevent Reckoning
+					set_global_flag = no_end_of_cycle
+				}
+				enable_special_project = {
+					name = CRISIS_DTM_THEOPHANY_SPECIAL_PROJECT_2
+				}
+				create_message = {
+					type = DTM_THEOPHANY_CRISIS_MILESTONE_MESSAGE_TYPE
+					localization =  DTM_THEOPHANY_MESSAGE_CRISIS_MILESTONE_2
+					days = @toast_message_days
+					target = event_target:dtm_theophany_god@root
+					variable = {
+						type = name
+						localization = LEADER
+						scope = event_target:dtm_theophany_god@root
+					}
+					variable = {
+						key = "border"
+						value = "GFX_border_legendary"
+					}
+				}
+				# First emissary is selected
+				country_event = {
+					id = dtm_theophany_emissary.1
+					days = 30
+					random = 30
+				}
+			}
+		}
+	}
+}
+
+crisis_dtm_theophany_level_3 = {
+	# REQUIREMENTS
+	allow = {
+		custom_tooltip = {
+			success_text = crisis_dtm_theophany_level_3_req_clear_tooltip
+			fail_text = crisis_dtm_theophany_level_3_req_tooltip
+			has_country_flag = crisis_dtm_theophany_special_project_2_complete
+		}
+	}
+	required_crisis_currency = 6000
+	# REWARDS
+	perks = {
+		menp_dtm_theophany_3a
+		menp_dtm_theophany_3b
+		menp_dtm_theophany_3c
+		menp_dtm_theophany_3d
+	}
+	on_unlock = {
+		hidden_effect = {
+			owner = {
+				add_event_chain_counter = {
+					event_chain = "dtm_theophany_chain"
+					counter = "crisis_level_reached"
+					amount = 1
+				}
+				enable_special_project = {
+					name = CRISIS_DTM_THEOPHANY_SPECIAL_PROJECT_3
+				}
+				create_message = {
+					type = DTM_THEOPHANY_CRISIS_MILESTONE_MESSAGE_TYPE
+					localization =  DTM_THEOPHANY_MESSAGE_CRISIS_MILESTONE_3
+					days = @toast_message_days
+					target = event_target:dtm_theophany_god@root
+					variable = {
+						type = name
+						localization = LEADER
+						scope = event_target:dtm_theophany_god@root
+					}
+					variable = {
+						key = "border"
+						value = "GFX_border_legendary"
+					}
+				}
+				# Shardworld appears
+				country_event = {
+					id = dtm_theophany_stages.31
+					days = 15
+				}				
+			}
+		}
+	}
+}
+
+crisis_dtm_theophany_level_4 = {
+	# REQUIREMENTS
+	allow = {
+		custom_tooltip = {
+			success_text = crisis_dtm_theophany_level_4_req_clear_tooltip
+			fail_text = crisis_dtm_theophany_level_4_req_tooltip
+			has_country_flag = crisis_dtm_theophany_special_project_3_complete
+		}
+	}
+	required_crisis_currency = 15000
+	# REWARDS
+	perks = {
+		menp_dtm_theophany_4a
+		menp_dtm_theophany_4b
+		menp_dtm_theophany_4c
+	}
+	on_unlock = {
+		hidden_effect = {
+			owner = {
+				add_event_chain_counter = {
+					event_chain = "dtm_theophany_chain"
+					counter = "crisis_level_reached"
+					amount = 1
+				}
+				enable_special_project = {
+					name = CRISIS_DTM_THEOPHANY_SPECIAL_PROJECT_4
+				}
+				create_message = {
+					type = DTM_THEOPHANY_CRISIS_MILESTONE_MESSAGE_TYPE
+					localization =  DTM_THEOPHANY_MESSAGE_CRISIS_MILESTONE_4
+					days = @toast_message_days
+					target = event_target:dtm_theophany_god@root
+					variable = {
+						type = name
+						localization = LEADER
+						scope = event_target:dtm_theophany_god@root
+					}
+					variable = {
+						key = "border"
+						value = "GFX_border_legendary"
+					}
+				}
+			}
+		}
+	}
+}
+
+crisis_dtm_theophany_level_5 = {
+	# REQUIREMENTS
+	allow = {
+		custom_tooltip = {
+			success_text = crisis_dtm_theophany_level_5_req_clear_tooltip
+			fail_text = crisis_dtm_theophany_level_5_req_tooltip
+			has_country_flag = crisis_dtm_theophany_special_project_4_complete
+		}
+		hidden_trigger = {
+			NOT = {
+				has_active_event = {
+					crisis.4135
+				}
+			}
+		}
+		is_subject = no
+	}
+	required_crisis_currency = 20000
+	# REWARDS
+	perks = {
+		menp_dtm_theophany_5a
+		menp_dtm_theophany_5b
+		menp_dtm_theophany_5c
+	}
+	on_unlock = {
+		owner = {
+			if = {
+				limit = {
+					has_federation = yes
+				}
+				leave_alliance = {
+					override_requirements = yes
+				}
+			}
+			tooltip = {
+				if = {
+					limit = {
+						is_galactic_community_formed = yes
+						is_galactic_community_member = yes
+					}
+					remove_from_galactic_community = yes
+				}
+			}
+		}
+		hidden_effect = {
+			# force Declare Crisis resolution through an appropriate party
+			# holy war - Do we have to ?
+			declare_crisis_effect = yes
+			owner = {
+				room_name_override = ""
+				add_event_chain_counter = {
+					event_chain = "dtm_theophany_chain"
+					counter = "crisis_level_reached"
+					amount = 1
+				}
+				end_event_chain = dtm_theophany_chain
+			}
+			if = {
+				limit = {
+					NOT = {
+						has_global_flag = dtm_theophany_galactic_core_spawned
+					}
+				}
+				# create the core
+				country_event = {
+					id = dtm_theophany_endgame.1000
+					days = 25
+				}
+				# notifies player
+				country_event = {
+					id = dtm_theophany_endgame.1015
+					days = 30
+				}
+			}
+		}
+	}
+}

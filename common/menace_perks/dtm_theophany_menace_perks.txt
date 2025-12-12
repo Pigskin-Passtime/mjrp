@@ -1,0 +1,197 @@
+# MENACE PERKS
+# menp_name = {
+#	portrait = "GFX_crisis_1_perk_1"	# Icon that will be used to display the perk
+#	modifier = {						# static modifier added to the country for as long as they have the perk
+#		pop_purge_mult = 5.0
+#	}
+#	on_unlock = {						# Effect that will be executed when the country receives perk
+#		log = "Country [This.GetName] received menace perk 'menp_name'"
+#	}
+#	resources = {						# resources for the country that has the perk. Only upkeep and produces are hooked in
+#		category = menace_perks
+#		produces = {
+#			alloys = 1
+#		}
+#		upkeep = {
+#			energy = 1
+#		}
+#	}
+# }
+menp_dtm_theophany_1a = {
+	portrait = "GFX_dtm_theophany_destroyer"
+	on_unlock = {
+		custom_tooltip = unlocks_theophany_destroyer
+	}
+}
+
+menp_dtm_theophany_1b = {
+	portrait = "GFX_dtm_theophany_sun"
+	on_unlock = {
+		custom_tooltip = unlocks_theophany_objectives
+	}
+}
+
+menp_dtm_theophany_1c = {
+	portrait = "GFX_dtm_theophany_hand"
+	modifier = {
+		#planet_dtm_pilgrims_dtm_faith_produces_add = 0.2
+		planet_bureaucrats_dtm_faith_produces_add = 0.25
+		planet_telepaths_dtm_faith_produces_add = 0.5
+	}
+	on_unlock = {
+		custom_tooltip = unlocks_theophany_devotion_from_priests
+	}
+}
+
+menp_dtm_theophany_2a = {
+	portrait = "GFX_dtm_theophany_covenant"
+	on_unlock = {
+		custom_tooltip = unlocks_theophany_convenant
+		#hidden_effect = {
+			if = {
+				limit = {
+					country_uses_bio_ships = yes
+				}
+				append_technology = {
+					TECH = psionic_barrier
+				}
+			}
+			else = {
+				append_technology = {
+					TECH = psionic_shield
+				}
+			}
+		#}
+	}
+	modifier = {
+		planet_telepaths_unity_produces_add = 2
+		planet_telepaths_sr_zro_produces_add = 0.1
+		planet_jobs_produces_mult = 0.1
+		ship_shield_mult = 0.25
+		country_base_influence_produces_add = 2
+		leader_lifespan_mult = -0.1
+		negative_traits_country = 1
+	}
+}
+
+menp_dtm_theophany_2b = {
+	portrait = "GFX_dtm_theophany_divine_bonds"
+	modifier = {
+		species_leader_exp_gain = 0.25
+	}
+	on_unlock = {
+		custom_tooltip = unlocks_theophany_divine_bonds
+	}
+}
+
+menp_dtm_theophany_2c = {
+	portrait = "GFX_dtm_theophany_unwavering_faith"
+	modifier = {
+		psionic_pop_bonus_workforce_mult = 0.15
+	}
+}
+
+menp_dtm_theophany_3a = {
+	portrait = "GFX_dtm_theophany_cruiser"
+	on_unlock = {
+		custom_tooltip = unlocks_theophany_cruiser
+	}
+}
+
+menp_dtm_theophany_3b = {
+	portrait = "GFX_dtm_theophany_purge_infidels"
+	modifier = {
+		country_war_exhaustion_mult = -0.25
+	}
+}
+
+menp_dtm_theophany_3c = {
+	portrait = "GFX_dtm_theophany_corruption_1"
+	# unlocks policy which triggers introduction event for all empires
+	on_unlock = {
+		set_global_flag = ap_dtm_theophany_active_corruption
+		custom_tooltip = unlocks_theophany_corruption_1
+	}
+}
+
+menp_dtm_theophany_3d = {
+	portrait = "GFX_dtm_theophany_shards"
+	on_unlock = {
+		custom_tooltip = unlocks_theophany_shardworld
+	}
+}
+
+menp_dtm_theophany_4a = {
+	portrait = "GFX_dtm_theophany_battleship"
+	on_unlock = {
+		custom_tooltip = unlocks_theophany_battleship
+	}
+}
+
+menp_dtm_theophany_4b = {
+	portrait = "GFX_dtm_theophany_new_order"
+	modifier = {
+		country_subject_acceptance_add = 25
+	}
+	on_unlock = {
+		custom_tooltip = unlocks_theophany_war_goal
+	}
+}
+
+menp_dtm_theophany_4c = {
+	portrait = "GFX_dtm_theophany_corruption_2"
+	on_unlock = {
+		custom_tooltip = unlocks_theophany_corruption_2
+	}
+}
+
+menp_dtm_theophany_5a = {
+	portrait = "GFX_dtm_theophany_burning_skies"
+	modifier = {
+		starbase_shipyard_artificial_build_unity_cost_mult = -0.5
+	}
+	on_unlock = {
+		custom_tooltip = unlocks_theophany_cargoship
+		# hidden_effect = {
+		# 	if = {
+		# 		limit = {
+		# 			host_has_dlc = "First Contact Story Pack"
+		# 		}
+		# 		add_global_ship_design = dtm_theophany_cargoship_01
+		# 	}
+		# 	else = {
+		# 		add_global_ship_design = dtm_theophany_cargoship_02
+		# 	}
+		# }
+	}
+}
+
+menp_dtm_theophany_5b = {
+	portrait = "GFX_dtm_theophany_final_war"
+	on_unlock = {
+		custom_tooltip = unlocks_theophany_final_war
+		hidden_effect = {
+			#declare_crisis_war_effect = yes # event target in effect, its somewhere else already
+			if = {
+				limit = {
+					NOT = {
+						has_global_flag = dtm_theophany_galactic_core_spawned
+					}
+				}
+				country_event = {
+					id = dtm_theophany_endgame.1000
+				}
+			}
+		}
+	}
+}
+
+menp_dtm_theophany_5c = {
+	portrait = "GFX_dtm_theophany_corruption_3"
+	on_unlock = {
+		custom_tooltip = unlocks_theophany_corruption_3
+		hidden_effect = {
+			set_global_flag = dtm_theophany_unlocked_theophany_corruption_3
+		}
+	}
+}

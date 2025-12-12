@@ -1,0 +1,528 @@
+dtm_theophany_increase_corruption_planet = {
+	if = {
+		limit = {
+			has_modifier = dtm_theophany_planet_corruption
+		}
+		remove_modifier = dtm_theophany_planet_corruption
+	}
+	if = {
+		limit = {
+			NOT = {
+				is_variable_set = dtm_theophany_planet_corruption
+			}
+		}
+		set_variable = {
+			which = dtm_theophany_planet_corruption
+			value = $AMOUNT$
+		}
+	}
+	else = {
+		change_variable = {
+			which = dtm_theophany_planet_corruption
+			value = $AMOUNT$
+		}
+	}
+	add_modifier = {
+		modifier = dtm_theophany_planet_corruption
+		mult = this.dtm_theophany_planet_corruption
+	}
+}
+
+dtm_theophany_increase_corruption_system = {
+	if = {
+		limit = {
+			has_modifier = dtm_theophany_system_corruption
+		}
+		remove_modifier = dtm_theophany_system_corruption
+	}
+	if = {
+		limit = {
+			NOT = {
+				is_variable_set = dtm_theophany_system_corruption
+			}
+		}
+		set_variable = {
+			which = dtm_theophany_system_corruption
+			value = $AMOUNT$
+		}
+	}
+	else = {
+		change_variable = {
+			which = dtm_theophany_system_corruption
+			value = $AMOUNT$
+		}
+	}
+	add_modifier = {
+		modifier = dtm_theophany_system_corruption
+		mult = this.dtm_theophany_system_corruption
+	}
+}
+
+dtm_theophany_create_wormhole = {
+	spawn_megastructure = {
+		type = gateway_final
+		name = dtm_theophany_create_wormhole_gateway_name
+		planet = solar_system.star
+		orbit_distance = 270
+		graphical_culture = avian_01
+		# owner = event_target:dtm_theophany_shroud_country # this prevents travel xd
+		#orbit_angle = 50
+	}
+	# spawn_natural_wormhole = {
+	# 	bypass_type = wormhole
+	# 	#graphics_entity_name = "NAME_Corrupted_Avatar"
+	# }
+	# save_event_target_as = dtm_theophany_create_wormhole_target
+	# random_system = {
+	# 	limit = {
+	# 		exists = owner
+	# 		owner = {
+	# 			has_menace_perk = menp_dtm_theophany_5c
+	# 		}
+	# 		NOR = {
+	# 			has_star_flag = dtm_theophany_core_system
+	# 			has_star_flag = unique_system
+	# 			has_natural_wormhole = yes
+	# 		}
+	# 	}
+	# 	spawn_natural_wormhole = {
+	# 		bypass_type = wormhole
+	# 		#graphics_entity_name = "NAME_Corrupted_Avatar"
+	# 	}
+	# 	link_wormholes = event_target:dtm_theophany_create_wormhole_target
+	# }
+}
+
+# Actually creating the thing
+dtm_theophany_create_shroud_countries = {
+	#set_global_flag = dtm_theophany_shroud_country_spawned
+	if = {
+		limit = {
+			NOT = {
+				exists = event_target:dtm_theophany_shroud_country
+			}
+		}
+		create_country = {
+			name = "NAME_Creatures_of_the_Shroud"
+			type = dtm_theophany_shroud_spirits
+			auto_delete = no
+			flag = {
+				icon = {
+					category = "special"
+					file = "the_shroud.dds"
+				}
+				background = {
+					category = "backgrounds"
+					file = "00_solid.dds"
+				}
+				colors = {
+					"dark_purple"
+					"black"
+					"null"
+					"null"
+				}
+			}
+			effect = {
+				save_global_event_target_as = dtm_theophany_shroud_country
+				add_modifier = {
+					modifier = dtm_theophany_shroud_buffs2
+				}
+			}
+		}
+	}
+	every_playable_country = {
+		establish_communications_no_message = event_target:dtm_theophany_shroud_country
+	}
+	# create_fleet = {
+	# 	name = "NAME_Psionic_Entity"
+	# 	settings = {
+	# 		spawn_debris = no
+	# 		is_boss = yes
+	# 	}
+	# 	effect = {
+	# 		set_owner = event_target:dtm_theophany_shroud_country
+	# 		set_fleet_flag = crisis_shroud_entity
+	# 		create_ship = {
+	# 			name = "NAME_Psionic_Entity"
+	# 			design = "NAME_Corrupted_Avatar"
+	# 		}
+	# 		set_location = {
+	# 			target = prev.star
+	# 			distance = 100
+	# 			angle = random
+	# 		}
+	# 		set_fleet_stance = aggressive
+	# 		set_aggro_range_measure_from = return_point
+	# 		set_aggro_range = 2000
+	# 	}
+	# }
+	# star = {
+	# 	create_ambient_object = {
+	# 		type = "psi_storm_1"
+	# 		location = this
+	# 	}
+	# 	last_created_ambient_object = {
+	# 		set_ambient_object_flag = psi_storm_object
+	# 		set_location = {
+	# 			target = prev
+	# 			distance = 0
+	# 			angle = random
+	# 		}
+	# 	}
+	# }
+	# }
+	# create_species = {
+	# 	name = dtm_theophany_shroud_country
+	# 	adjective = dtm_theophany_shroud_country_adjective
+	# 	plural = dtm_theophany_shroud_country_plural
+	# 	#class = FUN
+	# 	portrait = shroud1
+	# 	traits = {
+	# 		trait = trait_psionic
+	# 		trait = trait_nerve_stapled
+	# 		trait = trait_venerable
+	# 		trait = trait_repugnant
+	# 		trait = trait_slow_learners
+	# 	}
+	# }
+	# create_country = {
+	# 	name = dtm_theophany_shroud_country_name
+	# 	type = global_event
+	# 	species = last_created_species
+	# 	auto_delete = no
+	# 	flag = {
+	# 		icon = {
+	# 			category = "special"
+	# 			file = "the_shroud.dds"
+	# 		}
+	# 		background = {
+	# 			category = "backgrounds"
+	# 			file = "00_solid.dds"
+	# 		}
+	# 		colors = {
+	# 			"purple"
+	# 			"purple"
+	# 			"null"
+	# 			"null"
+	# 		}
+	# 	}
+	# 	ethos = {
+	# 		ethic = ethic_fanatic_spiritualist
+	# 		ethic = ethic_authoritarian
+	# 	}
+	# 	authority = auth_oligarchic
+	# 	effect = {
+	# 		save_global_event_target_as = dtm_theophany_shroud_country
+	# 	}
+	# 	room = shroud_room
+	# }
+}
+
+dtm_theophany_create_shroud_fleet = {
+	create_fleet = {
+		name = $NAME$
+		effect = {
+			# All have 4 mdi waepons wtf lazy copy pasting?
+			# "NAME_Shroud_Avatar"
+			# "NAME_Corrupted_Avatar"
+			# "NAME_Warped_Consciousness"
+			# "NAME_Shroud_Manifestation"
+			# while = {
+			# 	count = $AMOUNT$
+			# 	random_list = {
+			# 		1 = {
+			# 			create_ship = {
+			# 				name = ""							# No name cause ship class
+			# 				design = NAME_Shroud_Manifestation
+			# 			}
+			# 		}
+			# 		1 = {
+			# 			create_ship = {
+			# 				name = ""							# No name cause ship class
+			# 				design = NAME_Corrupted_Avatar
+			# 			}
+			# 		}
+			# 		1 = {
+			# 			create_ship = {
+			# 				name = ""							# No name cause ship class
+			# 				design = NAME_Shroud_Avatar
+			# 			}
+			# 		}
+			# 		1 = {
+			# 			create_ship = {
+			# 				name = ""							# No name cause ship class
+			# 				design = NAME_Warped_Consciousness
+			# 			}
+			# 		}
+			# 	}
+			# }
+			while = {
+				count = $AMOUNT$
+				create_ship = {
+					name = ""					# No name cause ship class
+					design = NAME_Shroud_Manifestation
+				}
+			}
+			set_location = {
+				target = $LOCATION$
+				distance = 300
+				angle = random
+			}
+			# set_location = {
+			# 	target = solar_system.star
+			# 	distance = 300
+			# 	angle = random
+			# }
+			set_fleet_stance = aggressive
+			set_aggro_range = 500
+			set_aggro_range_measure_from = self
+			# set_fleet_bombardment_stance = indiscriminate
+		}
+	}
+	last_created_fleet = {
+		set_name = NAME_Shroud_Manifestation
+		set_owner = event_target:dtm_theophany_shroud_country
+		set_location = {
+			target = $LOCATION$
+			distance = 300
+			angle = random
+		}
+		set_fleet_stance = aggressive
+		set_aggro_range = 500
+		set_aggro_range_measure_from = self
+	}
+}
+
+dtm_theophany_create_shroud_fleet_from_country = {
+	random_country = {
+		limit = {
+			is_country_type = default
+			is_at_war_with = root.owner
+		}
+		create_leader = {
+			class = commander
+			species = owner_main_species
+			name = random
+			skill = 4
+			effect = {
+				save_event_target_as = dtm_theophany_create_shroud_fleet_from_country_leader
+			}
+		}
+		last_created_leader = {
+			set_owner = event_target:dtm_theophany_shroud_country
+		}
+		create_fleet_from_naval_cap = $FRACTION$
+		last_created_fleet = {
+			set_name = NAME_Shroud_Manifestation
+			set_owner = event_target:dtm_theophany_shroud_country
+			set_location = {
+				target = $LOCATION$
+				distance = 300
+				angle = random
+			}
+			set_fleet_stance = aggressive
+			set_aggro_range = 500
+			set_aggro_range_measure_from = self
+			# set_fleet_bombardment_stance = indiscriminate
+			assign_leader = event_target:dtm_theophany_create_shroud_fleet_from_country_leader
+		}
+	}
+}
+
+dtm_theophany_create_shroud_fleet_fly_to_center = {
+	last_created_fleet = {
+		clear_orders = yes
+		clear_fleet_actions = THIS		# fleet scope	
+		queue_actions = {
+			find_closest_system = {
+				trigger = {
+					id = dtm_theophany_create_shroud_fleet_from_country_$ID$
+					has_star_flag = dtm_theophany_endgame_center
+				}
+				found_system = {
+					move_to = this
+					orbit_planet = star
+				}
+			}
+		}
+	}
+}
+
+dtm_theophany_buff_shroud = {
+	event_target:dtm_theophany_shroud_country = {
+		change_variable = {
+			which = dtm_theophany_buff_shroud
+			value = $AMOUNT$
+		}
+		remove_modifier = dtm_theophany_shroud_buffs
+		add_modifier = {
+			modifier = dtm_theophany_shroud_buffs
+			mult = dtm_theophany_buff_shroud
+		}
+	}
+}
+
+dtm_theophany_name_1_reset = {
+	remove_country_flag = dtm_theophany_name_1a
+	remove_country_flag = dtm_theophany_name_1b
+	remove_country_flag = dtm_theophany_name_1c
+	remove_country_flag = dtm_theophany_name_1d
+	remove_country_flag = dtm_theophany_name_1e
+	remove_country_flag = dtm_theophany_name_1f
+	remove_country_flag = dtm_theophany_name_1g
+	remove_country_flag = dtm_theophany_name_1h
+	remove_country_flag = dtm_theophany_name_1i
+	remove_country_flag = dtm_theophany_name_1j
+	remove_country_flag = dtm_theophany_name_1k
+}
+
+dtm_theophany_name_2_reset = {
+	remove_country_flag = dtm_theophany_name_2a
+	remove_country_flag = dtm_theophany_name_2b
+	remove_country_flag = dtm_theophany_name_2c
+	remove_country_flag = dtm_theophany_name_2d
+	remove_country_flag = dtm_theophany_name_2e
+	remove_country_flag = dtm_theophany_name_2f
+	remove_country_flag = dtm_theophany_name_2g
+	remove_country_flag = dtm_theophany_name_2h
+	remove_country_flag = dtm_theophany_name_2i
+	remove_country_flag = dtm_theophany_name_2j
+	remove_country_flag = dtm_theophany_name_2k
+	remove_country_flag = dtm_theophany_name_2l
+	remove_country_flag = dtm_theophany_name_2m
+}
+
+dtm_theophany_corrupt_planet_final = {
+	dtm_theophany_increase_corruption_planet = {
+		AMOUNT = 100
+	}
+	if = {
+		limit = {
+			habitable_planet = yes
+			NOT = {
+				is_planet_class = pc_dtm_shardworld
+			}
+		}
+		change_pc = pc_shrouded
+		# this is for all, not just the corruptor
+		every_playable_country = {
+			limit = {
+				has_menace_perk = menp_dtm_theophany_3d
+			}
+			country_event = {
+				id = dtm_theophany_objectives.6
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_global_flag = dtm_theophany_unlocked_theophany_corruption_3
+		}
+		solar_system = {
+			save_event_target_as = solar_system
+			inline_script = {
+				script = dtm_theophany/start_system_corruption
+				AMOUNT = 20
+				SYSTEM = event_target:solar_system
+			}
+		}
+	}
+}
+
+dtm_theophany_corrupt_system_final = {
+	set_star_flag = dtm_theophany_corruption_complete
+	add_modifier = {
+		modifier = dtm_theophany_system_corruption_final		#this way we show the full modifer 
+	}
+	solar_system = {
+		create_nebula = {
+			radius = 1
+			effect = {
+				star = {
+					create_ambient_object = {
+						type = dtm_theophany_space_storm_1
+						location = root.target.star
+						scale = 1
+						use_3d_location = yes
+						#entity_scale_to_size = yes
+					}
+					last_created_ambient_object = {
+						#set_ambient_object_flag = space_storm_object
+						set_location = {
+							target = root.target.star
+							distance = 0
+							angle = random
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_global_flag = dtm_theophany_unlocked_theophany_corruption_3
+			}
+			every_neighbor_system = {
+				solar_system = {
+					save_event_target_as = solar_system
+					inline_script = {
+						script = dtm_theophany/start_system_corruption
+						AMOUNT = 30
+						SYSTEM = event_target:solar_system
+					}
+				}
+			}
+		}
+	}
+	# this is for all, not just the corruptor
+	every_playable_country = {
+		limit = {
+			has_menace_perk = menp_dtm_theophany_3d
+		}
+		country_event = {
+			id = dtm_theophany_objectives.7
+		}
+	}
+}
+
+dtm_theophany_win_effect = {
+	custom_tooltip = dtm_theophany_win_effect_TT
+	hidden_effect = {
+		give_technology = {
+			tech = tech_dtm_theophany_sanctum_2
+			message = no
+		}
+		if = {
+			limit = {
+				has_first_contact_dlc = yes
+			}
+			random_owned_megastructure = {
+				limit = {
+					is_megastructure_type = dtm_theophany_throne_1
+				}
+				upgrade_megastructure_to = dtm_theophany_throne_2
+			}
+		}
+		else = {
+			random_owned_megastructure = {
+				limit = {
+					is_megastructure_type = dtm_theophany_throne_1_alt
+				}
+				upgrade_megastructure_to = dtm_theophany_throne_2_alt
+			}
+		}
+	}
+}
+
+dtm_theophany_delete_fire_ship = {
+	random_fleet_in_orbit = {
+		limit = {
+			any_owned_ship = {
+				OR = {
+					is_ship_size = dtm_theophany_cargoship_01
+					is_ship_size = dtm_theophany_cargoship_02
+				}
+			}
+		}
+		delete_fleet = this
+	}
+}

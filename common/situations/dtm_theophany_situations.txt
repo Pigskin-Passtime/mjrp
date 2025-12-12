@@ -1,0 +1,298 @@
+dtm_theophany_corruption_planet = {
+	picture = GFX_evt_alien_propaganda
+	category = neutral
+	fail_icon = GFX_situation_outcome_meh
+	fail_icon_frame = GFX_situation_outcome_frame_green
+	complete_icon = GFX_situation_outcome_unknown
+	complete_icon_frame = GFX_situation_outcome_frame_green
+	on_start = {
+		target = {
+			dtm_theophany_increase_corruption_planet = {
+				AMOUNT = 1
+			}
+			set_planet_flag = dtm_theophany_corruption_started
+		}
+	}
+	on_fail = {
+		target = {
+			remove_planet_flag = dtm_theophany_corruption_started
+			remove_modifier = dtm_theophany_planet_corruption
+			clear_variable = dtm_theophany_planet_corruption
+			if = {
+				# Negative gain
+				limit = {
+					has_planet_flag = dtm_theophany_planet_corruption_space_storm_object
+				}
+				#solar_system = {
+				random_ambient_object = {
+					limit = {
+						has_ambient_object_flag = dtm_theophany_planet_corruption_space_storm_object@root.target
+					}
+					destroy_ambient_object = this
+				}
+				#}
+			}
+		}
+		destroy_situation = this
+	}
+	on_abort = {
+	}
+	start_value = 0
+	abort_trigger = {
+	}
+	on_monthly = {
+		events = {
+			dtm_theophany_corruption.500
+		}
+	}
+	stages = {
+		dtm_theophany_corruption_planet_stage1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_blue
+			end = 50
+		}
+		dtm_theophany_corruption_planet_stage2 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_blue
+			on_first_enter = {
+				target = {
+					create_ambient_object = {
+						type = dtm_psi_storm_1						# planet
+						location = root.target
+						scale = 0.3
+						use_3d_location = yes
+						#entity_scale_to_size = yes
+						# entity_offset_height = {
+						# 	min = -30
+						# 	max = -30
+						# }
+					}
+					last_created_ambient_object = {
+						set_ambient_object_flag = dtm_theophany_planet_corruption_space_storm_object@root.target
+						# set_location = {
+						# 	target = root.target
+						# 	distance = 0
+						# 	angle = random
+						# }
+					}
+					set_planet_flag = dtm_theophany_planet_corruption_space_storm_object
+				}
+			}
+			end = 100
+		}
+	}
+	on_progress_complete = {
+		target = {
+			set_planet_flag = dtm_theophany_corruption_complete
+			clear_variable = dtm_theophany_planet_corruption
+			dtm_theophany_corrupt_planet_final = yes
+		}
+		destroy_situation = this
+	}
+	monthly_progress = {
+		base = 0		# base decay, 0,8% per month
+		#add = target.value:dtm_theophany_corruption_growth
+	}
+	approach = {
+		name = dtm_theophany_corruption_planet_approach
+		icon = GFX_situation_approach_gift
+		icon_background = GFX_situation_approach_bg_green
+		modifier = {
+			dtm_theophany_corruption_add = -0.008			# natural decay
+			country_unity_produces_mult = 0.01			# event country, log cries about this
+		}
+		ai_weight = {
+			base = 1
+		}
+		default = yes
+	}
+}
+
+dtm_theophany_corruption_system = {
+	picture = GFX_evt_alien_propaganda
+	category = neutral
+	fail_icon = GFX_situation_outcome_meh
+	fail_icon_frame = GFX_situation_outcome_frame_green
+	complete_icon = GFX_situation_outcome_unknown
+	complete_icon_frame = GFX_situation_outcome_frame_green
+	on_start = {
+		target = {
+			dtm_theophany_increase_corruption_system = {
+				AMOUNT = 1
+			}
+			set_star_flag = dtm_theophany_corruption_started
+		}
+	}
+	on_fail = {
+		target = {
+			remove_star_flag = dtm_theophany_corruption_started
+			remove_modifier = dtm_theophany_system_corruption
+			clear_variable = dtm_theophany_system_corruption
+		}
+		destroy_situation = this
+	}
+	on_abort = {
+	}
+	start_value = 0
+	abort_trigger = {
+	}
+	on_monthly = {
+		events = {
+			dtm_theophany_corruption.502
+		}
+	}
+	stages = {
+		dtm_theophany_corruption_system_stage1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_blue
+			end = 100
+		}
+	}
+	on_progress_complete = {
+		target = {
+			remove_star_flag = dtm_theophany_corruption_started
+			remove_modifier = dtm_theophany_system_corruption
+			clear_variable = dtm_theophany_system_corruption
+			dtm_theophany_corrupt_system_final = yes
+		}
+		custom_tooltip = FASCINATING		# for error log
+	}
+	monthly_progress = {
+		base = 0
+		#add = target.star.value:dtm_theophany_corruption_growth_system
+	}
+	approach = {
+		name = dtm_theophany_corruption_system_approach
+		icon = GFX_situation_approach_gift
+		icon_background = GFX_situation_approach_bg_green
+		modifier = {
+			country_unity_produces_mult = 0.01			# event country, log cries about this
+		}
+		ai_weight = {
+			base = 1
+		}
+		default = yes
+	}
+}
+
+dtm_theophany_final_battle = {
+	picture = GFX_evt_astral_rift_entangled_dark_matter
+	category = neutral
+	fail_icon = GFX_situation_outcome_bankrupcy
+	fail_icon_frame = GFX_situation_outcome_frame_red
+	complete_icon = GFX_situation_outcome_ascension
+	complete_icon_frame = GFX_situation_outcome_frame_green
+	on_start = {
+		set_timed_situation_flag = {
+			flag = dtm_theophany_final_battle_prepartion
+			days = 360
+		}
+		dtm_theophany_create_shroud_countries = yes
+	}
+	on_fail = {
+		custom_tooltip = dtm_theophany_final_battle_lose
+		destroy_situation = this
+		owner = {
+			country_event = {
+				id = dtm_theophany_endgame.1030
+			}
+		}
+		
+	}
+	on_abort = {
+		# owner = {
+		# 	country_event = {
+		# 		id = dtm_theophany_endgame.1030
+		# 	}
+		# }
+	}
+	initial_progress = 500
+	abort_trigger = {
+	}
+	on_monthly = {
+		events = {
+			dtm_theophany_endgame.1010
+		}
+	}
+	stages = {
+		dtm_theophany_final_battle_stage1 = {
+			icon = GFX_dtm_theophany_corruption_situation
+			icon_background = GFX_situation_stage_frame_magenta
+			end = 1000
+		}
+	}
+	on_progress_complete = {
+		custom_tooltip = dtm_theophany_final_battle_win
+		hidden_effect = {
+			situation_event = {
+				id = dtm_theophany_endgame.1025
+			}
+		}
+	}
+	monthly_progress = {
+		base = 0
+		#add = target.star.value:dtm_theophany_corruption_growth_system
+		modifier = {
+			desc = dtm_theophany_final_battle_ownership_modifier
+			target = {
+				exists = owner
+				owner = {
+					is_same_value = root.owner
+				}
+			}
+			add = 8
+		}
+		modifier = {
+			desc = dtm_theophany_final_battle_ownership_modifier_neg
+			#NAND = {
+			target = {
+				NOR = {
+					exists = owner
+					owner = {
+						is_same_value = root.owner
+					}
+				}
+			}
+			NOT = {
+				has_situation_flag = dtm_theophany_final_battle_prepartion
+			}
+			#}
+			add = -8
+		}
+	}
+	# TODO info that you have to claim the system and better info when you actually win the game
+	approach = {
+		name = dtm_theophany_final_battle_approach
+		icon = GFX_situation_approach_unity
+		icon_background = GFX_situation_approach_bg_green
+		modifier = {
+			country_unity_produces_mult = 0.5
+		}
+		ai_weight = {
+			base = 1
+		}
+		default = yes
+	}
+	approach = {
+		name = dtm_theophany_final_battle_approach2
+		icon = GFX_situation_approach_alloys
+		icon_background = GFX_situation_approach_bg_green
+		modifier = {
+			country_alloys_produces_mult = 0.25
+		}
+		ai_weight = {
+			base = 1
+		}
+	}
+	approach = {
+		name = dtm_theophany_final_battle_approach3
+		icon = GFX_situation_approach_astral
+		icon_background = GFX_situation_approach_bg_green
+		modifier = {
+			ship_shield_hardening_add = 1
+		}
+		ai_weight = {
+			base = 1
+		}
+	}
+}

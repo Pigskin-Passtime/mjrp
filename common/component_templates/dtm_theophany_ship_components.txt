@@ -1,0 +1,224 @@
+
+utility_component_template = {
+	key = "DTM_THEOPHANY_SHIP_BUTTON"
+	size = large
+	icon = GFX_mutation_combat_synapses
+	icon_frame = 1
+	power = 0
+	#custom_tooltip = DTM_THEOPHANY_SHIP_BUTTON_TT
+	scripted_action = {
+		scope = planet
+		possible = {
+			exists = owner
+			# only habitable 
+			# custom_tooltip = {
+			# 	fail_text = "is_habitable_planet"
+			# 	habitable_planet = yes
+			# }
+			# artifical planets remain habitable but cant be corrupted a second time
+			custom_tooltip = {
+				fail_text = "DTM_THEOPHANY_SHIP_BUTTON_no_corruption"
+				NOT = {
+					has_planet_flag = dtm_theophany_corruption_complete
+				}
+			}
+			# you need to be at war with them or your own?
+			custom_tooltip = {
+				fail_text = "DTM_THEOPHANY_SHIP_BUTTON_hostile_target"
+				# OR = {
+				# 	AND = {
+				# 		exists = space_owner
+				# 		space_owner = {
+				# 			OR = {
+				# 				is_same_value = root.owner
+				# 				from = {
+				# 					is_hostile_to = root.owner
+				# 				}
+				# 			}
+				# 		}
+				# 	}
+				#AND = {
+					# colony
+					exists = owner
+					owner = {
+						OR = {
+							is_same_value = root.owner
+							owner = {
+								is_hostile_to = root.owner
+							}
+						}
+					}
+				#}
+				#}
+			}
+		}
+		# button_visible = {
+		# 	always = yes
+		# }
+		# button_clickable = {
+		# 	# custom_tooltip = {
+		# 	# 	fail_text = behemoth_fast_egg_fail_tt
+		# 	# 	owner = {
+		# 	# 		has_country_flag = behemoth_fast_egg
+		# 	# 	}
+		# 	# }
+		# 	# custom_tooltip = {
+		# 	# 	fail_text = behemoth_combat_egg_fail_tt
+		# 	# 	is_in_combat = no
+		# 	# }
+		# 	always = yes
+		# }
+		name = on_dtm_fireship_fired_planet		# loc key
+		tooltip = DTM_THEOPHANY_SHIP_BUTTON_1_TT		# loc key
+		icon = GFX_dtm_theophany_button_planet		# icon
+		icon_selected = GFX_dtm_theophany_button_planet		# icon
+		activity_key = DTM_THEOPHANY_SHIP_BUTTON_1_activity		# on action name
+		context_menu_name = DTM_THEOPHANY_SHIP_BUTTON_1_title
+		# progress_activity_key = DTM_THEOPHANY_SHIP_BUTTON_1_key		# loc key
+		# required_progress = @behemoth_fast_egg_required_progress
+		#cooldown = 0		# it fucking dies after the first use
+		# cost = {
+		# 	food = 1
+		# 	#sr_zro = 100
+		# }
+		# shortcut = "SHIFT+Z"
+		# slot = 0
+	}
+	scripted_action = {
+		scope = planet
+		possible = {
+			# is_star
+			custom_tooltip = {
+				fail_text = "DTM_THEOPHANY_SHIP_BUTTON_is_star"
+				is_star = yes
+			}
+			# not already courrpted
+			custom_tooltip = {
+				fail_text = "DTM_THEOPHANY_SHIP_BUTTON_no_corruption"
+				solar_system = {
+					NOT = {
+						has_star_flag = dtm_theophany_corruption_complete
+					}
+				}
+			}
+			# custom_tooltip = {
+			# 	fail_text = "is_not_hostile_cracker"
+			# 	solar_system = {
+			# 		OR = {
+			# 			NOT = {
+			# 				exists = owner
+			# 			}
+			# 			is_same_value = root.owner
+			# 			owner = {
+			# 				is_hostile_to = root.owner
+			# 			}
+			# 		}
+			# 	}
+			# }
+		}
+		# button_visible = {
+		# 	always = yes
+		# }
+		# button_clickable = {
+		# 	always = yes
+		# 	# custom_tooltip = {
+		# 	# 	fail_text = behemoth_fast_egg_fail_tt
+		# 	# 	owner = {
+		# 	# 		has_country_flag = behemoth_fast_egg
+		# 	# 	}
+		# 	# }
+		# 	# custom_tooltip = {
+		# 	# 	fail_text = behemoth_combat_egg_fail_tt
+		# 	# 	is_in_combat = no
+		# 	# }
+		# }
+		name = on_dtm_fireship_fired_system		# on action name
+		tooltip = DTM_THEOPHANY_SHIP_BUTTON_2_TT		# loc key
+		icon = GFX_dtm_theophany_button_system		# icon
+		icon_selected = GFX_dtm_theophany_button_system	# icon
+		activity_key = DTM_THEOPHANY_SHIP_BUTTON_2_activity		# idfk
+		context_menu_name = DTM_THEOPHANY_SHIP_BUTTON_2_TT
+		# progress_activity_key = behemoth_fast_egg_progress_activity_key		# loc key
+		# required_progress = @behemoth_fast_egg_required_progress
+		# cooldown = 0		# it fucking dies after the first use
+		# cost = {
+		# 	food =1 
+		# }
+		# shortcut = "SHIFT+C"
+		# slot = 2
+	}
+	# scripted_action = {
+	# 	scope = planet
+	# 	possible = {
+	# 		# Copied from megastructure entry
+	# 		custom_tooltip = {
+	# 			fail_text = "requires_gas_giant"
+	# 			is_planet_class = pc_gas_giant
+	# 		}
+	# 		custom_tooltip = {
+	# 			fail_text = "requires_no_anomaly"
+	# 			NOT = {
+	# 				has_anomaly = yes
+	# 			}
+	# 		}
+	# 		custom_tooltip = {
+	# 			fail_text = "requires_surveyed_planet"
+	# 			is_surveyed = {
+	# 				# prevent leaking habitability information
+	# 				who = prev.from
+	# 				status = yes
+	# 			}
+	# 		}
+	# 		custom_tooltip = {
+	# 			fail_text = "requires_no_existing_megastructure"
+	# 			#can_build_megastructure_on_planet = yes
+	# 			NOR = {
+	# 				has_planet_flag = megastructure
+	# 				has_planet_flag = has_megastructure
+	# 				solar_system = {
+	# 					has_star_flag = ring_world_built
+	# 				}
+	# 				is_planet_class = pc_ringworld_habitable
+	# 				is_planet_class = pc_ringworld_habitable_damaged
+	# 				is_planet_class = pc_ringworld_tech
+	# 				is_planet_class = pc_ringworld_tech_damaged
+	# 				is_planet_class = pc_ringworld_seam
+	# 				is_planet_class = pc_ringworld_seam_damaged
+	# 				is_planet_class = pc_habitat
+	# 			}
+	# 		}
+	# 	}
+	# 	button_visible = {
+	# 		always = yes
+	# 	}
+	# 	button_clickable = {
+	# 		custom_tooltip = {
+	# 			fail_text = behemoth_fast_egg_fail_tt
+	# 			owner = {
+	# 				has_country_flag = behemoth_fast_egg
+	# 			}
+	# 		}
+	# 		custom_tooltip = {
+	# 			fail_text = behemoth_combat_egg_fail_tt
+	# 			is_in_combat = no
+	# 		}
+	# 	}
+	# 	name = on_behemoth_fast_egg_planet_reached
+	# 	tooltip = behemoth_fast_egg_ship_button
+	# 	icon = GFX_fleet_action_button_behemoth_egg
+	# 	icon_selected = GFX_fleet_action_button_behemoth_egg
+	# 	activity_key = behemoth_fast_egg_activity_key
+	# 	context_menu_name = behemoth_fast_egg_menu_title
+	# 	progress_activity_key = behemoth_fast_egg_progress_activity_key
+	# 	required_progress = @behemoth_fast_egg_required_progress
+	# 	cooldown = @behemoth_fast_egg_cooldown
+	# 	cost = {
+	# 		food = @behemoth_fast_egg_cost
+	# 	}
+	# 	shortcut = "SHIFT+Y"
+	# 	slot = 3
+	# }
+	ai_weight = {
+		factor = 2
+	}
+}

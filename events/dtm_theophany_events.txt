@@ -1,0 +1,2205 @@
+# By derega, tree, malthus
+#######################################################################################################################################
+# Theophany Crisis Path
+#######################################################################################################################################
+# Timeline Events
+#######################################################################################################################################
+# dtm_theophany_timeline.1		| Chose Ascension Perk
+# dtm_theophany_timeline.2		| Deity Incarnate
+#######################################################################################################################################
+# Crisis Objective Events
+#######################################################################################################################################
+# dtm_theophany_objectives.1	| Yearly collection of Devotion for Priest and Telepath Jobs and for Pilgrim Jobs
+# dtm_theophany_objectives.2	| Collection of Devotion for Subjugating an Empire
+# dtm_theophany_objectives.3	| Yearly collection of Devotion for Subject Empires
+# dtm_theophany_objectives.4	| Collection of Devotion for Destroying machine countries
+# dtm_theophany_objectives.5	| Collection of Devotion for using the Devine Enforcer
+# dtm_theophany_objectives.6	| Collection of Devotion for Shrouding Worlds
+# dtm_theophany_objectives.7	| Collection of Devotion for Shrouding Systems
+#######################################################################################################################################
+# Crisis Emissary Events
+#######################################################################################################################################
+# dtm_theophany_emissary.1		| First Emissary is selected - fired by stage 2 on_unlock
+# dtm_theophany_emissary.2		| Emissary died, fire new emissary selection event
+# dtm_theophany_emissary.3		| New Emissary is selected
+#######################################################################################################################################
+# Crisis Stages Events
+#######################################################################################################################################
+# dtm_theophany_stages.10		| Theophany Ascension Perk has been taken - First Encounter with the Shroud Entity	
+# dtm_theophany_stages.20		| Unlock Stage 2 of the Crisis - fired from CRISIS_DTM_THEOPHANY_SPECIAL_PROJECT_1
+# dtm_theophany_stages.21		| Unlock Stage 2 of the Crisis - Choose deity name main window
+# dtm_theophany_stages.22		| Unlock Stage 2 of the Crisis - Choose deity name first part selection window
+# dtm_theophany_stages.23		| Unlock Stage 2 of the Crisis - Choose deity name second part selection window
+# dtm_theophany_stages.30		| Unlock Stage 3 of the Crisis - fired from CRISIS_DTM_THEOPHANY_SPECIAL_PROJECT_2
+# dtm_theophany_stages.31		| The Shard World appears - fired by stage 3 on_unlock
+# dtm_theophany_stages.40		| Unlock Stage 4 of the Crisis - fired from CRISIS_DTM_THEOPHANY_SPECIAL_PROJECT_3
+# dtm_theophany_stages.50		| Get technology to build Sanctum of Incarnation - fired from CRISIS_DTM_THEOPHANY_SPECIAL_PROJECT_4
+# dtm_theophany_stages.51		| Unlock Stage 5 of the Crisis - fired on building Sanctum of Incarnation
+# TODO expand this list and add event chain/situation to all event - does neither work for diplo nor leader events afaik
+namespace = dtm_theophany_timeline
+# Chose Ascension Perk
+country_event = {
+	id = dtm_theophany_timeline.1
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		is_country_type = default
+	}
+	immediate = {
+		save_event_target_as = this_country
+		add_timeline_event = {
+			type = timeline_crisis
+			override_id = timeline_dtm_theophany_started
+			override_tooltip = "TIMELINE_EVENT_DTM_THEOPHANY_STARTED_TOOLTIP"
+			override_types = {
+				country
+			}
+			override_text = {
+				"text:TIMELINE_EVENT_DTM_THEOPHANY_STARTED"
+			}
+			override_texture = {
+				"background:GFX_evt_psionic_battle"
+			}
+			targets = {
+				event_target:this_country
+			}
+		}
+	}
+}
+
+# Deity Incarnate
+country_event = {
+	id = dtm_theophany_timeline.2
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		is_country_type = default
+	}
+	immediate = {
+		save_event_target_as = this_country
+		event_target:dtm_theophany_god@root = {
+			save_event_target_as = dtm_leader
+		}
+		add_timeline_event = {
+			type = timeline_crisis
+			override_id = timeline_dtm_theophany_stage_5
+			override_tooltip = "TIMELINE_EVENT_DTM_THEOPHANY_STAGE_5_TOOLTIP"
+			override_types = {
+				country
+				leader
+			}
+			override_text = {
+				"text:TIMELINE_EVENT_DTM_THEOPHANY_STAGE_5"
+			}
+			override_texture = {
+				"background:GFX_evt_payback"
+			}
+			targets = {
+				event_target:this_country
+				event_target:dtm_leader
+			}
+		}
+	}
+}
+
+namespace = dtm_theophany_objectives
+# Yearly collection of Devotion for Priest and Telepath Jobs
+event = {
+	id = dtm_theophany_objectives.1
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		has_global_flag = ap_dtm_theophany_active
+	}
+	immediate = {
+		every_playable_country = {
+			if = {
+				limit = {
+					has_ascension_perk = ap_dtm_theophany
+				}
+				while = {
+					count = value:dtm_theophany_num_priests_and_telepaths
+					complete_crisis_objective = crisobj_dtm_theophany_priest_jobs
+				}
+				# of course this didnt work if the value was wrong ^^
+				# while = {
+				# 	count = value:dtm_theophany_num_pilgrims
+				# 	complete_crisis_objective = crisobj_dtm_theophany_priest_jobs
+				# }
+			}
+		}
+	}
+}
+
+# on_becoming_subject
+# This = subject
+# From = subject's overlord
+# Collection of Devotion for Subjugating an Empire
+country_event = {
+	id = dtm_theophany_objectives.2
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		from = {
+			has_ascension_perk = ap_dtm_theophany
+		}
+	}
+	immediate = {
+		from = {
+			complete_crisis_objective = crisobj_dtm_theophany_subjugate_heretics
+		}
+	}
+}
+
+# Yearly collection of Devotion for Subject Empires
+event = {
+	id = dtm_theophany_objectives.3
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		has_global_flag = ap_dtm_theophany_active
+	}
+	immediate = {
+		every_playable_country = {
+			if = {
+				limit = {
+					has_ascension_perk = ap_dtm_theophany
+					is_overlord = yes
+				}
+				every_subject = {
+					prev = {
+						complete_crisis_objective = crisobj_dtm_theophany_leading_the_blind
+					}
+				}
+			}
+		}
+	}
+}
+
+# Collection of Devotion for Destroying machine/robot countries
+# on_country_destroyed
+# This = destroyed country
+# From = optional, destroyer (country)
+country_event = {
+	id = dtm_theophany_objectives.4
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		exists = from
+		from = {
+			has_ascension_perk = ap_dtm_theophany
+		}
+		is_mechanical_empire = yes
+	}
+	immediate = {
+		from = {
+			complete_crisis_objective = crisobj_dtm_theophany_destroy_ai
+		}
+	}
+}
+
+# Collection of Devotion for using the Devine Enforcer
+# Fired from on_destroy_planet_with_PLANET_KILLER_GODRAY
+planet_event = {
+	id = dtm_theophany_objectives.5
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		has_global_flag = ap_dtm_theophany_active
+	}
+	immediate = {
+		# Owner of the Colossus
+		from.owner = {
+			complete_crisis_objective = crisobj_dtm_theophany_divine_enforcer
+		}
+	}
+}
+
+# Collection of Devotion for Shrouding Worlds
+# can be called from shrouding effect
+# has to be called from somewhere
+country_event = {
+	id = dtm_theophany_objectives.6
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		random_owned_planet = {
+			limit = {
+				has_planet_flag = dtm_theophany_shardworld@root
+			}
+			owner = {
+				create_message = {
+					type = DTM_THEOPHANY_PLANET_MESSAGE_TYPE
+					#localization = DTM_THEOPHANY_PLANET_MESSAGE_TYPE
+					days = 30
+					target = prev
+				}
+			}
+			add_deposit = d_dtm_shards
+			if = {
+				limit = {
+					NOT = {
+						has_planet_flag = has_dtm_theophany_shardworld_crust
+					}
+					count_deposit = {
+						count > 5
+						limit = {
+							is_deposit_type = d_dtm_shards
+						}
+					}
+				}
+				create_ambient_object = {
+					type = dtm_theophany_shardworld_crust
+					location = this
+					scale = 2					# should be half of normal planets
+					use_3d_location = yes
+				}
+				set_planet_flag = has_dtm_theophany_shardworld_crust
+			}
+		}
+		complete_crisis_objective = crisobj_dtm_theophany_shrouding_worlds
+	}
+}
+
+# Collection of Devotion for Shrouding Systems
+# can be called from shrouding effect
+# has to be called from somewhere
+country_event = {
+	id = dtm_theophany_objectives.7
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		complete_crisis_objective = crisobj_dtm_theophany_shrouding_systems
+	}
+}
+
+namespace = dtm_theophany_emissary
+# First Emissary is selected after unlocking stage 2
+country_event = {
+	id = dtm_theophany_emissary.1
+	title = dtm_theophany_emissary.1.name
+	desc = dtm_theophany_emissary.1.desc
+	picture = GFX_evt_knights
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+	event_window_type = leader_story
+	event_picture_background = GFX_leader_recruitment_bg_renowned
+	picture_event_data = {
+		portrait = event_target:dtm_theophany_emissary
+	}
+	immediate = {
+		change_variable = {
+			which = dtm_theophany_emissary
+			value = 1
+		}
+		if = {
+			limit = {
+				any_owned_leader = {
+					is_councilor = yes
+					has_trait = leader_trait_psionic
+				}
+			}
+			random_owned_leader = {
+				limit = {
+					is_councilor = yes
+					has_trait = leader_trait_psionic
+				}
+				save_event_target_as = dtm_theophany_emissary
+			}
+		}
+		else_if = {
+			limit = {
+				any_owned_leader = {
+					has_trait = leader_trait_psionic
+				}
+			}
+			random_owned_leader = {
+				limit = {
+					has_trait = leader_trait_psionic
+				}
+				save_event_target_as = dtm_theophany_emissary
+			}
+		}
+		else = {
+			create_leader = {
+				class = official
+				skill = 1
+				randomize_traits = yes
+				effect = {
+					save_event_target_as = dtm_theophany_emissary
+				}
+			}
+		}
+	}
+	option = {
+		name = dtm_theophany_emissary.1.a
+		event_target:dtm_theophany_emissary = {
+			add_trait = {
+				trait = leader_trait_dtm_theophany_emissary
+			}
+			set_leader_flag = dtm_theophany_emissary
+		}
+	}
+}
+
+# Executed as a leader has died
+# This = Country
+# From = Leader
+# Emissary died, fire new emissary selection event
+country_event = {
+	id = dtm_theophany_emissary.2
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		has_global_flag = ap_dtm_theophany_active
+		from = {
+			has_leader_flag = dtm_theophany_emissary
+		}
+		NOT = {
+			has_country_flag = crisis_dtm_theophany_special_project_4_complete
+		}
+	}
+	immediate = {
+		change_variable = {
+			which = dtm_theophany_emissary
+			value = from.trigger:has_base_skill
+		}
+		country_event = {
+			id = dtm_theophany_emissary.3
+			days = 30
+			random = 30
+		}
+	}
+}
+
+# New Emissary is selected
+country_event = {
+	id = dtm_theophany_emissary.3
+	title = dtm_theophany_emissary.3.name
+	desc = dtm_theophany_emissary.3.desc
+	picture = GFX_evt_knights
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+	event_window_type = leader_story
+	event_picture_background = GFX_leader_recruitment_bg_renowned
+	picture_event_data = {
+		portrait = event_target:dtm_theophany_emissary
+	}
+	immediate = {
+		if = {
+			limit = {
+				any_owned_leader = {
+					is_councilor = yes
+					has_trait = leader_trait_psionic
+				}
+			}
+			random_owned_leader = {
+				limit = {
+					is_councilor = yes
+					has_trait = leader_trait_psionic
+				}
+				save_event_target_as = dtm_theophany_emissary
+			}
+		}
+		else_if = {
+			limit = {
+				any_owned_leader = {
+					has_trait = leader_trait_psionic
+				}
+			}
+			random_owned_leader = {
+				limit = {
+					has_trait = leader_trait_psionic
+				}
+				save_event_target_as = dtm_theophany_emissary
+			}
+		}
+		else = {
+			create_leader = {
+				class = official
+				skill = 1
+				randomize_traits = yes
+				effect = {
+					save_event_target_as = dtm_theophany_emissary
+				}
+			}
+		}
+	}
+	option = {
+		name = dtm_theophany_emissary.3.a
+		event_target:dtm_theophany_emissary = {
+			add_trait = {
+				trait = leader_trait_dtm_theophany_emissary
+			}
+			set_leader_flag = dtm_theophany_emissary
+		}
+	}
+}
+
+namespace = dtm_theophany_stages
+# Theophany Ascension Perk has been taken - First Encounter with the Shroud Entity
+country_event = {
+	id = dtm_theophany_stages.10
+	title = dtm_theophany_stages.10.name
+	desc = dtm_theophany_stages.10.desc
+	diplomatic_title = BLANK_STRING
+	diplomatic = yes
+	force_open = yes
+	picture_event_data = {
+		portrait = event_target:dtm_theophany_god@root
+		room = shroud_room
+	}
+	is_triggered_only = yes
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				has_trait = leader_trait_dtm_theophany_emissary
+			}
+			save_event_target_as = dtm_leader
+		}
+		event_target:dtm_leader = {
+			# i didnt even notice it first time
+			kill_leader = {
+				show_notification = yes
+			}
+		}
+		create_species = {
+			name = NAME_dtm_Celestial
+			plural = NAME_dtm_Celestials
+			adjective = NAME_dtm_Celestial
+			class = random
+			portrait = dtm_theophany_god_T1
+		}
+		# still lame, idfk
+		# I swear if i see another official paragon im gonna start hruting people
+		create_leader = {
+			species = last_created_species
+			event_leader = yes
+			class = official
+			name = "dtm_god"
+			skill = 1
+			randomize_traits = no
+			skip_background_generation = yes
+			custom_catch_phrase = dtm_god_catchphrase
+			custom_description = dtm_god_backstory
+			traits = {
+				add_trait = leader_trait_dtm_theophany_avatar
+				add_trait = leader_trait_psionic
+			}
+			gender = indeterminable
+			hide_age = yes
+			effect = {
+				set_leader_flag = legendary_leader
+				set_leader_flag = immune_to_negative_traits
+				set_leader_flag = leader_death_events_blocked
+				set_owner = root
+				save_global_event_target_as = dtm_theophany_god@root
+				exile_leader_as = dtm_theophany_god@root
+			}
+		}
+	}
+	option = {
+		name = dtm_theophany_stages.10.a
+		begin_event_chain = {
+			event_chain = dtm_theophany_chain
+		}
+		enable_special_project = {
+			name = CRISIS_DTM_THEOPHANY_SPECIAL_PROJECT_1
+		}
+	}
+}
+
+# Unlock Stage 2 of the Crisis
+country_event = {
+	id = dtm_theophany_stages.20
+	title = dtm_theophany_stages.20.name
+	desc = dtm_theophany_stages.20.desc
+	diplomatic_title = BLANK_STRING
+	diplomatic = yes
+	force_open = yes
+	picture_event_data = {
+		portrait = event_target:dtm_theophany_god@root
+		room = shroud_room
+	}
+	is_triggered_only = yes
+	immediate = {
+		event_target:dtm_theophany_god@root = {
+			change_leader_portrait = dtm_theophany_god_T2
+		}
+	}
+	option = {
+		name = dtm_theophany_stages.20.a
+		hidden_effect = {
+			country_event = {
+				id = dtm_theophany_stages.21
+			}
+		}
+	}
+}
+
+# Unlock Stage 2 of the Crisis - Choose deity name main window
+country_event = {
+	id = dtm_theophany_stages.21
+	title = dtm_theophany_stages.21.name
+	desc = dtm_theophany_stages.21.desc
+	diplomatic_title = BLANK_STRING
+	diplomatic = yes
+	force_open = yes
+	picture_event_data = {
+		portrait = event_target:dtm_theophany_god@root
+		room = shroud_room
+	}
+	is_triggered_only = yes
+	# Choose First Part
+	option = {
+		name = dtm_theophany_stages.21.a
+		hidden_effect = {
+			country_event = {
+				id = dtm_theophany_stages.22
+			}
+		}
+	}
+	# Choose Second Part
+	option = {
+		name = dtm_theophany_stages.21.b
+		hidden_effect = {
+			country_event = {
+				id = dtm_theophany_stages.23
+			}
+		}
+	}
+	# Choose Random Combination
+	option = {
+		name = dtm_theophany_stages.21.c
+		hidden_effect = {
+			dtm_theophany_name_1_reset = yes
+			dtm_theophany_name_2_reset = yes
+			random_list = {
+				1 = {
+					set_country_flag = dtm_theophany_name_1a
+				}
+				1 = {
+					set_country_flag = dtm_theophany_name_1b
+				}
+				1 = {
+					set_country_flag = dtm_theophany_name_1c
+				}
+				1 = {
+					set_country_flag = dtm_theophany_name_1d
+				}
+				1 = {
+					set_country_flag = dtm_theophany_name_1e
+				}
+				1 = {
+					set_country_flag = dtm_theophany_name_1f
+				}
+				1 = {
+					set_country_flag = dtm_theophany_name_1g
+				}
+				1 = {
+					set_country_flag = dtm_theophany_name_1h
+				}
+				1 = {
+					set_country_flag = dtm_theophany_name_1i
+				}
+				1 = {
+					set_country_flag = dtm_theophany_name_1j
+				}
+				1 = {
+					set_country_flag = dtm_theophany_name_1k
+				}
+			}
+			random_list = {
+				1 = {
+					set_country_flag = dtm_theophany_name_2a
+				}
+				1 = {
+					set_country_flag = dtm_theophany_name_2b
+				}
+				1 = {
+					set_country_flag = dtm_theophany_name_2c
+				}
+				1 = {
+					set_country_flag = dtm_theophany_name_2d
+				}
+				1 = {
+					set_country_flag = dtm_theophany_name_2e
+				}
+				1 = {
+					set_country_flag = dtm_theophany_name_2f
+				}
+				1 = {
+					set_country_flag = dtm_theophany_name_2g
+				}
+				1 = {
+					set_country_flag = dtm_theophany_name_2h
+				}
+				1 = {
+					set_country_flag = dtm_theophany_name_2i
+				}
+				1 = {
+					set_country_flag = dtm_theophany_name_2j
+				}
+				1 = {
+					set_country_flag = dtm_theophany_name_2k
+				}
+				1 = {
+					set_country_flag = dtm_theophany_name_2l
+				}
+				1 = {
+					set_country_flag = dtm_theophany_name_2m
+				}
+			}
+			country_event = {
+				id = dtm_theophany_stages.21
+			}
+		}
+	}
+	# Accept selected Name
+	option = {
+		name = dtm_theophany_stages.21.d
+		allow = {
+			OR = {
+				has_country_flag = dtm_theophany_name_1a
+				has_country_flag = dtm_theophany_name_1b
+				has_country_flag = dtm_theophany_name_1c
+				has_country_flag = dtm_theophany_name_1d
+				has_country_flag = dtm_theophany_name_1e
+				has_country_flag = dtm_theophany_name_1f
+				has_country_flag = dtm_theophany_name_1g
+				has_country_flag = dtm_theophany_name_1h
+				has_country_flag = dtm_theophany_name_1i
+				has_country_flag = dtm_theophany_name_1j
+				has_country_flag = dtm_theophany_name_1k
+			}
+			OR = {
+				has_country_flag = dtm_theophany_name_2a
+				has_country_flag = dtm_theophany_name_2b
+				has_country_flag = dtm_theophany_name_2c
+				has_country_flag = dtm_theophany_name_2d
+				has_country_flag = dtm_theophany_name_2e
+				has_country_flag = dtm_theophany_name_2f
+				has_country_flag = dtm_theophany_name_2g
+				has_country_flag = dtm_theophany_name_2h
+				has_country_flag = dtm_theophany_name_2i
+				has_country_flag = dtm_theophany_name_2j
+				has_country_flag = dtm_theophany_name_2k
+				has_country_flag = dtm_theophany_name_2l
+				has_country_flag = dtm_theophany_name_2m
+			}
+		}
+		custom_tooltip = can_advance_crisis_progression
+		hidden_effect = {
+			event_target:dtm_theophany_god@root = {
+				set_name = {
+					key = dtm_deity_name
+					variable_string = "[dtm_deity_name_1]"
+					variable_string = "[dtm_deity_name_2]"
+				}
+			}
+		}
+	}
+}
+
+# Unlock Stage 2 of the Crisis - Choose deity name first part selection window
+country_event = {
+	id = dtm_theophany_stages.22
+	title = dtm_theophany_stages.22.name
+	desc = dtm_theophany_stages.22.desc
+	diplomatic_title = BLANK_STRING
+	diplomatic = yes
+	force_open = yes
+	picture_event_data = {
+		portrait = event_target:dtm_theophany_god@root
+		room = shroud_room
+	}
+	is_triggered_only = yes
+	immediate = {
+		dtm_theophany_name_1_reset = yes
+	}
+	option = {
+		name = NAME_dtm_Benefactor
+		set_country_flag = dtm_theophany_name_1a
+	}
+	option = {
+		name = NAME_dtm_Attractor
+		set_country_flag = dtm_theophany_name_1b
+	}
+	option = {
+		name = NAME_dtm_Harbinger
+		set_country_flag = dtm_theophany_name_1c
+	}
+	option = {
+		name = NAME_dtm_Harvestor
+		set_country_flag = dtm_theophany_name_1d
+	}
+	option = {
+		name = NAME_dtm_Herald
+		set_country_flag = dtm_theophany_name_1e
+	}
+	option = {
+		name = NAME_dtm_Enforcer
+		set_country_flag = dtm_theophany_name_1f
+	}
+	option = {
+		name = NAME_dtm_Sovereign
+		set_country_flag = dtm_theophany_name_1g
+	}
+	option = {
+		name = NAME_dtm_Lord
+		set_country_flag = dtm_theophany_name_1h
+	}
+	option = {
+		name = NAME_dtm_God
+		set_country_flag = dtm_theophany_name_1i
+	}
+	option = {
+		name = NAME_dtm_Adversary
+		set_country_flag = dtm_theophany_name_1j
+	}
+	option = {
+		name = NAME_dtm_Paramount
+		set_country_flag = dtm_theophany_name_1k
+	}
+	after = {
+		hidden_effect = {
+			country_event = {
+				id = dtm_theophany_stages.21
+			}
+		}
+	}
+}
+
+# Unlock Stage 2 of the Crisis - Choose deity name second part selection window
+country_event = {
+	id = dtm_theophany_stages.23
+	title = dtm_theophany_stages.23.name
+	desc = dtm_theophany_stages.23.desc
+	diplomatic_title = BLANK_STRING
+	diplomatic = yes
+	force_open = yes
+	picture_event_data = {
+		portrait = event_target:dtm_theophany_god@root
+		room = shroud_room
+	}
+	is_triggered_only = yes
+	immediate = {
+		dtm_theophany_name_2_reset = yes
+	}
+	option = {
+		name = NAME_dtm_Order
+		set_country_flag = dtm_theophany_name_2a
+	}
+	option = {
+		name = NAME_dtm_Doom
+		set_country_flag = dtm_theophany_name_2b
+	}
+	option = {
+		name = NAME_dtm_Souls
+		set_country_flag = dtm_theophany_name_2c
+	}
+	option = {
+		name = NAME_dtm_Salvation
+		set_country_flag = dtm_theophany_name_2d
+	}
+	option = {
+		name = NAME_dtm_Dreams
+		set_country_flag = dtm_theophany_name_2e
+	}
+	option = {
+		name = NAME_dtm_Passion
+		set_country_flag = dtm_theophany_name_2f
+	}
+	option = {
+		name = NAME_dtm_Blood
+		set_country_flag = dtm_theophany_name_2g
+	}
+	option = {
+		name = NAME_dtm_Terror
+		set_country_flag = dtm_theophany_name_2h
+	}
+	option = {
+		name = NAME_dtm_Turmoil
+		set_country_flag = dtm_theophany_name_2i
+	}
+	option = {
+		name = NAME_dtm_Furor
+		set_country_flag = dtm_theophany_name_2j
+	}
+	option = {
+		name = NAME_dtm_Light
+		set_country_flag = dtm_theophany_name_2k
+	}
+	option = {
+		name = NAME_dtm_Peace
+		set_country_flag = dtm_theophany_name_2l
+	}
+	option = {
+		name = NAME_dtm_Serenity
+		set_country_flag = dtm_theophany_name_2m
+	}
+	after = {
+		hidden_effect = {
+			country_event = {
+				id = dtm_theophany_stages.21
+			}
+		}
+	}
+}
+
+# Unlock Stage 3 of the Crisis
+country_event = {
+	id = dtm_theophany_stages.30
+	title = dtm_theophany_stages.30.name
+	desc = dtm_theophany_stages.30.desc
+	diplomatic_title = BLANK_STRING
+	diplomatic = yes
+	force_open = yes
+	picture_event_data = {
+		portrait = event_target:dtm_theophany_god@root
+		room = shroud_room
+	}
+	is_triggered_only = yes
+	immediate = {
+		event_target:dtm_theophany_god@root = {
+			change_leader_portrait = dtm_theophany_god_T3
+		}
+	}
+	option = {
+		name = dtm_theophany_stages.30.a
+	}
+	after = {
+		custom_tooltip = can_advance_crisis_progression
+	}
+}
+
+# The Shard World appears
+country_event = {
+	id = dtm_theophany_stages.31
+	title = dtm_theophany_stages.31.name
+	desc = dtm_theophany_stages.31.desc
+	picture = GFX_evt_crystal_sphere
+	location = event_target:dtm_theophany_shardworld
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+	immediate = {
+		capital_scope.solar_system = {
+			if = {
+				limit = {
+					root.capital_scope = {
+						is_ringworld = no
+					}
+				}
+				spawn_planet = {
+					class = pc_dtm_shardworld
+					location = root.capital_scope
+					orbit_angle_offset = 90
+					size = 25
+					init_effect = {
+						set_planet_flag = colony_event
+						set_planet_flag = dtm_theophany_shardworld@root
+						prevent_anomaly = yes
+						set_name = "NAME_dtm_Unveiled_Lands"
+						save_event_target_as = dtm_theophany_shardworld
+						create_pop = {
+							species = root.owner_main_species
+						}
+					}
+				}
+			}
+			else = {
+				spawn_planet = {
+					class = pc_dtm_shardworld
+					location = root.capital_scope
+					orbit_angle_offset = 180
+					orbit_distance_offset = 12
+					size = 25
+					init_effect = {
+						set_planet_flag = colony_event
+						set_planet_flag = dtm_theophany_shardworld@root
+						prevent_anomaly = yes
+						set_name = "NAME_dtm_Unveiled_Lands"
+						save_event_target_as = dtm_theophany_shardworld
+						create_pop = {
+							species = root.owner_main_species
+						}
+					}
+				}
+			}
+			create_ambient_object = {
+				type = dtm_theophany_shardworld_core
+				entity_offset_height = -15
+				effect = {
+					set_location = event_target:dtm_theophany_shardworld
+				}
+			}
+		}
+	}
+	option = {
+		name = dtm_theophany_stages.31.a
+		event_target:dtm_theophany_shardworld = {
+			start_colony = {
+				owner = root
+				species = root.species
+			}
+			set_name = "NAME_dtm_Unveiled_Lands"
+		}
+	}
+}
+
+# Unlock Stage 4 of the Crisis - fired from CRISIS_DTM_THEOPHANY_SPECIAL_PROJECT_3
+country_event = {
+	id = dtm_theophany_stages.40
+	title = dtm_theophany_stages.40.name
+	desc = dtm_theophany_stages.40.desc
+	diplomatic_title = BLANK_STRING
+	diplomatic = yes
+	force_open = yes
+	picture_event_data = {
+		portrait = event_target:dtm_theophany_god@root
+		room = shroud_room
+	}
+	is_triggered_only = yes
+	immediate = {
+		event_target:dtm_theophany_god@root = {
+			change_leader_portrait = dtm_theophany_god_T4
+		}
+	}
+	option = {
+		name = dtm_theophany_stages.40.a
+	}
+	after = {
+		custom_tooltip = can_advance_crisis_progression
+	}
+}
+
+# Get technology to build Sanctum of Incarnation - fired from CRISIS_DTM_THEOPHANY_SPECIAL_PROJECT_4
+country_event = {
+	id = dtm_theophany_stages.50
+	title = dtm_theophany_stages.50.name
+	desc = dtm_theophany_stages.50.desc
+	diplomatic_title = BLANK_STRING
+	diplomatic = yes
+	force_open = yes
+	picture_event_data = {
+		portrait = event_target:dtm_theophany_god@root
+		room = shroud_room
+	}
+	is_triggered_only = yes
+	immediate = {
+		event_target:dtm_theophany_god@root = {
+			change_leader_portrait = dtm_theophany_god_T5
+		}
+	}
+	option = {
+		name = dtm_theophany_stages.50.a
+		give_technology = {
+			tech = tech_dtm_theophany_sanctum_1
+		}
+	}
+}
+
+# Unlock Stage 5 of the Crisis - fired on building Sanctum of Incarnation
+country_event = {
+	id = dtm_theophany_stages.51
+	title = dtm_theophany_stages.51.name
+	desc = dtm_theophany_stages.51.desc
+	diplomatic_title = BLANK_STRING
+	diplomatic = yes
+	force_open = yes
+	picture_event_data = {
+		portrait = event_target:dtm_theophany_god@root
+		room = shroud_room
+	}
+	is_triggered_only = yes
+	immediate = {
+		set_country_flag = crisis_dtm_theophany_special_project_4_complete
+		country_event = {
+			id = dtm_theophany_timeline.2
+		}
+	}
+	option = {
+		name = dtm_theophany_stages.51.a
+		hidden_effect = {
+			return_leader_from_exile = dtm_theophany_god@root
+			event_target:dtm_theophany_god@root = {
+				#add_skill = root.dtm_theophany_emissary
+				add_skill_without_trait_selection = root.dtm_theophany_emissary
+			}
+			create_message = {
+				type = MESSAGE_RECRUITED_LEADER
+				localization = MESSAGE_RECRUITED_LEADER_DESC
+				days = @toast_message_days
+				target = event_target:dtm_theophany_god@root
+				variable = {
+					type = name
+					localization = LEADER
+					scope = event_target:dtm_theophany_god@root
+				}
+				variable = {
+					key = "border"
+					value = "GFX_border_legendary"
+				}
+			}
+		}
+	}
+	after = {
+		custom_tooltip = can_advance_crisis_progression_final
+	}
+}
+
+namespace = dtm_theophany_corruption
+#########################################################
+#				 Corruption events						#
+#########################################################
+# find out why this is error
+country_event = {
+	id = dtm_theophany_corruption.999
+	title = FASCINATING
+	desc = FASCINATING
+	picture = GFX_evt_ancient_alien_temple
+	show_sound = event_collapsing_ruins
+	is_triggered_only = yes
+	immediate = {
+	}
+	# option = {
+	# 	name = FASCINATING
+	# 	capital_scope = {
+	# 		star = {
+	# 			create_ambient_object = {
+	# 				type = "dtm_theophany_space_storm_1"					# system
+	# 				location = this
+	# 			}
+	# 			last_created_ambient_object = {
+	# 				#set_ambient_object_flag = space_storm_object
+	# 				set_location = {
+	# 					target = prev
+	# 					distance = 0
+	# 					angle = random
+	# 				}
+	# 			}
+	# 		}
+	# 	}
+	# }
+	# option = {
+	# 	name = FASCINATING
+	# 	capital_scope = {
+	# 		star = {
+	# 			create_ambient_object = {
+	# 				type = dtm_psi_storm_1					# planet
+	# 				location = prev
+	# 				scale = 0.3
+	# 				use_3d_location = yes
+	# 				#entity_scale_to_size = yes
+	# 			}
+	# 			last_created_ambient_object = {
+	# 				#set_ambient_object_flag = space_storm_object
+	# 				set_location = {
+	# 					target = prev
+	# 					distance = 0
+	# 					angle = random
+	# 				}
+	# 			}
+	# 		}
+	# 	}
+	#}
+	option = {
+		name = FASCINATING
+		activate_crisis_progression = dtm_theophany_path
+		add_resource = {
+			dtm_faith = 50000000
+		}
+		# set_country_flag = crisis_dtm_theophany_special_project_1_complete
+		# set_country_flag = crisis_dtm_theophany_special_project_2_complete
+		# set_country_flag = crisis_dtm_theophany_special_project_3_complete
+		# set_country_flag = crisis_dtm_theophany_special_project_4_complete
+	}
+	option = {
+		name = FASCINATING
+		set_global_flag = ap_dtm_theophany_active
+		random_owned_leader = {
+			add_trait = {
+				trait = leader_trait_dtm_theophany_corruption_a_neg
+			}
+			kill_leader = {
+			}
+		}
+	}
+	option = {
+		name = FASCINATING
+		set_global_flag = ap_dtm_theophany_active
+		random_owned_leader = {
+			limit = {
+				NOT = {
+					has_trait = leader_trait_dtm_theophany_corruption_a_neg
+				}
+			}
+			add_trait = {
+				trait = leader_trait_dtm_theophany_corruption_a_neg
+			}
+			add_trait = {
+				trait = leader_trait_dtm_theophany_corruption_b_neg
+			}
+			add_trait = {
+				trait = leader_trait_dtm_theophany_corruption_a
+			}
+			add_trait = {
+				trait = leader_trait_dtm_theophany_corruption_b
+			}
+			add_trait = {
+				trait = leader_trait_dtm_theophany_corruption_c
+			}
+		}
+	}
+	# option = {
+	# 	name = FASCINATING
+	# 	capital_scope = {
+	# 		inline_script = {
+	# 			script = dtm_theophany/start_planet_corruption
+	# 			AMOUNT = 49
+	# 			PLANET = root.capital_scope
+	# 		}
+	# 		add_modifier = {
+	# 			modifier = dtm_theophany_planet_corruption_test
+	# 		}
+	# 	}
+	# }
+	option = {
+		name = FASCINATING
+		capital_scope = {
+			remove_modifier = dtm_theophany_planet_corruption_test
+		}
+	}
+	option = {
+		name = FASCINATING
+		capital_scope = {
+			spawn_system = {
+				initializer = dtm_central_crystal_init_01
+				#is_discovered = yes
+				max_jumps = 1
+			}
+			# spawn_system = {
+			# 	initializer = formless_system_initializer
+			# 	is_discovered = yes
+			# 	max_jumps = 1
+			# }
+		}
+	}
+	# option = {
+	# 	name = FASCINATING
+	# 	create_ship_design = {
+	# 		design = NAME_dtm_FE_Starbase
+	# 	}
+	# 	add_ship_design = last_created_design
+	# 	capital_scope = {
+	# 		# create_starbase = {
+	# 		# 	size = dtm_orbital_ring
+	# 		# 	owner = root
+	# 		# 	effect = {
+	# 		# 	}
+	# 		# }
+	# 	}
+	# }
+	# option = {
+	# 	inline_script = {
+	# 		script = dtm_theophany/traditions_pick
+	# 		TRADITION = statecraft
+	# 		ONE = constitutional_focus
+	# 		TWO = inspiring_agendas
+	# 		THREE = immutable_directives
+	# 		FOUR = amongst_peers
+	# 		FIVE = shared_benefits
+	# 	}
+	# }
+	option = {
+		name = FASCINATING
+		#no_scope = {
+		country_event = {
+			id = dtm_theophany_endgame.1000
+		}
+		#}
+	}
+	option = {
+		name = FASCINATING
+		destroy_country = yes
+		#add_situation_progress = 400
+	}
+	option = {
+		name = FASCINATING
+		random_system = {
+			limit = {
+				has_star_flag = dtm_theophany_endgame_center
+			}
+			# random_fleet_in_system = {
+			# 	limit = {
+			# 		owner = {
+			# 			is_same_value = event_target:dtm_theophany_shroud_country
+			# 		}
+			# 	}
+			# 	set_owner = root
+			# }
+			create_starbase = {
+				size = starbase_outpost
+			}
+			# starbase = {
+			# 	set_owner = root
+			# }
+			# star = {
+			# 	set_owner = root
+			# }
+			root = {
+				start_situation = {
+					type = dtm_theophany_final_battle
+					target = prev
+				}
+			}
+		}
+	}
+	option = {
+		name = FASCINATING
+		create_fleet = {
+			name = "NAME_Behemoth_fleet"
+			settings = {
+				spawn_debris = no
+			}
+			effect = {
+				set_owner = root
+				create_ship = {
+					name = "NAME_Behemoth_ship"
+					design = "dtm_theophany_cargoship_01"
+				}
+				set_location = {
+					target = root.capital_star
+					distance = 0
+					angle = 0
+					direction = in_system
+				}
+				# set_fleet_stance = aggressive
+				# set_aggro_range_measure_from = self #or return_point
+				# set_aggro_range = 30000
+			}
+		}
+	}
+	# option = {
+	# 	name = FASCINATING
+	# 	add_modifier = {
+	# 		modifier = dtm_theophany_shroud_test2
+	# 	}
+	# 	create_fleet_from_naval_cap = 30
+	# }
+}
+
+# Monthly Situation corruption tick
+situation_event = {
+	id = dtm_theophany_corruption.500
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = {
+				OR = {
+					NOT = {
+						exists = target.owner
+					}
+					NAND = {
+						exists = target.owner
+						target.owner = {
+							has_policy_flag = dtm_theophany_corruption_no_shrouding
+						}
+						check_variable = {
+							which = target.dtm_theophany_planet_corruption
+							value > 75
+						}
+						target = {
+							check_modifier_value = {
+								modifier = dtm_theophany_corruption_add
+								value > 0
+							}
+						}
+					}
+				}
+			}
+			target = {
+				dtm_theophany_increase_corruption_planet = {
+					AMOUNT = value:dtm_theophany_corruption_growth
+				}
+			}
+			add_situation_progress = target.value:dtm_theophany_corruption_growth
+		}
+	}
+}
+
+# taint voidlure
+starbase_event = {
+	id = dtm_theophany_corruption.501
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		has_starbase_building = voidlure_dtm_theophany_corrupter
+	}
+	immediate = {
+		if = {
+			limit = {
+				fleet = {
+					is_in_combat = no
+				}
+				used_defense_platform_capacity_percent < 1
+			}
+			create_ship = {
+				name = NAME_dtm_theophany_defense
+				design = NAME_dtm_theophany_defense
+				upgradable = no
+			}
+		}
+		starbase_event = {
+			id = dtm_theophany_corruption.501
+			days = @voidlure_dtm_theophany_corrupter_cd
+		}
+		set_timed_starbase_flag = {
+			flag = capture_cooldown_for_voidlure_dtm_theophany_corrupter
+			days = @voidlure_dtm_theophany_corrupter_cd
+		}
+		# Just so its not canceled and never works. Performance? dogshit
+		inline_script = {
+			script = dtm_theophany/start_system_corruption
+			AMOUNT = 0.1
+			SYSTEM = root.solar_system
+		}
+	}
+}
+
+# Monthly Situation corruption tick
+situation_event = {
+	id = dtm_theophany_corruption.502
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = {
+				OR = {
+					NOT = {
+						exists = target.owner
+					}
+					NAND = {
+						exists = target.owner
+						target.owner = {
+							has_policy_flag = dtm_theophany_corruption_no_shrouding
+						}
+					}
+					check_variable = {
+						which = target.dtm_theophany_planet_corruption
+						value > 75
+					}
+					target.star = {
+						check_modifier_value = {
+							modifier = dtm_theophany_corruption_add
+							value > 0
+						}
+					}
+				}
+			}
+			target = {
+				dtm_theophany_increase_corruption_system = {
+					AMOUNT = star.value:dtm_theophany_corruption_growth_system
+				}
+			}
+			add_situation_progress = target.star.value:dtm_theophany_corruption_growth_system
+		}
+	}
+}
+
+# A leader leveled up.
+# Scope = Country
+# From = Leader
+country_event = {
+	id = dtm_theophany_corruption.503
+	hide_window = yes
+	trigger = {
+		has_global_flag = ap_dtm_theophany_active
+		from = {
+			has_trait = leader_trait_dtm_theophany_corruption_b_neg
+			OR = {
+				exists = solar_system
+				exists = planet
+			}
+		}
+	}
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = {
+				from = {
+					exists = planet
+				}
+			}
+			from = {
+				planet = {
+					inline_script = {
+						script = dtm_theophany/start_planet_corruption
+						AMOUNT = 15
+						PLANET = from.planet
+					}
+				}
+			}
+		}
+		else = {
+			from = {
+				solar_system = {
+					inline_script = {
+						script = dtm_theophany/start_system_corruption
+						AMOUNT = 15
+						SYSTEM = this
+					}
+				}
+			}
+		}
+	}
+}
+
+# Leader died
+country_event = {
+	id = dtm_theophany_corruption.504
+	hide_window = yes
+	trigger = {
+		has_global_flag = ap_dtm_theophany_active
+		from = {
+			has_trait = leader_trait_dtm_theophany_corruption_a_neg
+			OR = {
+				exists = solar_system
+				exists = planet
+			}
+		}
+	}
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = {
+				from = {
+					exists = planet
+				}
+			}
+			from = {
+				planet = {
+					inline_script = {
+						script = dtm_theophany/start_planet_corruption
+						AMOUNT = 50
+						PLANET = from.planet
+					}
+				}
+			}
+		}
+		else = {
+			from = {
+				solar_system = {
+					inline_script = {
+						script = dtm_theophany/start_system_corruption
+						AMOUNT = 50
+						SYSTEM = this
+					}
+				}
+			}
+		}
+	}
+}
+
+# This = owner of fleet 1
+# From = owner of fleet 2
+# FromFrom = fleet 1
+# FromFromFrom = fleet 2
+# Fleet engaged
+country_event = {
+	id = dtm_theophany_corruption.505
+	hide_window = yes
+	trigger = {
+		has_global_flag = ap_dtm_theophany_active
+		FromFrom = {
+			exists = leader
+			leader = {
+				has_trait = leader_trait_dtm_theophany_corruption_a
+			}
+		}
+	}
+	is_triggered_only = yes
+	immediate = {
+		FromFrom = {
+			solar_system = {
+				inline_script = {
+					script = dtm_theophany/start_system_corruption
+					AMOUNT = 20
+					SYSTEM = this
+				}
+			}
+		}
+	}
+}
+
+# Someone reached tier 3 and can start corrupting stuff
+# Whats your reaction?
+country_event = {
+	id = dtm_theophany_corruption.510
+	title = dtm_theophany_corruption.510.name
+	desc = {
+		text = dtm_theophany_corruption.510.desc_non_corrupter
+		trigger = {
+			dtm_theophany_perk_cor1 = no
+		}
+	}
+	desc = {
+		text = dtm_theophany_corruption.510.desc_corrupter
+		trigger = {
+			dtm_theophany_perk_cor1 = yes
+		}
+	}
+	show_sound = event_red_alert
+	picture = GFX_evt_cosmic_storms_the_storm_speaks
+	is_triggered_only = yes
+	option = {
+		name = dtm_theophany_corruption.510.a
+		custom_tooltip = dtm_theophany_corruption_no_shrouding_name
+		set_policy = {
+			policy = dtm_theophany_corruption_policy
+			option = dtm_theophany_corruption_policy_contain
+		}
+	}
+	option = {
+		name = dtm_theophany_corruption.510.b
+		custom_tooltip = dtm_theophany_corruption_no_shrouding_name
+		set_policy = {
+			policy = dtm_theophany_corruption_policy
+			option = dtm_theophany_corruption_policy_ignore
+		}
+	}
+	option = {
+		name = dtm_theophany_corruption.510.c
+		trigger = {
+			dtm_theophany_perk_cor1 = yes
+		}
+		set_policy = {
+			policy = dtm_theophany_corruption_policy
+			option = dtm_theophany_corruption_policy_boost
+		}
+	}
+}
+
+# This = planet hopefully
+# on action fire ship planet
+planet_event = {
+	id = dtm_theophany_corruption.515
+	hide_window = yes
+	trigger = {
+	}
+	is_triggered_only = yes
+	immediate = {
+		inline_script = {
+			script = dtm_theophany/start_planet_corruption
+			AMOUNT = 100
+			PLANET = root
+		}
+		dtm_theophany_delete_fire_ship = yes
+	}
+}
+
+planet_event = {
+	id = dtm_theophany_corruption.520
+	hide_window = yes
+	trigger = {
+	}
+	is_triggered_only = yes
+	immediate = {
+		#spawn_behemoth_hatchling_effect = yes
+		inline_script = {
+			script = dtm_theophany/start_system_corruption
+			AMOUNT = 100
+			SYSTEM = root.solar_system
+		}
+		dtm_theophany_delete_fire_ship = yes
+	}
+}
+
+namespace = dtm_theophany_endgame
+#########################################################
+#				 The final system events				#
+#########################################################
+# spawn the core and start fighting each other
+country_event = {
+	id = dtm_theophany_endgame.1000
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		NOT = {
+			has_global_flag = dtm_theophany_galactic_core_spawned
+		}
+	}
+	immediate = {
+		set_global_flag = dtm_theophany_galactic_core_spawned
+		# 3 other weird systems and toggle for gigas? nah just move it a lil and we good
+		# gigas variable : @has_gigastructures
+		no_scope = {
+			# makes system positions originate from galactic core
+			set_spawn_system_batch = begin
+			spawn_system = {
+				min_distance >= 0
+				max_distance <= 1
+				min_orientation_angle = 176
+				max_orientation_angle = 182
+				initializer = "dtm_central_crystal_init_01"
+				hyperlane = no
+				# is_discovered = yes
+			}
+			last_created_system = {
+				# first one to find center gets direct wormhole - not anymore
+				save_event_target_as = dtm_theophany_endgame_center
+				star = {
+					save_global_event_target_as = dtm_theophany_dtm_theophany_endgame_target
+				}
+				dtm_theophany_create_shroud_countries = yes
+				dtm_theophany_create_shroud_fleet = {
+					AMOUNT = 1
+					NAME = NAME_dtm_theophany_create_shroud_fleet
+					LOCATION = event_target:dtm_theophany_dtm_theophany_endgame_target
+				}
+				last_created_fleet = {
+					set_location = {
+						target = star
+						distance = 150
+						angle = random
+					}
+				}
+				# spawn_natural_wormhole = {
+				# 	bypass_type = strange_wormhole
+				# }
+				# random_system = {
+				# 	limit = {
+				# 		exists = owner
+				# 		owner = {
+				# 			has_menace_perk = menp_dtm_theophany_5a
+				# 		}
+				# 		is_same_value = owner.capital_star
+				# 	}
+				# 	spawn_natural_wormhole = {
+				# 		bypass_type = strange_wormhole
+				# 	}
+				# 	link_wormholes = prev
+				# }
+			}
+			spawn_system = {
+				min_distance >= 30
+				max_distance <= 31
+				min_orientation_angle = 120
+				max_orientation_angle = 121
+				initializer = "dtm_central_crystal_init_02"
+				hyperlane = no
+				# is_discovered = yes
+			}
+			last_created_system = {
+				add_hyperlane = {
+					from = THIS
+					to = event_target:dtm_theophany_endgame_center
+				}
+			}
+			spawn_system = {
+				min_distance >= 30
+				max_distance <= 31
+				min_orientation_angle = 240
+				max_orientation_angle = 241
+				initializer = "dtm_central_crystal_init_03"
+				hyperlane = no
+				# is_discovered = yes
+			}
+			last_created_system = {
+				add_hyperlane = {
+					from = THIS
+					to = event_target:dtm_theophany_endgame_center
+				}
+			}
+			spawn_system = {
+				min_distance >= 30
+				max_distance <= 31
+				min_orientation_angle = 0
+				max_orientation_angle = 1
+				initializer = "dtm_central_crystal_init_04"
+				hyperlane = no
+				# is_discovered = yes
+			}
+			last_created_system = {
+				add_hyperlane = {
+					from = THIS
+					to = event_target:dtm_theophany_endgame_center
+				}
+			}
+			set_spawn_system_batch = end
+		}
+	}
+}
+
+# create enemies
+situation_event = {
+	id = dtm_theophany_endgame.1010
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		target = {
+			exists = owner
+			owner = {
+				is_same_value = root.owner
+			}
+		}
+	}
+	immediate = {
+		target = {
+			random_neighbor_system = {
+				star = {
+					save_event_target_as = dtm_theophany_dtm_theophany_neighbor_target
+				}
+			}
+		}
+		random_list = {
+			#80 = {}
+			10 = {
+				dtm_theophany_buff_shroud = {
+					AMOUNT = 10					# 10 %
+				}
+			}
+			10 = {
+				dtm_theophany_create_shroud_fleet_from_country = {
+					FRACTION = 0.2
+					LOCATION = event_target:dtm_theophany_dtm_theophany_neighbor_target
+				}
+				dtm_theophany_create_shroud_fleet_fly_to_center = {
+					ID = 1010.1
+				}
+				owner = {
+					create_message = {
+						type = DTM_THEOPHANY_FLEET_MESSAGE_TYPE
+						days = 10
+						target = last_created_fleet
+					}
+				}
+			}
+			10 = {
+				dtm_theophany_create_shroud_fleet = {
+					AMOUNT = 1
+					NAME = NAME_dtm_theophany_create_shroud_fleet
+					LOCATION = event_target:dtm_theophany_dtm_theophany_neighbor_target
+				}
+				dtm_theophany_create_shroud_fleet_fly_to_center = {
+					ID = 1010.2
+				}
+				owner = {
+					create_message = {
+						type = DTM_THEOPHANY_FLEET_MESSAGE_TYPE
+						days = 10
+						target = last_created_fleet
+					}
+				}
+			}
+		}
+	}
+}
+
+# your quest for the center of the universe begins
+country_event = {
+	id = dtm_theophany_endgame.1015
+	title = dtm_theophany_endgame.1015.name
+	desc = dtm_theophany_endgame.1015.desc
+	show_sound = event_red_alert
+	picture = GFX_evt_formless_system
+	is_triggered_only = yes
+	immediate = {
+		random_system = {
+			limit = {
+				has_star_flag = dtm_theophany_endgame_center
+			}
+			save_event_target_as = dtm_theophany_endgame_center
+		}
+	}
+	option = {
+		name = dtm_theophany_endgame.1015.a
+	}
+	option = {
+		name = dtm_theophany_endgame.1015.b
+		allow = {
+			resource_stockpile_compare = {
+				resource = influence
+				value > 300
+			}
+		}
+		hidden_effect = {
+			event_target:dtm_theophany_endgame_center = {
+				random_fleet_in_system = {
+					limit = {
+						owner = {
+							is_country_type = shroud_spirits
+						}
+					}
+					delete_fleet = this
+				}
+			}
+		}
+		event_target:dtm_theophany_endgame_center = {
+			create_starbase = {
+				size = starbase_starport
+				owner = root
+				building = voidlure_dtm_theophany_corrupter
+				module = gun_battery
+				module = gun_battery
+				# effect = {
+				# 	set_owner = root
+				# }
+			}
+		}
+		add_resource = {
+			influence = -300
+		}
+	}
+	after = {
+		start_situation = {
+			type = dtm_theophany_final_battle
+			target = event_target:dtm_theophany_endgame_center
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_technology = tech_gateway_activation
+				}
+			}
+			give_technology = {
+				tech = tech_gateway_activation
+			}
+		}
+		# append_technology = {
+		# 	TECH = gateway_activation
+		# }
+		hidden_effect = {
+			if = {
+				limit = {
+					capital_scope = {
+						solar_system = {
+							any_megastructure = {
+								is_megastructure_type = gateway_final
+							}
+						}
+					}
+				}
+				capital_scope = {
+					solar_system = {
+						dtm_theophany_create_wormhole = yes
+						# random_megastructure = {
+						# 	limit = {
+						# 		is_megastructure_type = gateway_final
+						# 	}
+						# 	set_owner = root
+						# }
+					}
+				}
+			}
+			every_system = {
+				limit = {
+					has_star_flag = dtm_theophany_core_system
+				}
+				set_surveyed = {
+					surveyed = yes
+					surveyor = root
+				}
+			}
+		}
+	}
+}
+
+# unused
+# your quest for the center of the universe begins + others started it
+country_event = {
+	id = dtm_theophany_endgame.1020
+	title = dtm_theophany_endgame.1020.name
+	desc = dtm_theophany_endgame.1020.desc
+	show_sound = event_red_alert
+	picture = GFX_evt_formless_system
+	is_triggered_only = yes
+	immediate = {
+		random_system = {
+			limit = {
+				has_star_flag = dtm_theophany_endgame_center
+			}
+			save_event_target_as = dtm_theophany_endgame_center
+		}
+	}
+	# effect to catch you up or option to later win
+	option = {
+		name = dtm_theophany_endgame.1015.a
+		start_situation = {
+			type = dtm_theophany_final_battle
+			target = event_target:dtm_theophany_endgame_center
+		}
+		append_technology = {
+			TECH = gateway_activation
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					capital_scope = {
+						solar_system = {
+							any_megastructure = {
+								is_megastructure_type = gateway_final
+							}
+						}
+					}
+				}
+				capital_scope = {
+					solar_system = {
+						dtm_theophany_create_wormhole = yes
+						random_megastructure = {
+							limit = {
+								is_megastructure_type = gateway_final
+							}
+							set_owner = root
+						}
+					}
+				}
+			}
+			every_system = {
+				limit = {
+					has_star_flag = dtm_theophany_core_system
+				}
+				set_surveyed = {
+					surveyed = yes
+					surveyor = root
+				}
+			}
+		}
+	}
+}
+
+# your won, hurray. Wanna end it here ? 
+situation_event = {
+	id = dtm_theophany_endgame.1025
+	title = dtm_theophany_endgame.1025.name
+	desc = dtm_theophany_endgame.1025.desc
+	show_sound = event_red_alert
+	picture = GFX_evt_shrouded_planet
+	is_triggered_only = yes
+	option = {
+		name = dtm_theophany_endgame.1025.a
+		owner = {
+			dtm_theophany_win_effect = yes
+		}
+	}
+	# no longer needed maybe reform this event?
+
+	# option = {
+	# 	name = dtm_theophany_endgame.1025.b
+	# 	add_relic = r_dtm_theophany_trophy
+	# }
+	after = {
+		destroy_situation = this
+		# hidden_effect = {
+		# 	every_playable_country = {
+		# 		limit = {
+		# 			has_ascension_perk = ap_dtm_theophany
+		# 		}
+		# 		random_situation = {
+		# 			limit = {
+		# 				is_situation_type = dtm_theophany_final_battle
+		# 			}
+		# 			abort_situation = this
+		# 		}
+		# 	}
+		# }
+	}
+}
+
+# You lost the king of the hill
+country_event = {
+	id = dtm_theophany_endgame.1030
+	title = dtm_theophany_endgame.1030.name
+	desc = dtm_theophany_endgame.1030.desc
+	show_sound = event_red_alert
+	picture = GFX_evt_shrouded_planet
+	is_triggered_only = yes
+	option = {
+		name = dtm_theophany_endgame.1030.a
+		destroy_country = yes
+	}
+}
+
+# You upgraded mega, falvor options
+country_event = {
+	id = dtm_theophany_endgame.1100
+	title = dtm_theophany_endgame.1100.name
+	desc = dtm_theophany_endgame.1100.desc
+	show_sound = event_red_alert
+	picture = GFX_evt_shrouded_planet
+	is_triggered_only = yes
+	diplomatic_title = BLANK_STRING
+	diplomatic = yes
+	force_open = yes
+	picture_event_data = {
+		portrait = event_target:dtm_theophany_god@root
+		room = shroud_room
+	}
+	# doubled triggers and potential here so players see that we have multiple options 
+	option = {
+		name = dtm_theophany_endgame.1100.a		# Let him walk the mortal plane, summon immortal deity entity	
+		custom_tooltip = dtm_theophany_endgame.1100.a.tt
+		trigger = {
+			is_militarist = yes
+			is_xenophobe = yes
+		}
+		allow = {
+			is_militarist = yes
+			is_xenophobe = yes
+		}
+		hidden_effect = {
+			create_fleet = {
+				name = NAME_Shroud_Avatar
+				effect = {
+					set_owner = root
+					create_ship = {
+						name = ""						# No name cause ship class
+						design = NAME_Corrupted_Avatar
+						effect = {
+							add_modifier = {
+								modifier = dtm_theophany_shroud_avatar_immortality
+							}
+						}
+					}
+					set_location = {
+						target = root.capital_scope
+						distance = 300
+						angle = random
+					}
+					set_fleet_stance = aggressive
+					set_aggro_range = 500
+					set_aggro_range_measure_from = self
+					# set_fleet_bombardment_stance = indiscriminate
+				}
+			}
+		}
+	}
+	option = {
+		name = dtm_theophany_endgame.1100.b		# 	Everyone likes each other
+		custom_tooltip = dtm_theophany_endgame.1100.b.tt
+		trigger = {
+			OR = {
+				is_pacifist = yes
+				is_xenophile = yes
+			}
+		}
+		allow = {
+			OR = {
+				is_pacifist = yes
+				is_xenophile = yes
+			}
+		}
+		hidden_effect = {
+			set_global_flag = dtm_theophany_eternal_peace
+		}
+	}
+	option = {
+		name = dtm_theophany_endgame.1100.b2		# 	Everyone hates each other
+		custom_tooltip = dtm_theophany_endgame.1100.b2.tt
+		trigger = {
+			OR = {
+				is_xenophobe = yes
+			}
+		}
+		allow = {
+			OR = {
+				is_xenophobe = yes
+			}
+		}
+		hidden_effect = {
+			set_global_flag = dtm_theophany_eternal_hate
+		}
+	}
+	option = {
+		trigger = {
+			OR = {
+				is_egalitarian = yes
+				is_materialist = yes
+				is_megacorp = yes
+			}
+		}
+		allow = {
+			OR = {
+				is_egalitarian = yes
+				is_materialist = yes
+				is_megacorp = yes
+			}
+		}
+		name = dtm_theophany_endgame.1100.c		# Fullfill our every desires
+		add_modifier = {
+			modifier = dtm_theophany_shroud_promise_fullfilled
+		}
+		#custom_tooltip = dtm_theophany_endgame.1100.c.tt
+	}
+	option = {
+		name = dtm_theophany_endgame.1100.d		# We already are blessed
+		add_monthly_resource_mult = {
+			resource = unity
+			value = 789			# intetional
+		}
+		#custom_tooltip = dtm_theophany_endgame.1100.c.tt
+	}
+	option = {
+		name = dtm_theophany_endgame.1100.e		# Endless money
+		trigger = {
+			is_megacorp = yes
+		}
+		allow = {
+			is_megacorp = yes
+		}
+		add_modifier = {
+			modifier = dtm_theophany_endless_money
+		}
+		#custom_tooltip = dtm_theophany_endgame.1100.c.tt
+	}
+	option = {
+		name = dtm_theophany_endgame.1100.f		# research
+		trigger = {
+			is_materialist = yes
+		}
+		allow = {
+			is_materialist = yes
+		}
+		hidden_effect = {
+			while = {
+			count = 30
+			reroll_random = yes
+			add_random_research_option = {
+				ignore_prereqs = yes
+				add_progress = 0.1
+			}
+		}
+		}
+		
+		custom_tooltip = dtm_theophany_endgame.1100.f.tt
+	}
+	option = {
+		name = dtm_theophany_endgame.1100.g		# stability + council
+		trigger = {
+			is_authoritarian = yes
+		}
+		allow = {
+			is_authoritarian = yes
+		}
+		add_modifier = {
+			modifier = dtm_theophany_absolute_order
+		}
+		# custom_tooltip = dtm_theophany_endgame.1100.f.tt
+	}
+	# option = {
+	# 	name = dtm_theophany_endgame.1100.h		# plushie
+	# 	# trigger = {
+	# 	# 	is_authoritarian = yes
+	# 	# }
+	# 	# allow = {
+	# 	# 	is_authoritarian = yes
+	# 	# }
+	# 	add_relic = r_dtm_theophany_trophy
+	# 	# custom_tooltip = dtm_theophany_endgame.1100.f.tt
+	# }
+	
+	after = {
+		win = yes
+	}
+}
