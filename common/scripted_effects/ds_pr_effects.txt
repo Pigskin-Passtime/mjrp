@@ -1,0 +1,467 @@
+ds_pr_crisis_effect = {
+	# Will add the GalCom leaders as war_leader, otherwise the strongest opponent
+	if = {
+		limit = {
+			has_galactic_emperor = yes
+			galactic_emperor = { has_country_flag = ds_pr_anti_crisis }
+		}
+		galactic_emperor = { save_event_target_as = war_leader }
+	}
+	else_if = {
+		limit = {
+			has_galactic_emperor = no
+			has_galactic_custodian = yes
+			galactic_custodian = { has_country_flag = ds_pr_anti_crisis }
+		}
+		galactic_custodian = { save_event_target_as = war_leader }
+	}
+	else_if = {
+		limit = {
+			any_playable_country = {
+				has_country_flag = ds_pr_anti_crisis
+				relative_power = {
+					who = prev
+					value >= superior
+					category = fleet
+				}
+			}
+		}
+		random_playable_country = {
+			limit = {
+				has_country_flag = ds_pr_anti_crisis
+				relative_power = {
+					who = prev
+					value >= superior
+					category = fleet
+				}
+			}
+			save_event_target_as = war_leader
+		}
+	}
+	else_if = {
+		limit = {
+			any_playable_country = {
+				has_country_flag = ds_pr_anti_crisis
+				relative_power = {
+					who = prev
+					value >= equivalent
+					category = all
+				}
+			}
+		}
+		random_playable_country = {
+			limit = {
+				has_country_flag = ds_pr_anti_crisis
+				relative_power = {
+					who = prev
+					value >= equivalent
+					category = all
+				}
+			}
+			save_event_target_as = war_leader
+		}
+	}
+	else = {
+		random_playable_country = {
+			limit = {
+				has_country_flag = ds_pr_anti_crisis
+				is_subject = no
+			}
+			save_event_target_as = war_leader
+		}
+	}
+	# War
+	event_target:war_leader = {
+		declare_war = {
+			target = event_target:ds_pr_crisis_country
+			name = {
+				key = "NAME_Declared_Crisis_War"
+				variable_string = "\\[This.MainDefender.GetAdj\\]"
+			}
+			attacker_war_goal = "wg_declared_crisis"
+		}
+	}
+	every_playable_country = {
+		limit = {
+			has_country_flag = ds_pr_anti_crisis
+			NOT = { is_same_value = event_target:war_leader }
+		}
+		join_war = event_target:war_leader
+	}
+	# Notifications
+	every_playable_country = {
+		limit = { has_crisis_level = ds_pr_level_5 }
+		country_event = { id = dsPR.55 }
+	}
+	every_playable_country = {
+		limit = { NOT = { has_crisis_level = ds_pr_level_5 } }
+		country_event = { id = dsPR.60 }
+	}
+}
+
+# Scope = star
+ds_pr_crisis_breach = {
+	change_variable = { which = ds_pr_breach_var value = 10 } # Modifier has 1%
+	add_modifier = { modifier = ds_pr_reality_breach mult = ds_pr_breach_var }
+	if = {
+		limit = { check_variable = { which = ds_pr_breach_var value >= 100 } }
+		prev = {
+			set_star_flag = ds_pr_breach_star
+			set_star_class = sc_ds_pr_rift
+		}
+		set_planet_entity = { entity = ds_pr_rift_star_entity }
+		clear_variable = ds_pr_breach_var
+		clear_global_event_target = ds_pr_breach_target@root
+	}
+}
+
+ds_pr_crisis_osiris = {
+	create_ambient_object = {
+		type = horror_spawn_object
+		location = this
+		use_3d_location = yes
+		play_animation_once = yes
+		duration = 3
+	}
+	set_planet_flag = ds_pr_osiris_set
+	set_planet_flag = megastructure
+	set_planet_flag = has_megastructure
+	# Keep order
+	clear_planet_modifiers = yes
+	clear_deposits = yes
+	add_modifier = { modifier = ds_pr_pm_anomaly }
+	destroy_colony = yes
+	change_pc = pc_barren_cold
+	set_planet_entity = {
+		entity = ds_pr_anomaly_entity
+		picture = pc_black_hole
+	}
+}
+
+ds_pr_crisis_end = {
+	optimize_memory
+	set_star_flag = ds_pr_breach_star
+	set_star_class = sc_ds_pr_rift
+	every_system_planet = {
+		limit = { is_star = yes }
+		change_pc = pc_black_hole
+		add_modifier = { modifier = ds_pr_reality_breach mult = 100 }
+		set_planet_entity = {
+			entity = ds_pr_anomaly_entity
+			picture = pc_black_hole
+		}
+	}
+	every_system_planet = {
+		limit = {
+			is_colony = no
+			is_artificial = no
+		}
+		add_modifier = { modifier = ds_pr_pm_anomaly }
+		set_planet_entity = {
+			entity = ds_pr_anomaly_entity
+			picture = pc_black_hole
+		}
+	}
+	every_system_planet = {
+		limit = {
+			is_colony = yes
+			NOT = { owner = { is_same_value = root } }
+		}
+		destroy_colony = yes
+		if = {
+			limit = { is_artificial = no }
+			change_pc = pc_barren_cold
+		}
+	}
+}
+
+ds_pr_crisis_primitives = {
+	create_species = {
+		name = random
+		class = DS_EXD
+		traits = random
+		namelist = DS_EXD1
+		extra_trait_points = 3
+		allow_negative_traits = no
+	}
+	create_country = {
+		name = random
+		authority = random
+		day_zero_contact = yes
+		origin = origin_default_pre_ftl
+		flag = random
+		name_list = DS_EXD1
+		type = primitive
+	}
+	last_created_country = {
+		set_graphical_culture = industrial_01
+		set_country_flag = early_space_age
+		set_pre_ftl_age = early_space_age
+	}
+	set_owner = last_created_country
+	create_pre_ftl_blockers = yes
+	create_pop_group = {
+		species = last_created_species
+		size = @early_space_age_pops
+	}
+	add_building = building_primitive_farm
+	add_building = building_primitive_factory
+	add_building = building_primitive_mine
+	add_building = building_primitive_power_plant
+	add_building = building_primitive_capital
+	add_building = building_urban_dwellings
+	last_created_country = {
+		copy_ethos_and_authority = event_target:ds_pr_crisis_country
+		add_modifier = { modifier = ds_pr_life_seeded }
+		set_awareness = 100
+		establish_communications = event_target:ds_pr_crisis_country
+	}
+}
+
+ds_pr_crisis_voidlife = {
+# Setup
+	set_country_type = ds_unbidden
+	set_variable = { which = ds_pr_void_job_var value = 150 }
+	set_variable = { which = ds_pr_void_energy_var value = 50 }
+	set_variable = { which = ds_pr_void_alloys_var value = 50 }
+	set_variable = { which = ds_pr_void_unity_var value = 25 }
+	set_variable = { which = ds_pr_void_dm_var value = 50 }
+	set_variable = { which = ds_pr_void_trade_var value = 25 }
+	add_modifier = { modifier = ds_pr_unbidden_fleet }
+	add_modifier = { modifier = ds_pr_energy_mod mult = ds_pr_void_energy_var }
+	add_modifier = { modifier = ds_pr_alloys_mod mult = ds_pr_void_alloys_var }
+	add_modifier = { modifier = ds_pr_unity_mod mult = ds_pr_void_unity_var }
+	add_modifier = { modifier = ds_pr_dm_mod mult = ds_pr_void_dm_var }
+	add_modifier = { modifier = ds_pr_trade_mod mult = ds_pr_void_trade_var }
+	add_resource = {
+		energy = 5000
+		minerals = 750
+		alloys = 5000
+		unity = 5000
+		trade = 5000
+		sr_dark_matter = 7500
+		volatile_motes = 500
+		exotic_gases = 500
+		rare_crystals = 500
+	}
+# Convert pops into ships
+	export_trigger_value_to_variable = {
+		trigger = count_owned_pop_amount
+		variable = ds_pr_ship_var
+	}
+	divide_variable = { which = ds_pr_ship_var value = @ds_pr_unbidden_rate }
+	round_variable = ds_pr_ship_var
+	if = {
+		limit = { check_variable = { which = ds_pr_ship_var value >= 200 } }
+		set_variable = { which = ds_pr_ship_var value = 200 }
+	}
+	country_event = { id = dsPR.115 }
+# Exodus system
+	event_target:ds_pr_exodus_system = {
+		set_name = NAME_DS_PR_Abyss
+		random_system_planet = {
+			limit = { is_planet_class = pc_black_hole }
+			change_planet_size = 5
+			create_ambient_object = {
+				type = "rare_nebula_1"
+				entity_offset_height = -5
+				location = this
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 0
+					angle = random
+				}
+			}
+		}
+	}
+# Planets
+	every_owned_planet = {
+		remove_all_buildings = yes
+		destroy_colony = yes
+	}
+	country_event = { id = dsPR.120 }
+}
+
+ds_pr_crisis_reset = {
+	optimize_memory
+	remove_star_flag = ds_pr_breach_star
+	star = {
+		random_list = {
+			5 = { solar_system = { set_star_class = sc_b } star = { change_pc = pc_b_star } }
+			5 = { solar_system = { set_star_class = sc_a } star = { change_pc = pc_a_star } }
+			5 = { solar_system = { set_star_class = sc_f } star = { change_pc = pc_f_star } }
+			5 = { solar_system = { set_star_class = sc_g } star = { change_pc = pc_g_star } }
+			5 = { solar_system = { set_star_class = sc_k } star = { change_pc = pc_k_star } }
+			5 = { solar_system = { set_star_class = sc_m } star = { change_pc = pc_m_star } }
+			5 = { solar_system = { set_star_class = sc_m_giant } star = { change_pc = pc_m_giant_star } }
+			5 = { solar_system = { set_star_class = sc_t } star = { change_pc = pc_t_star } }
+			2 = { solar_system = { set_star_class = sc_neutron_star } star = { change_pc = pc_neutron_star } }
+			2 = { solar_system = { set_star_class = sc_pulsar } star = { change_pc = pc_pulsar } }
+			1 = { solar_system = { set_star_class = sc_black_hole } star = { change_pc = pc_black_hole } }
+		}
+	}
+	every_system_planet = {
+		limit = {
+			is_planet_class = pc_ai
+			NOT = { has_planet_flag = machine_lair }
+		}
+		destroy_machine_world = yes
+	}
+	random_system_planet = {
+		limit = {
+			is_planet_class = pc_ai
+			has_planet_flag = machine_lair
+		}
+		from.owner = { save_event_target_as = final_machine_world_destroyer }
+		stop_crisis_sound = yes
+		planet_event = { id = crisis.2046 }
+	}
+	every_system_planet = {
+		limit = {
+			NOR = {
+				is_star = yes
+				is_astral_scar = yes
+				is_asteroid = yes
+			}
+		}
+		remove_planet_flag = megastructure
+		remove_planet_flag = has_megastructure
+		change_pc = ds_pr_rl_unhabitable_planets
+		reroll_planet_modifiers = yes
+		reroll_deposits = yes
+	}
+}
+
+ds_pr_crisis_habitables = {
+	optimize_memory
+	set_timed_star_flag = { flag = ds_pr_habitable_world days = 3 }
+	random_system_planet = {
+		limit = {
+			NOR = {
+				is_star = yes
+				is_colonizable = yes
+				is_astral_scar = yes
+				is_asteroid = yes
+			}
+			planet_size < 24
+		}
+		change_pc = rl_habitable_normal
+		reroll_deposits = yes
+		reroll_planet_modifiers = yes
+	}
+}
+
+ds_pr_crisis_lanes = {
+	optimize_memory
+	random_neighbor_system = { save_event_target_as = neighbor_system }
+	isolate_system = yes
+	random_neighbor_system_euclidean = {
+		limit = { NOT = { is_same_value = event_target:neighbor_system } }
+		add_hyperlane = { from = this to = prev }
+	}
+	random_neighbor_system_euclidean = {
+		limit = { NOT = { has_hyperlane_to = prev } }
+		add_hyperlane = { from = this to = prev }
+	}
+}
+
+ds_pr_crisis_lanes_0 = {
+	optimize_memory
+	random_neighbor_system_euclidean = { add_hyperlane = { from = this to = prev } }
+}
+
+ds_pr_crisis_lanes_2 = {
+	optimize_memory
+	random_neighbor_system = { save_event_target_as = neighbor_system }
+	random_neighbor_system_euclidean = {
+		limit = { NOT = { is_same_value = event_target:neighbor_system } }
+		add_hyperlane = { from = this to = prev }
+	}
+}
+
+ds_pr_crisis_empirespawn = {
+	optimize_memory
+	create_species = {
+		name = random
+		class = random
+		portrait = random
+		traits = random
+		namelist = DS_EXD1
+		extra_trait_points = 3
+		allow_negative_traits = no
+	}
+	if = {
+		limit = { has_machine_age_dlc = yes }
+		last_created_species = { set_random_cybernetic_portrait_effect = yes }
+	}
+	create_country = {
+		name = random
+		type = default
+		ignore_initial_colony_error = yes
+		authority = random
+		civics = random
+		species = last_created_species
+		ethos = random
+		flag = random
+		origin = "origin_default"
+		name_list = DS_EXD1
+		effect = {
+			save_event_target_as = new_country
+			set_country_flag = Story7 # To avoid event triggering
+			add_resource = {
+				energy = 5000
+				minerals = 2500
+				food = 500
+				consumer_goods = 500
+				alloys = 2500
+				influence = 1000
+			}
+			ruler = { add_skill = 5 }
+		}
+	}
+	clear_blockers = yes
+	generate_start_buildings_and_districts = yes
+	generate_start_pops = yes
+	event_target:new_country = {
+		create_starting_leaders = yes
+		country_event = { id = game_start.9 }
+		country_event = { id = game_start.33 days = 1 } # needs delay for system ownership to settle
+	}
+}
+
+ds_pr_crisis_leader_update = {
+	every_owned_leader = {
+		limit = { NOT = { has_leader_flag = legendary_leader } }
+		change_leader_portrait = owner.species
+	}
+	every_pool_leader = {
+		change_leader_portrait = owner.species
+	}
+}
+
+ds_pr_crisis_trait_limit = {
+	export_trigger_value_to_variable = {
+		trigger = count_owned_pop_amount
+		variable = ds_pr_pops_all_var
+	}
+	multiply_variable = { which = ds_pr_pops_all_var value = 0.5 } # 50% of the population
+	export_trigger_value_to_variable = {
+		trigger = count_owned_pop_amount
+		parameters = { limit = { has_trait = trait_ds_exd_phantom } }
+		variable = ds_pr_pops_trait_var
+	}
+	if = {
+		limit = {
+			check_variable_arithmetic = {
+				which = ds_pr_pops_all_var
+				subtract = ds_pr_pops_trait_var
+				value > 0
+			}
+		}
+		country_event = { id = dsPR.31 days = 15 }
+	}
+	clear_variable = ds_pr_pops_all_var
+	clear_variable = ds_pr_pops_trait_var
+}

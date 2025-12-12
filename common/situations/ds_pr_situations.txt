@@ -1,0 +1,148 @@
+situation_ds_pr_timer = {
+	picture = GFX_evt_shroud_tunnel
+	complete_icon_frame = GFX_situation_outcome_frame_blue
+	complete_icon = GFX_situation_outcome_unknown
+	initial_progress = 1
+	on_progress_complete = {
+		custom_tooltip = situation_ds_pr_timer_outcome
+		hidden_effect = {
+			owner = { country_event = { id = dsPR.50 } }
+			destroy_situation = this
+			clear_variable = ds_pr_difficulty_value
+			clear_variable = ds_pr_opponent_value
+		}
+	}
+	stages = {
+		stage_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_blue
+			end = 100
+			custom_tooltip = stage_unknown_effects
+		}
+		stage_2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_blue
+			end = 125
+			custom_tooltip = stage_unknown_effects
+			on_first_enter = {
+				owner = { country_event = { id = dsPR.43 } }
+			}
+		}
+		stage_3 = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_blue
+			end = 150
+			custom_tooltip = stage_unknown_effects
+		}
+	}
+	approach = {
+		name = situation_ds_pr_timer_approach
+		icon = GFX_situation_approach_this_is_fine
+		icon_background = GFX_situation_approach_bg_green
+		default = yes
+		on_select = {
+			custom_tooltip = situation_ds_pr_timer_approach_tt
+		}
+	}
+	monthly_progress = {
+		base = 3
+		modifier = {
+			add = owner.ds_pr_difficulty_var
+			desc = situation_ds_pr_difficulty_progress
+		}
+		modifier = {
+			add = owner.ds_pr_opponent_var
+			desc = situation_ds_pr_opponent_progress
+		}
+	}
+}
+
+situation_ds_phantom_reality = {
+	picture = GFX_evt_dimensional_horror # GFX_evt_astral_rift_vortex
+	complete_icon_frame = GFX_situation_outcome_frame_blue
+	complete_icon = GFX_situation_outcome_ascension
+	category = neutral
+	initial_progress = 10
+	desc = {
+		trigger = { owner = { has_crisis_level = ds_pr_level_5 } }
+		text = situation_ds_phantom_reality_desc_perp
+	}
+	desc = {
+		trigger = { owner = { NOT = { has_crisis_level = ds_pr_level_5 } } }
+		text = situation_ds_phantom_reality_desc
+	}
+	on_progress_complete = {
+		custom_tooltip = situation_ds_phantom_reality_outcome
+		hidden_effect = {
+			owner = {
+				if = {
+					limit = { is_same_value = event_target:ds_pr_crisis_country }
+					country_event = { id = dsPR.100 }
+				}
+			}
+			destroy_situation = this
+		}
+	}
+	stages = {
+		situation_ds_pr_stage_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_blue
+			end = 15
+			custom_tooltip = "situation_ds_pr_stage_1_tt"
+		}
+		situation_ds_pr_stage_2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_blue
+			end = 300
+			custom_tooltip = "situation_ds_pr_stage_2_tt"
+			on_first_enter = {
+				owner = {
+					if = {
+						limit = { is_same_value = event_target:ds_pr_crisis_country }
+						country_event = { id = dsPR.65 }
+					}
+				}
+			}
+		}
+		situation_ds_pr_stage_3 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_blue
+			end = 350 
+			custom_tooltip = "situation_ds_pr_stage_3_tt"
+		}
+	}
+	approach = {
+		name = situation_ds_pr_approach_crisis
+		icon = GFX_situation_approach_this_is_fine
+		icon_background = GFX_situation_approach_bg_green
+		potential = { owner = { is_same_value = event_target:ds_pr_crisis_country } }
+		on_select = {
+			custom_tooltip = situation_ds_pr_approach_crisis_tt
+		}
+	}
+	approach = {
+		name = situation_ds_pr_approach_other
+		icon = GFX_situation_approach_this_is_fine
+		icon_background = GFX_situation_approach_bg_yellow
+		potential = { owner = { NOT = { is_same_value = event_target:ds_pr_crisis_country } } }
+		on_select = {
+			custom_tooltip = situation_ds_pr_approach_other_tt
+		}
+	}
+	monthly_progress = {
+		base = 0
+		modifier = {
+			add = event_target:ds_pr_crisis_country.ds_pr_monthly_var
+			desc = situation_ds_pr_progress_tt
+		}
+		modifier = {
+			add = event_target:ds_pr_crisis_country.ds_pr_bonus_var
+			desc = situation_ds_pr_bonus_tt
+		}
+		modifier = {
+			add = 2
+			desc = situation_ds_pr_crit_tt
+			has_global_flag = ds_pr_crit_flag
+		}
+	}
+}

@@ -1,0 +1,63 @@
+ap_ds_phantom_reality = {
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_ascension_perks_3"
+			num_ascension_perks > 2
+		}
+		NOR = {
+			is_wilderness_empire = yes
+			has_origin = origin_clone_army
+			has_origin = origin_evolutionary_predators
+			has_origin = origin_broken_shackles
+			has_civic = civic_natural_design
+			has_civic = civic_hive_natural_design 
+			has_ascension_perk = ap_defender_of_the_galaxy
+		}
+		custom_tooltip = {
+			fail_text = "ap_ds_pr_not_xenophile"
+			is_xenophile = no
+		}
+		custom_tooltip = {
+			fail_text = "ap_ds_pr_not_pacifist"
+			is_pacifist = no
+		}
+		custom_tooltip = {
+			fail_text = "graphical_culture_tooltip_not_biological"
+			NOR = {
+				graphical_culture = biogenesis_01
+				graphical_culture = biogenesis_02
+			}
+		}
+		custom_tooltip = {
+			fail_text = "ap_ds_pr_not_machine"
+			NOR = {
+				is_machine_empire = yes
+				is_individual_machine = yes
+			}
+		}
+	}
+	on_enabled = {
+		hidden_effect = {
+			begin_event_chain = { event_chain = ds_pr_crisis_chain target = root }
+			country_event = { id = dsPR.1 }
+			set_country_flag = player_crisis_chosen 
+		}
+		activate_crisis_progression = ds_phantom_path
+	}
+	potential = {
+		NOR = {
+			has_ascension_perk = ap_ds_phantom_reality
+			has_ascension_perk = ap_cosmogenesis
+			has_ascension_perk = ap_behemoths
+			has_ascension_perk = ap_become_the_crisis
+			has_origin = origin_slavers
+			has_country_flag = player_crisis_chosen 
+		}
+		OR = {
+			has_biogenesis_dlc = yes
+			has_nemesis = yes
+			has_machine_age_dlc = yes
+		}
+		is_ai = no
+	}
+}

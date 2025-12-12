@@ -1,0 +1,1320 @@
+namespace = dsPR
+
+# Picking the AP
+country_event = {
+	id = dsPR.1
+	title = dsPR.1.name
+	desc = dsPR.1.desc
+	picture = GFX_evt_surreal_visions
+	show_sound = event_death_cult
+	is_triggered_only = yes
+	event_chain = ds_pr_crisis_chain
+	option = {
+		name = dsPR.1.a
+		enable_special_project = { name = DS_PR_DM_PROJECT owner = root }
+		hidden_effect = {
+			add_event_chain_counter = {
+				event_chain = "ds_pr_crisis_chain"
+				counter = "ds_pr_crisis_counter"
+				amount = 1
+			}
+		}
+	}
+}
+
+# First Project
+country_event = {
+	id = dsPR.5
+	title = dsPR.5.name
+	desc = dsPR.5.desc
+	picture = GFX_evt_physics_research
+	show_sound = event_laboratory_sound
+	is_triggered_only = yes
+	event_chain = ds_pr_crisis_chain
+	immediate = {
+		set_country_flag = ds_pr_crisis_level_1
+		create_ship_design = { design = NAME_DS_PR_Osiris }
+		add_ship_design = last_created_design
+		add_event_chain_counter = {
+			event_chain = "ds_pr_crisis_chain"
+			counter = "ds_pr_crisis_counter"
+			amount = 1
+		}
+		capital_scope.solar_system = {
+			create_fleet = {
+				name = random
+				effect = {
+					set_owner = root
+					set_location = prev
+					create_ship = {
+						name = random
+						random_existing_design = ds_pr_osiris
+					}
+				}
+			}
+		}
+		add_resource = { sr_dark_matter = 225 }
+	}
+	option = { name = dsPR.5.a }
+}
+
+# Second Level
+country_event = {
+	id = dsPR.10
+	title = dsPR.10.name
+	desc = dsPR.10.desc
+	picture = GFX_evt_genetic_modification
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+	event_chain = ds_pr_crisis_chain
+	immediate = {
+		add_event_chain_counter = {
+			event_chain = "ds_pr_crisis_chain"
+			counter = "ds_pr_crisis_counter"
+			amount = 1
+		}
+	}
+	option = {
+		name = dsPR.10.a
+		enable_special_project = { name = DS_PR_INF_1_PROJECT owner = root }
+		add_research_option = tech_ds_pr_chrono
+	}
+}
+
+# Second Project
+country_event = {
+	id = dsPR.15
+	title = dsPR.15.name
+	desc = dsPR.15.desc
+	picture = GFX_evt_zro_2
+	show_sound = event_mind_over_matter
+	is_triggered_only = yes
+	event_chain = ds_pr_crisis_chain
+	immediate = {
+		set_country_flag = ds_pr_crisis_level_3
+	}
+	option = { name = dsPR.15.a }
+}
+
+# Third Level
+country_event = {
+	id = dsPR.20
+	title = dsPR.20.name
+	desc = dsPR.20.desc
+	picture = GFX_evt_cosmogenesis_crisis
+	show_sound = event_psionic
+	is_triggered_only = yes
+	location = capital_star
+	event_chain = ds_pr_crisis_chain
+	immediate = {
+		add_event_chain_counter = {
+			event_chain = "ds_pr_crisis_chain"
+			counter = "ds_pr_crisis_counter"
+			amount = 1
+		}
+		capital_star = {
+			solar_system = {
+				set_star_flag = ds_pr_breach_star
+				set_star_class = sc_ds_pr_rift
+			}
+			set_planet_entity = { entity = ds_pr_rift_star_entity }
+			add_modifier = { modifier = ds_pr_reality_breach mult = 100 }
+		}
+	}
+	option = {
+		name = dsPR.20.a
+		enable_special_project = { name = DS_PR_INF_2_PROJECT owner = root }
+		hidden_effect = { country_event = { id = dsPR.21 days = 5 } }
+	}
+}
+
+# Modify species decision
+country_event = {
+	id = dsPR.21
+	title = dsPR.21.name
+	desc = dsPR.21.desc
+	picture = GFX_evt_shroudwalker_enclave
+	show_sound = event_psionic
+	is_triggered_only = yes
+	event_chain = ds_pr_crisis_chain
+	option = {
+		name = dsPR.21.a
+		hidden_effect = {
+			species = { change_species_characteristics = { portrait = ds_pr_exd1 } }
+			ds_pr_crisis_leader_update = yes
+		}
+	}
+	option = {
+		name = dsPR.21.b
+		hidden_effect = {
+			species = { change_species_characteristics = { portrait = ds_pr_exd2 } }
+			ds_pr_crisis_leader_update = yes
+		}
+	}
+	option = {
+		name = dsPR.21.c
+		hidden_effect = {
+			species = { change_species_characteristics = { portrait = ds_pr_exd3 } }
+			ds_pr_crisis_leader_update = yes
+		}
+	}
+	option = {
+		name = dsPR.21.d
+		hidden_effect = {
+			species = { change_species_characteristics = { portrait = ds_pr_exd4 } }
+			ds_pr_crisis_leader_update = yes
+		}
+	}
+	option = {
+		name = dsPR.21.e
+		hidden_effect = {
+			species = { change_species_characteristics = { portrait = ds_pr_exd5 } }
+			ds_pr_crisis_leader_update = yes
+		}
+	}
+	option = {
+		name = dsPR.21.f
+		hidden_effect = {
+			species = { change_species_characteristics = { portrait = ds_pr_exd6 } }
+			ds_pr_crisis_leader_update = yes
+		}
+	}
+}
+
+# Third Project
+country_event = {
+	id = dsPR.25
+	title = dsPR.25.name
+	desc = dsPR.25.desc
+	picture = GFX_evt_sky_burials
+	show_sound = event_kaleidoscopic_lights
+	is_triggered_only = yes
+	event_chain = ds_pr_crisis_chain
+	immediate = {
+		set_country_flag = ds_pr_crisis_level_4
+	}
+	option = {
+		name = dsPR.25.a
+		custom_tooltip = dsPR.25.a.tt
+		hidden_effect = { set_country_flag = ds_pr_void_life }
+	}
+	option = {
+		name = dsPR.25.b
+		custom_tooltip = dsPR.25.b.tt
+		hidden_effect = { set_country_flag = ds_pr_energy_life }
+	}
+}
+
+# Fourth Level
+country_event = {
+	id = dsPR.30
+	title = dsPR.30.name
+	desc = dsPR.30.desc
+	picture = GFX_evt_a_rift_in_space
+	show_sound = event_whispering
+	is_triggered_only = yes
+	event_chain = ds_pr_crisis_chain
+	option = {
+		name = dsPR.30.a
+		enable_special_project = { name = DS_PR_INF_3_PROJECT owner = root }
+	}
+}
+
+# Fourth Level - trait warning
+country_event = {
+	id = dsPR.31
+	title = dsPR.31.name
+	desc = dsPR.31.desc
+	picture = GFX_evt_astral_rift_entangled_dark_matter
+	show_sound = event_bad_omen
+	is_triggered_only = yes
+	event_chain = ds_pr_crisis_chain
+	option = {
+		name = dsPR.31.a
+		custom_tooltip = dsPR.31.a.tt
+	}
+}
+
+# Fourth Project
+country_event = {
+	id = dsPR.35
+	title = dsPR.35.name
+	desc = dsPR.35.desc
+	picture = GFX_evt_cosmic_storms_calibration
+	show_sound = evn_ove_shroud_tunnel
+	is_triggered_only = yes
+	event_chain = ds_pr_crisis_chain
+	immediate = {
+		set_country_flag = ds_pr_crisis_level_5
+	}
+	option = { name = dsPR.35.a }
+}
+
+# Fifth Level
+country_event = {
+	id = dsPR.40
+	title = dsPR.40.name
+	desc = dsPR.40.desc
+	picture = GFX_evt_astral_rift_vortex
+	show_sound = event_screams
+	is_triggered_only = yes
+	event_chain = ds_pr_crisis_chain
+	immediate = {
+		add_event_chain_counter = {
+			event_chain = "ds_pr_crisis_chain"
+			counter = "ds_pr_crisis_counter"
+			amount = 1
+		}
+		activate_fog_machine = ds_pr_storm
+		fog_machine_auto_tracking = yes
+		save_global_event_target_as = ds_pr_crisis_country
+		set_variable = { which = ds_pr_difficulty_var value = value:ds_pr_difficulty_value }
+		set_variable = { which = ds_pr_opponent_var value = value:ds_pr_opponent_value }
+		if = { # Should never go too low
+			limit = { check_variable = { which = ds_pr_opponent_var value < -3.5 } }
+# TODO why 2 if checking for -3.5?
+			set_variable = { which = ds_pr_opponent_var value = 2 }
+		}
+		start_situation = { type = situation_ds_pr_timer target = root }
+	}
+	option = {
+		name = dsPR.40.a
+	}
+}
+
+# Final stage of the countdown
+country_event = {
+	id = dsPR.43
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		every_playable_country = {
+			limit = { NOT = { is_same_value = event_target:ds_pr_crisis_country } }
+			country_event = { id = dsPR.45 }
+		}
+	}
+}
+
+# AI/players form anti-crisis coalition
+country_event = {
+	id = dsPR.45
+	title = dsPR.45.name
+	desc = dsPR.45.desc
+	picture = GFX_evt_galactic_senate
+	show_sound = event_death_cult
+	location = event_target:ds_pr_crisis_country
+	is_triggered_only = yes
+
+    # Coalition war
+    option = {
+        name = dsPR.45.a
+        custom_tooltip = dsPR.45.a.tt
+        trigger = {
+            NOR = {
+                has_ascension_perk = ap_become_the_crisis
+                has_ascension_perk = ap_behemoths
+                has_ascension_perk = ap_cosmogenesis
+                has_ascension_perk = ap_ds_phantom_reality
+            }
+            is_homicidal = no
+        }
+        ai_chance = {
+            modifier = {
+                add = 5
+				OR = {
+					is_xenophobe = yes # Our greatest enemy
+					is_xenophile = yes # Cant let them kill others
+				}
+            }
+            modifier = {
+                add = 5
+                is_militarist = yes
+            }
+            modifier = {
+                add = 15
+                has_ascension_perk = ap_defender_of_the_galaxy
+            }
+            modifier = {
+                add = 5
+                is_galactic_community_member = yes
+            }
+			modifier = {
+				add = 10
+				any_neighbor_country = {
+					is_same_empire = event_target:ds_pr_crisis_country
+				}
+			}
+            modifier = {
+                add = 10
+                OR = {
+                    is_galactic_custodian = yes
+                    is_galactic_emperor = yes
+                }
+            }
+        }
+        hidden_effect = { set_country_flag = ds_pr_anti_crisis }
+    }
+
+    # Genocidals
+    option = {
+        name = dsPR.45.b
+        custom_tooltip = dsPR.45.b.tt
+        trigger = { is_homicidal = yes }
+    }
+
+    # Neutral
+    option = {
+        name = dsPR.45.c
+        custom_tooltip = dsPR.45.c.tt
+        trigger = {
+            is_homicidal = no
+        }
+        ai_chance = {
+            modifier = {
+                add = 10
+				is_pacifist = yes
+            }
+            modifier = {
+                add = 25
+                has_civic = civic_inwards_perfection
+            }
+            modifier = {
+                add = 5
+                is_galactic_community_member = no
+            }
+        }
+    }
+}
+
+# Starts Crisis War
+country_event = {
+	id = dsPR.50
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+	# Min/Max Rifts
+		export_trigger_value_to_variable = {
+			trigger = num_galaxy_systems
+			variable = ds_pr_star_var
+		}
+		multiply_variable = { which = ds_pr_star_var value = @ds_pr_star_mult }
+		round_variable = ds_pr_star_var
+		if = {
+			limit = { check_variable = { which = ds_pr_star_var value < @ds_pr_star_min} }
+			set_variable = { which = ds_pr_star_var value = @ds_pr_star_min }
+		}
+		if = {
+			limit = { check_variable = { which = ds_pr_star_var value > @ds_pr_star_max } }
+			set_variable = { which = ds_pr_star_var value = @ds_pr_star_max }
+		}
+	# Critical Mass
+		export_trigger_value_to_variable = {
+			trigger = num_galaxy_systems
+			variable = ds_pr_crit_var
+		}
+		multiply_variable = { which = ds_pr_crit_var value = @ds_pr_crit_mult }
+		round_variable = ds_pr_crit_var
+	# Kick out of alliances
+		if = {
+			limit = {
+				is_galactic_community_formed = yes
+				is_galactic_community_member = yes
+			}
+			remove_from_galactic_community = yes
+		}
+		if = {
+			limit = { has_federation = yes }
+			leave_alliance = { override_requirements = yes }
+		}
+	# War
+		ds_pr_crisis_effect = yes
+	}
+}
+
+# Crisis War - crisis
+country_event = {
+	id = dsPR.55
+	title = dsPR.55.name
+	desc = dsPR.55.desc
+	picture = GFX_evt_cosmic_storms_electric_storm
+	show_sound = event_evolution_mastery
+	is_triggered_only = yes
+	event_chain = ds_pr_crisis_chain
+	immediate = {
+		start_situation= {
+			type = situation_ds_phantom_reality
+			target = root
+		}
+	}
+	option = {
+		name = dsPR.55.a
+		trigger = {
+			is_xenophobe = yes
+			is_homicidal = no
+		}
+		add_resource = { unity = 10 mult = trigger:years_passed }
+	}
+	option = {
+		name = dsPR.55.b
+		trigger = {
+			is_homicidal = yes
+		}
+		add_resource = { unity = 25 mult = trigger:years_passed }
+	}
+	option = { name = dsPR.55.c }
+}
+
+# Crisis War - others
+country_event = {
+	id = dsPR.60
+	title = dsPR.60.name
+	desc = dsPR.60.desc
+	picture = GFX_evt_crisis_declared
+	show_sound = event_screams
+	is_triggered_only = yes
+	location = event_target:ds_pr_crisis_country
+	immediate = {
+		start_situation= {
+			type = situation_ds_phantom_reality
+			target = event_target:ds_pr_crisis_country
+		}
+	}
+	option = { name = dsPR.60.a }
+}
+
+# Decision for ending
+country_event = {
+	id = dsPR.65
+	title = dsPR.65.name
+	desc = dsPR.65.desc
+	picture = GFX_evt_zro_3
+	show_sound = event_the_great_awakening
+	is_triggered_only = yes
+	event_chain = ds_pr_crisis_chain
+	option = {
+		name = dsPR.65.a
+		custom_tooltip = dsPR.65.a.tt
+		allow = {
+			custom_tooltip = {
+				fail_text = dsPR.65.limit
+				NOR = {
+					is_homicidal = yes
+					has_country_flag = ds_pr_65_excluded
+				}
+			}
+		}
+		hidden_effect = { set_country_flag = ds_pr_creators }
+	}
+	option = {
+		name = dsPR.65.b
+		custom_tooltip = dsPR.65.b.tt
+		hidden_effect = { set_country_flag = ds_pr_unbidden }
+	}
+}
+
+# Removes situation if the crisis dies
+country_event = {
+	id = dsPR.70
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		has_ascension_perk = ap_ds_phantom_reality
+		has_crisis_level = ds_pr_level_5
+	}
+	immediate = {
+		every_playable_country = {
+			random_situation = {
+				limit = { is_situation_type = situation_ds_phantom_reality }
+				abort_situation = this
+			}
+		}
+	}
+}
+
+# Crisis Wins - Init
+country_event = {
+	id = dsPR.100
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		win = yes
+		every_system = {
+			limit = { NOT = { has_star_flag = ds_pr_breach_star } }
+			ds_pr_crisis_end = yes
+		}
+		if = {
+			limit = { has_country_flag = ds_pr_creators }
+			country_event = { id = dsPR.105 }
+		}
+		else = { country_event = { id = dsPR.110 } }
+	}
+}
+
+# Crisis Wins - Creators
+country_event = {
+	id = dsPR.105
+	title = dsPR.105.name
+	desc = dsPR.105.desc
+	picture = GFX_evt_atmospheric_entry
+	show_sound = event_kaleidoscopic_lights
+	is_triggered_only = yes
+	event_chain = ds_pr_crisis_chain
+	immediate = {
+		remove_country_flag = ds_pr_creators
+		set_country_flag = ds_pr_asc_creators
+	}
+	option = { name = dsPR.105.a }
+}
+
+# Crisis Wins - Unbidden
+country_event = {
+	id = dsPR.110
+	title = dsPR.110.name
+	desc = dsPR.110.desc
+	picture = GFX_evt_dimensional_horror
+	show_sound = event_ex_started
+	is_triggered_only = yes
+	event_chain = ds_pr_crisis_chain
+	immediate = {
+		remove_country_flag = ds_pr_unbidden
+		set_country_flag = ds_pr_asc_unbidden
+	}
+	option = { name = dsPR.110.a }
+}
+
+# Unbidden Gameplay - pops to ships
+# Will create fleets and ships in a pulse, or the game can lag/crash/desync if too many
+country_event = {
+	id = dsPR.115
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { check_variable = { which = ds_pr_ship_var value >= 50 } }
+			event_target:ds_pr_exodus_system = {
+				create_fleet = {
+					effect = {
+						set_owner = event_target:ds_pr_crisis_country
+						set_location = prev
+						while = {
+							count = 50
+							create_ship = {
+								name = random
+								random_existing_design = ds_pr_reaver
+							}
+						}
+					}
+				}
+			}
+			change_variable = { which = ds_pr_ship_var value = -50 }
+		}
+		else_if = {
+			limit = { check_variable = { which = ds_pr_ship_var value < 50 } }
+			event_target:ds_pr_exodus_system = {
+				create_fleet = {
+					effect = {
+						set_owner = event_target:ds_pr_crisis_country
+						set_location = prev
+						while = {
+							count = root.ds_pr_ship_var
+							create_ship = {
+								name = random
+								random_existing_design = ds_pr_reaver
+							}
+						}
+					}
+				}
+			}
+			set_variable = { which = ds_pr_ship_var value = 0 }
+		}
+		if = {
+			limit = { check_variable = { which = ds_pr_ship_var value >= 1 } }
+			country_event = { id = dsPR.115 days = 1 }
+		}
+	}
+}
+
+# Unbidden Gameplay - informs player
+country_event = {
+	id = dsPR.120
+	title = dsPR.120.name
+	desc = dsPR.120.desc
+	picture = GFX_evt_black_hole
+	show_sound = event_engineered_evolution
+	is_triggered_only = yes
+	location = event_target:ds_pr_exodus_system
+	option = { name = dsPR.120.a }
+}
+
+# Unbidden Gameplay - galaxy reset setup
+country_event = {
+	id= dsPR.125
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		every_system_within_border = {
+			limit = { NOT = { is_same_value = event_target:ds_pr_exodus_system } }
+			random_fleet_in_system = {
+				limit = { is_ship_class = shipclass_starbase }
+				destroy_fleet = this
+			}
+		}
+		every_system = {
+			limit = { NOT = { is_same_value = event_target:ds_pr_exodus_system } }
+			random_list = {
+				50 = {}
+				50 = { save_global_event_target_as = ds_pr_reset_wave }
+			}
+		}
+		every_system = {
+			every_system_colony = {
+				remove_all_buildings = yes
+				remove_all_districts = yes
+				destroy_colony = yes
+			}
+			every_system_megastructure = {
+				remove_megastructure = this
+			}
+			every_system_planet = {
+				limit = { is_artificial = yes }
+				remove_planet = yes
+			}
+		}
+		every_system = {
+			limit = { is_same_value = event_target:ds_pr_reset_wave }
+			ds_pr_crisis_reset = yes
+		}
+		every_system = {
+			limit = {
+				NOR = {
+					is_same_value = event_target:ds_pr_reset_wave
+					is_same_value = event_target:ds_pr_exodus_system
+				}
+			}
+			ds_pr_crisis_reset = yes
+		}
+		while = {
+			count = ds_pr_habitables_var
+			random_system = {
+				limit = { NOT = { has_star_flag = ds_pr_habitable_world } }
+				ds_pr_crisis_habitables = yes
+			}
+		}
+	}
+	after = {
+		export_trigger_value_to_variable = {
+			trigger = check_galaxy_setup_value
+			parameters = { setting = num_empires }
+			variable = ds_pr_empires_var
+		}
+		if = {
+			limit = { check_variable = { which = ds_pr_empires_var value > 12 } }
+			set_variable = { which = ds_pr_empires_var value = 12 }
+		}
+		if = {
+			limit = { check_variable = { which = ds_pr_empires_var value < 5 } }
+			set_variable = { which = ds_pr_empires_var value = 5 }
+		}
+		country_event = { id = dsPR.130 days = 2 }
+		country_event = { id = dsPR.135 days = 5 }
+	}
+}
+
+# Unbidden Gameplay - galaxy reset
+country_event = {
+	id= dsPR.130
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		clear_global_event_target = ds_pr_reset_wave
+# Country cleanup
+		every_country = {
+			limit = {
+				OR = {
+					is_country_type = pirate
+					is_country_type = ruined_marauders
+					is_country_type = dormant_marauders
+					is_country_type = awakened_marauders
+					is_country_type = enclave
+					is_country_type = enclave_mercenary
+					is_country_type = swarm
+					is_country_type = extradimensional
+					is_country_type = extradimensional_2
+					is_country_type = extradimensional_3
+					is_country_type = ai_empire
+					is_country_type = gate_builders
+					is_country_type = synth_queen_storm
+					is_country_type = synth_queen
+					is_country_type = awakened_synth_queen
+					is_country_type = synth_queen_convoys
+					is_country_type = synth_queen_outposts
+					is_country_type = caravaneer_home
+					is_country_type = caravaneer_fleet
+					is_country_type = fallen_empire
+					is_country_type = awakened_fallen_empire
+				}
+			}
+			destroy_country = yes
+		}
+# Change hyperlanes + fixes connections
+		every_system = {
+			limit = { NOT = { is_star_class = sc_black_hole } }
+			ds_pr_crisis_lanes = yes
+		}
+		every_system = {
+			limit = { count_neighbor_system = { count = 0 } }
+			ds_pr_crisis_lanes_0 = yes
+		}
+		every_system = {
+			limit = { count_neighbor_system = { count < 2 } }
+			ds_pr_crisis_lanes_2 = yes
+		}
+# New empires
+		while = {
+			count = ds_pr_empires_var
+			random_galaxy_planet = {
+				limit = {
+					is_colonizable = yes
+					has_owner = no
+					NOT = { solar_system = { exists = space_owner } }
+				}
+				ds_pr_crisis_empirespawn = yes
+			}
+		}
+	}
+}
+
+# Unbidden Gameplay - boosts new empires
+country_event = {
+	id= dsPR.135
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		every_playable_country = {
+			limit = { is_country_type = default }
+			give_tech_no_error_effect = { MESSAGE = no TECH = tech_cruisers }
+			give_tech_no_error_effect = { MESSAGE = no TECH = tech_battleships }
+			add_modifier = { modifier = ds_pr_country_buff }
+		}
+		clear_variable = ds_pr_empires_var
+	}
+}
+
+# Unbidden Gameplay - recruit leaders without pops
+country_event = {
+	id = dsPR.140
+	title = dsPR.140.name
+	desc = dsPR.140.desc
+	picture = GFX_evt_astral_rift_advisor_nice
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+	option = {
+		name = dsPR.140.a
+		custom_tooltip = dsPR.140.a.desc
+		allow = {
+			custom_tooltip = {
+				fail_text = ds_pr_menu_leader_cost
+				has_resource = { type = unity amount >= @ds_pr_ui_leader_req }
+			}
+		}
+		hidden_effect = {
+			set_timed_country_flag = { flag = ds_pr_leader_added years = 2 }
+			add_resource = { unity = @ds_pr_ui_leader_cost }
+			create_leader = {
+				class = commander
+				species = owner_main_species
+				name = random
+				skill = 1
+				leader_age_min = 25
+				leader_age_max = 45
+			}
+			last_created_leader = { add_skill_without_trait_selection = owner.modifier:commander_initial_skill }
+		}
+	}
+	option = {
+		name = dsPR.140.b
+		custom_tooltip = dsPR.140.b.desc
+		allow = {
+			custom_tooltip = {
+				fail_text = ds_pr_menu_leader_cost
+				has_resource = { type = unity amount >= @ds_pr_ui_leader_req }
+			}
+		}
+		hidden_effect = {
+			set_timed_country_flag = { flag = ds_pr_leader_added years = 2 }
+			add_resource = { unity = @ds_pr_ui_leader_cost }
+			create_leader = {
+				class = scientist
+				species = owner_main_species
+				name = random
+				skill = 1
+				leader_age_min = 25
+				leader_age_max = 45
+			}
+			last_created_leader = { add_skill_without_trait_selection = owner.modifier:scientist_initial_skill }
+		}
+	}
+	option = {
+		name = dsPR.140.c
+		custom_tooltip = dsPR.140.c.desc
+		allow = {
+			custom_tooltip = {
+				fail_text = ds_pr_menu_leader_cost
+				has_resource = { type = unity amount >= @ds_pr_ui_leader_req }
+			}
+		}
+		hidden_effect = {
+			set_timed_country_flag = { flag = ds_pr_leader_added years = 2 }
+			add_resource = { unity = @ds_pr_ui_leader_cost }
+			create_leader = {
+				class = official
+				species = owner_main_species
+				name = random
+				skill = 1
+				leader_age_min = 25
+				leader_age_max = 45
+			}
+			last_created_leader = { add_skill_without_trait_selection = owner.modifier:official_initial_skill }
+		}
+	}
+	option = { name = dsPR.140.d }
+}
+
+# Unbidden gameplay - bombardment damage
+planet_event = {
+	id = dsPR.145
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { from = { is_country_type = ds_unbidden } }
+	immediate = {
+		random_owned_pop_group = {
+			kill_pop_group = { pop_group = this amount = 50 }
+		}
+	}
+}
+
+# Unbidden Gameplay - interface
+country_event = {
+	id= dsPR.900
+	title = dsPR.900.name
+	desc = dsPR.900.desc
+	custom_gui = ds_pr_menu_gui
+	diplomatic = yes
+	picture_event_data = {
+		portrait = root.owner_main_species
+		room = extradimensional_blue_room
+	}
+	is_triggered_only = yes
+	option = { name = CONFIRM }
+}
+
+# Monthly Pulse
+country_event = {
+	id = dsPR.1000
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		has_ascension_perk = ap_ds_phantom_reality
+		has_crisis_level = ds_pr_level_1
+	}
+	immediate = {
+
+# Objectives
+		complete_crisis_objective = crisobj_ds_pr_physics
+		complete_crisis_objective = crisobj_ds_pr_rifts
+		if = {
+			limit = { has_edict = ds_pr_dreamhijacking }
+			country_event = { id = dsPR.1030 }
+		}
+# Reality Breach - Stars
+		if = {
+			limit = { has_crisis_level = ds_pr_level_3 }
+			if = {
+				limit = { NOT = { exists = event_target:ds_pr_breach_target@root } }
+				capital_star.solar_system = {
+					closest_system = {
+						limit = {
+							exists = owner
+							owner = { is_same_value = root }
+							NOT = { has_star_flag = ds_pr_breach_star }
+						}
+						save_global_event_target_as = ds_pr_breach_target@root
+						star = { ds_pr_crisis_breach = yes }
+					}
+				}
+			}
+			else = {
+				limit = { exists = event_target:ds_pr_breach_target@root }
+				event_target:ds_pr_breach_target@root = { star = { ds_pr_crisis_breach = yes } }
+			}
+			# Monthly Pop Conversion
+			country_event = { id = dsPR.1001 days = 3 }
+		}
+# Reality Breach - Planets
+		if = {
+			limit = { has_crisis_level = ds_pr_level_5 }
+			every_owned_planet = {
+				limit = { any_owned_pop_group = { NOT = { pop_group_has_trait = trait_ds_exd_phantom } } }
+				random_owned_pop_group = {
+					limit = { NOT = { pop_group_has_trait = trait_ds_exd_phantom } }
+					kill_pop_group = { pop_group = this amount = @ds_pr_rift_pops }
+				}
+			}
+			random_system_within_border = {
+				limit = {
+					any_neighbor_system = {
+						exists = owner
+						NOT = { owner = { is_same_value = root } }
+						count_system_colony = { count > 0 }
+					}
+				}
+				random_neighbor_system = {
+					limit = {
+						exists = owner
+						NOT = { owner = { is_same_value = root } }
+						count_system_colony = { count > 0 }
+					}
+					every_system_colony = {
+						random_owned_pop_group = {
+							limit = { NOT = { pop_group_has_trait = trait_ds_exd_phantom } }
+							kill_pop_group = { pop_group = this amount = @ds_pr_rift_pops }
+						}
+					}
+				}
+			}
+		}
+# Situation - Debug: effect = { add_situation_progress = 5 }
+		if = {
+			limit = { has_crisis_level = ds_pr_level_5 }
+		# Setup
+			export_trigger_value_to_variable = {
+				trigger = count_system_within_border
+				parameters = { limit = { has_star_flag = ds_pr_breach_star } }
+				variable = ds_pr_breach_var
+			}
+			set_variable = { which = ds_pr_bonus_var value = 0 } # Must be 0 before Conclude, or it progresses without the limit
+		# Conclude
+			if = {
+				limit = { check_variable = { which = ds_pr_breach_var value >= ds_pr_star_var } }
+				set_variable = { which = ds_pr_monthly_var value = 1 }
+			# Bonus
+				set_variable = { which = ds_pr_bonus_var value = ds_pr_breach_var }
+				divide_variable = { which = ds_pr_bonus_var value = @ds_pr_bonus_mult }
+				multiply_variable = { which = ds_pr_bonus_var value = 0.5 }
+				floor_variable = ds_pr_bonus_var
+			# Critical Mass
+				if = {
+					limit = { check_variable = { which = ds_pr_breach_var value >= ds_pr_crit_var } }
+					set_timed_global_flag = { flag = ds_pr_crit_flag months = 1 }
+				}
+			}
+			else_if = {
+				limit = { check_variable = { which = ds_pr_breach_var value < ds_pr_star_var } }
+				if = {
+					limit = {
+						NOT = {
+							any_situation = {
+								is_situation_type = situation_ds_phantom_reality
+								current_stage = situation_ds_pr_stage_1
+							}
+						}
+					}
+					set_variable = { which = ds_pr_monthly_var value = -2 }
+				}
+				else = { set_variable = { which = ds_pr_monthly_var value = 0 } }
+			}
+		}
+	}
+}
+
+# Monthly pop conversion
+country_event = {
+	id = dsPR.1001
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { has_ascension_perk = ap_ds_phantom_reality } # keep this
+	immediate = {
+# Modify species
+		every_owned_planet = {
+			limit = { has_active_building = building_ds_pr_engine }
+			set_variable = { which = ds_pr_engine_var value = value:ds_pr_engine_value }
+			if = {
+				limit = { check_variable = { which = ds_pr_engine_var value > 0 } }
+				weighted_random_owned_pop_group = {
+					limit = {
+						species = { is_same_value = owner_main_species }
+						NOR = {
+							has_trait = trait_ds_exd_phantom
+							is_being_purged = yes
+							is_enslaved = yes
+						}
+					}
+					species = { save_event_target_as = old_species }
+					save_event_target_as = old_pop_group
+					if = {
+						limit = { NOT = { planet = { any_owned_species = { has_species_flag = ds_pr_species@event_target:old_species } } } }
+						modify_species = {
+							species = root.species
+							base = root.species
+							add_trait = trait_ds_exd_phantom
+							add_traits_at_start_of_list = yes
+							portrait = root.species
+							effect = {
+								save_event_target_as = target_species
+								set_species_flag = ds_pr_species@event_target:old_species
+							}
+						}
+					}
+					else = {
+						planet = {
+							random_owned_species = {
+								limit = { has_species_flag = ds_pr_species@event_target:old_species }
+								save_event_target_as = target_species
+							}
+						}
+					}
+					planet = {
+						create_pop_group = {
+							pop_group = event_target:old_pop_group
+							species = event_target:target_species
+							size = 0
+							effect = {
+								transfer_pop_amount = {
+									source = event_target:old_pop_group
+									target = this
+									amount = prev.ds_pr_engine_var
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Objective: Researching Tech
+country_event = {
+	id = dsPR.1005
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		has_crisis_level = ds_pr_level_2
+		last_increased_tech = tech_ds_pr_chrono
+	}
+	immediate = {
+		complete_crisis_objective = crisobj_ds_pr_tech
+		add_resource = { sr_dark_matter = 5 mult = trigger:years_passed }
+	}
+}
+
+# Objective: Harvesting Minds
+planet_event = {
+	id = dsPR.1010
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		from = { has_ascension_perk = ap_ds_phantom_reality }
+		fromfrom = { has_purge_type = { country = from type = purge_ds_pr_harvest } }
+	}
+	immediate = {
+		while = {
+			count = value:per_100_local_pop_amount
+			from = { complete_crisis_objective = crisobj_ds_pr_harvest }
+		}
+	}
+}
+
+# Objective: Elder God consumes enemies - target available
+system_event = {
+	id = dsPR.1015
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		every_system_colony = {
+			create_ambient_object = {
+				type = ds_pr_eldergod
+				location = this
+				entity_scale_to_size = yes
+				entity_offset_height = -7
+				duration = 30
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = prev
+					distance = 0
+					angle = 0
+				}
+			}
+			planet_event = { id = dsPR.1016 days = 30 }
+		}
+		save_event_target_as = target_system
+		space_owner = { country_event = { id = dsPR.1017 } }
+	}
+}
+
+# Objective: Elder God consumes the planet (delayed)
+planet_event = {
+	id = dsPR.1016
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		destroy_colony = yes
+		create_ambient_object = {
+			type = horror_spawn_object
+			location = this
+			use_3d_location = yes
+			play_animation_once = yes
+			duration = 3
+		}
+		if = {
+			limit = { is_artificial = no }
+			change_pc = pc_barren_cold
+		}
+	}
+}
+
+# Objective: Elder God consumes enemies - informs target
+country_event = {
+	id = dsPR.1017
+	title = dsPR.1017.name
+	desc = dsPR.1017.desc
+	picture = GFX_evt_dimensional_horror
+	show_sound = event_ex_started
+	location = event_target:target_system
+	is_triggered_only = yes
+	option = { name = dsPR.1017.a }
+}
+
+# Objective: Elder God consumes enemies - no target nearby
+country_event = {
+	id = dsPR.1018
+	title = dsPR.1018.name
+	desc = dsPR.1018.desc
+	picture = GFX_evt_dimensional_horror
+	show_sound = event_bad_omen
+	is_triggered_only = yes
+	option = { name = dsPR.1018.a }
+}
+
+# Objective: Osiris - init
+planet_event = {
+	id = dsPR.1020
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		any_fleet_in_orbit = { any_owned_ship = { is_ship_size = ds_pr_osiris } }
+		NOT = { has_planet_flag = ds_pr_osiris_set }
+	}
+	immediate = {
+		from.owner = { complete_crisis_objective = crisobj_ds_pr_anomaly }
+		planet_event = { id = dsPR.1021 days = 1 }
+	}
+}
+
+# Objective: Osiris - cracking
+planet_event = {
+	id = dsPR.1021
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		any_fleet_in_orbit = { any_owned_ship = { is_ship_size = ds_pr_osiris } }
+		NOT = { has_planet_flag = ds_pr_osiris_set }
+	}
+	immediate = {
+		ds_pr_crisis_osiris = yes
+		if = {
+			limit = { has_moon = yes }
+			every_moon = { ds_pr_crisis_osiris = yes }
+		}
+	}
+}
+
+# Objective: Starveil bombardment
+planet_event = {
+	id = dsPR.1025
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		has_orbital_bombardment_stance = ds_pr_starveil
+		count_owned_pop_amount = { count <= 250 }
+	}
+	immediate = {
+		owner = {
+			if = {
+				limit = { is_at_war_with = from }
+				add_static_war_exhaustion = { attacker = from location = root value_for_planet_destruction = 1 }
+			}
+		}
+		destroy_colony = yes
+		remove_all_buildings = yes
+		if = {
+			limit = { is_artificial = no }
+			change_pc = pc_shrouded
+			reroll_deposits = yes
+			clear_planet_modifiers = yes
+		}
+		from = { complete_crisis_objective = crisobj_ds_pr_starveil }
+	}
+}
+
+# Objective: Dream Hijacking
+country_event = {
+	id = dsPR.1030
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		while = {
+			count = 3
+			random_spynetwork = {
+				limit = {
+					is_spynetwork_level >= @ds_pr_intel_req
+					target = { NOT = { has_country_flag = ds_pr_nightmares@root } }
+				}
+				target = {
+					set_timed_country_flag = { flag = ds_pr_nightmares@root days = 3 }
+					random_owned_planet = {
+						limit = { NOT = { has_modifier = ds_pr_pm_astrophobia } }
+						add_modifier = { modifier = ds_pr_pm_astrophobia days = 30 }
+					}
+				}
+				root = {
+					complete_crisis_objective = crisobj_ds_pr_nightmares
+					add_resource = {
+						society_research = 1
+						mult = value:ds_pr_society_value
+					}
+				}
+			}
+		}
+	}
+}
+
+# Objective: Synth-Warforms conquer a world
+# This = country, lead attacker
+# From = country, planet owner
+# FromFrom = planet
+country_event = {
+	id = dsPR.1035
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		has_crisis_level = ds_pr_level_2
+		from = { is_machine_empire = no }
+		fromfrom = { any_ground_combat_attacker = { army_type = ds_pr_dark_army } }
+	}
+	immediate = {
+		while = {
+			count = value:ds_pr_army_value
+			complete_crisis_objective = crisobj_ds_pr_army
+		}
+		fromfrom = {
+			every_owned_pop_group = {
+				kill_pop_group = {
+					pop_group = this
+					percentage = 0.15 # crisobj_ds_pr_army_desc
+				}
+			}
+		}
+	}
+}

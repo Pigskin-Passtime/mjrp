@@ -1,0 +1,67 @@
+trait_ds_exd_phantom = {
+	cost = 1
+	icon = "gfx/interface/icons/traits/trait_exd.dds"
+	sorting_priority = 100
+	initial = no
+	randomized = no
+	species_potential_add = {
+		hidden_trigger = { exists = from }
+		from = { has_crisis_level = ds_pr_level_3 }
+	}
+	species_possible_add = {
+		#can_add_genetic_traits = yes
+		always = no
+	}
+	species_possible_remove = {
+		always = no
+	}
+	species_possible_merge_add = {
+		always = no
+	}
+	allowed_archetypes = { BIOLOGICAL LITHOID }
+	tags = { positive upkeep special drawbacks }
+# NOTE: If anything below changes, adjust concept_ds_pr_trait_desc + trait_ds_exd_phantom_tt
+	custom_tooltip = trait_ds_exd_phantom_tt
+	modifier = {
+		# If this changes, adjust trait_ds_exd_phantom_tt
+		leader_lifespan_add = 50
+		logistic_growth_mult = -0.15
+		planet_pops_food_upkeep_mult = -10 # Not shown
+	}
+	triggered_pop_group_modifier = {
+		potential = {
+			exists = owner
+			owner = { has_country_flag = ds_pr_void_life }
+		}
+		pop_environment_tolerance = 0.35
+		species_empire_size_mult = -0.1
+	}
+	triggered_pop_group_modifier = {
+		potential = {
+			exists = owner
+			owner = { has_country_flag = ds_pr_energy_life }
+		}
+		pop_environment_tolerance = 0.20
+		pop_bonus_workforce_mult = 0.1
+	}
+	resources = {
+		category = planet_pops
+		# If this changes, adjust trait_ds_exd_phantom_tt
+		upkeep = {
+			trigger = {
+				exists = owner
+				owner = { has_country_flag = ds_pr_void_life }
+			}
+			sr_dark_matter = 0.1
+		}
+		upkeep = {
+			trigger = {
+				exists = owner
+				owner = { has_country_flag = ds_pr_energy_life }
+			}
+			energy = 1
+		}
+	}
+	slave_cost = { energy = 1500 }
+	ai_weight = { weight = 50 }
+}

@@ -1,0 +1,28 @@
+ds_pr_starveil = {
+	trigger = { owner = { has_ascension_perk = ap_ds_phantom_reality } }
+	default = no
+	stop_when_armies_dead = no
+	stop_when_ground_combat = no
+	abduct_pops = no
+	planet_damage = 0.5
+	army_damage = 2.0
+	kill_pop_chance = { base = 3 }
+	min_pops_to_kill_pop = 0
+	kill_pop_amount = { min = 300 max = 500 }
+	ai_weight = {
+		weight = 10
+		modifier = {
+			factor = 0.01
+			exists = from
+			from = {
+				owner = { NOT = { is_hostile = root.owner } }
+				NAND = {
+					controller = { is_crisis_faction = yes }
+					planet_garrison_strength > 0
+				}
+			}
+			exists = owner
+			owner = { is_crisis_faction = no }
+		}
+	}
+}

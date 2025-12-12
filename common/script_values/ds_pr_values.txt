@@ -1,0 +1,111 @@
+ds_pr_difficulty_value = {
+	base = 0
+	add = trigger:is_difficulty
+	mult = 0.5
+}
+
+ds_pr_opponent_value = {
+	base = -0.1
+	# Galaxy setup to avoid counting in many smaller vassals & similar
+	complex_trigger_modifier = {
+		trigger = check_galaxy_setup_value
+		parameters = { setting = num_empires }
+		mode = mult
+	}
+}
+
+ds_pr_rift_obj_value = {
+	base = 0
+	complex_trigger_modifier = {
+		trigger = count_system_within_border
+		parameters = {
+			limit = {
+				OR = {
+					is_star_class = sc_black_hole
+					is_star_class = sc_ds_pr_rift
+				}
+			}
+		}
+		mode = add
+	}
+}
+
+ds_pr_engine_value = {
+	base = 0
+	complex_trigger_modifier = {
+		trigger = count_owned_pop_amount
+		parameters = { limit = { NOT = { has_trait = trait_ds_exd_phantom } } }
+		mode = add
+	}
+	max = @ds_pr_pop_rate
+}
+
+ds_pr_edict_value = {
+	base = 0.01
+	mult = trigger:empire_sprawl_over_cap
+	add = 1
+	max = 50
+}
+
+ds_pr_army_value = {
+	base = 0
+	complex_trigger_modifier = {
+		trigger = count_owned_pop_amount
+		mode = add
+	}
+	divide = 1000
+	round = yes
+	min = 0
+	max = 25
+}
+
+ds_pr_society_value = {
+	base = 0
+	add = trigger:years_passed
+	max = 75
+}
+
+ds_pr_energy_value = {
+	base = 0
+	complex_trigger_modifier = {
+		trigger = check_modifier_value
+		parameters = { modifier = country_base_energy_produces_add }
+		mode = add
+	}
+}
+
+ds_pr_alloys_value = {
+	base = 0
+	complex_trigger_modifier = {
+		trigger = check_modifier_value
+		parameters = { modifier = country_base_alloys_produces_add }
+		mode = add
+	}
+}
+
+ds_pr_unity_value = {
+	base = 0
+	complex_trigger_modifier = {
+		trigger = check_modifier_value
+		parameters = { modifier = country_base_unity_produces_add }
+		mode = add
+	}
+}
+
+ds_pr_dm_value = {
+	base = 0
+	complex_trigger_modifier = {
+		trigger = check_modifier_value
+		parameters = { modifier = country_base_sr_dark_matter_produces_add }
+		mode = add
+	}
+}
+
+ds_pr_trade_value = {
+	base = 0
+	complex_trigger_modifier = {
+		trigger = check_modifier_value
+		parameters = { modifier = country_base_trade_produces_add }
+		mode = add
+	}
+}

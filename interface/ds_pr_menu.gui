@@ -1,0 +1,596 @@
+# reload ds_pr_menu.gui
+
+guiTypes = {
+	### GUI ###
+	containerWindowType = {
+		name = "ds_pr_menu_gui"
+		orientation = center
+		origo = center
+		moveable = yes
+		size = { width = 750 height = 500 }
+		background = { name = "background" spriteType = "GFX_ds_pr_menu_bg" }
+		iconType = {
+			name = "hex_bg1"
+			spriteType = "GFX_hex_bg"
+			position = { x = 270 y = -14 }
+			alwaysTransparent = yes
+		}
+		iconType = {
+			name = "hex_bg2"
+			spriteType = "GFX_hex_bg"
+			position = { x = 270 y = -14 }
+			alwaysTransparent = yes
+		}
+		# Line on the top
+		iconType = {
+			name = "empire_header_line"
+			quadTextureSprite = "GFX_line_long"
+			position = { x = 6 y = 22 }
+			alwaysTransparent = yes
+		}
+		buttonType = {
+			name = "close"
+			quadTextureSprite = "GFX_close"
+			position = { x= -42 y = 8 }
+			orientation = "UPPER_RIGHT"
+			shortcut = "ESCAPE"
+			clicksound = "back_click"
+		}
+		### MOST OF THIS IS HIDDEN OR DISPLACED ###
+		buttonType = { name = "focus_button" position = { x = -1180 y = -1112 } spriteType = "GFX_fleetview_focus" } # hidden
+		instantTextBoxType = { name = "heading" font = "malgun_goth_24" position = { x = -1120 y = -115 } } # hidden
+		buttonType = { name = "alien_message_background" size = { x = 0 y = 0 } position = { x = -1110 y = -11430 } spriteType = "GFX_tiles_dark_area_cut_8" } # hidden
+		buttonType = { name = "confirm_button" quadTextureSprite = "GFX_standard_button_142_34_button" } # hidden
+		containerWindowType = {
+			name = "portrait_background"
+			position = { x = 0 y = 0 }
+			size = { width = 0 height = 0 } 	# hide portrait window
+			iconType = { name = "event_picture" spriteType = "GFX_diplomacy_portrait_frame" } # hidden
+			iconType = { name = "portrait" spriteType = "GFX_portrait_character" } # hidden
+		}
+		containerWindowType = {
+			name = "portrait"
+			position = { x = 6 y = 35 }
+			size = { width = 50 height = 50 }
+			clipping = no
+			iconType = {
+				name = "portrait"
+				spriteType = "GFX_portrait_gamesetup_mask"
+				scale = 0.34
+			}
+			iconType = {
+				name = "black_frame"
+				spriteType = "GFX_diplomacy_portrait_shadow_frame"
+				alwaysTransparent = yes
+				scale = 0.34
+			}
+			iconType = {
+				name = "stripes_1"
+				spriteType = "GFX_diplomacy_stripes_2"
+				alwaysTransparent = yes
+				scale = 0.34
+			}
+			iconType = {
+				name = "city_frame"
+				spriteType = "GFX_diplomacy_portrait_frame_caravaneer"
+				alwaysTransparent = yes
+				scale = 0.34
+			}
+		}
+		iconType = { name = "empire_info_bg" spriteType = "GFX_diplomacy_dark_fade_bg" } # hidden
+		instantTextBoxType = { name = "empire_name" font = "malgun_goth_24" } # hidden
+		instantTextBoxType = { name = "empire_government_type" font = "cg_16b" } # hidden
+		instantTextBoxType = { name = "empire_personality_type" font = "cg_16b" } # hidden
+		overlappingElementsBoxType = { name = "empire_ethics_icons" position = { x = -1145 y = -11138 } } # hidden
+		iconType = { name = "empire_flag" spriteType = "GFX_empire_flag_128" position = { x = -1125 y = -11235 } } # hidden
+		containerWindowType = {
+			name = "leader_details"
+			position = { x = 0 y = 0 }
+			containerWindowType = { name = "empire_traits_box" } # hidden
+			instantTextBoxType = { name = "empire_traits_label" font = "cg_16b" } # hidden
+			overlappingElementsBoxType = { name = "leader_traits" } # hidden
+			instantTextBoxType = { name = "leader_name" font = "cg_16b" } # hidden
+			instantTextBoxType = { name = "leader_species" font = "cg_16b" } # hidden
+		}
+		containerWindowType = {
+			name = "opinion_window"
+			position = { x = 0 y = 0 }
+			size = { width = 0 height = 0 }
+			iconType = { name = "their_opinion_icon" spriteType = "GFX_diplomacy_opinion" } # hidden
+			instantTextBoxType = { name = "their_opinion" font = "cg_16b" }
+		}
+
+		### EVENT DIPLO ###
+		containerWindowType = {
+			name = "EVENT_DIPLO"
+			position = { x = 60 y = 5 } # event window name
+			#size = { width = 563 height = 220 }
+			moveable = no
+			instantTextBoxType = {
+				name = "action_title"
+				font = "malgun_goth_24"
+				position = { x = 240 y = 0 }
+				maxWidth = 200
+				alwaysTransparent = yes
+			}
+			instantTextBoxType = {
+				name = "action_desc"
+				font = "malgun_goth_24"
+				position = { x = 490 y = 0 }
+				maxWidth = 500
+				maxHeight = 180
+				orientation = "UPPER_LEFT"
+				format = center
+				alwaysTransparent = yes
+				text_color_code = "H"
+			}
+			# CONFIRM BUTTON - not needed in further rows
+			listboxType = {
+				name = "option_list"
+				position = { x = 80 y = -90 } # y = -5 window mode
+				size = { x = 170 y = 120 }
+				spacing = 1
+				scrollbartype = "standardlistbox_slider"
+				borderSize = { x = 0 y = 0 }
+				Orientation = CENTER_LEFT
+			}
+		}
+		# Description Section
+		instantTextBoxType = {
+			name = "alien_message"
+			font = "malgun_goth_24"
+			position = { x = 380 y = 35 }
+			maxWidth = 350
+			maxHeight = 220
+			format = left
+			scrollbartype = "standardtext_slider"
+		}
+
+		### ECO SUMMARY ###
+		containerWindowType = {
+			name = "ds_pr_menu_summary"
+			position = { x = 380 y = 65 }
+			size = { width = 360 height = 65 }
+			background = {
+				name = "background"
+				quadTextureSprite = "GFX_ds_pr_menu_dark"
+			}
+			effectbuttonType = {
+				name = ds_pr_menu_jobs
+				quadTextureSprite = "GFX_tiled_window_transparent"
+				position = { x = 110 y = 15 }
+				size = { x = 230 y = 32 }
+				scale = 1
+				buttonFont = malgun_goth_24
+				buttonText = ds_pr_menu_jobs
+				multiline = yes
+				format = left
+				orientation = UPPER_LEFT
+			}
+		}
+
+		### RESOURCES ###
+		containerWindowType = {
+			name = "ds_pr_menu_eco"
+			position = { x = 10 y = 160 }
+			size = { width = 360 height = 300 }
+			background = {
+				name = "background"
+				quadTextureSprite = "GFX_ds_pr_menu_dark"
+			}
+			instantTextBoxType={
+				name = "ds_pr_menu_eco_title"
+				font = "malgun_goth_24"
+				text = "ds_pr_menu_eco_title"
+				position = { x = 100 y = 5 }
+				maxWidth = 150
+				maxHeight = 32
+				format = CENTER
+				fixedsize = yes
+			}
+			containerWindowType = {
+				name = "ENERGY"
+				position = { x = -15 y = 50 }
+				effectbuttonType = {
+					name = ds_pr_void_energy_minus_ten
+					quadTextureSprite = "GFX_ds_pr_menu_btn"
+					position = { x = 35 y = 0 }
+					scale = 1
+					buttonFont = cg_16b
+					buttonText = "-10"
+					orientation = UPPER_LEFT
+					effect = ds_pr_void_energy_minus_ten
+				}
+				effectbuttonType = {
+					name = ds_pr_void_energy_minus_one
+					quadTextureSprite = "GFX_ds_pr_menu_btn"
+					position = { x = 70 y = 0 }
+					scale = 1
+					buttonFont = cg_16b
+					buttonText = "-1"
+					orientation = UPPER_LEFT
+					effect = ds_pr_void_energy_minus_one
+				}
+				# MID
+				effectbuttonType = {
+					name = ds_pr_menu_energy
+					quadTextureSprite = "GFX_tiled_window_transparent"
+					position = { x = 100 y = 0 }
+					size = { x = 80 y = 32 }
+					scale = 1
+					buttonFont = cg_16b
+					buttonText = ds_pr_menu_energy
+					orientation = UPPER_LEFT
+				}
+				effectbuttonType = {
+					name = ds_pr_void_energy_add_one
+					quadTextureSprite = "GFX_ds_pr_menu_btn"
+					position = { x = 170 y = 0 }
+					scale = 1
+					buttonFont = cg_16b
+					buttonText = "+1"
+					orientation = UPPER_LEFT
+					effect = ds_pr_void_energy_add_one
+				}
+				effectbuttonType = {
+					name = ds_pr_void_energy_add_ten
+					quadTextureSprite = "GFX_ds_pr_menu_btn"
+					position = { x = 205 y = 0 }
+					scale = 1
+					buttonFont = cg_16b
+					buttonText = "+10"
+					orientation = UPPER_LEFT
+					effect = ds_pr_void_energy_add_ten
+				}
+				effectbuttonType = {
+					name = ds_pr_void_energy_total
+					quadTextureSprite = "GFX_tiled_window_transparent"
+					position = { x = 280 y = 0 }
+					size = { x = 110 y = 32 }
+					scale = 1
+					buttonFont = cg_16b
+					buttonText = ds_pr_void_energy_total
+					format = left
+					orientation = UPPER_LEFT
+				}
+			}
+			containerWindowType = {
+				name = "alloys"
+				position = { x = -15 y = 90 }
+				effectbuttonType = {
+					name = ds_pr_void_alloys_minus_ten
+					quadTextureSprite = "GFX_ds_pr_menu_btn"
+					position = { x = 35 y = 0 }
+					scale = 1
+					buttonFont = cg_16b
+					buttonText = "-10"
+					orientation = UPPER_LEFT
+					effect = ds_pr_void_alloys_minus_ten
+				}
+				effectbuttonType = {
+					name = ds_pr_void_alloys_minus_one
+					quadTextureSprite = "GFX_ds_pr_menu_btn"
+					position = { x = 70 y = 0 }
+					scale = 1
+					buttonFont = cg_16b
+					buttonText = "-1"
+					orientation = UPPER_LEFT
+					effect = ds_pr_void_alloys_minus_one
+				}
+				# MID
+				effectbuttonType = {
+					name = ds_pr_menu_alloys
+					quadTextureSprite = "GFX_tiled_window_transparent"
+					position = { x = 100 y = 0 }
+					size = { x = 80 y = 32 }
+					scale = 1
+					buttonFont = cg_16b
+					buttonText = ds_pr_menu_alloys
+					orientation = UPPER_LEFT
+				}
+				effectbuttonType = {
+					name = ds_pr_void_alloys_add_one
+					quadTextureSprite = "GFX_ds_pr_menu_btn"
+					position = { x = 170 y = 0 }
+					scale = 1
+					buttonFont = cg_16b
+					buttonText = "+1"
+					orientation = UPPER_LEFT
+					effect = ds_pr_void_alloys_add_one
+				}
+				effectbuttonType = {
+					name = ds_pr_void_alloys_add_ten
+					quadTextureSprite = "GFX_ds_pr_menu_btn"
+					position = { x = 205 y = 0 }
+					scale = 1
+					buttonFont = cg_16b
+					buttonText = "+10"
+					orientation = UPPER_LEFT
+					effect = ds_pr_void_alloys_add_ten
+				}
+				effectbuttonType = {
+					name = ds_pr_void_alloys_total
+					quadTextureSprite = "GFX_tiled_window_transparent"
+					position = { x = 280 y = 0 }
+					size = { x = 110 y = 32 }
+					scale = 1
+					buttonFont = cg_16b
+					buttonText = ds_pr_void_alloys_total
+					format = left
+					orientation = UPPER_LEFT
+				}
+			}
+			containerWindowType = {
+				name = "unity"
+				position = { x = -15 y = 130 }
+				effectbuttonType = {
+					name = ds_pr_void_unity_minus_ten
+					quadTextureSprite = "GFX_ds_pr_menu_btn"
+					position = { x = 35 y = 0 }
+					scale = 1
+					buttonFont = cg_16b
+					buttonText = "-10"
+					orientation = UPPER_LEFT
+					effect = ds_pr_void_unity_minus_ten
+				}
+				effectbuttonType = {
+					name = ds_pr_void_unity_minus_one
+					quadTextureSprite = "GFX_ds_pr_menu_btn"
+					position = { x = 70 y = 0 }
+					scale = 1
+					buttonFont = cg_16b
+					buttonText = "-1"
+					orientation = UPPER_LEFT
+					effect = ds_pr_void_unity_minus_one
+				}
+				# MID
+				effectbuttonType = {
+					name = ds_pr_menu_unity
+					quadTextureSprite = "GFX_tiled_window_transparent"
+					position = { x = 100 y = 0 }
+					size = { x = 80 y = 32 }
+					scale = 1
+					buttonFont = cg_16b
+					buttonText = ds_pr_menu_unity
+					orientation = UPPER_LEFT
+				}
+				effectbuttonType = {
+					name = ds_pr_void_unity_add_one
+					quadTextureSprite = "GFX_ds_pr_menu_btn"
+					position = { x = 170 y = 0 }
+					scale = 1
+					buttonFont = cg_16b
+					buttonText = "+1"
+					orientation = UPPER_LEFT
+					effect = ds_pr_void_unity_add_one
+				}
+				effectbuttonType = {
+					name = ds_pr_void_unity_add_ten
+					quadTextureSprite = "GFX_ds_pr_menu_btn"
+					position = { x = 205 y = 0 }
+					scale = 1
+					buttonFont = cg_16b
+					buttonText = "+10"
+					orientation = UPPER_LEFT
+					effect = ds_pr_void_unity_add_ten
+				}
+				effectbuttonType = {
+					name = ds_pr_void_unity_total
+					quadTextureSprite = "GFX_tiled_window_transparent"
+					position = { x = 280 y = 0 }
+					size = { x = 110 y = 32 }
+					scale = 1
+					buttonFont = cg_16b
+					buttonText = ds_pr_void_unity_total
+					format = left
+					orientation = UPPER_LEFT
+				}
+			}
+			containerWindowType = {
+				name = "dm"
+				position = { x = -15 y = 170 }
+				effectbuttonType = {
+					name = ds_pr_void_dm_minus_ten
+					quadTextureSprite = "GFX_ds_pr_menu_btn"
+					position = { x = 35 y = 0 }
+					scale = 1
+					buttonFont = cg_16b
+					buttonText = "-10"
+					orientation = UPPER_LEFT
+					effect = ds_pr_void_dm_minus_ten
+				}
+				effectbuttonType = {
+					name = ds_pr_void_dm_minus_one
+					quadTextureSprite = "GFX_ds_pr_menu_btn"
+					position = { x = 70 y = 0 }
+					scale = 1
+					buttonFont = cg_16b
+					buttonText = "-1"
+					orientation = UPPER_LEFT
+					effect = ds_pr_void_dm_minus_one
+				}
+				# MID
+				effectbuttonType = {
+					name = ds_pr_menu_dm
+					quadTextureSprite = "GFX_tiled_window_transparent"
+					position = { x = 100 y = 0 }
+					size = { x = 80 y = 32 }
+					scale = 1
+					buttonFont = cg_16b
+					buttonText = ds_pr_menu_dm
+					orientation = UPPER_LEFT
+				}
+				effectbuttonType = {
+					name = ds_pr_void_dm_add_one
+					quadTextureSprite = "GFX_ds_pr_menu_btn"
+					position = { x = 170 y = 0 }
+					scale = 1
+					buttonFont = cg_16b
+					buttonText = "+1"
+					orientation = UPPER_LEFT
+					effect = ds_pr_void_dm_add_one
+				}
+				effectbuttonType = {
+					name = ds_pr_void_dm_add_ten
+					quadTextureSprite = "GFX_ds_pr_menu_btn"
+					position = { x = 205 y = 0 }
+					scale = 1
+					buttonFont = cg_16b
+					buttonText = "+10"
+					orientation = UPPER_LEFT
+					effect = ds_pr_void_dm_add_ten
+				}
+				effectbuttonType = {
+					name = ds_pr_void_dm_total
+					quadTextureSprite = "GFX_tiled_window_transparent"
+					position = { x = 280 y = 0 }
+					size = { x = 110 y = 32 }
+					scale = 1
+					buttonFont = cg_16b
+					buttonText = ds_pr_void_dm_total
+					format = left
+					orientation = UPPER_LEFT
+				}
+			}
+			containerWindowType = {
+				name = "trade"
+				position = { x = -15 y = 210 }
+				effectbuttonType = {
+					name = ds_pr_void_trade_minus_ten
+					quadTextureSprite = "GFX_ds_pr_menu_btn"
+					position = { x = 35 y = 0 }
+					scale = 1
+					buttonFont = cg_16b
+					buttonText = "-10"
+					orientation = UPPER_LEFT
+					effect = ds_pr_void_trade_minus_ten
+				}
+				effectbuttonType = {
+					name = ds_pr_void_trade_minus_one
+					quadTextureSprite = "GFX_ds_pr_menu_btn"
+					position = { x = 70 y = 0 }
+					scale = 1
+					buttonFont = cg_16b
+					buttonText = "-1"
+					orientation = UPPER_LEFT
+					effect = ds_pr_void_trade_minus_one
+				}
+				# MID
+				effectbuttonType = {
+					name = ds_pr_menu_trade
+					quadTextureSprite = "GFX_tiled_window_transparent"
+					position = { x = 100 y = 0 }
+					size = { x = 80 y = 32 }
+					scale = 1
+					buttonFont = cg_16b
+					buttonText = ds_pr_menu_trade
+					orientation = UPPER_LEFT
+				}
+				effectbuttonType = {
+					name = ds_pr_void_trade_add_one
+					quadTextureSprite = "GFX_ds_pr_menu_btn"
+					position = { x = 170 y = 0 }
+					scale = 1
+					buttonFont = cg_16b
+					buttonText = "+1"
+					orientation = UPPER_LEFT
+					effect = ds_pr_void_trade_add_one
+				}
+				effectbuttonType = {
+					name = ds_pr_void_trade_add_ten
+					quadTextureSprite = "GFX_ds_pr_menu_btn"
+					position = { x = 205 y = 0 }
+					scale = 1
+					buttonFont = cg_16b
+					buttonText = "+10"
+					orientation = UPPER_LEFT
+					effect = ds_pr_void_trade_add_ten
+				}
+				effectbuttonType = {
+					name = ds_pr_void_trade_total
+					quadTextureSprite = "GFX_tiled_window_transparent"
+					position = { x = 280 y = 0 }
+					size = { x = 110 y = 32 }
+					scale = 1
+					buttonFont = cg_16b
+					buttonText = ds_pr_void_trade_total
+					format = left
+					orientation = UPPER_LEFT
+				}
+			}
+		}
+
+		### TOOLTIPS ###
+		containerWindowType = {
+			name = "ds_pr_menu_tt"
+			position = { x = 380 y = 160 }
+			size = { width = 360 height = 300 }
+			background = {
+				name = "background"
+				quadTextureSprite = "GFX_ds_pr_menu_dark"
+			}
+			instantTextBoxType={
+				name = "ds_pr_menu_war_title"
+				font = "malgun_goth_24"
+				text = "ds_pr_menu_war_title"
+				position = { x = 100 y = 5 }
+				maxWidth = 150
+				maxHeight = 32
+				format = CENTER
+				fixedsize = yes
+			}
+			effectbuttonType = {
+				name = ds_pr_menu_science
+				quadTextureSprite = "GFX_button_260_24" # GFX_exhibition_title_bg
+				position = { x = 40 y = 50 }
+				size = { x = 230 y = 32 }
+				scale = 1
+				buttonFont = malgun_goth_24
+				buttonText = ds_pr_menu_science
+				multiline = yes
+				format = center
+				orientation = UPPER_LEFT
+				effect = ds_pr_menu_science
+			}
+			effectbuttonType = {
+				name = ds_pr_menu_constructor
+				quadTextureSprite = "GFX_button_260_24"
+				position = { x = 40 y = 100 }
+				size = { x = 230 y = 32 }
+				scale = 1
+				buttonFont = malgun_goth_24
+				buttonText = ds_pr_menu_constructor
+				multiline = yes
+				format = center
+				orientation = UPPER_LEFT
+				effect = ds_pr_menu_constructor
+			}
+			effectbuttonType = {
+				name = ds_pr_menu_army
+				quadTextureSprite = "GFX_button_260_24"
+				position = { x = 40 y = 150 }
+				size = { x = 230 y = 32 }
+				scale = 1
+				buttonFont = malgun_goth_24
+				buttonText = ds_pr_menu_army
+				multiline = yes
+				format = center
+				orientation = UPPER_LEFT
+				effect = ds_pr_menu_army
+			}
+			effectbuttonType = {
+				name = ds_pr_menu_leader
+				quadTextureSprite = "GFX_button_260_24"
+				position = { x = 40 y = 200 }
+				size = { x = 230 y = 32 }
+				scale = 1
+				buttonFont = malgun_goth_24
+				buttonText = ds_pr_menu_leader
+				multiline = yes
+				format = center
+				orientation = UPPER_LEFT
+				effect = ds_pr_menu_leader
+			}
+		}
+	}
+}

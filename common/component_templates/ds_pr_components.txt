@@ -1,0 +1,345 @@
+# Osiris
+
+utility_component_template = {
+	key = "DS_PR_OSIRIS_CRACKER"
+	size = aux
+	icon = GFX_ship_part_ds_pr_osiris
+	icon_frame = 1
+	power = 0
+	component_set = "DS_PR_OSIRIS_SET"
+	scripted_action = {
+		scope = planet
+		possible = {
+			is_star = no
+			is_astral_scar = no
+			is_asteroid = no
+			is_artificial = no
+			NOT = { has_planet_flag = ds_pr_osiris_set }
+			exists = space_owner
+			space_owner = { is_same_value = from.owner }
+			custom_tooltip = {
+				fail_text = ds_pr_osiris_no_moon
+				is_moon = no
+			}
+		}
+		cost = { sr_dark_matter = 75 }
+		finished = { has_planet_flag = ds_pr_osiris_set }
+		name = ds_pr_osiris_btn
+		tooltip = ds_pr_osiris_btn_tt
+		icon = GFX_fleet_order_ds_pr_osiris
+		icon_selected = GFX_fleet_order_ds_pr_osiris_selected
+		context_menu_name = ds_pr_osiris_btn_title
+		activity_key = ds_pr_osiris_btn_activity
+		progress_activity_key = ds_pr_osiris_btn_progress
+		progress_anim_state = "working"
+		#finish_anim_state = "idle"
+		required_progress = 30
+		cooldown = 30
+	}
+	size_restriction = { ds_pr_osiris }
+	ai_weight = { factor = 0 }
+}
+
+# Utilities
+
+utility_component_template = {
+	key = "DS_PR_REACTOR"
+	size = small
+	icon = "GFX_ship_part_ds_pr_powercore"
+	icon_frame = 1
+	power = @battleship_reactor_power_6
+	size_restriction = { ds_pr_reaver ds_pr_drifter ds_pr_osiris }
+	component_set = "power_core"
+}
+
+utility_component_template = {
+	key = "DS_PR_THRUSTER"
+	size = small
+	icon = "GFX_ship_part_ds_pr_thruster"
+	icon_frame = 1
+	power = -250
+	ship_modifier = {
+		ship_base_speed_mult = 1.25
+	}
+	size_restriction = { ds_pr_reaver ds_pr_drifter ds_pr_osiris }
+	component_set = "thruster_components"
+}
+
+utility_component_template = {
+	key = "DS_PR_COMP_CARRIER"
+	size = small
+	icon = "GFX_ship_part_ds_pr_comp_carrier"
+	icon_frame = 1
+	power = 0
+	ship_modifier = {
+		ship_engagement_range_mult = 1
+	}
+	size_restriction = { ds_pr_reaver ds_pr_drifter }
+	component_set = "combat_computers"
+	ship_behavior = "carrier"
+}
+
+utility_component_template = {
+	key = "DS_PR_COMP_ART"
+	size = small
+	icon = "GFX_ship_part_ds_pr_comp_artillery"
+	icon_frame = 1
+	power = 0
+	ship_modifier = {
+		ship_weapon_range_mult = 0.2
+		ship_fire_rate_mult = 0.2
+	}
+	size_restriction = { ds_pr_reaver ds_pr_drifter }
+	component_set = "combat_computers"
+	ship_behavior = "artillery"
+}
+
+utility_component_template = {
+	key = "DS_PR_COMP_LINE"
+	size = small
+	icon = "GFX_ship_part_ds_pr_comp_line"
+	icon_frame = 1
+	power = 0
+	ship_modifier = {
+		ship_fire_rate_mult = 0.2
+		ship_accuracy_add = 20
+	}
+	size_restriction = { ds_pr_reaver ds_pr_drifter }
+	component_set = "combat_computers"
+	ship_behavior = "line"
+}
+
+utility_component_template = {
+	key = "DS_PR_DRIFTER_AURA"
+	size = medium
+	icon = "GFX_ship_part_ds_pr_drifter_aura"
+	icon_frame = 1
+	power = 0
+	size_restriction = { ds_pr_drifter }
+	component_set = "ship_aura_components"
+	friendly_aura = {
+		name = "ds_friendly_aura_ftl"
+		system_wide = yes
+		stack_info = {
+			id = ds_friendly_aura_ftl
+			priority = 1
+		}
+		modifier = {
+			ship_ftl_jumpdrive_range_mult = 0.25
+			ship_jumpdrive_cooldown_mult = -0.25
+		}
+	}
+	ai_weight = { weight = 10 }
+}
+
+# Voidbeam
+
+weapon_component_template = {
+	key = "DS_PR_VOIDBEAM_S"
+	size = small
+	type = instant
+	icon = "GFX_ship_part_ds_pr_voidbeam"
+	icon_frame = 1
+	use_ship_main_target = no
+	component_set = "DS_PR_VOIDBEAM_SET"
+	projectile_gfx = "ds_pr_voidbeam"
+	tags = { weapon_type_energy s_slot }
+	ai_tags = { weapon_role_anti_shield }
+	ai_tag_weight = 0
+	power = -7
+	#damage = { min = 6 max = 16 }
+	damage = { min = 9 max = 24 }
+	hull_damage = 0.25
+	shield_damage = 5
+	shield_penetration = 0
+	armor_damage = 0.25
+	armor_penetration = 0
+	total_fire_time = 42.50
+	range = 60
+	accuracy = 0.90
+	tracking = 0.60
+	size_restriction = { ds_pr_reaver ds_pr_drifter }
+	ai_weight = { weight = 99 }
+}
+
+weapon_component_template = {
+	key = "DS_PR_VOIDBEAM_M"
+	size = medium
+	type = instant
+	icon = "GFX_ship_part_ds_pr_voidbeam"
+	icon_frame = 1
+	use_ship_main_target = no
+	component_set = "DS_PR_VOIDBEAM_SET"
+	projectile_gfx = "ds_pr_voidbeam"
+	tags = { weapon_type_energy m_slot }
+	ai_tags = { weapon_role_anti_shield }
+	ai_tag_weight = 0
+	power = -13
+	#damage = { min = 14 max = 40 }
+	damage = { min = 21 max = 60 }
+	hull_damage = 0.25
+	shield_damage = 5
+	shield_penetration = 0
+	armor_damage = 0.25
+	armor_penetration = 0
+	total_fire_time = 50.00
+	range = 90
+	accuracy = 0.90
+	tracking = 0.30
+	size_restriction = { ds_pr_reaver ds_pr_drifter }
+	ai_weight = { weight = 99 }
+}
+
+weapon_component_template = {
+	key = "DS_PR_VOIDBEAM_L"
+	size = large
+	type = instant
+	icon = "GFX_ship_part_ds_pr_voidbeam"
+	icon_frame = 1
+	use_ship_main_target = no
+	component_set = "DS_PR_VOIDBEAM_SET"
+	projectile_gfx = "ds_pr_voidbeam"
+	tags = { weapon_type_energy l_slot }
+	ai_tags = { weapon_role_anti_shield }
+	ai_tag_weight = 0
+	power = -26
+	#damage = { min = 36 max = 95 }
+	damage = { min = 54 max = 140 }
+	hull_damage = 0.25
+	shield_damage = 5
+	shield_penetration = 0
+	armor_damage = 0.25
+	armor_penetration = 0
+	total_fire_time = 57.00
+	range = 120
+	accuracy = 0.90
+	tracking = 0.05
+	size_restriction = { ds_pr_reaver ds_pr_drifter }
+	ai_weight = { weight = 99 }
+}
+
+# Disintegrator
+
+weapon_component_template = {
+	key = "DS_PR_DISINTEGRATOR_S"
+	size = small
+	type = instant
+	icon = "GFX_ship_part_ds_pr_disintegrator"
+	icon_frame = 1
+	use_ship_main_target = no
+	component_set = "DS_PR_DISINTEGRATOR_SET"
+	projectile_gfx = "ds_pr_disintegrator"
+	tags = { weapon_type_energy s_slot }
+	ai_tags = { weapon_role_anti_hull }
+	ai_tag_weight = 0
+	power = -25
+	#damage = { min = 20 max = 49 }
+	damage = { min = 30 max = 70 }
+	hull_damage = 1.50
+	shield_damage = 0.25
+	shield_penetration = 0
+	armor_damage = 1.50
+	armor_penetration = 0
+	total_fire_time = 42.50
+	#range = 30
+	range = 60
+	accuracy = 0.90
+	tracking = 0.60
+	size_restriction = { ds_pr_reaver ds_pr_drifter }
+	ai_weight = { weight = 99 }
+}
+
+weapon_component_template = {
+	key = "DS_PR_DISINTEGRATOR_M"
+	size = medium
+	type = instant
+	icon = "GFX_ship_part_ds_pr_disintegrator"
+	icon_frame = 1
+	use_ship_main_target = no
+	component_set = "DS_PR_DISINTEGRATOR_SET"
+	projectile_gfx = "ds_pr_disintegrator"
+	tags = { weapon_type_energy m_slot }
+	ai_tags = { weapon_role_anti_hull }
+	ai_tag_weight = 0
+	power = -40
+	#damage = { min = 50 max = 123 }
+	damage = { min = 75 max = 185 }
+	hull_damage = 1.50
+	shield_damage = 0.25
+	shield_penetration = 0
+	armor_damage = 1.50
+	armor_penetration = 0
+	total_fire_time = 42.50
+	#range = 50
+	range = 80
+	accuracy = 0.90
+	tracking = 0.30
+	size_restriction = { ds_pr_reaver ds_pr_drifter }
+	ai_weight = { weight = 99 }
+}
+
+weapon_component_template = {
+	key = "DS_PR_DISINTEGRATOR_L"
+	size = large
+	type = instant
+	icon = "GFX_ship_part_ds_pr_disintegrator"
+	icon_frame = 1
+	use_ship_main_target = no
+	component_set = "DS_PR_DISINTEGRATOR_SET"
+	projectile_gfx = "ds_pr_disintegrator"
+	tags = { weapon_type_energy l_slot }
+	ai_tags = { weapon_role_anti_hull }
+	ai_tag_weight = 0
+	power = -80
+	#damage = { min = 120 max = 294 }
+	damage = { min = 180 max = 450 }
+	hull_damage = 1.50
+	shield_damage = 0.25
+	shield_penetration = 0
+	armor_damage = 1.50
+	armor_penetration = 0
+	total_fire_time = 42.50
+	#range = 70
+	range = 100
+	accuracy = 0.90
+	tracking = 0.05
+	size_restriction = { ds_pr_reaver ds_pr_drifter }
+	ai_weight = { weight = 99 }
+}
+
+# Abyss Lance
+
+weapon_component_template = {
+	key = "DS_PR_ABYSS_LANCE"
+	size = extra_large
+	type = instant
+	prio_projectile = yes
+	component_set = "DS_PR_ABYSS_LANCE_SET"
+	icon = "GFX_ship_part_ds_pr_abyss_lance"
+	icon_frame = 1
+	projectile_gfx = "ds_abyss_lance"
+	tags = { weapon_type_energy weapon_role_artillery x_slot }
+	ai_tags = { weapon_role_anti_hull weapon_role_artillery artillery }
+	ai_tag_weight = 0
+	power = -260
+	damage = { min = 900 max = 1500 }
+	hull_damage = 1.5
+	shield_damage = 1
+	shield_penetration = 0.25
+	armor_damage = 1
+	armor_penetration = 0
+	total_fire_time = 99.50 # 42.50
+	range = 150
+	accuracy = 1
+	tracking = 1
+	firing_arc = 35.0
+	size_restriction = { ds_pr_reaver }
+	ai_weight = { weight = 99 }
+	custom_tooltip = "DS_PR_ABYSS_LANCE_TT"
+	on_hit = {
+		custom_tooltip = DS_PR_ABYSS_LANCE_HIT
+		hidden_effect = {
+			from.owner = { complete_crisis_objective = crisobj_ds_pr_ships }
+		}
+	}
+}

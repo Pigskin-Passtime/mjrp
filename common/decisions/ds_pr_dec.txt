@@ -1,0 +1,255 @@
+decision_ds_pr_eldritchcall = {
+	resources = {
+		category = decisions
+		cost = {
+			sr_dark_matter = @ds_pr_decision_cost
+		}
+	}
+	potential = {
+		exists = from
+		from = { has_crisis_level = ds_pr_level_5 }
+		exists = space_owner
+		space_owner = { is_same_value = from }
+		is_astral_scar = no
+		is_asteroid = no
+	}
+	allow = {
+		custom_tooltip = {
+			from = { NOT = { has_country_flag = ds_pr_called_eldergod } }
+			fail_text = decision_ds_pr_eldritchcall_cd
+		}
+	}
+	effect = {
+		custom_tooltip = decision_ds_pr_eldritchcall_effects
+		hidden_effect = {
+			closest_system = {
+				max_steps = 3 # Adjust menp_ds_pr_eldritch_tt if this changes
+				use_bypasses = yes
+				limit = {
+					exists = space_owner
+					space_owner = { is_at_war_with = from }
+					any_system_colony = { is_owned_by = space_owner }
+				}
+				save_event_target_as = ds_pr_eldertarget@from
+			}
+			if = {
+				limit = { exists = event_target:ds_pr_eldertarget@from }
+				# Adjust decision_ds_pr_eldritchcall_cd if this changes
+				event_target:ds_pr_eldertarget@from = { system_event = { id = dsPR.1015 days = 1 } }
+				from = {
+					set_timed_country_flag = { flag = ds_pr_called_eldergod days = @ds_pr_eldergodCD }
+					set_saved_date = {
+						key = decision_ds_pr_cd_key
+						days_from_present = @ds_pr_eldergodCD
+						expires = 91
+					}
+				}
+			}
+			else = {
+				from = {
+					# Returns the cost
+					add_resource = { sr_dark_matter = @ds_pr_decision_cost }
+					country_event = { id = dsPR.1018 }
+				}
+			}
+		}
+	}
+}
+
+decision_ds_pr_creators = {
+	icon = decision_atmospheric_entry
+	resources = {
+		category = decisions
+		cost = {
+			sr_dark_matter = @ds_pr_decision_cost
+		}
+	}
+	potential = {
+		exists = from
+		from = { has_country_flag = ds_pr_asc_creators }
+		exists = space_owner
+		space_owner = { is_same_value = from }
+		is_colonizable = yes
+		is_astral_scar = no
+		is_asteroid = no
+		is_artificial = no
+	}
+	allow = {
+		custom_tooltip = {
+			is_colony = no
+			fail_text = decision_ds_pr_creators_limit
+		}
+	}
+	effect = {
+		custom_tooltip = decision_ds_pr_creators_effects
+		hidden_effect = {
+			ds_pr_crisis_primitives = yes
+		}
+	}
+}
+
+decision_ds_pr_unbidden = {
+	enactment_time = 180
+	owned_planets_only = yes
+	sound = event_mind_over_matter
+	resources = {
+		category = decisions
+		cost = {
+			sr_dark_matter = @ds_pr_decision_cost
+		}
+	}
+	potential = {
+		exists = from
+		from = { has_country_flag = ds_pr_asc_unbidden }
+		exists = space_owner
+		space_owner = { is_same_value = from }
+		is_capital = yes
+	}
+	allow = {
+		custom_tooltip = {
+			count_country= { limit = { is_country_type = default } count < 2 }
+			fail_text = decision_ds_pr_unbidden_limit
+		}
+	}
+	effect = {
+		custom_tooltip = decision_ds_pr_unbidden_effects
+		hidden_effect = {
+			solar_system = { save_global_event_target_as = ds_pr_exodus_system }
+			from = {
+				remove_country_flag = ds_pr_asc_unbidden
+				ds_pr_crisis_voidlife = yes
+			}
+		}
+	}
+}
+
+decision_ds_pr_exodus = {
+	enactment_time = 30
+	resources = {
+		category = decisions
+		cost = {
+			sr_dark_matter = @ds_pr_decision_cost
+		}
+	}
+	potential = {
+		exists = from
+		from = { is_country_type = ds_unbidden }
+		solar_system = {
+			is_same_value = event_target:ds_pr_exodus_system
+		}
+	}
+	allow = {
+		custom_tooltip = {
+			# DEBUG: effect = { every_country = { limit = { is_country_type = default } destroy_country = yes } }
+			count_country= { limit = { is_country_type = default } count = 0 }
+			fail_text = decision_ds_pr_unbidden_limit
+		}
+		custom_tooltip = {
+			from = { NOT = { has_country_flag = ds_pr_did_exodus } }
+			fail_text = decision_ds_pr_exodus_cd
+		}
+	}
+	effect = {
+		custom_tooltip = decision_ds_pr_exodus_effects
+		hidden_effect = {
+			from = {
+				# CD
+				set_timed_country_flag = { flag = ds_pr_did_exodus years = 1 }
+				set_saved_date = {
+					key = decision_ds_pr_exodus_cd_key
+					days_from_present = 360
+					expires = 360
+				}
+				# Habitable worlds
+				export_trigger_value_to_variable = {
+					trigger = num_galaxy_systems
+					variable = ds_pr_habitables_var
+				}
+				multiply_variable = { which = ds_pr_habitables_var value = 0.2 }
+				# Reset galaxy
+				country_event = { id = dsPR.125 days = 1 }
+			}
+		}
+	}
+}
+
+decision_ds_pr_voidstreaming = {
+	resources = {
+		category = decisions
+		cost = {
+			sr_dark_matter = @ds_pr_decision_cost
+		}
+	}
+	potential = {
+		exists = from
+		from = { has_crisis_level = ds_pr_level_4 }
+		exists = space_owner
+		space_owner = { is_same_value = from }
+		solar_system = { has_star_flag = ds_pr_breach_star }
+	}
+	allow = {
+		custom_tooltip = {
+			solar_system = { NOT = { has_star_flag = ds_pr_lane_start } }
+			fail_text = decision_ds_pr_voidstreaming_fail
+		}
+	}
+	effect = {
+		custom_tooltip = decision_ds_pr_voidstreaming_effects
+		hidden_effect = {
+
+# I know this is not the best way to do this, but the MODJAM deadline is coming
+
+			from = {
+				random_system_within_border = {
+					limit = { has_star_flag = ds_pr_lane_start }
+					save_event_target_as = start_system
+					remove_star_flag = ds_pr_lane_start
+				}
+			}
+			if = {
+				limit = { exists = event_target:start_system }
+				solar_system = {
+					save_event_target_as = end_system
+					if = {
+						limit = { NOT = { has_hyperlane_to = event_target:start_system } }
+						add_hyperlane = {
+							from = event_target:start_system
+							to = event_target:end_system
+						}
+					}
+					else_if = {
+						limit = { has_hyperlane_to = event_target:start_system }
+						remove_hyperlane = {
+							from = event_target:start_system
+							to = event_target:end_system
+						}
+					}
+				}
+				event_target:ds_pr_start@from = {
+					if = {
+						limit = { NOT = { has_hyperlane_to = event_target:ds_pr_end@from } }
+						add_hyperlane = {
+							from = event_target:ds_pr_start@from
+							to = event_target:ds_pr_end@from
+						}
+					}
+					else_if = {
+						limit = { has_hyperlane_to = event_target:ds_pr_end@from }
+						remove_hyperlane = {
+							from = event_target:ds_pr_start@from
+							to = event_target:ds_pr_end@from
+						}
+					}
+				}
+				clear_global_event_target = ds_pr_start@from
+				clear_global_event_target = ds_pr_end@from
+				event_target:start_system = { save_global_event_target_as = ds_pr_start@from }
+				event_target:end_system = { save_global_event_target_as = ds_pr_end@from }
+			}
+			else = {
+				solar_system = { set_timed_star_flag = { flag = ds_pr_lane_start days = 60 } }
+			}
+
+		}
+	}
+}
