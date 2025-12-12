@@ -1,0 +1,154 @@
+##################
+# hcp_on_actions.txt
+# By jam1066
+##################
+
+# No scope, like on_game_start
+on_yearly_pulse = {
+	events = {
+		hcp_harvesters_crisis_objectives.2 # Menace Objective - Have Matter Decompressors
+		hcp_harvesters_crisis_objectives.4 # Menace Objective - Have Arc Furnaces
+		hcp_harvesters_crisis_objectives.5 # Menace Objective - Have Prospectorium Vassals
+	}
+}
+
+# A ship has surveyed a planet.
+# Scope = Ship
+# From = Planet
+on_survey_planet = {
+	events = {
+		hcp_harvesters_crisis.110	# Prospector Drone Survey Event
+	}
+}
+
+# A colony has been destroyed. Called just before owner and controller is cleared
+# Scope = Planet
+on_colony_destroyed = {
+	events = {
+		hcp_harvesters_crisis.805  # Harvester Victory Backup Trigger
+	}
+}
+
+# This = owner of ship 1 (destroyed)
+# From = owner of ship 2 (combatant)
+# FromFrom = ship 1
+# FromFromFrom = ship 2
+on_ship_destroyed_victim = {
+	events = {
+		hcp_harvesters_crisis.415  # Prototype Destroyed Before Test
+		hcp_harvesters_crisis.605  # Reduce Number Stellar Harvesters Variable
+	}
+}
+
+# This = owner of ship 1 (combatant)
+# From = owner of ship 2 (destroyed)
+# FromFrom = ship 1
+# FromFromFrom = ship 2
+on_ship_destroyed_perp = {
+	events = {
+		hcp_harvesters_crisis.405  # Field Repairs Crisis Perk Effect
+	}
+}
+
+# This = fleet
+# Fires when a fleet exits combat (either because it won, lost, or any reason)
+# This is fired once for every fleet that was in combat (which is not the case for on_space_battle_won/lost)
+on_fleet_exit_battle = {
+	events = {
+		hcp_harvesters_crisis.205	# Detritus Recycling creating debris with lost ships
+		
+	}
+}
+
+#This = destroyed country
+#From = optional, destroyer (country)
+on_country_destroyed = {
+	events = {
+		hcp_harvesters_crisis.900 # Harvesters destroyed
+	}
+}
+
+# This = construction ship
+# From = planet OR Astral Rift it is built on
+# Fires when construction is complete,
+# immediately before station is created
+on_building_mining_station = {
+	events = {
+		hcp_harvesters_crisis_objectives.6 # Menace Objective - Construct Mining Stations
+	}
+}
+
+# A Megastructure has been built
+# Root = Country
+# From = Megastructure
+# FromFrom = System
+# FromFromFrom = Fleet
+on_megastructure_built = {
+	events = {
+		hcp_harvesters_crisis.103	# Singularity Silo alert message
+	}
+}
+
+# From = system
+# FromFrom = country (previous owner)
+# This = country (new owner)
+on_system_gained = {
+	events = {
+		hcp_harvesters_crisis.105 	# Add Build Mining Station Flag to Conquered System Planets
+		hcp_harvesters_crisis.1010  # Captures New Silo After Losing Theirs
+	}
+}
+
+# Fired when a science ship succesfully analyzed or scavenged debris
+# this = country
+# from = debris
+# fromfrom = controller of destroyed ship
+# fromfromfrom = science ship
+on_debris_scavenged = {
+	events = {
+		hcp_harvesters_crisis_objectives.1 # Menace Objective - Scavenge Debris
+	}
+}
+
+# Fired when a science ship succesfully analyzed or scavenged debris
+# this = country
+# from = debris
+# fromfrom = controller of destroyed ship
+# fromfromfrom = science ship
+on_debris_scavenged_and_researched = {
+	events = {
+		hcp_harvesters_crisis_objectives.1 # Menace Objective - Scavenge Debris
+	}
+}
+
+#####################
+# Component Actions #
+#####################
+
+on_destroy_planet_with_hcp_PLANET_KILLER_STELLAR_HARVESTER = {
+	events = {
+		hcp_harvesters_crisis.600
+		awareness.150 # Planet cracker used OR planet terraformed, chance to gain 20 awareness.
+	}
+}
+
+on_destroy_planet_with_hcp_PLANET_KILLER_STELLAR_HARVESTER_queued = {
+	events = {
+		fircon.5035 #Solarpunk Planet queued
+	}
+}
+
+on_destroy_planet_with_hcp_PLANET_KILLER_STELLAR_HARVESTER_unqueued = {	
+}
+
+hcp_on_stellar_harvester_replication_complete = {
+	events = {
+		hcp_harvesters_crisis.700 # Replicate Stellar Harvester
+	}
+}
+
+hcp_on_stellar_harvester_depart_galaxy = {
+	events = {
+		hcp_harvesters_crisis.710 # Depart Galaxy Stellar Harvester
+	}
+}

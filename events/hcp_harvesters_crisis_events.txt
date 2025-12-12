@@ -1,0 +1,2004 @@
+##################
+# hcp_harvesters_crisis_events.txt
+# By jam1066
+##################
+namespace = hcp_harvesters_crisis
+
+######################################### Crisis Level 1 #########################################
+
+country_event = {
+	id = hcp_harvesters_crisis.100
+	title = "hcp_harvesters_crisis.100.name"
+	desc = {
+		trigger = { NOT = { has_ethic = ethic_gestalt_consciousness } }
+		text = hcp_harvesters_crisis.100.desc
+	}
+	desc = {
+		trigger = { is_machine_empire = yes }
+		text = hcp_harvesters_crisis.100.mach.desc
+	}
+	desc = {
+		trigger = { is_hive_empire = yes }
+		text = hcp_harvesters_crisis.100.hive.desc
+	}
+	picture = GFX_evt_mining_station
+	show_sound = event_death_cult
+	event_chain = hcp_harvesters_crisis_chain
+
+	is_triggered_only = yes
+
+	immediate = {
+		begin_event_chain = {
+			event_chain = hcp_harvesters_crisis_chain
+			target = root
+		}
+		every_planet_within_border = {
+			limit = {
+				has_mining_station = yes
+			}
+			set_planet_flag = hcp_mining_station_built_@root
+		}
+		if = {
+			limit = {
+				hcp_has_valid_silo_site = yes
+			}
+			hcp_target_valid_silo_site = { TARGET = hcp_first_project_target }
+		}
+	}
+
+	option = {
+		name = hcp_harvesters_crisis.100.a
+		trigger = {
+			NOT = { has_origin = origin_machine }
+		}
+		tooltip = {
+			begin_event_chain = {
+				event_chain = hcp_harvesters_crisis_chain
+				target = root
+			}
+		}
+		add_event_chain_counter = {
+			event_chain = "hcp_harvesters_crisis_chain"
+			counter = "hcp_harvesters_level_reached"
+			amount = 1
+		}
+		if = {
+			limit = {
+				exists = event_target:hcp_first_project_target
+			}
+			tooltip = {
+				enable_special_project = {
+					name = hcp_BUILD_SINGULARITY_SILO_LEVEL_1
+					owner = root
+				}
+			}
+			hidden_effect = {
+				event_target:hcp_first_project_target = {
+					enable_special_project = {
+						name = hcp_BUILD_SINGULARITY_SILO_LEVEL_1
+						owner = root
+					}
+				}
+			}
+		}
+		else = {
+			enable_special_project = {
+				name = hcp_NO_BLACK_HOLE
+				owner = root
+			}
+		}
+		custom_tooltip = new_crisis_perks_tt
+	}
+
+	option = {
+		name = hcp_harvesters_crisis.100.resource_consolidation
+		trigger = {
+			has_origin = origin_machine
+		}
+		tooltip = {
+			begin_event_chain = {
+				event_chain = hcp_harvesters_crisis_chain
+				target = root
+			}
+		}
+		add_event_chain_counter = {
+			event_chain = "hcp_harvesters_crisis_chain"
+			counter = "hcp_harvesters_level_reached"
+			amount = 1
+		}
+		if = {
+			limit = {
+				exists = event_target:hcp_first_project_target
+			}
+			event_target:hcp_first_project_target = {
+				enable_special_project = {
+					name = hcp_BUILD_SINGULARITY_SILO_LEVEL_1
+					owner = root
+				}
+			}
+		}
+		else = {
+			enable_special_project = {
+				name = hcp_NO_BLACK_HOLE
+				owner = root
+			}
+		}
+		custom_tooltip = new_crisis_perks_tt
+	}
+}
+
+country_event = {
+	id = hcp_harvesters_crisis.101
+	title = "hcp_harvesters_crisis.101.name"
+	desc = hcp_harvesters_crisis.101.desc
+	picture = GFX_evt_black_hole
+	show_sound = event_death_cult
+	event_chain = hcp_harvesters_crisis_chain
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = EXCELLENT
+		tooltip = {
+			enable_special_project = {
+				name = hcp_BUILD_SINGULARITY_SILO_LEVEL_1
+				owner = root
+			}
+		}
+		hidden_effect = {
+			from = {
+				enable_special_project = {
+					name = hcp_BUILD_SINGULARITY_SILO_LEVEL_1
+					owner = root
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hcp_harvesters_crisis.102
+	title = "hcp_harvesters_crisis.102.name"
+	desc = hcp_harvesters_crisis.102.desc
+	picture = GFX_evt_black_hole
+	show_sound = event_death_cult
+	event_chain = hcp_harvesters_crisis_chain
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = EXCELLENT
+		tooltip = {
+			enable_special_project = {
+				name = hcp_BUILD_SINGULARITY_SILO_LEVEL_1
+				owner = root
+			}
+		}
+		hidden_effect = {
+			from = {
+				enable_special_project = {
+					name = hcp_BUILD_SINGULARITY_SILO_LEVEL_1
+					owner = root
+				}
+			}
+		}
+	}
+}
+
+# Alert Messages for initial step
+country_event = {
+	id = hcp_harvesters_crisis.103
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		from = {
+			has_megastructure_flag = hcp_crisis_silo
+		}
+	}
+
+	immediate = {
+		create_message = {
+			type = MEGASTRUCTURE_BUILT
+			localization = MESSAGE_MEGASTRUCTURE_BUILT
+			days = 30
+			target = from # the Go To
+			variable = {
+				type = name
+				localization = MEGASTRUCTURE
+				scope = from
+			}
+			variable = {
+				type = name
+				localization = SYSTEM
+				scope = fromfrom
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hcp_harvesters_crisis.105
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_ascension_perk = hcp_ap_harvesters
+		from = {
+			any_system_planet = {
+				has_mining_station = yes
+				NOT = { has_planet_flag = hcp_mining_station_built_@root }
+			}
+		}
+	}
+
+	immediate = {
+		from = {
+			every_system_planet = {
+				limit = {
+					has_mining_station = yes
+					NOT = { has_planet_flag = hcp_mining_station_built_@root }
+				}
+				set_planet_flag = hcp_mining_station_built_@root
+			}
+		}
+	}
+}
+
+##################################
+# Prospector Drone Survey Events #
+##################################
+
+ship_event = {
+	id = hcp_harvesters_crisis.110
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			has_crisis_perk = hcp_menp_prospector_drone
+		}
+		design = {
+			has_design_flag = hcp_prospector_drone
+		}
+		from = {
+			NOR = {
+				is_colonizable = yes
+				has_deposit_for = shipclass_mining_station
+				has_deposit_for = shipclass_research_station
+			}
+		}
+	}
+
+	immediate = {
+		# We wait a day in order to check if any anomalies or dig sites have spawned.
+		ship_event = {
+			id = hcp_harvesters_crisis.115
+			scopes = {
+				from = from
+			}
+			days = 1
+		}
+	}
+}
+
+ship_event = {
+	id = hcp_harvesters_crisis.115
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = {
+			NOR = {
+				is_star = yes
+				has_planet_flag = hcp_prospected_by@root.owner
+				has_deposit_for = shipclass_mining_station
+				has_deposit_for = shipclass_research_station
+				has_anomaly = yes
+				exists = archaeological_site
+			}
+		}
+	}
+
+	immediate = {
+		FROM = {
+			set_planet_flag = hcp_prospected_by@root.owner
+		}
+		random = {
+			chance = 50
+			from = {
+				set_planet_flag = hcp_has_prospected_deposit
+				locked_random_list = {
+					1 = { add_deposit = d_minerals_2 }
+					2 = { add_deposit = d_minerals_3 }
+					1 = { add_deposit = d_minerals_4 }
+				}
+			}
+		}
+	}
+}
+
+######################################### Crisis Level 2 #########################################
+
+country_event = {
+	id = hcp_harvesters_crisis.200
+	title = "hcp_harvesters_crisis.200.name"
+	desc = "hcp_harvesters_crisis.200.desc"
+	picture = GFX_evt_megastructure_construction
+	show_sound = event_death_cult
+	event_chain = hcp_harvesters_crisis_chain
+
+	is_triggered_only = yes
+
+	immediate = {
+	}
+
+	option = {
+		name = hcp_harvesters_crisis.200.a
+		add_event_chain_counter = {
+			event_chain = "hcp_harvesters_crisis_chain"
+			counter = "hcp_harvesters_level_reached"
+			amount = 1
+		}
+		tooltip = {
+			enable_special_project = {
+				name = hcp_BUILD_SINGULARITY_SILO_LEVEL_2
+				owner = root
+			}
+		}
+		hidden_effect = {
+			every_system = {
+				limit = {
+					has_star_flag = hcp_singularity_silo_@root
+				}
+				random_system_megastructure = {
+					limit = {
+						is_megastructure_type = hcp_singularity_silo_1
+					}
+					planet = {
+						enable_special_project = {
+							name = hcp_BUILD_SINGULARITY_SILO_LEVEL_2
+							owner = root
+						}
+					}
+				}
+			}
+		}
+		custom_tooltip = new_crisis_perks_tt
+	}
+}
+
+######################
+# Detritus Recycling #
+######################
+
+fleet_event = {
+	id = hcp_harvesters_crisis.205
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		controller = {
+			has_crisis_perk = hcp_menp_detritus_recycling
+		}
+	}
+
+	immediate = {
+		spawn_custom_debris = {
+			for = root
+			must_scavenge = yes
+			reset_killed_ship_designs = yes
+			should_add_ship_to_debris = {
+				is_space_fauna = no
+			}
+		}
+	}
+}
+
+######################################### Crisis Level 3 #########################################
+
+country_event = {
+	id = hcp_harvesters_crisis.300
+	title = "hcp_harvesters_crisis.300.name"
+	desc = "hcp_harvesters_crisis.300.desc"
+	picture = GFX_evt_mining_operations
+	show_sound = event_death_cult
+	event_chain = hcp_harvesters_crisis_chain
+
+	is_triggered_only = yes
+
+	immediate = {
+	}
+
+	option = {
+		name = hcp_harvesters_crisis.300.a
+		add_event_chain_counter = {
+			event_chain = "hcp_harvesters_crisis_chain"
+			counter = "hcp_harvesters_level_reached"
+			amount = 1
+		}
+		tooltip = {
+			enable_special_project = {
+				name = hcp_BUILD_SINGULARITY_SILO_LEVEL_3
+				owner = root
+			}
+		}
+		hidden_effect = {
+			every_system = {
+				limit = {
+					has_star_flag = hcp_singularity_silo_@root
+				}
+				random_system_megastructure = {
+					limit = {
+						is_megastructure_type = hcp_singularity_silo_2
+					}
+					planet = {
+						enable_special_project = {
+							name = hcp_BUILD_SINGULARITY_SILO_LEVEL_3
+							owner = root
+						}
+					}
+				}
+			}
+		}
+		custom_tooltip = new_crisis_perks_tt
+	}
+}
+
+######################################### Crisis Level 4 #########################################
+
+country_event = {
+	id = hcp_harvesters_crisis.400
+	title = "hcp_harvesters_crisis.400.name"
+	desc = "hcp_harvesters_crisis.400.desc"
+	picture = GFX_evt_strategic_resources
+	show_sound = event_death_cult
+	event_chain = hcp_harvesters_crisis_chain
+
+	is_triggered_only = yes
+
+	immediate = {
+	}
+
+	option = {
+		name = hcp_harvesters_crisis.400.a
+		add_event_chain_counter = {
+			event_chain = "hcp_harvesters_crisis_chain"
+			counter = "hcp_harvesters_level_reached"
+			amount = 1
+		}
+		tooltip = {
+			enable_special_project = {
+				name = hcp_BUILD_SINGULARITY_SILO_LEVEL_4
+				owner = root
+			}
+			enable_special_project = {
+				name = hcp_BUILD_STELLAR_HARVESTER_PROTOTYPE
+				owner = root
+			}
+		}
+		hidden_effect = {
+			every_system = {
+				limit = {
+					has_star_flag = hcp_singularity_silo_@root
+				}
+				random_system_megastructure = {
+					limit = {
+						is_megastructure_type = hcp_singularity_silo_3
+					}
+					planet = {
+						enable_special_project = {
+							name = hcp_BUILD_SINGULARITY_SILO_LEVEL_4
+							owner = root
+						}
+					}
+				}
+			}
+			capital_scope = {
+				enable_special_project = {
+					name = hcp_BUILD_STELLAR_HARVESTER_PROTOTYPE
+					owner = root
+					location = this
+				}
+			}
+		}
+		custom_tooltip = new_crisis_perks_tt
+	}
+}
+
+#################
+# Field Repairs #
+#################
+# On destroying enemy ship.
+country_event = {
+	id = hcp_harvesters_crisis.405
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_crisis_perk = hcp_menp_field_repairs
+	}
+
+	immediate = {
+		FROMFROM = { # Winning ship.
+			repair_percentage = @hcp_field_repairs_heal
+		}
+	}
+}
+
+####################################
+# Stellar Harvester Prototype Test #
+####################################
+
+country_event = {
+	id = hcp_harvesters_crisis.410
+	title = "hcp_harvesters_crisis.410.name"
+	desc = "hcp_harvesters_crisis.410.desc"
+	picture = GFX_evt_hcp_stellar_harvester
+	show_sound = event_death_cult
+	event_chain = hcp_harvesters_crisis_chain
+
+	is_triggered_only = yes
+
+	immediate = {
+		random_system_within_border = {
+			limit = {
+				space_owner = { is_same_value = from.owner }
+				solar_system = {
+					starbase = {
+						has_starbase_size = starbase_outpost
+					}
+					NOR = {
+						has_star_flag = enclave
+						has_any_megastructure = yes
+						any_system_planet = {
+							is_colony = yes
+						}
+					}
+				}
+			}
+			save_event_target_as = hcp_test_fire_target
+		}
+	}
+
+	option = {
+		name = hcp_harvesters_crisis.410.a
+		trigger = {
+			exists = event_target:hcp_test_fire_target
+		}
+		if = {
+			limit = {
+				exists = event_target:hcp_test_fire_target
+			}
+			event_target:hcp_test_fire_target = {
+				enable_special_project = {
+					name = hcp_TEST_STELLAR_HARVESTER_PROTOTYPE
+					location = star
+					owner = root
+				}
+			}
+		}
+	}
+
+	option = {
+		name = hcp_harvesters_crisis.410.b
+		trigger = {
+			NOT = { exists = event_target:hcp_test_fire_target }
+		}
+	}
+}
+
+country_event = {
+	id = hcp_harvesters_crisis.415
+	title = "hcp_harvesters_crisis.415.name"
+	desc = "hcp_harvesters_crisis.415.desc"
+	picture = GFX_evt_debris
+	show_sound = event_super_explosion
+	event_chain = hcp_harvesters_crisis_chain
+
+	is_triggered_only = yes
+
+	trigger = {
+		exists = this
+		fromfrom = { is_ship_size = hcp_stellar_harvester }
+		NOT = { has_country_flag = hcp_tested_stellar_harvester_prototype }
+	}
+
+	option = {
+		name = hcp_harvesters_crisis.415.a
+		tooltip = {
+			enable_special_project = {
+				name = hcp_BUILD_STELLAR_HARVESTER_PROTOTYPE
+				owner = root
+			}
+		}
+		hidden_effect = {
+			abort_special_project = {
+				type = hcp_TEST_STELLAR_HARVESTER_PROTOTYPE
+			}
+			abort_special_project = {
+				type = hcp_BUILD_STELLAR_HARVESTER_PROTOTYPE
+			}
+			capital_scope = {
+				enable_special_project = {
+					name = hcp_BUILD_STELLAR_HARVESTER_PROTOTYPE
+					owner = root
+					location = this
+				}
+			}
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			remove_country_flag = hcp_prototype_stellar_harvester_built
+		}
+	}
+}
+
+country_event = {
+	id = hcp_harvesters_crisis.420
+	title = "hcp_harvesters_crisis.420.name"
+	desc = "hcp_harvesters_crisis.420.desc"
+	picture = GFX_evt_vortex
+	show_sound = event_death_cult
+	event_chain = hcp_harvesters_crisis_chain
+
+	is_triggered_only = yes
+
+	immediate = {
+		complete_special_project = {
+			type = hcp_TEST_STELLAR_HARVESTER_PROTOTYPE
+		}
+	}
+
+	option = {
+		name = EXCELLENT
+		hidden_effect = {
+			set_country_flag = hcp_tested_stellar_harvester_prototype
+		}
+	}
+}
+
+######################################### Crisis Level 5 #########################################
+
+country_event = {
+	id = hcp_harvesters_crisis.500
+	title = "hcp_harvesters_crisis.500.name"
+	desc = "hcp_harvesters_crisis.500.desc"
+	picture = GFX_evt_hcp_singularity_silo
+	show_sound = event_death_cult
+	event_chain = hcp_harvesters_crisis_chain
+
+	is_triggered_only = yes
+
+	immediate = {
+	}
+
+	option = {
+		name = hcp_harvesters_crisis.500.a
+		trigger = {
+			OR = {
+				is_xenophile = yes
+				has_valid_civic = civic_machine_servitor
+				is_homicidal = no
+			}
+		}
+		set_policy = {
+			policy = hcp_evacuation_policy
+			option = hcp_evacuate_everyone
+		}
+	}
+	option = {
+		name = hcp_harvesters_crisis.500.b
+		trigger = {
+			NOR = {
+				is_xenophile = yes
+				has_valid_civic = civic_machine_servitor
+			}
+		}
+		set_policy = {
+			policy = hcp_evacuation_policy
+			option = hcp_evacuate_only_ours
+		}
+	}
+
+	after = {
+		add_event_chain_counter = {
+			event_chain = "hcp_harvesters_crisis_chain"
+			counter = "hcp_harvesters_level_reached"
+			amount = 1
+		}
+		end_event_chain = hcp_harvesters_crisis_chain
+		begin_event_chain = {
+			event_chain = hcp_harvesters_victory_chain
+			target = root
+		}
+		custom_tooltip = new_crisis_perks_tt
+		hidden_effect = {
+			country_event = {
+				id = hcp_harvesters_crisis.505
+				days = 5
+			}
+			#Make everyone hate you
+			every_playable_country = {
+				limit = {
+					NOT = { is_same_value = root }
+				}
+				establish_communications_no_message = root
+				add_opinion_modifier = {
+					who = root
+					modifier = opinion_destroying_galaxy
+				}
+			}
+			every_country = {
+				limit = { is_fallen_empire = yes }
+				add_opinion_modifier = {
+					who = root
+					modifier = opinion_destroying_galaxy
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hcp_harvesters_crisis.505
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		switch = {
+			trigger = galaxy_size
+			huge = { set_variable = { which = hcp_outward_bound_required_progress value = @hcp_outward_bound_required_progress_huge } }
+			large = { set_variable = { which = hcp_outward_bound_required_progress value = @hcp_outward_bound_required_progress_large } }
+			medium = { set_variable = { which = hcp_outward_bound_required_progress value = @hcp_outward_bound_required_progress_medium } }
+			small = { set_variable = { which = hcp_outward_bound_required_progress value = @hcp_outward_bound_required_progress_small } }
+			tiny = { set_variable = { which = hcp_outward_bound_required_progress value = @hcp_outward_bound_required_progress_tiny } }
+		}
+		start_situation = {
+			type = hcp_situation_outward_bound_master
+		}
+		hcp_highlight_departure_points = yes
+	}
+}
+
+country_event = {
+	id = hcp_harvesters_crisis.510
+	title = "hcp_harvesters_crisis.510.name"
+	desc = "hcp_harvesters_crisis.510.desc"
+	picture = GFX_evt_debris
+	show_sound = event_super_explosion
+	event_chain = hcp_harvesters_victory_chain
+
+	is_triggered_only = yes
+
+	option = {
+		name = hcp_harvesters_crisis.510.a
+	}
+}
+
+country_event = {
+	id = hcp_harvesters_crisis.515
+	title = "hcp_harvesters_crisis.515.name"
+	desc = "hcp_harvesters_crisis.515.desc"
+	picture = GFX_evt_hcp_outward_bound
+	show_sound = event_death_cult
+	event_chain = hcp_harvesters_victory_chain
+
+	is_triggered_only = yes
+
+	option = {
+		name = hcp_harvesters_crisis.515.a
+	}
+}
+
+# Harvest Solar System Event
+planet_event = {
+	id = hcp_harvesters_crisis.600
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		add_threat = { who = from.owner amount = 10 }
+		from = {
+			owner = {
+				if = {
+					limit = {
+						NOR = {
+							has_active_event = {
+								hcp_harvesters_crisis.420
+							}
+							has_country_flag = hcp_tested_stellar_harvester_prototype
+						}
+					}
+					country_event = {
+						id = hcp_harvesters_crisis.420
+						scopes = {
+							from = root.solar_system
+						}
+					}
+				}
+				save_event_target_as = crisis_country
+				if = {
+					limit = {
+						any_owned_planet = {
+							solar_system = {
+								has_star_flag = hcp_singularity_silo_@prevprev.owner
+							}
+						}
+					}
+					random_owned_planet = {
+						limit = {
+							solar_system = {
+								has_star_flag = hcp_singularity_silo_@prevprev.owner
+							}
+						}
+						save_event_target_as = hcp_relocate_target
+					}
+				}
+				else = {
+					capital_scope = {
+						save_event_target_as = hcp_relocate_target
+					}
+				}
+				add_victory_score = {
+					source = hcp_harvested_systems_score
+					score = 10
+				}
+				complete_crisis_objective = hcp_crisobj_harvest_star_systems
+			#	switch = {
+			#		trigger = galaxy_size
+			#		huge = { add_resource = { sr_dark_matter = 1000 } }
+			#		large = { add_resource = { sr_dark_matter = 1500 } }
+			#		medium = { add_resource = { sr_dark_matter = 2000 } }
+			#		small = { add_resource = { sr_dark_matter = 2500 } }
+			#		tiny = { add_resource = { sr_dark_matter = 3000 } }
+			#	}
+				if = {
+					limit = {
+						NOT = { has_country_flag = cracked_first_star }
+					}
+					set_country_flag = cracked_first_star
+				}
+			}
+		}
+		solar_system = { save_event_target_as = destroyed_system }
+		every_playable_country = {
+			limit = {
+				is_ai = no
+				has_communications = event_target:crisis_country
+				NOR = {
+					is_same_value = event_target:crisis_country
+					has_crisis_perk = hcp_menp_stellar_harvesters
+					has_country_flag = hcp_stellar_harvester@event_target:crisis_country
+				}
+				intel_level = {
+					system = event_target:destroyed_system
+					level = none
+				}
+			}
+			country_event = { id = hcp_harvesters_crisis.610 }
+		}
+		every_playable_country = {
+			limit = {
+				is_ai = no
+				has_communications = event_target:crisis_country
+				NOR = {
+					is_same_value = event_target:crisis_country
+					has_crisis_perk = hcp_menp_stellar_harvesters
+					has_country_flag = hcp_stellar_harvester@event_target:crisis_country
+				}
+				intel_level = {
+					system = event_target:destroyed_system
+					level > none
+				}
+			}
+			country_event = { id = hcp_harvesters_crisis.611 }
+		}
+		every_playable_country = {
+			limit = {
+				is_ai = no
+				has_communications = event_target:crisis_country
+				NOR = {
+					is_same_value = event_target:crisis_country
+					has_country_flag = hcp_stellar_harvester@event_target:crisis_country
+				}
+				has_crisis_perk = hcp_menp_stellar_harvesters
+			}
+			country_event = { id = hcp_harvesters_crisis.612 }
+		}
+		every_playable_country = {
+			limit = {
+				has_communications = event_target:crisis_country
+				NOT = {
+					has_opinion_modifier = {
+						who = event_target:crisis_country
+						modifier = opinion_destroying_systems
+					}
+				}
+			}
+			add_opinion_modifier = {
+				who = event_target:crisis_country
+				modifier = opinion_destroying_systems
+			}
+		}
+		solar_system = {
+			random_system_planet = {
+				limit = { has_modifier = holy_planet }
+				planet_event = { id = planet_destruction.605 }
+			}
+			hcp_harvest_star_system = yes
+		}
+	}
+}
+
+# On Stellar Harvester Destroyed.
+country_event = {
+	id = hcp_harvesters_crisis.605
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = this
+		has_country_flag = hcp_tested_stellar_harvester_prototype
+		fromfrom = {
+			is_ship_size = hcp_stellar_harvester
+		}
+	}
+
+	immediate = {
+		subtract_variable = {
+			which = hcp_num_stellar_harvesters
+			value = 1
+		}
+		if = {
+			limit = {
+				check_variable = {
+					which = hcp_num_stellar_harvesters
+					value = 0
+				}
+			}
+			country_event = {
+				id = hcp_harvesters_crisis.510
+			}
+		}
+		every_playable_country = {
+			limit = {
+				NOT = { is_same_value = root }
+				has_communications = root
+				has_event_chain = hcp_anti_harvesters_chain
+				any_situation = {
+					is_situation_type = hcp_situation_outward_bound_dummy
+					target = {
+						is_same_value = root
+					}
+				}
+			}
+			complete_special_project = {
+				type = hcp_DESTROY_STELLAR_HARVESTER
+				location = fromfrom.fleet
+			}
+		}
+	}
+}
+
+# First Star Harvested (No Intel)
+country_event = {
+	id = hcp_harvesters_crisis.610
+	title = "hcp_harvesters_crisis.610.name"
+	desc = "hcp_harvesters_crisis.610.desc"
+	picture = GFX_evt_vortex
+	show_sound = event_wind_ruins
+	location = event_target:destroyed_system
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = hcp_stellar_harvester@event_target:crisis_country
+	}
+
+	option = {
+		name = hcp_harvesters_crisis.610.a
+	}
+}
+
+# First Star Harvested (Some Intel)
+country_event = {
+	id = hcp_harvesters_crisis.611
+	title = "hcp_harvesters_crisis.611.name"
+	desc = "hcp_harvesters_crisis.611.desc"
+	picture = GFX_evt_vortex
+	show_sound = event_wind_ruins
+	location = event_target:destroyed_system
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = hcp_stellar_harvester@event_target:crisis_country
+	}
+
+	option = {
+		name = hcp_harvesters_crisis.611.a
+	}
+}
+
+# First Star Harvested (Also Crisis)
+country_event = {
+	id = hcp_harvesters_crisis.612
+	title = "hcp_harvesters_crisis.612.name"
+	desc = "hcp_harvesters_crisis.612.desc"
+	picture = GFX_evt_vortex
+	show_sound = event_wind_ruins
+	location = event_target:destroyed_system
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = hcp_stellar_harvester@event_target:crisis_country
+	}
+
+	option = {
+		name = hcp_harvesters_crisis.612.a
+	}
+}
+
+# Stellar Harvester Replicates via fleet action
+fleet_event = {
+	id = hcp_harvesters_crisis.700
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		hcp_replicate_stellar_harvester = { OWNER = root.owner TARGET = root }
+	}
+}
+
+# Stellar Harvester Departs Galaxy via fleet action
+fleet_event = {
+	id = hcp_harvesters_crisis.710
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		owner = {
+			subtract_variable = {
+				which = hcp_num_stellar_harvesters
+				value = 1
+			}
+			if = {
+				limit = {
+					any_situation = {
+						is_situation_type = hcp_situation_outward_bound_master
+					}
+				}
+				random_situation = {
+					limit = {
+						is_situation_type = hcp_situation_outward_bound_master
+					}
+					add_situation_progress = 1
+					create_message = {
+						type = hcp_MESSAGE_STELLAR_HARVESTER_DEPARTED
+						localization = hcp_MESSAGE_STELLAR_HARVESTER_DEPARTED_TEXT
+						days = 30
+						target = root.star
+					}
+				}
+			}
+			every_playable_country = {
+				limit = {
+					NOT = { is_same_value = root.owner }
+					has_communications = root.owner
+				}
+				if = {
+					limit = {
+						any_situation = {
+							is_situation_type = hcp_situation_outward_bound_dummy
+							target = { is_same_value = root.owner }
+						}
+					}
+					random_situation = {
+						limit = {
+							is_situation_type = hcp_situation_outward_bound_dummy
+							target = { is_same_value = root.owner }
+						}
+						add_situation_progress = 1
+						create_message = {
+							type = hcp_MESSAGE_HOSTILE_STELLAR_HARVESTER_DEPARTED
+							localization = hcp_MESSAGE_HOSTILE_STELLAR_HARVESTER_DEPARTED_TEXT
+							days = 30
+							target = root.star
+
+							variable = {
+								type = name
+								localization = TARGET
+								scope = root.owner
+							}
+						}
+					}
+				}
+				else = {
+					switch = {
+						trigger = galaxy_size
+						huge = { set_variable = { which = hcp_outward_bound_required_progress value = @hcp_outward_bound_required_progress_huge } }
+						large = { set_variable = { which = hcp_outward_bound_required_progress value = @hcp_outward_bound_required_progress_large } }
+						medium = { set_variable = { which = hcp_outward_bound_required_progress value = @hcp_outward_bound_required_progress_medium } }
+						small = { set_variable = { which = hcp_outward_bound_required_progress value = @hcp_outward_bound_required_progress_small } }
+						tiny = { set_variable = { which = hcp_outward_bound_required_progress value = @hcp_outward_bound_required_progress_tiny } }
+					}
+					start_situation = {
+						type = hcp_situation_outward_bound_dummy
+						target = root.owner
+						effect = {
+							situation_event = {
+								id = hcp_harvesters_situations.2000
+								scopes = {
+									from = root.solar_system
+								}
+							}
+						}
+					}
+				}
+			}
+			every_playable_country = {
+				limit = {
+					any_situation = {
+						is_situation_type = hcp_situation_outward_bound_dummy
+						target = {
+							is_same_value = root.owner
+						}
+					}
+				}
+				abort_special_project = {
+					type = hcp_DESTROY_STELLAR_HARVESTER
+					location = root
+				}
+			}
+			if = {
+				limit = {
+					check_variable = {
+						which = hcp_num_stellar_harvesters
+						value = 0
+					}
+				}
+				country_event = {
+					id = hcp_harvesters_crisis.515
+				}
+			}
+		}
+		delete_fleet = this
+	}
+}
+
+#Victory Event
+country_event = {
+	id = hcp_harvesters_crisis.800
+	title = "hcp_harvesters_crisis.800.name"
+	desc = "hcp_harvesters_crisis.800.desc"
+	picture = GFX_evt_hcp_singularity_silo
+	show_sound = event_death_cult
+	event_chain = hcp_harvesters_victory_chain
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_crisis_perk = hcp_menp_eternal_sanctuaries
+		has_country_flag = hcp_finished_outward_bound_situation
+		NOT = {
+			any_owned_planet = {
+				NOT = {
+					solar_system = {
+						has_star_flag = hcp_singularity_silo_@root.owner
+					}
+				}
+			}
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				any_system_within_border = {
+					has_star_flag = hcp_singularity_silo_@root
+				}
+			}
+			random_system_within_border = {
+				limit = {
+					has_star_flag = hcp_singularity_silo_@root
+				}
+				star = {
+					save_event_target_as = hcp_refuge_system
+				}
+			}
+		}
+	}
+
+	option = {
+		name = hcp_harvesters_crisis.800.a
+		tooltip = {
+			win = yes
+		}
+		hidden_effect = {
+			switch = {
+				trigger = graphical_culture
+				molluscoid_01 = { hcp_spawn_victory_objects = { CULTURE = molluscoid } }
+				mammalian_01 = { hcp_spawn_victory_objects = { CULTURE = mammalian } }
+				plantoid_01 = { hcp_spawn_victory_objects = { CULTURE = plantoid } }
+				fungoid_01 = { hcp_spawn_victory_objects = { CULTURE = fungoid } }
+				reptilian_01 = { hcp_spawn_victory_objects = { CULTURE = reptilian } }
+				arthropoid_01 = { hcp_spawn_victory_objects = { CULTURE = arthropoid } }
+				avian_01 = { hcp_spawn_victory_objects = { CULTURE = avian } }
+				lithoid_01 = { hcp_spawn_victory_objects = { CULTURE = lithoid } }
+				humanoid_01 = { hcp_spawn_victory_objects = { CULTURE = humanoid } }
+				necroid_01 = { hcp_spawn_victory_objects = { CULTURE = necroid } }
+				nemesis_01 = { hcp_spawn_victory_objects = { CULTURE = nemesis } }
+				aquatic_01 = { hcp_spawn_victory_objects = { CULTURE = aquatic } }
+				toxoid_01 = { hcp_spawn_victory_objects = { CULTURE = toxoid } }
+				cybernetics_01 = { hcp_spawn_victory_objects = { CULTURE = cybernetics } }
+				synthetics_01 = { hcp_spawn_victory_objects = { CULTURE = synthetics } }
+				biogenesis_01 = { hcp_spawn_victory_objects = { CULTURE = biogenesis_01 } }
+				biogenesis_02 = { hcp_spawn_victory_objects = { CULTURE = biogenesis_02 } }
+			}
+			event_target:hcp_refuge_system = {
+				clear_deposits = yes
+				solar_system = {
+					set_star_flag = ring_world_built
+					set_star_flag = hcp_harvesters_remnants
+					every_system_planet = {
+						limit = {
+							is_primary_star = no
+						}
+						remove_planet = yes
+					}
+					every_system_megastructure = {
+						remove_megastructure = this
+					}
+				}
+			}
+			set_country_flag = hcp_victory
+			every_owned_planet = {
+				every_owned_pop_group = {
+					kill_all_pop = yes
+				}
+			}
+			#every_owned_fleet = {
+			#	limit = {
+			#		NOT = { is_ship_size = hcp_stellar_harvester }
+			#	}
+			#	delete_fleet = this
+			#}
+			set_country_flag = silence_destroy_event
+			destroy_country = yes
+			win = yes
+		}
+	}
+}
+
+planet_event = {
+	id = hcp_harvesters_crisis.805
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			NOT = {
+				has_active_event = {
+					hcp_harvesters_crisis.800
+				}
+			}
+			has_crisis_perk = hcp_menp_eternal_sanctuaries
+			has_country_flag = hcp_finished_outward_bound_situation
+		}
+	}
+	immediate = {
+		owner = {
+			country_event = {
+				id = hcp_harvesters_crisis.800
+				days = 10
+			}
+		}
+	}
+}
+
+##### Harvester Country Destroyed #####
+# Trigger Event (HIDDEN)
+country_event = {
+	id = hcp_harvesters_crisis.900
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_crisis_perk = hcp_menp_galactic_harvest
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				any_system_within_border = {
+					has_star_flag = hcp_singularity_silo_@root
+				}
+			}
+			random_system_within_border = {
+				limit = {
+					has_star_flag = hcp_singularity_silo_@root
+				}
+				star = {
+					save_event_target_as = hcp_refuge_system
+				}
+			}
+		}
+		set_country_flag = silence_destroy_event
+		every_playable_country = {
+			limit = { is_ai = no }
+			if = {
+				limit = {
+					root = {
+						has_country_flag = hcp_victory
+					}
+				}
+				country_event = { id = hcp_harvesters_crisis.915 days = 1 }
+			}
+			else_if = {
+				limit = {
+					root = {
+						has_country_flag = hcp_finished_outward_bound_situation
+					}
+				}
+				country_event = { id = hcp_harvesters_crisis.910 days = 1 }
+			}
+			else = {
+				country_event = { id = hcp_harvesters_crisis.905 days = 1 }
+			}
+		}
+	}
+}
+
+## Before Completing Outward Bound Situation
+country_event = {
+	id = hcp_harvesters_crisis.905
+	title = "hcp_harvesters_crisis.905.name"
+	desc = "hcp_harvesters_crisis.905.desc"
+	picture = GFX_evt_crisis_defeated
+	show_sound = event_celebration
+
+	is_triggered_only = yes
+
+	option = {
+		name = hcp_harvesters_crisis.905.a
+	}
+}
+
+## After Completing Outward Bound Situation
+country_event = {
+	id = hcp_harvesters_crisis.910
+	title = "hcp_harvesters_crisis.910.name"
+	desc = "hcp_harvesters_crisis.910.desc"
+	picture = GFX_evt_crisis_defeated
+	show_sound = event_celebration
+
+	is_triggered_only = yes
+
+	option = {
+		name = hcp_harvesters_crisis.910.a
+	}
+}
+
+## Post Harvester Victory Event
+country_event = {
+	id = hcp_harvesters_crisis.915
+	title = "hcp_harvesters_crisis.915.name"
+	desc = "hcp_harvesters_crisis.915.desc"
+	picture = GFX_evt_hcp_singularity_silo_shielded
+	show_sound = event_energy_field
+
+	is_triggered_only = yes
+
+	option = {
+		name = hcp_harvesters_crisis.915.a
+	}
+}
+
+##### Harvester Lost Singularity Silo #####
+## Singularity Silo Harvested
+country_event = {
+	id = hcp_harvesters_crisis.1000
+	title = "hcp_harvesters_crisis.1000.name"
+	desc = "hcp_harvesters_crisis.1000.desc"
+	picture = GFX_evt_vortex
+	show_sound = event_air_raid_siren
+
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				hcp_has_valid_silo_site = yes
+			}
+			hcp_target_valid_silo_site = { TARGET = hcp_rebuild_project_target }
+		}
+		if = {
+			limit = {
+				exists = event_target:crisis_country
+			}
+			event_target:crisis_country = {
+				random_system_within_border = {
+					limit = {
+						has_star_flag = hcp_singularity_silo_@event_target:crisis_country
+						any_system_megastructure = { has_megastructure_flag = hcp_crisis_silo }
+					}
+					star = {
+						save_event_target_as = hcp_silo_to_steal
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = hcp_harvesters_crisis.1000.a
+		if = {
+			limit = {
+				exists = event_target:hcp_rebuild_project_target
+			}
+			tooltip = {
+				enable_special_project = {
+					name = hcp_REBUILD_SINGULARITY_SILO_1
+					owner = root
+				}
+			}
+			hidden_effect = {
+				event_target:hcp_rebuild_project_target = {
+					if = {
+						limit = { root = { has_event_chain = hcp_harvesters_crisis_chain } }
+						enable_special_project = {
+							name = hcp_REBUILD_SINGULARITY_SILO_1
+							owner = root
+						}
+					}
+					else_if = {
+						limit = { root = { has_event_chain = hcp_harvesters_victory_chain } }
+						enable_special_project = {
+							name = hcp_REBUILD_SINGULARITY_SILO_2
+							owner = root
+						}
+					}
+				}
+			}
+		}
+		else = {
+			enable_special_project = {
+				name = hcp_NEEDS_NEW_BLACK_HOLE
+				owner = root
+			}
+		}
+	}
+
+	option = {
+		name = hcp_harvesters_crisis.1000.b
+		trigger = {
+			exists = event_target:hcp_silo_to_steal
+		}
+		tooltip = {
+			event_target:hcp_silo_to_steal = {
+				enable_special_project = {
+					name = hcp_STEAL_SINGULARITY_SILO_1
+				}
+			}
+		}
+		hidden_effect = {
+			event_target:hcp_silo_to_steal = {
+				if = {
+					limit = { root = { has_event_chain = hcp_harvesters_crisis_chain } }
+					enable_special_project = {
+						name = hcp_STEAL_SINGULARITY_SILO_1
+						owner = root
+					}
+				}
+				else_if = {
+					limit = { root = { has_event_chain = hcp_harvesters_victory_chain } }
+					enable_special_project = {
+						name = hcp_STEAL_SINGULARITY_SILO_2
+						owner = root
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hcp_harvesters_crisis.1001
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = { has_event_chain = hcp_harvesters_crisis_chain }
+			country_event = {
+				id = hcp_harvesters_crisis.1002
+				scopes = {
+					from = from
+				}
+			}
+		}
+		else_if = {
+			limit = { has_event_chain = hcp_harvesters_victory_chain }
+			country_event = {
+				id = hcp_harvesters_crisis.1003
+				scopes = {
+					from = from
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hcp_harvesters_crisis.1002
+	title = "hcp_harvesters_crisis.1002.name"
+	desc = hcp_harvesters_crisis.1002.desc
+	picture = GFX_evt_black_hole
+	show_sound = event_death_cult
+	event_chain = hcp_harvesters_crisis_chain
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = EXCELLENT
+		tooltip = {
+			enable_special_project = {
+				name = hcp_REBUILD_SINGULARITY_SILO_1
+				owner = root
+			}
+		}
+		hidden_effect = {
+			from = {
+				enable_special_project = {
+					name = hcp_REBUILD_SINGULARITY_SILO_1
+					owner = root
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hcp_harvesters_crisis.1003
+	title = "hcp_harvesters_crisis.1003.name"
+	desc = hcp_harvesters_crisis.1003.desc
+	picture = GFX_evt_black_hole
+	show_sound = event_death_cult
+	event_chain = hcp_harvesters_victory_chain
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = EXCELLENT
+		tooltip = {
+			enable_special_project = {
+				name = hcp_REBUILD_SINGULARITY_SILO_2
+				owner = root
+			}
+		}
+		hidden_effect = {
+			from = {
+				enable_special_project = {
+					name = hcp_REBUILD_SINGULARITY_SILO_2
+					owner = root
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hcp_harvesters_crisis.1004
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = { has_event_chain = hcp_harvesters_crisis_chain }
+			country_event = {
+				id = hcp_harvesters_crisis.1005
+				scopes = {
+					from = from
+				}
+			}
+		}
+		else_if = {
+			limit = { has_event_chain = hcp_harvesters_victory_chain }
+			country_event = {
+				id = hcp_harvesters_crisis.1006
+				scopes = {
+					from = from
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hcp_harvesters_crisis.1005
+	title = "hcp_harvesters_crisis.1005.name"
+	desc = hcp_harvesters_crisis.1005.desc
+	picture = GFX_evt_black_hole
+	show_sound = event_death_cult
+	event_chain = hcp_harvesters_crisis_chain
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = EXCELLENT
+		tooltip = {
+			enable_special_project = {
+				name = hcp_REBUILD_SINGULARITY_SILO_1
+				owner = root
+			}
+		}
+		hidden_effect = {
+			from = {
+				enable_special_project = {
+					name = hcp_REBUILD_SINGULARITY_SILO_1
+					owner = root
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hcp_harvesters_crisis.1006
+	title = "hcp_harvesters_crisis.1006.name"
+	desc = hcp_harvesters_crisis.1006.desc
+	picture = GFX_evt_black_hole
+	show_sound = event_death_cult
+	event_chain = hcp_harvesters_victory_chain
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = EXCELLENT
+		tooltip = {
+			enable_special_project = {
+				name = hcp_REBUILD_SINGULARITY_SILO_2
+				owner = root
+			}
+		}
+		hidden_effect = {
+			from = {
+				enable_special_project = {
+					name = hcp_REBUILD_SINGULARITY_SILO_2
+					owner = root
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hcp_harvesters_crisis.1010
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		from = {
+			any_system_megastructure = { has_megastructure_flag = hcp_crisis_silo }
+		}
+		OR = {
+			has_special_project = hcp_STEAL_SINGULARITY_SILO_1
+			has_special_project = hcp_STEAL_SINGULARITY_SILO_2
+			has_special_project = hcp_NEEDS_NEW_BLACK_HOLE
+			has_special_project = hcp_REBUILD_SINGULARITY_SILO_1
+			has_special_project = hcp_REBUILD_SINGULARITY_SILO_2
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = { has_event_chain = hcp_harvesters_crisis_chain }
+			country_event = {
+				id = hcp_harvesters_crisis.1011
+				scopes = {
+					from = from
+				}
+			}
+		}
+		if = {
+			limit = { has_event_chain = hcp_harvesters_victory_chain }
+			country_event = {
+				id = hcp_harvesters_crisis.1012
+				scopes = {
+					from = from
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hcp_harvesters_crisis.1011
+	title = "hcp_harvesters_crisis.1011.name"
+	desc = {
+		text = "hcp_harvesters_crisis.1011.desc.a"
+		trigger = {
+			OR = {
+				has_special_project = hcp_STEAL_SINGULARITY_SILO_1
+				has_special_project = hcp_STEAL_SINGULARITY_SILO_2
+			}
+		}
+	}
+	desc = {
+		text = "hcp_harvesters_crisis.1011.desc.b"
+		trigger = {
+			OR = {
+				has_special_project = hcp_NEEDS_NEW_BLACK_HOLE
+				has_special_project = hcp_REBUILD_SINGULARITY_SILO_1
+				has_special_project = hcp_REBUILD_SINGULARITY_SILO_2
+			}
+		}
+	}
+	picture = GFX_evt_hcp_singularity_silo
+	show_sound = event_death_cult
+	event_chain = hcp_harvesters_crisis_chain
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = EXCELLENT
+		hidden_effect = {
+			from = {
+				set_star_flag = hcp_singularity_silo_@root
+			}
+			if = {
+				limit = { has_special_project = hcp_STEAL_SINGULARITY_SILO_1 }
+				complete_special_project = {
+					type = hcp_STEAL_SINGULARITY_SILO_1
+				}
+			}
+			else_if = {
+				limit = { has_special_project = hcp_NEEDS_NEW_BLACK_HOLE }
+				abort_special_project = {
+					type = hcp_NEEDS_NEW_BLACK_HOLE
+				}
+			}
+			else_if = {
+				limit = { has_special_project = hcp_REBUILD_SINGULARITY_SILO_1 }
+				abort_special_project = {
+					type = hcp_REBUILD_SINGULARITY_SILO_1
+				}
+			}
+			else_if = {
+				limit = { has_special_project = hcp_REBUILD_SINGULARITY_SILO_2 }
+				abort_special_project = {
+					type = hcp_REBUILD_SINGULARITY_SILO_2
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hcp_harvesters_crisis.1012
+	title = "hcp_harvesters_crisis.1012.name"
+	desc = {
+		text = "hcp_harvesters_crisis.1012.desc.a"
+		trigger = {
+			OR = {
+				has_special_project = hcp_STEAL_SINGULARITY_SILO_1
+				has_special_project = hcp_STEAL_SINGULARITY_SILO_2
+			}
+		}
+	}
+	desc = {
+		text = "hcp_harvesters_crisis.1012.desc.b"
+		trigger = {
+			OR = {
+				has_special_project = hcp_NEEDS_NEW_BLACK_HOLE
+				has_special_project = hcp_REBUILD_SINGULARITY_SILO_1
+				has_special_project = hcp_REBUILD_SINGULARITY_SILO_2
+			}
+		}
+	}
+	picture = GFX_evt_hcp_singularity_silo
+	show_sound = event_death_cult
+	event_chain = hcp_harvesters_victory_chain
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = EXCELLENT
+		hidden_effect = {
+			from = {
+				set_star_flag = hcp_singularity_silo_@root
+			}
+			if = {
+				limit = { has_special_project = hcp_STEAL_SINGULARITY_SILO_2 }
+				complete_special_project = {
+					type = hcp_STEAL_SINGULARITY_SILO_2
+				}
+			}
+			else_if = {
+				limit = { has_special_project = hcp_NEEDS_NEW_BLACK_HOLE }
+				abort_special_project = {
+					type = hcp_NEEDS_NEW_BLACK_HOLE
+				}
+			}
+			else_if = {
+				limit = { has_special_project = hcp_REBUILD_SINGULARITY_SILO_1 }
+				abort_special_project = {
+					type = hcp_REBUILD_SINGULARITY_SILO_1
+				}
+			}
+			else_if = {
+				limit = { has_special_project = hcp_REBUILD_SINGULARITY_SILO_2 }
+				abort_special_project = {
+					type = hcp_REBUILD_SINGULARITY_SILO_2
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = hcp_harvesters_crisis.1015
+	title = "hcp_harvesters_crisis.1015.name"
+	desc = {
+		text = "hcp_harvesters_crisis.1015.desc.a"
+		trigger = {
+			NOT = { exists = event_target:hcp_silo_to_steal }
+		}
+	}
+	desc = {
+		text = "hcp_harvesters_crisis.1015.desc.b"
+		trigger = {
+			exists = event_target:hcp_silo_to_steal
+		}
+	}
+	picture = GFX_evt_vortex
+	show_sound = event_air_raid_siren
+
+	is_triggered_only = yes
+
+	trigger = {
+		OR = {
+			has_special_project = hcp_STEAL_SINGULARITY_SILO_1
+			has_special_project = hcp_STEAL_SINGULARITY_SILO_2
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = { has_special_project = hcp_STEAL_SINGULARITY_SILO_1 }
+			abort_special_project = {
+				type = hcp_STEAL_SINGULARITY_SILO_1
+			}
+		}
+		else_if = {
+			limit = { has_special_project = hcp_STEAL_SINGULARITY_SILO_2 }
+			abort_special_project = {
+				type = hcp_STEAL_SINGULARITY_SILO_2
+			}
+		}
+		if = {
+			limit = {
+				hcp_has_valid_silo_site = yes
+			}
+			hcp_target_valid_silo_site = { TARGET = hcp_rebuild_project_target }
+		}
+		if = {
+			limit = {
+				any_playable_country = {
+					any_owned_megastructure = {
+						has_megastructure_flag = hcp_crisis_silo
+					}
+				}
+			}
+			random_playable_country = {
+				limit = {
+					any_playable_country = {
+						any_owned_megastructure = {
+							has_megastructure_flag = hcp_crisis_silo
+						}
+					}
+				}
+				random_system_within_border = {
+					limit = {
+						has_star_flag = hcp_singularity_silo_@prev
+						any_system_megastructure = { has_megastructure_flag = hcp_crisis_silo }
+					}
+					star = {
+						save_event_target_as = hcp_silo_to_steal
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = UNFORTUNATE
+		trigger = {
+			NOT = { exists = event_target:hcp_silo_to_steal }
+		}
+		if = {
+			limit = {
+				exists = event_target:hcp_rebuild_project_target
+			}
+			tooltip = {
+				enable_special_project = {
+					name = hcp_REBUILD_SINGULARITY_SILO_1
+					owner = root
+				}
+			}
+			hidden_effect = {
+				event_target:hcp_rebuild_project_target = {
+					if = {
+						limit = { root = { has_event_chain = hcp_harvesters_crisis_chain } }
+						enable_special_project = {
+							name = hcp_REBUILD_SINGULARITY_SILO_1
+							owner = root
+						}
+					}
+					else_if = {
+						limit = { root = { has_event_chain = hcp_harvesters_victory_chain } }
+						enable_special_project = {
+							name = hcp_REBUILD_SINGULARITY_SILO_2
+							owner = root
+						}
+					}
+				}
+			}
+		}
+		else = {
+			enable_special_project = {
+				name = hcp_NEEDS_NEW_BLACK_HOLE
+				owner = root
+			}
+		}
+	}
+
+	option = {
+		name = hcp_harvesters_crisis.1015.b
+		trigger = {
+			exists = event_target:hcp_silo_to_steal
+		}
+		tooltip = {
+			event_target:hcp_silo_to_steal = {
+				enable_special_project = {
+					name = hcp_STEAL_SINGULARITY_SILO_1
+				}
+			}
+		}
+		hidden_effect = {
+			event_target:hcp_silo_to_steal = {
+				if = {
+					limit = { root = { has_event_chain = hcp_harvesters_crisis_chain } }
+					enable_special_project = {
+						name = hcp_STEAL_SINGULARITY_SILO_1
+						owner = root
+					}
+				}
+				else_if = {
+					limit = { root = { has_event_chain = hcp_harvesters_victory_chain } }
+					enable_special_project = {
+						name = hcp_STEAL_SINGULARITY_SILO_2
+						owner = root
+					}
+				}
+			}
+		}
+	}
+}

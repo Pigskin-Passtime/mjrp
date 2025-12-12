@@ -1,0 +1,57 @@
+##################
+# !_hcp_policies.txt
+# By jam1066
+##################
+
+hcp_evacuation_policy = {
+	potential = {
+		has_crisis_level = hcp_crisis_harvesters_level_5
+	}
+
+	option = {
+		name = "hcp_evacuate_everyone"
+
+		policy_flags = {
+			hcp_evacuate_everyone
+		}
+
+		ai_weight = {
+			weight = 10
+
+			modifier = {
+				factor = 2
+				OR = {
+					is_pacifist = yes
+					is_xenophile = yes
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "hcp_evacuate_only_ours"
+
+		policy_flags = {
+			hcp_evacuate_only_ours
+		}
+
+		ai_weight = {
+			weight = 10
+
+			modifier = {
+				factor = 2
+				OR = {
+					is_xenophobe = yes
+					is_gestalt = yes
+				}
+			}
+
+			modifier = {
+				factor =5
+				OR = {
+					is_homicidal = yes
+				}
+			}
+		}
+	}
+}

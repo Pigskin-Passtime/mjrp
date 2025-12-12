@@ -1,0 +1,821 @@
+##################
+# hcp_scripted_effects.txt
+# By jam1066
+##################
+
+hcp_harvest_planet = {
+	random_list = {
+		1 = {
+			modifier = {
+				factor = 0
+				num_districts = { type = district_city value = 0 }
+			}
+			remove_district = district_city
+		}
+		1 = {
+			modifier = {
+				factor = 0
+				num_districts = { type = district_nexus value = 0 }
+			}
+			remove_district = district_nexus
+		}
+		1 = {
+			modifier = {
+				factor = 0
+				num_districts = { type = district_hive value = 0 }
+			}
+			remove_district = district_hive
+		}
+		1 = {
+			modifier = {
+				factor = 0
+				num_districts = { type = district_generator value = 0 }
+			}
+			remove_district = district_generator
+		}
+		1 = {
+			modifier = {
+				factor = 0
+				num_districts = { type = district_mining value = 0 }
+			}
+			remove_district = district_mining
+		}
+		3 = {
+			modifier = {
+				factor = 0
+				num_districts = { type = district_farming value = 0 }
+			}
+			remove_district = district_farming
+		}
+	}
+	random_list = {
+		10 = {
+			modifier = {
+				factor = 0
+				num_free_districts = { type = any value < 6 }
+			}
+			change_planet_size = -2
+			root = {
+				set_variable = { which = hcp_quarried_resources value = value:hcp_get_quarried_resources|RESOURCE|minerals|NUM|5| }
+			}
+			root.owner = {
+				add_monthly_resource_mult = {
+					resource = minerals
+					value = 5
+					min = @tier1materialmin
+					max = @tier1materialmax
+				}
+				create_message = {
+					type = hcp_MESSAGE_HARVEST_WORLD
+					localization = hcp_MESSAGE_HARVEST_WORLD_MINERALS_TEXT
+					days = 30
+					target = prev
+
+					variable = {
+						type = name
+						localization = PLANET
+						scope = prev
+					}
+
+					variable = {
+						type = variable
+						varname = hcp_quarried_resources
+						localization = RESOURCE
+						scope = root
+					}
+				}
+			}
+			add_planet_devastation = 20
+		}
+		10 = {
+			modifier = {
+				factor = 0
+				num_free_districts = { type = any value < 6 }
+			}
+			change_planet_size = -2
+			root = {
+				set_variable = { which = hcp_quarried_resources value = value:hcp_get_quarried_resources|RESOURCE|alloys|NUM|3| }
+			}
+			root.owner = {
+				add_monthly_resource_mult = {
+					resource = alloys
+					value = 3
+					min = @tier1materialmin
+					max = @tier1materialmax
+				}
+				create_message = {
+					type = hcp_MESSAGE_HARVEST_WORLD
+					localization = hcp_MESSAGE_HARVEST_WORLD_ALLOYS_TEXT
+					days = 30
+					target = prev
+
+					variable = {
+						type = name
+						localization = PLANET
+						scope = prev
+					}
+
+					variable = {
+						type = variable
+						varname = hcp_quarried_resources
+						localization = RESOURCE
+						scope = root
+					}
+				}
+			}
+			add_planet_devastation = 20
+		}
+		10 = {
+			# There's only one district slot left on the planet
+			modifier = {
+				factor = 0
+				num_free_districts = { type = any value >= 6 }
+			}
+			change_planet_size = -1
+			root = {
+				set_variable = { which = hcp_quarried_resources value = value:hcp_get_quarried_resources|RESOURCE|minerals|NUM|3| }
+			}
+			root.owner = {
+				add_monthly_resource_mult = {
+					resource = minerals
+					value = 3
+					min = @tier1materialmin
+					max = @tier1materialmax
+				}
+				create_message = {
+					type = hcp_MESSAGE_HARVEST_WORLD
+					localization = hcp_MESSAGE_HARVEST_WORLD_MINERALS_TEXT
+					days = 30
+					target = prev
+
+					variable = {
+						type = name
+						localization = PLANET
+						scope = prev
+					}
+
+					variable = {
+						type = variable
+						varname = hcp_quarried_resources
+						localization = RESOURCE
+						scope = root
+					}
+				}
+			}
+			root = {
+				clear_variable = hcp_quarried_resources
+			}
+			add_planet_devastation = 10
+		}
+	}
+	set_timed_planet_flag = {
+		days = 360
+		flag = recently_eaten_planet
+	}
+}
+
+hcp_harvest_star_system = {
+	if = {
+		limit = {
+			any_system_megastructure = {
+				exists = this
+				has_megastructure_flag = hcp_crisis_silo
+			}
+			any_playable_country = {
+				NOT = {
+					is_same_value = event_target:crisis_country
+				}
+				has_ascension_perk = hcp_ap_harvesters
+			}
+		}
+		every_playable_country = {
+			limit = {
+				OR = {
+					has_special_project = hcp_STEAL_SINGULARITY_SILO_1
+					has_special_project = hcp_STEAL_SINGULARITY_SILO_2
+				}
+			}
+			country_event = {
+				id = hcp_harvesters_crisis.1015
+			}
+		}
+		every_playable_country = {
+			limit = {
+				prev = {
+					has_star_flag = hcp_singularity_silo_@prev
+				}
+			}
+			country_event = {
+				id = hcp_harvesters_crisis.1000
+			}
+			prev = {
+				remove_star_flag = hcp_singularity_silo_@prev
+			}
+		}
+	}
+	if = {
+		limit = { exists = event_target:crisis_country }
+		fire_on_action = {
+			on_action = on_destroy_star_system
+			scopes = { from = event_target:crisis_country }
+		}
+	}
+	else = {
+		fire_on_action = { on_action = on_destroy_star_system }
+	}
+	from.solar_system = {
+		set_asteroid_belt = {
+			radius = 0
+		}
+	}
+	every_system_planet = {
+		limit = {
+			is_colony = yes
+		}
+		if = {
+			limit = {
+				OR = {
+					root.from.owner = {
+						has_policy_flag = hcp_evacuate_everyone
+					}
+					owner = {
+						is_same_value = root.from.owner
+					}
+				}
+			}
+			every_owned_pop_group = {
+				limit = {
+					NOR = {
+						has_trait = trait_pathogenic_genes
+						has_trait = trait_self_modified
+					}
+					if = {
+						limit = {
+							has_virtual_species_trait = yes
+						}
+						exists = owner
+						owner = {
+							is_fallen_empire = no
+							NOT = {
+								has_active_tradition = tr_virtuality_adopt
+							}
+						}
+					}
+				}
+				resettle_pop_group = {
+					POP_GROUP = this
+					PLANET = event_target:hcp_relocate_target
+					PERCENTAGE = 100%
+				}
+			}
+		}
+		else = {
+			every_owned_pop_group = {
+				limit = {
+					is_lithoid = yes
+				}
+				root.from.owner = {
+					add_resource = {
+						minerals = 1
+						multiplier = prev.trigger:pop_group_size
+					}
+				}
+			}
+			every_owned_pop_group = {
+				limit = {
+					is_lithoid = no
+					is_organic_species = yes
+				}
+				root.from.owner = {
+					add_resource = {
+						food = 1
+						multiplier = prev.trigger:pop_group_size
+					}
+				}
+			}
+			every_owned_pop_group = {
+				limit = {
+					species = {
+						OR = {
+							is_archetype = MACHINE
+							is_archetype = ROBOT
+						}
+					}
+				}
+				root.from.owner = {
+					add_resource = {
+						alloys = 1
+						multiplier = prev.trigger:pop_group_size
+					}
+				}
+			}
+		}
+		destroy_colony = yes
+	}
+	set_star_flag = star_cracked
+	set_star_flag = hcp_system_harvested
+	set_star_class = hcp_sc_harvested_system
+	every_system_ambient_object = {
+		limit = {
+			# Preserve Unbidden crisis effects
+			NOR = {
+				has_ambient_object_flag = extradimensional_system_effect
+				has_ambient_object_flag = extradimensional_system_effect_2
+			}
+		}
+		destroy_ambient_object = this
+	}
+	every_system_planet = {
+		limit = { is_primary_star = yes }
+		root.from.owner = {
+			hcp_resources_from_planet_size = yes
+		}
+		change_pc = hcp_pc_harvested_system
+	}
+	# Handle Contingency Machine Worlds
+	every_system_planet = {
+		limit = {
+			is_planet_class = pc_ai
+			NOT = { has_planet_flag = machine_lair }
+		}
+		destroy_machine_world = yes
+	}
+	random_system_planet = {
+		limit = {
+			is_planet_class = pc_ai
+			has_planet_flag = machine_lair
+		}
+		from.owner = { save_event_target_as = final_machine_world_destroyer }
+		stop_crisis_sound = yes
+		planet_event = { id = crisis.2046 }
+	}
+	every_system_planet = {
+		limit = {
+			exists = orbital_station
+		}
+		orbital_station = { dismantle = yes }
+	}
+	every_system_planet = {
+		clear_deposits = yes
+		clear_planet_modifiers = yes
+		prevent_anomaly = yes
+	}
+	every_system_planet = {
+		limit = { is_primary_star = no }
+		root.from.owner = {
+			hcp_resources_from_planet_size = yes
+		}
+		remove_planet = yes
+	}
+	every_fleet_in_system = {
+		limit = {
+			NOR = {
+				is_same_value = from
+				# except Extradimensionals
+				AND = {
+					exists = owner
+					owner = {
+						OR = {
+							is_country_type = portal_holder
+							is_country_type = extradimensional
+							is_country_type = extradimensional_2
+							is_country_type = extradimensional_3
+						}
+					}
+				}
+				# except biggest monsters
+				any_owned_ship = {
+					OR = {
+						is_ship_size = behemoth_04
+						is_ship_size = voidspawn_boss
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				exists = event_target:crisis_country #i.e. not final destruction of all matter
+				is_mobile = yes
+			}
+			set_mia = mia_return_home
+		}
+		else = {
+			root.from.owner = {
+				hcp_resources_from_ship_size = yes
+			}
+			destroy_fleet = this
+		}
+	}
+	every_system_megastructure = {
+		limit = {
+			NOR = {
+				is_megastructure_type = lgate_base
+				is_megastructure_type = gateway_ness_ruined
+				is_megastructure_type = gateway_ness_restored
+			}
+		}
+		root.from.owner = {
+			add_resource = {
+				alloys = 10000
+			}
+		}
+		remove_megastructure = this
+	}
+}
+
+hcp_resources_from_ship_size = {
+	if = {
+		limit = {
+			prev.owner = {
+				country_uses_bio_ships = no
+			}
+		}
+		add_resource = {
+			alloys = 1
+			multiplier = prev.value:hcp_harvest_star_system_resources|TRIGGER|fleet_size|
+		}
+	}
+	else = {
+		add_resource = {
+			food = 1
+			multiplier = prev.value:hcp_harvest_star_system_resources|TRIGGER|fleet_size|
+		}
+	}
+}
+
+hcp_resources_from_deposits = {
+	if = {
+		limit = {
+			prev = {
+				has_resource = {
+					type = $RESOURCE$
+					amount > 0
+				}
+			}
+		}
+		add_resource = {
+			$RESOURCE$ = 10000
+		}
+	}
+}
+
+hcp_resources_from_planet_size = {
+	add_resource = {
+		minerals = 1
+		multiplier = prev.value:hcp_harvest_star_system_resources|TRIGGER|planet_size|
+	}
+	if = {
+		limit = {
+			prev = {
+				is_colony = no
+			}
+		}
+		hcp_resources_from_deposits = { RESOURCE = minerals }
+		hcp_resources_from_deposits = { RESOURCE = energy }
+		hcp_resources_from_deposits = { RESOURCE = food }
+		hcp_resources_from_deposits = { RESOURCE = alloys }
+		hcp_resources_from_deposits = { RESOURCE = consumer_goods }
+		hcp_resources_from_deposits = { RESOURCE = volatile_motes }
+		hcp_resources_from_deposits = { RESOURCE = exotic_gases }
+		hcp_resources_from_deposits = { RESOURCE = rare_crystals }
+		hcp_resources_from_deposits = { RESOURCE = trade }
+		hcp_resources_from_deposits = { RESOURCE = sr_living_metal }
+		hcp_resources_from_deposits = { RESOURCE = sr_zro }
+		hcp_resources_from_deposits = { RESOURCE = sr_dark_matter }
+		hcp_resources_from_deposits = { RESOURCE = nanites }
+		hcp_resources_from_deposits = { RESOURCE = minor_artifacts }
+		hcp_resources_from_deposits = { RESOURCE = astral_threads }
+	}
+}
+
+hcp_replicate_stellar_harvester = {
+	create_fleet = {
+		name = "hcp_NAME_Stellar_Harvester"
+		settings = {
+			can_disband = no
+		}
+		effect = {
+			set_owner = $OWNER$
+			set_fleet_flag = hcp_stellar_harvester
+			create_ship = {
+				name = "hcp_NAME_Stellar_Harvester"
+				design = "hcp_NAME_Stellar_Harvester"
+			}
+			set_location = {
+					target = $TARGET$
+					distance = 10
+				}
+			set_fleet_stance = passive
+			set_variable = {
+				which = hcp_harvester_stored_resources
+				value = 0
+			}
+		}
+	}
+	last_created_fleet = {
+		save_event_target_as = hcp_new_harvester
+		owner = {
+			save_event_target_as = hcp_new_harvester_owner
+			if = {
+				limit = {
+					is_variable_set = hcp_num_stellar_harvesters
+				}
+				add_variable = {
+					which = hcp_num_stellar_harvesters
+					value = 1
+				}
+			}
+			else = {
+				set_variable = {
+					which = hcp_num_stellar_harvesters
+					value = 1
+				}
+			}
+		}
+		if = {
+			limit = {
+				any_playable_country = {
+					any_situation = {
+						is_situation_type = hcp_situation_outward_bound_dummy
+						target = {
+							is_same_value = event_target:hcp_new_harvester_owner
+						}
+					}
+				}
+			}
+			every_playable_country = {
+				limit = {
+					any_situation = {
+						is_situation_type = hcp_situation_outward_bound_dummy
+						target = {
+							is_same_value = event_target:hcp_new_harvester_owner
+						}
+					}
+				}
+				event_target:hcp_new_harvester = {
+					enable_special_project = {
+						name = hcp_DESTROY_STELLAR_HARVESTER
+						location = this
+						owner = prev
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				switch = {
+					trigger = galaxy_size
+					huge = { owner = { check_variable = { which = hcp_num_stellar_harvesters value >= @hcp_outward_bound_emergency_start_huge } } }
+					large = { owner = { check_variable = { which = hcp_num_stellar_harvesters value >= @hcp_outward_bound_emergency_start_large } } }
+					medium = { owner = { check_variable = { which = hcp_num_stellar_harvesters value >= @hcp_outward_bound_emergency_start_medium } } }
+					small = { owner = { check_variable = { which = hcp_num_stellar_harvesters value >= @hcp_outward_bound_emergency_start_small } } }
+					tiny = { owner = { check_variable = { which = hcp_num_stellar_harvesters value >= @hcp_outward_bound_emergency_start_tiny } } }
+				}
+				any_playable_country = {
+					NOR = {
+						is_same_value = event_target:hcp_new_harvester_owner
+						any_situation = {
+							is_situation_type = hcp_situation_outward_bound_dummy
+							target = { is_same_value = event_target:hcp_new_harvester_owner }
+						}
+					}
+				}
+			}
+			every_playable_country = {
+				limit = {
+					NOT = { is_same_value = event_target:hcp_new_harvester_owner }
+					has_communications = event_target:hcp_new_harvester_owner
+					NOT = {
+						any_situation = {
+							is_situation_type = hcp_situation_outward_bound_dummy
+							target = { is_same_value = event_target:hcp_new_harvester_owner }
+						}
+					}
+				}
+				switch = {
+					trigger = galaxy_size
+					huge = { set_variable = { which = hcp_outward_bound_required_progress value = @hcp_outward_bound_required_progress_huge } }
+					large = { set_variable = { which = hcp_outward_bound_required_progress value = @hcp_outward_bound_required_progress_large } }
+					medium = { set_variable = { which = hcp_outward_bound_required_progress value = @hcp_outward_bound_required_progress_medium } }
+					small = { set_variable = { which = hcp_outward_bound_required_progress value = @hcp_outward_bound_required_progress_small } }
+					tiny = { set_variable = { which = hcp_outward_bound_required_progress value = @hcp_outward_bound_required_progress_tiny } }
+				}
+				start_situation = {
+					type = hcp_situation_outward_bound_dummy
+					target = root.owner
+					effect = {
+						situation_event = {
+							id = hcp_harvesters_situations.2001
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+hcp_spawn_victory_objects = {
+	create_ambient_object = {
+		type = hcp_victory_remnants_shield
+		location = event_target:hcp_refuge_system
+		use_3d_location = yes
+	}
+	last_created_ambient_object = {
+		set_location = {
+			target = event_target:hcp_refuge_system
+			distance = 0
+			angle = random
+		}
+	}
+	create_ambient_object = {
+		type = hcp_$CULTURE$_victory_remnants
+		location = event_target:hcp_refuge_system
+		use_3d_location = yes
+	}
+	last_created_ambient_object = {
+		set_location = {
+			target = event_target:hcp_refuge_system
+			distance = 0
+			angle = random
+		}
+	}
+}
+
+hcp_repair_sanctuary = {
+	change_pc = pc_ringworld_habitable
+	clear_deposits = yes
+	set_planet_entity = {
+		entity = "ringworld_habitable_entity_01_entity"
+		graphical_culture = from
+	}
+	hidden_effect = {
+		if = {
+			limit = {
+				exists = orbital_station
+			}
+			orbital_station = { dismantle = yes }
+		}
+	}
+}
+
+hcp_target_valid_silo_site = {
+	ordered_system_within_border = {
+		limit = {
+			is_star_class = sc_black_hole
+			NOR = {
+				has_star_flag = great_wound
+				any_system_planet = {
+					colonizable_planet = yes
+				}
+			}
+			has_no_non_gate_megastructure = yes
+			NOT = {
+				any_system_planet = {
+					is_planet_class = pc_cosmogenesis_world
+				}
+			}
+		}
+		position = 0
+		order_by = trigger:distance_to_capital
+		inverse = yes
+		[[TARGET]
+		star = {
+			save_event_target_as = $TARGET$
+		}
+		]
+
+		[[EVENT]
+		star = {
+			root = {
+				country_event = {
+					id = $EVENT$
+					scopes = {
+						from = prev
+					}
+				}
+			}
+		}
+		]
+	}
+}
+
+hcp_black_hole_discovered = {
+	capital_star.solar_system = {
+		spawn_system = {
+			min_distance = 10
+			max_distance = 30
+			max_jumps = 0
+			initializer = "hcp_back_up_black_hole"
+		}
+		last_created_system = {
+			star = {
+				root = {
+					country_event = {
+						id = $EVENT$
+						scopes = {
+							from = prev
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = { last_created_system = { NOT = { has_hyperlane_to = prev } } }
+			add_hyperlane = {
+				from = this
+				to = last_created_system
+			}
+		}
+		else = {
+			add_extra_hyperlane_to_spawned_system_effect = yes
+		}
+	}
+}
+
+hcp_flag_departure_points_per_galaxy_size = {
+	if = {
+		limit = {
+			NOT = { has_global_flag = hcp_departure_points_set }
+		}
+		switch = {
+			trigger = galaxy_size
+			tiny = { hcp_flag_departure_points = { NUM = @hcp_outward_bound_required_progress_tiny } }
+			small = { hcp_flag_departure_points = { NUM = @hcp_outward_bound_required_progress_small } }
+			medium = { hcp_flag_departure_points = { NUM = @hcp_outward_bound_required_progress_medium } }
+			large = { hcp_flag_departure_points = { NUM = @hcp_outward_bound_required_progress_large } }
+			huge = { hcp_flag_departure_points = { NUM = @hcp_outward_bound_required_progress_huge } }
+		}
+		set_global_flag = hcp_departure_points_set
+	}
+}
+
+
+hcp_flag_departure_points = {
+	while = {
+		count = $NUM$
+		random_system = {
+			limit = {
+				is_rim_system = yes
+				NOR = {
+					has_star_flag = hcp_depart_galaxy_location
+					any_rim_system = {
+						has_star_flag = hcp_depart_galaxy_location
+						distance = {
+							source = prev
+							min_distance >= 5
+							max_distance <= 60
+							type= euclidean
+							use_bypasses = no
+							same_solar_system = no
+						}
+					}
+				}
+			}
+			set_star_flag = hcp_depart_galaxy_location
+		}
+	}
+	if = {
+		limit = {
+			count_rim_system = {
+				count < $NUM$
+				limit = {
+					has_star_flag = hcp_depart_galaxy_location
+				}
+			}
+		}
+		while = {
+			limit = {
+				count_rim_system = {
+					count < $NUM$
+					limit = {
+						has_star_flag = hcp_depart_galaxy_location
+					}
+				}
+			}
+			random_system = {
+				limit = {
+					is_rim_system = yes
+					NOR = {
+						has_star_flag = hcp_depart_galaxy_location
+					}
+				}
+				set_star_flag = hcp_depart_galaxy_location
+			}
+		}
+	}
+}
+
+hcp_highlight_departure_points = {
+	every_rim_system = {
+		limit = {
+			has_star_flag = hcp_depart_galaxy_location
+		}
+		set_star_flag = hcp_depart_galaxy_location_@root
+		star = {
+			enable_special_project = {
+				name = hcp_DEPARTURE_POINT
+				owner = root
+			}
+		}
+	}
+}

@@ -1,0 +1,285 @@
+##################
+# hcp_situations.txt
+# By jam1066
+##################
+
+hcp_situation_harvest_planet = {
+	complete_icon_frame = GFX_situation_outcome_frame_green
+	complete_icon = GFX_situation_exploding_planet
+	picture = GFX_evt_mining_station
+
+	stages = {
+		stage_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_green
+			end = 1000
+			custom_tooltip = hcp_stage_harvesting
+		}
+	}
+
+	category = positive
+	initial_progress = 0
+
+	on_progress_complete = {
+		custom_tooltip = hcp_harvest_finish_tooltip
+		hidden_effect = {
+			situation_event = { id = hcp_harvesters_situations.2 }
+		}
+	}
+	on_monthly = {
+		events = {
+			hcp_harvesters_situations.1 #Reduces Planet Size and grants reward
+		}
+	}
+	on_abort = {
+		target = {
+			remove_planet_flag = being_devoured
+			remove_modifier = hcp_being_harvested_modifier
+			solar_system = {
+				if = {
+					limit = {
+						any_system_megastructure = {
+							owner = { is_same_value = root.owner }
+							has_megastructure_flag = hcp_harvest_@prevprev
+						}
+					}
+					prev = { remove_planet_flag = megastructure }
+					every_system_megastructure = {
+						limit = {
+							has_megastructure_flag = hcp_harvest_@prevprev
+						}
+						remove_megastructure = this
+					}
+				}
+			}
+		}
+	}
+	approach = {#Harvest
+		name = hcp_approach_harvest
+		on_select = {
+			custom_tooltip = hcp_planet_harvest_effect
+		}
+		default = yes
+		icon = GFX_leader_trait_mining_focus
+		icon_background = GFX_situation_approach_bg_green
+		ai_weight = {
+			base = 10
+		}
+	}
+	approach = {#Dismantle Orbital Quarrier
+		name = hcp_approach_dismantle
+		on_select = {
+			custom_tooltip = hcp_harvester_dismantle_effect
+			owner = {
+				add_resource = { hcp_mining_efficiency = -1000 }
+			}
+			abort_situation = this
+		}
+		icon = GFX_situation_approach_influence
+		icon_background = GFX_situation_approach_bg_yellow
+		ai_weight = {
+			base = 10
+		}
+	}
+	monthly_progress = {
+		base = 0
+		modifier = {
+			add = value:terravore_progress
+			desc = hcp_string_harvesting_progress
+		}
+	}
+
+	abort_trigger = {
+		OR = {
+			NOT = { exists = target.solar_system.owner }
+			target.solar_system.owner = { NOT = { is_same_value = root.owner } }
+		}
+	}
+}
+
+hcp_situation_outward_bound_master = {
+	complete_icon_frame = GFX_situation_outcome_frame_green
+	complete_icon = GFX_situation_outcome_ascension
+	picture = GFX_evt_hcp_outward_bound
+
+	on_start = {
+		situation_event = {
+			id = hcp_harvesters_situations.1000
+		}
+	}
+
+	stages = {
+		stage_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_green
+			end = {
+				base = 1
+				mult = owner.hcp_outward_bound_required_progress
+			}
+		}
+	}
+
+	category = positive
+	initial_progress = 0
+
+	on_progress_complete = {
+		custom_tooltip = hcp_outward_bound_master_finish_tooltip
+		hidden_effect = {
+			situation_event = { id = hcp_harvesters_situations.1005 }
+		}
+	}
+
+	approach = {#Prioritise Sanctuaries
+		name = hcp_approach_sanctuaries
+		on_select = {
+			custom_tooltip = hcp_planet_sanctuaries_effect
+		}
+		modifier = {
+			planet_decision_enact_speed_mult = 0.5
+			
+		}
+		default = yes
+		icon = GFX_leader_trait_peacekeeper
+		icon_background = GFX_situation_approach_bg_green
+		ai_weight = {
+			base = 10
+		}
+	}
+	approach = {#Prioritise Harvesters
+		name = hcp_approach_harvesters
+		on_select = {
+			custom_tooltip = hcp_harvesters_effect
+		}
+		modifier = {
+			shipsize_hcp_stellar_harvester_weapon_damage = 0.5
+		}
+		icon = GFX_leader_trait_mining_focus
+		icon_background = GFX_situation_approach_bg_red
+		ai_weight = {
+			base = 5
+			modifier = {
+				multiply = 3
+				owner = {
+					is_at_war = yes
+				}
+			}
+		}
+	}
+
+	monthly_progress = {
+		base = 0 # Progresses Through Events
+	}
+
+	triggered_blocked_desc = {
+		text = hcp_build_another_stellar_harvester
+		trigger = {
+			owner = {
+				check_variable = {
+					which = hcp_num_stellar_harvesters
+					value < 1
+				}
+			}
+		}
+	}
+}
+
+hcp_situation_outward_bound_dummy = {
+	complete_icon_frame = GFX_situation_outcome_frame_red
+	complete_icon = GFX_situation_outcome_negative
+	picture = GFX_evt_hcp_outward_bound
+
+	on_start = {
+		situation_event = {
+			id = hcp_harvesters_situations.10
+		}
+		target = {
+			every_owned_fleet = {
+				limit = {
+					is_ship_size = hcp_stellar_harvester
+				}
+				enable_special_project = {
+					name = hcp_DESTROY_STELLAR_HARVESTER
+					location = this
+					owner = root.owner
+				}
+			}
+		}
+	}
+
+	stages = {
+		stage_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_red
+			end = {
+				base = 1
+				mult = owner.hcp_outward_bound_required_progress
+			}
+		}
+	}
+
+	category = negative
+	initial_progress = 0
+
+	on_progress_complete = {
+		custom_tooltip = hcp_outward_bound_dummy_finish_tooltip
+		hidden_effect = {
+			situation_event = {
+				id = hcp_harvesters_situations.2005
+			}
+		}
+	}
+
+	approach = {#Track Harvesters
+		name = hcp_approach_track_harvesters
+		on_select = {
+			custom_tooltip = hcp_track_harvesters_effect
+		}
+		default = yes
+		icon = GFX_leader_trait_bulwark_watcher
+		icon_background = GFX_situation_approach_bg_yellow
+		ai_weight = {
+			base = 10
+		}
+	}
+
+	monthly_progress = {
+		base = 0 # Progresses Through Events
+	}
+
+	abort_trigger = {
+		NOR = {
+			exists = owner
+			exists = target
+		}
+	}
+
+	on_abort = {
+		target = {
+			every_owned_fleet = {
+				limit = { is_ship_size = hcp_stellar_harvester }
+				root.owner = {
+					abort_special_project = {
+						type = hcp_DESTROY_STELLAR_HARVESTER
+						location = prev
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				exists = owner
+				NOT = {
+					owner = {
+						any_situation = {
+							is_situation_type = hcp_situation_outward_bound_dummy
+							target = { NOT = { is_same_value = root.target } }
+						}
+					}
+				}
+			}
+			owner = {
+				end_event_chain = hcp_anti_harvesters_chain
+			}
+		}
+	}
+}

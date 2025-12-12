@@ -1,0 +1,280 @@
+##################
+# hcp_harvesters_crisis_menace_objective_events.txt
+# By jam1066
+##################
+namespace = hcp_harvesters_crisis_objectives
+
+# Menace Objective - Scavenge Debris
+country_event = {
+	id = hcp_harvesters_crisis_objectives.1
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_ascension_perk = hcp_ap_harvesters
+	}
+
+	immediate = {
+		complete_crisis_objective = hcp_crisobj_scavenge_debris
+	}
+}
+
+# Menace Objective - Galcom Industrial Resolutions
+# Fired from on_action 'on_yearly_pulse'
+event = {
+	id = hcp_harvesters_crisis_objectives.2
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_country = {
+			has_ascension_perk = hcp_ap_harvesters
+		}
+		OR = {
+			is_active_resolution = resolution_industry_regulatory_facilitation
+			is_active_resolution = resolution_industry_collective_waste_management
+			is_active_resolution = resolution_industry_building_a_better_tomorrow
+			is_active_resolution = resolution_industry_environmental_ordinance_waivers
+			is_active_resolution = resolution_industry_project_cornucopia
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				is_active_resolution = resolution_industry_regulatory_facilitation
+			}
+			every_playable_country = {
+				limit = {
+					has_ascension_perk = hcp_ap_harvesters
+				}
+				complete_crisis_objective = hcp_crisobj_galcom_industrial_resolution
+			}
+		}
+		if = {
+			limit = {
+				is_active_resolution = resolution_industry_collective_waste_management
+			}
+			every_playable_country = {
+				limit = {
+					has_ascension_perk = hcp_ap_harvesters
+				}
+				complete_crisis_objective = hcp_crisobj_galcom_industrial_resolution
+				complete_crisis_objective = hcp_crisobj_galcom_industrial_resolution
+			}
+		}
+		if = {
+			limit = {
+				is_active_resolution = resolution_industry_building_a_better_tomorrow
+			}
+			every_playable_country = {
+				limit = {
+					has_ascension_perk = hcp_ap_harvesters
+				}
+				complete_crisis_objective = hcp_crisobj_galcom_industrial_resolution
+				complete_crisis_objective = hcp_crisobj_galcom_industrial_resolution
+				complete_crisis_objective = hcp_crisobj_galcom_industrial_resolution
+			}
+		}
+		if = {
+			limit = {
+				is_active_resolution = resolution_industry_environmental_ordinance_waivers
+			}
+			every_playable_country = {
+				limit = {
+					has_ascension_perk = hcp_ap_harvesters
+				}
+				complete_crisis_objective = hcp_crisobj_galcom_industrial_resolution
+				complete_crisis_objective = hcp_crisobj_galcom_industrial_resolution
+				complete_crisis_objective = hcp_crisobj_galcom_industrial_resolution
+				complete_crisis_objective = hcp_crisobj_galcom_industrial_resolution
+			}
+		}
+		if = {
+			limit = {
+				is_active_resolution = resolution_industry_project_cornucopia
+			}
+			every_playable_country = {
+				limit = {
+					has_ascension_perk = hcp_ap_harvesters
+				}
+				complete_crisis_objective = hcp_crisobj_galcom_industrial_resolution
+				complete_crisis_objective = hcp_crisobj_galcom_industrial_resolution
+				complete_crisis_objective = hcp_crisobj_galcom_industrial_resolution
+				complete_crisis_objective = hcp_crisobj_galcom_industrial_resolution
+				complete_crisis_objective = hcp_crisobj_galcom_industrial_resolution
+			}
+		}
+	}
+}
+
+# Menace Objective - Have Matter Decompressors
+# Fired from on_action 'on_yearly_pulse'
+event = {
+	id = hcp_harvesters_crisis_objectives.3
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_country = {
+			has_ascension_perk = hcp_ap_harvesters
+			any_owned_megastructure = {
+				OR = {
+					is_megastructure_type = matter_decompressor_4
+					is_megastructure_type = matter_decompressor_restored
+				}
+			}
+		}
+	}
+
+	immediate = {
+		every_playable_country = {
+			if = {
+				limit = {
+					has_ascension_perk = hcp_ap_harvesters
+				}
+				every_owned_megastructure = {
+					limit = {
+						OR = {
+							is_megastructure_type = matter_decompressor_4
+							is_megastructure_type = matter_decompressor_restored
+						}
+					}
+					prev = {
+						complete_crisis_objective = hcp_crisobj_have_matter_decompressors
+					}
+				}
+			}
+		}
+	}
+}
+
+# Menace Objective - Have Arc Furnaces
+# Fired from on_action 'on_yearly_pulse'
+event = {
+	id = hcp_harvesters_crisis_objectives.4
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_country = {
+			has_ascension_perk = hcp_ap_harvesters
+			any_owned_megastructure = {
+				OR = {
+					is_megastructure_type = orbital_arc_furnace_4
+					is_megastructure_type = orbital_arc_furnace_restored
+				}
+			}
+		}
+	}
+
+	immediate = {
+		every_playable_country = {
+			if = {
+				limit = {
+					has_ascension_perk = hcp_ap_harvesters
+				}
+				every_owned_megastructure = {
+					limit = {
+						OR = {
+							is_megastructure_type = orbital_arc_furnace_4
+							is_megastructure_type = orbital_arc_furnace_restored
+						}
+					}
+					prev = {
+						complete_crisis_objective = hcp_crisobj_have_arc_furnaces
+					}
+				}
+			}
+		}
+	}
+}
+
+# Menace Objective - Have Prospectorium Vassals
+# Fired from on_action 'on_yearly_pulse'
+event = {
+	id = hcp_harvesters_crisis_objectives.5
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_country = {
+			has_ascension_perk = hcp_ap_harvesters
+			is_overlord = yes
+			any_subject = {
+				any_agreement = {
+					has_active_specialization = specialist_prospectorium
+				}
+			}
+		}
+	}
+
+	immediate = {
+		every_playable_country = {
+			if = {
+				limit = {
+					has_ascension_perk = hcp_ap_harvesters
+					is_overlord = yes
+				}
+				every_subject = {
+					limit = {
+						any_agreement = {
+							has_active_specialization = specialist_prospectorium
+						}
+					}
+					prev = {
+						complete_crisis_objective = hcp_crisobj_have_prospectorium_vassals
+					}
+				}
+			}
+		}
+	}
+}
+
+# Menace Objective - Have Construct Mining Stations
+# Fired from on_action 'on_building_mining_station'
+event = {
+	id = hcp_harvesters_crisis_objectives.6
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			has_ascension_perk = hcp_ap_harvesters
+		}
+		from = {
+			NOT = {
+				has_planet_flag = hcp_mining_station_built_@root.owner
+			}
+		}
+	}
+
+	immediate = {
+		from = {
+			set_planet_flag = hcp_mining_station_built_@root.owner
+		}
+		owner = {
+			complete_crisis_objective = hcp_crisobj_build_mining_stations
+		}
+	}
+}
+
+# Menace Objective - Have Construct Mining Stations
+# Fired from on_action 'on_yearly_pulse'
+event = {
+	id = hcp_harvesters_crisis_objectives.7
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			has_ascension_perk = hcp_ap_harvesters
+		}
+	}
+
+	immediate = {
+		owner = {
+			complete_crisis_objective = hcp_crisobj_own_systems
+		}
+	}
+}

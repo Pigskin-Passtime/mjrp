@@ -1,0 +1,128 @@
+##################
+# hcp_components.txt
+# By jam1066
+##################
+
+###########################
+# STELLAR HARVESTER STAR CRACKER
+###########################
+
+weapon_component_template = { # Harvester Drone Swarm
+	key = "hcp_PLANET_KILLER_STELLAR_HARVESTER"
+	size = planet_killer
+	type = planet_killer
+	use_ship_main_target = no
+	can_destroy_stars = yes
+
+	valid_for_country = {
+		always = yes
+	}
+
+	icon = GFX_ship_part_archaeo_strike_craft
+	icon_frame = 1
+
+	potential = {
+		is_ship_size = hcp_stellar_harvester
+	}
+	component_set = "hcp_PLANET_KILLER_STELLAR_HARVESTER"
+
+	windup = { min = 90 max = 0 }
+	total_fire_time = 30
+
+	planet_destruction_gfx = "hcp_harvest_system_effect_gfx"
+
+	ai_weight = {
+		factor = 100
+	}
+}
+
+########################
+# STELLAR HARVESTER ACTIONS
+########################
+
+utility_component_template = {
+	key = "hcp_SHIP_STELLAR_HARVESTER_REPLICATE"
+	size = large
+	icon = GFX_starbase_shipyard
+	icon_frame = 1
+	power = 0
+
+	scripted_action = {
+		scope = self
+
+        possible = {
+			always = yes
+		}
+
+		button_clickable = {
+			custom_tooltip = {
+				fail_text = BLANK_STRING
+				always = yes
+			}
+		}
+
+		button_visible = {
+			owner = {
+				has_crisis_perk = hcp_menp_perpetual_replication
+			}
+		}
+
+		name = hcp_on_stellar_harvester_replication_complete
+		tooltip = hcp_stellar_harvester_replicate_ship_button
+		icon = GFX_hcp_scripted_action_stellar_harvester_replicate
+		activity_key = hcp_stellar_harvester_replicate_activity_key
+		context_menu_name = hcp_stellar_harvester_replicate_menu_title
+		progress_activity_key = hcp_stellar_harvester_replicate_progress_activity_key
+		required_progress = 360
+		on_click_sound = "megastructure_upgraded"
+
+		cooldown = 0
+		cost = { minerals = @hcp_replicate_cost }
+
+		shortcut = "SHIFT+R"
+	}
+
+	scripted_action = {
+		scope = self
+
+        possible = {
+			always = yes
+		}
+
+		button_clickable = {
+			custom_tooltip = {
+				fail_text = hcp_stellar_harvester_depart_galaxy_must_be_rim
+				is_scope_set = solar_system
+				solar_system = {
+					is_rim_system = yes
+				}
+			}
+			is_in_combat = no
+		}
+
+		button_visible = {
+			owner = {
+				has_crisis_perk = hcp_menp_galactic_harvest
+			}
+		}
+
+		name = hcp_on_stellar_harvester_depart_galaxy
+		tooltip = hcp_stellar_harvester_depart_galaxy_ship_button
+		icon = GFX_hcp_scripted_action_stellar_harvester_depart_galaxy
+		activity_key = hcp_stellar_harvester_depart_galaxy_activity_key
+		context_menu_name = hcp_stellar_harvester_depart_galaxy_menu_title
+		progress_activity_key = hcp_stellar_harvester_depart_galaxy_progress_activity_key
+		required_progress = 360
+		on_click_sound = "ftl_warp_charge_up_ship"
+
+		cooldown = 0
+		cost = { energy = 100000 }
+
+		shortcut = "SHIFT+Z"
+		slot = 1
+	}
+
+	ai_weight = {
+		factor = 2
+	}
+}

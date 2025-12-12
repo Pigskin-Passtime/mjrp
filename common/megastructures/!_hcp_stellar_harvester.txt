@@ -1,0 +1,163 @@
+##################
+# !_hcp_stellar_harvester.txt
+# By jam1066
+##################
+
+hcp_stellar_harvester_prototype = {
+	entity = "drone_homebase_hull_entity"
+	construction_entity = "drone_homebase_hull_entity"
+	portrait = "GFX_megastructure_construction_background"
+	place_entity_on_planet_plane = no
+	entity_offset = { x = -10 y = 0 }
+	build_time = 2400
+	show_in_outliner = no
+	resources = {
+		category = megastructures
+		cost = {
+			minerals = @hcp_replicate_cost
+		}
+	}
+
+	construction_blocks_and_blocked_by = self_type
+
+	potential = {
+		has_crisis_perk =  hcp_menp_stellar_harvesters
+		NOT = {
+			has_country_flag = hcp_prototype_stellar_harvester_built
+		}
+	}
+
+	possible = {
+		hidden_trigger = {
+			exists = starbase
+		}
+		custom_tooltip = {
+			fail_text = "requires_inside_border"
+			is_inside_border = from
+		}
+		custom_tooltip = {
+			fail_text = "requires_surveyed_system"
+			NOT = {
+				any_system_planet = {
+					is_surveyed = {
+						who = prev.from
+						status = no
+					}
+				}
+			}
+		}
+	}
+
+	placement_rules = {
+		planet_possible = {
+			custom_tooltip = {
+				fail_text = "requires_capital"
+				is_colony = yes
+				is_capital = yes
+				exists = owner
+				exists = controller
+				controller = { is_same_value = prev.owner }
+			}
+		}
+	}
+
+	on_build_complete = {
+		hcp_replicate_stellar_harvester = { OWNER = root TARGET = fromfrom }
+
+		remove_megastructure = fromfrom
+
+		from = {
+			country_event = {
+				id = hcp_harvesters_crisis.410
+			}
+			set_country_flag = hcp_prototype_stellar_harvester_built
+			complete_special_project = {
+				type = hcp_BUILD_STELLAR_HARVESTER_PROTOTYPE
+			}
+		}
+	}
+}
+
+hcp_stellar_harvester = {
+	entity = "drone_homebase_hull_entity"
+	construction_entity = "drone_homebase_hull_entity"
+	portrait = "GFX_megastructure_construction_background"
+	place_entity_on_planet_plane = no
+	entity_offset = { x = -10 y = 0 }
+	build_time = 2400
+	show_in_outliner = no
+	resources = {
+		category = megastructures
+		cost = {
+			hcp_mining_efficiency = 10000
+		}
+		cost = {
+			minerals = @hcp_replicate_cost
+		}
+	}
+
+	construction_blocks_and_blocked_by = self_type
+
+	potential = {
+		has_crisis_perk =  hcp_menp_perpetual_replication
+	}
+
+	possible = {
+		hidden_trigger = {
+			exists = starbase
+		}
+		custom_tooltip = {
+			fail_text = "requires_inside_border"
+			is_inside_border = from
+		}
+		custom_tooltip = {
+			fail_text = "requires_surveyed_system"
+			NOT = {
+				any_system_planet = {
+					is_surveyed = {
+						who = prev.from
+						status = no
+					}
+				}
+			}
+		}
+	}
+
+	placement_rules = {
+		planet_possible = {
+			custom_tooltip = {
+				fail_text = "requires_survey_not_habitable"
+				is_surveyed = {			# prevent leaking habitability information
+					who = prev.from
+					status = yes
+				}
+				colonizable_planet = no
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_anomaly"
+				NOT = { has_anomaly = yes }
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_minor_planetary_body"
+				NOR = {
+					is_asteroid = yes
+					is_moon = yes
+				}
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_star"
+				is_star = no
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_astral_scar"
+				is_astral_scar = no
+			}
+		}
+	}
+
+	on_build_complete = {
+		hcp_replicate_stellar_harvester = { OWNER = root TARGET = fromfrom }
+
+		remove_megastructure = fromfrom
+	}
+}

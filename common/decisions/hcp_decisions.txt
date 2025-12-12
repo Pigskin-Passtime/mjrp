@@ -1,0 +1,109 @@
+##################
+# hcp_decisions.txt
+# By jam1066
+##################
+
+hcp_decision_expand_sanctuary = {
+	owned_planets_only = yes
+	enactment_time = 360
+
+	icon = decision_resort_colony
+
+	potential = {
+		exists = owner
+		owner = { has_crisis_perk = hcp_menp_eternal_sanctuaries }
+		solar_system = {
+			is_star_class = sc_black_hole
+		}
+		is_planet_class = pc_ringworld_habitable
+		planet_size < 50
+	}
+
+	resources = {
+		category = decisions
+		cost = {
+			alloys = 10
+			hcp_mining_efficiency = 5
+			mult = value:wilderness_planet_size_mod
+		}
+		cost = {
+			influence = 50
+		}
+	}
+
+	effect = {
+		change_planet_size = 1
+	}
+
+	ai_weight = {
+		weight = 10
+		modifier = {
+			free_district_slots = 0
+			mult = 100
+		}
+		modifier = {
+			free_building_slots = 0
+			mult = 10
+		}
+	}
+}
+
+hcp_decision_repair_sanctuary = {
+	enactment_time = 360
+
+	icon = decision_resort_colony
+
+	potential = {
+		hcp_can_repair_sanctuary = { PLANET_CLASS = pc_ringworld_habitable_damaged }
+	}
+
+	resources = {
+		category = decisions
+		cost = {
+			alloys = 10000
+			hcp_mining_efficiency = 500
+			#mult = value:wilderness_planet_size_mod
+		}
+		cost = {
+			influence = 50
+		}
+	}
+
+	effect = {
+		hcp_repair_sanctuary = yes
+	}
+
+	ai_weight = {
+		weight = 100
+	}
+}
+
+hcp_decision_unshield_sanctuary = {
+	enactment_time = 360
+
+	icon = decision_resort_colony
+
+	potential = {
+		hcp_can_repair_sanctuary = { PLANET_CLASS = pc_ringworld_shielded }
+	}
+
+	resources = {
+		category = decisions
+		cost = {
+			energy = 20000
+			hcp_mining_efficiency = 500
+			#mult = value:wilderness_planet_size_mod
+		}
+		cost = {
+			influence = 50
+		}
+	}
+
+	effect = {
+		hcp_repair_sanctuary = yes
+	}
+
+	ai_weight = {
+		weight = 100
+	}
+}

@@ -1,0 +1,124 @@
+##################
+# hcp_ascension_perks.txt
+# By jam1066
+##################
+
+hcp_ap_harvesters = {
+	potential = {
+		is_ai = no
+		OR = {
+			has_nemesis = yes
+			has_machine_age_dlc = yes
+			has_biogenesis_dlc = yes
+		}
+		has_utopia = yes
+		NOR = {
+			has_country_flag = player_crisis_chosen
+			has_ascension_perk = ap_become_the_crisis
+			has_ascension_perk = ap_cosmogenesis
+			has_ascension_perk = ap_behemoths
+			has_ascension_perk = ap_defender_of_the_galaxy
+			has_origin = origin_slavers # No crisis for MSI
+		}
+		is_wilderness_empire = no
+	}
+
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_ascension_perks_3"
+			num_ascension_perks > 2
+		}
+		custom_tooltip = {
+			fail_text = "requires_independence"
+			is_subject = no
+		}
+		custom_tooltip = {
+			fail_text = "must_not_be_custodian"
+			is_galactic_custodian = no
+		}
+		custom_tooltip = {
+			fail_text = "must_not_be_emperor"
+			is_galactic_emperor = no
+		}
+		NOR = {
+			has_civic = civic_environmentalist
+			has_civic = civic_hive_devouring_swarm
+		}
+	}
+
+	custom_tooltip = hcp_ap_tooltip
+
+	on_enabled = {
+		hidden_effect = {
+			set_country_flag = player_crisis_chosen
+			hcp_flag_departure_points_per_galaxy_size = yes
+		}
+		activate_crisis_progression = hcp_crisis_harvesters_path
+	}
+
+	triggered_modifier = {
+		potential = {
+			is_catalytic_empire = no
+		}
+		planet_metallurgists_minerals_upkeep_add = -3
+	}
+
+	triggered_modifier = {
+		potential = {
+			is_catalytic_empire = no
+			is_machine_empire = yes
+		}
+		planet_metallurgists_minerals_upkeep_add = -1
+	}
+
+	triggered_modifier = {
+		potential = {
+			is_catalytic_empire = yes
+		}
+		planet_metallurgists_food_upkeep_add = -4.5
+	}
+
+	triggered_modifier = {
+		potential = {
+			is_catalytic_empire = yes
+			is_machine_empire = yes
+		}
+		planet_metallurgists_food_upkeep_add = -1.5
+	}
+
+	ai_weight = {
+		factor = 7.5
+		modifier = {
+			factor = 0
+			OR = {
+				is_pacifist = yes
+				is_xenophile = yes
+			}
+		}
+		modifier = {
+			factor = 2
+			has_tradition = tr_prosperity_finish
+		}
+		modifier = {
+			factor = 2
+			vassals > 0
+			any_subject = {
+				any_agreement = {
+					has_active_specialization = specialist_scholarium
+				}
+			}
+		}
+		modifier = {
+			factor = 10
+			has_country_flag = instrument_covenant_confirmed
+		}
+		modifier = {
+			factor = 0
+			galaxy_percentage < 0.1
+		}
+		modifier = {
+			factor = 2
+			galaxy_percentage > 0.2
+		}
+	}
+}

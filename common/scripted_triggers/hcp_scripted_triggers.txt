@@ -1,0 +1,138 @@
+##################
+# hcp_scripted_triggers.txt
+# By jam1066
+##################
+
+# Check if a planet can be targetd by a planet killer weapon
+# Scope:
+#	this = planet being targeted
+#	from = fleet
+#can_destroy_planet_with_PLANET_DESTRUCTION_COMPONENT = {
+#	...
+#}
+
+can_destroy_planet_with_hcp_PLANET_KILLER_STELLAR_HARVESTER = {
+	custom_tooltip = {
+		fail_text = hcp_can_test_fire
+		OR = {
+			from.owner = {
+				has_country_flag = hcp_tested_stellar_harvester_prototype
+			}
+			AND = {
+				space_owner = { is_same_value = from.owner }
+				NOT = {
+					solar_system = {
+						any_system_planet = {
+							is_colony = yes
+						}
+					}
+				}
+			}
+		}
+	}
+	custom_tooltip = {
+		fail_text = hcp_is_your_megastructure_system
+		NOR = {
+			solar_system = {
+				has_star_flag = hcp_singularity_silo_@from.owner
+				#any_system_megastructure = { has_megastructure_flag = crisis_sphere }
+			}
+			AND = {
+				from.owner = {
+					OR = {
+						has_special_project = hcp_STEAL_SINGULARITY_SILO_1
+						has_special_project = hcp_STEAL_SINGULARITY_SILO_2
+					}
+				}
+				solar_system = {
+					any_system_megastructure = { has_megastructure_flag = hcp_crisis_silo }
+				}
+			}
+		}
+	}
+	custom_tooltip = {
+		fail_text = is_not_star
+		is_star = yes
+	}
+	custom_tooltip = {
+		fail_text = hcp_nothing_to_harvest
+		NOR = {
+			is_planet_class = hcp_pc_harvested_system
+			solar_system = {
+				has_star_flag = hcp_harvesters_remnants
+			}
+		}
+	}
+	custom_tooltip = {
+		fail_text = star_owner_is_not_hostile
+		OR = {
+			NOT = { exists = space_owner }
+			space_owner = { is_hostile = from.owner }
+			space_owner = { is_same_value = from.owner }
+		}
+	}
+}
+
+hcp_should_world_be_harvested = { # planet scope
+	exists = owner
+	OR = {
+		owner = {
+			has_crisis_level = hcp_crisis_harvesters_level_5
+			any_owned_planet = {
+				solar_system = {
+					has_star_flag = hcp_singularity_silo_@root.owner
+				}
+			}
+		}
+		NOR = {
+			is_ideal_planet_class = {
+				who = owner
+				status = yes
+			}
+			AND = {
+				planet_size > 13
+				owner = {
+					any_owned_species = {
+						NOR = {
+							has_citizenship_type = { country = prev type = citizenship_purge }
+							has_citizenship_type = { country = prev type = citizenship_purge_machine }
+						}
+						prevprev = { habitability = { who = prev value >= 0.9 } }
+					}
+				}
+			}
+		}
+	}
+}
+
+hcp_can_repair_sanctuary = {
+	exists = from
+	from = { has_crisis_level = hcp_crisis_harvesters_level_4 }
+	exists = space_owner
+	space_owner = { is_same_value = from }
+	solar_system = {
+		has_star_flag = hcp_singularity_silo_@from
+	}
+	is_planet_class = $PLANET_CLASS$
+}
+
+hcp_has_valid_silo_site = {
+	[[PROJECT]
+	NOT = { has_completed_special_project_in_log = $PROJECT$ }
+	]
+	any_system_within_border = {
+		is_star_class = sc_black_hole
+		NOR = {
+			has_star_flag = great_wound
+			any_system_planet = {
+				colonizable_planet = yes
+			}
+		}
+		has_no_non_gate_megastructure = yes
+		NOT = {
+			any_system_planet = {
+				is_planet_class = pc_cosmogenesis_world
+			}
+		}
+	}
+}

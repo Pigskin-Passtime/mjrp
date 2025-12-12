@@ -1,0 +1,61 @@
+##################
+# hcp_zones.txt
+# By jam1066
+##################
+
+hcp_zone_minerals_ring_world = {
+	icon = GFX_resource_minerals_large
+	base_buildtime = @zone_buildtime
+
+	potential = { # planet scope
+		solar_system = {
+			is_star_class = sc_black_hole
+		}
+		exists = owner
+		owner = {
+			is_wilderness_empire = no
+		}
+	}
+
+	unlock = { # planet scope
+		exists = owner
+		owner = {
+			is_wilderness_empire = no
+		}
+	}
+
+	resources = {
+		category = planet_zones
+		cost = {
+			minerals = @zone_cost
+		}
+	}
+
+	inline_script = {
+		script = jobs/zone_miner_add
+		AMOUNT = @doubled_scaling_district_1_job
+	}
+
+	included_building_sets = {
+		mining
+		fallen_empire_mining
+		automation
+	}
+
+	planet_modifier = {
+		zone_building_slots_add = 3
+	}
+
+	ai_priority = 5
+
+	swap_type = hcp_district_ring_world_minerals
+	swap_type_weight = 5
+
+	zone_sets = {
+		ring_world
+	}
+
+	inline_script = {
+		script = zones/shared_ring_world_zone_modifiers
+	}
+}

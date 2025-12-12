@@ -1,0 +1,184 @@
+##################
+# hcp_crisis_levels.txt
+# By jam1066
+##################
+
+hcp_crisis_harvesters_level_1 = {
+	# REQUIREMENTS
+	required_crisis_currency = 0
+
+	# REWARDS
+	perks = {
+		hcp_menp_prospector_drone
+		hcp_menp_mining_efficiency
+		hcp_menp_standardised_orbital_mining
+		hcp_menp_infinite_storage
+	}
+
+	on_unlock = {
+		hidden_effect = {
+			owner = {
+				if = {
+					limit = { country_uses_bio_ships = yes }
+					create_ship_design = { design = "hcp_BIO_NAME_Prospector_Drone" }
+				}
+				else = {
+					create_ship_design = { design = "hcp_NAME_Prospector_Drone" }
+				}
+				country_event = { id = hcp_harvesters_crisis.100 }
+				last_created_design = {
+					set_design_flag = hcp_prospector_drone
+				}
+				add_ship_design = last_created_design
+				refresh_auto_generated_ship_designs = yes
+				add_research_option = tech_mining_drone_weapon_1
+			}
+		}
+	}
+}
+
+hcp_crisis_harvesters_level_2 = {
+	# REQUIREMENTS
+	allow = {
+		custom_tooltip = {
+			success_text = hcp_harvesters_level_2_req_clear_tooltip
+			fail_text =	hcp_harvesters_level_2_req_tooltip
+			has_country_flag = hcp_built_singularity_silo_stage_1
+		}
+	}
+	required_crisis_currency = 1000
+
+	# REWARDS
+	perks = {
+		hcp_menp_mining_drone
+		hcp_menp_energised_mining_equipment
+		hcp_menp_detritus_recycling
+	}
+
+	on_unlock = {
+		hidden_effect = {
+			owner = {
+				country_event = { id = hcp_harvesters_crisis.200 }
+				give_technology = {
+					tech = hcp_tech_mining_drone
+					message = no
+				}
+			}
+		}
+	}
+}
+
+hcp_crisis_harvesters_level_3 = {
+	# REQUIREMENTS
+	allow = {
+		custom_tooltip = {
+			success_text = hcp_harvesters_level_3_req_clear_tooltip
+			fail_text =	hcp_harvesters_level_3_req_tooltip
+			has_country_flag = hcp_built_singularity_silo_stage_2
+		}
+	}
+	required_crisis_currency = 2000
+
+	# REWARDS
+	perks = {
+		hcp_menp_excavator_drone
+		hcp_menp_planetary_quarrying
+		hcp_menp_improved_mining_lasers
+	}
+
+	on_unlock = {
+		hidden_effect = {
+			owner = {
+				country_event = { id = hcp_harvesters_crisis.300 }
+				give_technology = {
+					tech = hcp_tech_excavator_drone
+					message = no
+				}
+			}
+		}
+	}
+}
+
+hcp_crisis_harvesters_level_4 = {
+	# REQUIREMENTS
+	allow = {
+		custom_tooltip = {
+			success_text = hcp_harvesters_level_4_req_clear_tooltip
+			fail_text =	hcp_harvesters_level_4_req_tooltip
+			has_country_flag = hcp_built_singularity_silo_stage_3
+		}
+	}
+	required_crisis_currency = 5000
+
+	# REWARDS
+	perks = {
+		hcp_menp_stellar_harvesters
+		hcp_menp_efficient_metallurgy
+		hcp_menp_field_repairs
+	}
+
+	on_unlock = {
+		hidden_effect = {
+			owner = {
+				country_event = { id = hcp_harvesters_crisis.400 }
+			}
+		}
+	}
+}
+
+hcp_crisis_harvesters_level_5 = {
+	# REQUIREMENTS
+	allow = {
+		custom_tooltip = {
+			success_text = hcp_harvesters_level_5_req_clear_tooltip
+			fail_text =	hcp_harvesters_level_5_req_tooltip
+			has_country_flag = hcp_built_singularity_silo_stage_4
+		}
+		custom_tooltip = {
+			success_text = hcp_harvesters_level_5_test_fire_clear_tooltip
+			fail_text =	hcp_harvesters_level_5_test_fire_tooltip
+			has_country_flag = hcp_tested_stellar_harvester_prototype
+		}
+		custom_tooltip = {
+			success_text = hcp_harvesters_level_5_sanctuary_clear_tooltip
+			fail_text =	hcp_harvesters_level_5_sanctuary_tooltip
+			any_owned_planet = {
+				is_planet_class = pc_ringworld_habitable
+				solar_system = {
+					has_star_flag = hcp_singularity_silo_@root
+				}
+			}
+		}
+		is_subject = no
+	}
+	required_crisis_currency = 10000
+
+	# REWARDS
+	perks = {
+		hcp_menp_perpetual_replication
+		hcp_menp_galactic_harvest
+		hcp_menp_eternal_sanctuaries
+	}
+
+	on_unlock = {
+		hidden_effect = {
+			declare_crisis_effect = yes
+			every_playable_country = {
+				limit = {
+					is_galactic_community_member = no
+					NOR = {
+						is_same_value = owner
+						is_at_war_with = owner
+					}
+				}
+				join_war_on_side = {
+					war = event_target:crisis_war
+					side = event_target:community_war_leader
+				}
+			}
+			owner = {
+				country_event = { id = hcp_harvesters_crisis.500 }
+			}
+		}
+	}
+}
