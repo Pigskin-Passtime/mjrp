@@ -1,0 +1,78 @@
+#flag,gain monthly crisis resource
+cwis_observation_primitive_experiment_field = {
+    icon = "GFX_fleet_order_button_ground_support_selective"
+    small_icon = 1
+    potential = {
+        has_ascension_perk = cwis_ap_culture_weapon
+        FROM = {
+            exists = owner
+            owner = {
+                is_primitive = yes
+            }
+        }
+    }
+    valid = {
+        has_crisis_level = cwis_crisis_level_1
+        FROM = {
+            exists = owner
+            owner = {
+                is_primitive = yes
+                custom_tooltip = {
+                    has_country_flag = cwis_culture_link_deployed
+                    fail_text = not_yet_cwis_culture_link
+                }
+            }
+        }
+    }
+    resources = {
+        category = station_observer_missions
+        produces = {
+            society_research = 8
+            information_seal = 30
+            mult = value:pre_ftl_spy_network_mult
+        }
+    }
+    ai_weight = {
+        weight = 2
+    }
+}
+#set primitive to a civil war,lead them nuke themself,gain crisis resource
+cwis_observation_primitive_conflict_encourage = {
+    icon = "GFX_fleet_order_button_ground_support_armageddon_selected"
+    small_icon = 1
+    potential = {
+        has_ascension_perk = cwis_ap_culture_weapon
+        FROM = {
+            exists = owner
+            owner = {
+                is_primitive = yes
+            }
+        }
+    }
+    valid = {
+        has_crisis_level = cwis_crisis_level_4
+        has_policy_flag = interference_aggressive
+        FROM = {
+            exists = owner
+            owner = {
+                is_primitive = yes
+                custom_tooltip = {
+                    has_country_flag = cwis_culture_link_deployed
+                    fail_text = not_yet_cwis_culture_link
+                }
+            }
+        }
+    }
+    resources = {
+        category = station_observer_missions
+        produces = {
+            society_research = 45
+            information_seal = 70
+            unity = 15
+            mult = value:pre_ftl_spy_network_mult
+        }
+    }
+    ai_weight = {
+        base = 6
+    }
+}

@@ -1,0 +1,895 @@
+namespace = cwis
+
+#3300   crisis level3 mechanic (abandon)
+#4400   fleet confuse
+#5000   Operation resource and event
+#7100   Crisis level
+#8500willing shield
+#9900   Galcom war
+#10000+ Endgame
+country_event = {
+    id=cwis.1
+    hide_window = yes
+    is_triggered_only = yes
+    trigger = {
+        has_ascension_perk = cwis_ap_culture_weapon
+    }
+    immediate = {
+        complete_crisis_objective = cwis_crisobj_survive
+    }
+}
+
+#on_entering_battle  from = attacked country
+#FromFromFrom = attacked fleet
+country_event = {
+    id=cwis.4400
+    hide_window = yes
+    is_triggered_only = yes
+    trigger = {
+        has_edict = cwis_edict_linear_collide_enhancement
+    }
+    immediate = {
+        FromFromFrom = {
+            set_confused = yes
+            fleet_event = { id = cwis.4402 days = 180 random = 30 }
+        }
+    }
+}
+fleet_event = {
+    id=cwis.4402
+    hide_window = yes
+    is_triggered_only = yes
+    immediate = {
+        set_confused = no
+    }
+}
+
+country_event = {
+    id = cwis.4700
+    hide_window = yes
+    is_triggered_only = yes
+    trigger = {
+        owner = {
+            has_ascension_perk = cwis_ap_culture_weapon
+        }
+    }
+    immediate = {
+        complete_crisis_objective = cwis_crisobj_espionage_operations_performed
+    }
+}
+
+# culture_link_deployment on create
+country_event = {
+    id = cwis.5000
+    title = "cwis.5000.name"
+    desc = cwis.5000.desc
+    picture = GFX_evt_alpine_city
+    is_triggered_only = yes
+    option = {
+        name = cwis.5000.a
+    }
+}
+
+# culture_link_deployment stage
+espionage_operation_event = {
+    id = cwis.5001
+    title = "cwis.5001.name"
+    desc = cwis.5001.desc
+    picture = GFX_evt_spy_network
+    is_triggered_only = yes
+    immediate = {
+        target= {
+            set_country_flag = cwis_culture_link_deployed
+        }
+        owner = {
+            add_resource = {
+                information_seal = 50
+            }
+        }
+    }
+    option = {
+        name = cwis.5001.a
+    }
+}
+
+country_event = {
+    id = cwis.5010
+    title = "cwis.5010.name"
+    desc = cwis.5010.desc
+    picture = GFX_evt_alpine_city
+    is_triggered_only = yes
+    option = {
+        name = cwis.5010.a
+    }
+}
+
+espionage_operation_event = {
+    id = cwis.5011
+    title = "cwis.5011.name"
+    desc = cwis.5011.desc
+    picture = GFX_evt_spy_network
+    is_triggered_only = yes
+    immediate = {
+        target = {
+            add_modifier = {
+                modifier = cwis_research_agreement_nerf_modifier
+                months = 15
+            }
+        }
+        owner = {
+            add_resource = {
+                information_seal = 30
+                multiplier = value:scripted_modifier_mult|MODIFIER|cwis_spy_network_strength|
+            }
+        }
+    }
+    option = {
+        name = cwis.5011.a
+    }
+}
+
+country_event = {
+    id = cwis.5020
+    title = "cwis.5020.name"
+    desc = cwis.5020.desc
+    picture = GFX_evt_alpine_city
+    is_triggered_only = yes
+    option = {
+        name = cwis.5020.a
+    }
+}
+
+espionage_operation_event = {
+    id = cwis.5021
+    title = "cwis.5021.name"
+    desc = cwis.5021.desc
+    picture = GFX_evt_spy_network
+    is_triggered_only = yes
+    immediate = {
+        target = {
+            add_modifier = {
+                modifier = cwis_commercial_pact_nerf_modifier
+                months = 15
+            }
+        }
+        owner = {
+            add_resource = {
+                information_seal = 35
+                multiplier = value:scripted_modifier_mult|MODIFIER|cwis_spy_network_strength|
+            }
+        }
+    }
+    option = {
+        name = cwis.5021.a
+    }
+}
+
+country_event = {
+    id = cwis.5030
+    title = "cwis.5030.name"
+    desc = cwis.5030.desc
+    picture = GFX_evt_alpine_city
+    is_triggered_only = yes
+    option = {
+        name = cwis.5030.a
+    }
+}
+
+espionage_operation_event = {
+    id = cwis.5031
+    title = "cwis.5031.name"
+    desc = cwis.5031.desc
+    picture = GFX_evt_spy_network
+    is_triggered_only = yes
+    immediate = {
+        target = {
+            set_country_flag = cwis_operation_diplomacy_infection_flag
+            if = {
+                limit = {
+                    has_crisis_level = cwis_crisis_level_4
+                }
+                add_modifier = {
+                    modifier = cwis_diplomatic_weight_nerf_modifier
+                    multiplier = 4
+                    months = 6
+                }
+            }
+            else = {
+                add_modifier = {
+                    modifier = cwis_diplomatic_weight_nerf_modifier
+                    months = 6
+                }
+            }
+        }
+        owner = {
+            add_resource = {
+                information_seal = 25
+                multiplier = value:scripted_modifier_mult|MODIFIER|cwis_spy_network_strength|
+            }
+        }
+        hidden_effect = {
+            if = {
+                limit = {
+                    target = {
+                        has_country_flag = cwis_operation_diplomacy_infection_flag
+                        has_country_flag = cwis_operation_temperary_empire_size_mult_flag
+                        has_country_flag = cwis_operation_temperary_colony_uncontrol_over_production_flag
+                        NOT = { has_country_flag = cwis_country_split_reward }
+                    }
+                }
+                owner = {
+                    complete_crisis_objective = cwis_crisobj_country_split
+                }
+                target = {
+                    set_country_flag = cwis_country_split_reward
+                }
+            }
+        }
+    }
+    option = {
+        name = cwis.5031.a
+    }
+}
+
+country_event = {
+    id = cwis.5050
+    title = "cwis.5050.name"
+    desc = cwis.5050.desc
+    picture = GFX_evt_alpine_city
+    is_triggered_only = yes
+    option = {
+        name = cwis.5050.a
+    }
+}
+
+espionage_operation_event = {
+    id = cwis.5051
+    title = "cwis.5051.name"
+    desc = cwis.5051.desc
+    picture = GFX_evt_spy_network
+    is_triggered_only = yes
+    immediate = {
+        target = {
+            random_owned_planet = {
+                limit = {
+                    planet_resource_compare = {
+                        type = produces
+                        resource = unity
+                        value >200
+                    }
+                }
+                remove_modifier = cwis_unity_nerf_modifier
+                clear_variable = cwis_unity_nerf_temp_var
+                export_modifier_to_variable = {
+                    modifier = planet_bureaucrats_unity_produces_add
+                    variable = cwis_unity_nerf_temp_var
+                }
+                change_variable = {
+                    which = cwis_unity_nerf_temp_var
+                    value = 4
+                }
+                multiply_variable = {
+                    which = cwis_unity_nerf_temp_var
+                    value = 0.95
+                }
+                add_modifier = {
+                    modifier = cwis_unity_nerf_modifier
+                    mult = cwis_unity_nerf_temp_var
+                    months = 6
+                }
+            }
+        }
+        owner = {
+            set_country_flag = cwis_can_level5_unlocked
+        }
+    }
+    option = {
+        name = cwis.5051.a
+    }
+}
+
+country_event = {
+    id = cwis.5060
+    title = "cwis.5060.name"
+    desc = cwis.5060.desc
+    picture = GFX_evt_alpine_city
+    is_triggered_only = yes
+    option = {
+        name = cwis.5060.a
+    }
+}
+
+espionage_operation_event = {
+    id = cwis.5061
+    title = "cwis.5061.name"
+    desc = cwis.5061.desc
+    picture = GFX_evt_spy_network
+    is_triggered_only = yes
+    immediate = {
+        target = {
+            set_country_flag = cwis_operation_temperary_colony_uncontrol_over_production_flag
+            add_modifier = {
+                modifier = cwis_upkeep_increase_modifier
+                months = 6
+            }
+        }
+        hidden_effect = {
+            if = {
+                limit = {
+                    target = {
+                        has_country_flag = cwis_operation_diplomacy_infection_flag
+                        has_country_flag = cwis_operation_temperary_empire_size_mult_flag
+                        has_country_flag = cwis_operation_temperary_colony_uncontrol_over_production_flag
+                        NOT = { has_country_flag = cwis_country_split_reward }
+                    }
+                }
+                owner = {
+                    complete_crisis_objective = cwis_crisobj_country_split
+                }
+                target = {
+                    set_country_flag = cwis_country_split_reward
+                }
+            }
+        }
+    }
+    option = {
+        name = cwis.5061.a
+    }
+}
+
+country_event = {
+    id = cwis.5070
+    title = "cwis.5070.name"
+    desc = cwis.5070.desc
+    picture = GFX_evt_alpine_city
+    is_triggered_only = yes
+    option = {
+        name = cwis.5070.a
+    }
+}
+
+espionage_operation_event = {
+    id = cwis.5071
+    title = "cwis.5071.name"
+    desc = cwis.5071.desc
+    picture = GFX_evt_spy_network
+    is_triggered_only = yes
+    immediate = {
+        target = {
+            set_country_flag = cwis_operation_temperary_empire_size_mult_flag
+            add_modifier = {
+                modifier = cwis_empire_size_increase_modifier
+                months = 6
+            }
+        }
+        hidden_effect = {
+            if = {
+                limit = {
+                    target = {
+                        has_country_flag = cwis_operation_diplomacy_infection_flag
+                        has_country_flag = cwis_operation_temperary_empire_size_mult_flag
+                        has_country_flag = cwis_operation_temperary_colony_uncontrol_over_production_flag
+                        NOT = { has_country_flag = cwis_country_split_reward }
+                    }
+                }
+                owner = {
+                    complete_crisis_objective = cwis_crisobj_country_split
+                }
+                target = {
+                    set_country_flag = cwis_country_split_reward
+                }
+            }
+        }
+    }
+    option = {
+        name = cwis.5071.a
+    }
+}
+
+country_event = {
+    id = cwis.5080
+    title = "cwis.5080.name"
+    desc = cwis.5080.desc
+    picture = GFX_evt_alpine_city
+    is_triggered_only = yes
+    option = {
+        name = cwis.5080.a
+    }
+}
+
+espionage_operation_event = {
+    id = cwis.5081
+    title = "cwis.5081.name"
+    desc = cwis.5081.desc
+    picture = GFX_evt_spy_network
+    is_triggered_only = yes
+    immediate = {
+        target = {
+            every_agreement = {
+                add_loyalty = -100
+            }
+        }
+    }
+    option = {
+        name = cwis.5081.a
+    }
+}
+
+country_event = { # Taking the AP - Start level 1
+    id = cwis.7100
+    title = "cwis.7100.name"
+    desc = cwis.7100.desc
+    picture = GFX_evt_cargoship_caravan
+    show_sound = event_death_cult
+    is_triggered_only = yes
+    event_chain = cwis_chain
+
+    option = {
+        name = cwis.7100.a
+        begin_event_chain = {
+            event_chain = cwis_chain
+            target = root
+        }
+        add_event_chain_counter = {
+            event_chain = "cwis_chain"
+            counter = "cwis_level_reached"
+            amount = 1
+        }
+    }
+}
+
+country_event = { # Reaching Level 2
+    id = cwis.7105
+    title = "cwis.7105.name"
+    desc = cwis.7105.desc
+    picture = GFX_evt_cargoship_caravan
+    show_sound = event_death_cult
+    event_chain = cwis_chain
+
+    is_triggered_only = yes
+
+    immediate = {
+        add_event_chain_counter = {
+            event_chain = "cwis_chain"
+            counter = "cwis_level_reached"
+            amount = 1
+        }
+    }
+
+    option = {
+        name = cwis.7105.a
+    }
+}
+
+
+country_event = { # Reaching Level 3
+    id = cwis.7110
+    title = "cwis.7110.name"
+    desc = cwis.7110.desc
+    picture = GFX_evt_cargoship_caravan
+    show_sound = event_death_cult
+    event_chain = cwis_chain
+
+    is_triggered_only = yes
+
+    immediate = {
+        add_event_chain_counter = {
+            event_chain = "cwis_chain"
+            counter = "cwis_level_reached"
+            amount = 1
+        }
+    }
+
+    option = {
+        name = cwis.7110.a
+        #custom_tooltip = new_cwis_tech_tt
+    }
+}
+
+
+country_event = { # Reaching Level 4
+    id = cwis.7115
+    title = "cwis.7115.name"
+    desc = cwis.7115.desc
+    picture = GFX_evt_cargoship_caravan
+    show_sound = event_death_cult
+    event_chain = cwis_chain
+
+    is_triggered_only = yes
+
+    immediate = {
+        add_event_chain_counter = {
+            event_chain = "cwis_chain"
+            counter = "cwis_level_reached"
+            amount = 1
+        }
+    }
+
+    option = {
+        name = cwis.7115.a
+        #custom_tooltip = new_cwis_tech_tt
+    }
+}
+
+country_event = { # Reaching Level 5
+    id = cwis.7120
+    title = "cwis.7120.name"
+    desc = cwis.7120.desc
+    picture = GFX_evt_cargoship_caravan
+    show_sound = event_death_cult
+    event_chain = cwis_chain
+
+    is_triggered_only = yes
+
+    immediate = {
+        add_event_chain_counter = {
+            event_chain = "cwis_chain"
+            counter = "cwis_level_reached"
+            amount = 1
+        }
+        start_situation = {
+            type = cwis_situation_crisis_5
+        }
+    }
+
+    option = {
+        name = cwis.7120.a
+        #custom_tooltip = new_cwis_tech_tt
+    }
+}
+
+
+country_event = { # Researching Horizon Needle
+    id = cwis.7125
+    title = "cwis.7125.name"
+    desc = cwis.7125.desc
+    picture = GFX_evt_shroud_tunnel
+    show_sound = event_death_cult
+    event_chain = cwis_chain
+
+    is_triggered_only = yes
+
+    trigger = {
+    }
+
+    option = {
+        name = cwis.7125.a
+    }
+}
+
+#willing shield
+#on bi year country
+country_event = {
+    id = cwis.8500
+    hide_window = yes
+    is_triggered_only = yes
+    trigger = { has_crisis_level = cwis_crisis_level_4 }
+    immediate = {
+        save_event_target_as = cwis_level4
+        if = {
+            limit = {
+                event_target:cwis_level4 = {
+                    has_crisis_level = cwis_crisis_level_5
+                }
+            }
+            every_country = {
+                limit = {
+                    or = {
+                        is_country_type = fallen_empire
+                        is_country_type = awakened_fallen_empire
+                        is_country_type = default
+                    }
+                }
+                set_truce = {
+                    target = event_target:cwis_level4
+                    type = none
+                }
+                event_target:cwis_level4 ={
+                    complete_crisis_objective = cwis_crisobj_willing_shield_apply
+                }
+            }
+        }
+        else = {
+            every_playable_country = {
+                limit = {
+                    NOT = { has_total_war_cb = yes }
+                }
+                set_truce = {
+                    target = event_target:cwis_level4
+                    type = none
+                }
+                event_target:cwis_level4 ={
+                    complete_crisis_objective = cwis_crisobj_willing_shield_apply
+                }
+            }
+        }
+        if = {
+            limit = { exists = event_target:cwis_level4 }
+            country_event = { id = cwis.8500 years = 2 }
+        }
+    }
+}
+
+#Rebroadcast
+country_event = {
+    id = cwis.8800
+    hide_window = yes
+    is_triggered_only = yes
+    immediate = {
+        save_event_target_as = cwis8800country
+        set_variable = {
+            which = cwis8800
+            value = 0
+        }
+        every_owned_planet = {
+            set_variable = {
+                which = cwis8800planettemp
+                value = trigger:has_planetary_ascension_tier
+            }
+            event_target:cwis8800country = {
+                change_variable = {
+                    which = cwis8800
+                    value = prev.cwis8800planettemp
+                }
+            }
+        }
+        divide_variable = {
+            which = cwis8800
+            value = trigger:num_owned_planets
+        }
+        divide_variable = {
+            which = cwis8800
+            value = 10
+        }
+        every_galcom_member = {
+            add_modifier = {
+                modifier = cwis_8800_leader_upkeep
+                mult = event_target:cwis8800country.cwis8800
+            }
+        }
+    }
+}
+
+#galcom war
+country_event = {
+    id = cwis.9900
+    hide_window = yes
+    is_triggered_only = yes
+    immediate = {
+        hidden_effect = {
+            if = {
+                limit = { is_galactic_community_member = yes }
+                remove_from_galactic_community = yes
+            }
+            if = {
+                limit = {
+                    is_galactic_council_established = yes
+                    is_part_of_galactic_council = yes
+                }
+                remove_from_galactic_council = yes
+            }
+            every_subject = {
+                if = {
+                    limit = { is_galactic_community_member = yes }
+                    remove_from_galactic_community = yes
+                }
+                if = {
+                    limit = {
+                        is_galactic_council_established = yes
+                        is_part_of_galactic_council = yes
+                    }
+                    remove_from_galactic_council = yes
+                }
+            }
+            set_country_flag = declared_crisis
+            save_event_target_as = new_crisis
+            country_event = { id = crisis.4105 }
+            every_playable_country = {
+                limit = {
+                    is_ai = no
+                    NOT = { is_same_value = prev }
+                }
+                country_event = { id = crisis.4100 }
+            }
+            if = {
+                limit = { has_galactic_custodian = yes }
+                galactic_custodian = {
+                    save_event_target_as = community_war_leader
+                    if = {
+                        limit = { is_in_federation_with = event_target:new_crisis }
+                        event_target:new_crisis = {
+                            leave_alliance = { override_requirements = yes }
+                        }
+                    }
+                }
+            }
+            else_if = {
+                limit = { has_galactic_emperor = yes }
+                galactic_emperor = {
+                    save_event_target_as = community_war_leader
+                }
+            }
+            else = {
+                random_playable_country = {
+                    limit = {
+                        is_galactic_community_member = yes
+                        NOT = { is_in_federation_with = event_target:new_crisis }
+                    }
+                    weights = {
+                        base = 1
+                        modifier = {
+                            add = 10000
+                            galactic_community_rank = 1
+                        }
+                        modifier = {
+                            add = 1000
+                            galactic_community_rank = 2
+                        }
+                        modifier = {
+                            add = 100
+                            galactic_community_rank = 3
+                        }
+                        modifier = {
+                            add = 10
+                            is_galactic_council_established = yes
+                            is_part_of_galactic_council = yes
+                        }
+                    }
+                    save_event_target_as = community_war_leader
+                }
+            }
+
+            declare_crisis_war_effect = yes
+        }
+    }
+}
+
+#9900 galcom war dialog
+country_event = {
+    id = cwis.9901
+    title = cwis.9901.title
+    desc = cwis.9901.desc
+    picture = GFX_evt_assembly_fight
+    is_triggered_only = yes
+    option = {
+        name = cwis.9901.a
+    }
+}
+
+situation_event = {
+    id=cwis.9910
+    is_triggered_only = yes
+    title = cwis.9910.title
+    desc = cwis.9910.desc
+    picture = GFX_evt_a_rift_in_space
+    show_sound = event_solar_fusion
+    immediate = {
+
+    }
+    option = {
+        name = cwis.9910.a
+    }
+}
+
+situation_event = {
+    id=cwis.9915
+    is_triggered_only = yes
+    title = cwis.9915.title
+    desc = cwis.9915.desc
+    picture = GFX_evt_space_walk
+    show_sound = event_death_cult
+    immediate = {
+
+    }
+    option = {
+        name = cwis.9915.a
+    }
+}
+
+situation_event = {
+    id=cwis.9916
+    hide_window = yes
+    is_triggered_only = yes
+    trigger = {
+        has_situation_flag = cwis_sit_start_random
+        not = { has_situation_flag = cwis_level5_endrandom}
+    }
+    immediate = {
+        set_variable_to_random_value = {
+            which = cwis_crisis5_temp
+            min = 0.03
+            max = 0.08
+        }
+        change_variable = {
+            which = cwis_crisis5_random
+            value = cwis_crisis5_temp
+        }
+    }
+}
+
+situation_event = {
+    id=cwis.9917
+    hide_window = yes
+    is_triggered_only = yes
+    trigger = {
+        and = {
+            is_variable_set = cwis_crisis5_random
+            check_variable = { which = cwis_crisis5_random value >= 1.2 }
+        }
+    }
+    immediate = {
+        owner = {
+            country_event = {
+                id = cwis.10101
+            }
+        }
+    }
+}
+
+#selection 1 weapon launched
+country_event = {
+    id = cwis.10001
+    title = cwis.10001.title
+    desc = cwis.10001.desc
+    picture = GFX_evt_relic_world_street
+    is_triggered_only = yes
+    immediate = {
+        every_playable_country = {
+            save_event_target_as = cwis_endwar_temp_root
+            country_event = { id = cwis.10002 }
+            release_subject = yes
+            every_war = {
+                remove_war_participant = prev
+            }
+            remove_from_federation = yes
+        }
+        set_country_flag = cwis_weapon_launched
+        win = yes
+    }
+    option = {
+        name = cwis.10001.a
+    }
+}
+
+country_event = {
+    id = cwis.10002
+    hide_window = yes
+    is_triggered_only = yes
+    immediate = {
+        every_playable_country = {
+            remove_communications = event_target:cwis_endwar_temp_root
+        }
+    }
+}
+
+#selection 2 pearl
+country_event = {
+    id = cwis.10101
+    title = cwis.10101.title
+    desc = cwis.10101.desc
+    picture = GFX_evt_salvager_enclave_disassembly
+    is_triggered_only = yes
+    immediate = {
+        set_country_type = fallen_empire
+        capital_scope = {
+            create_ambient_object = {
+                type = cwis_pearl_object
+                location = this
+            }
+        }
+        every_owned_leader = {
+            limit = {
+                is_gestalt_node = no
+            }
+            kill_leader = {
+                fire = yes
+                show_notification = no
+            }
+        }
+        win = yes
+    }
+    option = {
+        name = cwis.10101.a
+    }
+}
+

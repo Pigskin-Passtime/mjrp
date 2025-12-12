@@ -1,0 +1,152 @@
+cwis_building_signal_center = {
+    base_buildtime = @b2_time
+
+    category = government
+
+    building_sets = {
+        government
+        urban
+    }
+
+    planet_limit = 1
+
+    potential = {
+        exists = owner
+        owner = { has_crisis_level = cwis_crisis_level_2 }
+
+        exists = planet
+        planet = { is_capital = yes }
+        NOT = { has_modifier = resort_colony }
+        NOT = { has_modifier = slave_colony }
+    }
+
+    allow = {
+        has_upgraded_capital = yes
+    }
+
+    destroy_trigger = {
+            AND = {
+                exists = owner
+                owner = {
+                    OR = {
+                        NOT = {is_country_type = default }
+                        NOT = { has_crisis_level = cwis_crisis_level_2}
+                    }
+                }
+            }
+    }
+
+    country_modifier = {
+        envoys_add = 3
+        country_unity_produces_mult = 0.05
+    }
+
+    triggered_desc = {
+        trigger = {
+            exists = owner
+        }
+        text = cwis_building_signal_center_envoys_add_desc
+    }
+
+    triggered_country_modifier = {
+        potential = { owner = { has_crisis_level = cwis_crisis_level_3 } }
+        envoys_add = 1
+        multiplier = owner.value:scripted_modifier_mult|MODIFIER|cwis_spy_network_strength|
+    }
+
+    planet_modifier = {
+        planet_bureaucrats_unity_produces_add = 1
+    }
+
+    triggered_planet_modifier = {
+        potential = {
+            has_ringworld_output_boost = yes
+        }
+        planet_bureaucrats_unity_produces_add = 1
+    }
+
+    triggered_planet_modifier = {
+        potential = {
+            exists = owner
+            owner = {
+                is_gestalt = no
+            }
+        }
+        planet_bureaucrats_consumer_goods_upkeep_add = 1
+    }
+    triggered_planet_modifier = {
+        potential = {
+            exists = owner
+            owner = {
+                is_machine_empire = yes
+            }
+        }
+        planet_bureaucrats_energy_upkeep_add = 2
+    }
+    triggered_planet_modifier = {
+        potential = {
+            exists = owner
+            owner = {
+                is_hive_empire = yes
+                is_lithoid_empire = no
+            }
+        }
+        planet_bureaucrats_food_upkeep_add = 1
+        planet_bureaucrats_energy_upkeep_add = 1
+    }
+    triggered_planet_modifier = {
+        potential = {
+            exists = owner
+            owner = {
+                is_hive_empire = yes
+                is_lithoid_empire = yes
+            }
+        }
+        planet_bureaucrats_minerals_upkeep_add = 1
+        planet_bureaucrats_energy_upkeep_add = 1
+    }
+
+    triggered_desc = {
+        trigger = {
+            exists = owner
+        }
+        text = cwis_building_signal_center_information_seal_produce_desc
+    }
+
+    triggered_desc = {
+        trigger = {
+            exists = owner
+        }
+        text = cwis_building_signal_center_unity_produce_desc
+    }
+
+    resources = {
+        category = planet_buildings
+        cost = {
+            minerals = @b2_minerals
+            rare_crystals = @b2_rare_cost
+            information_seal = 25
+        }
+        upkeep = {
+            energy = @b2_upkeep
+            rare_crystals = @b2_rare_upkeep
+        }
+        upkeep = {
+            unity = 5
+            multiplier = owner.value:scripted_modifier_mult|MODIFIER|cwis_spy_network_strength|
+        }
+        produces = {
+            information_seal = 20
+            multiplier = owner.value:scripted_modifier_mult|MODIFIER|cwis_spy_network_strength|
+        }
+        produces = {
+            unity = 100
+            #for ruler
+        }
+        produces = {
+            unity = 100
+            multiplier = owner.trigger:has_unlocked_council_positions
+            #positions only
+        }
+    }
+}

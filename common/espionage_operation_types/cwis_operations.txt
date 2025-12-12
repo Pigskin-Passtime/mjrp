@@ -1,0 +1,374 @@
+# operation_type_name = {			# Key of the site, used for name lookup etc.
+#	target = <target type>			# Valid target types are country, megastructure, starbase, fleet, army, pop_faction, spynetwork, federation and none (spy network target is the target then)
+#	picture = <sprite key>			# GFX_* sprite key for the operation image
+#	desc = <triggered event desc>	# Description generator for the operation, with scope this=spy network
+#	stages = <int>					# Should match number of defined stages below.
+#	potential = <trigger>			# Trigger checking if a scope with this=spy network is potential to use (this will add/remove this operation without giving the player a reason).
+#	allow = <trigger>				# Trigger checking if a scope with this=spy network is allowed to use (this will toggle enable/disabled mode on buttons etc).
+#	stage = {						# Stage definition, order dependent.
+#		difficulty = <interval int>	# min max interval type. interval is defined either by '<int>' or '{ min = <int> max=<int> }' where the later will randomize a value between min and max.
+#		icon = <string>				# icon gfx type.
+#		event = <string>			# event to fire when finished the state.
+#	}
+#	stage = {...}					# Second stage, the total number of 'stage' entries should match value of 'stages'
+#	on_roll_failed = <effect>		# Effect to fire when a roll fails, with scope this=spy operation.
+#	on_create = <effect>			# Effect to fire upon operation creation, with scope this=spy operation.
+#}
+
+@diff_t0 = 4
+@diff_t1 = 5
+@diff_t2 = 6
+@diff_t3 = 7
+@diff_t4 = 8
+@diff_t5 = 9
+@diff_t6 = 10
+@diff_t7 = 11
+@diff_t8 = 12
+@diff_t9 = 13
+
+@operationTargetedByTimer = 10800 #30 years during which the effects of an operation may be felt by select Spy Network events
+
+# this = operation
+# from = operation target
+
+#
+# base
+#
+#flag a country for crisis operations
+cwis_operation_culture_link_deployment = {
+	target = none
+	categories = { op_cat_subterfuge }
+	picture = GFX_evt_spymaster
+	desc = {
+		text = cwis_operation_culture_link_deployment_desc
+	}
+	stages = 1
+
+	resources = {
+		category = operations
+		cost = {
+			influence = 25
+		}
+		upkeep = {
+			energy = 30
+			unity = 5
+			information_seal = 1
+		}
+	}
+
+	spy_power_cost = 2
+	potential = {
+		owner = { has_crisis_level = cwis_crisis_level_1 }
+		target = {
+			or = {
+				is_country_type = default
+				is_country_type = primitive
+			}
+			not = { has_country_flag = cwis_culture_link_deployed }
+		}
+	}
+	allow = {
+		custom_tooltip = {
+			is_running_espionage_operation = no
+			fail_text = operation_one_at_a_time
+		}
+	}
+	stage = {
+		difficulty = 0
+		icon = GFX_espionage_chapter_icon_document
+		event = cwis.5001
+	}
+
+	on_roll_failed = {
+		cwis_espionage_operation_on_roll_failed = yes
+	}
+	on_create = {
+		target = {
+			country_event = {
+				id=cwis.5000
+			}
+		}
+	}
+}
+
+#-70%
+cwis_operation_research_proxy_nerf ={
+	target = none
+	categories = { op_cat_subterfuge }
+	picture = GFX_evt_spymaster
+	desc = {
+		text = cwis_operation_research_proxy_nerf_desc
+	}
+	stages = 1
+	spy_power_cost = 15
+	potential = {
+		owner = { has_crisis_level = cwis_crisis_level_1 }
+		target = {
+			is_country_type = default
+			has_country_flag = cwis_culture_link_deployed
+		}
+	}
+	allow = {
+		target = {
+			num_research_agreements > 0
+		}
+	}
+	stage = {
+		difficulty = @diff_t3
+		icon = GFX_espionage_chapter_icon_document
+		event = cwis.5011
+	}
+
+	on_roll_failed = {
+		cwis_espionage_operation_on_roll_failed = yes
+	}
+	on_create = {
+		target = {
+			country_event = {
+				id=cwis.5010
+			}
+		}
+	}
+}
+#-70%
+cwis_operation_commercial_pact_nerf ={
+	target = none
+	categories = { op_cat_subterfuge }
+	picture = GFX_evt_spymaster
+	desc = {
+		text = cwis_operation_commercial_pact_nerf_desc
+	}
+	stages = 1
+	spy_power_cost = 20
+	potential = {
+		owner = { has_crisis_level = cwis_crisis_level_1 }
+		target = {
+			is_country_type = default
+			has_country_flag = cwis_culture_link_deployed
+		}
+	}
+	allow = {
+		target = {
+			num_commercial_pacts > 0
+		}
+	}
+	stage = {
+		difficulty = @diff_t3
+		icon = GFX_espionage_chapter_icon_document
+		event = cwis.5021
+	}
+
+	on_roll_failed = {
+		cwis_espionage_operation_on_roll_failed = yes
+	}
+	on_create = {
+		target = {
+			country_event = {
+				id=cwis.5020
+			}
+		}
+	}
+}
+#-10% weight,mainly for crisis resource produce,crisis 4 give additional -30% weight
+cwis_operation_diplomacy_infection ={
+	target = none
+	categories = { op_cat_subterfuge }
+	picture = GFX_evt_spymaster
+	desc = {
+		text = cwis_operation_diplomacy_infection_desc
+	}
+	stages = 1
+	spy_power_cost = 25
+	potential = {
+		owner = { has_crisis_level = cwis_crisis_level_1 }
+		target = {
+			is_country_type = default
+			has_country_flag = cwis_culture_link_deployed
+		}
+	}
+	allow = {
+		target = {
+			num_communications > 1
+		}
+	}
+	stage = {
+		difficulty = @diff_t3
+		icon = GFX_espionage_chapter_icon_document
+		event = cwis.5031
+	}
+
+	on_roll_failed = {
+		cwis_espionage_operation_on_roll_failed = yes
+	}
+	on_create = {
+		target = {
+			country_event = {
+				id=cwis.5030
+			}
+		}
+	}
+}
+
+
+#
+#advance
+#
+#block a random planet's unity production 6 month ->5%
+cwis_operation_temperary_colony_seal_unity_produce = {
+	target = none
+	categories = { op_cat_subterfuge }
+	picture = GFX_evt_spymaster
+	desc = {
+		text = cwis_operation_temperary_colony_seal_unity_produce_desc
+	}
+	stages = 1
+	spy_power_cost = 55
+	potential = {
+		owner = { has_crisis_level = cwis_crisis_level_4 }
+		target = {
+			is_country_type = default
+			has_country_flag = cwis_culture_link_deployed
+		}
+	}
+	allow = {
+		target = {
+			resource_income_compare = { resource = unity value > 200 }
+		}
+	}
+	stage = {
+		difficulty = @diff_t6
+		icon = GFX_espionage_chapter_icon_document
+		event = cwis.5051
+	}
+
+	on_roll_failed = {
+		cwis_espionage_operation_on_roll_failed = yes
+	}
+	on_create = {
+		target = {
+			country_event = {
+				id=cwis.5050
+			}
+		}
+	}
+}
+#increace job upkeep 6 month ->+125%
+cwis_operation_temperary_colony_uncontrol_over_production = {
+	target = none
+	categories = { op_cat_subterfuge }
+	picture = GFX_evt_spymaster
+	desc = {
+		text = cwis_operation_temperary_colony_uncontrol_over_production_desc
+	}
+	stages = 1
+	spy_power_cost = 70
+	potential = {
+		owner = { has_crisis_level = cwis_crisis_level_4 }
+		target = {
+			is_country_type = default
+			has_country_flag = cwis_culture_link_deployed
+		}
+	}
+	allow = {
+		target = {
+			has_technology = tech_colonial_centralization
+		}
+	}
+	stage = {
+		difficulty = @diff_t6
+		icon = GFX_espionage_chapter_icon_document
+		event = cwis.5061
+	}
+
+	on_roll_failed = {
+		cwis_espionage_operation_on_roll_failed = yes
+	}
+	on_create = {
+		target = {
+			country_event = {
+				id=cwis.5060
+			}
+		}
+	}
+}
+#increace empire size 6 month ->+200 +100%
+cwis_operation_temperary_empire_size_mult = {
+	target = none
+	categories = { op_cat_subterfuge }
+	picture = GFX_evt_spymaster
+	desc = {
+		text = cwis_operation_temperary_empire_size_mult_desc
+	}
+	stages = 1
+	spy_power_cost = 55
+	potential = {
+		owner = { has_crisis_level = cwis_crisis_level_4 }
+		target = {
+			is_country_type = default
+			has_country_flag = cwis_culture_link_deployed
+		}
+	}
+	allow = {
+		target = {
+			has_technology = tech_artificial_moral_codes
+		}
+	}
+	stage = {
+		difficulty = @diff_t6
+		icon = GFX_espionage_chapter_icon_document
+		event = cwis.5071
+	}
+
+	on_roll_failed = {
+		cwis_espionage_operation_on_roll_failed = yes
+	}
+	on_create = {
+		target = {
+			country_event = {
+				id=cwis.5070
+			}
+		}
+	}
+}
+#set subject loyalty to Disloyalty
+cwis_operation_relation_break = {
+	target = none
+	categories = { op_cat_subterfuge }
+	picture = GFX_evt_spymaster
+	desc = {
+		text = cwis_operation_relation_break_desc
+	}
+	stages = 1
+	spy_power_cost = 50
+	potential = {
+		owner = { has_crisis_level = cwis_crisis_level_4 }
+		target = {
+			is_country_type = default
+			has_country_flag = cwis_culture_link_deployed
+		}
+	}
+	allow = {
+		owner = {
+			has_technology = tech_galactic_administration
+		}
+		target = {
+			subjects > 0
+		}
+	}
+	stage = {
+		difficulty = @diff_t4
+		icon = GFX_espionage_chapter_icon_document
+		event = cwis.5081
+	}
+
+	on_roll_failed = {
+		cwis_espionage_operation_on_roll_failed = yes
+	}
+	on_create = {
+		target = {
+			country_event = {
+				id=cwis.5080
+			}
+		}
+	}
+}

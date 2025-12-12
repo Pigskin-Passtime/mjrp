@@ -1,0 +1,88 @@
+###############
+#
+# CRISIS OBJECTIVES
+# (Previously 'MEANS')
+#
+###############
+
+# crisobj_name = {
+#	reward = 1			# The menace reward given when this objective is completed
+# }
+#
+# OR
+#
+# crisobj_name = {
+#	potential = {}		# Potential trigger (This = country). Defines availability of this objective to the country. The trigger is evaluated daily.
+#	reward = {			# The base menace reward given when this objective is completed
+#		base = 100
+#
+#		modifier = {	# Modifier(s) that adjust the reward amount
+#			factor = 2
+#			owner = { is_xenophobe = yes }
+#		}
+#	}
+# }
+
+cwis_crisobj_survive = {
+	reward = 5
+}
+
+cwis_crisobj_espionage_operations_performed = {
+	reward = {
+		base = 20
+		mult = value:scripted_modifier_mult|MODIFIER|cwis_spy_network_strength|
+	}
+}
+
+cwis_crisobj_country_split = {
+	reward = {
+		base = 5500
+		complex_trigger_modifier = { #subtract 200 for each playable country that exists
+			trigger = count_playable_country
+			mode = add
+			mult = 300
+		}
+		round_to = 500 	#we want a solid number
+		min = 1000 		#and we don't want less than 1000
+	}
+}
+
+cwis_crisobj_buliding  = {
+	reward = 10
+	potential = {
+		capital_scope = {
+			has_building = cwis_building_signal_center
+		}
+	}
+	recurring = yes
+}
+
+cwis_crisobj_envoy  = {
+	potential = {
+		capital_scope = {
+			has_building = cwis_building_signal_center
+		}
+	}
+	reward = {
+		base = 50
+		complex_trigger_modifier = { #subtract 50 for each playable country that exists
+			trigger = count_envoy
+			mode = add
+			mult = 50
+		}	#and we don't want less than 200
+	}
+	recurring = yes
+}
+
+cwis_crisobj_willing_shield_apply = { #Also use for the Vultaum Projects
+	reward = {
+		base = 2500
+		complex_trigger_modifier = { #subtract 200 for each playable country that exists
+			trigger = count_playable_country
+			mode = subtract
+			mult = 300
+		}
+		round_to = 500 	#we want a solid number
+		min = 1000 		#and we don't want less than 1000
+	}
+}

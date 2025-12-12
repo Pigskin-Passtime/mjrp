@@ -1,0 +1,122 @@
+cwis_situation_crisis_5 = {
+    picture = GFX_evt_astral_rift_ancient_battlegrounds
+    category = neutral
+    fail_icon = GFX_situation_outcome_negative
+    fail_icon_frame = GFX_situation_outcome_frame_blue
+    complete_icon = GFX_situation_outcome_negative
+    complete_icon_frame = GFX_situation_outcome_frame_blue
+
+    initial_progress = 0
+    on_monthly = {
+        events = {
+            cwis.9916
+            cwis.9917
+        }
+    }
+
+    stages = {
+        cwis_situation_preheating = {
+            icon = GFX_situation_stage_1
+            icon_background = GFX_situation_stage_frame_gray
+            end = 25
+        }
+        cwis_situation_charging = {
+            icon = GFX_situation_stage_2
+            icon_background = GFX_situation_stage_frame_gray
+            custom_tooltip = cwis_maintain_issue_tooltip
+            end = 50
+            on_first_enter = {
+                #galcom war
+                owner = {
+                    country_event = {
+                        id = cwis.9900
+                    }
+                }
+                situation_event = { id = cwis.9910 }
+                hidden_effect = {
+                    set_situation_flag = cwis_sit_start_random
+                    set_variable = { which = cwis_crisis5_random value = 0 }
+                    set_variable_to_random_value = { which = cwis_crisis5_random min = 0 max = 0.4}
+                }
+            }
+        }
+        cwis_situation_ready_to_fire = {
+            icon = GFX_situation_stage_3
+            icon_background = GFX_situation_stage_frame_gray
+            custom_tooltip = cwis_maintain_issue_tooltip
+            end = 75
+            on_first_enter = {
+                owner = {
+                    enable_special_project = {
+                        name = CWIS_WEAPON
+                        owner = this
+                    }
+                }
+            }
+        }
+        cwis_situation_collapse = {
+            custom_tooltip = cwis_situation_collapse_tooltip
+            icon = GFX_situation_stage_4
+            icon_background = GFX_situation_stage_frame_gray
+            end = 100
+            on_first_enter = {
+                owner = {
+                    abort_special_project = {
+                        type = CWIS_WEAPON
+                    }
+                }
+            }
+        }
+    }
+
+    on_progress_complete = {
+
+    }
+    on_fail = {
+
+    }
+    monthly_progress = {
+        base = 3
+        modifier = {
+            add = -2.9
+            current_situation_approach = cwis_approach_pull
+            desc = cwis_situation_crisis_5_approach_pull_desc
+        }
+        modifier = {
+            add = 3
+            current_situation_approach = cwis_approach_push
+            desc = cwis_situation_crisis_5_approach_push_desc
+        }
+    }
+    approach = {
+        name = cwis_approach_pull
+        icon = GFX_situation_approach_unity
+        icon_background = GFX_situation_approach_bg_yellow
+        default = yes
+        on_select = {
+            custom_tooltip = cwis_approach_pull_tooltip
+        }
+    }
+    approach = {
+        name = cwis_approach_idle
+        icon = GFX_situation_approach_gift
+        icon_background = GFX_situation_approach_bg_yellow
+        on_select = {
+            custom_tooltip = cwis_approach_idle_tooltip
+        }
+    }
+    approach = {
+        name = cwis_approach_push
+        icon = GFX_situation_approach_this_is_fine
+        icon_background = GFX_situation_approach_bg_red
+        on_select = {
+            custom_tooltip = cwis_approach_push_tooltip
+        }
+        resources = {
+            upkeep = {
+                unity = 24
+                mult = owner.trigger:empire_size
+            }
+        }
+    }
+}
