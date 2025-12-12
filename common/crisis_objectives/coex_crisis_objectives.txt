@@ -1,0 +1,93 @@
+###############
+#
+# CRISIS OBJECTIVES
+# (Previously 'MEANS')
+#
+###############
+
+# crisobj_name = {
+#	reward = 1			# The menace reward given when this objective is completed
+# }
+#
+# OR
+#
+# crisobj_name = {
+#	potential = {}		# Potential trigger (This = country). Defines availability of this objective to the country. The trigger is evaluated daily.
+#	reward = {			# The base menace reward given when this objective is completed
+#		base = 100
+#
+#		modifier = {	# Modifier(s) that adjust the reward amount
+#			factor = 2
+#			owner = { is_xenophobe = yes }
+#		}
+#	}
+# }
+
+coex_crisobj_brain_relays = { #For display purposes
+	reward = {
+		base = 0
+		add = coex_brain_relay_mental_authority_produced
+		round = yes 							#we don't want 3.124 menace
+		min = 0								#just in case
+	}
+	recurring = yes
+}
+
+coex_crisobj_have_vassals = {
+	reward = {
+		base = 900
+		complex_trigger_modifier = { #subtract 2.5 for each playable country that exists
+			trigger = count_playable_country
+			mode = subtract
+			mult = 50
+		}
+		round_to = 50 	#we want a solid number
+		min = 400 		
+	}
+	recurring = yes
+}
+
+coex_crisobj_vassalise_empires = {
+	reward = {
+		base = 1200
+		complex_trigger_modifier = { #subtract 25 for each playable country that exists
+			trigger = count_playable_country
+			mode = subtract
+			mult = 70
+		}
+		round_to = 50 	#we want a solid number
+		min = 300 		
+	}
+}
+
+
+coex_crisobj_espionage = {
+	reward = {
+		base = 200
+		complex_trigger_modifier = { #subtract 2.5 for each playable country that exists
+			trigger = count_playable_country
+			mode = subtract
+			mult = 5
+		}
+		round_to = 5 	#we want a solid number
+		min = 10 		#and we don't want less than 10
+
+	}
+}
+
+coex_crisobj_galcom_surveillance_resolution = {
+	potential = {
+		has_overlord_dlc = yes
+	}
+	reward = {
+		base = 100
+		complex_trigger_modifier = { #subtract 2.5 for each playable country that exists
+			trigger = count_playable_country
+			mode = subtract
+			mult = 2.5
+		}
+		round_to = 10 	#we want a solid number
+		min = 50 		#and we don't want less than 50
+	}
+	recurring = yes
+}

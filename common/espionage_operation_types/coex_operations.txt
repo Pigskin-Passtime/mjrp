@@ -1,0 +1,241 @@
+@diff_t0 = 4
+@diff_t1 = 5
+@diff_t2 = 6
+@diff_t3 = 7
+@diff_t4 = 8
+@diff_t5 = 9
+@diff_t6 = 10
+@diff_t7 = 11
+@diff_t8 = 12
+@diff_t9 = 13
+
+@operationTargetedByTimer = 10800
+
+
+
+coex_operation_force_truce = {
+	target = none
+	categories = {
+		op_cat_manipulation
+		op_cat_diplomacy
+	}
+	picture = GFX_evt_galactic_senate
+	desc = coex_operation_force_truce_desc
+	stages = 3
+	spy_power_cost = 35
+	resources = {
+		category = operations
+		cost = {
+			influence = 60
+		}
+		upkeep = {
+			energy = 7
+		}
+	}
+	potential = {
+		owner = {
+			has_menace_perk = menp_coex_operations_1
+		}
+		target = {
+			is_country_type = default
+		}
+	}
+	allow = {
+		custom_tooltip = {
+			is_running_espionage_operation = no
+			fail_text = operation_one_at_a_time
+		}
+		custom_tooltip = {
+			target = {
+				has_opinion_modifier = {
+					who = prev.owner
+					modifier = coex_affected_by_brain_relay_0
+				}
+			}
+			fail_text = coex_operation_need_brain_relay
+		}
+	}
+	stage = {
+		difficulty = @diff_t2
+		icon = GFX_espionage_chapter_icon_surveillance
+		event = coex_operation.101
+	}
+	stage = {
+		difficulty = @diff_t2
+		icon = GFX_espionage_chapter_icon_target
+		event = coex_operation.102
+	}
+	stage = {
+		difficulty = @diff_t2
+		icon = GFX_espionage_chapter_icon_document
+		event = coex_operation.103
+	}
+	on_roll_failed = {
+		standard_espionage_operation_on_roll_failed = {
+			RANDOM_EVENTS = operation_random_events_generic
+		}
+	}
+	on_create = {
+	}
+}
+
+
+coex_operation_build_relay = {
+	target = none
+	categories = {
+		op_cat_manipulation
+		op_cat_diplomacy
+	}
+	picture = GFX_evt_galactic_senate
+	desc = coex_operation_build_relay_desc
+	stages = 3
+	spy_power_cost = 35
+	resources = {
+		category = operations
+		cost = {
+			influence = 60
+		}
+		upkeep = {
+			energy = 7
+		}
+	}
+	potential = {
+		owner = {
+			has_menace_perk = menp_coex_operations_2
+		}
+		target = {
+			is_country_type = default
+			NOT = {
+				has_country_flag = coex_espionage_relay_installed
+			}
+		}
+	}
+	allow = {
+		custom_tooltip = {
+			is_running_espionage_operation = no
+			fail_text = operation_one_at_a_time
+		}
+	}
+	stage = {
+		difficulty = @diff_t2
+		icon = GFX_espionage_chapter_icon_surveillance
+		event = coex_operation.301
+	}
+	stage = {
+		difficulty = @diff_t2
+		icon = GFX_espionage_chapter_icon_target
+		event = coex_operation.302
+	}
+	stage = {
+		difficulty = @diff_t2
+		icon = GFX_espionage_chapter_icon_document
+		event = coex_operation.303
+	}
+	on_roll_failed = {
+		standard_espionage_operation_on_roll_failed = {
+			RANDOM_EVENTS = operation_random_events_generic
+		}
+	}
+	on_create = {
+	}
+}
+
+
+coex_operation_encourage_subjugation = {
+	target = none
+	categories = {
+		op_cat_manipulation
+		op_cat_diplomacy
+	}
+	picture = GFX_evt_galactic_senate
+	desc = coex_operation_encourage_subjugation_desc
+	stages = 3
+	spy_power_cost = 35
+	resources = {
+		category = operations
+		cost = {
+			influence = 60
+		}
+		upkeep = {
+			energy = 7
+			influence = 4
+		}
+	}
+	potential = {
+		owner = {
+			has_menace_perk = menp_coex_operations_4
+		}
+		target = {
+			is_country_type = default
+			is_homicidal = no
+
+		}
+	}
+	allow = {
+		custom_tooltip = {
+			is_running_espionage_operation = no
+			fail_text = operation_one_at_a_time
+		}
+		custom_tooltip = {
+			owner = {
+				is_subject = no
+			}
+			fail_text = coex_operation_subject
+		}
+		custom_tooltip = {
+			target = {
+				NOT = {
+					has_country_flag = coex_subjugation_attempted
+				}
+				}
+			fail_text = coex_operation_already_attempted_subjugation
+			}
+		
+		custom_tooltip = {
+			target = {
+				OR = {
+					has_opinion_modifier = {
+						who = prev.owner
+						modifier = coex_affected_by_brain_relay_0
+					}
+					has_opinion_modifier = {
+						who = prev.owner
+						modifier = coex_affected_by_brain_relay_1
+					}
+					has_opinion_modifier = {
+						who = prev.owner
+						modifier = coex_affected_by_brain_relay_2
+					}
+					has_opinion_modifier = {
+						who = prev.owner
+						modifier = coex_affected_by_brain_relay_3
+					}
+				}
+	
+			}
+			fail_text = coex_operation_need_brain_relay
+		}
+	}
+	stage = {
+		difficulty = @diff_t2
+		icon = GFX_espionage_chapter_icon_surveillance
+		event = coex_operation.401
+	}
+	stage = {
+		difficulty = @diff_t2
+		icon = GFX_espionage_chapter_icon_target
+		event = coex_operation.402
+	}
+	stage = {
+		difficulty = @diff_t2
+		icon = GFX_espionage_chapter_icon_document
+		event = coex_operation.403
+	}
+	on_roll_failed = {
+		standard_espionage_operation_on_roll_failed = {
+			RANDOM_EVENTS = operation_random_events_generic
+		}
+	}
+	on_create = {
+	}
+}

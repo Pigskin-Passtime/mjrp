@@ -1,0 +1,165 @@
+#########################################################################################
+# Coexistence Protocol
+# coex_crisis_menace_objective_events.txt
+# Author: SushiDragon
+#########################################################################################
+
+namespace = coex_crisis
+
+# Menace Objective - Have Vassals
+# Fired from on_action 'on_yearly_pulse'
+
+event = {
+	id = coex_crisis.7000
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_country = {
+			has_ascension_perk = coex_ap_coexistence_protocol 
+			is_overlord = yes
+		}
+	}
+
+	immediate = {
+		every_playable_country = {
+			if = {
+				limit = {
+					has_ascension_perk = coex_ap_coexistence_protocol
+					is_overlord = yes
+				}
+				every_subject = {
+					prev = {
+						complete_crisis_objective = coex_crisobj_have_vassals
+					}
+				}
+			}
+		}
+	}
+}
+
+
+# Menace Objective - Megastructure income
+# Fired from on_action 'on_monthly_pulse'
+event = {
+	id = coex_crisis.7001
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_playable_country = {
+			has_ascension_perk = coex_ap_coexistence_protocol
+		}
+	}
+
+	immediate = {
+		every_playable_country = {
+			limit = {
+				has_ascension_perk = coex_ap_coexistence_protocol
+			}
+			if = {
+				limit = {
+					NOT = { is_variable_set = coex_brain_relay_mental_authority_produced }
+
+				}
+				set_variable = {
+					which = coex_brain_relay_mental_authority_produced
+					value = 0
+				}
+			}
+			export_resource_income_to_variable = {
+				resource = coex_mental_authority
+				variable = coex_brain_relay_mental_authority_produced
+			}
+			add_resource = {
+				coex_mental_authority = -1
+				multiplier = coex_brain_relay_mental_authority_produced
+			}
+			complete_crisis_objective = coex_crisobj_brain_relays
+		}
+	}
+}
+
+
+
+country_event = {
+	id = coex_crisis.7002
+	hide_window = yes
+	is_triggered_only = yes
+
+	# This = subject
+	# From = subject's overlord
+
+	trigger = {
+		is_subject = yes
+		NOT = { has_country_flag = has_become_coex_crisis_vassal }
+		from = {
+			has_ascension_perk = coex_ap_coexistence_protocol
+		}
+	}
+
+	immediate = {
+		from = {
+			complete_crisis_objective = coex_crisobj_vassalise_empires
+		}
+		set_country_flag = has_become_coex_crisis_vassal
+	}
+}
+
+
+event = {
+	id = coex_crisis.7003
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_country = {
+			has_ascension_perk = coex_ap_coexistence_protocol
+		}
+		OR = {
+			is_active_resolution = resolution_bureaucraticsurveillance_personal_oversight
+			is_active_resolution = resolution_bureaucraticsurveillance_borderless_authority
+			is_active_resolution = resolution_bureaucraticsurveillance_administrative_insight
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				is_active_resolution = resolution_bureaucraticsurveillance_personal_oversight
+			}
+			every_playable_country = {
+				limit = {
+					has_ascension_perk = coex_ap_coexistence_protocol
+				}
+				complete_crisis_objective = coex_crisobj_galcom_surveillance_resolution
+			}
+		}
+		if = {
+			limit = {
+				is_active_resolution = resolution_bureaucraticsurveillance_borderless_authority
+			}
+			every_playable_country = {
+				limit = {
+					has_ascension_perk = coex_ap_coexistence_protocol
+				}
+				complete_crisis_objective = coex_crisobj_galcom_surveillance_resolution
+				complete_crisis_objective = coex_crisobj_galcom_surveillance_resolution
+			}
+		}
+		if = {
+			limit = {
+				is_active_resolution = resolution_bureaucraticsurveillance_administrative_insight
+			}
+			every_playable_country = {
+				limit = {
+					has_ascension_perk = coex_ap_coexistence_protocol
+				}
+				complete_crisis_objective = coex_crisobj_galcom_surveillance_resolution
+				complete_crisis_objective = coex_crisobj_galcom_surveillance_resolution
+				complete_crisis_objective = coex_crisobj_galcom_surveillance_resolution
+			}
+		}
+
+	}
+}
