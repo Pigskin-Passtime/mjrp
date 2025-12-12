@@ -1,0 +1,36 @@
+# Evergrowth Protocol
+# By Wiirlak
+
+
+
+# Final Project - Step 1
+special_project = {
+	key = WIIRLAK_EP_FINAL_PROJECT_1
+	icon = gfx/interface/icons/situation_log/situation_log_main_quest.dds
+	picture = GFX_evt_wilderness_colonizer
+
+	event_scope = country_event
+	event_chain = wiirlak_ep_evergrowth_protocol_chain
+	days_to_research = 100
+
+	on_success = {
+		# Requirements has to be done to continue
+		if = {
+			limit = {
+				wiirlak_ep_count_bloom_world_empire = yes
+				wiirlak_ep_percent_owned = yes
+				capital_scope = { is_planet_class = wiirlak_ep_pc_bloom }
+			}
+			
+			country_event = {
+				id = wiirlak_ep.5100
+			}
+		}
+
+		# Otherwise, relaunch itself
+		else = {
+			abort_special_project = { type = WIIRLAK_EP_FINAL_PROJECT_1 }
+			enable_special_project = { name = WIIRLAK_EP_FINAL_PROJECT_1 }
+		}
+	}
+}

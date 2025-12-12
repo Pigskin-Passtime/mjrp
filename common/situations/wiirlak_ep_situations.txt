@@ -1,0 +1,222 @@
+# Evergrowth Protocol
+# By Wiirlak
+
+
+
+# SPY OP Situation
+wiirlak_ep_situation = {
+	# UI
+	category = negative
+
+	complete_category = negative
+	complete_icon = GFX_situation_outcome_negative
+	complete_icon_frame = GFX_situation_outcome_frame_red
+	desc = {
+		trigger = { situation_progress > 750 }
+		text = wiirlak_ep_situation_desc_almost_complete
+	}
+	picture = {
+		trigger = { situation_progress > 750 }
+		picture = GFX_evt_astral_rift_garden_2
+	}
+	
+	desc = {
+		trigger = {
+			situation_progress <= 750
+			situation_progress >= 250
+
+		}
+		text = wiirlak_ep_situation_desc
+	}
+	picture = {
+		trigger = {
+			situation_progress <= 750
+			situation_progress >= 250
+
+		}
+		picture = GFX_evt_astral_rift_garden_1
+	}
+
+	fail_category = positive
+	fail_icon = GFX_situation_outcome_positive
+	fail_icon_frame = GFX_situation_outcome_frame_green
+	desc = {
+		trigger = { situation_progress < 250 }
+		text = wiirlak_ep_situation_desc_pushing_back
+	}
+	picture = {
+		trigger = { situation_progress < 250 }
+		picture = GFX_evt_astral_rift_garden_2_fire
+	}
+
+	# Stages
+	start_value = 0
+	initial_progress = 500
+	progress_direction = bidirectional
+
+	stages = {
+		wiirlak_ep_contained = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_green
+			end = 250
+			on_first_enter = {}
+		}
+		wiirlak_ep_incursion = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_gray
+			end = 750
+			on_first_enter = {}
+		}
+		wiirlak_ep_overwhelmed = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_red
+			end = 1000
+			on_first_enter = {}
+		}
+	}
+
+	# Approaches
+	approach = {
+		name = wiirlak_ep_burn
+		icon = GFX_situation_approach_sword
+		icon_background = GFX_situation_approach_bg_red
+		resources = {
+			category = situations
+			upkeep = {
+				energy = 1
+				multiplier = value:wiirlak_ep_situation_cost
+			}
+		}
+		target_modifier = {
+			planet_stability_add = -5
+		}
+	}
+	approach = {
+		name = wiirlak_ep_study
+		icon = GFX_situation_approach_research
+		icon_background = GFX_situation_approach_bg_green
+		resources = {
+			category = situations
+			upkeep = {
+				energy = 5
+			}
+			produces = {
+				society_research = 15
+			}
+		}
+		target_modifier = {
+			job_biologist_add = 100
+		}
+	}
+
+	
+	# Monthly changes
+	monthly_progress = {
+		base = 10
+		complex_trigger_modifier = {
+			trigger = relative_encryption_decryption
+			trigger_scope = event_target:wiirlak_ep_perpetrator
+			parameters = {
+				target = OWNER
+			}
+			mode = add
+			multiplier = 2
+			desc = THEIR_ENCRYPTION
+		}
+		modifier = {
+			desc = terraforming
+			TARGET = { is_terraforming = yes }
+		}
+		complex_trigger_modifier = {
+			trigger = num_armies
+			trigger_scope = TARGET
+			mode = subtract
+			multiplier = 0.5
+			desc = count_planet_army_trigger
+		}
+		modifier = {
+			desc = occupation
+			TARGET = { is_occupied_flag = yes }
+			add = 2
+		}
+		modifier = {
+			desc = wiirlak_ep_burn
+			current_situation_approach = wiirlak_ep_burn
+			subtract = 8
+		}
+	}
+
+
+	# Effects
+	# Immediatly when it starts
+	on_start = {
+		event_target:wiirlak_ep_temp_perpetrator = {
+			clear_global_event_target = wiirlak_ep_temp_perpetrator
+			save_event_target_as = wiirlak_ep_perpetrator
+		}
+	}
+	# Managed to push back the Evergrowth
+	on_fail = {
+		OWNER = {
+			country_event = {
+				id = wiirlak_ep.2110
+			}
+		}
+
+		hidden_effect = {
+			abort_situation = THIS
+		}
+	}
+	# The Evergrowth has taken another foothold
+	on_progress_complete = {
+		TARGET = { set_planet_flag = wiirlak_ep_flag_spy_op_target }
+		OWNER = {
+			country_event = {
+				id = wiirlak_ep.2120
+			}
+		}
+
+		TARGET = {
+			if = {
+				limit = { is_terraforming = yes }
+
+				stop_terraform_process = yes
+			}
+			
+			hidden_effect = {
+				event_target:wiirlak_ep_perpetrator = {
+					save_event_target_as = wiirlak_ep_crisis_reward
+				}
+
+				set_planet_flag = wiirlak_ep_forcibly_bloomed
+				set_planet_flag = wiirlak_ep_covert_op
+				wiirlak_ep_bloom_world = yes
+			}
+		}
+
+		hidden_effect = {
+			abort_situation = THIS
+		}
+	}
+
+	abort_trigger = {
+		OR = {
+			# Planet doesn't exist anymore
+			NOT = { exists = TARGET }
+
+			# Already Bloomed, or not capable of being bloomed anymore
+			TARGET = {
+				OR = {
+					is_planet_class = wiirlak_ep_pc_bloom
+					habitable_planet = no
+				}
+			}
+		}
+	}
+
+	target_modifier = {
+		planet_jobs_food_produces_mult = -0.10
+		planet_jobs_society_research_produces_mult = 0.10
+		terraforming_cost_mult = 100
+	}
+} 

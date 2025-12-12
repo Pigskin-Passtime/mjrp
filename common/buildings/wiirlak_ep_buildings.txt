@@ -1,0 +1,114 @@
+# Evergrowth Protocol
+# By Wiirlak
+
+
+# Subject Holding - Sporebloom Arboretum
+wiirlak_ep_holding_sporebloom_arboretum = {
+	base_buildtime = @b2_time
+	owner_type = subject_holding
+	icon = building_spore_spewer
+	empire_limit = 1
+
+	category = government
+
+	potential = {
+		has_overlord_dlc = yes
+		exists = OWNER
+		OWNER = { is_wilderness_empire = no }
+		planet.OWNER = { is_specialist_subject_type = { TYPE = evergrowth } }
+	}
+
+	allow = {
+		custom_tooltip = {
+			fail_text = is_capital
+			exists = planet
+			planet = { is_capital = yes }
+		}
+	}
+
+	resources = {
+		category = planet_holdings
+		cost = {
+			minerals = @b1_minerals
+		}
+		upkeep = {
+			energy = @b1_upkeep
+		}
+		produces = {
+			influence = 0.25
+		}
+		produces = {
+			trigger = {
+				planet.owner = {
+					is_specialist_subject_tier = {
+						TYPE = evergrowth
+						TIER = 3
+					}
+				}
+			}
+
+			unity = 5
+			multiplier = planet.owner.trigger:num_owned_leaders
+		}
+	}
+
+	# Subject Bonuses
+	triggered_planet_modifier = {
+		potential = {
+			planet.owner = {
+				is_specialist_subject_tier = {
+					TYPE = evergrowth
+					TIER = 1
+				}
+			}
+		}
+		planet_crime_add = -5
+	}
+	triggered_planet_modifier = {
+		potential = {
+			planet.owner = {
+				is_specialist_subject_tier = {
+					TYPE = evergrowth
+					TIER = 2
+				}
+			}
+		}
+		planet_crime_add = -10
+	}
+	triggered_planet_modifier = {
+		potential = {
+			planet.owner = {
+				is_specialist_subject_tier = {
+					TYPE = evergrowth
+					TIER = 3
+				}
+			}
+		}
+		planet_crime_add = -15
+		planet_max_districts_add = 1
+	}
+
+
+	# Overlord Bonuses
+	triggered_country_modifier = {
+		potential = {
+			planet.owner = {
+				is_specialist_subject_tier = {
+					TYPE = evergrowth
+					TIER = 1
+				}
+			}
+		}
+		bonus_pop_growth = 0.1
+		multiplier = planet.owner.value:wiirlak_ep_count_bloom_worlds_border
+	}
+
+	destroy_trigger = {
+		exists = planet.owner
+		planet.owner = {
+			NOT = {
+				is_specialist_subject_type = { TYPE = evergrowth }
+			}
+		}
+	}
+}

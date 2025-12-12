@@ -1,0 +1,214 @@
+# Evergrowth Protocol
+# By Wiirlak
+
+
+# Spread the Evergrowth
+wiirlak_ep_spread_the_evergrowth = {
+	fire_and_forget = yes
+
+	potential = {
+		has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+		has_menace_perk = wiirlak_ep_menap_diplo_1
+
+		FROM = {
+			is_country_type = default
+		}
+	}
+
+	on_traded_effect = {
+		# Can be used
+		if = {
+			limit = {
+				# Requires at least one non-Evergrowth planet
+				FROM = {
+					any_owned_planet = { wiirlak_ep_can_be_bloomed_no_terraform = no }
+
+					# Requires some acceptation
+					check_variable = {
+						which = wiirlak_ep_var_acceptation
+						value > 0
+					}
+				}
+			}
+
+			add_resource = {
+				wiirlak_ep_resource_mycogrowth = -100
+			}
+			
+			FROM = {
+				custom_tooltip = wiirlak_ep_spread_the_evergrowth_tooltip
+				hidden_effect = {
+					wiirlak_ep_acceptation = { AMOUNT = 1 }
+
+					random_owned_planet = {
+						limit = { wiirlak_ep_can_be_bloomed_no_terraform = no }
+
+						weights = {
+							base = 10
+							modifier = {
+								factor = 10
+								is_capital = no
+							}
+							modifier = {
+								factor = 0.2
+								wiirlak_ep_adv_planet = yes
+							}
+							modifier = {
+								factor = 100
+								any_owned_species = {
+									has_trait = trait_wiirlak_ep_pc_bloom_preference
+								}
+							}
+						}
+						wiirlak_ep_diplomatically_into_bloom = yes
+					}
+				}
+			}
+		}
+
+		# Can't be used
+		
+		# Requires at least one non-Evergrowth planet
+		else = {
+			if = {
+				limit = {
+					FROM = {
+						count_owned_planet = {
+							count = trigger:num_owned_planets
+							limit = {
+								wiirlak_ep_can_be_bloomed_no_terraform = yes
+							}
+						}
+					}
+				}
+
+				custom_tooltip = wiirlak_ep_spread_the_evergrowth_tooltip_no_more
+			}
+
+			# Requires some acceptation
+			if = {
+				limit = {
+					FROM = {
+						check_variable = {
+							which = wiirlak_ep_var_acceptation
+							value <= 0
+						}
+					}
+				}
+				
+				custom_tooltip = wiirlak_ep_spread_the_evergrowth_tooltip_acceptation
+			}
+			
+			custom_tooltip = wiirlak_ep_spread_the_evergrowth_tooltip_refusal
+		}
+	}
+
+	ai_weight = {
+		weight = -500
+
+		# Has Bloomform Species
+		modifier = {
+			weight = -450
+			FROM = { any_owned_species = { has_trait = trait_wiirlak_ep_pc_bloom_preference } }
+		}
+		modifier = {
+			weight = -350
+			FROM = { owner_main_species = { has_trait = trait_wiirlak_ep_pc_bloom_preference } }
+		}
+		modifier = {
+			weight = -250
+			FROM = { 
+				count_owned_species = {
+					count = trigger:num_species
+					limit = { has_trait = trait_wiirlak_ep_pc_bloom_preference }
+				}
+			}
+		}
+
+
+		# Has Bloom Worlds
+		modifier = {
+			factor = 0.9
+			FROM = {
+				count_owned_planet = {
+					count > 0
+					limit = { is_planet_class = wiirlak_ep_pc_bloom }
+				}
+			}
+		}
+		modifier = {
+			factor = 0.8
+			FROM = {
+				count_owned_planet = {
+					count > 1
+					limit = { is_planet_class = wiirlak_ep_pc_bloom }
+				}
+			}
+		}
+		modifier = {
+			factor = 0.7
+			FROM = {
+				count_owned_planet = {
+					count > 2
+					limit = { is_planet_class = wiirlak_ep_pc_bloom }
+				}
+			}
+		}
+		modifier = {
+			factor = 0.6
+			FROM = {
+				count_owned_planet = {
+					count > 3
+					limit = { is_planet_class = wiirlak_ep_pc_bloom }
+				}
+			}
+		}
+		modifier = {
+			factor = 0.5
+			FROM = {
+				count_owned_planet = {
+					count > 4
+					limit = { is_planet_class = wiirlak_ep_pc_bloom }
+				}
+			}
+		}
+
+
+		# Has the AP
+		modifier = {
+			weight = -50
+			FROM = { has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol }
+		}
+
+
+		# Has techs to enjoy Bloom World
+		modifier = {
+			factor = 0.84
+			FROM = { has_technology = wiirlak_ep_tech_adv_resource }
+		}
+		modifier = {
+			factor = 0.84
+			FROM = { has_technology = wiirlak_ep_tech_science }
+		}
+		modifier = {
+			factor = 0.84
+			FROM = { has_technology = wiirlak_ep_tech_energy }
+		}
+		modifier = {
+			factor = 0.88
+			FROM = { has_technology = wiirlak_ep_tech_unity }
+		}
+		modifier = {
+			factor = 0.92
+			FROM = { has_technology = wiirlak_ep_tech_influence }
+		}
+		modifier = {
+			factor = 0.92
+			FROM = { has_technology = wiirlak_ep_tech_growth }
+		}
+		modifier = {
+			factor = 0.96
+			FROM = { has_technology = wiirlak_ep_tech_defense }
+		}
+	}
+}

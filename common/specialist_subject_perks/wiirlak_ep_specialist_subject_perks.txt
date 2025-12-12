@@ -1,0 +1,281 @@
+# Evergrowth Protocol
+# By Wiirlak
+
+
+
+
+
+# Tier 1
+wiirlak_ep_1_modifier = {
+	main_perk = yes
+	subject_modifier = {
+		wiirlak_ep_pc_bloom_habitability = 0.65
+		terraform_speed_mult = 0.20
+		terraforming_cost_mult = -0.10
+		country_unity_produces_mult = 0.33
+	}
+}
+wiirlak_ep_1_penalties = {
+	main_perk = yes
+	subject_modifier = {
+		empire_size_penalty_mult = 0.15
+	}
+}
+wiirlak_ep_1_insight = {
+	icon = GFX_specialist_perk_scholarium_1_discovery
+	activate_effect = {
+		target = {
+			if = {
+				limit = { NOT = { has_technology = wiirlak_ep_tech_energy } }
+
+				give_technology = {
+					tech = wiirlak_ep_tech_energy
+					message = yes
+				}
+			}
+			if = {
+				limit = {
+					NOR = {
+						has_technology = wiirlak_ep_tech_growth
+						has_tech_option = wiirlak_ep_tech_growth
+					}
+				}
+
+				add_research_option = wiirlak_ep_tech_growth
+			}
+			if = {
+				limit = {
+					NOR = {
+						has_technology = wiirlak_ep_tech_defense
+						has_tech_option = wiirlak_ep_tech_defense
+					}
+				}
+
+				add_research_option = wiirlak_ep_tech_defense
+			}
+		}
+	}
+
+	desc = {
+		description = wiirlak_ep_1_insight_desc
+	}
+}
+wiirlak_ep_1_bloomform = {
+	icon = GFX_specialist_perk_bulwark_1_bulwark_array
+	desc = {
+		description = wiirlak_ep_1_bloomform_desc
+	}
+	activate_effect = {
+		TARGET = {
+			overlord = { save_event_target_as = wiirlak_ep_crisis_reward }
+			
+			capital_scope = {
+				if = {
+					limit = { wiirlak_ep_can_be_bloomed = yes }
+
+					wiirlak_ep_diplomatically_into_bloom = yes
+				}
+			}
+		}
+	}
+}
+wiirlak_ep_1_overlord_modifier = {
+	icon = GFX_specialist_perk_bulwark_1_overlord_modifier
+	overlord_modifier = {
+		pop_bonus_workforce_mult = 0.20
+		country_society_research_produces_mult = 0.20
+
+		planet_jobs_wiirlak_ep_resource_mycogrowth_produces_mult = -0.50
+	}
+}
+wiirlak_ep_1_neighbor_bonuses = {
+	icon = GFX_specialist_perk_bulwark_1_neighbor_bonuses
+	overlord_relay_network_modifier = {
+		Wiirlak_ep_modifier_relay = 1
+	}
+	desc = {
+		description = scholarium_1_neighbor_bonuses_desc
+	}
+}
+
+
+
+# Tier 2
+wiirlak_ep_2_modifier = {
+	main_perk = yes
+	subject_modifier = {
+		wiirlak_ep_pc_bloom_habitability = 0.90
+		terraform_speed_mult = 0.60
+		terraforming_cost_mult = -0.20
+		country_unity_produces_mult = 0.66
+	}
+}
+wiirlak_ep_2_penalties = {
+	main_perk = yes
+	subject_modifier = {
+		empire_size_penalty_mult = 0.33
+	}
+}
+wiirlak_ep_2_insight = {
+	icon = GFX_specialist_perk_scholarium_2_discovery
+	activate_effect = {
+		target = {
+			if = {
+				limit = { NOT = { has_technology = wiirlak_ep_tech_science } }
+
+				give_technology = {
+					tech = wiirlak_ep_tech_science
+					message = yes
+				}
+			}
+			if = {
+				limit = {
+					NOR = {
+						has_technology = wiirlak_ep_tech_unity
+						has_tech_option = wiirlak_ep_tech_unity
+					}
+				}
+				
+				add_research_option = wiirlak_ep_tech_unity
+			}
+		}
+	}
+
+	desc = {
+		description = wiirlak_ep_2_insight_desc
+	}
+}
+wiirlak_ep_2_bloomform = {
+	icon = GFX_specialist_perk_bulwark_1_bulwark_array
+	desc = {
+		description = wiirlak_ep_2_bloomform_desc
+	}
+	activate_effect = {
+		TARGET = {
+			overlord = { save_event_target_as = wiirlak_ep_crisis_reward }
+
+			capital_scope.sector = {
+				every_owned_planet = {
+					limit = { wiirlak_ep_can_be_bloomed = yes }
+
+					wiirlak_ep_diplomatically_into_bloom = yes
+				}
+			}
+			every_owned_planet = {
+				limit = { is_planet_class = wiirlak_ep_pc_bloom }
+
+				wiirlak_ep_spread_trait_every_pop = yes
+			}
+		}
+	}
+}
+wiirlak_ep_2_colony = {
+	icon = GFX_specialist_perk_scholarium_1_neighbor_bonuses
+	desc = {
+		description = wiirlak_ep_2_colony_desc
+	}
+}
+wiirlak_ep_2_bloomform_leader = {
+	icon = GFX_specialist_perk_prospectorium_2_leaders
+	subject_modifier = {
+		country_official_cap_add = 1
+		official_initial_skill = 1
+	}
+	activate_effect = {
+		target = {
+			add_specialist_leaders = {
+				TYPE = evergrowth
+				CLASS = official
+			}
+		}
+	}
+	deactivate_effect = {
+		target = {
+			remove_specialist_leaders = {
+				TYPE = evergrowth
+				CLASS = official
+			}
+		}
+	}
+	desc = {
+		description = wiirlak_ep_2_bloomform_leader_desc
+	}
+}
+
+
+
+# Tier 3
+wiirlak_ep_3_modifier = {
+	main_perk = yes
+	subject_modifier = {
+		wiirlak_ep_pc_bloom_habitability = 1.20
+		terraform_speed_mult = 1.00
+		terraforming_cost_mult = -0.30
+		country_unity_produces_mult = 1.00
+	}
+}
+wiirlak_ep_3_penalties = {
+	main_perk = yes
+	subject_modifier = {
+		empire_size_penalty_mult = 0.50
+	}
+}
+wiirlak_ep_3_insight = {
+	icon = GFX_specialist_perk_scholarium_3_discovery
+	activate_effect = {
+		target = {
+			if = {
+				limit = { NOT = { has_technology = wiirlak_ep_tech_adv_resource } }
+
+				give_technology = {
+					tech = wiirlak_ep_tech_adv_resource
+					message = yes
+				}
+			}
+			if = {
+				limit = {
+					NOR = {
+						has_technology = wiirlak_ep_tech_influence
+						has_tech_option = wiirlak_ep_tech_influence
+					}
+				}
+				
+				add_research_option = wiirlak_ep_tech_influence
+			}
+		}
+	}
+
+	desc = {
+		description = wiirlak_ep_3_insight_desc
+	}
+}
+wiirlak_ep_3_bloomform = {
+	icon = GFX_specialist_perk_bulwark_1_bulwark_array
+	desc = {
+		description = wiirlak_ep_3_bloomform_desc
+	}
+	activate_effect = {
+		TARGET = {
+			overlord = { save_event_target_as = wiirlak_ep_crisis_reward }
+
+			every_owned_planet = {
+				limit = { wiirlak_ep_can_be_bloomed = yes }
+
+				wiirlak_ep_diplomatically_into_bloom = yes
+			}
+			wiirlak_ep_spread_trait_every_pop = yes
+		}
+	}
+}
+wiirlak_ep_3_colony = {
+	icon = GFX_specialist_perk_scholarium_1_neighbor_bonuses
+	desc = {
+		description = wiirlak_ep_3_colony_desc
+	}
+}
+wiirlak_ep_3_bloomform_leader = {
+	icon = GFX_specialist_perk_scholarium_2_traits
+	desc = {
+		description = wiirlak_ep_3_bloomform_leader_desc
+	}
+}

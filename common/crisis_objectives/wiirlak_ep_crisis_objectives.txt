@@ -1,0 +1,110 @@
+# Evergrowth Protocol
+# By Wiirlak
+
+# Owning Bloom Worlds
+wiirlak_ep_crisobj_own_bloom_world = { #Yearly
+	reward = {
+		base = 30
+		complex_trigger_modifier = { #subtract 2 for each playable country that exists
+			trigger = count_playable_country
+			mode = subtract
+			mult = 2
+		}
+		round_to = 5	#we want a solid number
+		min = 15		#and we don't want less than
+	}
+	recurring = yes
+}
+wiirlak_ep_crisobj_inhabit_bloom_world = { #Yearly
+	reward = {
+		base = 150
+		complex_trigger_modifier = { #subtract 2 for each playable country that exists
+			trigger = count_playable_country
+			mode = subtract
+			mult = 2
+		}
+		round_to = 5	#we want a solid number
+		min = 50		#and we don't want less than
+	}
+	recurring = yes
+}
+
+
+# Blooming planets
+wiirlak_ep_crisobj_blooming_planet = {
+	reward = {
+		base = 50
+		complex_trigger_modifier = { #subtract 2 for each playable country that exists
+			trigger = count_playable_country
+			mode = subtract
+			mult = 2
+		}
+		round_to = 5	#we want a solid number
+		min = 25		#and we don't want less than
+	}
+}
+
+wiirlak_ep_crisobj_blooming_adv_pc = {
+	reward = {
+		base = 250
+		complex_trigger_modifier = { #subtract 10 for each playable country that exists
+			trigger = count_playable_country
+			mode = subtract
+			mult = 10
+		}
+		round_to = 5	#we want a solid number
+		min = 150		#and we don't want less than
+	}
+}
+
+wiirlak_ep_crisobj_blooming_outside_border = {
+	reward = {
+		base = 250
+		complex_trigger_modifier = { #subtract 10 for each playable country that exists
+			trigger = count_playable_country
+			mode = subtract
+			mult = 10
+		}
+		round_to = 5	#we want a solid number
+		min = 100		#and we don't want less than
+	}
+}
+
+
+# Kill Bio Ships
+wiirlak_ep_crisobj_kill_bioships = {
+	potential = { has_biogenesis_dlc = yes }
+
+	# Reward is 5 × (Num Playable Countries) ÷ Num Playable Countries with Bioships
+	# This means the fewer empires with bioships in the galaxy, the greater the reward
+	reward = {
+		base = 5
+		complex_trigger_modifier = {
+			trigger = count_playable_country
+			mode = mult
+		}
+		complex_trigger_modifier = {
+			trigger = count_playable_country
+			parameters = {
+				limit = {
+					OR = {
+						country_uses_bio_ships = yes
+						is_same_empire = ROOT
+					}
+				}
+			}
+			mode = divide
+		}
+		round_to = 5
+	}
+}
+
+# Kill Fauna
+wiirlak_ep_crisobj_kill_fauna = {
+	reward = {
+		base = 20000
+		divide = trigger:num_galaxy_systems
+		round_to = 5
+		min = 10
+	}
+}

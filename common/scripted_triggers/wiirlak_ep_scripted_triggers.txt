@@ -1,0 +1,170 @@
+# Evergrowth Protocol
+# By Wiirlak
+
+
+
+# Planet Scope - Is this a valid target for Spy OP
+wiirlak_ep_valid_planet = {
+
+}
+
+
+# Planet Scope - Check if it's an advanced planet type, or not
+wiirlak_ep_adv_planet = {	
+	OR = {
+		is_planet_class = pc_city
+		is_planet_class = pc_gaia
+		is_planet_class = pc_hive
+		is_planet_class = pc_machine
+		is_planet_class = pc_relic
+
+		is_planet_class = pc_nanotech
+		is_planet_class = pc_cybrex
+	}
+	NOT = { has_planet_flag = wiirlak_ep_terraformed }
+}
+
+
+# Planet Scope - Seedbreaker target check
+can_destroy_planet_with_PLANET_KILLER_SEEDBREAKER = {
+	custom_tooltip = {
+		fail_text = is_habitable_non_artificial
+		OR = {
+			is_colonizable = yes
+			is_colony = yes
+		}
+		is_artificial = no
+	}
+	custom_tooltip = {
+		fail_text = fotd_cant_collossus
+		NOT = { has_planet_flag = fotd_seperatist_planet@from.owner }
+		exists = from.owner
+		from.owner = {
+			NOT = { has_country_flag = fotd_seperatist_country@from.owner }
+		}
+	}
+	custom_tooltip = {
+		fail_text = lathe_cant_colossus
+		NOT = { is_planet_class = pc_cosmogenesis_world }
+	}
+	custom_tooltip = {
+		fail_text = wiirlak_ep_is_not_bloom
+		NOT = { is_planet_class = wiirlak_ep_pc_bloom }
+	}
+	if = {
+		limit = { is_inside_border = from.owner }
+		if = {
+			limit = { #Uninhabited and primitive planets are always fine, if own colony then check if pops would be purged
+				exists = owner
+				owner = { is_same_value = from.owner }
+				any_owned_species = {
+					NOR = {
+						has_trait = trait_aquatic
+						has_trait = trait_robot_aquatic
+					}
+				}
+			}
+			custom_tooltip = {
+				fail_text = requires_purge_allowed
+				success_text = will_purge_non_aquatic_pops
+				from.owner = {
+					is_ai = no
+					has_policy_flag = purge_allowed
+				}
+			}
+		}
+	}
+	else = {
+		custom_tooltip = {
+			fail_text = is_not_hostile_or_primitive_or_ours
+			OR = {
+				planet_is_hostile_or_crisis = yes
+				AND = {
+					exists = owner
+					owner = {
+						is_country_type = primitive
+					}
+				}
+			}
+		}
+	}
+	if = {
+		limit = {
+			exists = owner
+			owner = { is_country_type = primitive }
+		}
+		# custom_tooltip = {
+		# 	fail_text = primitives_not_in_borders
+		# 	exists = space_owner
+		# 	space_owner = { is_same_value = from.owner }
+		# }
+		custom_tooltip = {
+			fail_text = primitives_not_full_interference
+			from.owner = {
+				has_policy_flag = interference_aggressive
+			}
+		}
+	}
+}
+
+
+# Species Scope - Check if the Bloom Trait can be spread to
+wiirlak_ep_valid_country_trait_spreading = {
+	NOT = { has_trait = trait_wiirlak_ep_pc_bloom_preference }
+}
+
+
+# Global/Any Scope - Count empires that have Bloom Worlds
+wiirlak_ep_count_bloom_world_empire = {
+	count_country = {
+		count >= value:wiirlak_ep_half_total_empire
+		limit = {
+			is_default_or_fallen = yes
+			owner_main_species = { NOT = { is_same_species = ROOT.owner_main_species } }
+			any_planet_within_border = { is_planet_class = wiirlak_ep_pc_bloom }
+		}
+	}
+}
+
+# Global/Any Scope - Check if galaxy-wide Bloom Worlds > X% of total systems in the galaxy
+wiirlak_ep_percent_owned = {
+	count_galaxy_planet = {
+		count >= value:wiirlak_ep_percent_bloomed_worlds
+		limit = { is_planet_class = wiirlak_ep_pc_bloom }
+	}
+}
+
+# Country Scope - Check if it has accepted the Evergrowth, and could benefit from it
+wiirlak_ep_accepted_evergrowth = {
+	OR = {
+		has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+		is_specialist_subject_type = { TYPE = evergrowth }
+		has_country_flag = wiirlak_ep_flag_ally_to_@event_target:wiirlak_ep_crisis_player
+	}
+}
+
+# Planet Scope - Check if the planet is valid to be Bloomed
+wiirlak_ep_can_be_bloomed = {
+	OR = {
+		is_planet_class = wiirlak_ep_pc_bloom
+		has_modifier = wiirlak_ep_modifier_forced_blooming
+		
+		OR ={
+			is_artificial = no
+			is_planet_class = pc_city
+		}
+	}
+}
+# Planet Scope - Check if the planet is valid to be Bloomed (No being terraformed option)
+wiirlak_ep_can_be_bloomed_no_terraform = {
+	OR = {
+		is_planet_class = wiirlak_ep_pc_bloom
+		has_modifier = wiirlak_ep_modifier_forced_blooming
+		is_terraforming = yes
+		
+		OR ={
+			is_artificial = no
+			is_planet_class = pc_city
+		}
+	}
+}

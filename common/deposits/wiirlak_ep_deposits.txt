@@ -1,0 +1,258 @@
+# Evergrowth Protocol
+# By Wiirlak
+
+
+# Deposit for bonuses exclusive to Bloom Worlds
+wiirlak_ep_deposit = {
+	category = deposit_cat_rare
+	icon = d_dense_jungle
+	is_for_colonizable = yes
+	potential = { is_planet_class = wiirlak_ep_pc_bloom }
+
+	resources = {
+		category = wiirlak_ep_bloom_world
+		produces = {
+			trigger = {
+				exists = OWNER
+				OWNER = { has_technology = wiirlak_ep_tech_influence }
+			}
+
+			influence = 0.20
+		}
+		produces = {
+			trigger = {
+				exists = OWNER
+				OWNER = { has_technology = wiirlak_ep_tech_energy }
+			}
+
+			energy = 1.50
+			multiplier = trigger:planet_size
+		}
+		produces = {
+			trigger = {
+				exists = OWNER
+				OWNER = { has_technology = wiirlak_ep_tech_unity }
+			}
+
+			unity = 0.50
+			multiplier = trigger:planet_stability
+		}
+		produces = {
+			trigger = {
+				exists = OWNER
+				OWNER = { has_technology = wiirlak_ep_tech_adv_resource }
+			}
+
+			exotic_gases = 0.10
+			rare_crystals = 0.10
+			volatile_motes = 0.10
+			multiplier = trigger:planet_size
+		}
+		produces = {
+			trigger = {
+				exists = OWNER
+				OWNER = { has_technology = wiirlak_ep_tech_science }
+			}
+
+			physics_research = 0.50
+			society_research = 0.75
+			engineering_research = 0.50
+			multiplier = trigger:colony_age_years
+		}
+	}
+
+
+	# Base
+	triggered_planet_modifier = {
+		potential = {
+			exists = OWNER
+			OWNER = { has_crisis_level = wiirlak_ep_evergrowth_protocol_level_1 }
+		}
+
+		planet_jobs_produces_mult = 0.10
+		pop_bonus_workforce_mult = 0.05
+	}
+	triggered_planet_modifier = {
+		potential = {
+			exists = OWNER
+			OWNER = { has_crisis_level = wiirlak_ep_evergrowth_protocol_level_2 }
+		}
+
+		planet_jobs_produces_mult = 0.10
+		pop_bonus_workforce_mult = 0.05
+	}
+	triggered_planet_modifier = {
+		potential = {
+			exists = OWNER
+			OWNER = { has_crisis_level = wiirlak_ep_evergrowth_protocol_level_3 }
+		}
+
+		planet_jobs_produces_mult = 0.10
+		pop_bonus_workforce_mult = 0.05
+	}
+	triggered_planet_modifier = {
+		potential = {
+			exists = OWNER
+			OWNER = { has_crisis_level = wiirlak_ep_evergrowth_protocol_level_4 }
+		}
+
+		planet_jobs_produces_mult = 0.10
+		pop_bonus_workforce_mult = 0.05
+	}
+	triggered_planet_modifier = {
+		potential = {
+			exists = OWNER
+			OWNER = { has_crisis_level = wiirlak_ep_evergrowth_protocol_level_5 }
+		}
+
+		planet_jobs_produces_mult = 0.10
+		pop_bonus_workforce_mult = 0.05
+	}
+
+
+	# Flags
+	triggered_planet_modifier = {
+		potential = { has_planet_flag = wiirlak_ep_diplomatically_bloomed }
+
+		planet_jobs_produces_mult = 0.15
+		pop_bonus_workforce_mult = 0.10
+	}
+	triggered_planet_modifier = {
+		potential = { has_planet_flag = wiirlak_ep_forcibly_bloomed }
+
+		planet_jobs_produces_mult = -0.10
+		pop_bonus_workforce_mult = -0.05
+	}
+
+	
+	# Subject Perks
+	triggered_planet_modifier = {
+		potential = {
+			exists = OWNER
+			OWNER = {
+				is_specialist_subject = yes
+				is_specialist_subject_tier = {
+					TYPE = evergrowth
+					TIER = 2
+				}
+			}
+		}
+
+		planet_stability_add = 5
+		planet_crime_add = -10
+		planet_orbital_bombardment_damage = -0.10
+	}
+	triggered_planet_modifier = {
+		potential = {
+			exists = OWNER
+			OWNER = {
+				is_specialist_subject = yes
+				is_specialist_subject_tier = {
+					TYPE = evergrowth
+					TIER = 3
+				}
+			}
+		}
+
+		bonus_pop_growth = 1
+		planet_pops_upkeep_mult = -0.10
+		pop_bonus_workforce_mult = 0.10
+	}
+
+
+	# Techs
+	triggered_planet_modifier = {
+		potential = {
+			exists = OWNER
+			OWNER = { has_technology = wiirlak_ep_tech_gatekeeping }
+		}
+
+		planet_jobs_produces_mult = 0.15
+		pop_bonus_workforce_mult = 0.15
+	}
+	triggered_planet_modifier = {
+		potential = {
+			exists = OWNER
+			OWNER = { has_technology = wiirlak_ep_tech_energy }
+		}
+		
+		planet_jobs_energy_produces_mult = 0.25
+	}
+	triggered_planet_modifier = {
+		potential = {
+			exists = OWNER
+			OWNER = { has_technology = wiirlak_ep_tech_unity }
+		}
+		
+		planet_jobs_unity_produces_mult = 0.25
+	}
+	triggered_planet_modifier = {
+		potential = {
+			exists = OWNER
+			OWNER = { has_technology = wiirlak_ep_tech_growth }
+		}
+		
+		bonus_pop_growth = 2
+	}
+	triggered_planet_modifier = {
+		potential = {
+			exists = OWNER
+			OWNER = { has_technology = wiirlak_ep_tech_defense }
+		}
+		
+		army_defense_health_mult = 0.50
+		army_starting_experience_add = 100
+	}
+
+
+	# Final Step
+	triggered_planet_modifier = {
+		potential = {
+			exists = OWNER
+			OWNER = {
+				is_gestalt = yes
+				wiirlak_ep_accepted_evergrowth = yes
+			}
+		}
+
+		wiirlak_ep_modifier_blooming_hive = 1
+	}
+	triggered_planet_modifier = {
+		potential = {
+			exists = OWNER
+			OWNER = {
+				is_gestalt = yes
+				wiirlak_ep_accepted_evergrowth = no
+			}
+		}
+
+		wiirlak_ep_modifier_blooming_hive = -1
+	}
+	triggered_planet_modifier = {
+		potential = {
+			exists = OWNER
+			OWNER = {
+				is_gestalt = no
+				wiirlak_ep_accepted_evergrowth = yes
+			}
+		}
+
+		wiirlak_ep_modifier_blooming = 1
+	}
+	triggered_planet_modifier = {
+		potential = {
+			exists = OWNER
+			OWNER = {
+				is_gestalt = no
+				wiirlak_ep_accepted_evergrowth = no
+			}
+		}
+
+		wiirlak_ep_modifier_blooming = -1
+	}
+
+	drop_weight = {
+		factor = 0
+	}
+}
+

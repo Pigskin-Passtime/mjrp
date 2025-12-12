@@ -1,0 +1,508 @@
+# Evergrowth Protocol
+# By Wiirlak
+
+# Terraforming Bloom Worlds
+wiirlak_ep_tech_bloom_colonization_1 = {
+	area = society
+	category = { new_worlds }
+	ai_update_type = all
+	icon = tech_unique_mutation_voidworm
+	tier = 3
+	cost = 10000
+	weight = 0
+
+	is_rare = yes
+	is_reverse_engineerable = no
+
+	prerequisites = { tech_terrestrial_sculpting }
+	potential = {
+		has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+	}
+
+	prereqfor_desc = {
+		custom = {
+			title = wiirlak_ep_tech_bloom_colonization_1_tooltip
+			desc = wiirlak_ep_tech_bloom_colonization_1_tooltip_desc
+		}
+	}
+
+	ai_weight = {
+		factor = 1000
+	}
+}
+
+# Reduce cost of terraforming Bloom Worlds
+wiirlak_ep_tech_bloom_colonization_2 = {
+	area = society
+	category = { new_worlds }
+	ai_update_type = all
+	icon = tech_universal_marcophage
+	tier = 3
+	cost = 15000
+	weight = 0
+
+	is_rare = yes
+	is_reverse_engineerable = no
+
+	prerequisites = { wiirlak_ep_tech_bloom_colonization_1 }
+	potential = {
+		has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+	}
+	
+	modifier = {
+		custom_tooltip = wiirlak_ep_tech_bloom_colonization_2_tooltip
+	}
+
+	ai_weight = {
+		factor = 1000
+	}
+}
+
+
+# Unlocks the Seedbreaker Colossus Weapon
+wiirlak_ep_tech_seedbreaker = {
+	area = engineering
+	category = { voidcraft }
+	ai_update_type = military
+	icon = tech_unique_mutation_starborne_biology
+	tier = 5
+	cost = @tier5cost3
+	weight = 0
+
+	is_rare = yes
+	is_reverse_engineerable = no
+
+	prerequisites = { "tech_colossus" }
+	potential = {
+		host_has_dlc = "Apocalypse"
+		has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+		has_menace_perk = wiirlak_ep_menap_tech_4
+	}
+
+	ai_weight = {
+		factor = 1000
+	}
+}
+
+
+# Required tech to validate level 5 crisis
+wiirlak_ep_tech_gatekeeping = {
+	area = society
+	category = { new_worlds }
+	ai_update_type = all
+	icon = tech_identity_initialization
+	tier = 4
+	cost = @tier5cost3
+	weight = 10
+
+	is_rare = yes
+	is_reverse_engineerable = no
+	is_dangerous = yes
+
+	prerequisites = {}
+	potential = {
+		has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+		has_crisis_level = wiirlak_ep_evergrowth_protocol_level_4
+	}
+
+	prereqfor_desc = {
+		custom = {
+			title = wiirlak_ep_tech_gatekeeping_tooltip
+			desc = wiirlak_ep_tech_gatekeeping_tooltip_desc
+		}
+	}
+
+	weight_modifier = {
+		modifier = {
+			factor = 10
+			resource_stockpile_compare = {
+				resource = wiirlak_ep_resource_mycogrowth
+				value > 100000
+			}
+		}
+		modifier = {
+			factor = 5
+			resource_stockpile_compare = {
+				resource = wiirlak_ep_resource_mycogrowth
+				value > 50000
+			}
+		}
+	}
+
+	ai_weight = {
+		factor = 1000
+	}
+}
+
+
+
+
+
+
+
+
+
+
+# Techs for having Bloom Worlds
+wiirlak_ep_tech_energy = {
+	area = society
+	category = { new_worlds }
+	ai_update_type = all
+	icon = tech_unique_mutation_crystalline_entity
+	tier = 3
+	cost = @tier4cost3
+	weight = 5
+
+	is_rare = yes
+	is_reverse_engineerable = no
+
+	prerequisites = {}
+	potential = {
+		OR = {
+			any_planet_within_border = { is_planet_class = wiirlak_ep_pc_bloom }
+			is_specialist_subject_type = { TYPE = evergrowth }
+		}
+	}
+
+	modifier = {
+		custom_tooltip = wiirlak_ep_tech_energy_tooltip
+	}
+
+	ai_weight = {
+		factor = 1000
+	}
+	weight_modifier = {
+		modifier = {
+			factor = 4
+			any_owned_planet = {
+				is_planet_class = wiirlak_ep_pc_bloom
+			}
+		}
+		modifier = {
+			factor = 10
+			count_owned_planet = {
+				count > 2
+				limit = { is_planet_class = wiirlak_ep_pc_bloom }
+			}
+		}
+		modifier = {
+			factor = 10
+			count_owned_planet = {
+				count > 5
+				limit = { is_planet_class = wiirlak_ep_pc_bloom }
+			}
+		}
+	}
+}
+
+# Techs for having Bloom Worlds
+wiirlak_ep_tech_adv_resource = {
+	area = engineering
+	category = { materials }
+	ai_update_type = all
+	icon = tech_unique_mutation_restorative_enzymes
+	tier = 3
+	cost = @tier4cost3
+	weight = 5
+
+	is_rare = yes
+	is_reverse_engineerable = no
+
+	prerequisites = { tech_mine_exotic_gases tech_mine_rare_crystals tech_mine_volatile_motes }
+	potential = {
+		OR = {
+			any_planet_within_border = { is_planet_class = wiirlak_ep_pc_bloom }
+			is_specialist_subject_type = { TYPE = evergrowth }
+		}
+	}
+
+	modifier = {
+		custom_tooltip = wiirlak_ep_tech_adv_resource_tooltip
+	}
+
+	ai_weight = {
+		factor = 1000
+	}
+	weight_modifier = {
+		modifier = {
+			factor = 4
+			any_owned_planet = {
+				is_planet_class = wiirlak_ep_pc_bloom
+			}
+		}
+		modifier = {
+			factor = 10
+			count_owned_planet = {
+				count > 2
+				limit = { is_planet_class = wiirlak_ep_pc_bloom }
+			}
+		}
+		modifier = {
+			factor = 10
+			count_owned_planet = {
+				count > 5
+				limit = { is_planet_class = wiirlak_ep_pc_bloom }
+			}
+		}
+	}
+}
+
+# Techs for having Bloom Worlds
+wiirlak_ep_tech_influence = {
+	area = society
+	category = { statecraft }
+	ai_update_type = all
+	icon = tech_unique_mutation_tiyanki
+	tier = 3
+	cost = @tier4cost3
+	weight = 5
+
+	is_rare = yes
+	is_reverse_engineerable = no
+
+	prerequisites = {}
+	potential = {
+		OR = {
+			any_planet_within_border = { is_planet_class = wiirlak_ep_pc_bloom }
+			is_specialist_subject_type = { TYPE = evergrowth }
+		}
+	}
+
+	modifier = {
+		custom_tooltip = wiirlak_ep_tech_influence_tooltip
+	}
+
+	ai_weight = {
+		factor = 1000
+	}
+	weight_modifier = {
+		modifier = {
+			factor = 4
+			any_owned_planet = {
+				is_planet_class = wiirlak_ep_pc_bloom
+			}
+		}
+		modifier = {
+			factor = 10
+			count_owned_planet = {
+				count > 2
+				limit = { is_planet_class = wiirlak_ep_pc_bloom }
+			}
+		}
+		modifier = {
+			factor = 10
+			count_owned_planet = {
+				count > 5
+				limit = { is_planet_class = wiirlak_ep_pc_bloom }
+			}
+		}
+	}
+}
+
+# Techs for having Bloom Worlds
+wiirlak_ep_tech_science = {
+	area = society
+	category = { biology }
+	ai_update_type = all
+	icon = tech_voidworm_immunity
+	tier = 3
+	cost = @tier4cost3
+	weight = 5
+
+	is_rare = yes
+	is_reverse_engineerable = no
+
+	prerequisites = {}
+	potential = {
+		OR = {
+			any_planet_within_border = { is_planet_class = wiirlak_ep_pc_bloom }
+			is_specialist_subject_type = { TYPE = evergrowth }
+		}
+	}
+
+	modifier = {
+		custom_tooltip = wiirlak_ep_tech_science_tooltip
+	}
+
+	ai_weight = {
+		factor = 1000
+	}
+	weight_modifier = {
+		modifier = {
+			factor = 4
+			any_owned_planet = {
+				is_planet_class = wiirlak_ep_pc_bloom
+			}
+		}
+		modifier = {
+			factor = 10
+			count_owned_planet = {
+				count > 2
+				limit = { is_planet_class = wiirlak_ep_pc_bloom }
+			}
+		}
+		modifier = {
+			factor = 10
+			count_owned_planet = {
+				count > 5
+				limit = { is_planet_class = wiirlak_ep_pc_bloom }
+			}
+		}
+	}
+}
+
+# Techs for having Bloom Worlds
+wiirlak_ep_tech_unity = {
+	area = society
+	category = { statecraft }
+	ai_update_type = all
+	icon = tech_identity_fusion
+	tier = 3
+	cost = @tier4cost3
+	weight = 5
+
+	is_rare = yes
+	is_reverse_engineerable = no
+
+	prerequisites = {}
+	potential = {
+		OR = {
+			any_planet_within_border = { is_planet_class = wiirlak_ep_pc_bloom }
+			is_specialist_subject_type = { TYPE = evergrowth }
+		}
+	}
+
+	modifier = {
+		custom_tooltip = wiirlak_ep_tech_unity_tooltip
+	}
+
+	ai_weight = {
+		factor = 1000
+	}
+	weight_modifier = {
+		modifier = {
+			factor = 4
+			any_owned_planet = {
+				is_planet_class = wiirlak_ep_pc_bloom
+			}
+		}
+		modifier = {
+			factor = 10
+			count_owned_planet = {
+				count > 2
+				limit = { is_planet_class = wiirlak_ep_pc_bloom }
+			}
+		}
+		modifier = {
+			factor = 10
+			count_owned_planet = {
+				count > 5
+				limit = { is_planet_class = wiirlak_ep_pc_bloom }
+			}
+		}
+	}
+}
+
+# Techs for having Bloom Worlds
+wiirlak_ep_tech_growth = {
+	area = society
+	category = { biology }
+	ai_update_type = all
+	icon = tech_refit_standards_beastmasters
+	tier = 3
+	cost = @tier4cost3
+	weight = 5
+
+	is_rare = yes
+	is_reverse_engineerable = no
+
+	prerequisites = {}
+	potential = {
+		OR = {
+			any_planet_within_border = { is_planet_class = wiirlak_ep_pc_bloom }
+			is_specialist_subject_type = { TYPE = evergrowth }
+		}
+	}
+
+	modifier = {
+		custom_tooltip = wiirlak_ep_tech_growth_tooltip
+	}
+
+	ai_weight = {
+		factor = 1000
+	}
+	weight_modifier = {
+		modifier = {
+			factor = 4
+			any_owned_planet = {
+				is_planet_class = wiirlak_ep_pc_bloom
+			}
+		}
+		modifier = {
+			factor = 10
+			count_owned_planet = {
+				count > 2
+				limit = { is_planet_class = wiirlak_ep_pc_bloom }
+			}
+		}
+		modifier = {
+			factor = 10
+			count_owned_planet = {
+				count > 5
+				limit = { is_planet_class = wiirlak_ep_pc_bloom }
+			}
+		}
+	}
+}
+
+# Techs for having Bloom Worlds
+wiirlak_ep_tech_defense = {
+	area = society
+	category = { military_theory }
+	ai_update_type = all
+	icon = tech_sensors_bio_integration
+	tier = 3
+	cost = @tier4cost3
+	weight = 5
+
+	is_rare = yes
+	is_reverse_engineerable = no
+
+	prerequisites = {}
+	potential = {
+		OR = {
+			any_planet_within_border = { is_planet_class = wiirlak_ep_pc_bloom }
+			is_specialist_subject_type = { TYPE = evergrowth }
+		}
+	}
+
+	modifier = {
+		custom_tooltip = wiirlak_ep_tech_defense_tooltip
+	}
+
+	ai_weight = {
+		factor = 1000
+	}
+	weight_modifier = {
+		modifier = {
+			factor = 4
+			any_owned_planet = {
+				is_planet_class = wiirlak_ep_pc_bloom
+			}
+		}
+		modifier = {
+			factor = 10
+			count_owned_planet = {
+				count > 2
+				limit = { is_planet_class = wiirlak_ep_pc_bloom }
+			}
+		}
+		modifier = {
+			factor = 10
+			count_owned_planet = {
+				count > 5
+				limit = { is_planet_class = wiirlak_ep_pc_bloom }
+			}
+		}
+	}
+}

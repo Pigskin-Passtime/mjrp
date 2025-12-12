@@ -1,0 +1,139 @@
+# Evergrowth Protocol
+# By Wiirlak
+
+
+# Get 25% of the empire total owned planets
+wiirlak_ep_25_percent_planet = {
+	base = 0
+	add = trigger:num_owned_planets
+	mult = 0.25
+	ceiling = yes
+}
+
+# Get 75% of the empire total owned planets
+wiirlak_ep_75_percent_planet = {
+	base = 0
+	add = trigger:num_owned_planets
+	mult = 0.75
+	ceiling = yes
+}
+
+# Get 90% of the empire total owned planets
+wiirlak_ep_90_percent_planet = {
+	base = 0
+	add = trigger:num_owned_planets
+	mult = 0.90
+	ceiling = yes
+}
+
+
+# Count Bloom Worlds within Border
+wiirlak_ep_count_bloom_worlds_border = {
+	base = 0
+	complex_trigger_modifier = {
+		trigger = count_owned_planet
+		mode = add
+		parameters = {
+			limit = { is_planet_class = wiirlak_ep_pc_bloom }
+		}
+	}
+}
+
+# Count Bloom Worlds Galaxy-wide
+wiirlak_ep_count_bloom_worlds_galaxy = {
+	base = 0
+	complex_trigger_modifier = {
+		trigger = count_galaxy_planet
+		mode = set
+		parameters = {
+			limit = { is_planet_class = wiirlak_ep_pc_bloom }
+		}
+	}
+}
+
+
+# Count Bloomform in the Galaxy
+wiirlak_ep_bloomform_count = {
+	base = 0
+	complex_trigger_modifier = {
+		trigger = count_owned_pop_amount
+		trigger_scope = owner
+		parameters = {
+			limit = {
+				species = { has_trait = trait_wiirlak_ep_pc_bloom_preference }
+			}
+		}
+		mode = add
+	}
+}
+
+
+# 50% of Total Playable Empires in the Galaxy
+wiirlak_ep_half_total_empire = {
+	base = 0
+	complex_trigger_modifier = {
+		trigger = count_country
+		parameters = {
+			limit = { is_default_or_fallen = yes }
+		}
+		mode = add
+	}
+	divide = 2
+	ceiling = yes
+}
+# Count Playable Empires in the Galaxy with Bloom Worlds within
+wiirlak_ep_total_empire_bloomed = {
+	base = 0
+	complex_trigger_modifier = {
+		trigger = count_country
+		parameters = {
+			limit = {
+				is_default_or_fallen = yes
+				owner_main_species = { NOT = { is_same_species = ROOT.owner_main_species } }
+				any_planet_within_border = { is_planet_class = wiirlak_ep_pc_bloom }
+			}
+		}
+		mode = add
+	}
+}
+
+# Count X% of Total Habitable Planets in the Galaxy
+wiirlak_ep_percent_bloomed_worlds = {
+	base = 0
+	complex_trigger_modifier = {
+		trigger = count_galaxy_planet
+		parameters = {
+			limit = {
+				is_colonizable = yes
+				OR = {
+					is_artificial = no
+					is_planet_class = pc_city
+				}
+			}
+		}
+		mode = set
+	}
+	multiply = 0.25 	# Number = % of Habitable Planets to be Bloom Worlds
+	ceiling = yes
+}
+
+
+# Situation Cost
+wiirlak_ep_situation_cost = {
+	base = 1
+	multiply = trigger:situation_progress
+	multiply = 0.1
+}
+
+
+# Count total owned Mycogrowth
+wiirlak_ep_mycogrowth_total = {
+	base = 0
+	complex_trigger_modifier = {
+		trigger = resource_stockpile_compare
+		parameters = {
+			resource = wiirlak_ep_resource_mycogrowth
+		}
+		mode = set
+	}
+}

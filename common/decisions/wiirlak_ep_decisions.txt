@@ -1,0 +1,250 @@
+# Evergrowth Protocol
+# By Wiirlak
+
+
+# Bloom Propagation
+# +50% Food Production and +0.5 Mycogrowth per Farmer
+wiirlak_ep_decision_planet_boost = {
+	owned_planets_only = yes
+	sound = event_alien_nature
+	icon = wilderness_planet_expand
+
+	resources = {
+		category = decisions
+		inline_script = {
+			script = "wiirlak_ep_food_cost"
+			AMOUNT = 1000
+			MULT = 1
+			MYCO = 100
+		}
+	}
+
+	potential = {
+		owner = { has_menace_perk = wiirlak_ep_menap_food_2 }
+		owner = { NOT = { has_menace_perk = wiirlak_ep_menap_food_3 } }
+		is_planet_class = wiirlak_ep_pc_bloom
+	}
+
+	allow = {
+		NOT = { has_modifier = wiirlak_ep_modifier_decision_planet_boost }
+	}
+
+	effect = {
+		add_modifier = {
+			modifier = wiirlak_ep_modifier_decision_planet_boost
+			days = 3600
+		}
+
+		# Failsafe
+		wiirlak_ep_spawn_deposit = yes
+	}
+
+	ai_weight = {
+		weight = 50
+
+		# don't encourage growth if there is no free housing
+		modifier = {
+			factor = 0
+			free_housing <= 0
+		}
+	}
+}
+
+
+# Bloom Propagation
+# +50% Food Production and +0.5 Mycogrowth per Farmer; Apply Sector-wide
+# If not Bloom Worlds, will start Terraforming
+wiirlak_ep_decision_planet_boost_sector = {
+	owned_planets_only = yes
+	sound = event_alien_nature
+	icon = wilderness_planet_expand
+
+	resources = {
+		category = decisions
+		inline_script = {
+			script = "wiirlak_ep_food_cost"
+			AMOUNT = 3000
+			MULT = 1
+			MYCO = 250
+		}
+	}
+
+	potential = {
+		owner = { has_menace_perk = wiirlak_ep_menap_food_3 }
+		is_planet_class = wiirlak_ep_pc_bloom
+	}
+
+	allow = {
+		NOT = { has_modifier = wiirlak_ep_modifier_decision_planet_boost }
+		custom_tooltip = {
+			fail_text = wiirlak_ep_decision_planet_boost_sector_sector_fail
+			success_text = wiirlak_ep_decision_planet_boost_sector_sector_success
+			is_in_frontier_space = no
+		}
+		custom_tooltip = {
+			fail_text = wiirlak_ep_decision_planet_boost_sector_sector_leader_fail
+			success_text = wiirlak_ep_decision_planet_boost_sector_sector_leader_success
+			sector.sector_capital = {
+				exists = leader
+			}
+		}
+	}
+
+	effect = {
+		tooltip = {
+			custom_tooltip = wiirlak_ep_decision_planet_boost_sector_tooltip
+			add_modifier = {
+				modifier = wiirlak_ep_modifier_decision_planet_boost
+				days = 3600
+			}
+		}
+
+		hidden_effect = {
+			sector = {
+				every_owned_planet = {
+					if = {
+						limit = { is_planet_class = wiirlak_ep_pc_bloom }
+
+						hidden_effect = { remove_modifier = wiirlak_ep_modifier_decision_planet_boost }
+						add_modifier = {
+							modifier = wiirlak_ep_modifier_decision_planet_boost
+							days = 3600
+						}
+
+						# Failsafe
+						wiirlak_ep_spawn_deposit = yes
+					}
+					else_if = {
+						limit = { is_terraforming = no }
+
+						start_terraform_process = wiirlak_ep_pc_bloom
+					}
+				}
+			}
+		}
+	}
+
+	ai_weight = {
+		weight = 5
+
+		# don't encourage growth if there is no free housing
+		modifier = {
+			factor = 0
+			free_housing <= 0
+		}
+
+		modifier = {
+			factor = 100
+			sector = {
+				any_owned_planet = { NOT = { is_planet_class = wiirlak_ep_pc_bloom } }
+			}
+		}
+	}
+}
+
+
+
+# Final Project - Step 2
+wiirlak_ep_decision_final_project = {
+	owned_planets_only = yes
+	sound = event_alien_nature
+	icon = decision_wilderness_build_colony_ship
+
+	resources = {
+		category = decisions
+		inline_script = {
+			script = "wiirlak_ep_food_cost"
+			AMOUNT = 30000
+			MULT = 1
+			MYCO = 25000
+		}
+		upkeep = {
+			energy = 25
+		}
+	}
+	enactment_time = 3600
+
+	potential = {
+		owner = {
+			has_crisis_level = wiirlak_ep_evergrowth_protocol_level_5
+			has_completed_special_project_in_log = WIIRLAK_EP_FINAL_PROJECT_1
+			NOT = { has_country_flag = wiirlak_ep_flag_step_2_done }
+		}
+		is_capital = yes
+		is_planet_class = wiirlak_ep_pc_bloom
+	}
+
+	effect = {
+		custom_tooltip = wiirlak_ep_decision_final_project_tooltip
+
+		owner = {
+			country_event = {
+				id = wiirlak_ep.5200
+			}
+
+			hidden_effect = {
+				set_country_flag = wiirlak_ep_flag_step_2_done
+			}
+		}
+	}
+
+	ai_weight = {
+		weight = 10000
+	}
+}
+
+# Final Project - Step 3
+wiirlak_ep_decision_final_project_2 = {
+	owned_planets_only = yes
+	sound = event_alien_nature
+	icon = decision_wilderness_build_colony_ship
+
+	resources = {
+		category = decisions
+		inline_script = {
+			script = "wiirlak_ep_food_cost"
+			AMOUNT = 30000
+			MULT = 1
+			MYCO = 25000
+		}
+		upkeep = {
+			energy = 50
+		}
+	}
+	enactment_time = 3600
+
+	potential = {
+		owner = {
+			has_crisis_level = wiirlak_ep_evergrowth_protocol_level_5
+			has_completed_special_project_in_log = WIIRLAK_EP_FINAL_PROJECT_1
+			has_country_flag = wiirlak_ep_flag_step_2_done
+			NOT = { has_country_flag = wiirlak_ep_flag_step_3_done }
+		}
+		is_capital = yes
+		is_planet_class = wiirlak_ep_pc_bloom
+	}
+
+	on_queued = {
+		wiirlak_ep_blooming_worlds_start = yes
+	}
+	on_unqueued = {
+		wiirlak_ep_blooming_worlds_stop = yes
+	}
+	effect = {
+		custom_tooltip = wiirlak_ep_decision_final_project_2_tooltip
+
+		owner = {
+			country_event = {
+				id = wiirlak_ep.5300
+			}
+
+			hidden_effect = {
+				set_country_flag = wiirlak_ep_flag_step_3_done
+			}
+		}
+	}
+
+	ai_weight = {
+		weight = 10000
+	}
+}

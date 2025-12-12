@@ -1,0 +1,4140 @@
+# Evergrowth Protocol
+# By Wiirlak
+
+namespace = wiirlak_ep
+
+@gain = 3
+@loss = -3
+@threshold = 5
+
+
+# Empty - To copy/paste quickly
+country_event = {
+	id = wiirlak_ep.0000
+	
+	hide_window = no
+	title = wiirlak_ep_event_lvl_script_loc
+	desc = wiirlak_ep_event_lvl_script_loc
+	show_sound = amb_toxic_world_a
+	picture = GFX_evt_alien_nature
+	auto_opens = yes
+
+	is_triggered_only = yes
+	trigger = {
+		has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+		always = no
+	}
+	event_chain = wiirlak_ep_evergrowth_protocol_chain
+	
+	immediate = {
+	}
+
+	option = {
+		name = ACKNOWLEDGED
+	}
+	after = {
+	}
+}
+
+
+
+
+# Crisis Levels - Series 1000
+# Crisis Initial + Level Up Events
+country_event = {
+	id = wiirlak_ep.1000
+	
+	hide_window = no
+	title = wiirlak_ep_event_lvl_script_loc
+	desc = wiirlak_ep_event_lvl_desc_script_loc
+	show_sound = amb_toxic_world_a
+	auto_opens = yes
+
+	is_triggered_only = yes
+	trigger = {
+		has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+	}
+	event_chain = wiirlak_ep_evergrowth_protocol_chain
+
+	# Image
+	picture = {
+		trigger = { has_crisis_level = wiirlak_ep_evergrowth_protocol_level_5 }
+
+		picture = GFX_evt_astral_rift_bleached_planet_2
+	}
+	picture = {
+		trigger = { has_crisis_level = wiirlak_ep_evergrowth_protocol_level_4 }
+
+		picture = GFX_evt_liquid_darkness
+	}
+	picture = {
+		trigger = { has_crisis_level = wiirlak_ep_evergrowth_protocol_level_3 }
+
+		picture = GFX_evt_astral_rift_garden_2
+	}
+	picture = {
+		trigger = { has_crisis_level = wiirlak_ep_evergrowth_protocol_level_2 }
+
+		picture = GFX_evt_astral_rift_tropical_habitat
+	}
+	picture = {
+		trigger = { has_crisis_level = wiirlak_ep_evergrowth_protocol_level_1 }
+
+		picture = GFX_evt_astral_rift_lonely_planet
+	}
+
+	option = {
+		name = GOOD
+
+		if = {
+			limit = { has_event_chain = wiirlak_ep_evergrowth_protocol_chain }
+
+			add_event_chain_counter = {
+				event_chain = wiirlak_ep_evergrowth_protocol_chain
+				counter = wiirlak_ep_evergrowth_protocol_levels
+				amount = 1
+			}
+		}
+		else = {
+			begin_event_chain = {
+				event_chain = wiirlak_ep_evergrowth_protocol_chain
+			}
+
+			add_event_chain_counter = {
+				event_chain = wiirlak_ep_evergrowth_protocol_chain
+				counter = wiirlak_ep_evergrowth_protocol_levels
+				amount = 1
+			}
+		}
+
+		custom_tooltip = new_crisis_perks_tt
+
+
+		# Final Project at level 5
+		if = {
+			limit = { has_crisis_level = wiirlak_ep_evergrowth_protocol_level_5 }
+
+			enable_special_project = {
+				name = WIIRLAK_EP_FINAL_PROJECT_1
+			}
+
+			# Warn that someone is going overboard
+			hidden_effect = {
+				save_event_target_as = wiirlak_ep_crisis_player
+
+				every_country = {
+					limit = {
+						is_default_or_fallen = yes
+						has_communications = ROOT
+						NOT = { is_same_empire = ROOT }
+					}
+
+					country_event = {
+						id = wiirlak_ep.1200	days = 3
+					}
+				}
+
+				# Choose Allies
+				country_event = {
+					id = wiirlak_ep.5000	days = 15
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_crisis_level = wiirlak_ep_evergrowth_protocol_level_3
+				NOT = { has_global_flag = wiirlak_ep_flag_crisis_level_3 }
+			}
+
+			hidden_effect = {
+				save_event_target_as = wiirlak_ep_crisis_player
+				
+				set_global_flag = wiirlak_ep_flag_crisis_level_3
+
+				every_country = {
+					limit = {
+						is_default_or_fallen = yes
+						has_communications = ROOT
+						NOT = { is_same_empire = ROOT }
+					}
+
+					country_event = {
+						id = wiirlak_ep.1100	days = 3
+					}
+				}
+			}
+		}
+	}
+}
+
+
+# On Crisis level 3 - Warn that it's now a level 3 crisis
+country_event = {
+	id = wiirlak_ep.1100
+	
+	hide_window = no
+	title = wiirlak_ep_warning
+	desc = wiirlak_ep_warning_desc
+	show_sound = amb_toxic_world_a
+	picture = GFX_evt_aggressive_flora
+	auto_opens = yes
+
+	location = event_target:wiirlak_ep_crisis_player.capital_planet
+
+	is_triggered_only = yes
+
+	# Gestalt - Neutral
+	option = {
+		name = story.contact_report.gestalt_consciousness_machine
+
+		trigger = { is_gestalt = yes }
+
+		hidden_effect = {
+			wiirlak_ep_acceptation = { AMOUNT = 0 }
+		}
+
+		ai_chance = {
+			base = 10
+			modifier = {
+				add = 5
+				has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+			}
+			modifier = {
+				add = -5
+				has_country_flag = wiirlak_ep_flag_aggressively_bloomed
+			}
+			modifier = {
+				add = -3
+				is_at_war_with = event_target:wiirlak_ep_crisis_player
+			}
+			modifier = {
+				add = -1
+				is_rival = event_target:wiirlak_ep_crisis_player
+			}
+			modifier = {
+				add = 2
+				event_target:wiirlak_ep_crisis_player = { 
+					is_federation_leader = yes
+				}
+			}
+			modifier = {
+				add = 1
+				any_federation_ally = {
+					is_same_empire = event_target:wiirlak_ep_crisis_player
+				}
+			}
+			modifier = {
+				add = 3
+				event_target:wiirlak_ep_crisis_player = {
+					is_overlord_to = PREV
+				}
+			}
+		}
+	}
+
+	# Wary
+	option = {
+		name = story.contact_report_first_alien_life_found_militarist
+		
+		hidden_effect = {
+			wiirlak_ep_acceptation = { AMOUNT = 0 }
+		}
+
+		ai_chance = {
+			base = 5
+		}
+	}
+
+	# Agressive reaction
+	option = {
+		name = story.contact_report.xenophobe
+
+		trigger = { is_xenophobe = yes }
+
+		hidden_effect = {
+			wiirlak_ep_acceptation = { AMOUNT = @loss }
+		}
+
+		ai_chance = {
+			base = 50
+			modifier = {
+				add = -5
+				has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+			}
+			modifier = {
+				add = 10
+				has_country_flag = wiirlak_ep_flag_aggressively_bloomed
+			}
+			modifier = {
+				add = 10
+				is_at_war_with = event_target:wiirlak_ep_crisis_player
+			}
+			modifier = {
+				add = 7
+				is_rival = event_target:wiirlak_ep_crisis_player
+			}
+			modifier = {
+				add = 3
+				event_target:wiirlak_ep_crisis_player = { is_rival = PREV } 
+			}
+			modifier = {
+				add = -5
+				event_target:wiirlak_ep_crisis_player = { 
+					is_federation_leader = yes
+				}
+			}
+			modifier = {
+				add = -3
+				any_federation_ally = {
+					is_same_empire = event_target:wiirlak_ep_crisis_player
+				}
+			}
+			modifier = {
+				add = -15
+				event_target:wiirlak_ep_crisis_player = {
+					is_overlord_to = PREV
+				}
+			}
+		}
+	}
+	option = {
+		name = story.contact_report.militarist
+
+		trigger = { is_militarist = yes }
+
+		hidden_effect = {
+			wiirlak_ep_acceptation = { AMOUNT = @loss }
+		}
+
+		ai_chance = {
+			base = 50
+			modifier = {
+				add = -5
+				has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+			}
+			modifier = {
+				add = 10
+				has_country_flag = wiirlak_ep_flag_aggressively_bloomed
+			}
+			modifier = {
+				add = 10
+				is_at_war_with = event_target:wiirlak_ep_crisis_player
+			}
+			modifier = {
+				add = 7
+				is_rival = event_target:wiirlak_ep_crisis_player
+			}
+			modifier = {
+				add = 3
+				event_target:wiirlak_ep_crisis_player = { is_rival = PREV } 
+			}
+			modifier = {
+				add = -5
+				event_target:wiirlak_ep_crisis_player = { 
+					is_federation_leader = yes
+				}
+			}
+			modifier = {
+				add = -3
+				any_federation_ally = {
+					is_same_empire = event_target:wiirlak_ep_crisis_player
+				}
+			}
+			modifier = {
+				add = -15
+				event_target:wiirlak_ep_crisis_player = {
+					is_overlord_to = PREV
+				}
+			}
+		}
+	}
+	option = {
+		name = story.contact_report.authoritarian
+
+		trigger = { is_authoritarian = yes }
+
+		hidden_effect = {
+			wiirlak_ep_acceptation = { AMOUNT = @loss }
+		}
+
+		ai_chance = {
+			base = 50
+			modifier = {
+				add = -5
+				has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+			}
+			modifier = {
+				add = 10
+				has_country_flag = wiirlak_ep_flag_aggressively_bloomed
+			}
+			modifier = {
+				add = 10
+				is_at_war_with = event_target:wiirlak_ep_crisis_player
+			}
+			modifier = {
+				add = 7
+				is_rival = event_target:wiirlak_ep_crisis_player
+			}
+			modifier = {
+				add = 3
+				event_target:wiirlak_ep_crisis_player = { is_rival = PREV } 
+			}
+			modifier = {
+				add = -5
+				event_target:wiirlak_ep_crisis_player = { 
+					is_federation_leader = yes
+				}
+			}
+			modifier = {
+				add = -3
+				any_federation_ally = {
+					is_same_empire = event_target:wiirlak_ep_crisis_player
+				}
+			}
+			modifier = {
+				add = -15
+				event_target:wiirlak_ep_crisis_player = {
+					is_overlord_to = PREV
+				}
+			}
+		}
+	}
+
+	# More acceptive reaction
+	option = {
+		name = story.contact_report.xenophile
+
+		trigger = { has_ethic = ethic_fanatic_xenophile }
+
+		hidden_effect = {
+			wiirlak_ep_acceptation = { AMOUNT = @gain }
+		}
+
+		ai_chance = {
+			base = 30
+			modifier = {
+				add = 10
+				has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+			}
+			modifier = {
+				add = -10
+				has_country_flag = wiirlak_ep_flag_aggressively_bloomed
+			}
+			modifier = {
+				add = -5
+				is_at_war_with = event_target:wiirlak_ep_crisis_player
+			}
+			modifier = {
+				add = -5
+				OR = {
+					is_rival = event_target:wiirlak_ep_crisis_player
+					event_target:wiirlak_ep_crisis_player = { is_rival = PREV }
+				}
+			}
+			modifier = {
+				add = -5
+				OR = {
+					is_hostile = event_target:wiirlak_ep_crisis_player
+					is_hostile_to = event_target:wiirlak_ep_crisis_player
+				}
+			}
+			modifier = {
+				add = -4
+				opinion_level = {
+					who = event_target:wiirlak_ep_crisis_player
+					level = poor
+				}
+			}
+			modifier = {
+				set = 1
+				opinion_level = {
+					who = event_target:wiirlak_ep_crisis_player
+					level = terrible
+				}
+			}
+			modifier = {
+				add = 2
+				opinion_level = {
+					who = event_target:wiirlak_ep_crisis_player
+					level = good
+				}
+			}
+			modifier = {
+				add = 5
+				opinion_level = {
+					who = event_target:wiirlak_ep_crisis_player
+					level = excellent
+				}
+			}
+			modifier = {
+				add = 3
+				event_target:wiirlak_ep_crisis_player = { 
+					is_federation_leader = yes
+				}
+			}
+			modifier = {
+				add = 2
+				any_federation_ally = {
+					is_same_empire = event_target:wiirlak_ep_crisis_player
+				}
+			}
+			modifier = {
+				add = 5
+				event_target:wiirlak_ep_crisis_player = {
+					is_overlord_to = PREV
+					has_attitude_behavior = {
+						target = event_target:wiirlak_ep_crisis_player
+						behavior = alliance
+					}
+				}
+			}
+			modifier = {
+				set = 1
+				is_fallen_empire = yes
+			}
+			modifier = {
+				set = 1
+				has_attitude_behavior = {
+					target = event_target:wiirlak_ep_crisis_player
+					behavior = attack
+				}
+			}
+		}
+	}
+	option = {
+		name = story.contact_report.pacifist
+
+		trigger = { has_ethic = ethic_fanatic_pacifist }
+
+		hidden_effect = {
+			wiirlak_ep_acceptation = { AMOUNT = @gain }
+		}
+
+		ai_chance = {
+			base = 30
+			modifier = {
+				add = 10
+				has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+			}
+			modifier = {
+				add = -10
+				has_country_flag = wiirlak_ep_flag_aggressively_bloomed
+			}
+			modifier = {
+				add = -5
+				is_at_war_with = event_target:wiirlak_ep_crisis_player
+			}
+			modifier = {
+				add = -5
+				OR = {
+					is_rival = event_target:wiirlak_ep_crisis_player
+					event_target:wiirlak_ep_crisis_player = { is_rival = PREV }
+				}
+			}
+			modifier = {
+				add = -5
+				OR = {
+					is_hostile = event_target:wiirlak_ep_crisis_player
+					is_hostile_to = event_target:wiirlak_ep_crisis_player
+				}
+			}
+			modifier = {
+				add = -4
+				opinion_level = {
+					who = event_target:wiirlak_ep_crisis_player
+					level = poor
+				}
+			}
+			modifier = {
+				set = 1
+				opinion_level = {
+					who = event_target:wiirlak_ep_crisis_player
+					level = terrible
+				}
+			}
+			modifier = {
+				add = 2
+				opinion_level = {
+					who = event_target:wiirlak_ep_crisis_player
+					level = good
+				}
+			}
+			modifier = {
+				add = 5
+				opinion_level = {
+					who = event_target:wiirlak_ep_crisis_player
+					level = excellent
+				}
+			}
+			modifier = {
+				add = 3
+				event_target:wiirlak_ep_crisis_player = { 
+					is_federation_leader = yes
+				}
+			}
+			modifier = {
+				add = 2
+				any_federation_ally = {
+					is_same_empire = event_target:wiirlak_ep_crisis_player
+				}
+			}
+			modifier = {
+				add = 5
+				event_target:wiirlak_ep_crisis_player = {
+					is_overlord_to = PREV
+					has_attitude_behavior = {
+						target = event_target:wiirlak_ep_crisis_player
+						behavior = alliance
+					}
+				}
+			}
+			modifier = {
+				set = 1
+				is_fallen_empire = yes
+			}
+			modifier = {
+				set = 1
+				has_attitude_behavior = {
+					target = event_target:wiirlak_ep_crisis_player
+					behavior = attack
+				}
+			}
+		}
+	}
+	option = {
+		name = story.contact_report.egalitarian
+
+		trigger = { has_ethic = ethic_fanatic_egalitarian }
+
+		hidden_effect = {
+			wiirlak_ep_acceptation = { AMOUNT = @gain }
+		}
+
+		ai_chance = {
+			base = 30
+			modifier = {
+				add = 10
+				has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+			}
+			modifier = {
+				add = -10
+				has_country_flag = wiirlak_ep_flag_aggressively_bloomed
+			}
+			modifier = {
+				add = -5
+				is_at_war_with = event_target:wiirlak_ep_crisis_player
+			}
+			modifier = {
+				add = -5
+				OR = {
+					is_rival = event_target:wiirlak_ep_crisis_player
+					event_target:wiirlak_ep_crisis_player = { is_rival = PREV }
+				}
+			}
+			modifier = {
+				add = -5
+				OR = {
+					is_hostile = event_target:wiirlak_ep_crisis_player
+					is_hostile_to = event_target:wiirlak_ep_crisis_player
+				}
+			}
+			modifier = {
+				add = -4
+				opinion_level = {
+					who = event_target:wiirlak_ep_crisis_player
+					level = poor
+				}
+			}
+			modifier = {
+				set = 1
+				opinion_level = {
+					who = event_target:wiirlak_ep_crisis_player
+					level = terrible
+				}
+			}
+			modifier = {
+				add = 2
+				opinion_level = {
+					who = event_target:wiirlak_ep_crisis_player
+					level = good
+				}
+			}
+			modifier = {
+				add = 5
+				opinion_level = {
+					who = event_target:wiirlak_ep_crisis_player
+					level = excellent
+				}
+			}
+			modifier = {
+				add = 3
+				event_target:wiirlak_ep_crisis_player = { 
+					is_federation_leader = yes
+				}
+			}
+			modifier = {
+				add = 2
+				any_federation_ally = {
+					is_same_empire = event_target:wiirlak_ep_crisis_player
+				}
+			}
+			modifier = {
+				add = 5
+				event_target:wiirlak_ep_crisis_player = {
+					is_overlord_to = PREV
+					has_attitude_behavior = {
+						target = event_target:wiirlak_ep_crisis_player
+						behavior = alliance
+					}
+				}
+			}
+			modifier = {
+				set = 1
+				is_fallen_empire = yes
+			}
+			modifier = {
+				set = 1
+				has_attitude_behavior = {
+					target = event_target:wiirlak_ep_crisis_player
+					behavior = attack
+				}
+			}
+		}
+	}
+	option = {
+		name = story.contact_report.spiritualist
+
+		trigger = { has_ethic = ethic_fanatic_spiritualist }
+
+		hidden_effect = {
+			wiirlak_ep_acceptation = { AMOUNT = @gain }
+		}
+
+		ai_chance = {
+			base = 30
+			modifier = {
+				add = 10
+				has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+			}
+			modifier = {
+				add = -10
+				has_country_flag = wiirlak_ep_flag_aggressively_bloomed
+			}
+			modifier = {
+				add = -5
+				is_at_war_with = event_target:wiirlak_ep_crisis_player
+			}
+			modifier = {
+				add = -5
+				OR = {
+					is_rival = event_target:wiirlak_ep_crisis_player
+					event_target:wiirlak_ep_crisis_player = { is_rival = PREV }
+				}
+			}
+			modifier = {
+				add = -5
+				OR = {
+					is_hostile = event_target:wiirlak_ep_crisis_player
+					is_hostile_to = event_target:wiirlak_ep_crisis_player
+				}
+			}
+			modifier = {
+				add = -4
+				opinion_level = {
+					who = event_target:wiirlak_ep_crisis_player
+					level = poor
+				}
+			}
+			modifier = {
+				set = 1
+				opinion_level = {
+					who = event_target:wiirlak_ep_crisis_player
+					level = terrible
+				}
+			}
+			modifier = {
+				add = 2
+				opinion_level = {
+					who = event_target:wiirlak_ep_crisis_player
+					level = good
+				}
+			}
+			modifier = {
+				add = 5
+				opinion_level = {
+					who = event_target:wiirlak_ep_crisis_player
+					level = excellent
+				}
+			}
+			modifier = {
+				add = 3
+				event_target:wiirlak_ep_crisis_player = { 
+					is_federation_leader = yes
+				}
+			}
+			modifier = {
+				add = 2
+				any_federation_ally = {
+					is_same_empire = event_target:wiirlak_ep_crisis_player
+				}
+			}
+			modifier = {
+				add = 5
+				event_target:wiirlak_ep_crisis_player = {
+					is_overlord_to = PREV
+					has_attitude_behavior = {
+						target = event_target:wiirlak_ep_crisis_player
+						behavior = alliance
+					}
+				}
+			}
+			modifier = {
+				set = 1
+				is_fallen_empire = yes
+			}
+			modifier = {
+				set = 1
+				has_attitude_behavior = {
+					target = event_target:wiirlak_ep_crisis_player
+					behavior = attack
+				}
+			}
+		}
+	}
+	option = {
+		name = story.contact_report.materialist
+
+		trigger = { has_ethic = ethic_fanatic_materialist }
+
+		hidden_effect = {
+			wiirlak_ep_acceptation = { AMOUNT = @gain }
+		}
+
+		ai_chance = {
+			base = 30
+			modifier = {
+				add = 10
+				has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+			}
+			modifier = {
+				add = -10
+				has_country_flag = wiirlak_ep_flag_aggressively_bloomed
+			}
+			modifier = {
+				add = -5
+				is_at_war_with = event_target:wiirlak_ep_crisis_player
+			}
+			modifier = {
+				add = -5
+				OR = {
+					is_rival = event_target:wiirlak_ep_crisis_player
+					event_target:wiirlak_ep_crisis_player = { is_rival = PREV }
+				}
+			}
+			modifier = {
+				add = -5
+				OR = {
+					is_hostile = event_target:wiirlak_ep_crisis_player
+					is_hostile_to = event_target:wiirlak_ep_crisis_player
+				}
+			}
+			modifier = {
+				add = -4
+				opinion_level = {
+					who = event_target:wiirlak_ep_crisis_player
+					level = poor
+				}
+			}
+			modifier = {
+				set = 1
+				opinion_level = {
+					who = event_target:wiirlak_ep_crisis_player
+					level = terrible
+				}
+			}
+			modifier = {
+				add = 2
+				opinion_level = {
+					who = event_target:wiirlak_ep_crisis_player
+					level = good
+				}
+			}
+			modifier = {
+				add = 5
+				opinion_level = {
+					who = event_target:wiirlak_ep_crisis_player
+					level = excellent
+				}
+			}
+			modifier = {
+				add = 3
+				event_target:wiirlak_ep_crisis_player = { 
+					is_federation_leader = yes
+				}
+			}
+			modifier = {
+				add = 2
+				any_federation_ally = {
+					is_same_empire = event_target:wiirlak_ep_crisis_player
+				}
+			}
+			modifier = {
+				add = 5
+				event_target:wiirlak_ep_crisis_player = {
+					is_overlord_to = PREV
+					has_attitude_behavior = {
+						target = event_target:wiirlak_ep_crisis_player
+						behavior = alliance
+					}
+				}
+			}
+			modifier = {
+				set = 1
+				is_fallen_empire = yes
+			}
+			modifier = {
+				set = 1
+				has_attitude_behavior = {
+					target = event_target:wiirlak_ep_crisis_player
+					behavior = attack
+				}
+			}
+		}
+	}
+	
+	after = {
+		log = "Country: [THIS.GetName] - Acceptation Score: [THIS.wiirlak_ep_var_acceptation]"
+	}
+}
+
+# On Crisis level 5 - Warn that it's now a level 5 crisis
+country_event = {
+	id = wiirlak_ep.1200
+	
+	hide_window = no
+	title = wiirlak_ep_warning_2
+	desc = wiirlak_ep_warning_2_desc
+	show_sound = amb_toxic_world_a
+	picture = GFX_evt_astral_rift_tropical_habitat
+	auto_opens = yes
+
+	location = event_target:wiirlak_ep_crisis_player.capital_planet
+
+	is_triggered_only = yes
+	
+	immediate = {
+	}
+
+	# Aggressive
+	option = {
+		name = wiirlak_ep_warning_2_answer_aggressive
+
+		add_modifier = {
+			modifier = wiirlak_ep_modifier_crisis_reaction
+			days = 3600
+		}
+
+		ai_chance = {
+			base = 20
+			modifier = {
+				add = 10
+				has_policy_flag = diplo_stance_animosity
+			}
+			modifier = {
+				add = 10
+				has_policy_flag = diplo_stance_belligerent
+			}
+			modifier = {
+				add = 10
+				has_policy_flag = diplo_stance_supremacist
+			}
+			modifier = {
+				add = 30
+				is_militarist = yes
+			}
+			modifier = {
+				add = 30
+				is_xenophobe = yes
+			}
+			modifier = {
+				add = 15
+				has_federation = yes
+			}
+			modifier = {
+				add = 10
+				is_overlord = yes
+			}
+		}
+	}
+
+	# Neutral
+	option = {
+		name = wiirlak_ep_warning_2_answer_neutral
+
+		add_resource = {
+			influence = 100
+		}
+
+		ai_chance = {
+			base = 50
+			modifier = {
+				add = 50
+				has_policy_flag = diplo_stance_isolationist
+			}
+			modifier = {
+				add = 50
+				has_policy_flag = diplo_stance_isolationist_fallen_empire
+			}
+			modifier = {
+				add = 10
+				has_policy_flag = diplo_stance_expansionist
+			}
+		}
+	}
+
+	# Curious
+	option = {
+		name = wiirlak_ep_warning_2_answer_curious
+
+		add_unity_times_empire_size = {
+			VALUE = 30
+		}
+
+		ai_chance = {
+			base = 20
+			modifier = {
+				add = 20
+				has_policy_flag = diplo_stance_cooperative
+			}
+			modifier = {
+				add = 30
+				has_policy_flag = diplo_stance_fearful
+			}
+			modifier = {
+				add = 30
+				has_policy_flag = diplo_stance_ignorant
+			}
+			modifier = {
+				add = 30
+				is_pacifist = yes
+			}
+			modifier = {
+				add = 30
+				is_xenophile = yes
+			}
+			modifier = {
+				add = 15
+				has_federation = no
+			}
+			modifier = {
+				add = 15
+				is_subject = yes
+			}
+		}
+	}
+}
+
+
+
+
+# Crisis Objectives/Terraforming - Series 1500
+# On yearly check - Give Mycogrowth for yearly objectives
+country_event = {
+	id = wiirlak_ep.1500
+	hide_window = yes
+
+	is_triggered_only = yes
+	trigger = {
+		has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+	}
+	
+	immediate = {
+		# Owning Bloom Worlds
+		every_planet_within_border = {
+			limit = { is_planet_class = wiirlak_ep_pc_bloom }
+
+			PREV = { complete_crisis_objective = wiirlak_ep_crisobj_own_bloom_world }
+
+			if = {
+				limit = { is_colony = yes }
+
+				PREV = { complete_crisis_objective = wiirlak_ep_crisobj_inhabit_bloom_world }
+			}
+		}
+	}
+}
+
+# This = Planet
+# From = Terraforming country
+# On terraforming started - Flag the planet
+planet_event = {
+	id = wiirlak_ep.1510
+	hide_window = yes
+
+	is_triggered_only = yes
+	trigger = {
+		exists = FROM
+		FROM = { has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol }
+	}
+	
+	immediate = {
+		# Flag when starting to Bloom a planet
+		THIS = {
+			if = {
+				limit = {
+					is_terraforming = yes
+					wiirlak_ep_adv_planet = yes
+				}
+
+				set_planet_flag = wiirlak_ep_adv_planet
+			}
+		}
+		save_deposits = yes
+	}
+}
+
+# This = Planet
+# From = Terraforming country
+# On terraforming completed - Give Mycogrowth objective
+planet_event = {
+	id = wiirlak_ep.1515
+	hide_window = yes
+
+	is_triggered_only = yes
+	trigger = {
+	}
+	
+	immediate = {
+		THIS = {
+			if = {
+				limit = {
+					exists = FROM
+					FROM = { has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol }
+
+					is_planet_class = wiirlak_ep_pc_bloom
+					NOT = { has_planet_flag = wiirlak_ep_terraformed }
+				}
+
+
+				# Planet bloomed; flag so it can only happen once per planet
+				set_planet_flag = wiirlak_ep_terraformed
+
+
+				# Was a high value target (Ecu, Hive, Machine, etc..) ?
+				if = {
+					limit = { has_planet_flag = wiirlak_ep_adv_planet }
+
+					remove_planet_flag = wiirlak_ep_adv_planet
+					FROM = {
+						complete_crisis_objective = wiirlak_ep_crisobj_blooming_adv_pc
+					}
+				}
+
+				# Normal Planet
+				else = {
+					FROM = {
+						complete_crisis_objective = wiirlak_ep_crisobj_blooming_planet
+
+						# Give second tech if it was the first terraforming
+						if = {
+							limit = { NOT = { has_country_flag = wiirlak_ep_flag_bloomed_once } }
+
+							set_country_flag = wiirlak_ep_flag_bloomed_once
+							country_event = {
+								id = wiirlak_ep.1516
+							}
+						}
+					}
+				}
+
+				
+				# Was it inside another empire territory ?
+				if = {
+					limit = {
+						OR = {
+							AND = {
+								exists = OWNER
+								OWNER = { NOT = { is_same_empire = FROM } }
+							}
+							has_planet_flag = wiirlak_ep_covert_op
+						}
+					}
+
+					FROM = {
+						complete_crisis_objective = wiirlak_ep_crisobj_blooming_outside_border
+					}
+				}
+			}
+
+			# If it was terraformed but not into a Bloom World
+			else = {
+				remove_planet_flag = wiirlak_ep_adv_planet
+			}
+		}
+	}
+}
+
+# On first Bloom World terraforming completed - Give second tech
+country_event = {
+	id = wiirlak_ep.1516
+	
+	hide_window = no
+	title = wiirlak_ep_event_lvl_1B
+	desc = wiirlak_ep_event_lvl_1B_desc
+	show_sound = amb_toxic_world_a
+	picture = GFX_evt_astral_rift_lonely_planet_hatched
+	auto_opens = yes
+
+	is_triggered_only = yes
+	trigger = {
+		has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+	}
+	event_chain = wiirlak_ep_evergrowth_protocol_chain
+
+	option = {
+		name = INTERESTING
+
+		if = {
+			limit = { NOT = { has_technology = tech_ecological_adaptation } }
+
+			add_research_option = tech_ecological_adaptation
+		}
+
+		add_resource = {
+			wiirlak_ep_resource_mycogrowth = 100
+		}
+	}
+}
+
+# On terraforming - Give it the Evergowth deposit
+planet_event = {
+	id = wiirlak_ep.1550
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	trigger = {
+		is_planet_class = wiirlak_ep_pc_bloom
+	}
+	
+	immediate = {
+		wiirlak_ep_spawn_deposit = yes
+
+		# Warn crisis about new Bloom World
+		every_country = {
+			limit = { has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol }
+
+			# Warn that a planet has finished to be terraformed by covert OP
+			if = {
+				limit = { PREV = { has_planet_flag = wiirlak_ep_covert_op } }
+
+				create_message = {
+					type = WIIRLAK_EP_MESSAGE_COVERT_OP
+					localization = wiirlak_ep_message_terraformed_covert_op
+					days = 20
+					variable = {
+						type = name
+						localization = PLANETNAME
+						scope = PREV
+					}
+				}
+			}
+
+			# Don't show a Terraforming popup, since there will already be one for using the colossus
+			else_if = {
+				limit = { PREV = { NOT = { has_planet_flag = wiirlak_ep_flag_seedbreaker } } }
+				
+				create_message = {
+					type = WIIRLAK_EP_MESSAGE_TERRAFORMED
+					localization = wiirlak_ep_message_terraformed_text
+					days = 20
+					variable = {
+						type = name
+						localization = PLANETNAME
+						scope = PREV
+					}
+				}
+			}
+		}
+
+		# Check if the crisis managed to terraform it all without the final project
+		if = {
+			limit = {
+				any_galaxy_planet = {
+					is_colonizable = yes
+					NOT = { is_planet_class = wiirlak_ep_pc_bloom }
+				}
+			}
+
+			log = "$wiirlak_ep$: Not every planet terraformed"
+		}
+		else = {
+			every_country = {
+				limit = { has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol }
+
+				country_event = {
+					id = wiirlak_ep.5360	days = 3
+				}
+			}
+		}
+	}
+}
+
+# On killing bio ship / faune - Give Mycogrowth objective
+country_event = {
+	id = wiirlak_ep.1570
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	trigger = {
+		has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+		fromfromfrom = { is_organic_ship = yes }
+	}
+	event_chain = wiirlak_ep_evergrowth_protocol_chain
+
+	immediate = {
+		while = {
+			count = fromfromfrom.trigger:ship_size_multiplier
+			if = {
+				limit = {
+					fromfromfrom = { is_ship_category = bio_ship }
+				}
+				owner = {
+					complete_crisis_objective = wiirlak_ep_crisobj_kill_bioships
+				}
+			}
+			else = {
+				owner = {
+					complete_crisis_objective = wiirlak_ep_crisobj_kill_fauna
+				}
+			}
+		}
+	}
+}
+
+
+
+
+# Spy OP - Series 2000
+# On Spy OP progress - Warn the Target that something is happening
+espionage_operation_event = {
+	id = wiirlak_ep.2000
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	trigger = {
+	}
+	
+	immediate = {
+		save_event_target_as = wiirlak_ep_operation
+		if = {
+			limit = { exists = TARGET }
+
+			TARGET = {
+				country_event = {
+					id = wiirlak_ep.2010
+				}
+			}
+		}
+	}
+}
+# On Spy OP progress - Can monitor, or ignore
+country_event = {
+	id = wiirlak_ep.2010
+	
+	hide_window = no
+	title = wiirlak_ep_operation_event_1
+	desc = wiirlak_ep_operation_event_1_desc
+	show_sound = amb_toxic_world_a
+	picture = GFX_evt_astral_rift_windswept_planet
+	auto_opens = yes
+
+	is_triggered_only = yes
+	trigger = {
+	}
+
+	option = {
+		name = wiirlak_ep_operation_event_1_answer_ignore
+	}
+	option = {
+		name = wiirlak_ep_operation_event_1_answer_monitor
+
+		hidden_effect = {
+			event_target:wiirlak_ep_operation = {
+				set_espionage_operation_flag = wiirlak_ep_operation_monitored
+			}
+		}
+	}
+}
+
+# On Spy OP progress - Second warning
+espionage_operation_event = {
+	id = wiirlak_ep.2050
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	trigger = {
+	}
+	
+	immediate = {
+		save_event_target_as = wiirlak_ep_operation
+		if = {
+			limit = { exists = TARGET }
+
+			TARGET = {
+				country_event = {
+					id = wiirlak_ep.2060
+				}
+			}
+		}
+	}
+}
+# On Spy OP progress - Can monitor, resist or ignore
+country_event = {
+	id = wiirlak_ep.2060
+	
+	hide_window = no
+	title = wiirlak_ep_operation_event_1
+	desc = wiirlak_ep_operation_event_1_desc
+	show_sound = amb_toxic_world_a
+	picture = GFX_evt_crimson_crawlers
+	auto_opens = yes
+
+	is_triggered_only = yes
+	trigger = {
+	}
+
+	immediate = {
+		hidden_effect = {
+			event_target:wiirlak_ep_operation = {
+				OWNER = {
+					save_global_event_target_as = wiirlak_ep_temp_perpetrator
+
+					country_event = {
+						id = wiirlak_ep.2100	days = 3
+					}
+				}
+			}
+		}
+		random_owned_planet = {
+			limit = {
+				NOT = { is_planet_class = pc_cosmogenesis_world }
+				OR = {
+					is_colony = yes
+					is_colonizable = yes
+				}
+				OR = {
+					is_artificial = no
+					is_planet_class = pc_city
+				}
+			}
+
+			weights = {
+				base = 1500
+				modifier = {
+					add = -150
+					is_terraforming = yes
+				}
+				modifier = {
+					add = -50
+					wiirlak_ep_adv_planet = yes
+				}
+				modifier = {
+					add = -15
+					has_designation = col_resort
+				}
+				modifier = {
+					add = -100
+					count_planet_army = {
+						count > 0
+						limit = { is_defensive_army = no }
+					}
+				}
+				modifier = {
+					add = -100
+					count_planet_army = {
+						count > 5
+						limit = { is_defensive_army = no }
+					}
+				}
+				modifier = {
+					set = 1
+					is_capital = yes
+				}
+			}
+
+			save_event_target_as = wiirlak_ep_spy_op_target
+			OWNER = {
+				start_situation = {
+					type = wiirlak_ep_situation
+					target = PREV
+				}
+			}
+		}
+	}
+
+	option = {
+		name = wiirlak_ep_operation_event_2_answer_monitor
+
+		hidden_effect = {
+			every_situation = {
+				limit = { is_situation_type = wiirlak_ep_situation }
+
+				set_situation_approach = wiirlak_ep_study
+			}
+		}
+	}
+	option = {
+		name = wiirlak_ep_operation_event_2_answer_resist
+
+		hidden_effect = {
+			every_situation = {
+				limit = { is_situation_type = wiirlak_ep_situation }
+
+				set_situation_approach = wiirlak_ep_burn
+			}
+		}
+	}
+	option = {
+		name = wiirlak_ep_operation_event_2_answer_ignore
+	}
+}
+
+# On Spy OP progress - Results
+espionage_operation_event = {
+	id = wiirlak_ep.2070
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	trigger = {
+	}
+	
+	# immediate = {
+	# 	save_event_target_as = wiirlak_ep_operation
+
+	# 	# Variable to calculate chance of success
+	# 	set_variable = {
+	# 		which = wiirlak_ep_operation_chance
+	# 		value = modifier:intel_encryption_add
+	# 	}
+
+	# 	# Resisting
+	# 	if = {
+	# 		limit = { has_espionage_operation_flag = wiirlak_ep_operation_resist }
+
+	# 		change_variable = {
+	# 			which = wiirlak_ep_operation_chance
+	# 			value = -3
+	# 		}
+
+	# 		# Was monitored
+	# 		if = {
+	# 			limit = { has_espionage_operation_flag = wiirlak_ep_operation_monitored }
+
+	# 			change_variable = {
+	# 				which = wiirlak_ep_operation_chance
+	# 				value = -1
+	# 			}
+	# 		}
+	# 	}
+
+	# 	# Studying
+	# 	else_if = {
+	# 		limit = { has_espionage_operation_flag = wiirlak_ep_operation_study }
+
+	# 		change_variable = {
+	# 			which = wiirlak_ep_operation_chance
+	# 			value = -2
+	# 		}
+
+	# 		# Was monitored
+	# 		if = {
+	# 			limit = { has_espionage_operation_flag = wiirlak_ep_operation_monitored }
+
+	# 			change_variable = {
+	# 				which = wiirlak_ep_operation_chance
+	# 				value = -1
+	# 			}
+	# 		}
+	# 	}
+
+	# 	# Check result
+	# 	if = {
+	# 		limit = {
+	# 			check_variable = {
+	# 				which = wiirlak_ep_operation_chance
+	# 				value > 0
+	# 			}
+	# 		}
+
+	# 		# Terraformed
+	# 		log = "Result: [THIS.wiirlak_ep_operation_chance]"
+
+	# 		if = {
+	# 			limit = { has_espionage_operation_flag = wiirlak_ep_operation_resist }
+
+	# 			log = Failed_Defense
+	# 		}
+	# 		else = {
+	# 			TARGET = {
+	# 				random_owned_planet = {
+	# 					if = {
+	# 						limit = { is_terraforming = yes }
+
+	# 						stop_terraform_process = yes
+	# 					}
+
+	# 					set_planet_flag = wiirlak_ep_forcibly_bloomed
+	# 					set_planet_flag = wiirlak_ep_covert_op
+	# 					start_terraform_process = wiirlak_ep_pc_bloom
+	# 					add_terraformation_total_time_mult = -0.33
+	# 				}
+	# 			}
+	# 		}
+	# 	}
+
+	# 	# Final event
+	# 	if = {
+	# 		limit = { exists = TARGET }
+
+	# 		TARGET = {
+	# 			country_event = {
+	# 				id = wiirlak_ep.2110
+	# 			}
+	# 		}
+	# 	}
+	# }
+}
+
+# On Spy OP finished - Warn the crisis player
+country_event = {
+	id = wiirlak_ep.2100
+	
+	hide_window = no
+	title = wiirlak_ep_operation_event_finish
+	desc = wiirlak_ep_operation_event_finish_desc
+	show_sound = amb_toxic_world_a
+	picture = GFX_evt_astral_rift_tropical_habitat_2
+	auto_opens = yes
+
+	is_triggered_only = yes
+	trigger = {
+		has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+	}
+
+	option = {
+		name = ACKNOWLEDGED
+		
+		event_target:wiirlak_ep_operation = {
+			destroy_espionage_operation = THIS
+		}
+	}
+}
+# On Situation finished - Managed to push back the Evergrowth
+country_event = {
+	id = wiirlak_ep.2110
+	
+	hide_window = no
+	title = wiirlak_ep_operation_event_push_back
+	desc = wiirlak_ep_operation_event_push_back_desc
+	show_sound = amb_toxic_world_a
+	picture = GFX_evt_astral_rift_garden_2_fire
+	auto_opens = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = ACKNOWLEDGED
+	}
+}
+# On Situation finished - The Evergrowth has taken another foothold
+country_event = {
+	id = wiirlak_ep.2120
+	
+	hide_window = no
+	title = wiirlak_ep_operation_event_overgrown
+	desc = wiirlak_ep_operation_event_overgrown_desc
+	show_sound = amb_toxic_world_a
+	picture = GFX_evt_infested
+	auto_opens = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		random_owned_planet = {
+			limit = { has_planet_flag = wiirlak_ep_flag_spy_op_target }
+
+			remove_planet_flag = wiirlak_ep_flag_spy_op_target
+			save_event_target_as = wiirlak_ep_spy_op_target
+		}
+	}
+
+	option = {
+		name = ACKNOWLEDGED
+	}
+}
+
+
+
+
+# Bombardment - Series 3000
+# Bombardment until terraformed
+planet_event = {
+	id = wiirlak_ep.3000
+	hide_window = yes
+
+	is_triggered_only = yes
+	trigger = {
+		has_orbital_bombardment_stance = wiirlak_ep_verdant_purge
+
+		OR = {
+			is_occupied_flag = yes
+			planet_devastation >= 100
+			count_owned_pop_amount = {
+				count <= 500
+			}
+		}
+		NOT = { has_planet_flag = wiirlak_ep_forcibly_bloomed }
+	}
+
+	immediate = {
+		# destroy habitats and ringworlds
+		if = {
+			limit = { is_planet_class = pc_habitat }
+
+			spawn_habitat_cracker_effect = yes
+		}
+		else_if = {
+			limit = { is_planet_class = pc_cosmogenesis_world }
+
+			spawn_lathe_cracker_effect = yes
+		}
+		else_if = {
+			limit = { is_ringworld = yes }
+
+			spawn_ringworld_cracker_effect = yes
+			change_pc = pc_ringworld_habitable_damaged
+		}
+
+		# Normal planets
+		else_if = {
+			limit = { habitable_planet = yes }
+
+			# Warn about planet terraformed
+			save_event_target_as = wiirlak_ep_planet_targeted
+			OWNER = { country_event = { id = wiirlak_ep.3100 } }
+			FROM = { country_event = { id = wiirlak_ep.3200 } }
+			
+			# Terraforming Objectives
+			FROM.OWNER = { save_event_target_as = wiirlak_ep_crisis_reward }
+
+			wiirlak_ep_bombard_into_bloom = yes
+		}
+		
+		# Failsafe
+		else_if = {
+			limit = { NOT = { is_planet_class = wiirlak_ep_pc_bloom } }
+
+			change_pc = pc_shattered
+		}
+		
+		# War exhaustion
+		OWNER = {
+			if = {
+				limit = { OWNER = { is_at_war_with = FROM } }
+				
+				add_static_war_exhaustion = {
+					attacker = FROM
+					location = ROOT
+					value_for_planet_destruction = 1.0
+				}
+			}
+		}
+	}
+}
+
+
+# Bombarded to Bloom World - Target Owner
+country_event = {
+	id = wiirlak_ep.3100
+	hide_window = yes
+
+	is_triggered_only = yes
+	trigger = {
+	}
+
+	immediate = {
+		# Can only be shown once
+		if = {
+			limit = { NOT = { has_country_flag = wiirlak_ep_flag_bombarded } }
+			
+			set_country_flag = wiirlak_ep_flag_bombarded
+			country_event = {
+				id = wiirlak_ep.3110
+			}
+		}
+
+		# Then toast
+		else = {
+			create_message = {
+				type = WIIRLAK_EP_MESSAGE_BOMBARDED
+				localization = wiirlak_ep_message_bombarded_desc
+				days = 20
+				target = event_target:wiirlak_ep_planet_targeted
+			}
+		}
+	}
+}
+
+# Bombarded to Bloom World - Only the first time, be notified
+country_event = {
+	id = wiirlak_ep.3110
+	
+	hide_window = no
+	title = wiirlak_ep_event_bombarded_title
+	desc = wiirlak_ep_event_bombarded_desc
+	show_sound = amb_toxic_world_a
+	picture = GFX_evt_cosmic_storms_stormbound
+	auto_opens = yes
+
+	is_triggered_only = yes
+	trigger = {
+	}
+
+	option = {
+		name = wiirlak_ep_event_bombarded_answer
+	}
+}
+
+# Once the forced terraformation has been completed - Warn the owner
+planet_event = {
+	id = wiirlak_ep.3150
+	
+	hide_window = no
+	title = wiirlak_ep_event_bombarded_terraformed
+	desc = wiirlak_ep_event_bombarded_terraformed_desc
+	show_sound = amb_toxic_world_a
+	picture = GFX_evt_voidworms
+	auto_opens = yes
+	location = THIS
+
+	is_triggered_only = yes
+
+	immediate = {
+		wiirlak_ep_bloom_world = yes
+	}
+
+	option = {
+		name = wiirlak_ep_event_bombarded_answer
+	}
+}
+
+# Bombarded to Bloom World - Bombarder
+country_event = {
+	id = wiirlak_ep.3200
+	hide_window = yes
+
+	is_triggered_only = yes
+	trigger = {
+		has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+	}
+
+	immediate = {
+		# Can only be shown once
+		if = {
+			limit = { NOT = { has_country_flag = wiirlak_ep_flag_bombarder } }
+			
+			set_country_flag = wiirlak_ep_flag_bombarder
+			country_event = {
+				id = wiirlak_ep.3210
+			}
+		}
+		# Then toast
+		else = {
+			create_message = {
+				type = WIIRLAK_EP_MESSAGE_BOMBARDED
+				localization = wiirlak_ep_message_bombarded_origin_desc
+				days = 20
+				target = event_target:wiirlak_ep_planet_targeted
+			}
+		}
+	}
+}
+
+# Bombarded to Bloom World - Bombarder
+country_event = {
+	id = wiirlak_ep.3210
+	
+	hide_window = no
+	title = wiirlak_ep_event_bombarded_title
+	desc = wiirlak_ep_event_bombarded_origin_desc
+	show_sound = amb_toxic_world_a
+	picture = GFX_evt_wilderness_colonizer
+	auto_opens = yes
+
+	is_triggered_only = yes
+	trigger = {
+		has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+	}
+
+	option = {
+		name = wiirlak_ep_event_bombarded_answer
+	}
+}
+
+
+
+
+# Colossus - Series 3500
+# Colossus Terraformation
+planet_event = {
+	id = wiirlak_ep.3500
+	hide_window = yes
+
+	is_triggered_only = yes
+	trigger = {
+		FROM.OWNER = { has_technology = wiirlak_ep_tech_seedbreaker }
+	}
+
+	immediate = {
+		# Seedbreaker was used
+		set_planet_flag = wiirlak_ep_flag_seedbreaker
+
+		# destroy habitats and ringworlds
+		if = {
+			limit = { is_planet_class = pc_habitat }
+
+			spawn_habitat_cracker_effect = yes
+		}
+		else_if = {
+			limit = { is_planet_class = pc_cosmogenesis_world }
+
+			spawn_lathe_cracker_effect = yes
+		}
+		else_if = {
+			limit = { is_ringworld = yes }
+
+			spawn_ringworld_cracker_effect = yes
+			change_pc = pc_ringworld_habitable_damaged
+		}
+
+		else_if = {
+			limit = {
+				is_planet_class = pc_ai
+				NOT = { has_planet_flag = machine_lair }
+			}
+			#set_planet_flag = destroyed_by_colossus
+			planet_event = { id = crisis.2040 }
+			create_ambient_object = {
+				location = this
+				type = habitat_cracker_object
+				play_animation_once = yes
+				duration = 5
+
+				use_3d_location = yes
+				base_angle_towards = star
+				entity_face_object = star
+
+				entity_offset = { min = 0 max = 0 }
+
+				entity_scale_to_size = yes
+				scale = 0.5
+			}
+		}
+
+		# Contingency Final Machine World
+		else_if = {
+			limit = {
+				is_planet_class = pc_ai
+				has_planet_flag = machine_lair
+			}
+			#set_planet_flag = destroyed_by_colossus
+			FROM.OWNER = { save_event_target_as = final_machine_world_destroyer }
+			stop_crisis_sound = yes
+			planet_event = { id = crisis.2046 }
+			create_ambient_object = {
+				location = this
+				type = habitat_cracker_object
+				play_animation_once = yes
+				duration = 5
+
+				use_3d_location = yes
+				base_angle_towards = star
+				entity_face_object = star
+
+				entity_offset = { min = 0 max = 0 }
+
+				entity_scale_to_size = yes
+				scale = 0.5
+			}
+		}
+
+		# Normal planets
+		else_if = {
+			limit = { habitable_planet = yes }
+
+			# Warn about planet terraformed
+			save_event_target_as = wiirlak_ep_planet_targeted
+			if = {
+				limit = { exists = OWNER }
+				OWNER = {
+					country_event = { id = wiirlak_ep.3600 }
+				}
+			}
+			if = {
+				limit = { exists = OWNER }
+				FROM.OWNER = {
+					save_event_target_as = wiirlak_ep_crisis_reward
+					country_event = { id = wiirlak_ep.3700 }
+				}
+			}
+			
+			wiirlak_ep_colossus_into_bloom = yes
+		}
+		
+		# Failsafe
+		else_if = {
+			limit = { NOT = { is_planet_class = wiirlak_ep_pc_bloom } }
+
+			change_pc = pc_shattered
+		}
+
+		# War exhaustion
+		if = {
+			limit = { exists = OWNER }
+
+			OWNER = {
+				if = {
+					limit = {
+						exists = FROM.OWNER
+						FROM.OWNER = { is_at_war_with = THIS }
+					}
+					
+					add_static_war_exhaustion = {
+						attacker = FROM.OWNER
+						location = PREV
+						value_for_planet_destruction = 1.0
+					}
+				}
+			}
+		}
+	}
+
+
+	after = {
+		# Swarm Situation Log counter
+		if = {
+			limit = {
+				exists = OWNER
+				OWNER = { is_country_type = swarm }
+			}
+			every_country = {
+				limit = { has_event_chain = "prethoryn_scourge_chain" }
+				add_event_chain_counter = {
+					event_chain = "prethoryn_scourge_chain"
+					counter = "infested_worlds"
+					amount = -1
+				}
+				add_event_chain_counter = {
+					event_chain = "prethoryn_scourge_chain"
+					counter = "infested_worlds_cleansed"
+					amount = 1
+				}
+			}
+			destroy_colony = yes
+		}
+
+
+		# Holy world ?
+		if = {
+			limit = {
+				has_modifier = holy_planet
+				any_country = {
+					has_ai_personality_behaviour = holy_planets # not awakened
+					NOT = { is_at_war_with = FROM.OWNER }
+				}
+			}
+
+			log = FOUND
+			random_country = {
+				limit = {
+					has_ai_personality_behaviour = holy_planets # not awakened
+					NOT = { is_at_war_with = FROM.OWNER }
+				}
+				save_event_target_as = outraged_FE
+			}
+			FROM.OWNER = {
+				log = RAGE
+				save_event_target_as = FE_outrager
+				country_event = { id = planet_destruction.610 days = 5 }
+			}
+		}
+
+
+		# Resolutions breached
+		if = {
+			limit = {
+				exists = OWNER
+				OWNER = {
+					NOT = { is_same_value = FROM.OWNER }
+				}
+				OR = {
+					is_active_resolution = "resolution_rulesofwar_independent_tribunals"
+					is_active_resolution = "resolution_rulesofwar_last_resort_doctrine"
+					is_active_resolution = "resolution_rulesofwar_demobilization_initiative"
+				}
+			}
+			FROM.OWNER = {
+				set_timed_country_flag = { flag = resolution_breached_fired_deluge days = 3600 }
+			}
+		}
+		if = { #you've basically shortcutted terraforming. Yep, that's a breach
+			limit = {
+				exists = SPACE_OWNER
+				SPACE_OWNER = {
+					is_same_value = FROM.OWNER
+				}
+				OR = {
+					NOT = { exists = OWNER }
+					OWNER = { is_same_value = FROM.OWNER }
+				}
+				OR = {
+					is_active_resolution = "resolution_ecology_environmental_control_board"
+					is_active_resolution = "resolution_ecology_paradise_initiative"
+				}
+			}
+			FROM.OWNER = {
+				set_timed_country_flag = { flag = resolution_breached_terraformed days = 3600 }
+			}
+		}
+		
+
+		# Generate threat
+		if = {
+			limit = {
+				exists = OWNER
+				OWNER = {
+					NOT = { is_same_value = FROM.OWNER }
+					OR = {
+						is_country_type = default
+						is_country_type = fallen_empire
+						is_country_type = awakened_fallen_empire
+					}
+				}
+			}
+
+			add_threat = { who = FROM.OWNER amount = 3 }
+			# modifier for allies + those upset by robots
+			every_country = {
+				limit = {
+					NOR = {
+						is_same_value = FROM.OWNER
+						is_same_value = ROOT.OWNER
+						AND = {
+							has_federation = yes
+							is_in_federation_with = FROM.OWNER
+						}
+					}
+					OR = {
+						has_communications = FROM.OWNER
+						has_communications = ROOT.OWNER
+					}
+				}
+				add_opinion_modifier = {
+					modifier = wiirlak_ep_opinion_seeded_a_world
+					who = FROM.OWNER
+				}
+			}
+			# modifiers for victim
+			owner = {
+				add_opinion_modifier = {
+					modifier = wiirlak_ep_opinion_seeded_my_world
+					who = FROM.OWNER
+				}
+				if = {
+					limit = { NOT = { has_ethic = ethic_gestalt_consciousness } }
+					add_modifier = {
+						modifier = colossus_victim
+						days = 10800 # 30 years
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				exists = OWNER
+				OWNER = { is_country_type = primitive }
+			}
+			# modifier for allies + those upset by genocide
+			every_country = {
+				limit = {
+					NOR = { is_same_value = FROM.OWNER }
+					OR = {
+						has_communications = FROM.OWNER
+						has_communications = ROOT.OWNER
+					}
+					is_country_type = default
+					NOR = {
+						is_xenophobe = yes
+						is_homicidal = yes
+						is_xenophile = yes
+					}
+				}
+				add_opinion_modifier = {
+					modifier = wiirlak_ep_opinion_seeded_a_primitive_world
+					who = FROM.OWNER
+				}
+			}
+			every_country = {
+				limit = {
+					NOR = { is_same_value = FROM.OWNER }
+					OR = {
+						has_communications = FROM.OWNER
+						has_communications = ROOT.OWNER
+					}
+					OR = {
+						has_ai_personality = awakened_fallen_empire_xenophile
+						AND = {
+							is_country_type = default
+							is_xenophile = yes
+						}
+					}
+				}
+				add_opinion_modifier = {
+					modifier = wiirlak_ep_opinion_seeded_a_primitive_world_phile
+					who = FROM.OWNER
+				}
+			}
+		}
+	}
+}
+
+
+# On Seedbreaker Colossus Fired - Terraforming Objectives
+planet_event = {
+	id = wiirlak_ep.3505
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	trigger = {
+		FROM.OWNER = { has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol }
+	}
+
+	# immediate = {
+	# 	FROM.OWNER = { complete_crisis_objective = wiirlak_ep_crisobj_blooming_planet }
+
+	# 	if = {
+	# 		limit = {
+	# 			exists = SPACE_OWNER
+	# 			SPACE_OWNER = { is_same_value = FROM.OWNER }
+	# 		}
+
+	# 		FROM.OWNER = { complete_crisis_objective = wiirlak_ep_crisobj_blooming_outside_border }
+	# 	}
+
+	# 	if = {
+	# 		limit = { wiirlak_ep_adv_planet = yes }
+
+	# 		FROM.OWNER = { complete_crisis_objective = wiirlak_ep_crisobj_blooming_adv_pc }
+	# 	}
+	# }
+}
+
+
+# On Seedbreaker used - Target Owner
+country_event = {
+	id = wiirlak_ep.3600
+	hide_window = yes
+
+	is_triggered_only = yes
+	trigger = {
+	}
+
+	immediate = {
+		# Can only be shown once
+		if = {
+			limit = { NOT = { has_country_flag = wiirlak_ep_flag_seedbreaked_target } }
+			
+			set_country_flag = wiirlak_ep_flag_seedbreaked_target
+			country_event = {
+				id = wiirlak_ep.3610
+			}
+		}
+
+		# Then toast
+		else = {
+			create_message = {
+				type = WIIRLAK_EP_MESSAGE_SEEDBREAKER
+				localization = wiirlak_ep_message_seedbreaker_desc
+				days = 20
+				target = event_target:wiirlak_ep_planet_targeted
+			}
+		}
+	}
+}
+
+# On Seedbreaker used - Target Owner; Only the first time, be notified
+country_event = {
+	id = wiirlak_ep.3610
+	
+	hide_window = no
+	title = wiirlak_ep_event_seedbreaker_target_title
+	desc = wiirlak_ep_event_seedbreaker_target_desc
+	show_sound = amb_toxic_world_a
+	picture = GFX_evt_planet_beam
+	auto_opens = yes
+
+	is_triggered_only = yes
+	trigger = {
+	}
+
+	option = {
+		name = wiirlak_ep_event_bombarded_answer
+	}
+}
+
+
+# On Seedbreaker used - Colossus Owner
+country_event = {
+	id = wiirlak_ep.3700
+	hide_window = yes
+
+	is_triggered_only = yes
+	trigger = {
+		has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+	}
+
+	immediate = {
+		# Can only be shown once
+		if = {
+			limit = { NOT = { has_country_flag = wiirlak_ep_flag_seedbreaked_used } }
+			
+			set_country_flag = wiirlak_ep_flag_seedbreaked_used
+			country_event = {
+				id = wiirlak_ep.3710
+			}
+		}
+		# Then toast
+		else = {
+			create_message = {
+				type = WIIRLAK_EP_MESSAGE_SEEDBREAKER
+				localization = wiirlak_ep_message_seedbreaker_origin_desc
+				days = 20
+				target = event_target:wiirlak_ep_planet_targeted
+			}
+		}
+	}
+}
+
+# On Seedbreaker used - Colossus Owner; Only the first time, be notified
+country_event = {
+	id = wiirlak_ep.3710
+	
+	hide_window = no
+	title = wiirlak_ep_event_seedbreaker_title
+	desc = wiirlak_ep_event_seedbreaker_desc
+	show_sound = amb_toxic_world_a
+	picture = GFX_evt_planet_beam
+	auto_opens = yes
+
+	is_triggered_only = yes
+	trigger = {
+		has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+	}
+
+	option = {
+		name = wiirlak_ep_event_bombarded_answer
+	}
+}
+
+
+
+
+# Bloom Trait - Series 4000
+# Bi-yearly - Bloom Trait spreading 
+country_event = {
+	id = wiirlak_ep.4000
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	trigger = {
+		has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+		has_menace_perk = wiirlak_ep_menap_terraforming_5
+	}
+	
+	immediate = {
+		log = "Bi-annual Evergrowth check, starting:"
+
+		# Own Species are forced to transform
+		every_owned_species = {
+			limit = { NOT = { has_trait = trait_wiirlak_ep_pc_bloom_preference } }
+
+			set_habitability_trait = {
+				trait = trait_wiirlak_ep_pc_bloom_preference
+			}
+		}
+		set_variable = {
+			which = wiirlak_ep_var_bloomform_count
+			value = 0
+		}
+
+		# Random Neighbor
+		if = {
+			limit = {
+				count_neighbor_country = {
+					count > 0
+					limit = { is_country_type = default }
+				}
+			}
+
+			random_neighbor_country = {
+				log = "Neighbor Picked: [THIS.GetName]"
+				wiirlak_ep_spread_trait_country = yes
+			}
+		}
+
+
+		# Random Country through the galaxy
+		random_country = {
+			limit = {
+				is_country_type = default
+				NOT = { is_same_empire = ROOT }
+			}
+
+			# Bloom planets would largely increase chance for spread
+			weights = {
+				factor = 10
+				modifier = {
+					factor = 10
+					any_owned_planet = {
+						is_planet_class = wiirlak_ep_pc_bloom
+					}
+				}
+				modifier = {
+					factor = 5
+					any_planet_within_border = {
+						is_planet_class = wiirlak_ep_pc_bloom
+					}
+				}
+			}
+
+			log = "Random Picked: [THIS.GetName]"
+			wiirlak_ep_spread_trait_country = yes
+		}
+
+
+		# Spies help us seeding the Galaxy
+		random_spynetwork = {
+			limit = {
+				has_spy_power > 40
+				is_running_espionage_operation = no
+			}
+
+			TARGET = {
+				log = "Spy Network's Target Picked: [THIS.GetName]"
+
+				wiirlak_ep_spread_trait_country = yes
+			}
+		}
+	}
+
+	after = {
+		# We're great and connected, grant Unity
+		every_country = {
+			limit = { is_default_or_fallen = yes }
+
+			ROOT = {
+				change_variable = {
+					which = wiirlak_ep_var_bloomform_count
+					value = PREV.value:wiirlak_ep_bloomform_count
+				}
+				add_intel = {
+					who = PREV
+					amount = 10
+				}
+				log = "Step: [Prev.GetName] => [THIS.wiirlak_ep_var_bloomform_count]"
+			}
+		}
+		log = "Ressources: [THIS.wiirlak_ep_var_bloomform_count]"
+
+		create_message = {
+			type = WIIRLAK_EP_MESSAGE_BLOOMFORM
+			days = 40
+			localization = wiirlak_ep_message_bloomform_unity
+			target = ROOT
+		}
+
+		add_resource = {
+			unity = 1
+			multiplier = wiirlak_ep_var_bloomform_count
+		}
+	}
+}
+
+
+
+
+# Final Stage - Series 5000
+# Special Project done - Ask to choose allies
+country_event = {
+	id = wiirlak_ep.5000
+	
+	hide_window = no
+	title = wiirlak_ep_invitation
+	# desc = wiirlak_ep_invitation_desc
+	show_sound = amb_toxic_world_a
+	picture = GFX_evt_kaleidoscopic_lights
+	auto_opens = yes
+
+	is_triggered_only = yes
+	trigger = {
+		has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+	}
+	event_chain = wiirlak_ep_evergrowth_protocol_chain
+	
+	immediate = {
+		save_event_target_as = wiirlak_ep_crisis_player
+
+		if = {
+			limit = { NOT = { has_country_flag = wiirlak_ep_flag_first_ally_selected } }
+
+			every_country = {
+				limit = {
+					is_default_or_fallen = yes
+					has_communications = ROOT
+					NOR = {
+						is_same_empire = ROOT
+						is_at_war_with = ROOT
+					}
+				}
+
+				# Small bonuses for Ally
+				if = {
+					limit = { ROOT = { is_overlord_to = PREV } }
+
+					change_variable = {
+						which = wiirlak_ep_var_acceptation
+						value = 2
+					}
+				}
+				else_if = {
+					limit = { any_federation_ally = { is_same_empire = ROOT } }
+
+					change_variable = {
+						which = wiirlak_ep_var_acceptation
+						value = 1
+					}
+				}
+
+				log = "[THIS.GetName] has [THIS.wiirlak_ep_var_acceptation] approval rating"
+				# Must be somewhat okay with this
+				if = {
+					limit = {
+						is_variable_set = wiirlak_ep_var_acceptation
+						check_variable = {
+							which = wiirlak_ep_var_acceptation
+							value > @threshold
+						}
+					}
+
+					log = "[THIS.GetName] accepted to join with [THIS.wiirlak_ep_var_acceptation] approval rating"
+					# Propose up to 5 candidates
+					if = {
+						limit = { NOT = { exists = event_target:wiirlak_ep_crisis_potential_ally_1 } }
+
+						save_event_target_as = wiirlak_ep_crisis_potential_ally_1
+					}
+					else_if = {
+						limit = { NOT = { exists = event_target:wiirlak_ep_crisis_potential_ally_2 } }
+
+						save_event_target_as = wiirlak_ep_crisis_potential_ally_2
+					}
+					else_if = {
+						limit = { NOT = { exists = event_target:wiirlak_ep_crisis_potential_ally_3 } }
+
+						save_event_target_as = wiirlak_ep_crisis_potential_ally_3
+					}
+					else_if = {
+						limit = { NOT = { exists = event_target:wiirlak_ep_crisis_potential_ally_4 } }
+
+						save_event_target_as = wiirlak_ep_crisis_potential_ally_4
+					}
+					else_if = {
+						limit = { NOT = { exists = event_target:wiirlak_ep_crisis_potential_ally_5 } }
+
+						save_event_target_as = wiirlak_ep_crisis_potential_ally_5
+					}
+				}
+			}
+		}
+	}
+
+	desc = {
+		trigger = { exists = event_target:wiirlak_ep_crisis_potential_ally_1 }
+		text = wiirlak_ep_invitation_desc
+	}
+	desc = {
+		trigger = { NOT = { exists = event_target:wiirlak_ep_crisis_potential_ally_1 } }
+		text = wiirlak_ep_invitation_none_desc
+	}
+
+	# Choice
+	option = {
+		name = wiirlak_ep_invitation_empire_1
+
+		trigger = { exists = event_target:wiirlak_ep_crisis_potential_ally_1 }
+		allow = { event_target:wiirlak_ep_crisis_potential_ally_1 = { NOT = { has_country_flag = wiirlak_ep_flag_chosen_by_crisis@event_target:wiirlak_ep_crisis_player } } }
+
+		hidden_effect = {
+			event_target:wiirlak_ep_crisis_potential_ally_1 = {
+				set_country_flag = wiirlak_ep_flag_chosen_by_crisis@event_target:wiirlak_ep_crisis_player
+				country_event = {
+					id = wiirlak_ep.5020	days = 5
+				}
+			}
+		}
+	}
+	option = {
+		name = wiirlak_ep_invitation_empire_2
+
+		trigger = { exists = event_target:wiirlak_ep_crisis_potential_ally_2 }
+		allow = { event_target:wiirlak_ep_crisis_potential_ally_2 = { NOT = { has_country_flag = wiirlak_ep_flag_chosen_by_crisis@event_target:wiirlak_ep_crisis_player } } }
+
+		hidden_effect = {
+			event_target:wiirlak_ep_crisis_potential_ally_2 = {
+				set_country_flag = wiirlak_ep_flag_chosen_by_crisis@event_target:wiirlak_ep_crisis_player
+				country_event = {
+					id = wiirlak_ep.5020	days = 5
+				}
+			}
+		}
+	}
+	option = {
+		name = wiirlak_ep_invitation_empire_3
+
+		trigger = { exists = event_target:wiirlak_ep_crisis_potential_ally_3 }
+		allow = { event_target:wiirlak_ep_crisis_potential_ally_3 = { NOT = { has_country_flag = wiirlak_ep_flag_chosen_by_crisis@event_target:wiirlak_ep_crisis_player } } }
+
+		hidden_effect = {
+			event_target:wiirlak_ep_crisis_potential_ally_3 = {
+				set_country_flag = wiirlak_ep_flag_chosen_by_crisis@event_target:wiirlak_ep_crisis_player
+				country_event = {
+					id = wiirlak_ep.5020	days = 5
+				}
+			}
+		}
+	}
+	option = {
+		name = wiirlak_ep_invitation_empire_4
+
+		trigger = { exists = event_target:wiirlak_ep_crisis_potential_ally_4 }
+		allow = { event_target:wiirlak_ep_crisis_potential_ally_4 = { NOT = { has_country_flag = wiirlak_ep_flag_chosen_by_crisis@event_target:wiirlak_ep_crisis_player } } }
+
+		hidden_effect = {
+			event_target:wiirlak_ep_crisis_potential_ally_4 = {
+				set_country_flag = wiirlak_ep_flag_chosen_by_crisis@event_target:wiirlak_ep_crisis_player
+				country_event = {
+					id = wiirlak_ep.5020	days = 5
+				}
+			}
+		}
+	}
+	option = {
+		name = wiirlak_ep_invitation_empire_5
+
+		trigger = { exists = event_target:wiirlak_ep_crisis_potential_ally_5 }
+		allow = { event_target:wiirlak_ep_crisis_potential_ally_5 = { NOT = { has_country_flag = wiirlak_ep_flag_chosen_by_crisis@event_target:wiirlak_ep_crisis_player } } }
+
+		hidden_effect = {
+			event_target:wiirlak_ep_crisis_potential_ally_5 = {
+				set_country_flag = wiirlak_ep_flag_chosen_by_crisis@event_target:wiirlak_ep_crisis_player
+				country_event = {
+					id = wiirlak_ep.5020	days = 5
+				}
+			}
+		}
+	}
+
+	# None should help
+	option = {
+		name = first_contact.250.C
+
+		hidden_effect = {
+			set_country_flag = wiirlak_ep_flag_no_ally
+
+			country_event = {
+				id = wiirlak_ep.5050	days = 30
+			}
+		}
+	}
+
+	after = {
+		# If there's a second choice, ask for 2nd ally
+		if = {
+			limit = {
+				NOR = {
+					has_country_flag = wiirlak_ep_flag_no_ally
+					has_country_flag = wiirlak_ep_flag_first_ally_selected
+				}
+			}
+
+			hidden_effect = {
+				set_country_flag = wiirlak_ep_flag_first_ally_selected
+			}
+
+			if = {
+				limit = { exists = event_target:wiirlak_ep_crisis_potential_ally_2 }
+
+				country_event = {
+					id = wiirlak_ep.5000	days = 15
+				}
+			}
+			else = {
+				country_event = {
+					id = wiirlak_ep.5050	days = 30
+				}
+			}
+		}
+	}
+}
+
+# Potential Ally to Crisis - Choice to join, or reject
+country_event = {
+	id = wiirlak_ep.5020
+	
+	hide_window = no
+	title = wiirlak_ep_invitation_offer
+	desc = wiirlak_ep_invitation_offer_desc
+	show_sound = amb_toxic_world_a
+	picture = GFX_evt_egg_cracked
+	auto_opens = yes
+
+	is_triggered_only = yes
+
+	# Accept the Evergrowth boon
+	option = {
+		name = wiirlak_ep_invitation_offer_accept
+
+		ai_chance = {
+			base = 50
+			modifier = {
+				add = 50
+				event_target:wiirlak_ep_crisis_player = { is_overlord_to = PREV }
+				OR = {
+					is_loyal_to = event_target:wiirlak_ep_crisis_player
+					has_loyalty >= 150
+					has_monthly_loyalty >= 2
+				}
+			}
+			modifier = {
+				add = 500
+				event_target:wiirlak_ep_crisis_player = { is_overlord_to = PREV }
+				is_specialist_subject_type = { TYPE = evergrowth }
+			}
+			modifier = {
+				add = 20
+				any_federation_ally = { is_same_empire = event_target:wiirlak_ep_crisis_player }
+				event_target:wiirlak_ep_crisis_player = { is_federation_leader = yes }
+			}
+			modifier = {
+				add = 15
+				any_federation_ally = { is_same_empire = event_target:wiirlak_ep_crisis_player }
+			}
+			modifier = {
+				add = 10
+				has_defensive_pact = event_target:wiirlak_ep_crisis_player
+			}
+			modifier = {
+				add = 5
+				has_non_aggression_pact = event_target:wiirlak_ep_crisis_player
+			}
+			modifier = {
+				add = 5
+				their_opinion = {
+					who = event_target:wiirlak_ep_crisis_player
+					value > 300
+				}
+			}
+			modifier = {
+				add = 10
+				their_opinion = {
+					who = event_target:wiirlak_ep_crisis_player
+					value > 750
+				}
+			}
+			modifier = {
+				add = 25
+				their_opinion = {
+					who = event_target:wiirlak_ep_crisis_player
+					value > 1250
+				}
+			}
+			modifier = {
+				add = 2
+				has_embassy = event_target:wiirlak_ep_crisis_player
+			}
+			modifier = {
+				add = 30
+				has_same_ethos = event_target:wiirlak_ep_crisis_player
+			}
+			modifier = {
+				add = 15
+				relative_power = {
+					who = event_target:wiirlak_ep_crisis_player
+					category = fleet
+					value = overwhelming
+				}
+			}
+			modifier = {
+				add = 5
+				relative_power = {
+					who = event_target:wiirlak_ep_crisis_player
+					category = fleet
+					value = superior
+				}
+			}
+		}
+
+		custom_tooltip = wiirlak_ep_invitation_offer_accept_tooltip
+
+		if = {
+			limit = {
+				is_subject = yes
+				overlord = { is_same_empire = event_target:wiirlak_ep_crisis_player }
+			}
+
+			add_modifier = {
+				modifier = wiirlak_ep_modifier_crisis_link
+			}
+		}
+
+		every_owned_planet = {
+			wiirlak_ep_diplomatically_into_bloom = yes
+		}
+
+		hidden_effect = {
+			set_country_flag = wiirlak_ep_flag_ally_to_@event_target:wiirlak_ep_crisis_player
+			
+			if = {
+				limit = { exists = event_target:wiirlak_ep_crisis_ally_1 }
+
+				save_event_target_as = wiirlak_ep_crisis_ally_2
+			}
+			else = {
+				save_event_target_as = wiirlak_ep_crisis_ally_1
+			}
+
+			event_target:wiirlak_ep_crisis_player = {
+				country_event = {
+					id = wiirlak_ep.5030
+				}
+			}
+		}
+	}
+
+	# Refuse and get dragged into war
+	option = {
+		name = wiirlak_ep_invitation_offer_reject
+
+		ai_chance = {
+			base = 75
+			modifier = {
+				add = 50
+				is_rival = event_target:wiirlak_ep_crisis_player
+			}
+			modifier = {
+				add = 1000
+				is_at_war_with = event_target:wiirlak_ep_crisis_player
+			}
+			modifier = {
+				add = 250
+				has_opinion_modifier = {
+					who = event_target:wiirlak_ep_crisis_player
+					modifier = wiirlak_ep_opinion_seeded_my_world
+				}
+			}
+			modifier = {
+				add = 250
+				is_overlord = yes
+			}
+			modifier = {
+				add = 50
+				is_subject = yes
+				NOT = { has_overlord = event_target:wiirlak_ep_crisis_player }
+			}
+			modifier = {
+				add = 20
+				their_opinion = {
+					who = event_target:wiirlak_ep_crisis_player
+					value < 0
+				}
+			}
+			modifier = {
+				add = 50
+				their_opinion = {
+					who = event_target:wiirlak_ep_crisis_player
+					value < -300
+				}
+			}
+			modifier = {
+				add = 150
+				their_opinion = {
+					who = event_target:wiirlak_ep_crisis_player
+					value < -750
+				}
+			}
+			modifier = {
+				add = 25
+				relative_power = {
+					who = event_target:wiirlak_ep_crisis_player
+					category = fleet
+					value = pathetic
+				}
+			}
+			modifier = {
+				add = 15
+				relative_power = {
+					who = event_target:wiirlak_ep_crisis_player
+					category = fleet
+					value = inferior
+				}
+			}
+			modifier = {
+				add = 35
+				has_civic = civic_inwards_perfection
+			}
+			modifier = {
+				add = 25
+				has_civic = civic_pompous_purists
+			}
+		}
+
+		custom_tooltip = wiirlak_ep_invitation_offer_reject_tooltip
+		hidden_effect = {
+			set_country_flag = wiirlak_ep_flag_ennemy_to_@event_target:wiirlak_ep_crisis_player
+			
+			if = {
+				limit = { exists = event_target:wiirlak_ep_crisis_ennemy_1 }
+
+				save_event_target_as = wiirlak_ep_crisis_ennemy_2
+			}
+			else = {
+				save_event_target_as = wiirlak_ep_crisis_ennemy_1
+			}
+
+			event_target:wiirlak_ep_crisis_player = {
+				country_event = {
+					id = wiirlak_ep.5035
+				}
+			}
+		}
+	}
+}
+
+# Crisis Empire after potential Ally's choice - Warn about Acceptation
+country_event = {
+	id = wiirlak_ep.5030
+	
+	hide_window = no
+	title = wiirlak_ep_invitation_accepted
+	desc = wiirlak_ep_invitation_accepted_desc
+	show_sound = amb_toxic_world_a
+	picture = GFX_evt_overtuned
+	auto_opens = yes
+
+	is_triggered_only = yes
+	trigger = {
+		has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+	}
+	event_chain = wiirlak_ep_evergrowth_protocol_chain
+
+	# Accepted
+	option = {
+		name = wiirlak_ep_invitation_offer_accept
+
+		trigger = {
+			exists = event_target:wiirlak_ep_crisis_ally_1
+			NOT = { has_country_flag = wiirlak_ep_flag_1_ally }
+		}
+
+		hidden_effect = {
+			set_country_flag = wiirlak_ep_flag_1_ally
+			save_event_target_as = wiirlak_ep_crisis_reward
+		}
+
+		if = {
+			limit = { NOT = { is_overlord_to = event_target:wiirlak_ep_crisis_ally_1 } }
+
+			event_target:wiirlak_ep_crisis_ally_1 = {
+				wiirlak_ep_set_vassal = yes
+			}
+		}
+		else = {
+			event_target:wiirlak_ep_crisis_ally_1 = {
+				add_modifier = {
+					modifier = wiirlak_ep_modifier_subject
+				}
+			}
+		}
+	}
+	option = {
+		name = wiirlak_ep_invitation_offer_accept
+
+		trigger = {
+			exists = event_target:wiirlak_ep_crisis_ally_2
+			NOT = { has_country_flag = wiirlak_ep_flag_2_ally }
+		}
+
+		hidden_effect = {
+			set_country_flag = wiirlak_ep_flag_2_ally
+			save_event_target_as = wiirlak_ep_crisis_reward
+		}
+
+		if = {
+			limit = { NOT = { is_overlord_to = event_target:wiirlak_ep_crisis_ally_2 } }
+
+			event_target:wiirlak_ep_crisis_ally_2 = {
+				wiirlak_ep_set_vassal = yes
+			}
+		}
+		else = {
+			event_target:wiirlak_ep_crisis_ally_2 = {
+				add_modifier = {
+					modifier = wiirlak_ep_modifier_subject
+				}
+			}
+		}
+	}
+
+	after = {
+		if = {
+			limit = {
+				OR = {
+					AND = {
+						has_country_flag = wiirlak_ep_flag_1_ennemy
+						has_country_flag = wiirlak_ep_flag_2_ennemy
+					}
+					AND = {
+						has_country_flag = wiirlak_ep_flag_1_ally
+						has_country_flag = wiirlak_ep_flag_2_ally
+					}
+					AND = {
+						has_country_flag = wiirlak_ep_flag_1_ennemy
+						has_country_flag = wiirlak_ep_flag_1_ally
+					}
+					has_country_flag = wiirlak_ep_flag_no_ally
+				}
+			}
+
+			country_event = {
+				id = wiirlak_ep.5050	days = 30
+			}
+		}
+	}
+}
+
+# Crisis Empire after potential Ally's choice - Warn about Refusal
+country_event = {
+	id = wiirlak_ep.5035
+	
+	hide_window = no
+	title = wiirlak_ep_invitation_rejected
+	desc = wiirlak_ep_invitation_rejected_desc
+	show_sound = amb_toxic_world_a
+	picture = GFX_evt_space_crystals
+	auto_opens = yes
+
+	is_triggered_only = yes
+	trigger = {
+		has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+	}
+	event_chain = wiirlak_ep_evergrowth_protocol_chain
+
+	# Refusal
+	option = {
+		name = wiirlak_ep_invitation_rejected_answer
+
+		trigger = {
+			exists = event_target:wiirlak_ep_crisis_ennemy_1
+			NOT = { has_country_flag = wiirlak_ep_flag_1_ennemy }
+		}
+
+		hidden_effect = {
+			set_country_flag = wiirlak_ep_flag_1_ennemy
+		}
+
+		# No galcom, start a war with this country
+		if = {
+			limit = { is_galactic_community_formed = no }
+
+			event_target:wiirlak_ep_crisis_ennemy_1 = {
+				declare_war = {
+					target = PREV
+					attacker_war_goal = wg_declared_crisis
+				}
+			}
+		}
+	}
+	option = {
+		name = wiirlak_ep_invitation_rejected_answer
+
+		trigger = {
+			exists = event_target:wiirlak_ep_crisis_ennemy_2
+			NOT = { has_country_flag = wiirlak_ep_flag_2_ennemy }
+		}
+
+		hidden_effect = {
+			set_country_flag = wiirlak_ep_flag_2_ennemy
+		}
+
+		# No galcom, start a war with this country
+		if = {
+			limit = { is_galactic_community_formed = no }
+
+			event_target:wiirlak_ep_crisis_ennemy_1 = {
+				declare_war = {
+					target = PREV
+					attacker_war_goal = wg_declared_crisis
+				}
+			}
+		}
+	}
+
+	after = {
+		if = {
+			limit = {
+				OR = {
+					AND = {
+						has_country_flag = wiirlak_ep_flag_1_ennemy
+						has_country_flag = wiirlak_ep_flag_2_ennemy
+					}
+					AND = {
+						has_country_flag = wiirlak_ep_flag_1_ally
+						has_country_flag = wiirlak_ep_flag_2_ally
+					}
+					AND = {
+						has_country_flag = wiirlak_ep_flag_1_ennemy
+						has_country_flag = wiirlak_ep_flag_1_ally
+					}
+					has_country_flag = wiirlak_ep_flag_no_ally
+				}
+			}
+
+			country_event = {
+				id = wiirlak_ep.5050	days = 30
+			}
+		}
+	}
+}
+
+# Crisis Empire - Start of Galactic War
+country_event = {
+	id = wiirlak_ep.5050
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	trigger = {
+		has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+	}
+	event_chain = wiirlak_ep_evergrowth_protocol_chain
+	
+	# Get ready for the Galactic War
+	immediate = {
+		# # Set flags and Event Target myself for the Galcom War
+
+		# save_event_target_as = new_crisis
+		# set_country_flag = declared_crisis
+
+		# # Custodian, or emperor
+		# if = {
+		# 	limit = { has_galactic_emperor = yes }
+
+		# 	galactic_emperor = { save_event_target_as = community_war_leader }
+		# }
+		# else_if = {
+		# 	limit = { has_galactic_custodian = yes }
+
+		# 	galactic_custodian = { save_event_target_as = community_war_leader }
+		# }
+
+		# # Potential ally refused, they will lead the charge
+		# else_if = {
+		# 	limit = {
+		# 		exists = event_target:wiirlak_ep_crisis_ennemy_1
+		# 		exists = event_target:wiirlak_ep_crisis_ennemy_2
+		# 	}
+
+		# 	# Keep the strongest as the war leader
+		# 	if = {
+		# 		limit = {
+		# 			event_target:wiirlak_ep_crisis_ennemy_1 = {
+		# 				OR = {
+		# 					relative_power = {
+		# 						who = event_target:wiirlak_ep_crisis_ennemy_2
+		# 						category = fleet
+		# 						value = pathetic
+		# 					}
+		# 					relative_power = {
+		# 						who = event_target:wiirlak_ep_crisis_ennemy_2
+		# 						category = fleet
+		# 						value = inferior
+		# 					}
+		# 					AND = {
+		# 						relative_power = {
+		# 							who = event_target:wiirlak_ep_crisis_ennemy_2
+		# 							category = fleet
+		# 							value = equivalent
+		# 						}
+		# 						OR = {
+		# 							relative_power = {
+		# 								who = event_target:wiirlak_ep_crisis_ennemy_2
+		# 								category = economy
+		# 								value = overwhelming
+		# 							}
+		# 							relative_power = {
+		# 								who = event_target:wiirlak_ep_crisis_ennemy_2
+		# 								category = economy
+		# 								value = superior
+		# 							}
+		# 						}
+		# 					}
+		# 				}
+		# 			}
+		# 		}
+
+		# 		event_target:wiirlak_ep_crisis_ennemy_1 = { save_event_target_as = community_war_leader }
+		# 	}
+		# 	else = {
+		# 		event_target:wiirlak_ep_crisis_ennemy_2 = { save_event_target_as = community_war_leader }
+		# 	}
+		# }
+		# else_if = {
+		# 	limit = { exists = event_target:wiirlak_ep_crisis_ennemy_1 }
+
+		# 	event_target:wiirlak_ep_crisis_ennemy_1 = { save_event_target_as = community_war_leader }
+		# }
+
+		# # 1st council member by diplo weight
+		# else_if = {
+		# 	limit = { is_galactic_council_established = yes }
+
+		# 	ordered_council_member = {
+		# 		position = 0
+		# 		order_by = trigger:diplomacy_weight
+		# 		limit = { NOT = { is_same_empire = event_target:wiirlak_ep_crisis_player } }
+
+		# 		save_event_target_as = community_war_leader
+		# 	}
+		# }
+
+		# # 1st galcom member by diplo weight
+		# else_if = {
+		# 	limit = { is_galactic_community_formed = yes }
+
+		# 	ordered_galcom_member = {
+		# 		position = 0
+		# 		order_by = trigger:diplomacy_weight
+		# 		limit = { NOT = { is_same_empire = event_target:wiirlak_ep_crisis_player } }
+
+		# 		save_event_target_as = community_war_leader
+		# 	}
+		# }
+
+
+		# # Start the fun
+		# declare_crisis_war_effect = yes
+
+		declare_crisis_effect = yes
+	}
+}
+
+
+
+# For Ally/Diplo Option; Once the forced terraformation has been completed - Warn the owner
+planet_event = {
+	id = wiirlak_ep.5070
+	
+	hide_window = no
+	title = wiirlak_ep_event_bombarded_terraformed_positive
+	desc = wiirlak_ep_event_bombarded_terraformed_positive_desc
+	show_sound = amb_toxic_world_a
+	picture = GFX_evt_wilderness_colonizer
+	auto_opens = yes
+	location = THIS
+
+	is_triggered_only = yes
+
+	immediate = {
+		wiirlak_ep_bloom_world = yes
+	}
+
+	option = {
+		name = wiirlak_ep_event_bombarded_terraformed_positive_answer
+
+		OWNER = {
+			add_500_unity_per_year_passed = yes
+		}
+	}
+}
+
+
+
+
+# Crisis Empire - Project Step 1 completed - Start Step 2
+country_event = {
+	id = wiirlak_ep.5100
+	
+	hide_window = no
+	title = wiirlak_ep_project_1_done
+	desc = wiirlak_ep_project_1_done_desc
+	show_sound = amb_toxic_world_a
+	picture = GFX_evt_bleeding_worlds
+	auto_opens = yes
+	location = capital_scope
+
+	is_triggered_only = yes
+	trigger = {
+		has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+	}
+	event_chain = wiirlak_ep_evergrowth_protocol_chain
+
+	option = {
+		name = wiirlak_ep_project_1_done_answer
+
+		# Start the Decision for the country if possible
+		if = {
+			limit = {
+				if = {
+					limit = { country_uses_food = yes }
+					resource_stockpile_compare = {
+						resource = food
+						value >= 30000
+					}
+				}
+				else = {
+					resource_stockpile_compare = {
+						resource = minerals
+						value >= 30000
+					}
+				}
+				resource_stockpile_compare = {
+					resource = wiirlak_ep_resource_mycogrowth
+					value >= 25000
+				}
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 25
+				}
+			}
+
+			capital_scope = {
+				custom_tooltip = wiirlak_ep_project_1_done_tooltip
+				
+				select_decision = { name = wiirlak_ep_decision_final_project }
+			}
+		}
+
+		# Warn that the Decision is possible
+		else = {
+			custom_tooltip = wiirlak_ep_project_1_done_tooltip_fail
+		}
+	}
+}
+
+
+# Crisis Empire - Project Step 2 completed - Start Step 3
+country_event = {
+	id = wiirlak_ep.5200
+	
+	hide_window = no
+	title = wiirlak_ep_project_2_done
+	desc = wiirlak_ep_project_2_done_desc
+	show_sound = amb_toxic_world_a
+	picture = GFX_evt_bleeding_worlds_2
+	auto_opens = yes
+
+	is_triggered_only = yes
+	trigger = {
+		has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+	}
+	event_chain = wiirlak_ep_evergrowth_protocol_chain
+
+	option = {
+		name = wiirlak_ep_project_2_done_answer
+
+		# Start the Decision for the country if possible
+		if = {
+			limit = {
+				if = {
+					limit = { country_uses_food = yes }
+					resource_stockpile_compare = {
+						resource = food
+						value >= 30000
+					}
+				}
+				else = {
+					resource_stockpile_compare = {
+						resource = minerals
+						value >= 30000
+					}
+				}
+				resource_stockpile_compare = {
+					resource = wiirlak_ep_resource_mycogrowth
+					value >= 25000
+				}
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 50
+				}
+			}
+
+			capital_scope = {
+				custom_tooltip = wiirlak_ep_project_2_done_tooltip
+				
+				select_decision = { name = wiirlak_ep_decision_final_project_2 }
+			}
+		}
+
+		# Warn that the Decision is possible
+		else = {
+			custom_tooltip = wiirlak_ep_project_2_done_tooltip_fail
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			every_playable_country = {
+				limit = { NOT = { is_same_empire = PREV } }
+
+				country_event = {
+					id = wiirlak_ep.5210	days = 3
+				}
+			}
+		}
+	}
+}
+
+# Every other Empire - Warn that the Step 2 was completed
+country_event = {
+	id = wiirlak_ep.5210
+	
+	hide_window = no
+	title = wiirlak_ep_project_2_warning
+	desc = wiirlak_ep_project_2_warning_desc
+	show_sound = amb_toxic_world_a
+	picture = GFX_evt_crystal_kraken
+	auto_opens = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = wiirlak_ep_project_2_warning_answer
+
+		trigger = { NOT = { has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol } }
+	}
+
+	option = {
+		name = wiirlak_ep_project_2_warning_answer_evergrowth
+
+		trigger = { has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol }
+	}
+}
+
+
+# Crisis Empire - Project Step 3 completed - TERRAFORM EVERYTHING !
+country_event = {
+	id = wiirlak_ep.5300
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	trigger = {
+		has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+	}
+	event_chain = wiirlak_ep_evergrowth_protocol_chain
+
+	immediate = {
+		# Terraform (almost) everything
+		wiirlak_ep_blooming_worlds_finish = yes
+	
+		# Warn everyone
+		every_playable_country = {
+			limit = { NOT = { is_same_empire = PREV } }
+
+			country_event = {
+				id = wiirlak_ep.5310	days = 3
+			}
+		}
+
+		# Win
+		country_event = {
+			id = wiirlak_ep.5350	days = 15
+		}
+	}
+}
+
+# Every other Empire - Warn that the Step 3 was completed - Game Over
+country_event = {
+	id = wiirlak_ep.5310
+	
+	hide_window = no
+	title = wiirlak_ep_project_3_warning
+	desc = wiirlak_ep_project_3_warning_desc
+	show_sound = amb_toxic_world_a
+	picture = GFX_evt_situation_the_seal
+	auto_opens = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = wiirlak_ep_project_3_warning_answer
+
+		trigger = { NOT = { has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol } }
+	}
+
+	option = {
+		name = wiirlak_ep_project_3_warning_answer_evergrowth
+
+		trigger = { has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol }
+	}
+}
+
+# Crisis Empire - WIN
+country_event = {
+	id = wiirlak_ep.5350
+	
+	hide_window = no
+	title = wiirlak_ep_project_3_done
+	desc = wiirlak_ep_project_3_done_desc
+	show_sound = amb_toxic_world_a
+	picture = GFX_evt_situation_the_seal
+	auto_opens = yes
+
+	is_triggered_only = yes
+	trigger = {
+		has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+	}
+	event_chain = wiirlak_ep_evergrowth_protocol_chain
+
+	option = {
+		name = wiirlak_ep_project_3_done_answer
+
+		win = yes
+	}
+}
+
+
+
+# Crisis Empire - Alternative WIN
+country_event = {
+	id = wiirlak_ep.5360
+	
+	hide_window = no
+	title = wiirlak_ep_all_terraformed
+	# desc = wiirlak_ep_all_terraformed_desc
+	show_sound = amb_toxic_world_a
+	picture = GFX_evt_sky_burials
+	auto_opens = yes
+
+	is_triggered_only = yes
+	trigger = {
+		has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+		NOT = { has_country_flag = wiirlak_ep_flag_all_terraformed }
+	}
+	event_chain = wiirlak_ep_evergrowth_protocol_chain
+
+	immediate = {
+		set_country_flag = wiirlak_ep_flag_all_terraformed
+	
+		# WIN if you're the only crisis
+		if = {
+			limit = {
+				NOT = { has_global_flag = wiirlak_ep_flag_crisis_won }
+				count_country = {
+					limit = { has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol }
+					count = 1
+				}
+			}
+
+			win = yes
+		}
+
+		# Not alone; the country further into the path wins
+		else_if = {
+			limit = { NOT = { has_global_flag = wiirlak_ep_flag_crisis_won } }
+
+			# By Final Step
+			if = {
+				limit = {
+					count_country = {
+						limit = {
+							has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+							has_country_flag = wiirlak_ep_flag_step_3_done
+						}
+						count > 1
+					}
+				}
+
+				ordered_country = {
+					limit = {
+						has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+						has_country_flag = wiirlak_ep_flag_step_3_done
+					}
+
+					position = 0
+					order_by = value:wiirlak_ep_mycogrowth_total
+
+					hidden_effect = { set_global_flag = wiirlak_ep_flag_crisis_won }
+					win = yes
+				}
+			}
+			else_if = {
+				limit = {
+					count_country = {
+						limit = {
+							has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+							has_country_flag = wiirlak_ep_flag_step_3_done
+						}
+						count = 1
+					}
+				}
+
+				hidden_effect = { set_global_flag = wiirlak_ep_flag_crisis_won }
+				win = yes
+			}
+
+			else_if = {
+				limit = {
+					count_country = {
+						limit = {
+							has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+							has_country_flag = wiirlak_ep_flag_step_2_done
+						}
+						count > 1
+					}
+				}
+
+				ordered_country = {
+					limit = {
+						has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+						has_country_flag = wiirlak_ep_flag_step_2_done
+					}
+
+					position = 0
+					order_by = value:wiirlak_ep_mycogrowth_total
+
+					hidden_effect = { set_global_flag = wiirlak_ep_flag_crisis_won }
+					win = yes
+				}
+			}
+			else_if = {
+				limit = {
+					count_country = {
+						limit = {
+							has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+							has_country_flag = wiirlak_ep_flag_step_2_done
+						}
+						count = 1
+					}
+				}
+
+				hidden_effect = { set_global_flag = wiirlak_ep_flag_crisis_won }
+				win = yes
+			}
+
+			# By Special Project
+			else_if = {
+				limit = {
+					count_country = {
+						limit = {
+							has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+							has_completed_special_project_in_log = WIIRLAK_EP_FINAL_PROJECT_1
+						}
+						count > 1
+					}
+				}
+
+				ordered_country = {
+					limit = {
+						has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+						has_completed_special_project_in_log = WIIRLAK_EP_FINAL_PROJECT_1
+					}
+
+					position = 0
+					order_by = value:wiirlak_ep_mycogrowth_total
+
+					hidden_effect = { set_global_flag = wiirlak_ep_flag_crisis_won }
+					win = yes
+				}
+			}
+			else_if = {
+				limit = {
+					count_country = {
+						limit = {
+							has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+							has_completed_special_project_in_log = WIIRLAK_EP_FINAL_PROJECT_1
+						}
+						count = 1
+					}
+				}
+
+				hidden_effect = { set_global_flag = wiirlak_ep_flag_crisis_won }
+				win = yes
+			}
+
+			else_if = {
+				limit = {
+					count_country = {
+						limit = {
+							has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+							has_special_project = WIIRLAK_EP_FINAL_PROJECT_1
+						}
+						count > 1
+					}
+				}
+
+				ordered_country = {
+					limit = {
+						has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+						has_special_project = WIIRLAK_EP_FINAL_PROJECT_1
+					}
+
+					position = 0
+					order_by = value:wiirlak_ep_mycogrowth_total
+
+					hidden_effect = { set_global_flag = wiirlak_ep_flag_crisis_won }
+					win = yes
+				}
+			}
+			else_if = {
+				limit = {
+					count_country = {
+						limit = {
+							has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+							has_special_project = WIIRLAK_EP_FINAL_PROJECT_1
+						}
+						count = 1
+					}
+				}
+
+				hidden_effect = { set_global_flag = wiirlak_ep_flag_crisis_won }
+				win = yes
+			}
+
+			# By Crisis Level
+			else_if = {
+				limit = {
+					count_country = {
+						limit = {
+							has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+							has_crisis_level = wiirlak_ep_evergrowth_protocol_level_5
+						}
+						count > 1
+					}
+				}
+
+				ordered_country = {
+					limit = {
+						has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+						has_crisis_level = wiirlak_ep_evergrowth_protocol_level_5
+					}
+
+					position = 0
+					order_by = value:wiirlak_ep_mycogrowth_total
+
+					hidden_effect = { set_global_flag = wiirlak_ep_flag_crisis_won }
+					win = yes
+				}
+			}
+			else_if = {
+				limit = {
+					count_country = {
+						limit = {
+							has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+							has_crisis_level = wiirlak_ep_evergrowth_protocol_level_5
+						}
+						count = 1
+					}
+				}
+					
+				hidden_effect = { set_global_flag = wiirlak_ep_flag_crisis_won }
+				win = yes
+			}
+
+			else_if = {
+				limit = {
+					count_country = {
+						limit = {
+							has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+							has_crisis_level = wiirlak_ep_evergrowth_protocol_level_4
+						}
+						count > 1
+					}
+				}
+
+				ordered_country = {
+					limit = {
+						has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+						has_crisis_level = wiirlak_ep_evergrowth_protocol_level_4
+					}
+
+					position = 0
+					order_by = value:wiirlak_ep_mycogrowth_total
+
+					hidden_effect = { set_global_flag = wiirlak_ep_flag_crisis_won }
+					win = yes
+				}
+			}
+			else_if = {
+				limit = {
+					count_country = {
+						limit = {
+							has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+							has_crisis_level = wiirlak_ep_evergrowth_protocol_level_4
+						}
+						count = 1
+					}
+				}
+
+				hidden_effect = { set_global_flag = wiirlak_ep_flag_crisis_won }
+				win = yes
+			}
+
+			else_if = {
+				limit = {
+					count_country = {
+						limit = {
+							has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+							has_crisis_level = wiirlak_ep_evergrowth_protocol_level_3
+						}
+						count > 1
+					}
+				}
+
+				ordered_country = {
+					limit = {
+						has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+						has_crisis_level = wiirlak_ep_evergrowth_protocol_level_3
+					}
+
+					position = 0
+					order_by = value:wiirlak_ep_mycogrowth_total
+
+					hidden_effect = { set_global_flag = wiirlak_ep_flag_crisis_won }
+					win = yes
+				}
+			}
+			else_if = {
+				limit = {
+					count_country = {
+						limit = {
+							has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+							has_crisis_level = wiirlak_ep_evergrowth_protocol_level_3
+						}
+						count = 1
+					}
+				}
+
+				hidden_effect = { set_global_flag = wiirlak_ep_flag_crisis_won }
+				win = yes
+			}
+
+			else_if = {
+				limit = {
+					count_country = {
+						limit = {
+							has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+							has_crisis_level = wiirlak_ep_evergrowth_protocol_level_2
+						}
+						count > 1
+					}
+				}
+
+				ordered_country = {
+					limit = {
+						has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+						has_crisis_level = wiirlak_ep_evergrowth_protocol_level_2
+					}
+
+					position = 0
+					order_by = value:wiirlak_ep_mycogrowth_total
+
+					hidden_effect = { set_global_flag = wiirlak_ep_flag_crisis_won }
+					win = yes
+				}
+			}
+			else_if = {
+				limit = {
+					count_country = {
+						limit = {
+							has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+							has_crisis_level = wiirlak_ep_evergrowth_protocol_level_2
+						}
+						count = 1
+					}
+				}
+
+				hidden_effect = { set_global_flag = wiirlak_ep_flag_crisis_won }
+				win = yes
+			}
+
+			else_if = {
+				limit = {
+					count_country = {
+						limit = {
+							has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+							has_crisis_level = wiirlak_ep_evergrowth_protocol_level_1
+						}
+						count > 1
+					}
+				}
+
+				ordered_country = {
+					limit = {
+						has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+						has_crisis_level = wiirlak_ep_evergrowth_protocol_level_1
+					}
+
+					position = 0
+					order_by = value:wiirlak_ep_mycogrowth_total
+
+					hidden_effect = { set_global_flag = wiirlak_ep_flag_crisis_won }
+					win = yes
+				}
+			}
+			else_if = {
+				limit = {
+					count_country = {
+						limit = {
+							has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+							has_crisis_level = wiirlak_ep_evergrowth_protocol_level_1
+						}
+						count = 1
+					}
+				}
+
+				hidden_effect = { set_global_flag = wiirlak_ep_flag_crisis_won }
+				win = yes
+			}
+		}
+	}
+
+
+	# Step 2 done
+	desc = {
+		text = wiirlak_ep_all_terraformed_step_2_desc
+
+		trigger = {
+			has_country_flag = wiirlak_ep_flag_step_2_done
+		}
+	}
+	option = {
+		name = wiirlak_ep_all_terraformed_answer
+
+		trigger = {
+			has_country_flag = wiirlak_ep_flag_step_2_done
+		}
+	}
+
+
+	# Step 1 done
+	desc = {
+		text = wiirlak_ep_all_terraformed_step_1_desc
+
+		trigger = {
+			NOT = { has_country_flag = wiirlak_ep_flag_step_2_done }
+			has_special_project = WIIRLAK_EP_FINAL_PROJECT_1
+		}
+	}
+	option = {
+		name = wiirlak_ep_all_terraformed_answer
+
+		trigger = {
+			NOT = { has_country_flag = wiirlak_ep_flag_step_2_done }
+			has_completed_special_project_in_log = WIIRLAK_EP_FINAL_PROJECT_1
+		}
+	}
+	# Step 1 not done
+	option = {
+		name = wiirlak_ep_all_terraformed_answer
+
+		trigger = {
+			has_special_project = WIIRLAK_EP_FINAL_PROJECT_1
+			NOT = { has_completed_special_project_in_log = WIIRLAK_EP_FINAL_PROJECT_1 }
+		}
+	}
+
+
+	# NOT crisis level 5, NOT alone
+	desc = {
+		text = wiirlak_ep_all_terraformed_not_crisis_5_desc
+
+		trigger = {
+			NOT = { has_crisis_level = wiirlak_ep_evergrowth_protocol_level_5 }
+			count_country = {
+				limit = { has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol }
+				count > 1
+			}
+		}
+	}
+	option = {
+		name = wiirlak_ep_all_terraformed_answer
+
+		trigger = {
+			NOT = { has_crisis_level = wiirlak_ep_evergrowth_protocol_level_5 }
+			count_country = {
+				limit = { has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol }
+				count > 1
+			}
+		}
+	}
+
+
+	# NOT crisis level 5, alone
+	desc = {
+		text = wiirlak_ep_all_terraformed_not_crisis_5_alone_desc
+
+		trigger = {
+			NOT = { has_crisis_level = wiirlak_ep_evergrowth_protocol_level_5 }
+			count_country = {
+				limit = { has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol }
+				count = 1
+			}
+		}
+	}
+	option = {
+		name = wiirlak_ep_all_terraformed_answer
+
+		trigger = {
+			NOT = { has_crisis_level = wiirlak_ep_evergrowth_protocol_level_5 }
+			count_country = {
+				limit = { has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol }
+				count = 1
+			}
+		}
+	}
+}
+
+
+
+
+# Anything that I forgot to add and has no category - Series 6000
+# On new tech - Help to get the gatekeeping tech
+country_event = {
+	id = wiirlak_ep.6000
+	
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+		has_crisis_level = wiirlak_ep_evergrowth_protocol_level_4
+		NOR = { has_technology = wiirlak_ep_tech_gatekeeping }
+
+		OR = {
+			last_increased_tech = wiirlak_ep_tech_adv_resource
+			last_increased_tech = wiirlak_ep_tech_energy
+			last_increased_tech = wiirlak_ep_tech_unity
+			last_increased_tech = wiirlak_ep_tech_influence
+			last_increased_tech = wiirlak_ep_tech_science
+			last_increased_tech = wiirlak_ep_tech_defense
+			last_increased_tech = wiirlak_ep_tech_growth
+		}
+	}
+
+	immediate = {
+		# Advance a bit everytime
+		if = {
+			limit = { has_country_flag = wiirlak_ep_flag_gatekeeping_tech }
+			
+			country_event = {
+				id = wiirlak_ep.6008
+			}
+		}
+
+		# First time, warn
+		else = {
+			country_event = {
+				id = wiirlak_ep.6005
+			}
+		}
+	}
+}
+# On new tech - Help to get the gatekeeping tech
+country_event = {
+	id = wiirlak_ep.6005
+	
+	hide_window = no
+	title = wiirlak_ep_tech_event
+	desc = wiirlak_ep_tech_event_desc
+	show_sound = amb_toxic_world_a
+	picture = GFX_evt_egg_cracked
+	auto_opens = yes
+
+	is_triggered_only = yes
+	trigger = {
+		has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+		NOT = { has_country_flag = wiirlak_ep_flag_gatekeeping_tech }
+	}
+	event_chain = wiirlak_ep_evergrowth_protocol_chain
+
+	immediate = {
+		set_country_flag = wiirlak_ep_flag_gatekeeping_tech
+	}
+
+	option = {
+		name = ACKNOWLEDGED
+
+		give_tech_option_or_progress_effect = {
+			TECH = wiirlak_ep_tech_gatekeeping
+		}
+	}
+}
+# On new tech - Help to get the gatekeeping tech
+country_event = {
+	id = wiirlak_ep.6008
+	
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+		has_country_flag = wiirlak_ep_flag_gatekeeping_tech
+	}
+
+	immediate = {
+		give_tech_option_or_progress_effect = {
+			TECH = wiirlak_ep_tech_gatekeeping
+		}
+	}
+}
+
+
+# On new leader - Give it Subject Traits
+country_event = {
+	id = wiirlak_ep.6030
+	
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		from = { NOT = { leader_class = envoy } }
+		is_specialist_subject_tier = {
+			TYPE = evergrowth
+			TIER = 2
+		}
+	}
+	
+	immediate = {
+		FROM = {
+			add_specialist_trait_to_leader_in_pool = {
+				TYPE = evergrowth
+				CLASS = official
+			}
+		}
+	}
+}

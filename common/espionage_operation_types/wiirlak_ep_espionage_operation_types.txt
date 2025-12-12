@@ -1,0 +1,105 @@
+# Evergrowth Protocol
+# By Wiirlak
+
+
+
+@diff_t0 = 4
+@diff_t1 = 5
+@diff_t2 = 6
+@diff_t3 = 7
+@diff_t4 = 8
+@diff_t5 = 9
+@diff_t6 = 10
+@diff_t7 = 11
+@diff_t8 = 12
+@diff_t9 = 13
+
+
+# Covert Seeding
+wiirlak_ep_operation_covert_seeding = {
+	picture = GFX_origin_tree
+	desc = wiirlak_ep_operation_covert_seeding_desc
+    categories = { op_cat_sabotage      op_cat_government }
+
+	spy_power_cost = 50
+
+	resources = {
+		category = operations
+		cost = {
+			influence = 30
+            wiirlak_ep_resource_mycogrowth = 100
+		}
+		inline_script = {
+			script = "wiirlak_ep_food_upkeep"
+			AMOUNT = 9
+			MYCO = 0
+			MULT = 1
+		}
+		cost = {
+			trigger = {
+				TARGET = {
+					count_owned_planet = {
+						limit = {
+							is_colony = yes
+						#	is_capital = no
+							NOT = { is_planet_class = wiirlak_ep_pc_bloom }
+						}
+						count = 0
+					}
+					capital_scope = { NOT = { is_planet_class = wiirlak_ep_pc_bloom } }
+				}
+			}
+			influence = 70
+            wiirlak_ep_resource_mycogrowth = 1000
+		}
+	}
+
+	potential = { OWNER = { has_menace_perk = wiirlak_ep_menap_spy_op_1 } }
+	allow = {
+        custom_tooltip = {
+            fail_text = wiirlak_ep_operation_covert_seeding_requires_colonies
+			TARGET = {
+				count_owned_planet = {
+					limit = {
+						is_colony = yes
+					#	is_capital = no
+						NOT = { is_planet_class = wiirlak_ep_pc_bloom }
+					}
+					count > 0
+				}
+			}
+        }
+        custom_tooltip = {
+            fail_text = wiirlak_ep_operation_covert_seeding_already_in_situation
+			TARGET = {
+				NOT = { any_situation = { is_situation_type = wiirlak_ep_situation } }
+			}
+        }
+		custom_tooltip = {
+			fail_text = operation_one_at_a_time
+			is_running_espionage_operation = no
+		}
+    }
+    target = none
+
+	stages = 2	 					# Should match number of defined stages below.
+	stage = {
+		difficulty = @diff_t2
+		icon = GFX_espionage_chapter_icon_surveillance
+		event = wiirlak_ep.2000
+	}
+	stage = {
+		difficulty = @diff_t3
+		icon = GFX_espionage_chapter_icon_motion
+		event = wiirlak_ep.2050
+	}
+	# stage = {
+	# 	difficulty = @diff_t4
+	# 	icon = GFX_espionage_chapter_icon_motion
+	# 	event = wiirlak_ep.2100
+	# }
+	on_roll_failed = {
+		standard_espionage_operation_on_roll_failed = { RANDOM_EVENTS = operation_random_events_generic }
+	}
+	on_create = {}	        		# Effect to fire upon operation creation, with scope this=spy operation.
+}

@@ -1,0 +1,213 @@
+# Evergrowth Protocol - By Wiirlak
+wiirlak_ep_ap_evergrowth_protocol = {
+	potential = {
+		# Required for Crisis menu
+		OR = {
+			has_nemesis = yes
+			has_machine_age_dlc = yes
+			has_biogenesis_dlc = yes
+		}
+
+		# Not a Crisis or Galaxy Defender
+		NOR = {
+			has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol
+
+			has_country_flag = player_crisis_chosen
+			has_ascension_perk = ap_become_the_crisis
+			has_ascension_perk = ap_cosmogenesis
+			has_ascension_perk = ap_behemoths
+			has_ascension_perk = ap_defender_of_the_galaxy
+			has_origin = origin_slavers # No crisis for MSI
+			is_wilderness_empire = yes
+		}
+	}
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_ascension_perks_3"
+			num_ascension_perks > 2
+		}
+		custom_tooltip = {
+			fail_text = "requires_independence"
+			is_subject = no
+		}
+		custom_tooltip = {
+			fail_text = "must_not_be_custodian"
+			is_galactic_custodian = no
+		}
+		custom_tooltip = {
+			fail_text = "must_not_be_emperor"
+			is_galactic_emperor = no
+		}
+		# custom_tooltip = {
+		# 	fail_text = "civic_tooltip_not_idyllic_bloom"
+		# 	NOR = {
+		# 		has_civic = civic_idyllic_bloom
+		# 		has_civic = civic_hive_idyllic_bloom
+		# 	}
+		# }
+		NOR = {
+			has_civic = civic_machine_servitor
+			has_valid_civic = civic_hive_familiar_face
+		}
+	}
+
+	on_enabled = {
+		hidden_effect = {
+			set_country_flag = player_crisis_chosen
+			set_global_flag = wiirlak_ep_crisis_taken
+		}
+
+		activate_crisis_progression = wiirlak_ep_evergrowth_protocol_crisis_path
+	}
+
+	# Dynamic modifiers per Bloom World
+	triggered_modifier = {
+		potential = { has_menace_perk = wiirlak_ep_menap_modifier_1 }
+
+		wiirlak_ep_modifier_perk_4 = 1
+		multiplier = value:wiirlak_ep_count_bloom_worlds_border
+	}
+
+	triggered_modifier = {
+		potential = { has_menace_perk = wiirlak_ep_menap_modifier_1 }
+
+		wiirlak_ep_modifier_perk_4_galaxy = 1
+		multiplier = value:wiirlak_ep_count_bloom_worlds_galaxy
+	}
+
+	triggered_modifier = {
+		potential = { has_menace_perk = wiirlak_ep_menap_modifier_1 }
+
+		wiirlak_ep_modifier_perk_5 = 1
+		multiplier = value:wiirlak_ep_count_bloom_worlds_border
+	}
+
+	triggered_modifier = {
+		potential = { has_menace_perk = wiirlak_ep_menap_modifier_1 }
+
+		wiirlak_ep_modifier_perk_5_galaxy = 1
+		multiplier = value:wiirlak_ep_count_bloom_worlds_galaxy
+	}
+
+	ai_weight = {
+		factor = 6
+		
+		# Toxicoids
+		modifier = {
+			factor = 1.5
+			owner_main_species = {
+				toxoids_portrait = yes
+			}
+		}
+		modifier = {
+			factor = 5
+			owner_main_species = {
+				OR = {
+					has_trait = trait_noxious
+					has_trait = trait_inorganic_breath
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			owner_main_species = {
+				is_overtuned = yes
+			}
+		}
+		modifier = {
+			factor = 2
+			owner_main_species = {
+				OR = {
+					has_trait = trait_pc_nuked_preference
+				#	has_trait = trait_auto_pc_nuked_preference
+					has_trait = trait_machine_pc_nuked_preference
+				}
+			}
+		}
+
+		# Bio ships
+		modifier = {
+			factor = 2
+			country_uses_bio_ships = yes
+		}
+		modifier = {
+			factor = 2
+			any_owned_design = {
+				is_design_space_fauna = yes
+			}
+		}
+
+		# Is using Bio path
+		modifier = {
+			factor = 1.5
+			has_ascension_perk = ap_engineered_evolution
+		}
+		modifier = {
+			factor = 1.25
+			OR = {
+				has_tradition = tr_genetics_adopt
+				has_tradition = tr_cloning_adopt
+				has_tradition = tr_purity_adopt
+				has_tradition = tr_mutation_adopt
+			}
+		}
+		modifier = {
+			factor = 1.75
+			OR = {
+				has_tradition = tr_genetics_finish
+				has_tradition = tr_cloning_finish
+				has_tradition = tr_purity_finish
+				has_tradition = tr_mutation_finish
+			}
+		}
+
+		# Empire type
+		modifier = {
+			factor = 0.2
+			has_ascension_perk = ap_detox
+		}
+		modifier = {
+			factor = 6
+			has_civic = civic_hive_devouring_swarm
+		}
+		# modifier = {
+		# 	factor = 2
+		# 	is_wilderness_empire = yes
+		# }
+		modifier = {
+			factor = 0
+			is_pacifist = yes
+		}
+		modifier = {
+			factor = 2.5
+			is_homicidal = yes
+		}
+		modifier = {
+			factor = 2
+			has_tradition = tr_supremacy_finish
+		}
+		modifier = {
+			factor = 2
+			has_tradition = tr_expansion_finish
+		}
+		modifier = {
+			factor = 0
+			galaxy_percentage < 0.1
+		}
+		modifier = {
+			factor = 2
+			galaxy_percentage > 0.2
+		}
+		modifier = {
+			factor = 0
+			count_playable_country = {
+				count > 1
+				limit = { has_ascension_perk = wiirlak_ep_ap_evergrowth_protocol }
+			}
+		}
+		modifier = {
+			factor = 0
+			blocks_disruptive_gameplay = yes
+		}
+	}
+}
