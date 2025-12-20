@@ -1,85 +1,75 @@
 #recruitment option
-
 namespace = hursamaj_events
-
-
-
 # spawn system event
 event = {
 	id = hursamaj_events.4
 	is_triggered_only = yes
 	hide_window = yes
-
 	trigger = {
-		is_ai = no
 		NOT = {
 			has_global_flag = hursamaj_system_spawned
 		}
 	}
-
 	immediate = {
 		log = "event 4 activated"
-		name = spawn_ursa_minor
+		set_global_flag = hursamaj_allowed
+		set_global_flag = hursamaj_installed
 		if = {
 			limit = {
 				NOT = {
 					has_global_flag = hursamaj_system_spawned
 				}
 			}
-			capital_scope = {
-				solar_system = {
-					random_neighbor_system = {
-						limit = {
-							distance = {
-								min_jumps = 1
-								max_jumps = 3
-							}
+			random_country = {
+				limit = {
+					is_ai = no
+				}
+				save_event_target_as = random_player
+				random_system = {
+					limit = {
+						has_owner = no
+						distance = {
+							source = event_target:random_player.capital_scope.solar_system
+							use_bypasses = no
+							min_jumps = 2
+							max_jumps = 6
 						}
-						spawn_hursamaj  = yes
 					}
+					spawn_hursamaj = yes
+					set_global_flag = hursamaj_system_spawned
 				}
 			}
-			set_global_flag = hursamaj_system_spawned
 		}
-		else = {
-		}
-
 	}
 }
-
-
 
 # This = Owner of fleet 1 (combatant)
 # From = Owner of fleet 2 (destroyed)
 # FromFrom = fleet 1
 # FromFromFrom = fleet 2, destroyed Jammer Drone
-event = { # destroyed the jammers, inform the player that there's a special project
+event = {
+	# destroyed the jammers, inform the player that there's a special project
 	id = hursamaj_events.5
 	title = "hursamaj_events.5.name"
-
 	desc = {
 		text = hursamaj_events.5.desc
 	}
 	picture = GFX_evt_exploding_ship
 	show_sound = event_scanner
 	location = fromfrom.solar_system
-	
-
 	is_triggered_only = yes
-
 	trigger = {
 		fromfromfrom = {
 			has_fleet_flag = ursa_minor_jamming_drone_fleet
 		}
 	}
-
-	
-	option = { #investigate
+	option = {
+		#investigate
 		name = hursamaj_events.5.a
 		fromfrom.solar_system = {
 			random_system_planet = {
 				limit = {
-					has_planet_flag = ursa_minor_spawning_planet			
+					has_planet_flag = ursa_minor_spawning_planet
 				}
 				enable_special_project = {
 					name = "URSA_MINOR_RECRUIT_PROJECT"
@@ -89,30 +79,30 @@ event = { # destroyed the jammers, inform the player that there's a special proj
 				#set_ambient_object_flag = ursa_minor_recruit_project
 			}
 		}
-		
 	}
-
 }
 
-
-ship_event = { #there was probably a better way to do this, we secretly switch contexts in this event.
+ship_event = {
+	#there was probably a better way to do this, we secretly switch contexts in this event.
 	id = hursamaj_events.6
 	is_triggered_only = yes
 	hide_window = yes
-
 	immediate = {
 		log = "pre event activated"
 		this.owner = {
-			country_event = { id = hursamaj_events.7 }
-		} 
+			country_event = {
+				id = hursamaj_events.7
+			}
+		}
 	}
 }
 
-
-country_event = { #recruit weak bad leader
+country_event = {
+	#recruit weak bad leader
 	id = hursamaj_events.7
 	title = "hursamaj_events.7.name"
-	desc = { # Regular empire
+	desc = {
+		# Regular empire
 		trigger = {
 			NOT = {
 				has_ethic = ethic_gestalt_consciousness
@@ -120,83 +110,124 @@ country_event = { #recruit weak bad leader
 		}
 		text = hursamaj_events.7.desc.normal
 	}
-	desc = { # Gesalt/Robot empire
-		trigger = {	 
+	desc = {
+		# Gesalt/Robot empire
+		trigger = {
 			has_ethic = ethic_gestalt_consciousness
 		}
 		text = hursamaj_events.7.desc.gestalt
 	}
-	
-	#         "gfx/interface/leaders/recruitment_bgs/leader_recruitment_bg_legendary_ursa_major
 	picture = GFX_leader_recruitment_bg_legendary_ursa_major
-	#picture = GFX_leader_recruitment_bg_legendary_skrand
-
 	show_sound = event_mystic_reveal
 	is_triggered_only = yes
-
 	trigger = {
 		has_global_flag = hursamaj_allowed
 	}
-
 	immediate = {
-			log = "event 7 activated"
-			create_species = {
-				name = "PRESCRIPTED_species_name_ursa_major"
-				class = HURSAMAJ_1
-				portrait = hursamaj_ursaminor_portrait
-				namelist = "PRT1"
-				traits = {
-					trait = "trait_presapient_starborn"
-					trait = "trait_survivor"
-					trait = "trait_nomadic"
+		log = "event 7 activated"
+		create_species = {
+			name = "PRESCRIPTED_species_name_ursa_major"
+			class = HURSAMAJ_1
+			portrait = hursamaj_ursaminor_portrait
+			namelist = "PRT1"
+			traits = {
+				trait = "trait_presapient_starborn"
+				trait = "trait_survivor"
+				trait = "trait_nomadic"
+			}
+			effect = {
+				save_event_target_as = ursa_minor_species
+			}
+		}
+		create_country = {
+			name = "NAME_leader_country"
+			type = faction
+			auto_delete = yes
+			flag = {
+				icon = {
+					category = "special"
+					file = "unknown.dds"
 				}
+				background = {
+					category = "backgrounds"
+					file = "00_solid.dds"
+				}
+				colors = {
+					"red"
+					"red"
+					"null"
+					"null"
+				}
+			}
+			effect = {
+				save_event_target_as = leader_country
+			}
+		}
+		event_target:leader_country = {
+			create_leader = {
+				class = commander
+				tier = leader_tier_renowned
+				species = event_target:ursa_minor_species
+				name = NAME_commander_ursamajor
+				skill = 1
+				gender = male
+				event_leader = no				# Leader is allowed to lead factions and win elections
+				background_ethic = ethic_militarist
+				skip_background_generation = yes
+				custom_description = ursa_minor_desc
+				custom_catch_phrase = ursa_minor_catch_phrase
+				immortal = yes
+				hide_age = yes
+				randomize_traits = no
 				effect = {
-					save_event_target_as = ursa_minor_species
+					set_skill = 1
+					save_event_target_as = ethic_leader
+					set_leader_flag = is_in_recruit_window
+					set_variable = {
+						which = leader_pending_negative_traits_unmodified
+						value = 1
+					}
 				}
 			}
-			ethic_leader_creator = {
-				SPECIES_CLASS = event_target:ursa_minor_species # Species class, for animation purposes, example: MAM4
-				LEADER_PORTRAIT = hursamaj_ursaminor_portrait # xenophile_leader_gen # Leader portrait
-				CLASS = commander
-				NAME =  NAME_commander_ursamajor
-				LEVEL = 1
-				GENDER = male
-				IMMORTAL = yes
-				ETHIC = militarist
-				DESC = ursa_minor_desc
-				CATCH_PHRASE = ursa_minor_catch_phrase
-				FLAG = ursa_minor_leader_flag
+		}
+		event_target:ethic_leader = {
+			set_owner = root			#check
+			exile_leader_as = ethic_leader_exile
+		}
+		last_created_leader = {
+			add_trait = {
+				TRAIT = leader_trait_ursa_minor_unbearable
 			}
-
-			last_created_leader = {
-				add_trait = leader_trait_ursa_minor_unbearable
-				add_trait = leader_trait_ursa_minor_hibearnator
-				add_trait = leader_trait_ursa_minor_embearassing
-				add_trait = leader_trait_ursa_minor_overbearing
-				set_age = 89
-			}		
-
-			
+			add_trait = {
+				TRAIT = leader_trait_ursa_minor_hibearnator
+			}
+			add_trait = {
+				TRAIT = leader_trait_ursa_minor_embearassing
+			}
+			add_trait = {
+				TRAIT = leader_trait_ursa_minor_overbearing
+			}
+			set_age = 89
+			set_leader_flag = ursa_minor_leader_flag
+			set_leader_flag = hursamaj_ursa_minor
+		}
 	}
-
 	event_window_type = leader_recruit
 	picture_event_data = {
 		portrait = event_target:ethic_leader
 		room = galactic_custodian_room
 	}
-
-	option = { #omg we accept this leader
+	option = {
+		#omg we accept this leader
 		name = hursamaj_events.7.a
 		tag = hire_leader
 		custom_tooltip = hursamaj_events.7.hire_custom_tooltip
-
 		hidden_effect = {
-			ethic_leader_hire_effect ={
+			ethic_leader_hire_effect = {
 				GLOBAL_EVENT_TARGET = hursamaj_ursa_minor
 			}
 		}
 	}
-
 	option = {
 		name = hursamaj_events.7.c
 		response_text = hursamaj_events.7.c.response
@@ -212,99 +243,146 @@ country_event = { #recruit weak bad leader
 		response_text = hursamaj_events.7.e.response
 		is_dialog_only = yes
 	}
-
-	option = { #we do NOT accept this leader
+	option = {
+		#we do NOT accept this leader
 		name = hursamaj_events.7.b
 		tag = dismiss_leader
 		hidden_effect = {
 			ethic_leader_kill_effect = yes
 		}
-		
-		this = {}
+		this = {
+		}
 	}
 }
 
-
-
 ###################################### random flavor events #######################################
-
 #fires from on_decade_pulse_country
 country_event = {
 	id = hursamaj_events.10000
 	is_triggered_only = yes
 	hide_window = yes
-
 	immediate = {
 		random_owned_leader = {
-			limit = { has_leader_flag = hursamaj_ursa_minor }
+			limit = {
+				has_leader_flag = hursamaj_ursa_minor
+			}
 			random_list = {
-				20 = { leader_event = { id = hursamaj_events.81 days = 1 random = 1800 }}
-				10 = { leader_event = { id = hursamaj_events.82 days = 1 random = 1800 }}
-				10 = { leader_event = { id = hursamaj_events.83 days = 1 random = 1800 }}
-				5 = { leader_event = { id = hursamaj_events.84 days = 1 random = 1800 }}
-				55 = {}
+				20 = {
+					leader_event = {
+						id = hursamaj_events.81
+						days = 1
+						random = 1800
+					}
+				}
+				10 = {
+					leader_event = {
+						id = hursamaj_events.82
+						days = 1
+						random = 1800
+					}
+				}
+				10 = {
+					leader_event = {
+						id = hursamaj_events.83
+						days = 1
+						random = 1800
+					}
+				}
+				5 = {
+					leader_event = {
+						id = hursamaj_events.84
+						days = 1
+						random = 1800
+					}
+				}
+				55 = {
+				}
 			}
 		}
 		random_owned_leader = {
-			limit = { has_leader_flag = hursamaj_ursa_major }
+			limit = {
+				has_leader_flag = hursamaj_ursa_major
+			}
 			random_list = {
-				20 = { leader_event = { id = hursamaj_events.91 days = 1 random = 1800 }}
-				10 = { leader_event = { id = hursamaj_events.92 days = 1 random = 1800 }}
-				10 = { leader_event = { id = hursamaj_events.93 days = 1 random = 1800 }}
-				10 = { leader_event = { id = hursamaj_events.94 days = 1 random = 1800 }}
-				50 = {}
+				20 = {
+					leader_event = {
+						id = hursamaj_events.91
+						days = 1
+						random = 1800
+					}
+				}
+				10 = {
+					leader_event = {
+						id = hursamaj_events.92
+						days = 1
+						random = 1800
+					}
+				}
+				10 = {
+					leader_event = {
+						id = hursamaj_events.93
+						days = 1
+						random = 1800
+					}
+				}
+				10 = {
+					leader_event = {
+						id = hursamaj_events.94
+						days = 1
+						random = 1800
+					}
+				}
+				50 = {
+				}
 			}
 		}
 	}
 }
 
-
-
-
-leader_event = { #royal honey
+leader_event = {
+	#royal honey
 	id = hursamaj_events.81
 	title = "hursamaj_events.81.name"
 	picture = GFX_evt_deficit
-
-	desc = { # Regular empire
+	desc = {
+		# Regular empire
 		trigger = {
 			NOT = {
 				owner = {
 					has_ethic = ethic_gestalt_consciousness
-				}		
+				}
 			}
 		}
 		text = hursamaj_events.81.desc.normal
 	}
-	desc = { # Gesalt
-		trigger = {	 
+	desc = {
+		# Gesalt
+		trigger = {
 			owner = {
 				has_ethic = ethic_gestalt_consciousness
 			}
 		}
 		text = hursamaj_events.81.desc.gestalt
 	}
-	desc = { # machine
-		trigger = {	 
+	desc = {
+		# machine
+		trigger = {
 			owner = {
 				is_machine_empire = yes
 			}
 		}
 		text = hursamaj_events.81.desc.machine
 	}
-
 	is_triggered_only = yes
 	fire_only_once = yes
 	show_sound = event_default
-
 	event_window_type = leader_story
 	event_picture_background = "GFX_leader_recruitment_bg_renowned"
-
 	picture_event_data = {
 		portrait = root
 	}
-	
-	option = { #disappointing - biological
+	option = {
+		#disappointing - biological
 		name = hursamaj_events.81.a
 		trigger = {
 			NOT = {
@@ -314,241 +392,240 @@ leader_event = { #royal honey
 			}
 		}
 		owner = {
-			add_resource = { energy = -500}
-			add_resource = { food = -500}
+			add_resource = {
+				energy = -500
+			}
+			add_resource = {
+				food = -500
+			}
 		}
 	}
-
-	option = { #disappointing - machine
+	option = {
+		#disappointing - machine
 		name = hursamaj_events.81.a
 		trigger = {
 			owner = {
 				is_machine_empire = yes
-			}		
+			}
 		}
 		owner = {
-			add_resource = { energy = -1000}
+			add_resource = {
+				energy = -1000
+			}
 		}
 	}
-
 }
 
-
-
-
-leader_event = { #ship designs corrupted
+leader_event = {
+	#ship designs corrupted
 	id = hursamaj_events.82
 	title = "hursamaj_events.82.name"
 	picture = GFX_evt_ship_data_corrupted
 	desc = hursamaj_events.82.desc
-
 	is_triggered_only = yes
 	fire_only_once = yes
 	show_sound = event_default
-
 	event_window_type = leader_story
 	event_picture_background = "GFX_leader_recruitment_bg_renowned"
-
 	picture_event_data = {
 		portrait = root
 	}
-
-	option = { #this will set us back
+	option = {
+		#this will set us back
 		name = hursamaj_events.82.a
 		owner = {
-			add_modifier = { modifier = "hursamaj_corrupted_ship_data_modifier" years = 5 }
+			add_modifier = {
+				modifier = "hursamaj_corrupted_ship_data_modifier"
+				years = 5
+			}
 		}
 	}
 }
 
-
-leader_event = { #encryption key
+leader_event = {
+	#encryption key
 	id = hursamaj_events.83
 	title = "hursamaj_events.83.name"
 	picture = GFX_evt_intelligence_report
 	desc = hursamaj_events.83.desc
-
 	is_triggered_only = yes
 	fire_only_once = yes
 	show_sound = event_default
-
 	event_window_type = leader_story
 	event_picture_background = "GFX_leader_recruitment_bg_renowned"
-
 	picture_event_data = {
 		portrait = root
 	}
-
-	option = { #this will set us back
+	option = {
+		#this will set us back
 		name = hursamaj_events.83.a
 		owner = {
-			add_modifier = { modifier = "hursamaj_nuclear_launch_key_modifier" years = 5 }
+			add_modifier = {
+				modifier = "hursamaj_nuclear_launch_key_modifier"
+				years = 5
+			}
 		}
 	}
 }
 
-
-leader_event = { #national anthem
+leader_event = {
+	#national anthem
 	id = hursamaj_events.84
 	title = "hursamaj_events.84.name"
 	picture = GFX_evt_announcement
 	desc = hursamaj_events.84.desc
-
 	is_triggered_only = yes
 	fire_only_once = yes
 	show_sound = event_default
-
 	event_window_type = leader_story
 	event_picture_background = "GFX_leader_recruitment_bg_renowned"
-
 	picture_event_data = {
 		portrait = root
 	}
-
-	option = { #this will set us back
+	option = {
+		#this will set us back
 		name = hursamaj_events.84.a
 		owner = {
-			add_modifier = { modifier = "hursamaj_humiliated" years = 2 }
+			add_modifier = {
+				modifier = "hursamaj_humiliated"
+				years = 2
+			}
 		}
 	}
 }
 
-
-
-leader_event = { #military stockpile
+leader_event = {
+	#military stockpile
 	id = hursamaj_events.91
 	title = "hursamaj_events.91.name"
 	picture = GFX_evt_resource_cache
 	desc = hursamaj_events.91.desc
-
 	is_triggered_only = yes
 	fire_only_once = yes
 	show_sound = event_default
-
 	event_window_type = leader_story
 	event_picture_background = "GFX_leader_recruitment_bg_renowned"
-
 	picture_event_data = {
 		portrait = root
 	}
-
-	option = { #this could prove useful
+	option = {
+		#this could prove useful
 		name = hursamaj_events.91.a
 		owner = {
-			add_resource = { alloys = 2000 }
-			add_resource = { volatile_motes = 1000 }
-			add_resource = { exotic_gases = 1000 }
-			add_resource = { rare_crystals = 1000 }		 
+			add_resource = {
+				alloys = 2000
+			}
+			add_resource = {
+				volatile_motes = 1000
+			}
+			add_resource = {
+				exotic_gases = 1000
+			}
+			add_resource = {
+				rare_crystals = 1000
+			}
 		}
-
-
 	}
 }
 
-
-
-
-leader_event = { #stuffed toys
+leader_event = {
+	#stuffed toys
 	id = hursamaj_events.92
 	title = "hursamaj_events.92.name"
 	picture = GFX_evt_grand_speech
-	desc = { # Regular empire
+	desc = {
+		# Regular empire
 		trigger = {
 			NOT = {
 				owner = {
 					has_ethic = ethic_gestalt_consciousness
-				}		
+				}
 			}
 		}
 		text = hursamaj_events.92.desc.normal
 	}
-	desc = { # Gesalt
-		trigger = {	 
+	desc = {
+		# Gesalt
+		trigger = {
 			owner = {
 				has_ethic = ethic_gestalt_consciousness
 			}
 		}
 		text = hursamaj_events.92.desc.gestalt
 	}
-	desc = { # machine
-		trigger = {	 
+	desc = {
+		# machine
+		trigger = {
 			owner = {
 				is_machine_empire = yes
 			}
 		}
 		text = hursamaj_events.92.desc.machine
 	}
-
 	is_triggered_only = yes
 	fire_only_once = yes
 	show_sound = event_default
-
 	event_window_type = leader_story
 	event_picture_background = "GFX_leader_recruitment_bg_renowned"
-
 	picture_event_data = {
 		portrait = root
 	}
-
-	option = { #delightful
+	option = {
+		#delightful
 		name = hursamaj_events.92.a
 		owner = {
 			owner = {
-				add_modifier = { modifier = "hursamaj_stuffed_toys" days = -1 }
-			}	 
+				add_modifier = {
+					modifier = "hursamaj_stuffed_toys"
+					days = -1
+				}
+			}
 		}
-
-
 	}
 }
 
-
-leader_event = { #construction assistance
+leader_event = {
+	#construction assistance
 	id = hursamaj_events.93
 	title = "hursamaj_events.93.name"
 	picture = GFX_evt_space_hangar
 	desc = hursamaj_events.93.desc
-
 	is_triggered_only = yes
 	fire_only_once = yes
 	show_sound = event_default
-
 	event_window_type = leader_story
 	event_picture_background = "GFX_leader_recruitment_bg_renowned"
-
 	picture_event_data = {
 		portrait = root
 	}
-
-	option = { #this will set us back
+	option = {
+		#this will set us back
 		name = hursamaj_events.93.a
 		owner = {
-			add_modifier = { modifier = "hursamaj_ship_construction_assist" years = 10 }
+			add_modifier = {
+				modifier = "hursamaj_ship_construction_assist"
+				years = 10
+			}
 		}
 	}
 }
 
-
-
-
-leader_event = { #regal the tale
+leader_event = {
+	#regal the tale
 	id = hursamaj_events.94
 	title = "hursamaj_events.94.name"
 	picture = GFX_evt_burning_city
 	desc = hursamaj_events.94.desc
-
 	is_triggered_only = yes
 	fire_only_once = yes
 	show_sound = event_default
-
 	event_window_type = leader_story
 	event_picture_background = "GFX_leader_recruitment_bg_renowned"
-
 	picture_event_data = {
 		portrait = root
 	}
-
-	option = { #inspiring
+	option = {
+		#inspiring
 		name = hursamaj_events.94.a
 		owner = {
 			every_owned_leader = {
@@ -558,24 +635,20 @@ leader_event = { #regal the tale
 	}
 }
 
-
-
-country_event = { #on screen!
+country_event = {
+	#on screen!
 	id = hursamaj_events.10001
 	title = "hursamaj_events.10001.name"
 	picture = GFX_evt_communication_event
 	desc = hursamaj_events.10001.desc
-
 	is_triggered_only = yes
 	fire_only_once = yes
-
 	trigger = {
 		any_owned_leader = {
 			has_leader_flag = hursamaj_ursa_minor
-		 	has_level = 5 
-		}	 
+			has_base_skill = 5
+		}
 	}
-
 	option = {
 		name = hursamaj_events.10001.a
 		country_event = {
@@ -584,32 +657,26 @@ country_event = { #on screen!
 	}
 }
 
-
-
-
-country_event = { #dramatic battle choice
+country_event = {
+	#dramatic battle choice
 	id = hursamaj_events.10
 	title = "hursamaj_events.10.name"
 	picture = GFX_evt_shrouded_planet
 	desc = hursamaj_events.10.desc
-
 	is_triggered_only = yes
 	fire_only_once = yes
 	diplomatic = yes
-
 	picture_event_data = {
 		room = no_video_feed_room
 	}
-
-	
-
 	immediate = {
 		random_owned_leader = {
-			limit = { has_leader_flag = hursamaj_ursa_minor }
+			limit = {
+				has_leader_flag = hursamaj_ursa_minor
+			}
 			save_event_target_as = hursamaj_sacrifice_target
 		}
 	}
-
 	option = {
 		name = hursamaj_events.10.a
 		response_text = hursamaj_events.10.a.response
@@ -625,57 +692,53 @@ country_event = { #dramatic battle choice
 		response_text = hursamaj_events.10.c.response
 		is_dialog_only = yes
 	}
-
-	option = { #kill option
+	option = {
+		#kill option
 		name = hursamaj_events.10.d
 		response_text = hursamaj_events.10.d.response
-
 		event_target:hursamaj_sacrifice_target = {
 			kill_leader = {
-				class = commander show_notification = no
+				class = commander
+				show_notification = no
 			}
 		}
 	}
-	
-	option = { #defend option
+	option = {
+		#defend option
 		name = hursamaj_events.10.e
 		response_text = hursamaj_events.10.e.response
 		country_event = {
-			id = hursamaj_events.11 days=10 random=5
+			id = hursamaj_events.11
+			days = 10
+			random = 5
 		}
 	}
-
 }
 
-
-
-
-country_event = { #fight!
+country_event = {
+	#fight!
 	id = hursamaj_events.11
 	title = "hursamaj_events.11.name"
 	picture = GFX_evt_fleet_evil
 	desc = hursamaj_events.11.desc
-
 	is_triggered_only = yes
 	fire_only_once = yes
-
 	immediate = {
-		
 		this.capital_star = {
 			save_event_target_as = hursamaj_tormentor_attack_target
 		}
-
 		create_country = {
 			name = "NAME_Ursa_Major_Tormentors"
 			type = faction
 		}
 		last_created_country = {
 			set_country_flag = ursa_minor_tormentor_country
-
 			#we want about 10k power more or less
 			create_fleet = {
 				name = "NAME_Ursa_Major_Tormentors_fleet"
-				settings = { spawn_debris = no }
+				settings = {
+					spawn_debris = no
+				}
 				effect = {
 					set_owner = PREV
 					set_fleet_flag = ursa_minor_tormentor_fleet
@@ -846,70 +909,61 @@ country_event = { #fight!
 				}
 			}
 		}
-		
 	}
-
-	option = { #lets get em!
+	option = {
+		#lets get em!
 		name = hursamaj_events.11.a
 	}
 }
 
-
-
-
-
 # we destroy the fleet, ursa major dies
-event = { 
+event = {
 	id = hursamaj_events.12
 	title = "hursamaj_events.12.name"
 	desc = hursamaj_events.12.desc
-
 	is_triggered_only = yes
 	fire_only_once = yes
 	picture = GFX_evt_exploding_ship
-
 	trigger = {
 		fromfromfrom = {
 			has_fleet_flag = ursa_minor_tormentor_fleet
 		}
 		any_owned_leader = {
-			#limit = { has_leader_flag = hursamaj_ursa_minor }
 			has_leader_flag = hursamaj_ursa_minor
-		}	 
+		}
 	}
-
 	immediate = {
 		this = {
 			random_owned_leader = {
-				limit = { has_leader_flag = hursamaj_ursa_minor }
+				limit = {
+					has_leader_flag = hursamaj_ursa_minor
+				}
 				save_event_target_as = hursamaj_sacrifice_target
 			}
 			event_target:hursamaj_sacrifice_target = {
 				kill_leader = {
-					class = commander show_notification = yes
+					class = commander
+					show_notification = yes
 				}
 			}
 		}
 	}
-
 	option = {
 		name = hursamaj_events.12.a
-		
 		hidden_effect = {
 			country_event = {
-				id = hursamaj_events.13 days = 180
-			}	
+				id = hursamaj_events.13
+				days = 180
+			}
 		}
 	}
-
-	
 }
-
 
 country_event = {
 	id = hursamaj_events.13
 	title = "hursamaj_events.13.name"
-	desc = { # Regular empire
+	desc = {
+		# Regular empire
 		trigger = {
 			NOT = {
 				has_ethic = ethic_gestalt_consciousness
@@ -917,22 +971,20 @@ country_event = {
 		}
 		text = hursamaj_events.13.desc.normal
 	}
-	desc = { # Gesalt/Robot empire
-		trigger = {	 
+	desc = {
+		# Gesalt/Robot empire
+		trigger = {
 			has_ethic = ethic_gestalt_consciousness
 		}
 		text = hursamaj_events.13.desc.gestalt
 	}
 	picture = GFX_leader_recruitment_bg_legendary_ursa_major_2
 	show_sound = event_mystic_reveal
-	
 	is_triggered_only = yes
 	fire_only_once = yes
-
 	trigger = {
 		has_global_flag = hursamaj_allowed
 	}
-
 	immediate = {
 		log = "event 7 activated"
 		create_species = {
@@ -949,61 +1001,105 @@ country_event = {
 				save_event_target_as = ursa_major_species
 			}
 		}
-		ethic_leader_creator = {
-			SPECIES_CLASS = event_target:ursa_major_species # Species class, for animation purposes, example: MAM4
-			LEADER_PORTRAIT = hursamaj_ursamajor_portrait # xenophile_leader_gen # Leader portrait
-			CLASS = commander
-			NAME =  NAME_commander_ursamajor
-			LEVEL = 5
-			GENDER = male
-			IMMORTAL = no
-			ETHIC = militarist
-			DESC = ursa_major_desc
-			CATCH_PHRASE = ursa_major_catch_phrase
-			FLAG = ursa_major_leader_flag
+		create_country = {
+			name = "NAME_leader_country"
+			type = faction
+			auto_delete = yes
+			flag = {
+				icon = {
+					category = "special"
+					file = "unknown.dds"
+				}
+				background = {
+					category = "backgrounds"
+					file = "00_solid.dds"
+				}
+				colors = {
+					"red"
+					"red"
+					"null"
+					"null"
+				}
+			}
+			effect = {
+				save_event_target_as = leader_country
+			}
 		}
-
-
+		event_target:leader_country = {
+			create_leader = {
+				class = commander
+				tier = leader_tier_legendary
+				species = event_target:ursa_major_species
+				name = NAME_commander_ursamajor
+				skill = 5
+				gender = male
+				event_leader = no				# Leader is allowed to lead factions and win elections
+				background_ethic = ethic_militarist
+				skip_background_generation = yes
+				custom_description = ursa_major_desc
+				custom_catch_phrase = ursa_major_catch_phrase
+				immortal = no
+				hide_age = no
+				randomize_traits = no
+				effect = {
+					set_skill = 5
+					save_event_target_as = ethic_leader
+					set_leader_flag = is_in_recruit_window
+					set_variable = {
+						which = leader_pending_negative_traits_unmodified
+						value = 1
+					}
+				}
+			}
+		}
+		event_target:ethic_leader = {
+			set_owner = root			#check
+			exile_leader_as = ethic_leader_exile
+		}
 		last_created_leader = {
-
-			add_trait = leader_trait_ursa_major_grizzled_veteran
-			add_trait = leader_trait_ursa_major_cub_scout
-			add_trait = leader_trait_ursa_major_bear_hands
-			add_trait = leader_trait_ursa_major_two_bear_arms
+			add_trait = {
+				TRAIT = leader_trait_ursa_major_grizzled_veteran
+			}
+			add_trait = {
+				TRAIT = leader_trait_ursa_major_cub_scout
+			}
+			add_trait = {
+				TRAIT = leader_trait_ursa_major_bear_hands
+			}
+			add_trait = {
+				TRAIT = leader_trait_ursa_major_two_bear_arms
+			}
 			set_age = 22
-		}		
-
-		
+			set_leader_flag = ursa_major_leader_flag
+			set_leader_flag = hursamaj_ursa_major
+		}
 	}
-
 	event_window_type = leader_recruit
 	picture_event_data = {
 		portrait = event_target:ethic_leader
 		room = galactic_custodian_room
 	}
-
-	option = { #omg we accept this leader
+	option = {
+		#omg we accept this leader
 		name = hursamaj_events.13.a
 		tag = hire_leader
 		custom_tooltip = hursamaj_events.13.hire_custom_tooltip
-
 		hidden_effect = {
-			ethic_leader_hire_effect ={
+			ethic_leader_hire_effect = {
 				GLOBAL_EVENT_TARGET = hursamaj_ursa_major
 			}
 		}
 	}
-
-	option = { #we do NOT accept this leader
+	option = {
+		#we do NOT accept this leader
 		name = hursamaj_events.13.b
 		tag = dismiss_leader
 		hidden_effect = {
 			ethic_leader_kill_effect = yes
 		}
-		
-		this = {}
+		this = {
+		}
 	}
-
 	option = {
 		name = hursamaj_events.13.c
 		response_text = hursamaj_events.13.c.response
