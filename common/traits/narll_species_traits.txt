@@ -3,7 +3,6 @@
 
 narll_trait_energy_being = {
 	cost = 0
-	potential_crossbreeding_chance = 0
 	icon = "gfx/interface/icons/traits/trait_plantoid_phototrophic.dds" # TODO: change
 
 	improves_leaders = yes
@@ -20,24 +19,36 @@ narll_trait_energy_being = {
 	}
 
 	allowed_archetypes = { BIOLOGICAL LITHOID }
+	tags = { organic positive research leader special }
 
 	modifier = {
-		planet_jobs_physics_research_produces_mult = 0.05
-		planet_jobs_energy_produces_mult = 0.05
+		physicist_jobs_bonus_workforce_mult = 0.05
+		technician_jobs_bonus_workforce_mult = 0.05
 		leader_lifespan_add = 60
-		planet_jobs_energy_upkeep_mult = 0.4
 	}
-	triggered_pop_modifier = {
+	triggered_pop_group_modifier = {
 		potential = {
 			is_lithoid = no
 		}
-		planet_jobs_food_upkeep_mult = -0.6
+		planet_pops_food_upkeep_mult = -0.75
 	}
-	triggered_pop_modifier = {
+	triggered_pop_group_modifier = {
 		potential = {
 			is_lithoid = yes
 		}
-		planet_jobs_minerals_upkeep_mult = -0.6
+		planet_pops_minerals_upkeep_mult = -0.75
+	}
+
+	resources = {
+		category = planet_pops
+		# Energy Upkeep
+		upkeep = {
+			trigger = {
+				is_being_purged = no
+				is_sapient = yes
+			}
+			energy = 0.25
+		}
 	}
 
 	custom_tooltip_with_modifiers = narll_trait_energy_being_custom_tt
