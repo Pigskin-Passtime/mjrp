@@ -14,18 +14,13 @@ building_tiyres_infestation_purge = {
 	building_sets = {
 		research
 		fortress
-		hunting_zone
-		knights
 	}
 	
-	allow = {
-		owner = {
-			has_technology = tech_tiyres_infestation_purger
-		}
+	prerequisites = {
+		"tech_tiyres_infestation_purger"
 	}
 
 	potential = {
-		#buildings_simple_allow = yes
 		exists = owner
 		is_bio_planet = yes
 		OR = {
@@ -52,62 +47,32 @@ building_tiyres_infestation_purge = {
 		}
 	}
 
+	planet_modifier = {
+		pop_environment_tolerance = 0.1
+		country_society_research_produces_mult = 0.15
+	}
+
 	triggered_planet_modifier = {
 		potential = {
 			exists = owner
 			owner = { is_regular_empire = yes }
 		}
 		modifier = {
-			job_tiyres_infestation_purger_add = 200
-			job_soldier_add = 100
+			job_tiyres_infestation_purger_add = @b1_jobs
+			job_soldier_add = @b0_jobs
 		}
 	}
 
 	triggered_planet_modifier = {
 		potential = {
 			exists = owner
-			owner = { is_hive_empire = yes }
+			owner = { is_gestalt = yes }
 		}
 		modifier = {
-			job_tiyres_infestation_purger_add = 200
-			job_warrior_drone_add = 100
+			job_tiyres_infestation_purger_add = @b1_jobs
+			job_warrior_drone_add = @b0_jobs
 		}
 	}
-
-	triggered_planet_modifier = {
-		potential = {
-			exists = owner
-			owner = { is_machine_empire = yes }
-		}
-		modifier = {
-			job_tiyres_infestation_purger_add = 200
-			job_warrior_drone_add = 100
-		}
-	}
-
-	# triggered_desc = {
-	# 	trigger = {
-	# 		exists = owner
-	# 		owner = { is_regular_empire = yes }
-	# 	}
-	# 	text = job_tiyres_infestation_purger_effect_desc
-	# }
-
-	# triggered_desc = {
-	# 	trigger = {
-	# 		exists = owner
-	# 		owner = { is_hive_empire = yes }
-	# 	}
-	# 	text = job_tiyres_infestation_purger_effect_desc
-	# }
-
-	# triggered_desc = {
-	# 	trigger = {
-	# 		exists = owner
-	# 		owner = { is_machine_empire = yes }
-	# 	}
-	# 	text = job_tiyres_infestation_purger_effect_desc
-	# }
 
 	ai_weight = {
 		weight = 100
